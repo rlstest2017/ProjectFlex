@@ -13,14 +13,14 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>/WEB-INF/applicationContext-flexoffice-gatewayapi.xml</param-value>
   </context-param>
-<!--   <servlet> -->
-<!--     <servlet-name>SystemManageServlet</servlet-name> -->
-<!--     <servlet-class>com.orange.flexoffice.gatewayapi.servlet.SystemManageServlet</servlet-class> -->
-<!--   </servlet> -->
-<!--   <servlet-mapping> -->
-<!--     <servlet-name>SystemManageServlet</servlet-name> -->
-<!--     <url-pattern>/system/*</url-pattern> -->
-<!--   </servlet-mapping> -->
+  <servlet>
+    <servlet-name>GatewaysManageServlet</servlet-name>
+    <servlet-class>com.orange.flexoffice.gatewayapi.servlet.GatewaysManageServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GatewaysManageServlet</servlet-name>
+    <url-pattern>/gateways/*</url-pattern>
+  </servlet-mapping>
   <listener>
     <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
   </listener>
