@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.orange.flexoffice</groupId>
+  <artifactId>pom-parent</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>flexoffice</name>
+  <url>http://maven.apache.org</url>
+
+  <modules>  
+    <module>flexoffice-adminui</module>
+    <module>flexoffice-userui</module>
+    <module>flexoffice-gatewayapi</module>
+    <module>flexoffice-business</module>
+    <module>flexoffice-dao</module>
+  </modules>
+ 
+  <properties>
+    <!-- Par ordre alphabétique, veuillez respecter l'ordre à l'ajout. -->
+	<aspectj.version>1.5.2a</aspectj.version>
+<!--     <antlr.version>2.7.7</antlr.version> -->
+    <commons-logging.version>1.1.1</commons-logging.version>
+    <commons-lang.version>2.4</commons-lang.version>
+    <commons-httpclient.version>3.1</commons-httpclient.version>
+	<cglib.version>2.2</cglib.version>
+	<ehcache.version>1.6.0</ehcache.version>
+    <java.compile.version>1.7</java.compile.version>
+    <javax-servlet.version>3.0.1</javax-servlet.version>
+    <javassist.version>3.9.0.GA</javassist.version>
+    <jackson-mapper.version>1.8.5</jackson-mapper.version>
+    <jsp.version>2.1</jsp.version>
+    <junit.version>4.8.2</junit.version>
+    <log4j.version>1.2.14</log4j.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+<!--     <slf4j.version>1.5.11</slf4j.version> -->
+<!--     <slf4j-api.version>1.6.0</slf4j-api.version> -->
+    <spring.version>3.0.5.RELEASE</spring.version>
+    <!-- Sonar -->
+    <sonar.sources>src/main</sonar.sources>
+    <sonar.tests>src/test</sonar.tests>
+    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+    <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+    <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+    <sonar.language>java</sonar.language>
+  </properties>
+
+ <!-- === Repositories === 
+  <repositories>
+        <repository>
+            <id>third_party</id>
+            <url>http://repo.aql.fr/nexus/content/repositories/thirdparty/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+   </repositories>
+    -->
+  <build>
+
+		<!-- the processing of ressources is done in two steps -->
+		<testResources>
+			  <testResource>
+    			<directory>${project.basedir}/src/test/java</directory>
+  			</testResource>
+  			<testResource>
+    			<directory>${project.basedir}/src/test/resources</directory>
+  			</testResource>
+		</testResources>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<!-- -source and -target arguments for the Java compiler -->
+					<source>${java.compile.version}</source>
+					<target>${java.compile.version}</target>
+					<version>${java.compile.version}</version>
+					 <encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.8.1</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Spec.*</include>
+                        <include>**/*Test.*</include>
+                    </includes>
+                </configuration>
+            </plugin>
+<!-- 			<plugin> -->
+<!--     			<groupId>org.jacoco</groupId> -->
+<!--     			<artifactId>jacoco-maven-plugin</artifactId> -->
+<!--     			<version>0.6.0.201210061924</version> -->
+<!--     			<configuration> -->
+<!--         			<destFile>${sonar.jacoco.reportPath}</destFile> -->
+<!--         				<append>true</append> -->
+<!--     			</configuration> -->
+<!--     			<executions> -->
+<!--         			<execution> -->
+<!--             			<id>agent</id> -->
+<!--             			<goals> -->
+<!--                 			<goal>prepare-agent</goal> -->
+<!--             			</goals> -->
+<!--         			</execution> -->
+<!--     			</executions> -->
+<!-- 			</plugin> -->
+		</plugins>
+
+	</build>
+
+
+	<!-- Version definition -->
+	<dependencyManagement>
+	  <dependencies>
+	  	<!-- Common lang -->
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${commons-lang.version}</version>
+		</dependency>
+		<!-- Common logging -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>${commons-logging.version}</version>
+		</dependency>
+		<!-- Junit -->  
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		  	
+	  	<!-- aspect J-->
+		<dependency>
+			<groupId>aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>
+ 		
+ 		<!-- Common httpclient -->
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>${commons-httpclient.version}</version>
+		</dependency>
+
+		<!-- org.apache.httpcomponents -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.0</version>
+		</dependency>
+
+		<!-- Java Programming Assistant -->
+		<dependency>
+			<groupId>javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>${javassist.version}</version>
+		</dependency>
+ 		
+ 		<!-- Log -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.slf4j</groupId> -->
+<!-- 			<artifactId>slf4j-api</artifactId> -->
+<!-- 			<version>${slf4j.version}</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.slf4j</groupId> -->
+<!-- 			<artifactId>slf4j-log4j12</artifactId> -->
+<!-- 			<version>${slf4j.version}</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.slf4j</groupId> -->
+<!-- 			<artifactId>jcl104-over-slf4j</artifactId> -->
+<!-- 			<version>${slf4j.version}</version> -->
+<!-- 		</dependency> -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+			
+		<!-- antlr -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>antlr</groupId> -->
+<!-- 			<artifactId>antlr</artifactId> -->
+<!-- 			<version>${antlr.version}</version> -->
+<!-- 		</dependency> -->
+ 	
+ 		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<!-- spring AOP -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- cglib -->
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+			<version>${cglib.version}</version>
+		</dependency>
+
+		<!-- ehcache -->
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>${ehcache.version}</version>
+		</dependency>
+
+		<!-- Servlet -->
+		<dependency>
+		   <groupId>javax.servlet</groupId>
+		   <artifactId>javax.servlet-api</artifactId>
+		   <version>${javax-servlet.version}</version>
+		   <scope>provided</scope> <!-- provided by Tomcat: tomcat-servlet-api-3.0.jar-->
+		</dependency>
+	
+		<!-- Jackson for JSON -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>${jackson-mapper.version}</version>
+		</dependency>
+	
+		<!-- Mock IT -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.5</version>
+			<scope>test</scope>
+		</dependency>	
+	 </dependencies>
+	
+	</dependencyManagement>
+		
+</project>

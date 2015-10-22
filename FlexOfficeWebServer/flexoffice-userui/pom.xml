@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.orange.flexoffice</groupId>
+    <artifactId>pom-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>flexoffice-userui</artifactId>
+  
+  <packaging>war</packaging>
+  <name>flexoffice-userui Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  
+  <dependencies>
+ 	<dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>flexoffice-business</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+       <groupId>javax.servlet</groupId>
+	   <artifactId>javax.servlet-api</artifactId>
+    </dependency>
+    <dependency>
+		<groupId>org.codehaus.jackson</groupId>
+		<artifactId>jackson-mapper-asl</artifactId>
+	</dependency>
+
+	<!-- Log -->
+	<dependency>
+		<groupId>log4j</groupId>
+		<artifactId>log4j</artifactId>
+	</dependency>
+	
+	<!-- Spring -->
+	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+	</dependency>
+	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+	</dependency>
+	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+	</dependency>
+	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+	</dependency>
+	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+	</dependency>
+	
+	<!-- spring AOP -->
+	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+	</dependency>
+  </dependencies>
+  
+  <build>
+    <finalName>flexoffice-userui</finalName>
+  </build>
+</project>
