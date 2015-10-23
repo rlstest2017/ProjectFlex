@@ -100,17 +100,30 @@ public class SystemManageServlet extends HttpServlet {
         response.setContentType( "application/json" );
         response.setCharacterEncoding( "utf8" );
 
-        final String method = request.getParameter( "method" );
-        final String ipAdress = request.getRemoteAddr();
-
+        String pathInfo = request.getPathInfo();
+        
         LOGGER.info( "Begin call doGet method for SystemManageServlet at: " + new Date() );
 
-
-        MethodsCalledByHmi methodsCalledByHmiObject = MethodsCalledByHmi.fromValue(method);
+        if (pathInfo == null) pathInfo = "/system";  
+        	
+        MethodsCalledByHmi methodsCalledByHmiObject = MethodsCalledByHmi.fromValue(pathInfo);
 
         switch(methodsCalledByHmiObject.code()) {
 
-        case 7: //
+        case 0: // /v1/system
+        	LOGGER.debug( " request is /v1/system ");
+            break;
+            
+        case 1: // /v1/system/login
+        	LOGGER.debug( " request is /v1/system/login ");
+            break;
+            
+        case 2: // /v1/system/logout
+        	LOGGER.debug( " request is /v1/system/logout ");
+            break;
+            
+        case 3: // /v1/system/teachin
+        	LOGGER.debug( " request is /v1/system/teachin ");
             break;
         
         default:
@@ -130,19 +143,31 @@ public class SystemManageServlet extends HttpServlet {
         response.setContentType( "application/json" );
         response.setCharacterEncoding( "utf8" );
 
-        final String method = request.getParameter( "method" );
-        final String ipAdress = request.getRemoteAddr();
+        final String pathInfo = request.getPathInfo();
+        
 
         LOGGER.info( "Begin call doPost method for SystemManageServlet at: " + new Date() );
 
 
-        MethodsCalledByHmi methodsCalledByHmiObject = MethodsCalledByHmi.fromValue(method);
+        MethodsCalledByHmi methodsCalledByHmiObject = MethodsCalledByHmi.fromValue(pathInfo);
 
         switch(methodsCalledByHmiObject.code()) {
 
-        case 6: //
-           break;
+        case 4: // /v1/system/teachin/init?roomId= 
+        	
+        	String roomId = request.getParameter("roomId");
+        	
+        	LOGGER.debug( " request is /v1/system/teachin/init?roomId=" + roomId);
+            break;
         
+        case 5: // /v1/system/teachin/submit
+        	LOGGER.debug( " request is /v1/system/teachin/submit ");
+            break;
+        
+        case 6: // /v1/system/teachin/cancel
+        	LOGGER.debug( " request is /v1/system/teachin/cancel ");
+            break;
+            
         default:
 
         }

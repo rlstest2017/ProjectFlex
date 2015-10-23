@@ -6,5 +6,8 @@
 
 	<bean id="messageHandler" class="com.orange.flexoffice.business.handler.MessageHandler">
 	</bean>
+	<bean id="systemManageFacade" class="com.orange.flexoffice.business.facade.impl.SystemManageFacadeImpl">
+	</bean>
+
 
 </beans>

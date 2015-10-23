@@ -11,14 +11,19 @@ package com.orange.flexoffice.adminui.enums;
  */
 public enum MethodsCalledByHmi {
     /**
-     * methods called in PhoneCallsManageServlet 
+     * methods called in SystemManageServlet 
      */
-    USERS_GET(1, "userGet"),
-    USER_PUT(2, "userPut"),
-    USER_POST(3, "userPost"),
-    USER_DELETE(4, "userDelete");
-        
-     /**
+	/* GET */
+	SYSTEM(0, "/system"),
+    SYSTEM_LOGIN(1, "/login"),
+    SYSTEM_LOGOUT(2, "/logout"),
+    SYSTEM_TECHIN(3, "/teachin"),
+    /* POST */
+    SYSTEM_TECHIN_INIT(4, "/teachin/init"),
+    SYSTEM_TECHIN_submit(5, "/teachin/submit"),
+    SYSTEM_TECHIN_CANCEL(6, "/teachin/cancel");
+    
+	/**
      * status code
      */
     private final Integer code;

@@ -19,7 +19,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>SystemManageServlet</servlet-name>
-    <url-pattern>/system/*</url-pattern>
+    <url-pattern>/v1/system/*</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>StatsManageServlet</servlet-name>
