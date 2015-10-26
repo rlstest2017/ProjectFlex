@@ -103,13 +103,12 @@ public class GatewaysManageServlet extends HttpServlet {
         response.setContentType( "application/json" );
         response.setCharacterEncoding( "utf8" );
 
-        final String method = request.getParameter( "method" );
-        String ipAdress = request.getRemoteAddr();
+        final String pathInfo = request.getPathInfo();
 
         LOGGER.info( "Begin call doGet method for GatewaysManageServlet at: " + new Date() );
 
 
-        MethodsCalledByHmi methodsCalledByHmiObject = MethodsCalledByHmi.fromValue(method);
+        MethodsCalledByHmi methodsCalledByHmiObject = MethodsCalledByHmi.fromValue(pathInfo);
 
         switch(methodsCalledByHmiObject.code()) {
 
@@ -122,5 +121,96 @@ public class GatewaysManageServlet extends HttpServlet {
 
         LOGGER.info( "End call doGet method for GatewaysManageServlet at: " + new Date() );
     }
+    
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.setCharacterEncoding( "utf8" );
+        response.setContentType( "application/json" );
+        response.setCharacterEncoding( "utf8" );
+
+        final String pathInfo = request.getPathInfo();
+
+        LOGGER.info( "Begin call doGet method for GatewaysManageServlet at: " + new Date() );
+
+
+        MethodsCalledByHmi methodsCalledByHmiObject = MethodsCalledByHmi.fromValue(pathInfo);
+
+        switch(methodsCalledByHmiObject.code()) {
+
+        case 81 ://get....
+             break;
+                    
+        default:   
+
+        }
+
+        LOGGER.info( "End call doGet method for GatewaysManageServlet at: " + new Date() );
+    }
+    
+    /**
+     * @see HttpServlet#doPut(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.setCharacterEncoding( "utf8" );
+        response.setContentType( "application/json" );
+        response.setCharacterEncoding( "utf8" );
+
+        final String pathInfo = request.getPathInfo();
+        
+
+        LOGGER.info( "Begin call doPut method for GatewaysManageServlet at: " + new Date() );
+
+
+        MethodsCalledByHmi methodsCalledByHmiObject = MethodsCalledByHmi.fromValue(pathInfo);
+
+        switch(methodsCalledByHmiObject.code()) {
+
+        case 6: // /v1/system/teachin/cancel
+        	LOGGER.debug( " request is /v1/system/teachin/cancel ");
+            break;
+            
+        default:
+
+        }
+
+        LOGGER.info( "End call doPut method for SystemManageServlet at: " + new Date() );
+
+    }
+    
+    /**
+     * @see HttpServlet#doDelete(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.setCharacterEncoding( "utf8" );
+        response.setContentType( "application/json" );
+        response.setCharacterEncoding( "utf8" );
+
+        final String pathInfo = request.getPathInfo();
+        
+
+        LOGGER.info( "Begin call doDelete method for GatewaysManageServlet at: " + new Date() );
+
+
+        MethodsCalledByHmi methodsCalledByHmiObject = MethodsCalledByHmi.fromValue(pathInfo);
+
+        switch(methodsCalledByHmiObject.code()) {
+
+        case 6: // /v1/system/teachin/cancel
+        	LOGGER.debug( " request is /v1/system/teachin/cancel ");
+            break;
+            
+        default:
+
+        }
+
+        LOGGER.info( "End call doDelete method for GatewaysManageServlet at: " + new Date() );
+
+    }
+
 
 }

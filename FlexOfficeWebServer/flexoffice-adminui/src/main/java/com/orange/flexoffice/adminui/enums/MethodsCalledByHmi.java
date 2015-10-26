@@ -24,6 +24,11 @@ public enum MethodsCalledByHmi {
     SYSTEM_TECHIN_CANCEL(6, "/teachin/cancel");
     
 	/**
+     * methods called in GatewaysManageServlet 
+     */
+	
+	
+	/**
      * status code
      */
     private final Integer code;

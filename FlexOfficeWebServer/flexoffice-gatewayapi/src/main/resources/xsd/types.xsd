@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<!-- User -->
+	
+	<xsd:complexType name="xmlUser">
+		<xsd:sequence>
+			<xsd:element name="logs">
+				<xsd:complexType>
+					<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="log" type="xmlLogRef"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="preferences">
+				<xsd:complexType>
+					<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="preference" type="xmlPreferenceRef"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="friends">
+				<xsd:complexType>
+					<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="friend" type="xmlRelationshipRef"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="followers">
+				<xsd:complexType>
+					<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="follower" type="xmlRelationshipRef"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="xsd:string"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="xmlUserRef">
+		<xsd:attribute name="id" type="xsd:string"/>
+		<xsd:attribute name="href" type="xsd:anyURI"/>
+	</xsd:complexType>
+	
+	<!-- Item -->
+	
+	<xsd:complexType name="xmlItem">
+		<xsd:sequence>
+			<xsd:element name="logs">
+				<xsd:complexType>
+					<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="log" type="xmlLogRef"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="characteristics">
+				<xsd:complexType>
+					<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="characteristic" type="xmlCharacteristicRef"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="xsd:string"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="xmlItemRef">
+		<xsd:attribute name="id" type="xsd:string"/>
+		<xsd:attribute name="href" type="xsd:anyURI"/>
+	</xsd:complexType>
+	
+	<!-- Descriptor -->
+	
+	<xsd:complexType name="xmlDescriptor">
+		<xsd:sequence>
+			<xsd:element name="preferences">
+				<xsd:complexType>
+					<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="preference" type="xmlPreferenceRef"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="characteristics">
+				<xsd:complexType>
+					<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="characteristic" type="xmlCharacteristicRef"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="xsd:string"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="xmlDescriptorRef">
+		<xsd:attribute name="id" type="xsd:string"/>
+		<xsd:attribute name="href" type="xsd:anyURI"/>
+	</xsd:complexType>
+	
+	<!-- Log -->
+	
+	<xsd:complexType name="xmlLog">
+		<xsd:sequence>
+			<xsd:element name="user" type="xmlUserRef"/>
+			<xsd:element name="item" type="xmlItemRef"/>
+			<xsd:element name="rating" type="xsd:float"/>
+			<xsd:element name="comment" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="timestamp" type="xsd:dateTime" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="xsd:string"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="xmlLogRef">
+		<xsd:attribute name="id" type="xsd:string"/>
+		<xsd:attribute name="href" type="xsd:anyURI"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="xmlLogs">
+		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+			<xsd:element name="log" type="xmlLog"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- Characteristic -->
+	
+	<xsd:complexType name="xmlCharacteristic">
+		<xsd:sequence>
+			<xsd:element name="item" type="xmlItemRef"/>
+			<xsd:element name="descriptor" type="xmlDescriptorRef"/>
+			<xsd:element name="weight" type="xsd:float"/>
+			<xsd:element name="comment" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="timestamp" type="xsd:dateTime" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="xsd:string"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="xmlCharacteristicRef">
+		<xsd:attribute name="id" type="xsd:string"/>
+		<xsd:attribute name="href" type="xsd:anyURI"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="xmlCharacteristics">
+		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+			<xsd:element name="characteristic" type="xmlCharacteristic"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- Preference -->
+	
+	<xsd:complexType name="xmlPreference">
+		<xsd:sequence>
+			<xsd:element name="user" type="xmlUserRef"/>
+			<xsd:element name="descriptor" type="xmlDescriptorRef"/>
+			<xsd:element name="rating" type="xsd:float"/>
+			<xsd:element name="comment" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="timestamp" type="xsd:dateTime" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="xsd:string"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="xmlPreferenceRef">
+		<xsd:attribute name="id" type="xsd:string"/>
+		<xsd:attribute name="href" type="xsd:anyURI"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="xmlPreferences">
+		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+			<xsd:element name="preference" type="xmlPreference"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- Relationship -->
+	
+	<xsd:complexType name="xmlRelationship">
+		<xsd:sequence>
+			<xsd:element name="user" type="xmlUserRef"/>
+			<xsd:element name="friend" type="xmlUserRef"/>
+			<xsd:element name="rating" type="xsd:float"/>
+			<xsd:element name="comment" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="timestamp" type="xsd:dateTime" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="xsd:string"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="xmlRelationshipRef">
+		<xsd:attribute name="id" type="xsd:string"/>
+		<xsd:attribute name="href" type="xsd:anyURI"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="xmlRelationships">
+		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+			<xsd:element name="relationship" type="xmlRelationship"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	
+	<!-- Recommendation -->
+	
+	<xsd:complexType name="xmlRecommendation">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element name="user" type="xmlUserRef"/>
+				<xsd:element name="item" type="xmlItemRef"/>
+				<xsd:element name="descriptor" type="xmlDescriptorRef"/>
+			</xsd:choice>
+			<xsd:element name="rating" type="xsd:float"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="xmlRecommendations">
+		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+			<xsd:element name="recommendation" type="xmlRecommendation"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- Prediction -->
+	
+	<xsd:complexType name="xmlPrediction">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element name="user" type="xmlUserRef"/>
+				<xsd:element name="item" type="xmlItemRef"/>
+				<xsd:element name="descriptor" type="xmlDescriptorRef"/>
+			</xsd:choice>
+			<xsd:element name="rating" type="xsd:float"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="xmlPredictions">
+		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+			<xsd:element name="prediction" type="xmlPrediction"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- Similarity -->
+	
+	<xsd:complexType name="xmlSimilarity">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:element name="user" type="xmlUserRef"/>
+					<xsd:element name="similarUser" type="xmlUserRef"/>
+				</xsd:sequence>
+				<xsd:sequence>
+					<xsd:element name="item" type="xmlItemRef"/>
+					<xsd:element name="similarItem" type="xmlItemRef"/>
+				</xsd:sequence>
+				<xsd:sequence>
+					<xsd:element name="descriptor" type="xmlDescriptorRef"/>
+					<xsd:element name="similarDescriptor" type="xmlDescriptorRef"/>
+				</xsd:sequence>
+			</xsd:choice>
+			<xsd:element name="rating" type="xsd:float"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="xmlSimilarities">
+		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+			<xsd:element name="similarity" type="xmlSimilarity"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+</xsd:schema>

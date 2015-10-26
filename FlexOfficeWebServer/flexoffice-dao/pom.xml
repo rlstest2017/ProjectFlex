@@ -42,10 +42,6 @@
 	</dependency>
 	<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-	</dependency>
-	<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
 	</dependency>
 	<dependency>
@@ -58,6 +54,28 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
 	</dependency>
+		
+ 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+		</dependency>
+		
+		<!-- Database -->
+		
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+		</dependency>
   </dependencies>
 
 </project>
