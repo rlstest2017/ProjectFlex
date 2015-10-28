@@ -1,4 +1,4 @@
-package com.orange.flexoffice.dao.gateway.repository.data.jdbc.metadata;
+package com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.metadata;
 
 public final class LogMetadata {
 	

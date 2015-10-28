@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.orange.flexoffice.business.gatewayapi.service.object.UserManager;
-import com.orange.flexoffice.dao.gateway.repository.data.jdbc.LogRepository;
-import com.orange.flexoffice.dao.gateway.repository.data.jdbc.PreferenceRepository;
-import com.orange.flexoffice.dao.gateway.repository.data.jdbc.RelationshipRepository;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Log;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Preference;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Relationship;
 import com.orange.flexoffice.dao.gatewayapi.model.object.User;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.LogRepository;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.PreferenceRepository;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.RelationshipRepository;
 
 @Service("userManager")
 @Transactional(readOnly=true)

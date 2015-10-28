@@ -1,9 +1,9 @@
-package com.orange.flexoffice.dao.gateway.repository.data.jdbc;
+package com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc;
 
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.metadata.CharacteristicMetadata.CHARACTERISTIC_DESC_ID_COL;
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.metadata.CharacteristicMetadata.CHARACTERISTIC_ITEM_ID_COL;
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.metadata.CharacteristicMetadata.CHARACTERISTIC_TABLE_NAME;
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.metadata.CharacteristicMetadata.CHARACTERISTIC_WEIGHT_COL;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.metadata.CharacteristicMetadata.CHARACTERISTIC_DESC_ID_COL;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.metadata.CharacteristicMetadata.CHARACTERISTIC_ITEM_ID_COL;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.metadata.CharacteristicMetadata.CHARACTERISTIC_TABLE_NAME;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.metadata.CharacteristicMetadata.CHARACTERISTIC_WEIGHT_COL;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,9 +16,9 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
-import com.orange.flexoffice.dao.gateway.repository.data.CharacteristicOperations;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Characteristic;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Data;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.CharacteristicOperations;
 import com.orange.flexoffice.dao.gatewayapi.repository.support.DataExtractor;
 import com.orange.flexoffice.dao.gatewayapi.repository.support.StreamingPreparedStatement;
 

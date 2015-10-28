@@ -1,15 +1,15 @@
-package com.orange.flexoffice.dao.gateway.repository.data.jdbc;
+package com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc;
 
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.DataSqlTemplate.COUNT_TEMPLATE;
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.DataSqlTemplate.FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE;
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.DataSqlTemplate.FIND_ALL_TEMPLATE;
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_ID_AND_ROW_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.DataSqlTemplate.FIND_BY_ROW_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.DataSqlTemplate.FIND_ONE_TEMPLATE;
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.DataSqlTemplate.REMOVE_TEMPLATE;
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.DataSqlTemplate.SAVE_TEMPLATE;
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.DataSqlTemplate.UPDATE_TEMPLATE;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.COUNT_TEMPLATE;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.FIND_ALL_TEMPLATE;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_ID_AND_ROW_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.FIND_BY_ROW_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.FIND_ONE_TEMPLATE;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.REMOVE_TEMPLATE;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.SAVE_TEMPLATE;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.UPDATE_TEMPLATE;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,8 +29,8 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
-import com.orange.flexoffice.dao.gateway.repository.data.DataOperations;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Data;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.DataOperations;
 
 public abstract class DataRepository<T extends Data> 
 	implements DataOperations<T> {

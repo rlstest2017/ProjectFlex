@@ -6,9 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.orange.flexoffice.business.gatewayapi.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.gatewayapi.service.data.CharacteristicManager;
-import com.orange.flexoffice.dao.gateway.repository.data.jdbc.CharacteristicRepository;
 import com.orange.flexoffice.dao.gatewayapi.model.Stat;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Characteristic;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.CharacteristicRepository;
 import com.orange.flexoffice.dao.gatewayapi.repository.stat.jdbc.CharacteristicDescStatRepository;
 import com.orange.flexoffice.dao.gatewayapi.repository.stat.jdbc.CharacteristicItemStatRepository;
 

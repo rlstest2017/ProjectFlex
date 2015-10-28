@@ -1,4 +1,4 @@
-package com.orange.flexoffice.dao.gateway.repository.data;
+package com.orange.flexoffice.dao.gatewayapi.repository.data;
 
 import java.util.Collection;
 import java.util.List;

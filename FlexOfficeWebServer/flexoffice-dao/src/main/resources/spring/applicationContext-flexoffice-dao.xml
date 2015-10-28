@@ -10,9 +10,9 @@
 	
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="org.postgresql.Driver"/>
-		<property name="url" value="jdbc:postgresql://192.168.144.109/reperio_test"/>
-		<property name="username" value="reperio"/>
-		<property name="password" value="r3perio"/>		
+		<property name="url" value="jdbc:postgresql://localhost:5432/FlexOffice_Test"/>
+		<property name="username" value="flexoffice"/>
+		<property name="password" value="oab"/>		
 		<property name="maxActive" value="10"/>
 		<property name="maxIdle" value="5"/>
 	</bean>

@@ -3,5 +3,88 @@ Flex Office web-server
 - to provide web APIs to Flex Office web applications (user and administration portals)
 - to provide web APIs to gateway server
 
+Install  & Configure Tomcat:
+----------------------------
+# sudo apt-get install tomcat7 tomcat7-admin
+# tar xzvf WinDrive/TAR/config.tar.gz
+# cd /home/oab/Config
+# sudo chown -vR tomcat7: tomcat7 *
+# cd /var/lib/tomcat7/conf
+# sudo nano tomcat-users.xml 
+  add :
+  <role rolename="manager-gui"/>
+  <user username="admin" password="admin" roles="manager-gui"/>
+
+# sudo service tomcat7 stop
+# cd /var/lib/tomcat7/webapps/
+# sudo cp /home/oab/Dev/FlexOffice/web-server/FlexOfficeWebServer/flexoffice-gatewayapi/target/flexoffice-gatewayapi.war .
+# sudo chown -vR tomcat7: tomcat7 *
+# tail -f /var/log/tomcat7/catalina.out
+# sudo service tomcat7 start
+
+Install & Configure Maven:
+--------------------------
+#sudo apt-get install maven
+# Kate /usr/share/maven/conf/settings.xml
+    => add : 
+    <localRepository>/home/oab/.m2/repository</localRepository>
+    <proxy>
+	  <id>optional</id>
+	  <active>true</active>
+	  <protocol>http</protocol>
+	  <username>hbcp0056</username>
+	  <password>FTlara_1</password>
+	  <host>nrs-csn-proxy.ad-subs.w2k.francetelecom.fr</host>
+	  <port>3128</port>
+	  <nonProxyHosts>local.net|some.host.com</nonProxyHosts>
+    </proxy>
+    <mirror>
+       <id>nexus</id>
+       <mirrorOf>*,!cccxxx.releases,!cccxxx.snapshots</mirrorOf>
+       <url>http://repo.aql.fr/nexus/content/groups/public</url>
+    </mirror>
 
 
+Configure Eclipse:
+------------------
+- Window => Preferences => Maven => Installations
+- Window => Preferences => Maven => User Settings
+- Import => import... => Maven => Existing Maven Projects => /home/oab/Dev/FlexOffice/web-server/FlexOfficeWebServer
+
+
+Postgres :
+----------
+Pour entrer, se mettre en mode sudo
+  > sudo -i -u postgres
+Pour démarrer 
+  > psql
+
+Pour sortir :
+  #psql> \q
+
+  #psql> CREATE ROLE flexoffice; 
+  Pour lister les comptes utilisateur et leurs roles :
+  #psql> SELECT rolsuper, rolname, rolpassword FROM pg_roles;
+  Pour modifier le rôle en superutilisateur
+  #psql> ALTER USER flexoffice CREATEUSER CREATEDB;
+     (http://docs.postgresql.fr/8.0/sql-alteruser.html)
+  #psql> ALTER ROLE flexoffice WITH LOGIN;
+  Pour modifier le mot de passe :
+  #psql> ALTER USER flexoffice WITH PASSWORD 'oab'; 
+   
+  Créer un mot de passe pour le compte PostGres :
+  #psql> ALTER USER postgres WITH PASSWORD 'oab';
+
+  lancer la cmd en dehors de psql    
+  > createdb FlexOffice_Test
+  supprimer une base
+  > dropdb FlexOffice_Test
+  entrer dans la base
+  > psql FlexOffice_Test
+
+  Arrêt du service
+  > sudo service postgresql stop
+  redémarrage
+  > exit
+  > sudo service postgres start
+  > sudo service postgres restart

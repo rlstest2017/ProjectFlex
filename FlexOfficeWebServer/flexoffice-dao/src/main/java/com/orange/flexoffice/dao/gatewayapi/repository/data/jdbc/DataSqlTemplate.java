@@ -1,4 +1,4 @@
-package com.orange.flexoffice.dao.gateway.repository.data.jdbc;
+package com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc;
 
 public final class DataSqlTemplate {
 	

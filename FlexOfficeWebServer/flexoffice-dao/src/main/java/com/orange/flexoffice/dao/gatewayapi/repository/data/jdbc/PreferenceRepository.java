@@ -1,9 +1,9 @@
-package com.orange.flexoffice.dao.gateway.repository.data.jdbc;
+package com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc;
 
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.metadata.RelationshipMetadata.RELATIONSHIP_FRIEND_ID_COL;
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.metadata.RelationshipMetadata.RELATIONSHIP_RATING_COL;
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.metadata.RelationshipMetadata.RELATIONSHIP_TABLE_NAME;
-import static com.orange.flexoffice.dao.gateway.repository.data.jdbc.metadata.RelationshipMetadata.RELATIONSHIP_USER_ID_COL;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.metadata.PreferenceMetadata.PREFERENCE_DESC_ID_COL;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.metadata.PreferenceMetadata.PREFERENCE_RATING_COL;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.metadata.PreferenceMetadata.PREFERENCE_TABLE_NAME;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.metadata.PreferenceMetadata.PREFERENCE_USER_ID_COL;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,53 +16,54 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
-import com.orange.flexoffice.dao.gateway.repository.data.RelationshipOperations;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Data;
-import com.orange.flexoffice.dao.gatewayapi.model.data.Relationship;
+import com.orange.flexoffice.dao.gatewayapi.model.data.Preference;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.PreferenceOperations;
 import com.orange.flexoffice.dao.gatewayapi.repository.support.DataExtractor;
 import com.orange.flexoffice.dao.gatewayapi.repository.support.StreamingPreparedStatement;
 
 @Repository
-public class RelationshipRepository 
-	extends DataRepository<Relationship>
-	implements RelationshipOperations {
+public class PreferenceRepository 
+	extends DataRepository<Preference>
+	implements PreferenceOperations {
 	
-	public RelationshipRepository() {
-		super(Relationship.class);
+	public PreferenceRepository() {
+		super(Preference.class);
 	}
 
 	@Override
 	protected String getTableName() {
-		return RELATIONSHIP_TABLE_NAME;
+		return PREFERENCE_TABLE_NAME;
 	}
 
 	@Override
 	protected String getColumnColName() {
-		return RELATIONSHIP_USER_ID_COL;
+		return PREFERENCE_USER_ID_COL;
 	}
 
 	@Override
 	protected String getRowColName() {
-		return RELATIONSHIP_FRIEND_ID_COL;
+		return PREFERENCE_DESC_ID_COL;
 	}
 
 	@Override
 	protected String getRatingColName() {
-		return RELATIONSHIP_RATING_COL;
+		return PREFERENCE_RATING_COL;
 	}
 
 	@Override
-	public Relationship findByUserIdAndFriendId(String userId, String friendId) {
+	public Preference findByUserIdAndDescriptorId(String userId,
+			String descriptorId) {
 		MapSqlParameterSource paramMap = new MapSqlParameterSource();
 		paramMap.addValue("columnId", userId);
-		paramMap.addValue("rowId", friendId);
+		paramMap.addValue("rowId", descriptorId);
 		
-		Relationship data = null;
+		Preference data = null;
 		try {
 			data = jdbcTemplate.queryForObject(
 					findByColumnIdAndRowIdQuery, 
 					paramMap, 
-					new BeanPropertyRowMapper<Relationship>(Relationship.class)
+					new BeanPropertyRowMapper<Preference>(Preference.class)
 				);
 		} catch (EmptyResultDataAccessException erdae) {
 			// If no data found just return null
@@ -71,22 +72,22 @@ public class RelationshipRepository
 	}
 
 	@Override
-	public List<Relationship> findByUserId(String userId) {
+	public List<Preference> findByUserId(String userId) {
 		SqlParameterSource paramMap = new MapSqlParameterSource("columnId", userId);
 		return jdbcTemplate.query(
 				findByColumnIdQuery, 
 				paramMap, 
-				new BeanPropertyRowMapper<Relationship>(Relationship.class)
+				new BeanPropertyRowMapper<Preference>(Preference.class)
 			);
 	}
 
 	@Override
-	public List<Relationship> findByFriendId(String friendId) {
-		SqlParameterSource paramMap = new MapSqlParameterSource("rowId", friendId);
+	public List<Preference> findByDescriptorId(String descriptorId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("rowId", descriptorId);
 		return jdbcTemplate.query(
 				findByRowIdQuery, 
 				paramMap, 
-				new BeanPropertyRowMapper<Relationship>(Relationship.class)
+				new BeanPropertyRowMapper<Preference>(Preference.class)
 			);
 	}
 	
@@ -96,7 +97,7 @@ public class RelationshipRepository
 			
 			@Override
 			public void processRow(ResultSet rs) throws SQLException {
-				Data data = new Relationship();
+				Data data = new Preference();
 				data.setColumnId(rs.getString(getColumnColName()));
 				data.setRowId(rs.getString(getRowColName()));
 				data.setComment(rs.getString("comment"));
@@ -108,5 +109,6 @@ public class RelationshipRepository
 			}
 		});		
 	}
+
 
 }

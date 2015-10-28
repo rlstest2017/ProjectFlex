@@ -1,4 +1,4 @@
-package com.orange.flexoffice.dao.gateway.repository.data.jdbc;
+package com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,10 +11,10 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
-import com.orange.flexoffice.dao.gateway.repository.data.LogOperations;
-import com.orange.flexoffice.dao.gateway.repository.data.jdbc.metadata.LogMetadata;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Data;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Log;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.LogOperations;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.metadata.LogMetadata;
 import com.orange.flexoffice.dao.gatewayapi.repository.support.DataExtractor;
 import com.orange.flexoffice.dao.gatewayapi.repository.support.StreamingPreparedStatement;
 

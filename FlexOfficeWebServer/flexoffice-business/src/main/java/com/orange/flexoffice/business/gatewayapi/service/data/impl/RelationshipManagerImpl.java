@@ -6,9 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.orange.flexoffice.business.gatewayapi.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.gatewayapi.service.data.RelationshipManager;
-import com.orange.flexoffice.dao.gateway.repository.data.jdbc.RelationshipRepository;
 import com.orange.flexoffice.dao.gatewayapi.model.Stat;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Relationship;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.RelationshipRepository;
 import com.orange.flexoffice.dao.gatewayapi.repository.stat.jdbc.RelationshipFriendStatRepository;
 import com.orange.flexoffice.dao.gatewayapi.repository.stat.jdbc.RelationshipUserStatRepository;
 

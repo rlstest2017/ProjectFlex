@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.orange.flexoffice.business.gatewayapi.service.object.DescriptorManager;
-import com.orange.flexoffice.dao.gateway.repository.data.jdbc.CharacteristicRepository;
-import com.orange.flexoffice.dao.gateway.repository.data.jdbc.PreferenceRepository;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Characteristic;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Preference;
 import com.orange.flexoffice.dao.gatewayapi.model.object.Descriptor;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.CharacteristicRepository;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.PreferenceRepository;
 
 @Service("descriptorManager")
 @Transactional(readOnly=true)

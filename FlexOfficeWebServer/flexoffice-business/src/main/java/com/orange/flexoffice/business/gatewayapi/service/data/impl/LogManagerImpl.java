@@ -11,9 +11,9 @@ import com.orange.flexoffice.business.gatewayapi.exception.DataAlreadyExistsExce
 import com.orange.flexoffice.business.gatewayapi.matrix.SimilarityMatrix;
 import com.orange.flexoffice.business.gatewayapi.matrix.SimilarityMatrixType;
 import com.orange.flexoffice.business.gatewayapi.service.data.LogManager;
-import com.orange.flexoffice.dao.gateway.repository.data.jdbc.LogRepository;
 import com.orange.flexoffice.dao.gatewayapi.model.Stat;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Log;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.LogRepository;
 import com.orange.flexoffice.dao.gatewayapi.repository.stat.jdbc.LogItemStatRepository;
 import com.orange.flexoffice.dao.gatewayapi.repository.stat.jdbc.LogUserStatRepository;
 

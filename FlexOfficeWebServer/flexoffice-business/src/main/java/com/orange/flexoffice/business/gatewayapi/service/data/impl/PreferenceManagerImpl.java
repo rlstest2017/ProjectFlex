@@ -6,9 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.orange.flexoffice.business.gatewayapi.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.gatewayapi.service.data.PreferenceManager;
-import com.orange.flexoffice.dao.gateway.repository.data.jdbc.PreferenceRepository;
 import com.orange.flexoffice.dao.gatewayapi.model.Stat;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Preference;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.PreferenceRepository;
 import com.orange.flexoffice.dao.gatewayapi.repository.stat.jdbc.PreferenceDescStatRepository;
 import com.orange.flexoffice.dao.gatewayapi.repository.stat.jdbc.PreferenceUserStatRepository;
 

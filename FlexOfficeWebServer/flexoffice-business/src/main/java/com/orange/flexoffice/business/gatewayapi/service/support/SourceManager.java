@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.orange.flexoffice.business.gatewayapi.source.Source;
 import com.orange.flexoffice.business.gatewayapi.source.SourceType;
-import com.orange.flexoffice.dao.gateway.repository.data.jdbc.CharacteristicRepository;
-import com.orange.flexoffice.dao.gateway.repository.data.jdbc.LogRepository;
-import com.orange.flexoffice.dao.gateway.repository.data.jdbc.PreferenceRepository;
-import com.orange.flexoffice.dao.gateway.repository.data.jdbc.RelationshipRepository;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.CharacteristicRepository;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.LogRepository;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.PreferenceRepository;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.RelationshipRepository;
 import com.orange.flexoffice.dao.gatewayapi.repository.stat.jdbc.CharacteristicDescStatRepository;
 import com.orange.flexoffice.dao.gatewayapi.repository.stat.jdbc.CharacteristicItemStatRepository;
 import com.orange.flexoffice.dao.gatewayapi.repository.stat.jdbc.LogItemStatRepository;

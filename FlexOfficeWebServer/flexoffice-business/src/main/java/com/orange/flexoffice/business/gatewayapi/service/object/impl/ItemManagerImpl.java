@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.orange.flexoffice.business.gatewayapi.service.object.ItemManager;
-import com.orange.flexoffice.dao.gateway.repository.data.jdbc.CharacteristicRepository;
-import com.orange.flexoffice.dao.gateway.repository.data.jdbc.LogRepository;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Characteristic;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Log;
 import com.orange.flexoffice.dao.gatewayapi.model.object.Item;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.CharacteristicRepository;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.LogRepository;
 
 @Service("itemManager")
 @Transactional(readOnly=true)
