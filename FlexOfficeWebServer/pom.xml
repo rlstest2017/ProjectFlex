@@ -11,9 +11,9 @@
   <url>http://maven.apache.org</url>
 
   <modules>  
-     <module>flexoffice-adminui</module> 
+<!--      <module>flexoffice-adminui</module>  -->
     <module>flexoffice-userui</module>
-    <module>flexoffice-gatewayapi</module>
+<!--     <module>flexoffice-gatewayapi</module> -->
     <module>flexoffice-business</module>
     <module>flexoffice-dao</module>
   </modules>
@@ -34,12 +34,17 @@
     <jackson-mapper.version>1.8.5</jackson-mapper.version>
     <jsp.version>2.1</jsp.version>
     <junit.version>4.8.2</junit.version>
+<!--     <slf4j.version>1.7.7</slf4j.version>         -->
+<!--      <log4j.version>1.2.17</log4j.version> -->
+<!--     <slf4j.version>1.5.11</slf4j.version>  -->
+<!--     <slf4j-api.version>1.6.0</slf4j-api.version>         -->
     <log4j.version>1.2.14</log4j.version>
+     
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-<!--     <slf4j.version>1.5.11</slf4j.version> -->
-<!--     <slf4j-api.version>1.6.0</slf4j-api.version> -->
 <!--     <spring.version>3.0.5.RELEASE</spring.version> -->
     <spring.version>3.1.1.RELEASE</spring.version>
+<!--     <spring.security.version>3.2.5.RELEASE</spring.security.version> -->
+    <javax.annotation.version>1.0</javax.annotation.version>
     
     <!-- Sonar -->
     <sonar.sources>src/main</sonar.sources>
@@ -133,6 +138,12 @@
 	<!-- Version definition -->
 	<dependencyManagement>
 	  <dependencies>
+<!-- 	  <dependency> -->
+<!--             <groupId>javax</groupId> -->
+<!--             <artifactId>javaee-web-api</artifactId> -->
+<!--             <version>7.0</version> -->
+<!--             <scope>provided</scope> -->
+<!--         </dependency> -->
 	  	<!-- Common lang -->
 		<dependency>
 			<groupId>commons-lang</groupId>
@@ -182,27 +193,27 @@
 			<version>${javassist.version}</version>
 		</dependency>
  		
- 		<!-- Log -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.slf4j</groupId> -->
-<!-- 			<artifactId>slf4j-api</artifactId> -->
-<!-- 			<version>${slf4j.version}</version> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.slf4j</groupId> -->
-<!-- 			<artifactId>slf4j-log4j12</artifactId> -->
-<!-- 			<version>${slf4j.version}</version> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.slf4j</groupId> -->
-<!-- 			<artifactId>jcl104-over-slf4j</artifactId> -->
-<!-- 			<version>${slf4j.version}</version> -->
-<!-- 		</dependency> -->
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
+	<!-- logging -->            
+<!--         <dependency> -->
+<!--             <groupId>org.slf4j</groupId> -->
+<!--             <artifactId>slf4j-log4j12</artifactId> -->
+<!--             <version>${slf4j.version}</version> -->
+<!--         </dependency>     -->
+<!--         <dependency> -->
+<!--             <groupId>org.slf4j</groupId> -->
+<!--             <artifactId>slf4j-api</artifactId> -->
+<!--             <version>${slf4j-api.version}</version> -->
+<!--         </dependency> -->
+<!--         <dependency> -->
+<!--             <groupId>org.slf4j</groupId> -->
+<!--             <artifactId>jcl-over-slf4j</artifactId> -->
+<!--             <version>${slf4j.version}</version> -->
+<!--         </dependency>             -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>   
 			
 		<!-- antlr -->
 <!-- 		<dependency> -->
@@ -244,17 +255,44 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-tx</artifactId>
-	    		<version>${spring.version}</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+	   		<version>${spring.version}</version>
 		</dependency>
 		<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-jdbc</artifactId>
-	    		<version>${spring.version}</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+	   		<version>${spring.version}</version>
 		</dependency>
 		
-				<!-- Database -->
+		 <!-- Spring Security -->
+<!-- 	    <dependency> -->
+<!-- 	        <groupId>org.springframework.security</groupId> -->
+<!-- 	        <artifactId>spring-security-taglibs</artifactId> -->
+<!-- 			<version>${spring.version}</version> -->
+<!-- 	    </dependency> -->
+<!-- 	    <dependency> -->
+<!-- 	        <groupId>org.springframework.security</groupId> -->
+<!-- 	        <artifactId>spring-security-core</artifactId> -->
+<!-- 	        <version>${spring.version}</version> -->
+<!-- 	    </dependency> -->
+<!-- 	    <dependency> -->
+<!-- 	        <groupId>org.springframework.security</groupId> -->
+<!-- 	        <artifactId>spring-security-config</artifactId> -->
+<!-- 	        <version>${spring.version}</version> -->
+<!-- 	    </dependency> -->
+<!-- 	    <dependency> -->
+<!-- 	        <groupId>org.springframework.security</groupId> -->
+<!-- 	        <artifactId>spring-security-web</artifactId> -->
+<!-- 	        <version>${spring.version}</version> -->
+<!-- 	    </dependency> -->
+<!-- 	    <dependency> -->
+<!-- 	        <groupId>javax.annotation</groupId> -->
+<!-- 	        <artifactId>jsr250-api</artifactId> -->
+<!-- 	        <version>${javax.annotation.version}</version> -->
+<!-- 	    </dependency> -->
+		
+			<!-- Database -->
 			<dependency>
 				<groupId>commons-dbcp</groupId>
 				<artifactId>commons-dbcp</artifactId>
@@ -271,6 +309,7 @@
 				<groupId>postgresql</groupId>
 				<artifactId>postgresql</artifactId>
 				<version>9.1-901.jdbc4</version>
+<!-- 				<version>9.4-1200-jdbc41</version> -->
 			</dependency>
 			
 		<!-- spring AOP -->

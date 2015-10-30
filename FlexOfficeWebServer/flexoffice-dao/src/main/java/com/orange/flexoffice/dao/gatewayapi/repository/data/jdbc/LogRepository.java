@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Data;
 import com.orange.flexoffice.dao.gatewayapi.model.data.Log;
 import com.orange.flexoffice.dao.gatewayapi.repository.data.LogOperations;
-import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.metadata.LogMetadata;
+import com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.metadata.UserFlexofficeMetadata;
 import com.orange.flexoffice.dao.gatewayapi.repository.support.DataExtractor;
 import com.orange.flexoffice.dao.gatewayapi.repository.support.StreamingPreparedStatement;
 
@@ -87,22 +87,22 @@ public class LogRepository
 	
 	@Override
 	protected String getTableName() {
-		return LogMetadata.LOG_TABLE_NAME;
+		return UserFlexofficeMetadata.LOG_TABLE_NAME;
 	}
 
 	@Override
 	protected String getColumnColName() {
-		return LogMetadata.LOG_USER_ID_COL;
+		return UserFlexofficeMetadata.LOG_USER_ID_COL;
 	}
 
 	@Override
 	protected String getRowColName() {
-		return LogMetadata.LOG_ITEM_ID_COL;
+		return UserFlexofficeMetadata.LOG_ITEM_ID_COL;
 	}
 
 	@Override
 	protected String getRatingColName() {
-		return LogMetadata.LOG_RATING_COL;
+		return UserFlexofficeMetadata.LOG_RATING_COL;
 	}
 
 }

@@ -26,13 +26,19 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-       <groupId>javax.servlet</groupId>
-	   <artifactId>javax.servlet-api</artifactId>
+     <groupId>javax.servlet</groupId>
+	 <artifactId>javax.servlet-api</artifactId>
     </dependency>
     <dependency>
 		<groupId>org.codehaus.jackson</groupId>
 		<artifactId>jackson-mapper-asl</artifactId>
 	</dependency>
+
+	<!-- CXF -->	
+		<dependency>
+     		<groupId>org.apache.cxf</groupId>
+     		<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+  		</dependency>
 
 	<!-- Log -->
 	<dependency>
@@ -72,5 +78,22 @@
   
   <build>
     <finalName>flexoffice-userui</finalName>
+    <plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<executions>
+                    <execution>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+               </executions>
+				<configuration>
+					<packageName>com.orange.flexoffice.userui.ws.model</packageName>
+					<schemaDirectory>${basedir}/src/main/resources/xsd</schemaDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
   </build>
 </project>
