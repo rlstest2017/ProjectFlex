@@ -110,5 +110,11 @@ public class PreferenceRepository
 		});		
 	}
 
+	@Override
+	protected String getColumnMailName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

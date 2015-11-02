@@ -51,6 +51,15 @@ public class UserFlexoffice extends AbstractData {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public void setColumnEmail(String columnMail) {
+		setEmail(columnMail);
+	}
+	
+	public String getColumnEmail() {
+		return getEmail();
+	}
+	
 	@Override
 	public void setColumnId(String columnId) {
 		setId(Long.valueOf(columnId));

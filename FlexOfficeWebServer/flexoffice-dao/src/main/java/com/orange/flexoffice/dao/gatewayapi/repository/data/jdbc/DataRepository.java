@@ -5,10 +5,12 @@ import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlT
 import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.FIND_ALL_TEMPLATE;
 import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_ID_AND_ROW_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_MAIL_TEMPLATE;
 import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.FIND_BY_ROW_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.FIND_ONE_TEMPLATE;
 import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.REMOVE_TEMPLATE;
 import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.SAVE_TEMPLATE;
+//import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.USER_TEMPLATE;
 import static com.orange.flexoffice.dao.gatewayapi.repository.data.jdbc.DataSqlTemplate.UPDATE_TEMPLATE;
 
 import java.util.ArrayList;
@@ -38,11 +40,13 @@ public abstract class DataRepository<T extends Data>
 	private final String findOneQuery;
 	protected final String findAllQuery;
 	private final String saveQuery;
+	//private final String userQuery;
 	private final String updateQuery;
 	private final String deleteQuery;
 	private final String countQuery;
 	protected final String findByColumnIdAndRowIdQuery;
 	protected final String findByColumnIdQuery;
+	protected final String findByColumnMailQuery;
 	protected final String findByRowIdQuery;
 	protected final String findAllColumnIdsWithRowIdConditionQuery;
 	
@@ -56,11 +60,13 @@ public abstract class DataRepository<T extends Data>
 		findOneQuery = String.format(FIND_ONE_TEMPLATE, getTableName());
 		findAllQuery = String.format(FIND_ALL_TEMPLATE, getTableName());
 		saveQuery = String.format(SAVE_TEMPLATE, getTableName(), getColumnColName(), getRowColName(), getRatingColName());
+		//userQuery = String.format(USER_TEMPLATE, getTableName(), getColumnColName(), getRowColName(), getRatingColName());
 		updateQuery = String.format(UPDATE_TEMPLATE, getTableName(), getRatingColName(), getColumnColName(), getRowColName());
 		deleteQuery = String.format(REMOVE_TEMPLATE, getTableName());
 		countQuery = String.format(COUNT_TEMPLATE, getTableName());
 		findByColumnIdAndRowIdQuery = String.format(FIND_BY_COL_ID_AND_ROW_ID_TEMPLATE, getTableName(), getColumnColName(), getRowColName());
 		findByColumnIdQuery = String.format(FIND_BY_COL_ID_TEMPLATE, getTableName(), getColumnColName());
+		findByColumnMailQuery = String.format(FIND_BY_COL_MAIL_TEMPLATE, getTableName(), getColumnMailName());
 		findByRowIdQuery = String.format(FIND_BY_ROW_ID_TEMPLATE, getTableName(), getRowColName());
 		findAllColumnIdsWithRowIdConditionQuery = String.format(FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE, getColumnColName(), getTableName(), getRowColName());
 	}
@@ -102,7 +108,23 @@ public abstract class DataRepository<T extends Data>
 		
 		return data;
 	}
-
+	
+	
+	public T saveUser(T data) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(saveQuery, paramBean, keyHolder);
+		
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		//Date ts = (Date)keyHolder.getKeys().get("timestamp");
+		data.setId(id.longValue());
+		//data.setTimestamp(ts);
+		
+		return data;
+	}
+	
 	@Override
 	public T update(T data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -184,6 +206,7 @@ public abstract class DataRepository<T extends Data>
 	
 	protected abstract String getTableName();
 	protected abstract String getColumnColName();
+	protected abstract String getColumnMailName();
 	protected abstract String getRowColName();
 	protected abstract String getRatingColName();
 

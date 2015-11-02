@@ -111,4 +111,10 @@ public class CharacteristicRepository
 		});		
 	}
 
+	@Override
+	protected String getColumnMailName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

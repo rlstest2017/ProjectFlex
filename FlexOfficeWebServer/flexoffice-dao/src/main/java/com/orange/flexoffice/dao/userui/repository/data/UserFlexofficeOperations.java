@@ -8,4 +8,6 @@ public interface UserFlexofficeOperations {
 	
 	List<UserFlexoffice> findByUserId(Long userId);
 	
+	List<UserFlexoffice> findByUserEmail(String userEmail);
+	
 }

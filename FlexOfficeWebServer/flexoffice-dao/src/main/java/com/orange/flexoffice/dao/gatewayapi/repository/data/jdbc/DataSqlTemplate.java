@@ -8,6 +8,8 @@ public final class DataSqlTemplate {
 			"select * from %s where %s=:columnId and %s=:rowId";
 	public static final String FIND_BY_COL_ID_TEMPLATE = 
 			"select * from %s where %s=:columnId";
+	public static final String FIND_BY_COL_MAIL_TEMPLATE = 
+			"select * from %s where %s=:columnEmail";
 	public static final String FIND_BY_ROW_ID_TEMPLATE = 
 			"select * from %s where %s=:rowId";
 	public static final String FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE = 
@@ -22,6 +24,9 @@ public final class DataSqlTemplate {
 			"delete from %s where id=:id";
 	public static final String COUNT_TEMPLATE =
 			"select count(id) from %s";
+	public static final String USER_TEMPLATE = 
+			"insert into %s (%s, %s, %s, %s) values (:firstname, :lastname, :email, :password)";
+
 	
 	private DataSqlTemplate() {}
 

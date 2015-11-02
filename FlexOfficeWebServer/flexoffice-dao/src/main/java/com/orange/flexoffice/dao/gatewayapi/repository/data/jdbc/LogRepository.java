@@ -105,4 +105,10 @@ public class LogRepository
 		return UserFlexofficeMetadata.LOG_RATING_COL;
 	}
 
+	@Override
+	protected String getColumnMailName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

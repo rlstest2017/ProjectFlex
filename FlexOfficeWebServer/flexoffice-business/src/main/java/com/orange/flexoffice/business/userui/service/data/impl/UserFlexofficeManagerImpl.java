@@ -2,6 +2,7 @@ package com.orange.flexoffice.business.userui.service.data.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -21,6 +22,8 @@ import com.orange.flexoffice.dao.userui.repository.data.jdbc.UserFlexofficeRepos
 @Service("UserFlexofficeManager")
 @Transactional
 public class UserFlexofficeManagerImpl implements UserFlexofficeManager {
+	
+	private final Logger LOGGER = Logger.getLogger(UserFlexofficeManagerImpl.class);
 	
 	@Autowired
 	private UserFlexofficeRepository UserFlexofficeRepository;
@@ -46,15 +49,18 @@ public class UserFlexofficeManagerImpl implements UserFlexofficeManager {
 	 * @throws DataAlreadyExistsException 
 	 */
 	public UserFlexoffice save(UserFlexoffice UserFlexoffice) throws DataAlreadyExistsException {
-		Long userId = UserFlexoffice.getId();
+//		String userEmail = UserFlexoffice.getEmail();
 		
-		List<UserFlexoffice> testUserFlexoffice = UserFlexofficeRepository.findByUserId(userId);
-		if (testUserFlexoffice != null) {
-			throw new DataAlreadyExistsException("UserFlexoffice already saves.");
-		}
+//		LOGGER.debug("UserMail : " + userEmail);
+		
+//		List<UserFlexoffice> testUserFlexoffice = UserFlexofficeRepository.findByUserEmail(userEmail);
+//		if ((testUserFlexoffice != null)&&(testUserFlexoffice.size() > 0)) {
+//			LOGGER.debug("testUserFlexoffice.size() : " + testUserFlexoffice.size());
+//			throw new DataAlreadyExistsException("UserFlexoffice already saves.");
+//		}
 		
 		// Saves UserFlexoffice
-		return UserFlexofficeRepository.save(UserFlexoffice);
+		return UserFlexofficeRepository.saveUser(UserFlexoffice);
 	}
 	
 	/**

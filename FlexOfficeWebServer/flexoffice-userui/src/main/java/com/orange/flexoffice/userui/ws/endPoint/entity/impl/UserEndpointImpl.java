@@ -1,5 +1,7 @@
 package com.orange.flexoffice.userui.ws.endPoint.entity.impl;
 
+import java.util.Date;
+
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -18,7 +20,7 @@ import com.orange.flexoffice.userui.ws.model.XmlUser;
 
 public class UserEndpointImpl implements UserEndpoint {
 	
-	private final Logger logger = Logger.getLogger(UserEndpointImpl.class);
+	private final Logger LOGGER = Logger.getLogger(UserEndpointImpl.class);
 	private final ObjectFactory factory = new ObjectFactory();
 	
 	@Autowired
@@ -49,13 +51,37 @@ public class UserEndpointImpl implements UserEndpoint {
 
 	@Override
 	public Response addUser(XmlUser xmlUser) throws DataAlreadyExistsException {
+		
+        LOGGER.info( "Begin call doPost method for UserEndpoint at: " + new Date() );
+        
 		UserFlexoffice user = new UserFlexoffice();
 		user.setEmail(xmlUser.getEmail());
 		user.setFirstName(xmlUser.getFirstName());
 		user.setLastName(xmlUser.getLastName());
 		user.setPassword(xmlUser.getPassword());
-				
+		
+		 if (LOGGER.isDebugEnabled()) {
+	            LOGGER.debug( "Begin call addUser(XmlUser xmlUser) method for UserEndpoint, with parameters :");
+	            final StringBuffer message = new StringBuffer( 100 );
+	            message.append( "email :" );
+	            message.append( xmlUser.getEmail() );
+	            message.append( "\n" );
+	            message.append( "firstname :" );
+	            message.append( xmlUser.getFirstName() );
+	            message.append( "\n" );
+	            message.append( "lastname :" );
+	            message.append( xmlUser.getLastName() );
+	            message.append( "\n" );
+	            message.append( "password :" );
+	            message.append( xmlUser.getPassword() );
+	            message.append( "\n" );
+	            LOGGER.debug( message.toString() );
+	    }
+		
+		
 		user = userManager.save(user);
+		
+		LOGGER.info( "End call doPost method for UserEndpoint at: " + new Date() );
 		
 		return Response.noContent().build();
 	}
