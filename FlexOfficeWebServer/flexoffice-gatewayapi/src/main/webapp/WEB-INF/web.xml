@@ -13,14 +13,6 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath:applicationContext-flexoffice-gatewayapi.xml</param-value>
   </context-param>
-<!--   <servlet> -->
-<!--     <servlet-name>GatewaysManageServlet</servlet-name> -->
-<!--     <servlet-class>com.orange.flexoffice.gatewayapi.servlet.GatewaysManageServlet</servlet-class> -->
-<!--   </servlet> -->
-<!--   <servlet-mapping> -->
-<!--     <servlet-name>GatewaysManageServlet</servlet-name> -->
-<!--     <url-pattern>/gateways/*</url-pattern> -->
-<!--   </servlet-mapping> -->
     <servlet>
 		<servlet-name>GatewaysManageServlet</servlet-name>
 		<servlet-class>
@@ -40,9 +32,6 @@
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
-<!--   <listener> -->
-<!--     <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class> -->
-<!--   </listener> -->
   <session-config>
     <session-timeout>0</session-timeout>
   </session-config>

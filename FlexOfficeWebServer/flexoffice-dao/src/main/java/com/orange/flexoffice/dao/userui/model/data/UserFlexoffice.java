@@ -1,7 +1,5 @@
 package com.orange.flexoffice.dao.userui.model.data;
 
-import com.orange.flexoffice.dao.gatewayapi.model.data.AbstractData;
-
 /**
  * A user. 
  * 

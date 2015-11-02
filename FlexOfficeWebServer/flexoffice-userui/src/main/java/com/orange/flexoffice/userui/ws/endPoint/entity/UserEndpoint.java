@@ -38,9 +38,9 @@ public interface UserEndpoint {
 	 */
 	@GET
 	@Path(USER_ID_PATH)
-	@Consumes (MediaType.APPLICATION_XML)
-	@Produces(MediaType.APPLICATION_XML)
-	JAXBElement<XmlUser> getUser(@PathParam(USER_ID_PARAM) String userId);
+	@Consumes (MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	XmlUser getUser(@PathParam(USER_ID_PARAM) String userId);
 
 	/**
 	 * Add a new user.
@@ -53,8 +53,9 @@ public interface UserEndpoint {
 	 * @see Response
 	 */
 	@POST
-	@Consumes(MediaType.APPLICATION_XML)
-	Response addUser(XmlUser user) throws DataAlreadyExistsException;
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	XmlUser addUser(XmlUser user) throws DataAlreadyExistsException;
 	
 	/**
 	 * Modifies a specific user.
@@ -71,7 +72,7 @@ public interface UserEndpoint {
 	 */
 	@PUT
 	@Path(USER_ID_PATH)
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	Response updateUser(@PathParam(USER_ID_PARAM)String id, XmlUser user);
 
 	/**
@@ -86,7 +87,7 @@ public interface UserEndpoint {
 	 */
 	@DELETE
 	@Path(USER_ID_PATH)
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	Response removeUser(@PathParam(USER_ID_PARAM)String id);
 	
 	

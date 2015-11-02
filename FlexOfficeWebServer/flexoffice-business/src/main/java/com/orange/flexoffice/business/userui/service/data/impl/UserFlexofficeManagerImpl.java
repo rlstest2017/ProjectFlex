@@ -49,15 +49,15 @@ public class UserFlexofficeManagerImpl implements UserFlexofficeManager {
 	 * @throws DataAlreadyExistsException 
 	 */
 	public UserFlexoffice save(UserFlexoffice UserFlexoffice) throws DataAlreadyExistsException {
-//		String userEmail = UserFlexoffice.getEmail();
+		String userEmail = UserFlexoffice.getEmail();
 		
-//		LOGGER.debug("UserMail : " + userEmail);
+		LOGGER.debug("UserMail : " + userEmail);
 		
-//		List<UserFlexoffice> testUserFlexoffice = UserFlexofficeRepository.findByUserEmail(userEmail);
-//		if ((testUserFlexoffice != null)&&(testUserFlexoffice.size() > 0)) {
-//			LOGGER.debug("testUserFlexoffice.size() : " + testUserFlexoffice.size());
-//			throw new DataAlreadyExistsException("UserFlexoffice already saves.");
-//		}
+		List<UserFlexoffice> testUserFlexoffice = UserFlexofficeRepository.findByUserEmail(userEmail);
+		if ((testUserFlexoffice != null)&&(testUserFlexoffice.size() > 0)) {
+			LOGGER.debug("testUserFlexoffice.size() : " + testUserFlexoffice.size());
+			throw new DataAlreadyExistsException("UserFlexoffice already saves.");
+		}
 		
 		// Saves UserFlexoffice
 		return UserFlexofficeRepository.saveUser(UserFlexoffice);
@@ -70,12 +70,17 @@ public class UserFlexofficeManagerImpl implements UserFlexofficeManager {
 	 * 		  the new {@link UserFlexoffice}
 	 * @return a saved {@link UserFlexoffice}
 	 */
-	public UserFlexoffice update(UserFlexoffice UserFlexoffice) {
-		//String userId = UserFlexoffice.getUserId();
-		UserFlexoffice oldUserFlexoffice = UserFlexofficeRepository.findOne(UserFlexoffice.getId());
+	public UserFlexoffice update(UserFlexoffice userFlexoffice) {
+//		Long userId = userFlexoffice.getId();
+//		UserFlexoffice testUserFlexoffice = UserFlexofficeRepository.findOne(userFlexoffice.getId());
+//		
+//		if (testUserFlexoffice == null) {
+//			LOGGER.debug("user by id " + userId + " is not found");
+//			//throw new DataAlreadyExistsException("UserFlexoffice already saves.");
+//		}
 		
 		// Saves UserFlexoffice
-		return UserFlexofficeRepository.update(UserFlexoffice);
+		return UserFlexofficeRepository.updateUser(userFlexoffice);
 	}
 
 	/**

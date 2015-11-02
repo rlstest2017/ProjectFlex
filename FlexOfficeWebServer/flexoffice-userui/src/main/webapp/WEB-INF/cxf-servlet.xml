@@ -13,6 +13,16 @@
 		<jaxrs:serviceBeans>
   			<bean class="com.orange.flexoffice.userui.ws.endPoint.entity.impl.UserEndpointImpl"/>
   		</jaxrs:serviceBeans>
-	</jaxrs:server>
+  		 <jaxrs:extensionMappings>
+            <entry key="json" value="application/json"/>
+            <entry key="xml" value="application/xml"/>
+        </jaxrs:extensionMappings>
+        <jaxrs:providers>
+            <ref bean="jaxbJSONProvider"/>
+        </jaxrs:providers>
+   </jaxrs:server>
+
+   <bean id="jaxbJSONProvider" class="org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider"/>
+  	
 
 </beans>

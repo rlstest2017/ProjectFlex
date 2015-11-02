@@ -54,9 +54,9 @@
     <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
     <sonar.language>java</sonar.language>
     
-    	<test.database.url>jdbc:postgresql://192.168.144.109/reperio_test</test.database.url>
-    	<test.database.username>reperio</test.database.username>
-    	<test.database.password>r3perio</test.database.password>
+    	<test.database.url>jdbc:postgresql://localhost:5432/FlexOffice_Test</test.database.url>
+    	<test.database.username>flexoffice</test.database.username>
+    	<test.database.password>oab</test.database.password>
     
   </properties>
 
@@ -338,7 +338,19 @@
       		<artifactId>cxf-rt-frontend-jaxrs</artifactId>
       		<version>${cxf.version}</version>
    		</dependency>
-   			   			
+   		 <!--  for JSON provider -->
+	    <dependency>
+	        <groupId>org.apache.cxf</groupId>
+	        <artifactId>cxf-rt-rs-extension-providers</artifactId>
+	        <version>${cxf.version}</version>
+	    </dependency>
+	    <!--  for extension providers -->
+	    <dependency>
+	        <groupId>org.codehaus.jettison</groupId>
+	        <artifactId>jettison</artifactId>
+	        <version>1.2</version>
+	    </dependency>
+	       	   			
 		<!-- ehcache -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
@@ -360,7 +372,16 @@
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>${jackson-mapper.version}</version>
 		</dependency>
-	
+	<dependency>
+  			<groupId>org.codehaus.jackson</groupId>
+  			<artifactId>jackson-jaxrs</artifactId>
+  			<version>1.8.5</version>
+	</dependency>
+	<dependency>
+    		<groupId>org.codehaus.jackson</groupId>
+    		<artifactId>jackson-xc</artifactId>
+    		<version>1.8.5</version>
+	</dependency>
 		<!-- Mock IT -->
 		<dependency>
 			<groupId>org.mockito</groupId>

@@ -11,18 +11,7 @@
 	
 	<jaxrs:server id="server" address="/">
 		<jaxrs:serviceBeans>
-  			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.data.impl.LogEndpointImpl"/>
-  			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.data.impl.CharacteristicEndpointImpl"/>	
-  			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.data.impl.PreferenceEndpointImpl"/>	
-  			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.data.impl.RelationshipEndpointImpl"/>
-  			
-  			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.entity.impl.UserEndpointImpl"/>
-  			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.entity.impl.ItemEndpointImpl"/>
-  			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.entity.impl.DescriptorEndpointImpl"/>
-  			
-  			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.impl.RecommendationEndpointImpl"/>
-  			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.impl.RankingEndpointImpl"/>
-  			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.impl.SimilarityEndpointImpl"/>
+<!--   			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.data.impl.LogEndpointImpl"/> -->
   		</jaxrs:serviceBeans>
 	</jaxrs:server>
 
