@@ -33,7 +33,7 @@
     <javassist.version>3.9.0.GA</javassist.version>
     <jackson-mapper.version>1.8.5</jackson-mapper.version>
     <jsp.version>2.1</jsp.version>
-    <junit.version>4.8.2</junit.version>
+    <junit.version>4.10</junit.version>
 <!--     <slf4j.version>1.7.7</slf4j.version>         -->
 <!--      <log4j.version>1.2.17</log4j.version> -->
 <!--     <slf4j.version>1.5.11</slf4j.version>  -->
@@ -54,9 +54,10 @@
     <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
     <sonar.language>java</sonar.language>
     
-    	<test.database.url>jdbc:postgresql://localhost:5432/FlexOffice_Test</test.database.url>
-    	<test.database.username>flexoffice</test.database.username>
-    	<test.database.password>oab</test.database.password>
+    <!-- Unitils configuration -->
+   	<test.database.url>jdbc:postgresql://localhost:5432/FlexOffice_Test</test.database.url>
+   	<test.database.username>flexoffice</test.database.username>
+   	<test.database.password>oab</test.database.password>
     
   </properties>
 
@@ -383,13 +384,43 @@
     		<artifactId>jackson-xc</artifactId>
     		<version>1.8.5</version>
 	</dependency>
-		<!-- Mock IT -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.9.5</version>
-			<scope>test</scope>
-		</dependency>	
+	
+	<!-- Test -->
+	<dependency> 
+	    <groupId>org.unitils</groupId> 
+	    <artifactId>unitils-dbunit</artifactId> 
+	    <version>3.3</version> 
+	    <scope>test</scope> 
+	</dependency>
+	
+	<dependency> 
+	    <groupId>org.unitils</groupId> 
+	    <artifactId>unitils-spring</artifactId> 
+	    <version>3.3</version> 
+	    <scope>test</scope> 
+	</dependency>
+	
+	<dependency> 
+	    <groupId>org.unitils</groupId> 
+	    <artifactId>unitils-easymock</artifactId> 
+	    <version>3.3</version> 
+	    <scope>test</scope> 
+	</dependency>
+	
+	<dependency> 
+	    <groupId>org.unitils</groupId> 
+	    <artifactId>unitils-inject</artifactId> 
+	    <version>3.3</version> 
+	    <scope>test</scope> 
+	</dependency>
+
+	<!-- Mock IT -->
+	<dependency>
+		<groupId>org.mockito</groupId>
+		<artifactId>mockito-all</artifactId>
+		<version>1.9.5</version>
+		<scope>test</scope>
+	</dependency>	
 	 </dependencies>
 	
 	</dependencyManagement>

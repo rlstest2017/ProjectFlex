@@ -1,10 +1,13 @@
 package com.orange.flexoffice.userui.ws.endPoint.entity.impl;
 
+import java.net.URI;
 import java.util.Date;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
 import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
@@ -27,6 +30,8 @@ public class UserEndpointImpl implements UserEndpoint {
 	private final Logger LOGGER = Logger.getLogger(UserEndpointImpl.class);
 	private final ObjectFactory factory = new ObjectFactory();
 	
+	@Context
+	private UriInfo uriInfo;
 	@Autowired
 	private UserFlexofficeManager userManager;
 	
@@ -105,7 +110,6 @@ public class UserEndpointImpl implements UserEndpoint {
 	public Response updateUser(String id, XmlUser xmlUser) {
 		LOGGER.info( "Begin call doPut method for UserEndpoint at: " + new Date() );
 		
-		try {
 		UserFlexoffice user = new UserFlexoffice();
 		user.setId(Long.valueOf(id));
 		user.setEmail(xmlUser.getEmail());
@@ -113,8 +117,9 @@ public class UserEndpointImpl implements UserEndpoint {
 		user.setLastName(xmlUser.getLastName());
 		user.setPassword(xmlUser.getPassword());
 		
+		try {
 		user = userManager.update(user);
-		
+	
 		} catch (DataNotExistsException e){
 			ErrorModel errorModel = new ErrorModel();
 			errorModel.setCode(EnumErrorModel.ERROR_6.code());
@@ -125,11 +130,13 @@ public class UserEndpointImpl implements UserEndpoint {
 			builder.entity(errorModel);
 			Response response = builder.build();
 			throw new WebApplicationException(response);
-
 		}
 		
+		URI location = uriInfo.getAbsolutePathBuilder()
+				.path(UserEndpoint.class, "getUser")
+				.build(user.getId());
 		LOGGER.info( "End call doPut method for UserEndpoint at: " + new Date() );
-		return Response.noContent().build();
+		return Response.created(location).build();
 	}
 
 	@Override
