@@ -27,7 +27,7 @@ public final class DataSqlTemplate {
 	public static final String USER_TEMPLATE = 
 			"insert into %s (%s, %s, %s, %s) values (:firstName, :lastName, :email, :password)";
 	public static final String UPDATE_USER_TEMPLATE =
-			"update %s set %s=:email WHERE %s=:columnId";
+			"update %s set %s=:email WHERE %s=:id";
 	
 	private DataSqlTemplate() {}
 

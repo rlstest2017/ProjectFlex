@@ -4,13 +4,7 @@ import java.util.Date;
 
 
 /**
- * Defines a generic representation for all the data manage by Reperio.
- * 
- * @see Log
- * @see Characteristic
- * @see Preference
- * @see Relationship
- * 
+ * Defines a generic representation 
  * @author oab
  */
 public interface Data {

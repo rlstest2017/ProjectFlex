@@ -9,7 +9,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.orange.flexoffice.business.gatewayapi.exception.DataAlreadyExistsException;
+import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
+import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.userui.service.data.UserFlexofficeManager;
 import com.orange.flexoffice.dao.userui.model.data.UserFlexoffice;
 import com.orange.flexoffice.dao.userui.repository.data.jdbc.UserFlexofficeRepository;
@@ -70,14 +71,14 @@ public class UserFlexofficeManagerImpl implements UserFlexofficeManager {
 	 * 		  the new {@link UserFlexoffice}
 	 * @return a saved {@link UserFlexoffice}
 	 */
-	public UserFlexoffice update(UserFlexoffice userFlexoffice) {
-//		Long userId = userFlexoffice.getId();
-//		UserFlexoffice testUserFlexoffice = UserFlexofficeRepository.findOne(userFlexoffice.getId());
-//		
-//		if (testUserFlexoffice == null) {
-//			LOGGER.debug("user by id " + userId + " is not found");
-//			//throw new DataAlreadyExistsException("UserFlexoffice already saves.");
-//		}
+	public UserFlexoffice update(UserFlexoffice userFlexoffice) throws DataNotExistsException {
+		Long userId = userFlexoffice.getId();
+		UserFlexoffice testUserFlexoffice = UserFlexofficeRepository.findOne(userFlexoffice.getId());
+		
+		if (testUserFlexoffice == null) {
+			LOGGER.debug("user by id " + userId + " is not found");
+			throw new DataNotExistsException("UserFlexoffice already saves.");
+		}
 		
 		// Saves UserFlexoffice
 		return UserFlexofficeRepository.updateUser(userFlexoffice);

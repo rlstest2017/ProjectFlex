@@ -17,7 +17,7 @@ import static com.orange.flexoffice.userui.ws.ParamsConst.USER_ID_PARAM;
 import static com.orange.flexoffice.userui.ws.PathConst.USERS_PATH;
 import static com.orange.flexoffice.userui.ws.PathConst.USER_ID_PATH;
 
-import com.orange.flexoffice.business.gatewayapi.exception.DataAlreadyExistsException;
+import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.userui.ws.model.XmlUser;
 
 /**

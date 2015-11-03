@@ -1,4 +1,4 @@
-package com.orange.flexoffice.userui.ws.exception;
+package com.orange.flexoffice.business.common.exception;
 
 /**
  * 

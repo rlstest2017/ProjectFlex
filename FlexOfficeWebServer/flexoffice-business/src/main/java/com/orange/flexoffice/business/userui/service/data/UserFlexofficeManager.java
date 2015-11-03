@@ -1,6 +1,7 @@
 package com.orange.flexoffice.business.userui.service.data;
 
-import com.orange.flexoffice.business.gatewayapi.exception.DataAlreadyExistsException;
+import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
+import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.userui.model.data.UserFlexoffice;
 
 public interface UserFlexofficeManager {
@@ -31,7 +32,7 @@ public interface UserFlexofficeManager {
 	 * 		  the new {@link UserFlexoffice}
 	 * @return a saved {@link UserFlexoffice}
 	 */
-	UserFlexoffice update(UserFlexoffice UserFlexoffice);
+	UserFlexoffice update(UserFlexoffice UserFlexoffice) throws DataNotExistsException;
 
 	/**
 	 * Deletes a {@link UserFlexoffice}.

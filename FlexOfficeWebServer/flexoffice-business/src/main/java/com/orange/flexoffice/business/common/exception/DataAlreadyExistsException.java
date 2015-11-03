@@ -1,9 +1,9 @@
-package com.orange.flexoffice.business.gatewayapi.exception;
+package com.orange.flexoffice.business.common.exception;
 
 /**
  * Exception throws when trying to save an already existing data.
  * 
- * @author Guillaume Mouricou
+ * @author oab
  */
 public class DataAlreadyExistsException extends Exception {
 

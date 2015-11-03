@@ -11,11 +11,13 @@ import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.orange.flexoffice.business.gatewayapi.exception.DataAlreadyExistsException;
+import com.orange.flexoffice.business.common.enums.EnumErrorModel;
+import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
+import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.business.common.exception.ErrorModel;
 import com.orange.flexoffice.business.userui.service.data.UserFlexofficeManager;
 import com.orange.flexoffice.dao.userui.model.data.UserFlexoffice;
 import com.orange.flexoffice.userui.ws.endPoint.entity.UserEndpoint;
-import com.orange.flexoffice.userui.ws.exception.ErrorModel;
 import com.orange.flexoffice.userui.ws.model.ObjectFactory;
 import com.orange.flexoffice.userui.ws.model.XmlUser;
 
@@ -37,10 +39,9 @@ public class UserEndpointImpl implements UserEndpoint {
 	UserFlexoffice data = userManager.find(Long.valueOf(userId));
 		
 		if (data == null) {
-			//throw new WebApplicationException(Status.NOT_FOUND);
 			ErrorModel errorModel = new ErrorModel();
-			errorModel.setCode("U001");
-			errorModel.setMessage("impossible de charger la liste des utilisateurs");
+			errorModel.setCode(EnumErrorModel.ERROR_4.code());
+			errorModel.setMessage(EnumErrorModel.ERROR_4.value());
 			
 			ResponseBuilderImpl builder = new ResponseBuilderImpl();
 			builder.status(Response.Status.NOT_FOUND);
@@ -104,17 +105,28 @@ public class UserEndpointImpl implements UserEndpoint {
 	public Response updateUser(String id, XmlUser xmlUser) {
 		LOGGER.info( "Begin call doPut method for UserEndpoint at: " + new Date() );
 		
+		try {
 		UserFlexoffice user = new UserFlexoffice();
 		user.setId(Long.valueOf(id));
 		user.setEmail(xmlUser.getEmail());
+		user.setFirstName(xmlUser.getFirstName());
+		user.setLastName(xmlUser.getLastName());
+		user.setPassword(xmlUser.getPassword());
 		
-		LOGGER.debug("UserMail : " + xmlUser.getEmail());
-		
-		//user.setFirstName(xmlUser.getFirstName());
-		//user.setLastName(xmlUser.getLastName());
-		//user.setPassword(xmlUser.getPassword());
-				
 		user = userManager.update(user);
+		
+		} catch (DataNotExistsException e){
+			ErrorModel errorModel = new ErrorModel();
+			errorModel.setCode(EnumErrorModel.ERROR_6.code());
+			errorModel.setMessage(EnumErrorModel.ERROR_6.value());
+			
+			ResponseBuilderImpl builder = new ResponseBuilderImpl();
+			builder.status(Response.Status.NOT_FOUND);
+			builder.entity(errorModel);
+			Response response = builder.build();
+			throw new WebApplicationException(response);
+
+		}
 		
 		LOGGER.info( "End call doPut method for UserEndpoint at: " + new Date() );
 		return Response.noContent().build();
