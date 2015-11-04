@@ -1,11 +1,15 @@
 package com.orange.flexoffice.business.userui.service.data;
 
+import java.util.List;
+
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.userui.model.data.UserFlexoffice;
 
 public interface UserFlexofficeManager {
 
+	List<UserFlexoffice> findAllUsers();
+	
 	/**
 	 * Finds a {@link UserFlexoffice} by its ID.
 	 * 
@@ -40,6 +44,6 @@ public interface UserFlexofficeManager {
 	 * @param id 
 	 * 		  a {@link UserFlexoffice} ID
 	 */
-	void delete(long id);
+	void delete(long id) throws DataNotExistsException;
 
 }

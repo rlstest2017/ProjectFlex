@@ -12,7 +12,7 @@ import static com.orange.flexoffice.dao.userui.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.userui.repository.data.jdbc.DataSqlTemplate.SAVE_TEMPLATE;
 import static com.orange.flexoffice.dao.userui.repository.data.jdbc.DataSqlTemplate.UPDATE_TEMPLATE;
 import static com.orange.flexoffice.dao.userui.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_TEMPLATE;
-import static com.orange.flexoffice.dao.userui.repository.data.jdbc.DataSqlTemplate.USER_TEMPLATE;
+import static com.orange.flexoffice.dao.userui.repository.data.jdbc.DataSqlTemplate.CREATE_USER_TEMPLATE;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,7 +41,7 @@ public abstract class DataRepository<T extends Data>
 	private final String findOneQuery;
 	protected final String findAllQuery;
 	private final String saveQuery;
-	private final String userQuery;
+	private final String saveUserQuery;
 	private final String updateQuery;
 	private final String updateUserQuery;
 	private final String deleteQuery;
@@ -61,15 +61,16 @@ public abstract class DataRepository<T extends Data>
 		
 		findOneQuery = String.format(FIND_ONE_TEMPLATE, getTableName());
 		findAllQuery = String.format(FIND_ALL_TEMPLATE, getTableName());
-		saveQuery = String.format(SAVE_TEMPLATE, getTableName(), getColumnColName(), getRowColName(), getRatingColName());
-		userQuery = String.format(USER_TEMPLATE, getTableName(), getFisrtName(), getLastName(), getEmail(), getPassword());
-		updateQuery = String.format(UPDATE_TEMPLATE, getTableName(), getRatingColName(), getColumnColName(), getRowColName());
-		updateUserQuery = String.format(UPDATE_USER_TEMPLATE, getTableName(), getEmail(), getColumnColName());
-		deleteQuery = String.format(REMOVE_TEMPLATE, getTableName());
+		saveUserQuery = String.format(CREATE_USER_TEMPLATE, getTableName(), getFisrtName(), getLastName(), getEmail());
+		updateUserQuery = String.format(UPDATE_USER_TEMPLATE, getTableName(), getFisrtName(), getLastName(), getEmail(), getColumnColName());
+		deleteQuery = String.format(REMOVE_TEMPLATE, getTableName());	
 		countQuery = String.format(COUNT_TEMPLATE, getTableName());
-		findByColumnIdAndRowIdQuery = String.format(FIND_BY_COL_ID_AND_ROW_ID_TEMPLATE, getTableName(), getColumnColName(), getRowColName());
 		findByColumnIdQuery = String.format(FIND_BY_COL_ID_TEMPLATE, getTableName(), getColumnColName());
 		findByColumnMailQuery = String.format(FIND_BY_COL_MAIL_TEMPLATE, getTableName(), getColumnMailName());
+		
+		updateQuery = String.format(UPDATE_TEMPLATE, getTableName(), getRatingColName(), getColumnColName(), getRowColName());
+		saveQuery = String.format(SAVE_TEMPLATE, getTableName(), getColumnColName(), getRowColName(), getRatingColName());
+		findByColumnIdAndRowIdQuery = String.format(FIND_BY_COL_ID_AND_ROW_ID_TEMPLATE, getTableName(), getColumnColName(), getRowColName());
 		findByRowIdQuery = String.format(FIND_BY_ROW_ID_TEMPLATE, getTableName(), getRowColName());
 		findAllColumnIdsWithRowIdConditionQuery = String.format(FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE, getColumnColName(), getTableName(), getRowColName());
 	}
@@ -117,7 +118,7 @@ public abstract class DataRepository<T extends Data>
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
-		jdbcTemplate.update(userQuery, paramBean, keyHolder);
+		jdbcTemplate.update(saveUserQuery, paramBean, keyHolder);
 		
 		// Retrieves generated id of saved data.
 		Integer id = (Integer)keyHolder.getKeys().get("id");

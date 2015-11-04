@@ -12,4 +12,12 @@
 		<xsd:attribute name="id" type="xsd:string"/>
 	</xsd:complexType>
 	
+	<!-- Error Model -->
+	<xsd:complexType name="ErrorModel">
+		<xsd:sequence>
+			<xsd:element name="code" type="xsd:string"/>
+			<xsd:element name="message" type="xsd:string"/>
+ 		</xsd:sequence>
+	</xsd:complexType>
+	
 </xsd:schema>

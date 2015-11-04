@@ -32,7 +32,7 @@ import com.orange.flexoffice.userui.ws.endPoint.entity.UserEndpoint;
 import com.orange.flexoffice.userui.ws.endPoint.support.ObjectFactory;
 import com.orange.flexoffice.userui.ws.model.XmlUser;
 
-public class UserEndpointImplTest extends UnitilsJUnit4 {
+public class UserEndPointImplTest extends UnitilsJUnit4 {
 	
 	@TestedObject
 	private UserEndpointImpl userEndpoint;

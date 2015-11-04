@@ -40,8 +40,8 @@ public enum EnumErrorModel {
 	ERROR_28("R002","impossible de créer cette salle" /*({{name}})*/),
 	ERROR_29("R003","impossible de mettre à jour cette salle" /*({{name}})*/),
 	ERROR_30("R004","impossible de supprimer cette salle" /*({{name}})*/),
-	ERROR_31("R005","impossible de charger cette salle" /*({{name}})*/);
-	
+	ERROR_31("R005","impossible de charger cette salle" /*({{name}})*/),
+	ERROR_32("500","");
         
      /**
      * status code

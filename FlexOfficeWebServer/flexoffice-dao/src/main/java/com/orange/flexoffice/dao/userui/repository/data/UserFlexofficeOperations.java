@@ -6,6 +6,8 @@ import com.orange.flexoffice.dao.userui.model.data.UserFlexoffice;
 
 public interface UserFlexofficeOperations {
 	
+	List<UserFlexoffice> findAllUsers();
+	
 	List<UserFlexoffice> findByUserId(Long userId);
 	
 	List<UserFlexoffice> findByUserEmail(String userEmail);

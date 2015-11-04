@@ -29,6 +29,11 @@ public class UserFlexofficeManagerImpl implements UserFlexofficeManager {
 	@Autowired
 	private UserFlexofficeRepository UserFlexofficeRepository;
 	
+	@Transactional(readOnly=true)
+	public List<UserFlexoffice> findAllUsers() {
+		return UserFlexofficeRepository.findAllUsers();
+	}
+	
 	/**
 	 * Finds a {@link UserFlexoffice} by its ID.
 	 * 
@@ -90,9 +95,14 @@ public class UserFlexofficeManagerImpl implements UserFlexofficeManager {
 	 * @param id 
 	 * 		  a {@link UserFlexoffice} ID
 	 */
-	public void delete(long id) {
-		//UserFlexoffice UserFlexoffice = UserFlexofficeRepository.findOne(id);
-		//String userId = UserFlexoffice.getUserId();
+	public void delete(long id) throws DataNotExistsException {
+	
+		UserFlexoffice testUserFlexoffice = UserFlexofficeRepository.findOne(id);
+		
+		if (testUserFlexoffice == null) {
+			LOGGER.debug("user by id " + id + " is not found");
+			throw new DataNotExistsException("UserFlexoffice already saves.");
+		}
 		
 		// Deletes UserFlexoffice
 		UserFlexofficeRepository.delete(id);

@@ -21,6 +21,15 @@ public class UserFlexofficeRepository extends DataRepository<UserFlexoffice> imp
 		super(UserFlexoffice.class);
 	}
 	
+	@Override
+	public List<UserFlexoffice> findAllUsers() {
+		SqlParameterSource paramMap = new MapSqlParameterSource();
+		return jdbcTemplate.query(
+				findAllQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<UserFlexoffice>(UserFlexoffice.class)
+			);
+	}
 	
 	@Override
 	public List<UserFlexoffice> findByUserId(Long userId) {
@@ -100,7 +109,6 @@ public class UserFlexofficeRepository extends DataRepository<UserFlexoffice> imp
 	protected String getPassword() {
 		return UserFlexofficeMetadata.USER_FLEXOFFICE_PASSSWOR_COL;	
 	}
-
 
 	
 

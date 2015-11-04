@@ -17,12 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
-import com.orange.flexoffice.business.common.exception.ErrorModel;
 import com.orange.flexoffice.business.userui.service.data.UserFlexofficeManager;
 import com.orange.flexoffice.dao.userui.model.data.UserFlexoffice;
 import com.orange.flexoffice.userui.ws.endPoint.entity.UserEndpoint;
+import com.orange.flexoffice.userui.ws.model.ErrorModel;
 import com.orange.flexoffice.userui.ws.model.ObjectFactory;
 import com.orange.flexoffice.userui.ws.model.XmlUser;
+
 
 
 public class UserEndpointImpl implements UserEndpoint {
@@ -141,7 +142,12 @@ public class UserEndpointImpl implements UserEndpoint {
 
 	@Override
 	public Response removeUser(String id) {
-		userManager.delete(Long.valueOf(id));
+		try {
+			userManager.delete(Long.valueOf(id));
+		} catch (NumberFormatException | DataNotExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return Response.noContent().build();
 		//return Response.status(Status.NOT_FOUND).build();
 	}
