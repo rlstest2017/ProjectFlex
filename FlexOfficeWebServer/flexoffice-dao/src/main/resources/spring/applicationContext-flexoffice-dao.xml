@@ -6,7 +6,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 	
 	<!-- Scan base package -->
-	<context:component-scan base-package="com.orange.flexoffice.dao.userui.repository, com.orange.flexoffice.dao.userui.model" />
+	<context:component-scan base-package="com.orange.flexoffice.dao.common.repository, com.orange.flexoffice.dao.common.model, com.orange.flexoffice.dao.userui.repository, com.orange.flexoffice.dao.userui.model" />
 	
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="org.postgresql.Driver"/>
