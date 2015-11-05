@@ -52,12 +52,12 @@ public abstract class DataRepository<T extends Data>
 		
 		findOneQuery = String.format(FIND_ONE_TEMPLATE, getTableName());
 		findAllQuery = String.format(FIND_ALL_TEMPLATE, getTableName());
-		saveUserQuery = String.format(CREATE_USER_TEMPLATE, getTableName(), getFisrtName(), getLastName(), getEmail());
-		updateUserQuery = String.format(UPDATE_USER_TEMPLATE, getTableName(), getFisrtName(), getLastName(), getEmail(), getColumnColName());
+		saveUserQuery = String.format(CREATE_USER_TEMPLATE, getTableName());
+		updateUserQuery = String.format(UPDATE_USER_TEMPLATE, getTableName(), getColumnColName());
 		deleteQuery = String.format(REMOVE_TEMPLATE, getTableName());	
 		countQuery = String.format(COUNT_TEMPLATE, getTableName());
 		findByColumnIdQuery = String.format(FIND_BY_COL_ID_TEMPLATE, getTableName(), getColumnColName());
-		findByColumnMailQuery = String.format(FIND_BY_COL_MAIL_TEMPLATE, getTableName(), getColumnMailName());
+		findByColumnMailQuery = String.format(FIND_BY_COL_MAIL_TEMPLATE, getTableName());
 		findAllColumnIdsWithRowIdConditionQuery = String.format(FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE, getColumnColName(), getTableName(), getRowColName());
 	}
 	
@@ -151,12 +151,6 @@ public abstract class DataRepository<T extends Data>
 	
 	protected abstract String getTableName();
 	protected abstract String getColumnColName();
-	protected abstract String getColumnMailName();
 	protected abstract String getRowColName();
-	protected abstract String getRatingColName();
-	protected abstract String getFisrtName();
-	protected abstract String getLastName();
-	protected abstract String getEmail();
-	protected abstract String getPassword();
 
 }
