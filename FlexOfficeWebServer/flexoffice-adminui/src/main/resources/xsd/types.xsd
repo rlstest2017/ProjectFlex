@@ -218,7 +218,7 @@
 			<xsd:element name="desc" type="xsd:string"/>
  		    <xsd:element name="status" type="e-deviceStatus" />
 			<xsd:element name="lastPollingDate" type="xsd:long"/>
-			<xsd:element name="rooms" type="Rooms"/>
+			<xsd:element name="rooms" type="RoomSummary" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	

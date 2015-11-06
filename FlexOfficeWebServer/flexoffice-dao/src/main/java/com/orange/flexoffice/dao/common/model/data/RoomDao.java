@@ -17,11 +17,11 @@ public class RoomDao extends AbstractData {
 	private String adress;
 	private Integer capacity;
 	private String description;
-	private E_RoomStatus status;
-	private E_RoomType type;
+	private String status;
+	private String type;
 	private Integer gatewayId;
 	private Integer userId;
-	private List<Integer> sensorsId;
+	private org.postgresql.jdbc4.Jdbc4Array sensorsId;
 	
 	public String getName() {
 		return name;
@@ -48,18 +48,7 @@ public class RoomDao extends AbstractData {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public E_RoomStatus getStatus() {
-		return status;
-	}
-	public void setStatus(E_RoomStatus status) {
-		this.status = status;
-	}
-	public E_RoomType getType() {
-		return type;
-	}
-	public void setType(E_RoomType type) {
-		this.type = type;
-	}
+	
 	public Integer getGatewayId() {
 		return gatewayId;
 	}
@@ -72,13 +61,23 @@ public class RoomDao extends AbstractData {
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	public List<Integer> getSensorsId() {
-		if(sensorsId == null){
-			sensorsId = new ArrayList<Integer>();
-        }
+	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public org.postgresql.jdbc4.Jdbc4Array getSensorsId() {
 		return sensorsId;
 	}
-	public void setSensorsId(List<Integer> sensorsId) {
+	public void setSensorsId(org.postgresql.jdbc4.Jdbc4Array sensorsId) {
 		this.sensorsId = sensorsId;
 	}
 	@Override
