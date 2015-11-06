@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.orange.flexoffice</groupId>
-    <artifactId>pom-parent</artifactId>
+    <artifactId>flexoffice</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
  
