@@ -1,11 +1,5 @@
 package com.orange.flexoffice.dao.common.model.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
-import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
-
 /**
  * RoomDao
  * @author oab
@@ -21,7 +15,6 @@ public class RoomDao extends AbstractData {
 	private String type;
 	private Integer gatewayId;
 	private Integer userId;
-	private org.postgresql.jdbc4.Jdbc4Array sensorsId;
 	
 	public String getName() {
 		return name;
@@ -74,12 +67,7 @@ public class RoomDao extends AbstractData {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public org.postgresql.jdbc4.Jdbc4Array getSensorsId() {
-		return sensorsId;
-	}
-	public void setSensorsId(org.postgresql.jdbc4.Jdbc4Array sensorsId) {
-		this.sensorsId = sensorsId;
-	}
+
 	@Override
 	public void setColumnId(String columnId) {
 		setId(Long.valueOf(columnId));

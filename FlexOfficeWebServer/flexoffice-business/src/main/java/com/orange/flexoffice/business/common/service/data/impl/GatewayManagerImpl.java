@@ -49,18 +49,30 @@ public class GatewayManagerImpl implements GatewayManager {
 
 	@Override
 	@Transactional(readOnly=true)
-	public GatewayDto find(long gatewayId) {
+	public GatewayDto find(long gatewayId)  throws DataNotExistsException {
 		GatewayDao gatewayDao = gatewayRepository.findOne(gatewayId);
+		
+		if (gatewayDao == null) {
+			LOGGER.debug("gateway by id " + gatewayId + " is not found");
+			throw new DataNotExistsException("Gateway not exist");
+		}
 		
 		GatewayDto dto = new GatewayDto();
 		dto.setId(String.valueOf(gatewayId));
-		dto.setActivated(gatewayDao.isActivated());
+
 		dto.setDescription(gatewayDao.getDescription());
 		dto.setLastPollingDate(gatewayDao.getLastPollingDate());
 		dto.setMacAdress(gatewayDao.getMacAdress());
 		dto.setName(gatewayDao.getName());
 		dto.setStatus(E_GatewayStatus.valueOf(gatewayDao.getStatus()));
-		dto.setRooms(getRooms(gatewayDao.getRoomsId()));
+		
+		List<RoomDao> roomsList = getRooms(gatewayId);
+		if ((roomsList != null) && (roomsList.size() > 0)) { 
+			dto.setRooms(getRooms(gatewayId));
+			dto.setActivated(true);			
+		} else {
+			dto.setActivated(false);
+		}
 		
 		return dto;
 	}
@@ -83,23 +95,9 @@ public class GatewayManagerImpl implements GatewayManager {
 		
 	}
 
-	private List<RoomDao> getRooms(org.postgresql.jdbc4.Jdbc4Array roomsId) {
+	private List<RoomDao> getRooms(long gatewayId) {
+		List<RoomDao> roomsDao =roomRepository.findByGatewayId(gatewayId);
 		
-		List<RoomDao> rooms = new ArrayList<RoomDao>();
-		
-		Integer[] rmsId;
-		try {
-			rmsId = (Integer[])roomsId.getArray();
-			List<Integer> rmsIdList = Arrays.asList(rmsId);
-			for (Integer roomId : rmsIdList) {
-				List<RoomDao> roomDao =roomRepository.findByRoomId(Long.valueOf(roomId.toString()));
-				rooms. add(roomDao.get(0));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return rooms;
+		return roomsDao;
 	}
 }

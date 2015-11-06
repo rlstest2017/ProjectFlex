@@ -6,8 +6,6 @@ CREATE TYPE gatewayStatus AS ENUM ('ONLINE', 'OFFLINE', 'ONTEACHIN');
 CREATE TYPE roomStatus AS ENUM ('FREE', 'RESERVED', 'OCCUPIED', 'UNKNOWN');
 CREATE TYPE roomType AS ENUM ('BOX', 'VIDEO_CONF');
 
-/*DROP TABLE users, gateways, sensors, alerts, room_stats;*/
-
 CREATE TABLE users (
     id serial NOT NULL,
     first_name character varying(20),
@@ -25,6 +23,8 @@ CREATE TABLE gateways (
     mac_adress character varying(20),
     description text,
     status gatewayStatus,
+    is_activated boolean,
+    rooms_id integer ARRAY,
     last_polling_date timestamp without time zone 
 );
 
@@ -38,6 +38,7 @@ CREATE TABLE rooms (
     "type" roomType,
     gateway_id integer NOT NULL,
     user_id integer,
+    sensors_id integer ARRAY
 );
 
 CREATE TABLE sensors (
@@ -49,7 +50,7 @@ CREATE TABLE sensors (
     description text,
     status sensorStatus,
     room_id integer,
-    last_measure_date timestamp without time zone   
+    last_measure_date timestamp without time zone 
 );
 
 CREATE TABLE alerts (
@@ -63,8 +64,8 @@ CREATE TABLE room_stats (
     id serial NOT NULL,
     room_id integer NOT NULL,
     room_type roomType,
-    begin_occupancy_date timestamp without time zone ,
-    end_occupancy_date timestamp without time zone  
+    begin_occupancy_date timestamp without time zone,
+    end_occupancy_date timestamp without time zone
 );
 
 

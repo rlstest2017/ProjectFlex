@@ -1,10 +1,6 @@
 package com.orange.flexoffice.dao.common.model.data;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
-import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
 
 /**
  * GatewayDao
@@ -17,8 +13,6 @@ public class GatewayDao extends AbstractData {
 	private String macAdress;
 	private String description;
 	private String status;
-	private boolean isActivated;
-	private org.postgresql.jdbc4.Jdbc4Array roomsId;
 	private Date lastPollingDate;
 	
 	
@@ -47,30 +41,6 @@ public class GatewayDao extends AbstractData {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public boolean isActivated() {
-		return isActivated;
-	}
-	public void setActivated(boolean isActivated) {
-		this.isActivated = isActivated;
-	}
-	
-	
-	
-	public org.postgresql.jdbc4.Jdbc4Array getRoomsId() {
-		return roomsId;
-	}
-	public void setRoomsId(org.postgresql.jdbc4.Jdbc4Array roomsId) {
-		this.roomsId = roomsId;
-	}
-	//	public List<String> getRoomsId() {
-//		if(roomsId == null){
-//			roomsId = new ArrayList<String>();
-//        }
-//		return roomsId;
-//	}
-//	public void setRoomsId(List<String> roomsId) {
-//		this.roomsId = roomsId;
-//	}
 	public Date getLastPollingDate() {
 		return lastPollingDate;
 	}

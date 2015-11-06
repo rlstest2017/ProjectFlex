@@ -13,6 +13,7 @@ import static com.orange.flexoffice.adminui.ws.PathConst.GATEWAYS_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.GATEWAY_ID_PATH;
 
 import com.orange.flexoffice.adminui.ws.model.Gateway;
+import com.orange.flexoffice.adminui.ws.model.GatewayOutput2;
 
 /**
  * Defines all operations available for a resource "gateway".
@@ -34,7 +35,7 @@ public interface GatewayEndpoint {
 	@Path(GATEWAY_ID_PATH)
 	@Consumes (MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Gateway getGateway(@PathParam(GATEWAY_ID_PARAM) String gatewayId);
+	GatewayOutput2 getGateway(@PathParam(GATEWAY_ID_PARAM) String gatewayId);
 	
 	
 }

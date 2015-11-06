@@ -49,67 +49,6 @@
 	</xsd:simpleType>
 	<!-- End Enumeration Type -->
 	
-	<!-- Begin Arrays Type -->
-	<xsd:complexType name="DeviceStatuses">
-		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
- 		   <xsd:element name="deviceStatus" type="e-deviceStatus" />
-		</xsd:sequence>
-	</xsd:complexType>
-	
-	<xsd:complexType name="SensorTypes">
-		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
- 		   <xsd:element name="sensorType" type="e-sensorType" ></xsd:element>
-		</xsd:sequence>
-	</xsd:complexType>
-	
-	<xsd:complexType name="RoomTypes">
-		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
- 			<xsd:element name="roomType" type="e-roomType" ></xsd:element>
-		</xsd:sequence>
-	</xsd:complexType>
-	
-	<xsd:complexType name="DeviceAlerts">
-		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
- 			<xsd:element name="deviceAlertSummary" type="DeviceAlertSummary" ></xsd:element>
-		</xsd:sequence>
-	</xsd:complexType>
-	
-	<xsd:complexType name="Categories">
-		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
- 			<xsd:element name="category" type="xsd:string" ></xsd:element>
-		</xsd:sequence>
-	</xsd:complexType>
-	
-	<xsd:complexType name="Values">
-		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
- 			<xsd:element name="value" type="xsd:string" ></xsd:element>
-		</xsd:sequence>
-	</xsd:complexType>
-	
-	<xsd:complexType name="Rooms">
-		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
- 			<xsd:element name="room" type="RoomSummary" ></xsd:element>
-		</xsd:sequence>
-	</xsd:complexType>
-	
-	<xsd:complexType name="TeachinSensors">
-		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
- 			<xsd:element name="teachinSensor" type="TeachinSensor" ></xsd:element>
-		</xsd:sequence>
-	</xsd:complexType>
-	<xsd:complexType name="Sensors">
-		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
- 			<xsd:element name="room" type="SensorSummary" ></xsd:element>
-		</xsd:sequence>
-	</xsd:complexType>
-	
-	<xsd:complexType name="Datas">
-		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
- 			<xsd:element name="data" type="MultiStat" ></xsd:element>
-		</xsd:sequence>
-	</xsd:complexType>
-	<!-- End Arrays Type -->
-	
 	<!-- Alert -->
 	<xsd:complexType name="DeviceAlertSummary">
 		<xsd:sequence>
@@ -126,10 +65,10 @@
 			<xsd:element name="activeUserCount" type="xsd:integer"/>
 			<xsd:element name="gatewayCount" type="xsd:integer"/>
 			<xsd:element name="roomCount" type="xsd:integer"/>
-			<xsd:element name="deviceStatuses" type="DeviceStatuses"/>
-			<xsd:element name="sensorTypes" type="SensorTypes"/>
-			<xsd:element name="roomTypes" type="RoomTypes"/>
-			<xsd:element name="deviceAlerts" type="DeviceAlerts"/>
+			<xsd:element name="deviceStatuses" type="e-deviceStatus" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="sensorTypes" type="e-sensorType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="roomTypes" type="e-roomType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="deviceAlerts" type="DeviceAlertSummary" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	
@@ -144,7 +83,7 @@
 	<xsd:complexType name="MultiStat">
 		<xsd:sequence>
  			<xsd:element name="label" type="xsd:string"/>
-			<xsd:element name="values" type="Values"/>
+			<xsd:element name="values" type="xsd:string"  minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	
@@ -152,8 +91,8 @@
 		<xsd:sequence>
  		   <xsd:element name="startdate" type="xsd:long"/>
    		   <xsd:element name="enddate" type="xsd:long"/>
-   		   <xsd:element name="categories" type="Categories"/>
-   		   <xsd:element name="data" type="Datas"/>
+   		   <xsd:element name="categories" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+   		   <xsd:element name="data" type="MultiStat" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	
@@ -178,12 +117,35 @@
 	</xsd:complexType>
 
 	<!-- Sensor -->
+	<xsd:complexType name="SensorOutput">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="name" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SensorInput1">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="name" type="xsd:string"/>
+ 		    <xsd:element name="type" type="e-sensorType"/>
+			<xsd:element name="room" type="RoomInput2"/>
+			<xsd:element name="desc" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SensorInput2">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+ 		    <xsd:element name="type" type="e-sensorType"/>
+			<xsd:element name="room" type="RoomInput2"/>
+			<xsd:element name="desc" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
 	<xsd:complexType name="SensorSummary">
 		<xsd:sequence>
 			<xsd:element name="id" type="xsd:string"/>
 			<xsd:element name="name" type="xsd:string"/>
  		    <xsd:element name="type" type="e-sensorType"/>
-			<xsd:element name="room" type="RoomSummary"/>
+			<xsd:element name="room" type="RoomOutput"/>
 			<xsd:element name="status" type="e-deviceStatus"/>
 			<xsd:element name="lastMeasureDate" type="xsd:long"/>
 		</xsd:sequence>
@@ -194,7 +156,7 @@
 			<xsd:element name="id" type="xsd:string"/>
 			<xsd:element name="name" type="xsd:string"/>
  		    <xsd:element name="type" type="e-sensorType"/>
-			<xsd:element name="room" type="RoomSummary"/>
+			<xsd:element name="room" type="RoomOutput"/>
 			<xsd:element name="desc" type="xsd:string"/>
 			<xsd:element name="status" type="e-deviceStatus"/>
 			<xsd:element name="lastMeasureDate" type="xsd:long"/>
@@ -202,6 +164,41 @@
 	</xsd:complexType>
 	
 	<!-- Gateway -->
+	<xsd:complexType name="GatewayInput1">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="name" type="xsd:string"/>
+ 		    <xsd:element name="desc" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GatewayInput2">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+ 		    <xsd:element name="desc" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GatewayOutput2">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="desc" type="xsd:string"/>
+ 		    <xsd:element name="status" type="e-deviceStatus" />
+			<xsd:element name="lastPollingDate" type="xsd:long"/>
+			<xsd:element name="rooms" type="RoomOutput" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GatewayInput4">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="name" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GatewayOutput">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="name" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
 	<xsd:complexType name="GatewaySummary">
 		<xsd:sequence>
 			<xsd:element name="id" type="xsd:string"/>
@@ -210,7 +207,6 @@
 			<xsd:element name="lastPollingDate" type="xsd:long"/>
 		</xsd:sequence>
 	</xsd:complexType>
-	
 	<xsd:complexType name="Gateway">
 		<xsd:sequence>
 			<xsd:element name="id" type="xsd:string"/>
@@ -223,12 +219,34 @@
 	</xsd:complexType>
 	
 	<!-- Room -->
+	<xsd:complexType name="RoomInput1">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+ 		    <xsd:element name="type" type="e-roomType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="gateway" type="GatewayInput4" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="desc" type="xsd:string"/>
+			<xsd:element name="adress" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="capacity" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="RoomInput2">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>		
+			<xsd:element name="name" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="RoomOutput">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>		
+			<xsd:element name="name" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
 	<xsd:complexType name="RoomSummary">
 		<xsd:sequence>
 			<xsd:element name="id" type="xsd:string"/>
 			<xsd:element name="name" type="xsd:string"/>
  		    <xsd:element name="type" type="e-roomType" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="gateway" type="GatewaySummary" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="gateway" type="GatewayOutput" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="adress" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="capacity" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="status" type="e-roomStatus" minOccurs="0" maxOccurs="1"/>
@@ -241,9 +259,9 @@
 			<xsd:element name="id" type="xsd:string"/>
 			<xsd:element name="name" type="xsd:string"/>
  		    <xsd:element name="type" type="e-roomType"/>
-			<xsd:element name="gateway" type="GatewaySummary"/>
+			<xsd:element name="gateway" type="GatewayOutput"/>
 			<xsd:element name="desc" type="xsd:string"/>
-			<xsd:element name="sensors" type="Sensors"/>
+			<xsd:element name="sensors" type="SensorOutput" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="adress" type="xsd:string"/>
 			<xsd:element name="capacity" type="xsd:integer"/>
 			<xsd:element name="status" type="e-roomStatus"/>
@@ -257,7 +275,7 @@
 			<xsd:element name="id" type="xsd:string"/>
 			<xsd:element name="roomId" type="xsd:string"/>
  		    <xsd:element name="gatewayId" type="xsd:string"/>
-			<xsd:element name="sensors" type="TeachinSensors"/>
+			<xsd:element name="sensors" type="TeachinSensor" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	

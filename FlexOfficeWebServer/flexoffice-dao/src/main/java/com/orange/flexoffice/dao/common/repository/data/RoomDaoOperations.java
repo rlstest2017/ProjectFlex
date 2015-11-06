@@ -15,4 +15,6 @@ public interface RoomDaoOperations {
 	
 	List<RoomDao> findByRoomId(Long roomId);
 	
+	List<RoomDao> findByGatewayId(Long gatewayId);
+	
 }

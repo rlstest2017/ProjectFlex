@@ -41,6 +41,16 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 				new BeanPropertyRowMapper<RoomDao>(RoomDao.class)
 			);
 	}
+
+	@Override
+	public List<RoomDao> findByGatewayId(Long gatewayId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("gatewayId", gatewayId);
+		return jdbcTemplate.query(
+				findByColumnGatewayIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<RoomDao>(RoomDao.class)
+			);
+	}
 	
 	@Override
 	protected String getTableName() {
@@ -64,6 +74,7 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 	
 

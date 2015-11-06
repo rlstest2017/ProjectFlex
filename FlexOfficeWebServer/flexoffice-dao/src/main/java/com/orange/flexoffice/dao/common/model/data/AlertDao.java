@@ -2,8 +2,6 @@ package com.orange.flexoffice.dao.common.model.data;
 
 import java.util.Date;
 
-import com.orange.flexoffice.dao.common.model.enumeration.E_DeviceType;
-
 /**
  * AlertDao
  * @author oab
@@ -12,7 +10,7 @@ import com.orange.flexoffice.dao.common.model.enumeration.E_DeviceType;
 public class AlertDao extends AbstractData {
 	
 	private String name;
-	private E_DeviceType type;
+	private String type;
 	private Date lastNotification;
 	
 	public String getName() {
@@ -22,10 +20,10 @@ public class AlertDao extends AbstractData {
 		this.name = name;
 	}
 	
-	public E_DeviceType getType() {
+	public String getType() {
 		return type;
 	}
-	public void setType(E_DeviceType type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 	public Date getLastNotification() {

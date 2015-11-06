@@ -2,9 +2,6 @@ package com.orange.flexoffice.dao.common.model.data;
 
 import java.util.Date;
 
-import com.orange.flexoffice.dao.common.model.enumeration.E_SensorStatus;
-import com.orange.flexoffice.dao.common.model.enumeration.E_SensorType;
-
 /**
  * SensorDao
  * @author oab
@@ -14,10 +11,10 @@ public class SensorDao extends AbstractData {
 	
 	private String identifier; // sensor back id on hexa 4 octets
 	private String name;
-	private E_SensorType type;
+	private String type;
 	private String profile; // profile back as a5-07-01 & a5-04-01
 	private String description;
-	private E_SensorStatus status;
+	private String status;
 	private Integer roomId;
 	private Date lastMeasureDate;
 	
@@ -35,10 +32,10 @@ public class SensorDao extends AbstractData {
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
-	public E_SensorType getType() {
+	public String getType() {
 		return type;
 	}
-	public void setType(E_SensorType type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 	public String getProfile() {
@@ -53,10 +50,10 @@ public class SensorDao extends AbstractData {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public E_SensorStatus getStatus() {
+	public String getStatus() {
 		return status;
 	}
-	public void setStatus(E_SensorStatus status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 	public Integer getRoomId() {

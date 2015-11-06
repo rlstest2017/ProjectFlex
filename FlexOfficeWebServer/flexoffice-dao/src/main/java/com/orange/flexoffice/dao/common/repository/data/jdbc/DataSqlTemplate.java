@@ -6,6 +6,8 @@ public final class DataSqlTemplate {
 			"select * from %s where id=:id";
 	public static final String FIND_BY_COL_ID_TEMPLATE = 
 			"select * from %s where %s=:columnId";
+	public static final String FIND_BY_COL_GATEWAY_ID_TEMPLATE = 
+			"select * from %s where gateway_id=:gatewayId";
 	public static final String FIND_BY_COL_MAIL_TEMPLATE = 
 			"select * from %s where email=:email";
 	public static final String FIND_ALL_TEMPLATE = 

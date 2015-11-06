@@ -2,8 +2,6 @@ package com.orange.flexoffice.dao.common.model.data;
 
 import java.util.Date;
 
-import com.orange.flexoffice.dao.common.model.enumeration.E_UserRole;
-
 /**
  * A user. 
  * 
@@ -17,7 +15,7 @@ public class UserDao extends AbstractData {
 	private String email;
 	private String password;
 	private String accessToken;
-	private E_UserRole role;
+	private String role;
 	private Date lastConnectionDate; 
 	
 	public String getFirstName() {
@@ -51,10 +49,10 @@ public class UserDao extends AbstractData {
 	public void setAccessToken(String accessToken) {
 		this.accessToken = accessToken;
 	}
-	public E_UserRole getRole() {
+	public String getRole() {
 		return role;
 	}
-	public void setRole(E_UserRole role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 	public Date getLastConnectionDate() {

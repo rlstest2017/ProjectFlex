@@ -22,7 +22,7 @@ public interface GatewayManager {
 	 * 		  the {@link gatewayId} ID
 	 * @return a {@link GatewayDto}
 	 */
-	GatewayDto find(long gatewayId);
+	GatewayDto find(long gatewayId)  throws DataNotExistsException;
 
 	/**
 	 * Saves a {@link GatewayDto}
