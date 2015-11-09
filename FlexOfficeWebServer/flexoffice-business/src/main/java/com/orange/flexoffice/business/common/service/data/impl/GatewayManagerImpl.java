@@ -1,8 +1,5 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -40,11 +37,8 @@ public class GatewayManagerImpl implements GatewayManager {
 	
 	@Override
 	@Transactional(readOnly=true)
-	public List<GatewayDto> findAllGateways() {
-		
-		List<GatewayDao> daoList = gatewayRepository.findAllGateways();
-		// TODO
-		return null;
+	public List<GatewayDao> findAllGateways() {
+		return gatewayRepository.findAllGateways();
 	}
 
 	@Override
@@ -59,12 +53,26 @@ public class GatewayManagerImpl implements GatewayManager {
 		
 		GatewayDto dto = new GatewayDto();
 		dto.setId(String.valueOf(gatewayId));
-
 		dto.setDescription(gatewayDao.getDescription());
 		dto.setLastPollingDate(gatewayDao.getLastPollingDate());
 		dto.setMacAddress(gatewayDao.getMacAddress());
 		dto.setName(gatewayDao.getName());
 		dto.setStatus(E_GatewayStatus.valueOf(gatewayDao.getStatus()));
+		
+		if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug( "Return find(long gatewayId) method for GatewayManagerImpl, with parameters :");
+            final StringBuffer message = new StringBuffer( 100 );
+            message.append( "id :" );
+            message.append( String.valueOf(gatewayId) );
+            message.append( "\n" );
+            message.append( "macAddress :" );
+            message.append( gatewayDao.getMacAddress() );
+            message.append( "\n" );
+            message.append( "name :" );
+            message.append( gatewayDao.getName() );
+            message.append( "\n" );
+            LOGGER.debug( message.toString() );
+        }
 		
 		List<RoomDao> roomsList = getRooms(gatewayId);
 		if ((roomsList != null) && (roomsList.size() > 0)) { 

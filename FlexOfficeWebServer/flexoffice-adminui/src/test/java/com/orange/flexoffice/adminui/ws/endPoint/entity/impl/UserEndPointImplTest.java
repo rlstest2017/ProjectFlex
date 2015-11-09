@@ -1,159 +1,130 @@
 package com.orange.flexoffice.adminui.ws.endPoint.entity.impl;
 
-import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.unitils.easymock.EasyMockUnitils.refEq;
-import static org.unitils.reflectionassert.ReflectionComparatorMode.IGNORE_DEFAULTS;
+import static org.junit.Assert.assertNotNull;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.datatype.DatatypeConfigurationException;
 
-import org.junit.Test;
-import org.unitils.UnitilsJUnit4;
-import org.unitils.easymock.EasyMockUnitils;
-import org.unitils.easymock.annotation.Mock;
-import org.unitils.inject.annotation.InjectIntoByType;
-import org.unitils.inject.annotation.TestedObject;
 
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.orange.flexoffice.adminui.ws.endPoint.entity.UserEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.entity.impl.UserEndpointImpl;
 import com.orange.flexoffice.adminui.ws.endPoint.support.ObjectFactory;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.business.common.service.data.UserManager;
 import com.orange.flexoffice.business.common.service.data.impl.UserManagerImpl;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
-import com.orange.flexoffice.adminui.ws.endPoint.entity.UserEndpoint;
 import com.orange.flexoffice.adminui.ws.model.User;
+import com.orange.flexoffice.adminui.ws.model.UserInput;
 
-public class UserEndPointImplTest extends UnitilsJUnit4 {
+public class UserEndPointImplTest {
 	
-	@TestedObject
-	private UserEndpointImpl userEndpoint;
-	@Mock
-	@InjectIntoByType
-	private UserManagerImpl userManagerMock;
-	@Mock
-	@InjectIntoByType
-	private UriInfo uriInfoMock;
-	@Mock
-	private UriBuilder uriBuilderMock;
-
+	private static ClassPathXmlApplicationContext context;
+		
+	private static UserEndpoint userEndpoint;
+	private static UserManager userManager;
+	
+	@Context
+	private UriInfo uriInfo;
+	
 	private final ObjectFactory factory = new ObjectFactory();
-		
-	@Test
-	public void getUser() throws URISyntaxException, DatatypeConfigurationException {
-		// Setup
-		//URI exceptedUri = new URI("http://mockUri");
-		UserDao user = factory.createUser(null, "firstNameTest1", "lastNameTest1", "emailTest1");
-		
-		// Mock expectations
-		expect(userManagerMock.find(1l)).andReturn(user);
-		expect(uriInfoMock.getBaseUriBuilder()).andReturn(uriBuilderMock);
-		EasyMockUnitils.replay();
-		
-		// Test
-		User userHmi = userEndpoint.getUser("1");
-		
-		// Asserts
-		assertEquals("firstNameTest1", userHmi.getFirstName());
-		assertEquals("lastNameTest1", userHmi.getLastName());
-		assertEquals("emailTest1", userHmi.getEmail());
-		EasyMockUnitils.verify();
-	}
 	
+	 /**
+     * @throws java.lang.Exception
+     */
+    @BeforeClass
+    public static void initSpringContextAndDatabase() throws Exception {
+        context = new ClassPathXmlApplicationContext("applicationContext-flexoffice-adminui-test.xml");
+        userEndpoint = (UserEndpointImpl)context.getBean("userEndpoint");
+        userManager = (UserManagerImpl)context.getBean("userManager");
+    }
+	
+		
 	@Test
 	public void addUser() throws URISyntaxException, DataAlreadyExistsException {
 		// Setup
-		User userHmi = factory.createHmiUser(null, "firstNameTest1", "lastNameTest1", "emailTest1");
-		UserDao user = factory.createUser(null, "firstNameTest1", "lastNameTest1", "emailTest1");
-		UserDao savedUser = factory.createUser(1l, "firstNameTest1", "lastNameTest1", "emailTest1");
-		URI exceptedUri = new URI("http://mockUri");
-		
-		// Mock expectations
-		expect(userManagerMock.save(refEq(user, IGNORE_DEFAULTS))).andReturn(savedUser);
-		expect(uriInfoMock.getAbsolutePathBuilder()).andReturn(uriBuilderMock);
-		expect(uriBuilderMock.path(UserEndpoint.class, "getUser")).andReturn(uriBuilderMock);
-		expect(uriBuilderMock.build(1)).andReturn(exceptedUri);
-		EasyMockUnitils.replay();
-		
+		UserInput userHmi = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
+			
 		// Test
 		User response = userEndpoint.addUser(userHmi);
 		
 		// Asserts
-		assertEquals("1", response.getId());
-		EasyMockUnitils.verify();
+		assertNotNull(response.getId());
 	}
 	
-	
-	@Test(expected = DataAlreadyExistsException.class)
-	public void addUserDataAlreadyExistsException() throws DataAlreadyExistsException {
+	@Test
+	public void getUser() throws URISyntaxException, DatatypeConfigurationException {
 		// Setup
-		User userHmi = factory.createHmiUser(null, "firstNameTest1", "lastNameTest1", "emailTest1");
-		UserDao user = factory.createUser(null, "firstNameTest1", "lastNameTest1", "emailTest1");
-		
-		// Mock expectations
-		expect(userManagerMock.save(refEq(user, IGNORE_DEFAULTS)))
-			.andThrow(new DataAlreadyExistsException("user already exists"));
-		EasyMockUnitils.replay();
+		UserInput expecteduser = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
+		UserDao user = userManager.findByUserMail("emailTest1");
 		
 		// Test
-		try {
-			userEndpoint.addUser(userHmi);
-		} finally {
-			EasyMockUnitils.verify();
-		}
+		User userFromDB = userEndpoint.getUser(user.getColumnId());
+	
+		boolean expectedResult = false;
+		
+		if (((expecteduser.getFirstName().compareTo(userFromDB.getFirstName())) == 0) &&
+				((expecteduser.getLastName().compareTo(userFromDB.getLastName())) == 0) &&
+				((expecteduser.getEmail().compareTo(userFromDB.getEmail())) == 0)
+	       ){
+			
+			expectedResult = true;
+	    }
+
+		assertEquals(true, expectedResult);	
+		
 	}
+
+//	@Test(expected = DataAlreadyExistsException.class)
+//	public void addUserDataAlreadyExistsException() throws DataAlreadyExistsException {
+//		// Setup
+//		UserInput userHmi = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
+//				
+//		// Test
+//		try {
+//			userEndpoint.addUser(userHmi);
+//		} finally {
+//		}
+//	}
 	
 	@Test
 	public void updateUser() throws URISyntaxException, DataNotExistsException {
 		// Setup
-		User userHmi = factory.createHmiUser(null, "firstNameTest1", "lastNameTest1", "emailTest1");
-		UserDao user = factory.createUser(null, "firstNameTest1", "lastNameTest1", "emailTest1");
-		UserDao updatedUser = factory.createUser(1l, "firstNameTest1", "lastNameTest1", "emailTest1");
-		URI exceptedUri = new URI("http://mockUri");
+		UserInput userHmi = factory.createHmiUser("firstNameTest2", "lastNameTest2", "emailTest2");
 		
-		// Mock expectations
-		expect(userManagerMock.update(refEq(user))).andReturn(updatedUser);
-		expect(uriInfoMock.getAbsolutePathBuilder()).andReturn(uriBuilderMock);
-		expect(uriBuilderMock.build()).andReturn(exceptedUri);
-		EasyMockUnitils.replay();
+		UserDao user = userManager.findByUserMail("emailTest1");
 		
 		// Test
-		Response response = userEndpoint.updateUser("1", userHmi);
+		Response response = userEndpoint.updateUser(user.getColumnId(), userHmi);
 		
 		// Asserts
 		// Asserts
-		assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
-		assertTrue(response.getMetadata().containsKey("Location"));
+		assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
 		
-		String returnUri = (String) response.getMetadata().get("Location").get(0);
-		assertEquals(exceptedUri.toString(), returnUri);
-		EasyMockUnitils.verify();
 	}
 	
 	@Test
 	public void removeUser() {
-		// Mock expectations
-		try {
-			userManagerMock.delete(1l);
-		} catch (DataNotExistsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		EasyMockUnitils.replay();
 		
+		UserInput userHmi = factory.createHmiUser("firstNameTest2", "lastNameTest2", "emailTest2");
+		UserDao user = userManager.findByUserMail(userHmi.getEmail());
+		
+			userEndpoint.removeUser(user.getColumnId());
 		// Test
 		Response response = userEndpoint.removeUser("1");
 		
 		// Asserts
 		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
-		EasyMockUnitils.verify();
 	}
 	
 

@@ -108,6 +108,24 @@ public class UserManagerImpl implements UserManager {
 		UserDaoRepository.delete(id);
 	}
 	
+	/**
+	 * 
+	 * @param userEmail
+	 * @return
+	 */
+	public UserDao findByUserMail(String userEmail) {
+		UserDao returnedUserDao = new UserDao();
+		
+		List<UserDao> testUserDao = UserDaoRepository.findByUserEmail(userEmail);
+		if ((testUserDao != null)&&(testUserDao.size() > 0)) {
+			returnedUserDao = testUserDao.get(0);
+		}
+		
+		// Saves UserDao
+		return returnedUserDao;
+	}
+	
+	
 	public static void main(String[] args) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext-business.xml");
 		UserManager UserDaoManager = (UserManager) context.getBean("UserDaoManager");

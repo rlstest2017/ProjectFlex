@@ -1,6 +1,7 @@
 package com.orange.flexoffice.adminui.ws.endPoint.support;
 
 import com.orange.flexoffice.adminui.ws.model.User;
+import com.orange.flexoffice.adminui.ws.model.UserInput;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 
 public class ObjectFactory {
@@ -11,9 +12,8 @@ public class ObjectFactory {
      * Create an instance of {@link XmlUser }
      * 
      */
-    public User createHmiUser(String id, String firstName, String lastName, String email) {
-    	User user = factory.createUser();
-    	user.setId(id);
+    public UserInput createHmiUser(String firstName, String lastName, String email) {
+    	UserInput user = factory.createUserInput();
     	user.setFirstName(firstName);
     	user.setLastName(lastName);
     	user.setEmail(email);

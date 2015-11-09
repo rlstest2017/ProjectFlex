@@ -1,5 +1,6 @@
 package com.orange.flexoffice.adminui.ws.endPoint.entity.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
@@ -15,13 +16,17 @@ import com.orange.flexoffice.adminui.ws.endPoint.entity.GatewayEndpoint;
 import com.orange.flexoffice.adminui.ws.model.EDeviceStatus;
 import com.orange.flexoffice.adminui.ws.model.ErrorModel;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput2;
+import com.orange.flexoffice.adminui.ws.model.GatewaySummary;
 import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
 import com.orange.flexoffice.adminui.ws.model.RoomOutput;
+import com.orange.flexoffice.adminui.ws.model.UserSummary;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
+import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
+import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 
 
@@ -36,6 +41,42 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 	private GatewayManager gatewayManager;
 	
 	@Override
+	public List<GatewaySummary> getGateways() {
+			
+			List<GatewayDao> dataList = gatewayManager.findAllGateways();
+		
+		if (dataList == null) {
+			ErrorModel errorModel = new ErrorModel();
+			errorModel.setCode(EnumErrorModel.ERROR_21.code());
+			errorModel.setMessage(EnumErrorModel.ERROR_21.value());
+			
+			ResponseBuilderImpl builder = new ResponseBuilderImpl();
+			builder.status(Response.Status.NOT_FOUND);
+			builder.entity(errorModel);
+			Response response = builder.build();
+			throw new WebApplicationException(response);
+		}
+		
+		LOGGER.debug("List of gateways : " + dataList.size());
+		
+		List<GatewaySummary> gatewayList = new ArrayList<GatewaySummary>();
+		
+		for (GatewayDao gatewayDao : dataList) {
+			GatewaySummary gateway = factory.createGatewaySummary();
+			gateway.setId(gatewayDao.getColumnId());
+			gateway.setName(gatewayDao.getName());
+			gateway.setStatus(EDeviceStatus.valueOf(gatewayDao.getStatus().toString()));
+			if (gatewayDao.getLastPollingDate() != null) {
+				gateway.setLastPollingDate(gatewayDao.getLastPollingDate().getTime());
+			}
+			
+			gatewayList.add(gateway);
+		}
+		
+		return gatewayList;
+	}
+
+	@Override
 	public GatewayOutput2 getGateway(String gatewayId) {
 		
 		try {
@@ -46,7 +87,9 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 			gateway.setName(data.getName());
 			gateway.setDesc(data.getDescription());
 			gateway.setStatus(EDeviceStatus.valueOf(data.getStatus().toString()));
-			gateway.setLastPollingDate(data.getLastPollingDate().getTime());
+			if (data.getLastPollingDate() != null) {
+				gateway.setLastPollingDate(data.getLastPollingDate().getTime());
+			}
 			
 			List<RoomDao> rooms = data.getRooms();
 			
@@ -83,9 +126,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 		
 		
 	}
-	
-	
-	
-	
+
+
 	
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 
 /**
@@ -13,7 +14,7 @@ import com.orange.flexoffice.dao.common.model.object.GatewayDto;
  */
 public interface GatewayManager {
 
-	List<GatewayDto> findAllGateways();
+	List<GatewayDao> findAllGateways();
 	
 	/**
 	 * Finds a {@link GatewayDto} by its ID.
@@ -41,7 +42,7 @@ public interface GatewayManager {
 	 * 		  the new {@link GatewayDto}
 	 * @return a saved {@link GatewayDto}
 	 */
-	GatewayDto update(GatewayDto UserFlexoffice) throws DataNotExistsException;
+	GatewayDto update(GatewayDto gatewayDto) throws DataNotExistsException;
 
 	/**
 	 * Deletes a {@link GatewayDto}.

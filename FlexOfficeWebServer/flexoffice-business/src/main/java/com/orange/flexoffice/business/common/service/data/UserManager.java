@@ -18,6 +18,13 @@ public interface UserManager {
 	 * @return a {@link UserDao}
 	 */
 	UserDao find(long UserDaoId);
+	
+	/**
+	 * 
+	 * @param userEmail
+	 * @return
+	 */
+	UserDao findByUserMail(String userEmail);
 
 	/**
 	 * Saves a {@link UserDao}
