@@ -19,6 +19,7 @@ import com.orange.flexoffice.adminui.ws.endPoint.entity.UserEndpoint;
 import com.orange.flexoffice.adminui.ws.model.ErrorModel;
 import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
 import com.orange.flexoffice.adminui.ws.model.User;
+import com.orange.flexoffice.adminui.ws.model.UserInput;
 import com.orange.flexoffice.adminui.ws.model.UserSummary;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
@@ -97,26 +98,26 @@ public class UserEndpointImpl implements UserEndpoint {
 	}
 
 	@Override
-	public User addUser(User xmlUser) {
+	public User addUser(UserInput userInput) {
 		
         LOGGER.info( "Begin call doPost method for UserEndpoint at: " + new Date() );
         
 		UserDao user = new UserDao();
-		user.setEmail(xmlUser.getEmail());
-		user.setFirstName(xmlUser.getFirstName());
-		user.setLastName(xmlUser.getLastName());
+		user.setEmail(userInput.getEmail());
+		user.setFirstName(userInput.getFirstName());
+		user.setLastName(userInput.getLastName());
 		
 		 if (LOGGER.isDebugEnabled()) {
 	            LOGGER.debug( "Begin call addUser(XmlUser xmlUser) method for UserEndpoint, with parameters :");
 	            final StringBuffer message = new StringBuffer( 100 );
 	            message.append( "email :" );
-	            message.append( xmlUser.getEmail() );
+	            message.append( userInput.getEmail() );
 	            message.append( "\n" );
 	            message.append( "firstname :" );
-	            message.append( xmlUser.getFirstName() );
+	            message.append( userInput.getFirstName() );
 	            message.append( "\n" );
 	            message.append( "lastname :" );
-	            message.append( xmlUser.getLastName() );
+	            message.append( userInput.getLastName() );
 	            message.append( "\n" );
 	            LOGGER.debug( message.toString() );
 	    }
@@ -156,14 +157,14 @@ public class UserEndpointImpl implements UserEndpoint {
 	}
 
 	@Override
-	public Response updateUser(String id, User xmlUser) {
+	public Response updateUser(String id, UserInput userInput) {
 		LOGGER.info( "Begin call doPut method for UserEndpoint at: " + new Date() );
 		
 		UserDao user = new UserDao();
 		user.setId(Long.valueOf(id));
-		user.setEmail(xmlUser.getEmail());
-		user.setFirstName(xmlUser.getFirstName());
-		user.setLastName(xmlUser.getLastName());
+		user.setEmail(userInput.getEmail());
+		user.setFirstName(userInput.getFirstName());
+		user.setLastName(userInput.getLastName());
 		
 		try {
 		user = userManager.update(user);
