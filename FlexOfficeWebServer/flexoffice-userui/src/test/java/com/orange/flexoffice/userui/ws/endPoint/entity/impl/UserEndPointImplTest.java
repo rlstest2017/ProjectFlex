@@ -26,7 +26,7 @@ import org.unitils.inject.annotation.TestedObject;
 
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
-import com.orange.flexoffice.business.userui.service.data.impl.UserFlexofficeManagerImpl;
+import com.orange.flexoffice.business.common.service.data.impl.UserManagerImpl;
 import com.orange.flexoffice.dao.userui.model.data.UserFlexoffice;
 import com.orange.flexoffice.userui.ws.endPoint.entity.UserEndpoint;
 import com.orange.flexoffice.userui.ws.endPoint.support.ObjectFactory;
@@ -38,7 +38,7 @@ public class UserEndPointImplTest extends UnitilsJUnit4 {
 	private UserEndpointImpl userEndpoint;
 	@Mock
 	@InjectIntoByType
-	private UserFlexofficeManagerImpl userManagerMock;
+	private UserManagerImpl userManagerMock;
 	@Mock
 	@InjectIntoByType
 	private UriInfo uriInfoMock;

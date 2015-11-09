@@ -18,7 +18,7 @@
 	</bean>
 
 	<!-- Scan base package -->
-	<context:component-scan base-package="com.orange.flexoffice.business.common, com.orange.flexoffice.business.userui" />
+	<context:component-scan base-package="com.orange.flexoffice.business.common" />
 	
 	<!-- Transactions with annotations -->
 	<tx:annotation-driven transaction-manager="transactionManager" />

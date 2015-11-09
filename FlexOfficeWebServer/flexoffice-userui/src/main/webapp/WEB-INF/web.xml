@@ -14,7 +14,7 @@
     <param-value>classpath:applicationContext-flexoffice-userui.xml</param-value>
   </context-param>
     <servlet>
-		<servlet-name>UsersManageServlet</servlet-name>
+		<servlet-name>UserUiManageServlet</servlet-name>
 		<servlet-class>
 			org.apache.cxf.transport.servlet.CXFServlet
 		</servlet-class>
@@ -22,8 +22,8 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>UsersManageServlet</servlet-name>
-		<url-pattern>/ws/*</url-pattern>
+		<servlet-name>UserUiManageServlet</servlet-name>
+		<url-pattern>/v1/*</url-pattern>
 	</servlet-mapping>
   
   <listener>

@@ -11,7 +11,7 @@
 	
 	<jaxrs:server id="server" address="/">
 		<jaxrs:serviceBeans>
-  			<bean class="com.orange.flexoffice.userui.ws.endPoint.entity.impl.UserEndpointImpl"/>
+<!--   			<bean class="com.orange.flexoffice.userui.ws.endPoint.entity.impl.UserEndpointImpl"/> -->
   		</jaxrs:serviceBeans>
   		 <jaxrs:extensionMappings>
             <entry key="json" value="application/json"/>

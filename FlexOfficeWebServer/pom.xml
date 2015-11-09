@@ -12,8 +12,8 @@
 
   <modules>  
      <module>flexoffice-adminui</module> 
-<!--     <module>flexoffice-userui</module> -->
-<!--     <module>flexoffice-gatewayapi</module> -->
+    <module>flexoffice-userui</module>
+    <module>flexoffice-gatewayapi</module>
     <module>flexoffice-business</module>
     <module>flexoffice-dao</module>
   </modules>
@@ -21,7 +21,6 @@
   <properties>
     <!-- Par ordre alphabétique, veuillez respecter l'ordre à l'ajout. -->
 	<aspectj.version>1.5.2a</aspectj.version>
-<!--     <antlr.version>2.7.7</antlr.version> -->
     <commons-logging.version>1.1.1</commons-logging.version>
     <commons-lang.version>2.4</commons-lang.version>
     <commons-httpclient.version>3.1</commons-httpclient.version>
@@ -34,26 +33,11 @@
     <jackson-mapper.version>1.8.5</jackson-mapper.version>
     <jsp.version>2.1</jsp.version>
     <junit.version>4.8.2</junit.version>
-<!--     <junit.version>4.10</junit.version> -->
-<!--     <slf4j.version>1.7.7</slf4j.version>         -->
-<!--      <log4j.version>1.2.17</log4j.version> -->
-<!--     <slf4j.version>1.5.11</slf4j.version>  -->
-<!--     <slf4j-api.version>1.6.0</slf4j-api.version>         -->
     <log4j.version>1.2.14</log4j.version>
     <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version> 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-<!--     <spring.version>3.0.5.RELEASE</spring.version> -->
     <spring.version>3.1.1.RELEASE</spring.version>
-<!--     <spring.security.version>3.2.5.RELEASE</spring.security.version> -->
     <javax.annotation.version>1.0</javax.annotation.version>
-    
-    <!-- Sonar -->
-<!--     <sonar.sources>src/main</sonar.sources> -->
-<!--     <sonar.tests>src/test</sonar.tests> -->
-<!--     <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin> -->
-<!--     <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis> -->
-<!--     <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath> -->
-<!--     <sonar.language>java</sonar.language> -->
     
     <!-- Unitils configuration -->
    	<test.database.url>jdbc:postgresql://localhost:5432/FlexOffice_Test</test.database.url>
@@ -62,36 +46,15 @@
     
   </properties>
 
- <!-- === Repositories === 
-  <repositories>
-        <repository>
-            <id>third_party</id>
-            <url>http://repo.aql.fr/nexus/content/repositories/thirdparty/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-   </repositories>
-    -->
-  
 	<!-- Version definition -->
 	<dependencyManagement>
 	  <dependencies>
-<!-- 	  <dependency> -->
-<!--             <groupId>javax</groupId> -->
-<!--             <artifactId>javaee-web-api</artifactId> -->
-<!--             <version>7.0</version> -->
-<!--             <scope>provided</scope> -->
-<!--         </dependency> -->
-	  	<!-- Common lang -->
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>${commons-lang.version}</version>
 		</dependency>
+
 		<!-- Common logging -->
 		<dependency>
 			<groupId>commons-logging</groupId>
@@ -134,36 +97,12 @@
 			<artifactId>javassist</artifactId>
 			<version>${javassist.version}</version>
 		</dependency>
- 		
-	<!-- logging -->            
-<!--         <dependency> -->
-<!--             <groupId>org.slf4j</groupId> -->
-<!--             <artifactId>slf4j-log4j12</artifactId> -->
-<!--             <version>${slf4j.version}</version> -->
-<!--         </dependency>     -->
-<!--         <dependency> -->
-<!--             <groupId>org.slf4j</groupId> -->
-<!--             <artifactId>slf4j-api</artifactId> -->
-<!--             <version>${slf4j-api.version}</version> -->
-<!--         </dependency> -->
-<!--         <dependency> -->
-<!--             <groupId>org.slf4j</groupId> -->
-<!--             <artifactId>jcl-over-slf4j</artifactId> -->
-<!--             <version>${slf4j.version}</version> -->
-<!--         </dependency>             -->
-        <dependency>
+ 	    <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
         </dependency>   
 			
-		<!-- antlr -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>antlr</groupId> -->
-<!-- 			<artifactId>antlr</artifactId> -->
-<!-- 			<version>${antlr.version}</version> -->
-<!-- 		</dependency> -->
- 	
  		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -207,33 +146,6 @@
 	   		<version>${spring.version}</version>
 		</dependency>
 		
-		 <!-- Spring Security -->
-<!-- 	    <dependency> -->
-<!-- 	        <groupId>org.springframework.security</groupId> -->
-<!-- 	        <artifactId>spring-security-taglibs</artifactId> -->
-<!-- 			<version>${spring.version}</version> -->
-<!-- 	    </dependency> -->
-<!-- 	    <dependency> -->
-<!-- 	        <groupId>org.springframework.security</groupId> -->
-<!-- 	        <artifactId>spring-security-core</artifactId> -->
-<!-- 	        <version>${spring.version}</version> -->
-<!-- 	    </dependency> -->
-<!-- 	    <dependency> -->
-<!-- 	        <groupId>org.springframework.security</groupId> -->
-<!-- 	        <artifactId>spring-security-config</artifactId> -->
-<!-- 	        <version>${spring.version}</version> -->
-<!-- 	    </dependency> -->
-<!-- 	    <dependency> -->
-<!-- 	        <groupId>org.springframework.security</groupId> -->
-<!-- 	        <artifactId>spring-security-web</artifactId> -->
-<!-- 	        <version>${spring.version}</version> -->
-<!-- 	    </dependency> -->
-<!-- 	    <dependency> -->
-<!-- 	        <groupId>javax.annotation</groupId> -->
-<!-- 	        <artifactId>jsr250-api</artifactId> -->
-<!-- 	        <version>${javax.annotation.version}</version> -->
-<!-- 	    </dependency> -->
-		
 			<!-- Database -->
 			<dependency>
 				<groupId>commons-dbcp</groupId>
@@ -251,9 +163,6 @@
 				<groupId>postgresql</groupId>
 				<artifactId>postgresql</artifactId>
 				<version>9.1-901.jdbc4</version>
-<!-- 				<version>9.2-1002-jdbc4</version> -->
-<!-- 				<version>9.3-1100-jdbc41</version> -->
-<!-- 				<version>9.4-1200-jdbc41</version> -->
 			</dependency>
 			
 		<!-- spring AOP -->
@@ -356,13 +265,6 @@
 	    <scope>test</scope> 
 	</dependency>
 
-	<!-- Mock IT -->
-<!-- 	<dependency> -->
-<!-- 		<groupId>org.mockito</groupId> -->
-<!-- 		<artifactId>mockito-all</artifactId> -->
-<!-- 		<version>1.9.5</version> -->
-<!-- 		<scope>test</scope> -->
-<!-- 	</dependency>	 -->
 	 </dependencies>
 	
 	</dependencyManagement>
@@ -402,23 +304,6 @@
     			<artifactId>sonar-maven-plugin</artifactId>
     			<version>2.4</version>
   			</plugin>
-<!-- 			<plugin> -->
-<!--     			<groupId>org.jacoco</groupId> -->
-<!--     			<artifactId>jacoco-maven-plugin</artifactId> -->
-<!--     			<version>0.6.0.201210061924</version> -->
-<!--     			<configuration> -->
-<!--         			<destFile>${sonar.jacoco.reportPath}</destFile> -->
-<!--         				<append>true</append> -->
-<!--     			</configuration> -->
-<!--     			<executions> -->
-<!--         			<execution> -->
-<!--             			<id>agent</id> -->
-<!--             			<goals> -->
-<!--                 			<goal>prepare-agent</goal> -->
-<!--             			</goals> -->
-<!--         			</execution> -->
-<!--     			</executions> -->
-<!-- 			</plugin> -->
 		</plugins>
 
 	</build>

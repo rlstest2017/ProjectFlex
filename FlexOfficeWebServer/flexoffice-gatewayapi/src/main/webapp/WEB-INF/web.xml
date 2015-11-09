@@ -23,7 +23,7 @@
 
 	<servlet-mapping>
 		<servlet-name>GatewaysManageServlet</servlet-name>
-		<url-pattern>/ws/*</url-pattern>
+		<url-pattern>/v1/*</url-pattern>
 	</servlet-mapping>
   
   <listener>

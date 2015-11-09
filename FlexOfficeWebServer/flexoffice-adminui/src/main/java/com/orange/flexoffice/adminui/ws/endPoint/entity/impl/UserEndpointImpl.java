@@ -14,7 +14,7 @@ import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.orange.flexoffice.dao.userui.model.data.UserFlexoffice;
+import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.adminui.ws.endPoint.entity.UserEndpoint;
 import com.orange.flexoffice.adminui.ws.model.ErrorModel;
 import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
@@ -23,7 +23,7 @@ import com.orange.flexoffice.adminui.ws.model.UserSummary;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
-import com.orange.flexoffice.business.userui.service.data.UserFlexofficeManager;
+import com.orange.flexoffice.business.common.service.data.UserManager;
 
 
 public class UserEndpointImpl implements UserEndpoint {
@@ -34,11 +34,11 @@ public class UserEndpointImpl implements UserEndpoint {
 	@Context
 	private UriInfo uriInfo;
 	@Autowired
-	private UserFlexofficeManager userManager;
+	private UserManager userManager;
 	
 	@Override
 	public List<UserSummary> getUsers() {
-		List<UserFlexoffice> dataList = userManager.findAllUsers();
+		List<UserDao> dataList = userManager.findAllUsers();
 		
 		if (dataList == null) {
 			ErrorModel errorModel = new ErrorModel();
@@ -56,13 +56,13 @@ public class UserEndpointImpl implements UserEndpoint {
 		
 		List<UserSummary> userList = new ArrayList<UserSummary>();
 		
-		for (UserFlexoffice userFlexoffice : dataList) {
+		for (UserDao UserDao : dataList) {
 			UserSummary user = factory.createUserSummary();
-			user.setId(userFlexoffice.getColumnId());
-			user.setEmail(userFlexoffice.getEmail());
-			user.setFirstName(userFlexoffice.getFirstName());
-			user.setLastName(userFlexoffice.getLastName());
-			user.setLabel(userFlexoffice.getFirstName() + " " + userFlexoffice.getLastName());
+			user.setId(UserDao.getColumnId());
+			user.setEmail(UserDao.getEmail());
+			user.setFirstName(UserDao.getFirstName());
+			user.setLastName(UserDao.getLastName());
+			user.setLabel(UserDao.getFirstName() + " " + UserDao.getLastName());
 			
 			userList.add(user);
 		}
@@ -72,7 +72,7 @@ public class UserEndpointImpl implements UserEndpoint {
 	
 	@Override
 	public User getUser(String userId) {
-	UserFlexoffice data = userManager.find(Long.valueOf(userId));
+	UserDao data = userManager.find(Long.valueOf(userId));
 		
 		if (data == null) {
 			ErrorModel errorModel = new ErrorModel();
@@ -101,7 +101,7 @@ public class UserEndpointImpl implements UserEndpoint {
 		
         LOGGER.info( "Begin call doPost method for UserEndpoint at: " + new Date() );
         
-		UserFlexoffice user = new UserFlexoffice();
+		UserDao user = new UserDao();
 		user.setEmail(xmlUser.getEmail());
 		user.setFirstName(xmlUser.getFirstName());
 		user.setLastName(xmlUser.getLastName());
@@ -159,7 +159,7 @@ public class UserEndpointImpl implements UserEndpoint {
 	public Response updateUser(String id, User xmlUser) {
 		LOGGER.info( "Begin call doPut method for UserEndpoint at: " + new Date() );
 		
-		UserFlexoffice user = new UserFlexoffice();
+		UserDao user = new UserDao();
 		user.setId(Long.valueOf(id));
 		user.setEmail(xmlUser.getEmail());
 		user.setFirstName(xmlUser.getFirstName());
@@ -194,7 +194,7 @@ public class UserEndpointImpl implements UserEndpoint {
 				.path(UserEndpoint.class, "getUser")
 				.build(user.getId());
 		LOGGER.info( "End call doPut method for UserEndpoint at: " + new Date() );
-		return Response.created(location).build();
+		return Response.accepted(location).build();
 	}
 
 	@Override

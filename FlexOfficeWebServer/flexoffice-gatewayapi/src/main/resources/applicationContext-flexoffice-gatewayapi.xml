@@ -9,9 +9,5 @@
 
     <!-- Import related to Flex Office Web Sever Business -->
 	<import resource="classpath*:spring/applicationContext-flexoffice-business.xml" />
-  	
-	<bean id="responseHandler" class="com.orange.flexoffice.gatewayapi.handler.JsonResponseHandler" >
-	</bean>
-	
 		
 </beans>
