@@ -18,6 +18,7 @@ import static com.orange.flexoffice.adminui.ws.PathConst.USER_ID_PATH;
 
 import java.util.List;
 import com.orange.flexoffice.adminui.ws.model.User;
+import com.orange.flexoffice.adminui.ws.model.UserInput;
 import com.orange.flexoffice.adminui.ws.model.UserSummary;
 
 /**
@@ -66,7 +67,7 @@ public interface UserEndpoint {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	User addUser(User user);
+	User addUser(UserInput user);
 	
 	/**
 	 * Modifies a specific user.
@@ -85,7 +86,7 @@ public interface UserEndpoint {
 	@Path(USER_ID_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response updateUser(@PathParam(USER_ID_PARAM)String id, User user);
+	Response updateUser(@PathParam(USER_ID_PARAM)String id, UserInput user);
 
 	/**
 	 * Deletes a specific user.

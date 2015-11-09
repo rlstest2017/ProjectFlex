@@ -6,7 +6,7 @@ CREATE TYPE gatewayStatus AS ENUM ('ONLINE', 'OFFLINE', 'ONTEACHIN');
 CREATE TYPE roomStatus AS ENUM ('FREE', 'RESERVED', 'OCCUPIED', 'UNKNOWN');
 CREATE TYPE roomType AS ENUM ('BOX', 'VIDEO_CONF');
 
-/*DROP TABLE users, gateways, sensors, alerts, room_stats;*/
+/*DROP TABLE users, gateways, rooms, sensors, alerts, room_stats;*/
 
 CREATE TABLE users (
     id serial NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE rooms (
     status roomStatus,
     "type" roomType,
     gateway_id integer NOT NULL,
-    user_id integer,
+    user_id integer
 );
 
 CREATE TABLE sensors (
@@ -63,7 +63,7 @@ CREATE TABLE room_stats (
     id serial NOT NULL,
     room_id integer NOT NULL,
     room_type roomType,
-    begin_occupancy_date timestamp without time zone ,
+    begin_occupancy_date timestamp without time zone,
     end_occupancy_date timestamp without time zone  
 );
 

@@ -9,6 +9,7 @@
 	<xsd:element name="multiStatSet" type="MultiStatSet"/>
 	<xsd:element name="userSummary" type="UserSummary"/>
 	<xsd:element name="user" type="User"/>
+	<xsd:element name="userInput" type="UserInput"/>
 	<xsd:element name="sensorSummary" type="SensorSummary"/>
 	<xsd:element name="sensor" type="Sensor"/>
 	<xsd:element name="sensorOutput" type="SensorOutput"/>
