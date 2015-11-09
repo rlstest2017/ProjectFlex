@@ -44,7 +44,7 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 
 	@Override
 	public List<UserDao> findByUserEmail(String userEmail) {
-		SqlParameterSource paramMap = new MapSqlParameterSource("columnEmail", userEmail);
+		SqlParameterSource paramMap = new MapSqlParameterSource("email", userEmail);
 		return jdbcTemplate.query(
 				findByColumnMailQuery, 
 				paramMap, 
