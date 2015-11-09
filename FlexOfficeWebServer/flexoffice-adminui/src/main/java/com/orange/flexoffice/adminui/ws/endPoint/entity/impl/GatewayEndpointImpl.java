@@ -42,7 +42,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 			GatewayDto data = gatewayManager.find(Long.valueOf(gatewayId));
 			
 			GatewayOutput2 gateway = factory.createGatewayOutput2();
-			gateway.setId(data.getMacAdress());
+			gateway.setId(data.getMacAddress());
 			gateway.setName(data.getName());
 			gateway.setDesc(data.getDescription());
 			gateway.setStatus(EDeviceStatus.valueOf(data.getStatus().toString()));

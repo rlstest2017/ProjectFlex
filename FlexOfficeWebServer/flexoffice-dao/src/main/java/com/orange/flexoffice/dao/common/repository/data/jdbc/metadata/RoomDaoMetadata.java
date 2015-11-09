@@ -10,7 +10,7 @@ public final class RoomDaoMetadata {
 	public static final String ROOM_TABLE_NAME = "rooms";
 	public static final String ROOM_ID_COL = "id";
 	public static final String ROOM_NAME_COL = "name";
-	public static final String ROOM_ADRESS_COL = "adress";
+	public static final String ROOM_ADDRESS_COL = "address";
 	public static final String ROOM_CAPACITY_COL = "capacity";
 	public static final String ROOM_DESCRIPTION_COL = "description";
 	public static final String ROOM_STATUS_COL = "status";

@@ -10,7 +10,7 @@ import java.util.Date;
 public class GatewayDao extends AbstractData {
 	
 	private String name;
-	private String macAdress;
+	private String macAddress;
 	private String description;
 	private String status;
 	private Date lastPollingDate;
@@ -22,11 +22,11 @@ public class GatewayDao extends AbstractData {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getMacAdress() {
-		return macAdress;
+	public String getMacAddress() {
+		return macAddress;
 	}
-	public void setMacAdress(String macAdress) {
-		this.macAdress = macAdress;
+	public void setMacAddress(String macAddress) {
+		this.macAddress = macAddress;
 	}
 	public String getDescription() {
 		return description;

@@ -62,7 +62,7 @@ public class GatewayManagerImpl implements GatewayManager {
 
 		dto.setDescription(gatewayDao.getDescription());
 		dto.setLastPollingDate(gatewayDao.getLastPollingDate());
-		dto.setMacAdress(gatewayDao.getMacAdress());
+		dto.setMacAddress(gatewayDao.getMacAddress());
 		dto.setName(gatewayDao.getName());
 		dto.setStatus(E_GatewayStatus.valueOf(gatewayDao.getStatus()));
 		

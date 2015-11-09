@@ -225,7 +225,7 @@
  		    <xsd:element name="type" type="e-roomType" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="gateway" type="GatewayInput4" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="desc" type="xsd:string"/>
-			<xsd:element name="adress" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="address" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="capacity" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
 	</xsd:complexType>
@@ -247,7 +247,7 @@
 			<xsd:element name="name" type="xsd:string"/>
  		    <xsd:element name="type" type="e-roomType" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="gateway" type="GatewayOutput" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="adress" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="address" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="capacity" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="status" type="e-roomStatus" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="tenantName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
@@ -262,7 +262,7 @@
 			<xsd:element name="gateway" type="GatewayOutput"/>
 			<xsd:element name="desc" type="xsd:string"/>
 			<xsd:element name="sensors" type="SensorOutput" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="adress" type="xsd:string"/>
+			<xsd:element name="address" type="xsd:string"/>
 			<xsd:element name="capacity" type="xsd:integer"/>
 			<xsd:element name="status" type="e-roomStatus"/>
 			<xsd:element name="tenantName" type="xsd:string"/>

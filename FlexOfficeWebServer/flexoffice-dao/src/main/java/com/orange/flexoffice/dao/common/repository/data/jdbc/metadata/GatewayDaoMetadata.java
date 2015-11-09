@@ -10,7 +10,7 @@ public final class GatewayDaoMetadata {
 	public static final String GATEWAY_TABLE_NAME = "gateways";
 	public static final String GATEWAY_ID_COL = "id";
 	public static final String GATEWAY_NAME_COL = "name";
-	public static final String GATEWAY_MAC_ADRESS_COL = "mac_adress";
+	public static final String GATEWAY_MAC_ADDRESS_COL = "mac_address";
 	public static final String GATEWAY_DESCRIPTION_COL = "description";
 	public static final String GATEWAY_STATUS_COL = "status";
 	public static final String GATEWAY_IS_ACTIVATED_COL = "is_activated";

@@ -8,7 +8,7 @@ package com.orange.flexoffice.dao.common.model.data;
 public class RoomDao extends AbstractData {
 	
 	private String name;
-	private String adress;
+	private String address;
 	private Integer capacity;
 	private String description;
 	private String status;
@@ -23,11 +23,11 @@ public class RoomDao extends AbstractData {
 		this.name = name;
 	}
 	
-	public String getAdress() {
-		return adress;
+	public String getAddress() {
+		return address;
 	}
-	public void setAdress(String adress) {
-		this.adress = adress;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	public Integer getCapacity() {
 		return capacity;

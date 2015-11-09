@@ -8,19 +8,19 @@ CREATE TYPE roomType AS ENUM ('BOX', 'VIDEO_CONF');
 
 CREATE TABLE users (
     id serial NOT NULL,
-    first_name character varying(20),
-    last_name character varying(20),
-    email character varying(30),
-    password character varying(30),
-    access_token character varying(100),
+    first_name character varying(100),
+    last_name character varying(100),
+    email character varying(100),
+    password character varying(100),
+    access_token character varying(255),
     role userRole,
     last_connection_date timestamp without time zone DEFAULT now() NOT NULL
 );
 
 CREATE TABLE gateways (
     id serial NOT NULL,
-    name character varying(20),
-    mac_adress character varying(20),
+    name character varying(100),
+    mac_address character varying(100),
     description text,
     status gatewayStatus,
     is_activated boolean,
@@ -30,8 +30,8 @@ CREATE TABLE gateways (
 
 CREATE TABLE rooms (
     id serial NOT NULL,
-    name character varying(20),
-    adress character varying(255),
+    name character varying(100),
+    address character varying(255),
     capacity integer,
     description text,
     status roomStatus,
@@ -43,10 +43,10 @@ CREATE TABLE rooms (
 
 CREATE TABLE sensors (
     id serial NOT NULL,
-    identifier character varying(20),
-    name character varying(20),
+    identifier character varying(100),
+    name character varying(100),
     "type" sensorType,
-    profile character varying(20),
+    profile character varying(255),
     description text,
     status sensorStatus,
     room_id integer,
@@ -55,7 +55,7 @@ CREATE TABLE sensors (
 
 CREATE TABLE alerts (
     id serial NOT NULL,
-    name character varying(50),
+    name character varying(100),
     "type" deviceType,
     last_notification timestamp without time zone DEFAULT now() NOT NULL
 );
@@ -89,7 +89,7 @@ ALTER TABLE ONLY room_stats
  
 CREATE INDEX users_last_name_idx ON users USING btree (last_name);
 
-CREATE INDEX gateways_mac_adress_idx ON gateways USING btree (mac_adress);
+CREATE INDEX gateways_mac_address_idx ON gateways USING btree (mac_address);
 
 CREATE INDEX sensors_identifier_idx ON sensors USING btree (identifier);
 
