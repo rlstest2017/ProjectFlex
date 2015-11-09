@@ -1,4 +1,4 @@
-package com.orange.flexoffice.userui.ws.endPoint.entity.impl;
+package com.orange.flexoffice.adminui.ws.endPoint.entity.impl;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -8,13 +8,11 @@ import static org.unitils.reflectionassert.ReflectionComparatorMode.IGNORE_DEFAU
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Date;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.junit.Test;
@@ -24,13 +22,14 @@ import org.unitils.easymock.annotation.Mock;
 import org.unitils.inject.annotation.InjectIntoByType;
 import org.unitils.inject.annotation.TestedObject;
 
+import com.orange.flexoffice.adminui.ws.endPoint.entity.impl.UserEndpointImpl;
+import com.orange.flexoffice.adminui.ws.endPoint.support.ObjectFactory;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.impl.UserManagerImpl;
-import com.orange.flexoffice.dao.userui.model.data.UserFlexoffice;
-import com.orange.flexoffice.userui.ws.endPoint.entity.UserEndpoint;
-import com.orange.flexoffice.userui.ws.endPoint.support.ObjectFactory;
-import com.orange.flexoffice.userui.ws.model.XmlUser;
+import com.orange.flexoffice.dao.common.model.data.UserDao;
+import com.orange.flexoffice.adminui.ws.endPoint.entity.UserEndpoint;
+import com.orange.flexoffice.adminui.ws.model.User;
 
 public class UserEndPointImplTest extends UnitilsJUnit4 {
 	
@@ -51,7 +50,7 @@ public class UserEndPointImplTest extends UnitilsJUnit4 {
 	public void getUser() throws URISyntaxException, DatatypeConfigurationException {
 		// Setup
 		//URI exceptedUri = new URI("http://mockUri");
-		UserFlexoffice user = factory.createFlexOfficeUser(null, "firstNameTest1", "lastNameTest1", "emailTest1", "passwordTest");
+		UserDao user = factory.createUser(null, "firstNameTest1", "lastNameTest1", "emailTest1");
 		
 		// Mock expectations
 		expect(userManagerMock.find(1l)).andReturn(user);
@@ -59,22 +58,21 @@ public class UserEndPointImplTest extends UnitilsJUnit4 {
 		EasyMockUnitils.replay();
 		
 		// Test
-		XmlUser xmluser = userEndpoint.getUser("1");
+		User userHmi = userEndpoint.getUser("1");
 		
 		// Asserts
-		assertEquals("firstNameTest1", xmluser.getFirstName());
-		assertEquals("lastNameTest1", xmluser.getLastName());
-		assertEquals("emailTest1", xmluser.getEmail());
-		assertEquals("passwordTest", xmluser.getPassword());
+		assertEquals("firstNameTest1", userHmi.getFirstName());
+		assertEquals("lastNameTest1", userHmi.getLastName());
+		assertEquals("emailTest1", userHmi.getEmail());
 		EasyMockUnitils.verify();
 	}
 	
 	@Test
 	public void addUser() throws URISyntaxException, DataAlreadyExistsException {
 		// Setup
-		XmlUser xmluser = factory.createXmlUser(null, "firstNameTest1", "lastNameTest1", "emailTest1", "passwordTest");
-		UserFlexoffice user = factory.createFlexOfficeUser(null, "firstNameTest1", "lastNameTest1", "emailTest1", "passwordTest");
-		UserFlexoffice savedUser = factory.createFlexOfficeUser(1l, "firstNameTest1", "lastNameTest1", "emailTest1", "passwordTest");
+		User userHmi = factory.createHmiUser(null, "firstNameTest1", "lastNameTest1", "emailTest1");
+		UserDao user = factory.createUser(null, "firstNameTest1", "lastNameTest1", "emailTest1");
+		UserDao savedUser = factory.createUser(1l, "firstNameTest1", "lastNameTest1", "emailTest1");
 		URI exceptedUri = new URI("http://mockUri");
 		
 		// Mock expectations
@@ -85,7 +83,7 @@ public class UserEndPointImplTest extends UnitilsJUnit4 {
 		EasyMockUnitils.replay();
 		
 		// Test
-		XmlUser response = userEndpoint.addUser(xmluser);
+		User response = userEndpoint.addUser(userHmi);
 		
 		// Asserts
 		assertEquals("1", response.getId());
@@ -96,8 +94,8 @@ public class UserEndPointImplTest extends UnitilsJUnit4 {
 	@Test(expected = DataAlreadyExistsException.class)
 	public void addUserDataAlreadyExistsException() throws DataAlreadyExistsException {
 		// Setup
-		XmlUser xmluser = factory.createXmlUser(null, "firstNameTest1", "lastNameTest1", "emailTest1", "passwordTest");
-		UserFlexoffice user = factory.createFlexOfficeUser(null, "firstNameTest1", "lastNameTest1", "emailTest1", "passwordTest");
+		User userHmi = factory.createHmiUser(null, "firstNameTest1", "lastNameTest1", "emailTest1");
+		UserDao user = factory.createUser(null, "firstNameTest1", "lastNameTest1", "emailTest1");
 		
 		// Mock expectations
 		expect(userManagerMock.save(refEq(user, IGNORE_DEFAULTS)))
@@ -106,7 +104,7 @@ public class UserEndPointImplTest extends UnitilsJUnit4 {
 		
 		// Test
 		try {
-			userEndpoint.addUser(xmluser);
+			userEndpoint.addUser(userHmi);
 		} finally {
 			EasyMockUnitils.verify();
 		}
@@ -115,9 +113,9 @@ public class UserEndPointImplTest extends UnitilsJUnit4 {
 	@Test
 	public void updateUser() throws URISyntaxException, DataNotExistsException {
 		// Setup
-		XmlUser xmluser = factory.createXmlUser(null, "firstNameTest1", "lastNameTest1", "emailTest1", "passwordTest");
-		UserFlexoffice user = factory.createFlexOfficeUser(null, "firstNameTest1", "lastNameTest1", "emailTest1", "passwordTest");
-		UserFlexoffice updatedUser = factory.createFlexOfficeUser(1l, "firstNameTest1", "lastNameTest1", "emailTest1", "passwordTest");
+		User userHmi = factory.createHmiUser(null, "firstNameTest1", "lastNameTest1", "emailTest1");
+		UserDao user = factory.createUser(null, "firstNameTest1", "lastNameTest1", "emailTest1");
+		UserDao updatedUser = factory.createUser(1l, "firstNameTest1", "lastNameTest1", "emailTest1");
 		URI exceptedUri = new URI("http://mockUri");
 		
 		// Mock expectations
@@ -127,7 +125,7 @@ public class UserEndPointImplTest extends UnitilsJUnit4 {
 		EasyMockUnitils.replay();
 		
 		// Test
-		Response response = userEndpoint.updateUser("1", xmluser);
+		Response response = userEndpoint.updateUser("1", userHmi);
 		
 		// Asserts
 		// Asserts
@@ -142,7 +140,12 @@ public class UserEndPointImplTest extends UnitilsJUnit4 {
 	@Test
 	public void removeUser() {
 		// Mock expectations
-		userManagerMock.delete(1l);
+		try {
+			userManagerMock.delete(1l);
+		} catch (DataNotExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		EasyMockUnitils.replay();
 		
 		// Test
