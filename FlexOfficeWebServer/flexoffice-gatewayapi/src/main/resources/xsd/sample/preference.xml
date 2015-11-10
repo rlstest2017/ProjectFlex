@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<preference xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="../elements.xsd">
-	<user id="1256"/>	
-	<descriptor id="keyword_||_animation"/>
-	<rating>4</rating>
-	<comment>test comment</comment>
-</preference>
