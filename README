@@ -3,6 +3,7 @@ Flex Office web-server
 - to provide web APIs to Flex Office web applications (user and administration portals)
 - to provide web APIs to gateway server
 
+
 Install  & Configure Tomcat:
 ----------------------------
 # sudo apt-get install tomcat7 tomcat7-admin
@@ -88,3 +89,22 @@ Pour sortir :
   > exit
   > sudo service postgres start
   > sudo service postgres restart
+  
+
+Configuration of remote connection from pgAdmin3 (optional)
+-----------------------------------------------------------
+pgAdmin3 is a comprehensive PostgreSQL database design and management system for Unix
+and Windows systems. This tool allows the administrator to connect to ATS COM database
+and view, modify database tables.
+It’s required to identify on postgresql settings the IP of the client machine which is allowed for
+this connection. The IP/Hotsname must be at least the administration station.
+
+  > sudo vi /etc/postgresql/9.3/main/postgresql.conf and change
+    listen_addresses = '*'
+
+  > sudo vi /etc/postgresql/9.3/main/pg_hba.conf and add following line (do not forget to adapt IP/Hostname)
+      host  all   all    <IP/Hostname>/32   md5
+      
+  > sudo service postgres restart
+
+
