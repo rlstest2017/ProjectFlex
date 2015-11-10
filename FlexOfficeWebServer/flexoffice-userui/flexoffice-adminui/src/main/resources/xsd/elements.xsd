@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<xsd:include id="types" schemaLocation="types.xsd"/>
+	
+	<xsd:element name="system" type="System"/>
+	<xsd:element name="teachin" type="Teachin"/>
+	<xsd:element name="simpleStat" type="SimpleStat"/>
+	<xsd:element name="multiStatSet" type="MultiStatSet"/>
+	<xsd:element name="userSummary" type="UserSummary"/>
+	<xsd:element name="user" type="User"/>
+	<xsd:element name="userInput" type="UserInput"/>
+	<xsd:element name="sensorSummary" type="SensorSummary"/>
+	<xsd:element name="sensor" type="Sensor"/>
+	<xsd:element name="sensorOutput" type="SensorOutput"/>
+	<xsd:element name="sensorInput1" type="SensorInput1"/>
+	<xsd:element name="sensorInput2" type="SensorInput2"/>
+	<xsd:element name="gatewaySummary" type="GatewaySummary"/>
+	<xsd:element name="gateway" type="Gateway"/>
+	<xsd:element name="gatewayInput1" type="GatewayInput1"/>
+	<xsd:element name="gatewayInput2" type="GatewayInput2"/>
+	<xsd:element name="gatewayInput4" type="GatewayInput4"/>
+	<xsd:element name="gatewayOutput" type="GatewayOutput"/>
+	<xsd:element name="gatewayOutput2" type="GatewayOutput2"/>
+	<xsd:element name="roomSummary" type="RoomSummary"/>
+	<xsd:element name="room" type="Room"/>
+	<xsd:element name="roomInput1" type="RoomInput1"/>
+	<xsd:element name="roomInput2" type="RoomInput2"/>
+	<xsd:element name="roomOutput" type="RoomOutput"/>
+	
+	<xsd:element name="error" type="ErrorModel"/>
+	
+</xsd:schema>

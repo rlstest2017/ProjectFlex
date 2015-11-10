@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<user xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../elements.xsd">
+
+	<logs>
+		<log href="/uri"/>
+		<log href="/uri"/>
+	</logs>
+	
+	<preferences/>
+	
+	<friends/>
+	<followers/>
+
+</user>

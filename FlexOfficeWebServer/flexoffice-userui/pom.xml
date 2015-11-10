@@ -63,11 +63,6 @@
 	<!-- Spring -->
 	<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<scope>test</scope>
-	</dependency>
-	<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 	</dependency>
 	<dependency>
@@ -95,19 +90,7 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>	
-    <dependency> 
-	    <groupId>org.unitils</groupId> 
-	    <artifactId>unitils-easymock</artifactId> 
-	    <scope>test</scope> 
-	</dependency>
-	
-	<dependency> 
-	    <groupId>org.unitils</groupId> 
-	    <artifactId>unitils-inject</artifactId> 
-	    <scope>test</scope> 
-	</dependency>
-	
-	<dependency>
+    <dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-test</artifactId>
    		<scope>test</scope>
