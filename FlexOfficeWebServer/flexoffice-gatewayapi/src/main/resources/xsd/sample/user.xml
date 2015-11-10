@@ -2,15 +2,8 @@
 
 <user xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="../elements.xsd">
-
-	<logs>
-		<log href="/uri"/>
-		<log href="/uri"/>
-	</logs>
-	
-	<preferences/>
-	
-	<friends/>
-	<followers/>
-
+	<id>3</id>
+	<firstName>Rachid</firstName>
+	<lastName>LAOUES</lastName>
+	<email>rachid.laoues@orange.com</email>
 </user>

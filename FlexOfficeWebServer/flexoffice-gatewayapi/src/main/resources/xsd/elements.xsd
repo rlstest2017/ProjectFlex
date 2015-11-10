@@ -3,19 +3,11 @@
 
 	<xsd:include id="types" schemaLocation="types.xsd"/>
 	
-	<xsd:element name="user" type="xmlUser"/>
-	<xsd:element name="item" type="xmlItem"/>
-	<xsd:element name="descriptor" type="xmlDescriptor"/>
-	<xsd:element name="log" type="xmlLog"/>
-	<xsd:element name="logs" type="xmlLogs"/>
-	<xsd:element name="preference" type="xmlPreference"/>
-	<xsd:element name="preferences" type="xmlPreferences"/>
-	<xsd:element name="characteristic" type="xmlCharacteristic"/>
-	<xsd:element name="characteristics" type="xmlCharacteristics"/>
-	<xsd:element name="relationship" type="xmlRelationship"/>
-	<xsd:element name="relationships" type="xmlRelationships"/>
-	<xsd:element name="predictions" type="xmlPredictions"/>
-	<xsd:element name="recommendations" type="xmlRecommendations"/>
-	<xsd:element name="similarities" type="xmlSimilarities"/>
+	<xsd:element name="sensorNewSummary" type="SensorNewSummary"/>
+	<xsd:element name="gatewaySummary" type="GatewaySummary"/>
+	<xsd:element name="gatewayReturn" type="GatewayReturn"/>
+	<xsd:element name="room" type="Room"/>
+	
+	<xsd:element name="error" type="ErrorModel"/>
 	
 </xsd:schema>

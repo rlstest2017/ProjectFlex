@@ -41,6 +41,16 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 				new BeanPropertyRowMapper<SensorDao>(SensorDao.class)
 			);
 	}
+	
+	@Override
+	public List<SensorDao> findByRoomId(Long roomId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("roomId", roomId);
+		return jdbcTemplate.query(
+				findByColumnRoomIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<SensorDao>(SensorDao.class)
+			);
+	}
 
 	@Override
 	protected String getTableName() {
@@ -64,6 +74,7 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 
 
 }

@@ -11,7 +11,17 @@
 	
 	<jaxrs:server id="server" address="/">
 		<jaxrs:serviceBeans>
+<!--   			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.entity.impl.SensorEndpointImpl"/> -->
+   			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.entity.impl.GatewayEndpointImpl"/> 
   		</jaxrs:serviceBeans>
-	</jaxrs:server>
+  		 <jaxrs:extensionMappings>
+            <entry key="json" value="application/json"/>
+        </jaxrs:extensionMappings>
+        <jaxrs:providers>
+            <ref bean="jaxbJSONProvider"/>
+        </jaxrs:providers>
+   </jaxrs:server>
+
+   <bean id="jaxbJSONProvider" class="org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider"/>
 
 </beans>

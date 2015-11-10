@@ -10,6 +10,8 @@ public final class DataSqlTemplate {
 			"select * from %s where gateway_id=:gatewayId";
 	public static final String FIND_BY_COL_MAIL_TEMPLATE = 
 			"select * from %s where email=:email";
+	public static final String FIND_BY_COL_ROOM_ID_TEMPLATE = 
+			"select * from %s where room_id=:roomId";
 	public static final String FIND_ALL_TEMPLATE = 
 			"select * from %s";
 	public static final String REMOVE_TEMPLATE = 

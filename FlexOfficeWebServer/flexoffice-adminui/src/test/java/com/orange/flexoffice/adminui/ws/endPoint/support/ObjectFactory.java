@@ -1,6 +1,5 @@
 package com.orange.flexoffice.adminui.ws.endPoint.support;
 
-import com.orange.flexoffice.adminui.ws.model.User;
 import com.orange.flexoffice.adminui.ws.model.UserInput;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 

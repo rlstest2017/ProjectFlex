@@ -1,5 +1,6 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -12,10 +13,13 @@ import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
+import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
+import com.orange.flexoffice.dao.common.model.object.RoomDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
 
 /**
  * Manages {@link GatewayDto}.
@@ -34,6 +38,8 @@ public class GatewayManagerImpl implements GatewayManager {
 	@Autowired
 	private RoomDaoRepository roomRepository;
 	
+	@Autowired
+	private SensorDaoRepository sensorRepository;
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -41,6 +47,27 @@ public class GatewayManagerImpl implements GatewayManager {
 		return gatewayRepository.findAllGateways();
 	}
 
+	@Override
+	@Transactional(readOnly=true)
+	public List<RoomDto> findGatewayRooms(long gatewayId) {
+		
+		List<RoomDto> roomDtoList = new ArrayList<RoomDto>();
+		
+		List<RoomDao> roomsDao = roomRepository.findByGatewayId(gatewayId);
+		for (RoomDao roomDao : roomsDao) {
+			RoomDto roomDto = new RoomDto();
+			roomDto.setId(roomDao.getColumnId());
+			roomDto.setName(roomDao.getName());
+			List<SensorDao> sonsensDao = getSensors(roomDao.getId());
+			if ((sonsensDao != null)&&(!sonsensDao.isEmpty())) {
+				roomDto.setSensors(sonsensDao);					
+			}
+		}
+		
+		return roomDtoList;
+	}
+	
+	
 	@Override
 	@Transactional(readOnly=true)
 	public GatewayDto find(long gatewayId)  throws DataNotExistsException {
@@ -76,7 +103,7 @@ public class GatewayManagerImpl implements GatewayManager {
 		
 		List<RoomDao> roomsList = getRooms(gatewayId);
 		if ((roomsList != null) && (roomsList.size() > 0)) { 
-			dto.setRooms(getRooms(gatewayId));
+			dto.setRooms(roomsList);
 			dto.setActivated(true);			
 		} else {
 			dto.setActivated(false);
@@ -103,9 +130,27 @@ public class GatewayManagerImpl implements GatewayManager {
 		
 	}
 
+	/**
+	 * getRooms
+	 * @param gatewayId
+	 * @return
+	 */
 	private List<RoomDao> getRooms(long gatewayId) {
 		List<RoomDao> roomsDao =roomRepository.findByGatewayId(gatewayId);
 		
 		return roomsDao;
 	}
+	
+	/**
+	 * getSensors
+	 * @param roomId
+	 * @return
+	 */
+	private List<SensorDao> getSensors(long roomId) {
+		List<SensorDao> sensorsDao = sensorRepository.findByRoomId(roomId);
+		
+		return sensorsDao;
+	}
+
+	
 }

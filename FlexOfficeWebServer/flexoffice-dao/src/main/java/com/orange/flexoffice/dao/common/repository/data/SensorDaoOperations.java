@@ -15,4 +15,6 @@ public interface SensorDaoOperations {
 	
 	List<SensorDao> findBySensorId(Long sonsorId);
 	
+	List<SensorDao> findByRoomId(Long roomId);
+	
 }
