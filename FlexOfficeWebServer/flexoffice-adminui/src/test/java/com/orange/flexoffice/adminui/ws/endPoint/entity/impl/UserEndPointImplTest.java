@@ -71,10 +71,10 @@ public class UserEndPointImplTest {
 	@Test
 	public void addUser() throws WebApplicationException {
 		// Setup
-		UserInput userHmi = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
+		final UserInput userHmi = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
 
 		// Test
-		User response = userEndpoint.addUser(userHmi);
+		final User response = userEndpoint.addUser(userHmi);
 
 		// Asserts
 		assertNotNull(response.getId());
@@ -84,12 +84,12 @@ public class UserEndPointImplTest {
 	public void getUser() throws WebApplicationException {
 		// Setup
 		boolean expectedResult = false;
-		UserInput expecteduser = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
-		UserDao user = userEndpoint.findByUserMail("emailTest1");
+		final UserInput expecteduser = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
+		final UserDao user = userEndpoint.findByUserMail("emailTest1");
 
 		// Test
 		if (user != null) {
-			User userFromDB = userEndpoint.getUser(user.getColumnId());
+			final User userFromDB = userEndpoint.getUser(user.getColumnId());
 
 			if (((expecteduser.getFirstName().compareTo(userFromDB.getFirstName())) == 0) &&
 					((expecteduser.getLastName().compareTo(userFromDB.getLastName())) == 0) &&
@@ -109,7 +109,7 @@ public class UserEndPointImplTest {
 	public void getUsers() throws WebApplicationException {
 
 		// Test
-		List<UserSummary> response = userEndpoint.getUsers();
+		final List<UserSummary> response = userEndpoint.getUsers();
 
 		// Asserts
 		assertEquals(1, response.size());
@@ -120,11 +120,14 @@ public class UserEndPointImplTest {
 	public void addUserDataAlreadyExistsException() {
 		// Setup
 		boolean expectedResult = false;
-		UserInput userHmi = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
-
+		
 		// Test
 		try {
+			// Setup
+			UserInput userHmi = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
+
 			userEndpoint.addUser(userHmi);
+			
 		} catch (WebApplicationException e) {
 			expectedResult = true;
 		}
@@ -137,21 +140,62 @@ public class UserEndPointImplTest {
 	@Test
 	public void updateUser() throws WebApplicationException {
 		// Setup
-		UserInput userHmi = factory.createHmiUser("firstNameTest2", "lastNameTest2", "emailTest2");
-		UserDao user = userEndpoint.findByUserMail("emailTest1");
+		final UserInput userHmi = factory.createHmiUser("firstNameTest2", "lastNameTest2", "emailTest2");
+		final UserDao user = userEndpoint.findByUserMail("emailTest1");
 
 		// Test
 		Response response = userEndpoint.updateUser(user.getColumnId(), userHmi);
 
 		// Asserts
 		assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
-
 	}
+
+	@Test
+	public void updateUserDataNotExistsException() {
+		// Setup
+		boolean expectedResult = false;
+
+		// Test
+		try {
+			// Setup
+			final UserInput userHmi = factory.createHmiUser("firstNameTest3", "lastNameTest3", "emailTest3");
+			final UserDao user = userEndpoint.findByUserMail("emailTest2");
+
+			userEndpoint.updateUser(user.getColumnId()+100, userHmi);
+			
+		} catch (WebApplicationException e) {
+			expectedResult = true;
+		}
+
+		// Asserts
+		assertEquals(true, expectedResult);	
+	}
+	@Test
+	public void removeUserDataNotExistsException() {
+		// Setup
+		boolean expectedResult = false;
+
+		// Test
+		try {
+			// Setup
+			final UserDao user = userEndpoint.findByUserMail("emailTest2");
+
+			// Test
+			userEndpoint.removeUser(user.getColumnId()+100);
+			
+		} catch (WebApplicationException e) {
+			expectedResult = true;
+		}
+
+		// Asserts
+		assertEquals(true, expectedResult);	
+	}
+
 
 	@Test
 	public void removeUser() throws WebApplicationException {
 		// Setup
-		UserDao user = userEndpoint.findByUserMail("emailTest2");
+		final UserDao user = userEndpoint.findByUserMail("emailTest2");
 
 		// Test
 		Response response = userEndpoint.removeUser(user.getColumnId());
@@ -159,6 +203,5 @@ public class UserEndPointImplTest {
 		// Asserts
 		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 	}
-
 
 }
