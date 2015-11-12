@@ -13,8 +13,12 @@ Install  & Configure Tomcat:
 # cd /var/lib/tomcat7/conf
 # sudo nano tomcat-users.xml 
   add :
+
   <role rolename="manager-gui"/>
-  <user username="admin" password="admin" roles="manager-gui"/>
+  <role rolename="manager-script"/>
+  <role rolename="manager-jmx"/>
+  <role rolename="manager-status"/>
+  <user username="admin" password="flexoffice" roles="manager-gui,manager-jmx,manager-script,manager-status"/>
 
 # sudo service tomcat7 stop
 # cd /var/lib/tomcat7/webapps/
