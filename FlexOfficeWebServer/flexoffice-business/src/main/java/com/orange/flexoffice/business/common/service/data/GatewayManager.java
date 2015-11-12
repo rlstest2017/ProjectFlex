@@ -63,7 +63,8 @@ public interface GatewayManager {
 	 */
 	void delete(long id) throws DataNotExistsException;
 
-	
+	// used for tests
+	boolean executeGatewaysTestFile();
 	
 	
 	

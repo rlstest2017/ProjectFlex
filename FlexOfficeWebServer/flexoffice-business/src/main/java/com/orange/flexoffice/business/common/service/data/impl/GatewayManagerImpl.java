@@ -138,6 +138,12 @@ public class GatewayManagerImpl implements GatewayManager {
 		
 	}
 
+	// used for tests
+	@Override
+	public boolean executeGatewaysTestFile() {
+		return gatewayRepository.executeGatewaysTestFile();
+	}
+	
 	/**
 	 * getRooms
 	 * @param gatewayId

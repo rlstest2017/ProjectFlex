@@ -110,5 +110,10 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 				throw new WebApplicationException(response);
 			}
 	}
+
+	@Override
+	public boolean executeGatewaysTestFile() {
+		return gatewayManager.executeGatewaysTestFile();
+	}
 	
 }

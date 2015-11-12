@@ -51,6 +51,8 @@ public interface GatewayEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	List<Room> getGateway(@PathParam(GATEWAY_ID_PARAM) String gatewayId);
 	
+	// used for tests
+	boolean executeGatewaysTestFile();
 	
 }
 

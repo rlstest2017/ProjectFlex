@@ -12,6 +12,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_USER_TEMPLATE;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,6 +22,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -28,6 +30,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+
 
 import com.orange.flexoffice.dao.common.model.data.Data;
 import com.orange.flexoffice.dao.common.repository.data.DataOperations;
@@ -49,6 +52,8 @@ public abstract class DataRepository<T extends Data>
 	
 	protected NamedParameterJdbcTemplate jdbcTemplate;
 
+	protected JdbcTemplate jdbcTemplateForTest;
+	
 	private Class<T> entityClass;
 	
 	public DataRepository(Class<T> entitClass) {
@@ -70,6 +75,8 @@ public abstract class DataRepository<T extends Data>
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
 		jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		// For Tests
+		jdbcTemplateForTest = new JdbcTemplate(dataSource);
 	}
 	
 	@Override
@@ -119,7 +126,6 @@ public abstract class DataRepository<T extends Data>
 		return data;
 	}
 	
-
 	@Override
 	public void delete(Long id) {
 		SqlParameterSource paramMap = new MapSqlParameterSource("id", id);
