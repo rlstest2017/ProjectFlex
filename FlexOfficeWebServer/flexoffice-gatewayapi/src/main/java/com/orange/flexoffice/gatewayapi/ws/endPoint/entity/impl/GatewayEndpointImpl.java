@@ -76,6 +76,8 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 			
 			List<RoomDto> data = gatewayManager.findGatewayRooms(Long.valueOf(gatewayId));
 			
+			LOGGER.debug("There is: " + data.size() + " rooms");
+			
 			for (RoomDto roomDto : data) {
 				Room room = factory.createRoom();
 				room.setId(roomDto.getId());
