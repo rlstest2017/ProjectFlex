@@ -54,14 +54,22 @@ public class GatewayManagerImpl implements GatewayManager {
 		List<RoomDto> roomDtoList = new ArrayList<RoomDto>();
 		
 		List<RoomDao> roomsDao = roomRepository.findByGatewayId(gatewayId);
+		
+		LOGGER.debug("There is: " + roomsDao.size() + " rooms for gateway :" + gatewayId );
+		
 		for (RoomDao roomDao : roomsDao) {
 			RoomDto roomDto = new RoomDto();
 			roomDto.setId(roomDao.getColumnId());
 			roomDto.setName(roomDao.getName());
 			List<SensorDao> sonsensDao = getSensors(roomDao.getId());
+			
+			LOGGER.debug("There is: " + sonsensDao.size() + " sensors for room :" + roomDao.getColumnId());
+			
 			if ((sonsensDao != null)&&(!sonsensDao.isEmpty())) {
 				roomDto.setSensors(sonsensDao);					
 			}
+			
+			roomDtoList.add(roomDto);
 		}
 		
 		return roomDtoList;
