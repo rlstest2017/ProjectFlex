@@ -1,10 +1,9 @@
-package com.orange.flexoffice.gatewayapi.ws.endPoint.entity.impl;
+package com.orange.flexoffice.adminui.ws.endPoint.entity.impl;
 
 import static org.junit.Assert.*;
 
 import java.util.List;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
@@ -13,9 +12,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.orange.flexoffice.gatewayapi.ws.endPoint.entity.GatewayEndpoint;
-import com.orange.flexoffice.gatewayapi.ws.model.GatewaySummary;
-import com.orange.flexoffice.gatewayapi.ws.model.Room;
+import com.orange.flexoffice.adminui.ws.endPoint.entity.GatewayEndpoint;
+import com.orange.flexoffice.adminui.ws.model.GatewayOutput2;
+import com.orange.flexoffice.adminui.ws.model.GatewaySummary;
 
 
 public class GatewayEndpointImplTest {
@@ -27,14 +26,12 @@ public class GatewayEndpointImplTest {
 	@Context
 	private UriInfo uriInfo;
 
-	//private final ObjectFactory factory = new ObjectFactory();
-
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@BeforeClass
 	public static void initSpringContextAndDatabase() throws Exception {
-		context = new ClassPathXmlApplicationContext("applicationContext-flexoffice-gatewayapi-test.xml");
+		context = new ClassPathXmlApplicationContext("applicationContext-flexoffice-adminui-test.xml");
 		gatewayEndpoint = (GatewayEndpointImpl)context.getBean("gatewayEndpoint");
 	}
 
@@ -64,19 +61,11 @@ public class GatewayEndpointImplTest {
 		String gatewayId = "1";
 		
 		// Test
-		List<Room> rooms = gatewayEndpoint.getGateway(gatewayId);
-		
-		// Asserts
-		assertEquals(2, rooms.size());
+		GatewayOutput2 gateways = gatewayEndpoint.getGateway(gatewayId);
 				
-		for (Room room : rooms) {
-		 if (room.getId().equals("1")) {
-			 assertEquals(2, room.getSensors().size());
-		 } else {
-			 assertEquals(1, room.getSensors().size());
-		 }
-		}
-					
+		// Asserts
+		assertEquals(2, gateways.getRooms().size());
+				
 	}
 
 }

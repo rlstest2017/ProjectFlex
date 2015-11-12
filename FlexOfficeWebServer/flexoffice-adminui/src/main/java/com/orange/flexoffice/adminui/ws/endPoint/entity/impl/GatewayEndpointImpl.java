@@ -19,14 +19,11 @@ import com.orange.flexoffice.adminui.ws.model.GatewayOutput2;
 import com.orange.flexoffice.adminui.ws.model.GatewaySummary;
 import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
 import com.orange.flexoffice.adminui.ws.model.RoomOutput;
-import com.orange.flexoffice.adminui.ws.model.UserSummary;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
-import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
-import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 
 
@@ -128,5 +125,10 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 	}
 
 
+	@Override
+	public boolean executeGatewaysTestFile() {
+		return gatewayManager.executeGatewaysTestFile();
+	}
+	
 	
 }

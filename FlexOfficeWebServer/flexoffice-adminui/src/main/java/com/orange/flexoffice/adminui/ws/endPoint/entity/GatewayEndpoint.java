@@ -52,6 +52,8 @@ public interface GatewayEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	GatewayOutput2 getGateway(@PathParam(GATEWAY_ID_PARAM) String gatewayId);
 	
+	// used for tests
+	boolean executeGatewaysTestFile();
 	
 }
 

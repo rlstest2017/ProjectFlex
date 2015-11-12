@@ -13,6 +13,8 @@
 	<bean id="userEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.UserEndpointImpl">
 	</bean>
 	
+	<bean id="gatewayEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.GatewayEndpointImpl">
+	</bean>
 	
 		
 </beans>
