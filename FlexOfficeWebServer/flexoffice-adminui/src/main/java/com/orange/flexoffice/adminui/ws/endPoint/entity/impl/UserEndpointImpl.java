@@ -10,17 +10,16 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.adminui.ws.endPoint.entity.UserEndpoint;
-import com.orange.flexoffice.adminui.ws.model.ErrorModel;
 import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
 import com.orange.flexoffice.adminui.ws.model.User;
 import com.orange.flexoffice.adminui.ws.model.UserInput;
 import com.orange.flexoffice.adminui.ws.model.UserSummary;
+import com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
@@ -40,6 +39,8 @@ public class UserEndpointImpl implements UserEndpoint {
 	private UriInfo uriInfo;
 	@Autowired
 	private UserManager userManager;
+	@Autowired
+	private ErrorMessageHandler errorMessageHandler;
 
 	@Override
 	public List<UserSummary> getUsers() {
@@ -47,7 +48,7 @@ public class UserEndpointImpl implements UserEndpoint {
 
 		if (dataList == null) {
 
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_4, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_4, Response.Status.NOT_FOUND));
 		
 		}
 
@@ -75,7 +76,7 @@ public class UserEndpointImpl implements UserEndpoint {
 
 		if (data == null) {
 
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_8, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_8, Response.Status.NOT_FOUND));
 		
 		}
 
@@ -119,11 +120,11 @@ public class UserEndpointImpl implements UserEndpoint {
 
 		} catch (DataAlreadyExistsException e) {
 			
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_9, Response.Status.METHOD_NOT_ALLOWED));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_9, Response.Status.METHOD_NOT_ALLOWED));
 
 		} catch (RuntimeException ex) {
 
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
 
@@ -150,11 +151,11 @@ public class UserEndpointImpl implements UserEndpoint {
 
 		} catch (DataNotExistsException e){
 			
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_6, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_6, Response.Status.NOT_FOUND));
 			
 		} catch (RuntimeException ex){
 
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
 		LOGGER.info( "End call doPut method for UserEndpoint at: " + new Date() );
@@ -171,11 +172,11 @@ public class UserEndpointImpl implements UserEndpoint {
 
 		} catch (DataNotExistsException e){
 			
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_7, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_7, Response.Status.NOT_FOUND));
 			
 		} catch (RuntimeException ex){
 
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
 
@@ -186,29 +187,6 @@ public class UserEndpointImpl implements UserEndpoint {
 	public UserDao findByUserMail(String userEmail) {
 
 		return userManager.findByUserMail(userEmail);
-	}
-
-
-	
-	
-	
-	/** Create error message for exception
-	 * 
-	 * @param error
-	 * @param status
-	 * @return message
-	 */
-	private Response createErrorMessage(final EnumErrorModel error, Status status) {
-		ErrorModel errorModel = factory.createErrorModel();
-		errorModel.setCode(error.code());
-		errorModel.setMessage(error.value());
-
-		ResponseBuilderImpl builder = new ResponseBuilderImpl();
-		builder.status(status);
-		builder.entity(errorModel);
-		Response response = builder.build();
-
-		return response;
 	}
 
 }

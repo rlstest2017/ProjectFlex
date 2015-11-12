@@ -20,7 +20,6 @@
   		</jaxrs:serviceBeans>
   		 <jaxrs:extensionMappings>
             <entry key="json" value="application/json"/>
-            <entry key="xml" value="application/xml"/>
         </jaxrs:extensionMappings>
         <jaxrs:providers>
             <ref bean="jaxbJSONProvider"/>

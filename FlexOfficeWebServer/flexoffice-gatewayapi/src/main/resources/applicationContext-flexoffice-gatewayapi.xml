@@ -9,5 +9,8 @@
 
     <!-- Import related to Flex Office Web Sever Business -->
 	<import resource="classpath*:spring/applicationContext-flexoffice-business.xml" />
+	
+	<bean id="errorMessageHandler" class="com.orange.flexoffice.gatewayapi.ws.utils.ErrorMessageHandler">
+	</bean>
 		
 </beans>

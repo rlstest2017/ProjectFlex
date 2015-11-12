@@ -8,17 +8,16 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.adminui.ws.endPoint.entity.GatewayEndpoint;
 import com.orange.flexoffice.adminui.ws.model.EDeviceStatus;
-import com.orange.flexoffice.adminui.ws.model.ErrorModel;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput2;
 import com.orange.flexoffice.adminui.ws.model.GatewaySummary;
 import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
 import com.orange.flexoffice.adminui.ws.model.RoomOutput;
+import com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
@@ -36,6 +35,8 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 	private UriInfo uriInfo;
 	@Autowired
 	private GatewayManager gatewayManager;
+	@Autowired
+	private ErrorMessageHandler errorMessageHandler;
 	
 	@Override
 	public List<GatewaySummary> getGateways() {
@@ -43,15 +44,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 			List<GatewayDao> dataList = gatewayManager.findAllGateways();
 		
 		if (dataList == null) {
-			ErrorModel errorModel = new ErrorModel();
-			errorModel.setCode(EnumErrorModel.ERROR_21.code());
-			errorModel.setMessage(EnumErrorModel.ERROR_21.value());
-			
-			ResponseBuilderImpl builder = new ResponseBuilderImpl();
-			builder.status(Response.Status.NOT_FOUND);
-			builder.entity(errorModel);
-			Response response = builder.build();
-			throw new WebApplicationException(response);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_21, Response.Status.NOT_FOUND));
 		}
 		
 		LOGGER.debug("List of gateways : " + dataList.size());
@@ -100,25 +93,9 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 			return factory.createGatewayOutput2(gateway).getValue();
 			
 			} catch (DataNotExistsException e){
-				ErrorModel errorModel =  factory.createErrorModel();
-				errorModel.setCode(EnumErrorModel.ERROR_25.code());
-				errorModel.setMessage(EnumErrorModel.ERROR_25.value());
-				
-				ResponseBuilderImpl builder = new ResponseBuilderImpl();
-				builder.status(Response.Status.NOT_FOUND);
-				builder.entity(errorModel);
-				Response response = builder.build();
-				throw new WebApplicationException(response);
+				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_25, Response.Status.NOT_FOUND));
 			} catch (RuntimeException ex){
-				ErrorModel errorModel =  factory.createErrorModel();
-				errorModel.setCode(EnumErrorModel.ERROR_32.code());
-				errorModel.setMessage(ex.getMessage());
-				
-				ResponseBuilderImpl builder = new ResponseBuilderImpl();
-				builder.status(Response.Status.INTERNAL_SERVER_ERROR);
-				builder.entity(errorModel);
-				Response response = builder.build();
-				throw new WebApplicationException(response);
+				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 			}
 		
 		
