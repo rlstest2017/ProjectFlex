@@ -101,7 +101,7 @@ public class UserEndpointImpl implements UserEndpoint {
 		user.setLastName(userInput.getLastName());
 
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug( "Begin call addUser(XmlUser xmlUser) method for UserEndpoint, with parameters :");
+			LOGGER.debug( "Begin call addUser(UserInput userInput) method of UserEndpoint, with parameters :");
 			final StringBuffer message = new StringBuffer( 1000 );
 			message.append( "email :" );
 			message.append( userInput.getEmail() );

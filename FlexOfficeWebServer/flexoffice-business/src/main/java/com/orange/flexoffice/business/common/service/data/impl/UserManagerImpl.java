@@ -99,7 +99,7 @@ public class UserManagerImpl implements UserManager {
 		
 		if (userFound == null) {
 			LOGGER.debug("user by id " + id + " is not found");
-			throw new DataNotExistsException("UserDao already saves.");
+			throw new DataNotExistsException("user is not found.");
 		}
 		
 		// Deletes UserDao
