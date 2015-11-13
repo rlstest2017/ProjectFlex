@@ -142,6 +142,8 @@ public class GatewayManagerImpl implements GatewayManager {
 		if (gatewayFound == null) {
 			LOGGER.debug("gateway by id " + gatewayId + " is not found");
 			throw new DataNotExistsException("GatewayDao already saves.");
+		} else {
+			LOGGER.debug("gateway by id " + gatewayId + " is found");
 		}
 		
 		// update Gateway Status
