@@ -17,4 +17,6 @@ public interface GatewayDaoOperations {
 	
 	GatewayDao updateGatewayStatus(GatewayDao data); 
 	
+	GatewayDao saveGateway(GatewayDao data);
+	
 }

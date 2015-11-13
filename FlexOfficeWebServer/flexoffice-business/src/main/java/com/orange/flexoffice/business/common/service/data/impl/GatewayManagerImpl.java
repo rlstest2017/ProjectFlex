@@ -16,6 +16,7 @@ import com.orange.flexoffice.business.gatewayapi.enums.EnumCommandModel;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
+import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
@@ -124,8 +125,16 @@ public class GatewayManagerImpl implements GatewayManager {
 
 	@Override
 	public GatewayDao save(GatewayDao gatewayDao) throws DataAlreadyExistsException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<GatewayDao> gatewayFound = gatewayRepository.findByGatewayId(gatewayDao.getId());
+		if ((gatewayFound != null)&&(gatewayFound.size() > 0)) {
+			LOGGER.debug("gatewayFound.size() : " + gatewayFound.size());
+			throw new DataAlreadyExistsException("gateway already exist.");
+		}
+		
+		// Save GatewayDao
+		return gatewayRepository.saveGateway(gatewayDao);
+		
 	}
 
 	@Override

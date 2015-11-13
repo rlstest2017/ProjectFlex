@@ -12,6 +12,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_GATEWAY_STATUS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_USER_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_GATEWAY_TEMPLATE;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,6 +38,7 @@ public abstract class DataRepository<T extends Data>
 	private final String findOneQuery;
 	protected final String findAllQuery;
 	protected final String saveUserQuery;
+	protected final String saveGatewayQuery;
 	protected final String updateUserQuery;
 	protected final String updateGatewayStatusQuery;
 	private final String deleteQuery;
@@ -59,6 +61,7 @@ public abstract class DataRepository<T extends Data>
 		findOneQuery = String.format(FIND_ONE_TEMPLATE, getTableName());
 		findAllQuery = String.format(FIND_ALL_TEMPLATE, getTableName());
 		saveUserQuery = String.format(CREATE_USER_TEMPLATE, getTableName());
+		saveGatewayQuery = String.format(CREATE_GATEWAY_TEMPLATE, getTableName());
 		updateUserQuery = String.format(UPDATE_USER_TEMPLATE, getTableName(), getColumnColName());
 		updateGatewayStatusQuery = String.format(UPDATE_GATEWAY_STATUS_TEMPLATE, getTableName());
 		deleteQuery = String.format(REMOVE_TEMPLATE, getTableName());	

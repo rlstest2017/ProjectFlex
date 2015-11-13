@@ -17,9 +17,8 @@
 	<xsd:element name="sensorInput2" type="SensorInput2"/>
 	<xsd:element name="gatewaySummary" type="GatewaySummary"/>
 	<xsd:element name="gateway" type="Gateway"/>
-	<xsd:element name="gatewayInput1" type="GatewayInput1"/>
+	<xsd:element name="gatewayInput1" type="GatewayInput"/>
 	<xsd:element name="gatewayInput2" type="GatewayInput2"/>
-	<xsd:element name="gatewayInput4" type="GatewayInput4"/>
 	<xsd:element name="gatewayOutput" type="GatewayOutput"/>
 	<xsd:element name="gatewayOutput2" type="GatewayOutput2"/>
 	<xsd:element name="roomSummary" type="RoomSummary"/>

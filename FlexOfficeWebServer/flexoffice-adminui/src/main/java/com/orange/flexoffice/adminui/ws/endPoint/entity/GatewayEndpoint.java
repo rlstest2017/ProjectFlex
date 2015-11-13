@@ -19,8 +19,7 @@ import static com.orange.flexoffice.adminui.ws.PathConst.GATEWAY_ID_PATH;
 import java.util.List;
 
 import com.orange.flexoffice.adminui.ws.model.Gateway;
-import com.orange.flexoffice.adminui.ws.model.GatewayInput1;
-import com.orange.flexoffice.adminui.ws.model.GatewayInput2;
+import com.orange.flexoffice.adminui.ws.model.GatewayInput;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput2;
 import com.orange.flexoffice.adminui.ws.model.GatewaySummary;
@@ -70,7 +69,7 @@ public interface GatewayEndpoint {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	GatewayOutput addGateway(GatewayInput1 gateway);
+	GatewayOutput addGateway(GatewayInput gateway);
 	
 	/**
 	 * Modifies a specific gateway.
@@ -88,7 +87,7 @@ public interface GatewayEndpoint {
 	@Path(GATEWAY_ID_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response updateGateway(@PathParam(GATEWAY_ID_PARAM)String id, GatewayInput2 gateway);
+	Response updateGateway(@PathParam(GATEWAY_ID_PARAM)String id, GatewayInput gateway);
 
 	/**
 	 * Deletes a specific gateway.

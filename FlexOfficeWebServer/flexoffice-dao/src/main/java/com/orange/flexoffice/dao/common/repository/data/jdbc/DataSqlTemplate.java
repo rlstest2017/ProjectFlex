@@ -20,6 +20,8 @@ public final class DataSqlTemplate {
 			"select count(id) from %s";
 	public static final String CREATE_USER_TEMPLATE = 
 			"insert into %s (first_name, last_name, email) values (:firstName, :lastName, :email)";
+	public static final String CREATE_GATEWAY_TEMPLATE = 
+			"insert into %s (name, description) values (:name, :description)";
 	public static final String UPDATE_USER_TEMPLATE =
 			"update %s set first_name=:firstName, last_name=:lastName, email=:email WHERE %s=:id";
 	public static final String UPDATE_GATEWAY_STATUS_TEMPLATE =

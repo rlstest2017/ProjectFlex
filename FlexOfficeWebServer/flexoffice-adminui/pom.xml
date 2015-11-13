@@ -8,7 +8,6 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
   
-  
   <artifactId>flexoffice-adminui</artifactId>
   <packaging>war</packaging>
   <name>flexoffice-adminui Maven Webapp</name>

@@ -14,8 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.adminui.ws.endPoint.entity.GatewayEndpoint;
 import com.orange.flexoffice.adminui.ws.model.EDeviceStatus;
-import com.orange.flexoffice.adminui.ws.model.GatewayInput1;
-import com.orange.flexoffice.adminui.ws.model.GatewayInput2;
+import com.orange.flexoffice.adminui.ws.model.GatewayInput;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput2;
 import com.orange.flexoffice.adminui.ws.model.GatewaySummary;
@@ -28,6 +27,7 @@ import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 
 
@@ -60,7 +60,11 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 			GatewaySummary gateway = factory.createGatewaySummary();
 			gateway.setId(gatewayDao.getColumnId());
 			gateway.setName(gatewayDao.getName());
+			if (gatewayDao.getStatus().equals(E_GatewayStatus.ONTEACHIN.toString())) {
+				gateway.setStatus(EDeviceStatus.ONLINE);
+			} else {
 			gateway.setStatus(EDeviceStatus.valueOf(gatewayDao.getStatus().toString()));
+			}
 			if (gatewayDao.getLastPollingDate() != null) {
 				gateway.setLastPollingDate(gatewayDao.getLastPollingDate().getTime());
 			}
@@ -107,19 +111,16 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 	}
 
 	@Override
-	public GatewayOutput addGateway(GatewayInput1 gateway) {
+	public GatewayOutput addGateway(GatewayInput gateway) {
 		LOGGER.info( "Begin call doPost method for GatewayEndpoint at: " + new Date() );
 
 		GatewayDao gatewayDao = new GatewayDao();
-		gatewayDao.setId(Long.valueOf(gateway.getId()));
 		gatewayDao.setName(gateway.getName());
 		gatewayDao.setDescription(gateway.getDesc());
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call addGateway(GatewayInput1 gateway) method of GatewayEndpoint, with parameters :");
 			final StringBuffer message = new StringBuffer( 1000 );
-			message.append( "id :" );
-			message.append( gateway.getId() );
 			message.append( "\n" );
 			message.append( "name :" );
 			message.append( gateway.getName() );
@@ -153,7 +154,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 	}
 
 	@Override
-	public Response updateGateway(String id, GatewayInput2 gateway) {
+	public Response updateGateway(String id, GatewayInput gateway) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -46,6 +46,19 @@ public class GatewayDaoRepository extends DataRepository<GatewayDao> implements 
 	}
 	
 	@Override
+	public GatewayDao saveGateway(GatewayDao data) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(saveGatewayQuery, paramBean, keyHolder);
+		
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
+		
+		return data;
+	}
+	@Override
 	public GatewayDao updateGatewayStatus(GatewayDao data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		
