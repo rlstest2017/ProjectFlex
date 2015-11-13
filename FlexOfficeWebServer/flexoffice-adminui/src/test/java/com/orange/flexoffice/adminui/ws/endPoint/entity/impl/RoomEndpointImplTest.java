@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
@@ -16,6 +17,8 @@ import com.orange.flexoffice.adminui.ws.endPoint.entity.GatewayEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.entity.RoomEndpoint;
 import com.orange.flexoffice.adminui.ws.model.Room;
 import com.orange.flexoffice.adminui.ws.model.RoomSummary;
+import com.orange.flexoffice.adminui.ws.model.UserInput;
+import com.orange.flexoffice.adminui.ws.model.UserSummary;
 
 
 public class RoomEndpointImplTest {
@@ -40,14 +43,14 @@ public class RoomEndpointImplTest {
 	}
 
 
-//	@Test
-//	public void initTables() {
-//		// SetUp
-//		boolean state = gatewayEndpoint.executeGatewaysTestFile();
-//		 
-//		// Asserts
-//		assertEquals(true, state);
-//	}
+	@Test
+	public void initTables() {
+		// SetUp
+		boolean state = gatewayEndpoint.executeGatewaysTestFile();
+		 
+		// Asserts
+		assertEquals(true, state);
+	}
 
 	
 	@Test
@@ -61,11 +64,9 @@ public class RoomEndpointImplTest {
 
 	@Test
 	public void getRoomByRoomId1() {
-		// SetUp
-		String roomId = "1";
-		
+
 		// Test
-		Room room = roomEndpoint.getRoom(roomId);
+		Room room = roomEndpoint.getRoom("1");
 				
 		// Asserts
 		assertEquals(2, room.getSensors().size());
@@ -73,14 +74,32 @@ public class RoomEndpointImplTest {
 
 	@Test
 	public void getRoomByRoomId2() {
-		// SetUp
-		String roomId = "2";
 		
 		// Test
-		Room room = roomEndpoint.getRoom(roomId);
+		Room room = roomEndpoint.getRoom("2");
 				
 		// Asserts
 		assertEquals(1, room.getSensors().size());
+	}
+
+	
+
+	@Test
+	public void getWrongRoomDataNotExistsException() {
+		// Setup
+		boolean expectedResult = false;
+		
+		// Test
+		try {
+			// Test
+			roomEndpoint.getRoom("125");
+			
+		} catch (WebApplicationException e) {
+			expectedResult = true;
+		}
+
+		// Asserts
+		assertEquals(true, expectedResult);	
 	}
 
 }

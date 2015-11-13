@@ -8,22 +8,18 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.core.Response.Status;
 
-import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.adminui.ws.endPoint.entity.RoomEndpoint;
 import com.orange.flexoffice.adminui.ws.model.ERoomStatus;
 import com.orange.flexoffice.adminui.ws.model.ERoomType;
-import com.orange.flexoffice.adminui.ws.model.ErrorModel;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput;
 import com.orange.flexoffice.adminui.ws.model.RoomSummary;
 import com.orange.flexoffice.adminui.ws.model.SensorOutput;
 import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
 import com.orange.flexoffice.adminui.ws.model.Room;
-import com.orange.flexoffice.adminui.ws.model.RoomOutput;
 import com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
@@ -35,7 +31,6 @@ import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
-import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 
 
 public class RoomEndpointImpl implements RoomEndpoint {
