@@ -2,10 +2,13 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.UserDao;
@@ -16,7 +19,7 @@ import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 @Repository
 public class UserDaoRepository extends DataRepository<UserDao> implements UserDaoOperations {
 
-	private final Logger LOGGER = Logger.getLogger(UserDaoRepository.class);
+	//private final Logger LOGGER = Logger.getLogger(UserDaoRepository.class);
 	
 	public UserDaoRepository() {
 		super(UserDao.class);
@@ -42,6 +45,7 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 			);
 	}
 
+	
 	@Override
 	public List<UserDao> findByUserEmail(String userEmail) {
 		SqlParameterSource paramMap = new MapSqlParameterSource("email", userEmail);
@@ -52,6 +56,33 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 			);
 	}
 	
+	@Override
+	public UserDao updateUser(UserDao data) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateUserQuery, paramBean, keyHolder);
+		
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
+		
+		return data;
+	}
+	
+	@Override
+	public UserDao saveUser(UserDao data) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(saveUserQuery, paramBean, keyHolder);
+		
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
+		
+		return data;
+	}
 		
 	@Override
 	protected String getTableName() {

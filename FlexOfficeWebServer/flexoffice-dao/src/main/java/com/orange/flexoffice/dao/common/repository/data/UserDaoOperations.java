@@ -17,4 +17,8 @@ public interface UserDaoOperations {
 	
 	List<UserDao> findByUserEmail(String userEmail);
 	
+	UserDao updateUser(UserDao data);
+	
+	UserDao saveUser(UserDao data);
+	
 }

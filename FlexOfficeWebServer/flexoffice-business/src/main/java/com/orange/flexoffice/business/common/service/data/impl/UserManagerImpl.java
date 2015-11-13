@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,11 +25,11 @@ public class UserManagerImpl implements UserManager {
 	private final Logger LOGGER = Logger.getLogger(UserManagerImpl.class);
 	
 	@Autowired
-	private UserDaoRepository UserDaoRepository;
+	private UserDaoRepository userRepository;
 	
 	@Transactional(readOnly=true)
 	public List<UserDao> findAllUsers() {
-		return UserDaoRepository.findAllUsers();
+		return userRepository.findAllUsers();
 	}
 	
 	/**
@@ -43,30 +41,30 @@ public class UserManagerImpl implements UserManager {
 	 */
 	@Transactional(readOnly=true)
 	public UserDao find(long UserDaoId) {
-		return UserDaoRepository.findOne(UserDaoId);
+		return userRepository.findOne(UserDaoId);
 	}
 
 	/**
 	 * Saves a {@link UserDao}
 	 * 
-	 * @param UserDao
+	 * @param userDao
 	 * 		  the new {@link UserDao}
 	 * @return a saved {@link UserDao}
 	 * @throws DataAlreadyExistsException 
 	 */
-	public UserDao save(UserDao UserDao) throws DataAlreadyExistsException {
-		String userEmail = UserDao.getEmail();
+	public UserDao save(UserDao userDao) throws DataAlreadyExistsException {
+		String userEmail = userDao.getEmail();
 		
 		LOGGER.debug("UserMail : " + userEmail);
 		
-		List<UserDao> testUserDao = UserDaoRepository.findByUserEmail(userEmail);
-		if ((testUserDao != null)&&(testUserDao.size() > 0)) {
-			LOGGER.debug("testUserDao.size() : " + testUserDao.size());
+		List<UserDao> userFound = userRepository.findByUserEmail(userEmail);
+		if ((userFound != null)&&(userFound.size() > 0)) {
+			LOGGER.debug("testUserDao.size() : " + userFound.size());
 			throw new DataAlreadyExistsException("UserDao already saves.");
 		}
 		
 		// Saves UserDao
-		return UserDaoRepository.saveUser(UserDao);
+		return userRepository.saveUser(userDao);
 	}
 	
 	/**
@@ -76,17 +74,17 @@ public class UserManagerImpl implements UserManager {
 	 * 		  the new {@link UserDao}
 	 * @return a saved {@link UserDao}
 	 */
-	public UserDao update(UserDao UserDao) throws DataNotExistsException {
-		Long userId = UserDao.getId();
-		UserDao testUserDao = UserDaoRepository.findOne(UserDao.getId());
+	public UserDao update(UserDao userDao) throws DataNotExistsException {
+		Long userId = userDao.getId();
+		UserDao userFound = userRepository.findOne(userDao.getId());
 		
-		if (testUserDao == null) {
+		if (userFound == null) {
 			LOGGER.debug("user by id " + userId + " is not found");
 			throw new DataNotExistsException("UserDao already saves.");
 		}
 		
 		// Saves UserDao
-		return UserDaoRepository.updateUser(UserDao);
+		return userRepository.updateUser(userDao);
 	}
 
 	/**
@@ -97,15 +95,15 @@ public class UserManagerImpl implements UserManager {
 	 */
 	public void delete(long id) throws DataNotExistsException {
 	
-		UserDao testUserDao = UserDaoRepository.findOne(id);
+		UserDao userFound = userRepository.findOne(id);
 		
-		if (testUserDao == null) {
+		if (userFound == null) {
 			LOGGER.debug("user by id " + id + " is not found");
 			throw new DataNotExistsException("UserDao already saves.");
 		}
 		
 		// Deletes UserDao
-		UserDaoRepository.delete(id);
+		userRepository.delete(id);
 	}
 	
 	/**
@@ -116,32 +114,13 @@ public class UserManagerImpl implements UserManager {
 	public UserDao findByUserMail(String userEmail) {
 		UserDao returnedUserDao = new UserDao();
 		
-		List<UserDao> testUserDao = UserDaoRepository.findByUserEmail(userEmail);
-		if ((testUserDao != null)&&(testUserDao.size() > 0)) {
-			returnedUserDao = testUserDao.get(0);
+		List<UserDao> userFound = userRepository.findByUserEmail(userEmail);
+		if ((userFound != null)&&(userFound.size() > 0)) {
+			returnedUserDao = userFound.get(0);
 		}
 		
 		// Saves UserDao
 		return returnedUserDao;
-	}
-	
-	
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext-business.xml");
-		UserManager UserDaoManager = (UserManager) context.getBean("UserDaoManager");
-		
-		for (int i = 0; i < 1000; i++) {
-			UserDao UserDao = new UserDao();
-			UserDao.setId((long)i%10);
-			
-			try {
-				UserDaoManager.save(UserDao);
-			} catch (DataAlreadyExistsException e) {
-				// TODO Auto-generated catch block
-				System.out.println("test");
-			}
-		}
-		
 	}
 
 }

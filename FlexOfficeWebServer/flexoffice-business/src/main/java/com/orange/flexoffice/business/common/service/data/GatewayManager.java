@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.business.gatewayapi.dto.GatewayCommand;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
@@ -37,24 +38,33 @@ public interface GatewayManager {
 	GatewayDto find(long gatewayId)  throws DataNotExistsException;
 	
 	/**
-	 * Saves a {@link GatewayDto}
+	 * Saves a {@link GatewayDao}
 	 * method used by adminui
-	 * @param GatewayDto
-	 * 		  the new {@link GatewayDto}
-	 * @return a saved {@link GatewayDto}
+	 * @param GatewayDao
+	 * 		  the new {@link GatewayDao}
+	 * @return a saved {@link GatewayDao}
 	 * @throws DataAlreadyExistsException 
 	 */
-	GatewayDto save(GatewayDto gatewayDto) throws DataAlreadyExistsException;
+	GatewayDao save(GatewayDao gatewayDao) throws DataAlreadyExistsException;
 
 	/**
-	 * Updates a {@link GatewayDto}
+	 * Updates a {@link GatewayDao}
 	 * method used by adminui
-	 * @param GatewayDto
-	 * 		  the new {@link GatewayDto}
-	 * @return a saved {@link GatewayDto}
+	 * @param GatewayDao
+	 * 		  the new {@link GatewayDao}
+	 * @return a saved {@link GatewayDao}
 	 */
-	GatewayDto update(GatewayDto gatewayDto) throws DataNotExistsException;
+	GatewayDao update(GatewayDao gatewayDao) throws DataNotExistsException;
 
+	/**
+	 * Updates a {@link GatewayDao}
+	 * method used by gatewayapi
+	 * @param GatewayDao
+	 * 		  the new {@link GatewayDao}
+	 * @return a command {@link GatewayCommand}
+	 */
+	GatewayCommand updateStatus(GatewayDao gatewayDao) throws DataNotExistsException;
+	
 	/**
 	 * Deletes a {@link GatewayDto}.
 	 * method used by adminui

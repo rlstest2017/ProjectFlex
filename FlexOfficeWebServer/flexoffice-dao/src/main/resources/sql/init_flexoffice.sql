@@ -37,7 +37,7 @@ CREATE TABLE rooms (
     status roomStatus,
     "type" roomType,
     gateway_id integer NOT NULL,
-    user_id integer
+    user_id integer 
 );
 
 CREATE TABLE sensors (

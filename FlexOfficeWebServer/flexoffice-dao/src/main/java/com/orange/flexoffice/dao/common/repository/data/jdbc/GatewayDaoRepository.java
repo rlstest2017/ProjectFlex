@@ -2,7 +2,7 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -16,7 +16,7 @@ import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 @Repository
 public class GatewayDaoRepository extends DataRepository<GatewayDao> implements GatewayDaoOperations {
 
-	private final Logger LOGGER = Logger.getLogger(GatewayDaoRepository.class);
+	//private final Logger LOGGER = Logger.getLogger(GatewayDaoRepository.class);
 	
 	public GatewayDaoRepository() {
 		super(GatewayDao.class);
@@ -41,6 +41,7 @@ public class GatewayDaoRepository extends DataRepository<GatewayDao> implements 
 				new BeanPropertyRowMapper<GatewayDao>(GatewayDao.class)
 			);
 	}
+	
 	
 	@Override
 	protected String getTableName() {

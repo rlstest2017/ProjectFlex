@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
+import com.orange.flexoffice.business.gatewayapi.dto.GatewayCommand;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
@@ -121,14 +122,29 @@ public class GatewayManagerImpl implements GatewayManager {
 	}
 
 	@Override
-	public GatewayDto save(GatewayDto gatewayDto) throws DataAlreadyExistsException {
+	public GatewayDao save(GatewayDao gatewayDao) throws DataAlreadyExistsException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public GatewayDto update(GatewayDto UserFlexoffice) throws DataNotExistsException {
+	public GatewayDao update(GatewayDao gatewayDao) throws DataNotExistsException {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public GatewayCommand updateStatus(GatewayDao gatewayDao) throws DataNotExistsException {
+		Long gatewayId = gatewayDao.getId();
+		GatewayDao gatewayFound = gatewayRepository.findOne(gatewayId);
+		
+		if (gatewayFound == null) {
+			LOGGER.debug("gateway by id " + gatewayId + " is not found");
+			throw new DataNotExistsException("GatewayDao already saves.");
+		}
+		
+		// Saves UserDao
+		//return gatewayRepository.updateSatus(GatewayDao);
 		return null;
 	}
 
@@ -165,6 +181,5 @@ public class GatewayManagerImpl implements GatewayManager {
 		
 		return sensorsDao;
 	}
-
 	
 }

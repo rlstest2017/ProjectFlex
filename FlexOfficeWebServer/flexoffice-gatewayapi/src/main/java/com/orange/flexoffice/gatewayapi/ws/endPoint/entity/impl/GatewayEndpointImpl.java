@@ -2,6 +2,7 @@ package com.orange.flexoffice.gatewayapi.ws.endPoint.entity.impl;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.orange.flexoffice.gatewayapi.ws.endPoint.entity.GatewayEndpoint;
 import com.orange.flexoffice.gatewayapi.ws.model.EGatewayStatus;
 import com.orange.flexoffice.gatewayapi.ws.model.ESensorStatus;
+import com.orange.flexoffice.gatewayapi.ws.model.GatewayInput;
+import com.orange.flexoffice.gatewayapi.ws.model.GatewayReturn;
 import com.orange.flexoffice.gatewayapi.ws.model.GatewaySummary;
 import com.orange.flexoffice.gatewayapi.ws.model.ObjectFactory;
 import com.orange.flexoffice.gatewayapi.ws.model.Room;
@@ -24,6 +27,7 @@ import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 
 
@@ -97,8 +101,21 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 	}
 
 	@Override
+	public GatewayReturn updateGateway(String id, GatewayInput gateway) {
+		LOGGER.info( "Begin call doPut method for GatewayEndpoint at: " + new Date() );
+		
+		GatewayDao gatewayDao = new GatewayDao();
+		gatewayDao.setId(Long.valueOf(id));
+		gatewayDao.setStatus(gateway.getGatewayStatus().toString());
+		
+		LOGGER.info( "End call doPut method for GatewayEndpoint at: " + new Date() );
+		return null;
+	}
+	
+	@Override
 	public boolean executeGatewaysTestFile() {
 		return gatewayManager.executeGatewaysTestFile();
 	}
+
 	
 }

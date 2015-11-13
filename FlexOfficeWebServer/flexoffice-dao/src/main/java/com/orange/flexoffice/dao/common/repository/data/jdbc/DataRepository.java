@@ -12,7 +12,6 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_USER_TEMPLATE;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -24,13 +23,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
-
 
 import com.orange.flexoffice.dao.common.model.data.Data;
 import com.orange.flexoffice.dao.common.repository.data.DataOperations;
@@ -40,8 +35,8 @@ public abstract class DataRepository<T extends Data>
 	
 	private final String findOneQuery;
 	protected final String findAllQuery;
-	private final String saveUserQuery;
-	private final String updateUserQuery;
+	protected final String saveUserQuery;
+	protected final String updateUserQuery;
 	private final String deleteQuery;
 	private final String countQuery;
 	protected final String findByColumnIdQuery;
@@ -93,36 +88,6 @@ public abstract class DataRepository<T extends Data>
 		} catch (EmptyResultDataAccessException erdae) {
 			// If no data found just return null.
 		}
-		return data;
-	}
-
-	public T saveUser(T data) {
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		
-		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
-		jdbcTemplate.update(saveUserQuery, paramBean, keyHolder);
-		
-		// Retrieves generated id of saved data.
-		Integer id = (Integer)keyHolder.getKeys().get("id");
-		//Date ts = (Date)keyHolder.getKeys().get("timestamp");
-		data.setId(id.longValue());
-		//data.setTimestamp(ts);
-		
-		return data;
-	}
-	
-	public T updateUser(T data) {
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		
-		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
-		jdbcTemplate.update(updateUserQuery, paramBean, keyHolder);
-		
-		// Retrieves generated id of saved data.
-		Integer id = (Integer)keyHolder.getKeys().get("id");
-		//Date ts = (Date)keyHolder.getKeys().get("timestamp");
-		data.setId(id.longValue());
-		//data.setTimestamp(ts);
-		
 		return data;
 	}
 	

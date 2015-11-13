@@ -4,8 +4,10 @@
 	<xsd:include id="types" schemaLocation="types.xsd"/>
 	
 	<xsd:element name="sensorNewSummary" type="SensorNewSummary"/>
+	<xsd:element name="sensorInput" type="SensorInput"/>
 	<xsd:element name="gatewaySummary" type="GatewaySummary"/>
 	<xsd:element name="gatewayReturn" type="GatewayReturn"/>
+	<xsd:element name="gatewayInput" type="GatewayInput"/>
 	<xsd:element name="room" type="Room"/>
 	
 	<xsd:element name="error" type="ErrorModel"/>
