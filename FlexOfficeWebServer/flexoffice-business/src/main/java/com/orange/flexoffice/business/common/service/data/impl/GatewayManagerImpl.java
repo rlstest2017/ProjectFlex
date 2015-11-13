@@ -12,6 +12,7 @@ import com.orange.flexoffice.business.common.exception.DataAlreadyExistsExceptio
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
 import com.orange.flexoffice.business.gatewayapi.dto.GatewayCommand;
+import com.orange.flexoffice.business.gatewayapi.enums.EnumCommandModel;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
@@ -143,9 +144,16 @@ public class GatewayManagerImpl implements GatewayManager {
 			throw new DataNotExistsException("GatewayDao already saves.");
 		}
 		
-		// Saves UserDao
-		//return gatewayRepository.updateSatus(GatewayDao);
-		return null;
+		// update Gateway Status
+		gatewayRepository.updateGatewayStatus(gatewayDao);
+		
+		GatewayCommand command = new GatewayCommand();
+		// TODO if Teachin return roomId and command = "TEACHIN"
+		// TODO if stop Teachin return roomId and command = "STOPTEACHIN"
+		command.setCommand(EnumCommandModel.NONE);
+		
+		return command;
+		
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.gatewayapi.ws.endPoint.entity.GatewayEndpoint;
+import com.orange.flexoffice.gatewayapi.ws.model.ECommandModel;
 import com.orange.flexoffice.gatewayapi.ws.model.EGatewayStatus;
 import com.orange.flexoffice.gatewayapi.ws.model.ESensorStatus;
 import com.orange.flexoffice.gatewayapi.ws.model.GatewayInput;
@@ -24,10 +25,11 @@ import com.orange.flexoffice.gatewayapi.ws.model.Room;
 import com.orange.flexoffice.gatewayapi.ws.model.SensorSummary;
 import com.orange.flexoffice.gatewayapi.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
+import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
+import com.orange.flexoffice.business.gatewayapi.dto.GatewayCommand;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
-import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 
 
@@ -102,14 +104,32 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 
 	@Override
 	public GatewayReturn updateGateway(String id, GatewayInput gateway) {
+		try {
 		LOGGER.info( "Begin call doPut method for GatewayEndpoint at: " + new Date() );
-		
 		GatewayDao gatewayDao = new GatewayDao();
 		gatewayDao.setId(Long.valueOf(id));
 		gatewayDao.setStatus(gateway.getGatewayStatus().toString());
 		
-		LOGGER.info( "End call doPut method for GatewayEndpoint at: " + new Date() );
-		return null;
+			GatewayCommand command = gatewayManager.updateStatus(gatewayDao);
+			
+			GatewayReturn returnCommand = factory.createGatewayReturn();
+			if (command.getRoomId() > 1) {
+				returnCommand.setRoomId(BigInteger.valueOf(command.getRoomId()));
+			}
+			returnCommand.setCommand(ECommandModel.valueOf(command.getCommand().toString()));
+			
+			LOGGER.info( "End call doPut method for GatewayEndpoint at: " + new Date() );
+			return returnCommand;
+			
+		} catch (DataNotExistsException e){
+			
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_23, Response.Status.NOT_FOUND));
+			
+		} catch (RuntimeException ex){
+
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		}
+	
 	}
 	
 	@Override

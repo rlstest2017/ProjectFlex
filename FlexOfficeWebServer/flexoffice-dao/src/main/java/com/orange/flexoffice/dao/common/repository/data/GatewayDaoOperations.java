@@ -15,4 +15,6 @@ public interface GatewayDaoOperations {
 	
 	List<GatewayDao> findByGatewayId(Long gatewayId);
 	
+	GatewayDao updateGatewayStatus(GatewayDao data); 
+	
 }

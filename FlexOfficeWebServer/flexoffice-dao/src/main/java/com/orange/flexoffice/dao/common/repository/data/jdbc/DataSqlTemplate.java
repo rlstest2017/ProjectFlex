@@ -22,6 +22,8 @@ public final class DataSqlTemplate {
 			"insert into %s (first_name, last_name, email) values (:firstName, :lastName, :email)";
 	public static final String UPDATE_USER_TEMPLATE =
 			"update %s set first_name=:firstName, last_name=:lastName, email=:email WHERE %s=:id";
+	public static final String UPDATE_GATEWAY_STATUS_TEMPLATE =
+			"update %s set status=:CAST(status AS gatewayStatus)";
 	public static final String FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE = 
 			"select %s from %s where %s in (:rowIds)";
 	
