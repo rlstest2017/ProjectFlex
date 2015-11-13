@@ -170,7 +170,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		UserDao userDao = null;
 
-		if (userId != null) {
+		if ((userId != null) && (userId != 0)) {
 
 			userDao = userManager.find(Long.valueOf(userId));			
 		}

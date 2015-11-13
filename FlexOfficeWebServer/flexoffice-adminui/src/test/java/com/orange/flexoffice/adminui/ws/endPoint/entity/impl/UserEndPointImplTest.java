@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.AssertThrows;
 
+import com.orange.flexoffice.adminui.ws.endPoint.entity.GatewayEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.entity.UserEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.entity.impl.UserEndpointImpl;
 import com.orange.flexoffice.adminui.ws.endPoint.support.ObjectFactory;
@@ -35,6 +36,8 @@ public class UserEndPointImplTest {
 
 	private static UserEndpoint userEndpoint;
 
+	private static GatewayEndpoint gatewayEndpoint;
+
 	@Context
 	private UriInfo uriInfo;
 
@@ -47,8 +50,18 @@ public class UserEndPointImplTest {
 	public static void initSpringContextAndDatabase() throws Exception {
 		context = new ClassPathXmlApplicationContext("applicationContext-flexoffice-adminui-test.xml");
 		userEndpoint = (UserEndpointImpl)context.getBean("userEndpoint");
+		gatewayEndpoint = (GatewayEndpointImpl)context.getBean("gatewayEndpoint");
 	}
 
+
+	@Test
+	public void initTables() {
+		// SetUp
+		boolean state = gatewayEndpoint.executeGatewaysTestFile();
+		 
+		// Asserts
+		assertEquals(true, state);
+	}
 
 	@Test
 	public void cleanUserTable() throws WebApplicationException {
@@ -124,9 +137,13 @@ public class UserEndPointImplTest {
 		// Test
 		try {
 			// Setup
-			UserInput userHmi = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
+			final UserDao user = userEndpoint.findByUserMail("emailTest1");
+			if (user != null) {
+				
+				UserInput userHmi = factory.createHmiUser(user.getFirstName(), user.getLastName(), user.getEmail());
 
-			userEndpoint.addUser(userHmi);
+				userEndpoint.addUser(userHmi);
+			}
 			
 		} catch (WebApplicationException e) {
 			expectedResult = true;
