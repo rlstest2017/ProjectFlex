@@ -1,6 +1,7 @@
 package com.orange.flexoffice.adminui.ws.endPoint.entity.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
@@ -13,12 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.adminui.ws.endPoint.entity.GatewayEndpoint;
 import com.orange.flexoffice.adminui.ws.model.EDeviceStatus;
+import com.orange.flexoffice.adminui.ws.model.GatewayInput1;
+import com.orange.flexoffice.adminui.ws.model.GatewayInput2;
+import com.orange.flexoffice.adminui.ws.model.GatewayOutput;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput2;
 import com.orange.flexoffice.adminui.ws.model.GatewaySummary;
 import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
 import com.orange.flexoffice.adminui.ws.model.RoomOutput;
 import com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
+import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
@@ -101,11 +106,82 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 		
 	}
 
+	@Override
+	public GatewayOutput addGateway(GatewayInput1 gateway) {
+		LOGGER.info( "Begin call doPost method for GatewayEndpoint at: " + new Date() );
+
+		GatewayDao gatewayDao = new GatewayDao();
+		gatewayDao.setId(Long.valueOf(gateway.getId()));
+		gatewayDao.setName(gateway.getName());
+		gatewayDao.setDescription(gateway.getDesc());
+
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug( "Begin call addGateway(GatewayInput1 gateway) method of GatewayEndpoint, with parameters :");
+			final StringBuffer message = new StringBuffer( 1000 );
+			message.append( "id :" );
+			message.append( gateway.getId() );
+			message.append( "\n" );
+			message.append( "name :" );
+			message.append( gateway.getName() );
+			message.append( "\n" );
+			message.append( "desc :" );
+			message.append( gateway.getDesc() );
+			message.append( "\n" );
+			LOGGER.debug( message.toString() );
+		}
+
+		try {
+			gatewayDao = gatewayManager.save(gatewayDao);
+
+		} catch (DataAlreadyExistsException e) {
+			
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_22, Response.Status.METHOD_NOT_ALLOWED));
+
+		} catch (RuntimeException ex) {
+
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		}
+
+
+		GatewayOutput returnedGateway = factory.createGatewayOutput();
+		returnedGateway.setId(gatewayDao.getColumnId());
+
+		LOGGER.info( "End call doPost method for GatewayEndpoint at: " + new Date() );
+
+		return factory.createGatewayOutput(returnedGateway).getValue();
+
+	}
+
+	@Override
+	public Response updateGateway(String id, GatewayInput2 gateway) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Response removeGateway(String id) {
+		try {
+
+			gatewayManager.delete(Long.valueOf(id));
+
+		} catch (DataNotExistsException e){
+			
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_24, Response.Status.NOT_FOUND));
+			
+		} catch (RuntimeException ex){
+
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		}
+
+
+		return Response.noContent().build();
+	}
 
 	@Override
 	public boolean executeGatewaysTestFile() {
 		return gatewayManager.executeGatewaysTestFile();
 	}
-	
+
+		
 	
 }

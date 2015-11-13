@@ -160,8 +160,15 @@ public class GatewayManagerImpl implements GatewayManager {
 
 	@Override
 	public void delete(long id) throws DataNotExistsException {
-		// TODO Auto-generated method stub
+		GatewayDao gatewayFound = gatewayRepository.findOne(id);
 		
+		if (gatewayFound == null) {
+			LOGGER.debug("gateway by id " + id + " is not found");
+			throw new DataNotExistsException("gateway is not found.");
+		}
+		
+		// Deletes UserDao
+		gatewayRepository.delete(id);		
 	}
 
 	// used for tests
