@@ -16,6 +16,9 @@
 	<bean id="gatewayEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.GatewayEndpointImpl">
 	</bean>
 	
+	<bean id="roomEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.RoomEndpointImpl">
+	</bean>
+	
 	<bean id="errorMessageHandler" class="com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler">
 	</bean>
 		

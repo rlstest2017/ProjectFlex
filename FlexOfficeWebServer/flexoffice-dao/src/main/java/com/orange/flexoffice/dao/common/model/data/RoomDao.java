@@ -13,8 +13,8 @@ public class RoomDao extends AbstractData {
 	private String description;
 	private String status;
 	private String type;
-	private Integer gatewayId;
-	private Integer userId;
+	private Long gatewayId;
+	private Long userId;
 	
 	public String getName() {
 		return name;
@@ -42,16 +42,16 @@ public class RoomDao extends AbstractData {
 		this.description = description;
 	}
 	
-	public Integer getGatewayId() {
+	public Long getGatewayId() {
 		return gatewayId;
 	}
-	public void setGatewayId(Integer gatewayId) {
+	public void setGatewayId(Long gatewayId) {
 		this.gatewayId = gatewayId;
 	}
-	public Integer getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
-	public void setUserId(Integer userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 	
