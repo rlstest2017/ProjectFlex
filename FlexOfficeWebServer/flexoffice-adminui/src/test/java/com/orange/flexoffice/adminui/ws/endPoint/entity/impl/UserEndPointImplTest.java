@@ -137,9 +137,13 @@ public class UserEndPointImplTest {
 		// Test
 		try {
 			// Setup
-			UserInput userHmi = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
+			final UserDao user = userEndpoint.findByUserMail("emailTest1");
+			if (user != null) {
+				
+				UserInput userHmi = factory.createHmiUser(user.getFirstName(), user.getLastName(), user.getEmail());
 
-			userEndpoint.addUser(userHmi);
+				userEndpoint.addUser(userHmi);
+			}
 			
 		} catch (WebApplicationException e) {
 			expectedResult = true;
