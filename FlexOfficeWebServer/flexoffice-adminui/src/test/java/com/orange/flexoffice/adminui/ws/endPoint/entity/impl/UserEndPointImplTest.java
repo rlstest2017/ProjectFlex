@@ -57,7 +57,7 @@ public class UserEndPointImplTest {
 	@Test
 	public void initTables() {
 		// SetUp
-		boolean state = gatewayEndpoint.executeGatewaysTestFile();
+		boolean state = gatewayEndpoint.executeInitTestFile();
 		 
 		// Assert
 		assertEquals(true, state);

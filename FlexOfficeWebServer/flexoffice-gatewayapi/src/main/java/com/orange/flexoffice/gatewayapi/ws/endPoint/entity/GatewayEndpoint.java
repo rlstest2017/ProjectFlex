@@ -76,7 +76,7 @@ public interface GatewayEndpoint {
 
 	
 	// used for tests
-	boolean executeGatewaysTestFile();
+	boolean executeInitTestFile();
 	
 }
 

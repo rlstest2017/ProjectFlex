@@ -27,6 +27,7 @@ import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
+import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
@@ -42,6 +43,8 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 	private UriInfo uriInfo;
 	@Autowired
 	private GatewayManager gatewayManager;
+	@Autowired
+	private TestManager testManager;
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
 	
@@ -227,8 +230,8 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 	}
 
 	@Override
-	public boolean executeGatewaysTestFile() {
-		return gatewayManager.executeGatewaysTestFile();
+	public boolean executeInitTestFile() {
+		return testManager.executeInitTestFile();
 	}
 
 		
