@@ -67,12 +67,12 @@ public class GatewayEndpointImplTest {
 	}
 
 	@Test
-	public void getGatewayByGatewayId() {
+	public void getGatewayByGatewayByMacAddress() {
 		// SetUp
-		String gatewayId = "1";
+		String macAddress = "FF:EE:ZZ:AA:GG:PP";
 		
 		// Test
-		GatewayOutput2 gateways = gatewayEndpoint.getGateway(gatewayId);
+		GatewayOutput2 gateways = gatewayEndpoint.getGateway(macAddress);
 				
 		// Asserts
 		assertEquals(2, gateways.getRooms().size());
