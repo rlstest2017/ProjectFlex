@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response.Status;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.util.Log4jConfigurer;
 
 import com.orange.flexoffice.adminui.ws.endPoint.entity.GatewayEndpoint;
@@ -26,10 +25,9 @@ import com.orange.flexoffice.adminui.ws.model.Room;
 import com.orange.flexoffice.adminui.ws.model.RoomInput1;
 import com.orange.flexoffice.adminui.ws.model.RoomOutput;
 import com.orange.flexoffice.adminui.ws.model.RoomSummary;
-import com.orange.flexoffice.adminui.ws.model.UserInput;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
-import com.orange.flexoffice.dao.common.model.data.UserDao;
+
 
 
 

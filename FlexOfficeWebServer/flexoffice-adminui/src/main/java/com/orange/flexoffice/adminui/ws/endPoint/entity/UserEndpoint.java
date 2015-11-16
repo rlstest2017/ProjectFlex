@@ -17,9 +17,11 @@ import static com.orange.flexoffice.adminui.ws.PathConst.USERS_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.USER_ID_PATH;
 
 import java.util.List;
+
 import com.orange.flexoffice.adminui.ws.model.User;
 import com.orange.flexoffice.adminui.ws.model.UserInput;
 import com.orange.flexoffice.adminui.ws.model.UserSummary;
+import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 
 /**
@@ -105,8 +107,9 @@ public interface UserEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	Response removeUser(@PathParam(USER_ID_PARAM)String id);
 	
+	
 	// Used for tests
-	public UserDao findByUserMail(String userEmail);
+	public UserDao findByUserMail(String userEmail) throws DataNotExistsException;
 	
 }
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,8 +41,31 @@ public class UserManagerImpl implements UserManager {
 	 * @return a {@link UserDao}
 	 */
 	@Transactional(readOnly=true)
-	public UserDao find(long UserDaoId) {
-		return userRepository.findOne(UserDaoId);
+	public UserDao find(long userDaoId) throws DataNotExistsException {
+		try {
+			return userRepository.findOne(userDaoId);
+
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.error("UserManager.find : User by id #" + userDaoId + " is not found");
+			throw new DataNotExistsException("UserManager.find : User by id #" + userDaoId + " is not found");
+		}
+
+	}
+
+	
+	/**
+	 * 
+	 * @param userEmail
+	 * @return
+	 */
+	public UserDao findByUserMail(String userEmail) throws DataNotExistsException {
+		try {
+			return userRepository.findByUserEmail(userEmail);
+
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.error("UserManager.findByUserMail : User by email #" + userEmail + " is not found");
+			throw new DataNotExistsException("UserManager.findByUserMail : User by email #" + userEmail + " is not found");
+		}
 	}
 
 	/**
@@ -53,18 +77,14 @@ public class UserManagerImpl implements UserManager {
 	 * @throws DataAlreadyExistsException 
 	 */
 	public UserDao save(UserDao userDao) throws DataAlreadyExistsException {
-		String userEmail = userDao.getEmail();
-		
-		LOGGER.debug("UserMail : " + userEmail);
-		
-		List<UserDao> userFound = userRepository.findByUserEmail(userEmail);
-		if ((userFound != null)&&(userFound.size() > 0)) {
-			LOGGER.debug("testUserDao.size() : " + userFound.size());
-			throw new DataAlreadyExistsException("UserDao already saves.");
+		try {		
+			// Saves UserDao
+			return userRepository.saveUser(userDao);
+
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.error("UserManager.save : User already exists");
+			throw new DataAlreadyExistsException("UserManager.save : User already exists");
 		}
-		
-		// Saves UserDao
-		return userRepository.saveUser(userDao);
 	}
 	
 	/**
@@ -75,16 +95,14 @@ public class UserManagerImpl implements UserManager {
 	 * @return a saved {@link UserDao}
 	 */
 	public UserDao update(UserDao userDao) throws DataNotExistsException {
-		Long userId = userDao.getId();
-		UserDao userFound = userRepository.findOne(userDao.getId());
-		
-		if (userFound == null) {
-			LOGGER.debug("user by id " + userId + " is not found");
-			throw new DataNotExistsException("UserDao already saves.");
+		try {
+			// Update RoomDao
+			return userRepository.updateUser(userDao);
+			
+		} catch (IncorrectResultSizeDataAccessException e) {
+			LOGGER.error("UserManager.update : User to update not found");
+			throw new DataNotExistsException("UserManager.update : User to update not found");
 		}
-		
-		// Saves UserDao
-		return userRepository.updateUser(userDao);
 	}
 
 	/**
@@ -95,32 +113,15 @@ public class UserManagerImpl implements UserManager {
 	 */
 	public void delete(long id) throws DataNotExistsException {
 	
-		UserDao userFound = userRepository.findOne(id);
-		
-		if (userFound == null) {
-			LOGGER.debug("user by id " + id + " is not found");
-			throw new DataNotExistsException("user is not found.");
+		try {
+			// To generate exception if wrong id
+			userRepository.findOne(id);
+			// Delete Room
+			userRepository.delete(id);	
+		} catch (IncorrectResultSizeDataAccessException e) {
+			LOGGER.error("UserManager.delete : User to delete not found");
+			throw new DataNotExistsException("UserManager.delete : User to delete not found");
 		}
-		
-		// Deletes UserDao
-		userRepository.delete(id);
-	}
-	
-	/**
-	 * 
-	 * @param userEmail
-	 * @return
-	 */
-	public UserDao findByUserMail(String userEmail) {
-		UserDao returnedUserDao = new UserDao();
-		
-		List<UserDao> userFound = userRepository.findByUserEmail(userEmail);
-		if ((userFound != null)&&(userFound.size() > 0)) {
-			returnedUserDao = userFound.get(0);
-		}
-		
-		// Saves UserDao
-		return returnedUserDao;
 	}
 
 }

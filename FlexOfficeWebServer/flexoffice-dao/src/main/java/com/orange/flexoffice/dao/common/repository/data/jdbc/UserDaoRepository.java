@@ -2,6 +2,8 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
 import java.util.List;
 
+
+import org.springframework.dao.DataIntegrityViolationException;
 //import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -36,9 +38,9 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 	}
 	
 	@Override
-	public List<UserDao> findByUserId(Long userId) {
+	public UserDao findByUserId(Long userId) {
 		SqlParameterSource paramMap = new MapSqlParameterSource("columnId", userId);
-		return jdbcTemplate.query(
+		return jdbcTemplate.queryForObject(
 				findByColumnIdQuery, 
 				paramMap, 
 				new BeanPropertyRowMapper<UserDao>(UserDao.class)
@@ -47,9 +49,9 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 
 	
 	@Override
-	public List<UserDao> findByUserEmail(String userEmail) {
+	public UserDao findByUserEmail(String userEmail) {
 		SqlParameterSource paramMap = new MapSqlParameterSource("email", userEmail);
-		return jdbcTemplate.query(
+		return jdbcTemplate.queryForObject(
 				findByColumnMailQuery, 
 				paramMap, 
 				new BeanPropertyRowMapper<UserDao>(UserDao.class)
@@ -71,7 +73,7 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 	}
 	
 	@Override
-	public UserDao saveUser(UserDao data) {
+	public UserDao saveUser(UserDao data) throws DataIntegrityViolationException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);

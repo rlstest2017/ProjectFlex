@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import com.orange.flexoffice.adminui.ws.endPoint.entity.RoomEndpoint;
 import com.orange.flexoffice.adminui.ws.model.ERoomStatus;
@@ -308,9 +309,12 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		UserDao userDao = null;
 
-		if ((userId != null) && (userId != 0)) {
+		try {
 
-			userDao = userManager.find(Long.valueOf(userId));			
+			userDao = userManager.find(Long.valueOf(userId));
+			
+		} catch(DataNotExistsException e ) {
+			LOGGER.info("Get rooms / Get room id : user not found");
 		}
 
 		return computeTenant(status, userDao, roomName);
@@ -335,7 +339,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 			if (userDao == null) {
 
-				LOGGER.warn("Get rooms / Get room id   : Wrong user on room " + roomName);
+				LOGGER.info("Get rooms / Get room id   : user not found on room " + roomName);
 
 			} else {
 

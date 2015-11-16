@@ -13,18 +13,18 @@ public interface UserManager {
 	/**
 	 * Finds a {@link UserDao} by its ID.
 	 * 
-	 * @param UserDaoId
+	 * @param userDaoId
 	 * 		  the {@link UserDao} ID
 	 * @return a {@link UserDao}
 	 */
-	UserDao find(long UserDaoId);
+	UserDao find(long userDaoId) throws DataNotExistsException;
 	
 	/**
 	 * 
 	 * @param userEmail
 	 * @return
 	 */
-	UserDao findByUserMail(String userEmail);
+	UserDao findByUserMail(String userEmail) throws DataNotExistsException;
 
 	/**
 	 * Saves a {@link UserDao}

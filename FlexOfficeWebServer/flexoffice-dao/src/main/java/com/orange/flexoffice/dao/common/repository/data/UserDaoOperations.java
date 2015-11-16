@@ -13,9 +13,9 @@ public interface UserDaoOperations {
 	
 	List<UserDao> findAllUsers();
 	
-	List<UserDao> findByUserId(Long userId);
+	UserDao findByUserId(Long userId);
 	
-	List<UserDao> findByUserEmail(String userEmail);
+	UserDao findByUserEmail(String userEmail);
 	
 	UserDao updateUser(UserDao data);
 	

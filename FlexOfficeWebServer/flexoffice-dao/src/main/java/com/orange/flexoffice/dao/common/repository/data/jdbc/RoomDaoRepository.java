@@ -97,14 +97,10 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 	@Override
 	public RoomDao updateRoomStatus(RoomDao data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
-		
-		LOGGER.debug("Before execute jdbcTemplate updateRoomStatus() method");
-		
+			
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
 		jdbcTemplate.update(updateRoomStatusQuery, paramBean, keyHolder);
-		
-		LOGGER.debug("After execute jdbcTemplate updateRoomStatus() method");
-		
+				
 		// Retrieves generated id of saved data.
 		Integer id = (Integer)keyHolder.getKeys().get("id");
 		data.setId(id.longValue());	

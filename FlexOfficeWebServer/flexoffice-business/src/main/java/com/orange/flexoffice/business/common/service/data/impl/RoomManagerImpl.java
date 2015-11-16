@@ -67,7 +67,7 @@ public class RoomManagerImpl implements RoomManager {
 			roomDao = roomRepository.findOne(roomId);
 
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("RoomManager.find : Room by id #" + roomId + " is not found");
+			LOGGER.error("RoomManager.find : Room by id #" + roomId + " is not found");
 			throw new DataNotExistsException("RoomManager.find : Room by id #" + roomId + " is not found");
 		}
 

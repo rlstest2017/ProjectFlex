@@ -3,7 +3,7 @@ package com.orange.flexoffice.adminui.ws.endPoint.entity.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.net.URISyntaxException;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
@@ -11,19 +11,18 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.datatype.DatatypeConfigurationException;
+
 
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.test.AssertThrows;
+import org.springframework.util.Log4jConfigurer;
 
 import com.orange.flexoffice.adminui.ws.endPoint.entity.GatewayEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.entity.UserEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.entity.impl.UserEndpointImpl;
 import com.orange.flexoffice.adminui.ws.endPoint.support.ObjectFactory;
-import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.adminui.ws.model.User;
@@ -31,6 +30,15 @@ import com.orange.flexoffice.adminui.ws.model.UserInput;
 import com.orange.flexoffice.adminui.ws.model.UserSummary;
 
 public class UserEndPointImplTest {
+
+	static {
+	    try {
+	      Log4jConfigurer.initLogging( "classpath:log4j-flexoffice-adminui-test.xml" );
+	    }
+	    catch( FileNotFoundException ex ) {
+	      System.err.println( "Cannot Initialize log4j" );
+	    }
+	  }
 
 	private static ClassPathXmlApplicationContext context;
 
@@ -98,9 +106,10 @@ public class UserEndPointImplTest {
 		// Setup
 		boolean expectedResult = false;
 		final UserInput expecteduser = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
-		final UserDao user = userEndpoint.findByUserMail("emailTest1");
+		
+		try {
+			final UserDao user = userEndpoint.findByUserMail("emailTest1");
 
-		if (user != null) {
 			// Test
 			final User userFromDB = userEndpoint.getUser(user.getColumnId());
 
@@ -110,7 +119,10 @@ public class UserEndPointImplTest {
 			assertEquals(expecteduser.getEmail(), userFromDB.getEmail());	
 
 			expectedResult = true;
+
+		} catch(DataNotExistsException e ) {
 		}
+
 
 		// Assert
 		assertEquals(true, expectedResult);	
@@ -144,6 +156,8 @@ public class UserEndPointImplTest {
 				userEndpoint.addUser(userHmi);
 			}
 			
+		} catch(DataNotExistsException e ) {
+		
 		} catch (WebApplicationException e) {
 			expectedResult = true;
 		}
@@ -158,9 +172,10 @@ public class UserEndPointImplTest {
 		// Setup
 		boolean expectedResult = false;
 		final UserInput userHmi = factory.createHmiUser("firstNameTest2", "lastNameTest2", "emailTest2");
-		final UserDao user = userEndpoint.findByUserMail("emailTest1");
 
-		if (user != null) {
+		try {
+			final UserDao user = userEndpoint.findByUserMail("emailTest1");
+
 
 			// Test
 			Response response = userEndpoint.updateUser(user.getColumnId(), userHmi);
@@ -168,7 +183,10 @@ public class UserEndPointImplTest {
 			// Assert
 			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
 			expectedResult = true;
+
+		} catch(DataNotExistsException e ) {
 		}
+
 		// Assert
 		assertEquals(true, expectedResult);	
 	}
@@ -184,9 +202,10 @@ public class UserEndPointImplTest {
 			final UserInput userHmi = factory.createHmiUser("firstNameTest3", "lastNameTest3", "emailTest3");
 			final UserDao user = userEndpoint.findByUserMail("emailTest2");
 
-			if (user != null) {
-				userEndpoint.updateUser(user.getColumnId()+"1", userHmi);
-			}
+			userEndpoint.updateUser(user.getColumnId()+"1", userHmi);
+
+		} catch(DataNotExistsException e ) {
+
 		} catch (WebApplicationException e) {
 			expectedResult = true;
 		}
@@ -204,11 +223,11 @@ public class UserEndPointImplTest {
 			// Setup
 			final UserDao user = userEndpoint.findByUserMail("emailTest2");
 
-			if (user != null) {
-				// Test
-				userEndpoint.removeUser(user.getColumnId()+"1");
-			}
+			// Test
+			userEndpoint.removeUser(user.getColumnId()+"1");
 			
+		} catch(DataNotExistsException e ) {
+
 		} catch (WebApplicationException e) {
 			expectedResult = true;
 		}
@@ -222,9 +241,9 @@ public class UserEndPointImplTest {
 	public void removeUser() throws WebApplicationException {
 		// Setup
 		boolean expectedResult = false;
-		final UserDao user = userEndpoint.findByUserMail("emailTest2");
 
-		if (user != null) {
+		try {
+			final UserDao user = userEndpoint.findByUserMail("emailTest2");
 
 			// Test
 			Response response = userEndpoint.removeUser(user.getColumnId());
@@ -232,6 +251,8 @@ public class UserEndPointImplTest {
 			// Assert
 			assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 			expectedResult = true;
+
+		} catch(DataNotExistsException e ) {
 		}
 		
 		// Assert

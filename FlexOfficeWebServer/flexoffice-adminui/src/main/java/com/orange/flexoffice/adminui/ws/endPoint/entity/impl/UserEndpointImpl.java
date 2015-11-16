@@ -80,24 +80,28 @@ public class UserEndpointImpl implements UserEndpoint {
 
 		LOGGER.info( "Begin call getUser method for UserEndpoint at: " + new Date() );
 
-		UserDao data = userManager.find(Long.valueOf(userId));
+		try {
+			UserDao data = userManager.find(Long.valueOf(userId));
 
-		if (data == null) {
+			User user = factory.createUser();
+			user.setId(data.getColumnId());
+			user.setEmail(data.getEmail());
+			user.setFirstName(data.getFirstName());
+			user.setLastName(data.getLastName());
+
+			LOGGER.info( "End call getUser method for UserEndpoint at: " + new Date() );
+
+			return factory.createUser(user).getValue();
+
+		} catch (DataNotExistsException e){
 
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_8, Response.Status.NOT_FOUND));
-		
+
+		} catch (RuntimeException ex){
+
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+
 		}
-
-
-		User user = factory.createUser();
-		user.setId(data.getColumnId());
-		user.setEmail(data.getEmail());
-		user.setFirstName(data.getFirstName());
-		user.setLastName(data.getLastName());
-
-		LOGGER.info( "End call getUser method for UserEndpoint at: " + new Date() );
-
-		return factory.createUser(user).getValue();
 	}
 
 	@Override
@@ -198,7 +202,7 @@ public class UserEndpointImpl implements UserEndpoint {
 	}
 
 	@Override
-	public UserDao findByUserMail(String userEmail) {
+	public UserDao findByUserMail(String userEmail) throws DataNotExistsException {
 
 		return userManager.findByUserMail(userEmail);
 	}
