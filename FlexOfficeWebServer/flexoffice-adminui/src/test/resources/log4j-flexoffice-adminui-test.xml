@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+    
+	<!-- *************************************************************** -->
+	<!--                         Appenders                               -->
+	<!-- *************************************************************** -->
+	<!-- ******************************** -->
+	<!-- Log Test File appender                -->
+	<!-- ******************************** -->
+	<appender name="logTestFile" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="target/surefire-reports/flexoffice-adminui-test.log"/>
+		<param name="Append" value="true" />
+		<param name="threshold" value="debug"/>
+		<param name="MaxFileSize" value="500000KB" />
+		<param name="MaxBackupIndex" value="7" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} ~ %t ~ %p ~ %C{1}.%M ~ %L ~ %m%n"/>
+		</layout>
+	</appender>
+    
+	<!-- *************************************************************** -->
+	<!--                              Loggers                            -->
+	<!-- *************************************************************** -->
+	  
+	<!-- Réflexion : prévoir 2 fichiers logs, un WARN (celui là) destiné à la prod
+	et l'autre DEBUG dans les level, destiné au dév
+	PS : Comment dire via Maven qu'on est en mode DEV/DEBUG ou PROD ?? -->
+	  
+	<!-- ******************************** -->
+	<!-- Loggers               	  -->
+	<!-- ******************************** -->
+	
+    <!-- Ordre croissant des priorités Level : -->
+    <!-- TRACE, DEBUG, INFO, WARN, ERROR et FATAL => -->
+    <!-- Si notre application tourne en mode DEBUG, tous les logs de l'application sauf
+         les logs du niveau TRACE sont loggés dans notre fichier désigné par l'appender -->
+    <!-- Si notre application tourne en mode INFO, les logs de l'application qui sont aux
+         niveaux INFO, WARN, ERROR et FATAL sont loggés dans notre fichier désigné par l'appender -->
+         
+    <!-- com -->
+    <!-- additivity="true" permet de mettre les parents et fils du logger dans le même logger 
+    et donc même destination (appender) -->
+    
+	<logger name="com.orange.flexoffice" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="logTestFile" />
+	</logger>
+
+    <logger name="org.springframework.core.env.StandardEnvironment" additivity="false">
+        <level value="debug"/>
+		<appender-ref ref="logTestFile" />
+    </logger> 
+	
+	<!-- ******************************** -->
+	<!-- ROOT Loggers                     -->
+	<!-- ******************************** -->
+	<root>
+		<level value="debug"/>
+		<!-- <appender-ref ref="ConsoleIhm"/> -->
+		<appender-ref ref="logTestFile" />
+	</root>
+  
+</log4j:configuration>
