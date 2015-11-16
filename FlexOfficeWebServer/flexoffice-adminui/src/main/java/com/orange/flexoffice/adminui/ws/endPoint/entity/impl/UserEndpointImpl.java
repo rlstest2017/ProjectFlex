@@ -44,6 +44,9 @@ public class UserEndpointImpl implements UserEndpoint {
 
 	@Override
 	public List<UserSummary> getUsers() {
+
+		LOGGER.info( "Begin call getUsers method for UserEndpoint at: " + new Date() );
+
 		List<UserDao> dataList = userManager.findAllUsers();
 
 		if (dataList == null) {
@@ -67,11 +70,16 @@ public class UserEndpointImpl implements UserEndpoint {
 			userList.add(user);
 		}
 
+		LOGGER.info( "End call getUsers method for UserEndpoint at: " + new Date() );
+
 		return userList;
 	}
 
 	@Override
 	public User getUser(String userId) {
+
+		LOGGER.info( "Begin call getUser method for UserEndpoint at: " + new Date() );
+
 		UserDao data = userManager.find(Long.valueOf(userId));
 
 		if (data == null) {
@@ -87,13 +95,15 @@ public class UserEndpointImpl implements UserEndpoint {
 		user.setFirstName(data.getFirstName());
 		user.setLastName(data.getLastName());
 
+		LOGGER.info( "End call getUser method for UserEndpoint at: " + new Date() );
+
 		return factory.createUser(user).getValue();
 	}
 
 	@Override
 	public User addUser(UserInput userInput) {
 
-		LOGGER.info( "Begin call doPost method for UserEndpoint at: " + new Date() );
+		LOGGER.info( "Begin call addUser method for UserEndpoint at: " + new Date() );
 
 		UserDao user = new UserDao();
 		user.setEmail(userInput.getEmail());
@@ -131,14 +141,15 @@ public class UserEndpointImpl implements UserEndpoint {
 		User returnedUser = factory.createUser();
 		returnedUser.setId(user.getColumnId());
 
-		LOGGER.info( "End call doPost method for UserEndpoint at: " + new Date() );
+		LOGGER.info( "End call addUser method for UserEndpoint at: " + new Date() );
 
 		return factory.createUser(returnedUser).getValue();
 	}
 
 	@Override
 	public Response updateUser(String id, UserInput userInput) {
-		LOGGER.info( "Begin call doPut method for UserEndpoint at: " + new Date() );
+		
+		LOGGER.info( "Begin call updateUser method for UserEndpoint at: " + new Date() );
 
 		UserDao user = new UserDao();
 		user.setId(Long.valueOf(id));
@@ -158,13 +169,15 @@ public class UserEndpointImpl implements UserEndpoint {
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
-		LOGGER.info( "End call doPut method for UserEndpoint at: " + new Date() );
+		LOGGER.info( "End call updateUser method for UserEndpoint at: " + new Date() );
 
 		return Response.status(Status.ACCEPTED).build();
 	}
 
 	@Override
 	public Response removeUser(String id) {
+
+		LOGGER.info( "Begin call removeUser method for UserEndpoint at: " + new Date() );
 
 		try {
 
@@ -179,6 +192,7 @@ public class UserEndpointImpl implements UserEndpoint {
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
+		LOGGER.info( "End call removeUser method for UserEndpoint at: " + new Date() );
 
 		return Response.noContent().build();
 	}

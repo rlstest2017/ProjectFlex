@@ -5,6 +5,7 @@ import java.util.List;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
+import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 
 /**
@@ -29,23 +30,33 @@ public interface RoomManager {
 	RoomDto find(long roomId)  throws DataNotExistsException;
 
 	/**
-	 * Saves a {@link RoomDto}
+	 * Saves a {@link RoomDao}
 	 * method used by adminui
-	 * @param roomDto
-	 * 		  the new {@link RoomDto}
-	 * @return a saved {@link RoomDto}
+	 * @param roomDao
+	 * 		  the new {@link RoomDao}
+	 * @return a saved {@link RoomDao}
 	 * @throws DataAlreadyExistsException 
 	 */
-	RoomDto save(RoomDto roomDto) throws DataAlreadyExistsException;
+	RoomDao save(RoomDao roomDao) throws DataAlreadyExistsException;
 
 	/**
-	 * Updates a {@link RoomDto}
+	 * Updates a {@link RoomDao}
 	 * method used by adminui
-	 * @param roomDto
-	 * 		  the new {@link RoomDto}
-	 * @return a saved {@link RoomDto}
+	 * @param roomDao
+	 * 		  the new {@link RoomDao}
+	 * @return a saved {@link RoomDao}
 	 */
-	RoomDto update(RoomDto roomDto) throws DataNotExistsException;
+	RoomDao update(RoomDao roomDao) throws DataNotExistsException;
+
+
+	/**
+	 * Updates status {@link RoomDao}
+	 * method used by adminui
+	 * @param roomDao
+	 * 		  the new {@link RoomDao}
+	 * @return a saved {@link RoomDao}
+	 */
+	RoomDao updateStatus(RoomDao roomDao) throws DataNotExistsException;
 
 	/**
 	 * Deletes a room
@@ -55,4 +66,11 @@ public interface RoomManager {
 	 */
 	void delete(long roomId) throws DataNotExistsException;
 
+	
+	/**
+	 * @param name
+	 * 
+	 * @return RoomDao object if found
+	 */
+	RoomDao findByName(String name);
 }

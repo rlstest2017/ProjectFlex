@@ -7,12 +7,16 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_MAIL_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_ROOM_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_GATEWAY_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_NAME_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ONE_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_GATEWAY_STATUS_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOM_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOM_STATUS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_USER_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_GATEWAY_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_ROOM_TEMPLATE;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,14 +43,18 @@ public abstract class DataRepository<T extends Data>
 	protected final String findAllQuery;
 	protected final String saveUserQuery;
 	protected final String saveGatewayQuery;
+	protected final String saveRoomQuery;
 	protected final String updateUserQuery;
 	protected final String updateGatewayStatusQuery;
+	protected final String updateRoomQuery;
+	protected final String updateRoomStatusQuery;
 	private final String deleteQuery;
 	private final String countQuery;
 	protected final String findByColumnIdQuery;
 	protected final String findByColumnMailQuery;
 	protected final String findByColumnRoomIdQuery;
 	protected final String findByColumnGatewayIdQuery;
+	protected final String findByColumnNameQuery;
 	protected final String findAllColumnIdsWithRowIdConditionQuery;
 	
 	protected NamedParameterJdbcTemplate jdbcTemplate;
@@ -62,14 +70,18 @@ public abstract class DataRepository<T extends Data>
 		findAllQuery = String.format(FIND_ALL_TEMPLATE, getTableName());
 		saveUserQuery = String.format(CREATE_USER_TEMPLATE, getTableName());
 		saveGatewayQuery = String.format(CREATE_GATEWAY_TEMPLATE, getTableName());
+		saveRoomQuery = String.format(CREATE_ROOM_TEMPLATE, getTableName());
 		updateUserQuery = String.format(UPDATE_USER_TEMPLATE, getTableName(), getColumnColName());
 		updateGatewayStatusQuery = String.format(UPDATE_GATEWAY_STATUS_TEMPLATE, getTableName());
+		updateRoomQuery = String.format(UPDATE_ROOM_TEMPLATE, getTableName(), getColumnColName());
+		updateRoomStatusQuery = String.format(UPDATE_ROOM_STATUS_TEMPLATE, getTableName(), getColumnColName());
 		deleteQuery = String.format(REMOVE_TEMPLATE, getTableName());	
 		countQuery = String.format(COUNT_TEMPLATE, getTableName());
 		findByColumnIdQuery = String.format(FIND_BY_COL_ID_TEMPLATE, getTableName(), getColumnColName());
 		findByColumnMailQuery = String.format(FIND_BY_COL_MAIL_TEMPLATE, getTableName());
 		findByColumnRoomIdQuery = String.format(FIND_BY_COL_ROOM_ID_TEMPLATE, getTableName());
 		findByColumnGatewayIdQuery = String.format(FIND_BY_COL_GATEWAY_ID_TEMPLATE, getTableName());
+		findByColumnNameQuery = String.format(FIND_BY_COL_NAME_TEMPLATE, getTableName());
 		findAllColumnIdsWithRowIdConditionQuery = String.format(FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE, getColumnColName(), getTableName(), getRowColName());
 	}
 	

@@ -104,22 +104,74 @@ public class RoomManagerImpl implements RoomManager {
 	}
 
 	@Override
-	public RoomDto save(RoomDto roomDto) throws DataAlreadyExistsException {
-		// TODO Auto-generated method stub
-		return null;
+	public RoomDao save(RoomDao roomDao) throws DataAlreadyExistsException {
+
+		List<RoomDao> roomFound = roomRepository.findByName(roomDao.getName());
+		if ((roomFound != null) && (roomFound.size() > 0)) {
+			LOGGER.debug("RoomManager.save   roomFound.size() : " + roomFound.size());
+			throw new DataAlreadyExistsException("Room already exists.");
+		}
+		
+		// Save RoomDao
+		return roomRepository.saveRoom(roomDao);
 	}
 
 	@Override
-	public RoomDto update(RoomDto UserFlexoffice) throws DataNotExistsException {
-		// TODO Auto-generated method stub
-		return null;
+	public RoomDao update(RoomDao roomDao) throws DataNotExistsException {
+
+		List<RoomDao> roomFound = roomRepository.findByName(roomDao.getName());
+		if ((roomFound == null) || (roomFound.size() == 0)) {
+			LOGGER.debug("RoomManager.update  not found");
+			throw new DataNotExistsException("Room to update not found.");
+		}
+		
+		// Update RoomDao
+		return roomRepository.updateRoom(roomDao);
+	}
+
+
+	@Override
+	public RoomDao updateStatus(RoomDao roomDao) throws DataNotExistsException {
+
+		List<RoomDao> roomFound = roomRepository.findByName(roomDao.getName());
+		if ((roomFound == null) || (roomFound.size() == 0)) {
+			LOGGER.debug("RoomManager.updateStatus  not found");
+			throw new DataNotExistsException("Room to update not found.");
+		}
+		
+		// Update RoomDao
+		return roomRepository.updateRoomStatus(roomDao);
 	}
 
 	@Override
 	public void delete(long id) throws DataNotExistsException {
-		// TODO Auto-generated method stub
 		
+		RoomDao roomFound = roomRepository.findOne(id);
+		
+		if (roomFound == null) {
+			LOGGER.debug("Room by id " + id + " is not found");
+			throw new DataNotExistsException("Room is not found.");
+		}
+		
+		// Delete Room
+		roomRepository.delete(id);	
 	}
 	
-	
+	/**
+	 * @param name
+	 * 
+	 * @return RoomDao object if found
+	 */
+	@Override
+	public RoomDao findByName(String name) {
+		
+		final List<RoomDao> data = roomRepository.findByName(name);
+		
+		if ((data != null) && (data.size() > 0)) {
+			return data.get(0);
+		} else {
+			return null;
+		}
+	}
+
 }
