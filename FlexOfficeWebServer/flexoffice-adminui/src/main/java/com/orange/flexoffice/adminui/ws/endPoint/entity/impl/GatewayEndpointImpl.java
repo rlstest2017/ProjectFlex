@@ -8,6 +8,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.orange.flexoffice.adminui.ws.endPoint.entity.GatewayEndpoint;
 import com.orange.flexoffice.adminui.ws.model.EDeviceStatus;
 import com.orange.flexoffice.adminui.ws.model.GatewayInput;
+import com.orange.flexoffice.adminui.ws.model.GatewayInput3;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput2;
 import com.orange.flexoffice.adminui.ws.model.GatewaySummary;
@@ -58,12 +60,12 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 		
 		for (GatewayDao gatewayDao : dataList) {
 			GatewaySummary gateway = factory.createGatewaySummary();
-			gateway.setId(gatewayDao.getColumnId());
+			gateway.setMacAddress((gatewayDao.getMacAddress()));
 			gateway.setName(gatewayDao.getName());
 			if (gatewayDao.getStatus().equals(E_GatewayStatus.ONTEACHIN.toString())) {
 				gateway.setStatus(EDeviceStatus.ONLINE);
 			} else {
-			gateway.setStatus(EDeviceStatus.valueOf(gatewayDao.getStatus().toString()));
+				gateway.setStatus(EDeviceStatus.valueOf(gatewayDao.getStatus().toString()));
 			}
 			if (gatewayDao.getLastPollingDate() != null) {
 				gateway.setLastPollingDate(gatewayDao.getLastPollingDate().getTime());
@@ -76,16 +78,20 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 	}
 
 	@Override
-	public GatewayOutput2 getGateway(String gatewayId) {
+	public GatewayOutput2 getGateway(String macAddress) {
 		
 		try {
-			GatewayDto data = gatewayManager.find(Long.valueOf(gatewayId));
+			GatewayDto data = gatewayManager.findByMacAddress(macAddress);
 			
 			GatewayOutput2 gateway = factory.createGatewayOutput2();
-			gateway.setId(data.getMacAddress());
+			gateway.setMacAddress(data.getMacAddress());
 			gateway.setName(data.getName());
 			gateway.setDesc(data.getDescription());
-			gateway.setStatus(EDeviceStatus.valueOf(data.getStatus().toString()));
+			if (data.getStatus().equals(E_GatewayStatus.ONTEACHIN.toString())) {
+				gateway.setStatus(EDeviceStatus.ONLINE);
+			} else {
+				gateway.setStatus(EDeviceStatus.valueOf(data.getStatus().toString()));
+			}
 			if (data.getLastPollingDate() != null) {
 				gateway.setLastPollingDate(data.getLastPollingDate().getTime());
 			}
@@ -111,17 +117,20 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 	}
 
 	@Override
-	public GatewayOutput addGateway(GatewayInput gateway) {
+	public GatewayOutput addGateway(GatewayInput3 gateway) {
 		LOGGER.info( "Begin call doPost method for GatewayEndpoint at: " + new Date() );
 
 		GatewayDao gatewayDao = new GatewayDao();
-		gatewayDao.setName(gateway.getName());
+		gatewayDao.setMacAddress(gateway.getMacAddress());
+		gatewayDao.setName(gateway.getName().trim());
 		gatewayDao.setDescription(gateway.getDesc());
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call addGateway(GatewayInput1 gateway) method of GatewayEndpoint, with parameters :");
 			final StringBuffer message = new StringBuffer( 1000 );
 			message.append( "\n" );
+			message.append( "macAddress :" );
+			message.append( gateway.getMacAddress() );
 			message.append( "name :" );
 			message.append( gateway.getName() );
 			message.append( "\n" );
@@ -145,7 +154,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 
 
 		GatewayOutput returnedGateway = factory.createGatewayOutput();
-		returnedGateway.setId(gatewayDao.getColumnId());
+		returnedGateway.setMacAddress(gatewayDao.getMacAddress());
 
 		LOGGER.info( "End call doPost method for GatewayEndpoint at: " + new Date() );
 
@@ -154,16 +163,55 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 	}
 
 	@Override
-	public Response updateGateway(String id, GatewayInput gateway) {
-		// TODO Auto-generated method stub
-		return null;
+	public Response updateGateway(String macAddress, GatewayInput gateway) {
+		LOGGER.info( "Begin call doPut method for GatewayEndpoint at: " + new Date() );
+
+		GatewayDao gatewayDao = new GatewayDao();
+		gatewayDao.setMacAddress(macAddress);
+		gatewayDao.setName(gateway.getName().trim());
+		gatewayDao.setDescription(gateway.getDesc());
+
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug( "Begin call updateGateway(String id, GatewayInput gateway) method of GatewayEndpoint, with parameters :");
+			final StringBuffer message = new StringBuffer( 1000 );
+			message.append( "macAddress :" );
+			message.append( macAddress );
+			message.append( "\n" );
+			message.append( "name :" );
+			message.append( gateway.getName() );
+			message.append( "\n" );
+			message.append( "desc :" );
+			message.append( gateway.getDesc() );
+			message.append( "\n" );
+			LOGGER.debug( message.toString() );
+		}
+
+		try {
+			gatewayDao = gatewayManager.update(gatewayDao);
+
+		} catch (DataNotExistsException e) {
+			
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_23, Response.Status.METHOD_NOT_ALLOWED));
+
+		} catch (RuntimeException ex) {
+
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		}
+
+
+		GatewayOutput returnedGateway = factory.createGatewayOutput();
+		returnedGateway.setMacAddress(gatewayDao.getMacAddress());
+
+		LOGGER.info( "End call doPut method for GatewayEndpoint at: " + new Date() );
+
+		return Response.status(Status.ACCEPTED).build();
 	}
 
 	@Override
-	public Response removeGateway(String id) {
+	public Response removeGateway(String macAddress) {
 		try {
 
-			gatewayManager.delete(Long.valueOf(id));
+			gatewayManager.delete(macAddress);
 
 		} catch (DataNotExistsException e){
 			

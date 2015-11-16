@@ -6,6 +6,8 @@ public final class DataSqlTemplate {
 			"select * from %s where id=:id";
 	public static final String FIND_BY_COL_ID_TEMPLATE = 
 			"select * from %s where %s=:columnId";
+	public static final String FIND_BY_MAC_ADDRESS_TEMPLATE = 
+			"select * from %s where mac_address=:macAddress";
 	public static final String FIND_BY_COL_GATEWAY_ID_TEMPLATE = 
 			"select * from %s where gateway_id=:gatewayId";
 	public static final String FIND_BY_COL_NAME_TEMPLATE = 
@@ -16,6 +18,8 @@ public final class DataSqlTemplate {
 			"select * from %s where room_id=:roomId";
 	public static final String FIND_ALL_TEMPLATE = 
 			"select * from %s";
+	public static final String REMOVE_BY_MAC_ADDRESS_TEMPLATE = 
+			"delete from %s where mac_address=:macAddress";
 	public static final String REMOVE_TEMPLATE = 
 			"delete from %s where id=:id";
 	public static final String COUNT_TEMPLATE =
@@ -23,7 +27,9 @@ public final class DataSqlTemplate {
 	public static final String CREATE_USER_TEMPLATE = 
 			"insert into %s (first_name, last_name, email) values (:firstName, :lastName, :email)";
 	public static final String CREATE_GATEWAY_TEMPLATE = 
-			"insert into %s (name, description) values (:name, :description)";
+			"insert into %s (mac_address, name, description) values (:macAddress, :name, :description)";
+	public static final String UPDATE_GATEWAY_TEMPLATE = 
+			"update %s set name=:name, description=:description WHERE mac_address=:macAddress";
 	public static final String CREATE_ROOM_TEMPLATE = 
 			"insert into %s (name, gateway_id, address, capacity, description, type, status) values (:name, :gatewayId, :address, :capacity, :description, CAST(:type AS roomtype), CAST(:status AS roomstatus))";
 	public static final String UPDATE_USER_TEMPLATE =

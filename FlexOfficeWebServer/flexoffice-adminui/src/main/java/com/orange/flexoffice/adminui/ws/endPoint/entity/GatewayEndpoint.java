@@ -12,14 +12,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static com.orange.flexoffice.adminui.ws.ParamsConst.GATEWAY_ID_PARAM;
+import static com.orange.flexoffice.adminui.ws.ParamsConst.GATEWAY_MAC_ADDRESS_PARAM;
 import static com.orange.flexoffice.adminui.ws.PathConst.GATEWAYS_PATH;
-import static com.orange.flexoffice.adminui.ws.PathConst.GATEWAY_ID_PATH;
+import static com.orange.flexoffice.adminui.ws.PathConst.GATEWAY_MAC_ADDRESS_PATH;
 
 import java.util.List;
 
 import com.orange.flexoffice.adminui.ws.model.Gateway;
 import com.orange.flexoffice.adminui.ws.model.GatewayInput;
+import com.orange.flexoffice.adminui.ws.model.GatewayInput3;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput2;
 import com.orange.flexoffice.adminui.ws.model.GatewaySummary;
@@ -52,10 +53,10 @@ public interface GatewayEndpoint {
 	 * @see Gateway
 	 */
 	@GET
-	@Path(GATEWAY_ID_PATH)
+	@Path(GATEWAY_MAC_ADDRESS_PATH)
 	@Consumes (MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	GatewayOutput2 getGateway(@PathParam(GATEWAY_ID_PARAM) String gatewayId);
+	GatewayOutput2 getGateway(@PathParam(GATEWAY_MAC_ADDRESS_PARAM) String gatewayMacAddress);
 	
 	/**
 	 * Add a new gateway.
@@ -69,7 +70,7 @@ public interface GatewayEndpoint {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	GatewayOutput addGateway(GatewayInput gateway);
+	GatewayOutput addGateway(GatewayInput3 gateway);
 	
 	/**
 	 * Modifies a specific gateway.
@@ -84,10 +85,10 @@ public interface GatewayEndpoint {
 	 * @see Response
 	 */
 	@PUT
-	@Path(GATEWAY_ID_PATH)
+	@Path(GATEWAY_MAC_ADDRESS_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response updateGateway(@PathParam(GATEWAY_ID_PARAM)String id, GatewayInput gateway);
+	Response updateGateway(@PathParam(GATEWAY_MAC_ADDRESS_PARAM)String macAddress, GatewayInput gateway);
 
 	/**
 	 * Deletes a specific gateway.
@@ -100,10 +101,10 @@ public interface GatewayEndpoint {
 	 * @see Response
 	 */
 	@DELETE
-	@Path(GATEWAY_ID_PATH)
+	@Path(GATEWAY_MAC_ADDRESS_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response removeGateway(@PathParam(GATEWAY_ID_PARAM)String id);
+	Response removeGateway(@PathParam(GATEWAY_MAC_ADDRESS_PARAM)String macAddress);
 	
 	// used for tests
 	boolean executeGatewaysTestFile();

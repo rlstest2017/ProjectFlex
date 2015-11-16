@@ -120,7 +120,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 			for (SensorDao sensorDao : sensors) {
 				SensorOutput sensorOutput = new SensorOutput();
-				sensorOutput.setId(sensorDao.getColumnId());
+				sensorOutput.setIdentifier(sensorDao.getIdentifier());
 				sensorOutput.setName(sensorDao.getName());
 				room.getSensors().add(sensorOutput);
 			}
@@ -286,8 +286,8 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		try {
 			final GatewayDto gatewayDto = gatewayManager.find(Long.valueOf(gatewayId));
-			gateway.setId(gatewayDto.getId());
-			gateway.setName(gatewayDto.getId());
+			gateway.setMacAddress(gatewayDto.getMacAddress());
+			gateway.setName(gatewayDto.getName());
 
 		} catch (DataNotExistsException e) {
 			LOGGER.warn("Get rooms / Get room id : Wrong Gateway on room " + roomName, e);

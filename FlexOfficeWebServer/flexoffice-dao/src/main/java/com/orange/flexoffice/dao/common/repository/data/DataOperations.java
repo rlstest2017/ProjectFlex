@@ -3,13 +3,15 @@ package com.orange.flexoffice.dao.common.repository.data;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
+
 import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 import com.orange.flexoffice.dao.common.model.data.Data;
 
 
 public interface DataOperations<T extends Data> {
 	
-	T findOne(Long id);
+	T findOne(Long id) throws IncorrectResultSizeDataAccessException;
 	
 	void delete(Long id);
 	

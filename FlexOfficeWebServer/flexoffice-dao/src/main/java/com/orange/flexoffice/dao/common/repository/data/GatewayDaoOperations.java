@@ -2,6 +2,9 @@ package com.orange.flexoffice.dao.common.repository.data;
 
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
+
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 
 /**
@@ -13,10 +16,17 @@ public interface GatewayDaoOperations {
 	
 	List<GatewayDao> findAllGateways();
 	
-	List<GatewayDao> findByGatewayId(Long gatewayId);
+	GatewayDao findByGatewayId(Long gatewayId);
+	
+	GatewayDao findByMacAddress(String macAddress) throws IncorrectResultSizeDataAccessException;
+	
+	//GatewayDao findByName(String name);
 	
 	GatewayDao updateGatewayStatus(GatewayDao data); 
 	
-	GatewayDao saveGateway(GatewayDao data);
+	GatewayDao saveGateway(GatewayDao data) throws DataIntegrityViolationException;
 	
+	GatewayDao updateGateway(GatewayDao data);
+	
+	void deleteByMacAddress(String macAddress); 
 }

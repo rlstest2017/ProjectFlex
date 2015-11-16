@@ -12,7 +12,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
-import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.repository.data.RoomDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.RoomDaoMetadata;
 import com.orange.flexoffice.dao.common.repository.support.DataExtractor;

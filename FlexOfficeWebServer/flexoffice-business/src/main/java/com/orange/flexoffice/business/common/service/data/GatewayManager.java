@@ -38,6 +38,15 @@ public interface GatewayManager {
 	GatewayDto find(long gatewayId)  throws DataNotExistsException;
 	
 	/**
+	 * Finds a {@link GatewayDto} by its macAddress.
+	 * method used by adminui
+	 * @param macAddress
+	 * 		  the {@link gatewayId} macAddress
+	 * @return a {@link GatewayDto}
+	 */
+	GatewayDto findByMacAddress(String macAddress)  throws DataNotExistsException;
+	
+	/**
 	 * Saves a {@link GatewayDao}
 	 * method used by adminui
 	 * @param GatewayDao
@@ -69,9 +78,9 @@ public interface GatewayManager {
 	 * Deletes a {@link GatewayDto}.
 	 * method used by adminui
 	 * @param id 
-	 * 		  a {@link GatewayDto} ID
+	 * 		  a {@link GatewayDto} macAddress
 	 */
-	void delete(long id) throws DataNotExistsException;
+	void delete(String macAddress) throws DataNotExistsException;
 
 	// used for tests
 	boolean executeGatewaysTestFile();

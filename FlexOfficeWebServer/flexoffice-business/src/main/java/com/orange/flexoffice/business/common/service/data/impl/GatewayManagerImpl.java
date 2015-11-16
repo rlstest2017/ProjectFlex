@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +18,6 @@ import com.orange.flexoffice.business.gatewayapi.enums.EnumCommandModel;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
-import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
@@ -82,6 +83,7 @@ public class GatewayManagerImpl implements GatewayManager {
 	@Override
 	@Transactional(readOnly=true)
 	public GatewayDto find(long gatewayId)  throws DataNotExistsException {
+		
 		GatewayDao gatewayDao = gatewayRepository.findOne(gatewayId);
 		
 		if (gatewayDao == null) {
@@ -124,60 +126,102 @@ public class GatewayManagerImpl implements GatewayManager {
 	}
 
 	@Override
+	@Transactional(readOnly=true)
+	public GatewayDto findByMacAddress(String macAddress)  throws DataNotExistsException {
+			try {
+				GatewayDao gatewayDao = gatewayRepository.findByMacAddress(macAddress);
+				
+				GatewayDto dto = new GatewayDto();
+				dto.setId(gatewayDao.getColumnId());
+				dto.setDescription(gatewayDao.getDescription());
+				dto.setLastPollingDate(gatewayDao.getLastPollingDate());
+				dto.setMacAddress(macAddress);
+				dto.setName(gatewayDao.getName());
+				dto.setStatus(E_GatewayStatus.valueOf(gatewayDao.getStatus()));
+				
+				if (LOGGER.isDebugEnabled()) {
+		            LOGGER.debug( "Return findByMacAddress(String macAddress) method for GatewayManagerImpl, with parameters :");
+		            final StringBuffer message = new StringBuffer( 100 );
+		            message.append( "id :" );
+		            message.append( gatewayDao.getColumnId() );
+		            message.append( "\n" );
+		            message.append( "macAddress :" );
+		            message.append( macAddress );
+		            message.append( "\n" );
+		            message.append( "name :" );
+		            message.append( gatewayDao.getName() );
+		            message.append( "\n" );
+		            LOGGER.debug( message.toString() );
+		        }
+				
+				List<RoomDao> roomsList = getRooms(gatewayDao.getId());
+				if ((roomsList != null) && (roomsList.size() > 0)) { 
+					dto.setRooms(roomsList);
+					dto.setActivated(true);			
+				} else {
+					dto.setActivated(false);
+				}
+				
+				return dto;
+	
+			} catch(IncorrectResultSizeDataAccessException e ) {
+				LOGGER.debug("gateway by macAddress " + macAddress + " is not found");
+				throw new DataNotExistsException("Gateway not exist");
+			}
+	}
+
+	@Override
 	public GatewayDao save(GatewayDao gatewayDao) throws DataAlreadyExistsException {
-		
-		List<GatewayDao> gatewayFound = gatewayRepository.findByGatewayId(gatewayDao.getId());
-		if ((gatewayFound != null)&&(gatewayFound.size() > 0)) {
-			LOGGER.debug("gatewayFound.size() : " + gatewayFound.size());
+		try {
+			// Save GatewayDao
+			return gatewayRepository.saveGateway(gatewayDao);
+		} catch (DataIntegrityViolationException e) {
 			throw new DataAlreadyExistsException("gateway already exist.");
 		}
-		
-		// Save GatewayDao
-		return gatewayRepository.saveGateway(gatewayDao);
-		
 	}
 
 	@Override
 	public GatewayDao update(GatewayDao gatewayDao) throws DataNotExistsException {
-		// TODO Auto-generated method stub
-		return null;
+		try {	
+			gatewayRepository.findByMacAddress(gatewayDao.getMacAddress());
+			// update GatewayDao
+			return gatewayRepository.updateGateway(gatewayDao);
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.debug("gateway is not found");
+			throw new DataNotExistsException("Gateway not exist");
+		}
 	}
 
 	@Override
 	public GatewayCommand updateStatus(GatewayDao gatewayDao) throws DataNotExistsException {
-		Long gatewayId = gatewayDao.getId();
-		GatewayDao gatewayFound = gatewayRepository.findOne(gatewayId);
-		
-		if (gatewayFound == null) {
-			LOGGER.debug("gateway by id " + gatewayId + " is not found");
-			throw new DataNotExistsException("GatewayDao already saves.");
-		} else {
-			LOGGER.debug("gateway by id " + gatewayId + " is found");
+		try {
+			Long gatewayId = gatewayDao.getId();
+			gatewayRepository.findOne(gatewayId);
+			// update Gateway Status
+			gatewayRepository.updateGatewayStatus(gatewayDao);
+			
+			GatewayCommand command = new GatewayCommand();
+			// TODO if Teachin return roomId and command = "TEACHIN"
+			// TODO if stop Teachin return roomId and command = "STOPTEACHIN"
+			command.setCommand(EnumCommandModel.NONE);
+			
+			return command;
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.debug("gateway is not found");
+			throw new DataNotExistsException("Gateway not exist");
 		}
-		
-		// update Gateway Status
-		gatewayRepository.updateGatewayStatus(gatewayDao);
-		
-		GatewayCommand command = new GatewayCommand();
-		// TODO if Teachin return roomId and command = "TEACHIN"
-		// TODO if stop Teachin return roomId and command = "STOPTEACHIN"
-		command.setCommand(EnumCommandModel.NONE);
-		
-		return command;
-		
 	}
 
 	@Override
-	public void delete(long id) throws DataNotExistsException {
-		GatewayDao gatewayFound = gatewayRepository.findOne(id);
-		
-		if (gatewayFound == null) {
-			LOGGER.debug("gateway by id " + id + " is not found");
-			throw new DataNotExistsException("gateway is not found.");
+	public void delete(String macAddress) throws DataNotExistsException {
+		try {
+			gatewayRepository.findByMacAddress(macAddress);
+			// Deletes UserDao
+			gatewayRepository.deleteByMacAddress(macAddress);
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.debug("gateway by macAddress " + macAddress + " is not found");
+			throw new DataNotExistsException("Gateway not exist");
 		}
-		
-		// Deletes UserDao
-		gatewayRepository.delete(id);		
 	}
 
 	// used for tests

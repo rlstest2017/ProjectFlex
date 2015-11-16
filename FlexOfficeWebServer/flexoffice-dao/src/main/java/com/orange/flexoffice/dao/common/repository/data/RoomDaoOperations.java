@@ -2,9 +2,7 @@ package com.orange.flexoffice.dao.common.repository.data;
 
 import java.util.List;
 
-import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
-import com.orange.flexoffice.dao.common.model.data.UserDao;
 
 /**
  * RoomDaoOperations

@@ -10,7 +10,8 @@
 	
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="org.postgresql.Driver"/>
- 		<property name="url" value="jdbc:postgresql://192.168.129.80:5432/FlexOffice_Test"/>
+<!--  		<property name="url" value="jdbc:postgresql://192.168.129.80:5432/FlexOffice_Test"/> -->
+ 		<property name="url" value="jdbc:postgresql://localhost:5432/FlexOffice_Test"/>
 		<property name="username" value="flexoffice"/>
 		<property name="password" value="oab"/>		
 		<property name="maxActive" value="10"/>

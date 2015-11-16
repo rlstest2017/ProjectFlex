@@ -12,9 +12,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static com.orange.flexoffice.adminui.ws.ParamsConst.GATEWAY_ID_PARAM;
+import static com.orange.flexoffice.adminui.ws.ParamsConst.GATEWAY_MAC_ADDRESS_PARAM;
 import static com.orange.flexoffice.adminui.ws.ParamsConst.ROOM_ID_PARAM;
-import static com.orange.flexoffice.adminui.ws.PathConst.GATEWAY_ID_PATH;
+import static com.orange.flexoffice.adminui.ws.PathConst.GATEWAY_MAC_ADDRESS_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.ROOMS_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.ROOM_ID_PATH;
 
@@ -92,7 +92,7 @@ public interface RoomEndpoint {
 	 * @see Response
 	 */
 	@PUT
-	@Path(GATEWAY_ID_PATH)
+	@Path(GATEWAY_MAC_ADDRESS_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	Response updateRoom(@PathParam(ROOM_ID_PARAM)String id, RoomInput1 room);
@@ -108,7 +108,7 @@ public interface RoomEndpoint {
 	 * @see Response
 	 */
 	@DELETE
-	@Path(GATEWAY_ID_PATH)
+	@Path(GATEWAY_MAC_ADDRESS_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	Response removeRoom(@PathParam(ROOM_ID_PARAM)String id);

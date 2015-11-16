@@ -3,6 +3,8 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -36,17 +38,44 @@ public class GatewayDaoRepository extends DataRepository<GatewayDao> implements 
 	}
 
 	@Override
-	public List<GatewayDao> findByGatewayId(Long gatewayId) {
+	public GatewayDao findByGatewayId(Long gatewayId) {
 		SqlParameterSource paramMap = new MapSqlParameterSource("columnId", gatewayId);
-		return jdbcTemplate.query(
+		GatewayDao data = null;
+		data =  jdbcTemplate.queryForObject(
 				findByColumnIdQuery, 
 				paramMap, 
 				new BeanPropertyRowMapper<GatewayDao>(GatewayDao.class)
 			);
+		return data;
 	}
 	
 	@Override
-	public GatewayDao saveGateway(GatewayDao data) {
+	public GatewayDao findByMacAddress(String macAddress) throws IncorrectResultSizeDataAccessException {
+		SqlParameterSource paramMap = new MapSqlParameterSource("macAddress", macAddress);
+		GatewayDao data = null;
+		data = jdbcTemplate.queryForObject(
+				findByMacAddressQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<GatewayDao>(GatewayDao.class)
+			);
+		return data;
+	}
+	
+	
+//	@Override
+//	public GatewayDao findByName(String name) {
+//		SqlParameterSource paramMap = new MapSqlParameterSource("name", name);
+//		GatewayDao data = null;
+//		data = jdbcTemplate.queryForObject(
+//				findByColumnNameQuery, 
+//				paramMap, 
+//				new BeanPropertyRowMapper<GatewayDao>(GatewayDao.class)
+//			);
+//		return data;
+//	}
+	
+	@Override
+	public GatewayDao saveGateway(GatewayDao data) throws DataIntegrityViolationException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
@@ -58,6 +87,21 @@ public class GatewayDaoRepository extends DataRepository<GatewayDao> implements 
 		
 		return data;
 	}
+	
+	@Override
+	public GatewayDao updateGateway(GatewayDao data) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateGatewayQuery, paramBean, keyHolder);
+		
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
+		
+		return data;
+	}
+	
 	@Override
 	public GatewayDao updateGatewayStatus(GatewayDao data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -73,11 +117,15 @@ public class GatewayDaoRepository extends DataRepository<GatewayDao> implements 
 		Integer id = (Integer)keyHolder.getKeys().get("id");
 		data.setId(id.longValue());
 		
-		
-		
 		return data;
 	}
 
+	@Override
+	public void deleteByMacAddress(String macAddress) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("macAddress", macAddress);
+		jdbcTemplate.update(deleteByMacAddressQuery, paramMap);
+		
+	}
 	
 	@Override
 	protected String getTableName() {
