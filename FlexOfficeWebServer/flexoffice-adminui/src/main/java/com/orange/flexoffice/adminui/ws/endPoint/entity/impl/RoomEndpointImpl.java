@@ -162,7 +162,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		roomDao.setCapacity(roomInput.getCapacity().intValue());
 		roomDao.setDescription(roomInput.getDesc());
 		roomDao.setType(roomInput.getType().toString());
-		roomDao.setStatus("FREE");
+		roomDao.setStatus("UNKNOWN");
 		roomDao.setGatewayId(Long.valueOf(roomInput.getGateway().getId()));
 	
 		
