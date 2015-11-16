@@ -81,9 +81,11 @@ public class RoomManagerImpl implements RoomManager {
 		dto.setStatus(E_RoomStatus.valueOf(roomDao.getStatus()));
 		dto.setType(E_RoomType.valueOf(roomDao.getType()));
 
-		UserDao userDao = userRepository.findOne(roomDao.getUserId());
-		if (userDao != null) {
+		try {
+			UserDao userDao = userRepository.findOne(roomDao.getUserId());
 			dto.setUser(userDao);
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.debug("RoomManager.find : User by id #" + roomDao.getUserId() + " for current Room is not found");
 		}
 
 		List<SensorDao> sensorsDao = sensorRepository.findByRoomId(roomId);
@@ -91,9 +93,11 @@ public class RoomManagerImpl implements RoomManager {
 			dto.setSensors(sensorsDao);
 		}
 
-		GatewayDao gatewayDao = gatewayRepository.findOne(roomDao.getGatewayId());
-		if (gatewayDao != null) {
+		try {
+			GatewayDao gatewayDao = gatewayRepository.findOne(roomDao.getGatewayId());
 			dto.setGateway(gatewayDao);
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.debug("RoomManager.find : Gateway by id #" + roomDao.getGatewayId() + " for current Room is not found");
 		}
 
 		if (LOGGER.isDebugEnabled()) {
@@ -152,6 +156,8 @@ public class RoomManagerImpl implements RoomManager {
 	public void delete(long id) throws DataNotExistsException {
 
 		try {
+			// To generate exception if wrong id
+			roomRepository.findOne(id);
 			// Delete Room
 			roomRepository.delete(id);	
 		} catch (IncorrectResultSizeDataAccessException e) {
@@ -172,8 +178,8 @@ public class RoomManagerImpl implements RoomManager {
 		try {
 			return roomRepository.findByName(name);
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("RoomManager.find : Room by name #" + name + " is not found");
-			throw new DataNotExistsException("RoomManager.find : Room by name #" + name + " is not found");
+			LOGGER.debug("RoomManager.findByName : Room by name #" + name + " is not found");
+			throw new DataNotExistsException("RoomManager.findByName : Room by name #" + name + " is not found");
 		}
 	}
 }
