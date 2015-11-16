@@ -13,11 +13,11 @@ public interface RoomDaoOperations {
 	
 	List<RoomDao> findAllRooms();
 	
-	List<RoomDao> findByRoomId(Long roomId);
+	RoomDao findByRoomId(Long roomId);
 	
 	List<RoomDao> findByGatewayId(Long gatewayId);
 
-	List<RoomDao> findByName(String name);
+	RoomDao findByName(String name);
 	
 	RoomDao saveRoom(RoomDao data);
 	

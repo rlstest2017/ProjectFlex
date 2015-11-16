@@ -72,5 +72,5 @@ public interface RoomManager {
 	 * 
 	 * @return RoomDao object if found
 	 */
-	RoomDao findByName(String name);
+	RoomDao findByName(String name) throws DataNotExistsException;
 }

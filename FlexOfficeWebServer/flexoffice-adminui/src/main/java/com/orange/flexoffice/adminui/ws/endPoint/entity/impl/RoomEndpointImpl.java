@@ -269,7 +269,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 * @see com.orange.flexoffice.adminui.ws.endPoint.entity.RoomEndpoint#findByName
 	 */
 	@Override
-	public RoomDao findByName(String name) {
+	public RoomDao findByName(String name) throws DataNotExistsException {
 		return roomManager.findByName(name);
 	}
 

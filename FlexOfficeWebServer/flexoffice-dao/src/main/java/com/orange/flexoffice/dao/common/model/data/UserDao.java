@@ -67,7 +67,11 @@ public class UserDao extends AbstractData {
 	}
 	@Override
 	public String getColumnId() {
-		return getId().toString();
+		if (getId() != null) {
+			return getId().toString();
+		} else {
+			return "0";
+		}
 	}
 	
 

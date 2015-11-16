@@ -27,6 +27,7 @@ import com.orange.flexoffice.adminui.ws.model.RoomInput1;
 import com.orange.flexoffice.adminui.ws.model.RoomOutput;
 import com.orange.flexoffice.adminui.ws.model.RoomSummary;
 import com.orange.flexoffice.adminui.ws.model.User;
+import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 
@@ -115,7 +116,7 @@ public interface RoomEndpoint {
 
 	
 	// Used for tests
-	RoomDao findByName(String name);
+	RoomDao findByName(String name) throws DataNotExistsException;
 }
 
 

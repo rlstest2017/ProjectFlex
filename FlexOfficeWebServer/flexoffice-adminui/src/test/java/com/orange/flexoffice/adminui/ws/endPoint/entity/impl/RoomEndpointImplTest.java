@@ -2,6 +2,7 @@ package com.orange.flexoffice.adminui.ws.endPoint.entity.impl;
 
 import static org.junit.Assert.*;
 
+import java.io.FileNotFoundException;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -14,6 +15,8 @@ import javax.ws.rs.core.Response.Status;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.util.Log4jConfigurer;
 
 import com.orange.flexoffice.adminui.ws.endPoint.entity.GatewayEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.entity.RoomEndpoint;
@@ -24,12 +27,22 @@ import com.orange.flexoffice.adminui.ws.model.RoomInput1;
 import com.orange.flexoffice.adminui.ws.model.RoomOutput;
 import com.orange.flexoffice.adminui.ws.model.RoomSummary;
 import com.orange.flexoffice.adminui.ws.model.UserInput;
+import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 
 
 
 public class RoomEndpointImplTest {
+
+	static {
+	    try {
+	      Log4jConfigurer.initLogging( "classpath:log4j-flexoffice-adminui-test.xml" );
+	    }
+	    catch( FileNotFoundException ex ) {
+	      System.err.println( "Cannot Initialize log4j" );
+	    }
+	  }
 
 	private static ClassPathXmlApplicationContext context;
 
@@ -165,10 +178,12 @@ public class RoomEndpointImplTest {
 
 	@Test
 	public void updateRoom() throws WebApplicationException {
-		// Setup
-		final RoomDao user = roomEndpoint.findByName("RoomTest1");
 
-		if (user != null) {
+		// Setup
+		boolean expectedResult = false;
+		
+		try {
+			RoomDao user = roomEndpoint.findByName("RoomTest1");
 
 			// Setup
 			final RoomInput1 roomInput = new RoomInput1();
@@ -193,7 +208,13 @@ public class RoomEndpointImplTest {
 
 			// Asserts
 			assertEquals(3, rooms.size());
+			expectedResult = true;
+			
+		} catch(DataNotExistsException e ) {
 		}
+
+		// Asserts
+		assertEquals(true, expectedResult);	
 	}
 	
 
@@ -202,10 +223,10 @@ public class RoomEndpointImplTest {
 	public void updateRoomDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
-		// Setup
-		final RoomDao user = roomEndpoint.findByName("RoomTest1");
+		
+		try {
+			final RoomDao user = roomEndpoint.findByName("RoomTest1");
 
-		if (user != null) {
 
 			try {
 				// Setup
@@ -226,6 +247,8 @@ public class RoomEndpointImplTest {
 			} catch (WebApplicationException e) {
 				expectedResult = true;
 			}
+
+		} catch(DataNotExistsException e ) {
 		}
 
 		// Asserts
@@ -237,9 +260,9 @@ public class RoomEndpointImplTest {
 	public void removeRoomDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
-		final RoomDao user = roomEndpoint.findByName("RoomTest1");
+		try {
+			final RoomDao user = roomEndpoint.findByName("RoomTest1");
 
-		if (user != null) {
 
 			try {
 				// Setup
@@ -251,6 +274,8 @@ public class RoomEndpointImplTest {
 			} catch (WebApplicationException e) {
 				expectedResult = true;
 			}
+
+		} catch(DataNotExistsException e ) {
 		}
 
 		// Asserts
@@ -262,9 +287,9 @@ public class RoomEndpointImplTest {
 	public void removeRoom() throws WebApplicationException {
 		// Setup
 		boolean expectedResult = false;
-		final RoomDao user = roomEndpoint.findByName("RoomTest1");
+		try {
+			final RoomDao user = roomEndpoint.findByName("RoomTest1");
 
-		if (user != null) {
 
 			// Test
 			Response response = roomEndpoint.removeRoom(user.getColumnId());
@@ -272,6 +297,8 @@ public class RoomEndpointImplTest {
 			// Assert
 			assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 			expectedResult = true;
+
+		} catch(DataNotExistsException e ) {
 		}
 		
 		// Assert

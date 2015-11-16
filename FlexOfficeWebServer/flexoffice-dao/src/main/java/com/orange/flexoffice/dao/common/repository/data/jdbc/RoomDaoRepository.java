@@ -3,6 +3,7 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -36,9 +37,9 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 	}
 
 	@Override
-	public List<RoomDao> findByRoomId(Long roomId) {
+	public RoomDao findByRoomId(Long roomId) {
 		SqlParameterSource paramMap = new MapSqlParameterSource("columnId", roomId);
-		return jdbcTemplate.query(
+		return jdbcTemplate.queryForObject(
 				findByColumnIdQuery, 
 				paramMap, 
 				new BeanPropertyRowMapper<RoomDao>(RoomDao.class)
@@ -56,9 +57,9 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 	}
 
 	@Override
-	public List<RoomDao> findByName(String name) {
+	public RoomDao findByName(String name) {
 		SqlParameterSource paramMap = new MapSqlParameterSource("name", name);
-		return jdbcTemplate.query(
+		return jdbcTemplate.queryForObject(
 				findByColumnNameQuery, 
 				paramMap, 
 				new BeanPropertyRowMapper<RoomDao>(RoomDao.class)
@@ -66,7 +67,7 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 	}
 
 	@Override
-	public RoomDao saveRoom(RoomDao data) {
+	public RoomDao saveRoom(RoomDao data) throws DataIntegrityViolationException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
