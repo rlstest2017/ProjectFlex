@@ -223,12 +223,6 @@ public class GatewayManagerImpl implements GatewayManager {
 			throw new DataNotExistsException("Gateway not exist");
 		}
 	}
-
-	// used for tests
-	@Override
-	public boolean executeGatewaysTestFile() {
-		return gatewayRepository.executeGatewaysTestFile();
-	}
 	
 	/**
 	 * getRooms

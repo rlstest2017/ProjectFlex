@@ -81,10 +81,5 @@ public interface GatewayManager {
 	 * 		  a {@link GatewayDto} macAddress
 	 */
 	void delete(String macAddress) throws DataNotExistsException;
-
-	// used for tests
-	boolean executeGatewaysTestFile();
-	
-	
 	
 }

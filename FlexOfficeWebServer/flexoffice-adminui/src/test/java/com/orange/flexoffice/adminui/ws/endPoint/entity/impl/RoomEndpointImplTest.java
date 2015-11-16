@@ -55,7 +55,7 @@ public class RoomEndpointImplTest {
 	@Test
 	public void initTables() {
 		// SetUp
-		boolean state = gatewayEndpoint.executeGatewaysTestFile();
+		boolean state = gatewayEndpoint.executeInitTestFile();
 
 		// Asserts
 		assertEquals(true, state);

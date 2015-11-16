@@ -6,9 +6,9 @@ import com.orange.flexoffice.dao.common.model.data.InitForTestDao;
 import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 
 @Repository
-public class InitDaoForTestRepository extends DataRepository<InitForTestDao>  {
+public class InitTestRepository extends DataRepository<InitForTestDao>  {
 
-	public InitDaoForTestRepository() {
+	public InitTestRepository() {
 		super(InitForTestDao.class);
 	}
 	/**

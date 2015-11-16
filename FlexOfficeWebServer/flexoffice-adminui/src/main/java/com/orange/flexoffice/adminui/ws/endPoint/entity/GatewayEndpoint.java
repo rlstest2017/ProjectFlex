@@ -107,7 +107,7 @@ public interface GatewayEndpoint {
 	Response removeGateway(@PathParam(GATEWAY_MAC_ADDRESS_PARAM)String macAddress);
 	
 	// used for tests
-	boolean executeGatewaysTestFile();
+	boolean executeInitTestFile();
 	
 }
 
