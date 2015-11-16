@@ -139,6 +139,31 @@ public class RoomEndpointImplTest {
 	}
 
 	@Test
+	public void addRoomAlreadyExists() {
+		// Setup
+		boolean expectedResult = false;
+		final RoomInput1 roomInput = new RoomInput1();
+		roomInput.setName("RoomTest1");
+		roomInput.setAddress("RoomAddress1");
+		roomInput.setCapacity(BigInteger.valueOf(4));
+		roomInput.setDesc("RoomDescription1");
+		roomInput.setType(ERoomType.BOX);
+		final GatewayInput2 gateway = new GatewayInput2();
+		gateway.setId("1");
+		roomInput.setGateway(gateway);
+
+		try {
+			// Test
+			roomEndpoint.addRoom(roomInput);
+
+		} catch (WebApplicationException e) {
+			expectedResult = true;
+		}
+		// Asserts
+		assertEquals(true, expectedResult);	
+	}
+
+	@Test
 	public void updateRoom() throws WebApplicationException {
 		// Setup
 		final RoomDao user = roomEndpoint.findByName("RoomTest1");

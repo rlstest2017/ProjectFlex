@@ -59,7 +59,7 @@ public class UserEndPointImplTest {
 		// SetUp
 		boolean state = gatewayEndpoint.executeGatewaysTestFile();
 		 
-		// Asserts
+		// Assert
 		assertEquals(true, state);
 	}
 
@@ -77,7 +77,7 @@ public class UserEndPointImplTest {
 
 		response = userEndpoint.getUsers();
 
-		// Asserts
+		// Assert
 		assertEquals(0, response.size());
 	}
 
@@ -89,7 +89,7 @@ public class UserEndPointImplTest {
 		// Test
 		final User response = userEndpoint.addUser(userHmi);
 
-		// Asserts
+		// Assert
 		assertNotNull(response.getId());
 	}
 
@@ -100,20 +100,19 @@ public class UserEndPointImplTest {
 		final UserInput expecteduser = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
 		final UserDao user = userEndpoint.findByUserMail("emailTest1");
 
-		// Test
 		if (user != null) {
+			// Test
 			final User userFromDB = userEndpoint.getUser(user.getColumnId());
 
-			if (((expecteduser.getFirstName().compareTo(userFromDB.getFirstName())) == 0) &&
-					((expecteduser.getLastName().compareTo(userFromDB.getLastName())) == 0) &&
-					((expecteduser.getEmail().compareTo(userFromDB.getEmail())) == 0)
-					){
+			// Assert
+			assertEquals(expecteduser.getFirstName(), userFromDB.getFirstName());	
+			assertEquals(expecteduser.getLastName(), userFromDB.getLastName());	
+			assertEquals(expecteduser.getEmail(), userFromDB.getEmail());	
 
-				expectedResult = true;
-			}
+			expectedResult = true;
 		}
 
-		// Asserts
+		// Assert
 		assertEquals(true, expectedResult);	
 	}
 
@@ -124,7 +123,7 @@ public class UserEndPointImplTest {
 		// Test
 		final List<UserSummary> response = userEndpoint.getUsers();
 
-		// Asserts
+		// Assert
 		assertEquals(1, response.size());
 	}
 
@@ -149,7 +148,7 @@ public class UserEndPointImplTest {
 			expectedResult = true;
 		}
 
-		// Asserts
+		// Assert
 		assertEquals(true, expectedResult);	
 	}
 
@@ -157,14 +156,21 @@ public class UserEndPointImplTest {
 	@Test
 	public void updateUser() throws WebApplicationException {
 		// Setup
+		boolean expectedResult = false;
 		final UserInput userHmi = factory.createHmiUser("firstNameTest2", "lastNameTest2", "emailTest2");
 		final UserDao user = userEndpoint.findByUserMail("emailTest1");
 
-		// Test
-		Response response = userEndpoint.updateUser(user.getColumnId(), userHmi);
+		if (user != null) {
 
-		// Asserts
-		assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+			// Test
+			Response response = userEndpoint.updateUser(user.getColumnId(), userHmi);
+
+			// Assert
+			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+			expectedResult = true;
+		}
+		// Assert
+		assertEquals(true, expectedResult);	
 	}
 
 	@Test
@@ -178,13 +184,14 @@ public class UserEndPointImplTest {
 			final UserInput userHmi = factory.createHmiUser("firstNameTest3", "lastNameTest3", "emailTest3");
 			final UserDao user = userEndpoint.findByUserMail("emailTest2");
 
-			userEndpoint.updateUser(user.getColumnId()+100, userHmi);
-			
+			if (user != null) {
+				userEndpoint.updateUser(user.getColumnId()+"1", userHmi);
+			}
 		} catch (WebApplicationException e) {
 			expectedResult = true;
 		}
 
-		// Asserts
+		// Assert
 		assertEquals(true, expectedResult);	
 	}
 	@Test
@@ -197,14 +204,16 @@ public class UserEndPointImplTest {
 			// Setup
 			final UserDao user = userEndpoint.findByUserMail("emailTest2");
 
-			// Test
-			userEndpoint.removeUser(user.getColumnId()+100);
+			if (user != null) {
+				// Test
+				userEndpoint.removeUser(user.getColumnId()+"1");
+			}
 			
 		} catch (WebApplicationException e) {
 			expectedResult = true;
 		}
 
-		// Asserts
+		// Assert
 		assertEquals(true, expectedResult);	
 	}
 
@@ -212,13 +221,21 @@ public class UserEndPointImplTest {
 	@Test
 	public void removeUser() throws WebApplicationException {
 		// Setup
+		boolean expectedResult = false;
 		final UserDao user = userEndpoint.findByUserMail("emailTest2");
 
-		// Test
-		Response response = userEndpoint.removeUser(user.getColumnId());
+		if (user != null) {
 
-		// Asserts
-		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+			// Test
+			Response response = userEndpoint.removeUser(user.getColumnId());
+
+			// Assert
+			assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+			expectedResult = true;
+		}
+		
+		// Assert
+		assertEquals(true, expectedResult);	
 	}
 
 }
