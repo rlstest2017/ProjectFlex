@@ -262,5 +262,28 @@ public class UserEndPointImplTest {
 		// Assert
 		assertEquals(true, expectedResult);	
 	}
+	
+
+	@Test
+	public void TestK_getWrongUser() {
+		// Setup
+		boolean expectedResult = false;
+		
+		try {
+			final UserDao user = userEndpoint.findByUserMail("user Email 1");
+
+			// Test
+			userEndpoint.getUser(user.getColumnId()+"1");
+
+		} catch(DataNotExistsException e ) {
+			expectedResult = true;
+		}
+
+
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+
+
 
 }

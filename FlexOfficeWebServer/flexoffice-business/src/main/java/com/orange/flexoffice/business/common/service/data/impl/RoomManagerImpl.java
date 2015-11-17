@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 
 
@@ -133,7 +135,7 @@ public class RoomManagerImpl implements RoomManager {
 		try {
 			// Update RoomDao
 			return roomRepository.updateRoom(roomDao);
-		} catch (IncorrectResultSizeDataAccessException e) {
+		} catch (RuntimeException e) {
 			LOGGER.error("RoomManager.update : Room to update not found");
 			throw new DataNotExistsException("RoomManager.update : Room to update not found");
 		}
@@ -146,7 +148,7 @@ public class RoomManagerImpl implements RoomManager {
 		try {
 			// Update RoomDao
 			return roomRepository.updateRoomStatus(roomDao);
-		} catch (IncorrectResultSizeDataAccessException e) {
+		} catch (RuntimeException e) {
 			LOGGER.error("RoomManager.updateStatus : Room to update Status not found");
 			throw new DataNotExistsException("RoomManager.updateStatus : Room to update Status not found");
 		}

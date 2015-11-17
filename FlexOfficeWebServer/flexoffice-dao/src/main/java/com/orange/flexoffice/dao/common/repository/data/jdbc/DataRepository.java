@@ -17,9 +17,12 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOM_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_GATEWAY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOM_STATUS_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_SENSOR_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_SENSOR_STATUS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_USER_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_GATEWAY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_ROOM_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_SENSOR_TEMPLATE;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,11 +51,14 @@ public abstract class DataRepository<T extends Data>
 	protected final String saveUserQuery;
 	protected final String saveGatewayQuery;
 	protected final String saveRoomQuery;
+	protected final String saveSensorQuery;
 	protected final String updateUserQuery;
 	protected final String updateGatewayStatusQuery;
 	protected final String updateGatewayQuery;
 	protected final String updateRoomQuery;
 	protected final String updateRoomStatusQuery;
+	protected final String updateSensorQuery;
+	protected final String updateSensorStatusQuery;
 	protected final String deleteByMacAddressQuery;
 	private final String deleteQuery;
 	private final String countQuery;
@@ -78,10 +84,13 @@ public abstract class DataRepository<T extends Data>
 		saveUserQuery = String.format(CREATE_USER_TEMPLATE, getTableName());
 		saveGatewayQuery = String.format(CREATE_GATEWAY_TEMPLATE, getTableName());
 		saveRoomQuery = String.format(CREATE_ROOM_TEMPLATE, getTableName());
+		saveSensorQuery = String.format(CREATE_SENSOR_TEMPLATE, getTableName());
 		updateUserQuery = String.format(UPDATE_USER_TEMPLATE, getTableName(), getColumnColName());
 		updateGatewayStatusQuery = String.format(UPDATE_GATEWAY_STATUS_TEMPLATE, getTableName());
 		updateRoomQuery = String.format(UPDATE_ROOM_TEMPLATE, getTableName(), getColumnColName());
 		updateRoomStatusQuery = String.format(UPDATE_ROOM_STATUS_TEMPLATE, getTableName(), getColumnColName());
+		updateSensorQuery = String.format(UPDATE_SENSOR_TEMPLATE, getTableName(), getColumnColName());
+		updateSensorStatusQuery = String.format(UPDATE_SENSOR_STATUS_TEMPLATE, getTableName(), getColumnColName());
 		updateGatewayQuery = String.format(UPDATE_GATEWAY_TEMPLATE, getTableName());
 		deleteQuery = String.format(REMOVE_TEMPLATE, getTableName());
 		deleteByMacAddressQuery = String.format(REMOVE_BY_MAC_ADDRESS_TEMPLATE, getTableName());
