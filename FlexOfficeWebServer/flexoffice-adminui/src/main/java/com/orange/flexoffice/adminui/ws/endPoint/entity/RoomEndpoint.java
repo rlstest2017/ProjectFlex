@@ -38,11 +38,11 @@ import com.orange.flexoffice.dao.common.model.data.UserDao;
 public interface RoomEndpoint {
 	
 	/**
-	 * Gets users.
+	 * Gets rooms.
 	 * 
-	 * @return user.
+	 * @return room summary list.
 	 * 
-	 * @see User
+	 * @see room
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -93,7 +93,7 @@ public interface RoomEndpoint {
 	 * @see Response
 	 */
 	@PUT
-	@Path(GATEWAY_MAC_ADDRESS_PATH)
+	@Path(ROOM_ID_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	Response updateRoom(@PathParam(ROOM_ID_PARAM)String id, RoomInput1 room);
@@ -109,7 +109,7 @@ public interface RoomEndpoint {
 	 * @see Response
 	 */
 	@DELETE
-	@Path(GATEWAY_MAC_ADDRESS_PATH)
+	@Path(ROOM_ID_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	Response removeRoom(@PathParam(ROOM_ID_PARAM)String id);

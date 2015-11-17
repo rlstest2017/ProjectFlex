@@ -120,8 +120,8 @@ public class UserManagerImpl implements UserManager {
 			// Delete Room
 			userRepository.delete(id);	
 		} catch (IncorrectResultSizeDataAccessException e) {
-			LOGGER.error("UserManager.delete : User to delete not found");
-			throw new DataNotExistsException("UserManager.delete : User to delete not found");
+			LOGGER.error("UserManager.delete : User #" + id + " not found");
+			throw new DataNotExistsException("UserManager.delete : User #" + id + " not found");
 		}
 	}
 

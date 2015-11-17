@@ -16,10 +16,14 @@ public final class DataSqlTemplate {
 			"select * from %s where email=:email";
 	public static final String FIND_BY_COL_ROOM_ID_TEMPLATE = 
 			"select * from %s where room_id=:roomId";
+	public static final String FIND_BY_IDENTIFIER_TEMPLATE = 
+			"select * from %s where identifier=:identifier";
 	public static final String FIND_ALL_TEMPLATE = 
 			"select * from %s";
 	public static final String REMOVE_BY_MAC_ADDRESS_TEMPLATE = 
 			"delete from %s where mac_address=:macAddress";
+	public static final String REMOVE_BY_IDENTIFIER_TEMPLATE = 
+			"delete from %s where identifier=:identifier";
 	public static final String REMOVE_TEMPLATE = 
 			"delete from %s where id=:id";
 	public static final String COUNT_TEMPLATE =

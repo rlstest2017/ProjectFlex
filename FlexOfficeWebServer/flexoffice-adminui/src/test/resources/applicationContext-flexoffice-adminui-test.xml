@@ -19,6 +19,9 @@
 	<bean id="roomEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.RoomEndpointImpl">
 	</bean>
 	
+	<bean id="sensorEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.SensorEndpointImpl">
+	</bean>
+	
 	<bean id="errorMessageHandler" class="com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler">
 	</bean>
 		

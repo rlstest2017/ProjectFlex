@@ -163,8 +163,8 @@ public class RoomManagerImpl implements RoomManager {
 			// Delete Room
 			roomRepository.delete(id);	
 		} catch (IncorrectResultSizeDataAccessException e) {
-			LOGGER.error("RoomManager.delete : Room to delete not found");
-			throw new DataNotExistsException("RoomManager.delete : Room to delete not found");
+			LOGGER.error("RoomManager.delete : Room #" + id + " not found");
+			throw new DataNotExistsException("RoomManager.delete : Room #" + id + " not found");
 		}
 	}
 

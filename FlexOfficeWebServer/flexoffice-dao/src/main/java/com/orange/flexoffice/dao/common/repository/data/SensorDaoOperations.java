@@ -18,13 +18,17 @@ public interface SensorDaoOperations {
 	
 	List<SensorDao> findAllSensors();
 	
-	SensorDao findBySensorId(Long sensorId) throws IncorrectResultSizeDataAccessException;
+	SensorDao findBySensorId(String sensorIdentifier) throws IncorrectResultSizeDataAccessException;
 	
 	List<SensorDao> findByRoomId(Long roomId);
 	
+	SensorDao findByName(String name) throws IncorrectResultSizeDataAccessException;
+
 	SensorDao saveSensor(SensorDao data) throws DataIntegrityViolationException;
 	
 	SensorDao updateSensor(SensorDao data) throws DataAccessException; 
 
-	SensorDao updateSensorStatus(SensorDao data) throws DataAccessException; 	
+	SensorDao updateSensorStatus(SensorDao data) throws DataAccessException;
+	
+	void deleteByIdentifier(Long sensorIndetifier) throws DataAccessException;
 }

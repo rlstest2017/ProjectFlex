@@ -13,6 +13,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.repository.data.SensorDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.SensorDaoMetadata;
@@ -38,10 +39,10 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 	}
 
 	@Override
-	public SensorDao findBySensorId(Long sonsorId) throws IncorrectResultSizeDataAccessException {
-		SqlParameterSource paramMap = new MapSqlParameterSource("identifier", sonsorId);
+	public SensorDao findBySensorId(String sensorIdentifier) throws IncorrectResultSizeDataAccessException {
+		SqlParameterSource paramMap = new MapSqlParameterSource("identifier", sensorIdentifier);
 		return jdbcTemplate.queryForObject(
-				findByColumnIdQuery, 
+				findByIdentifierQuery, 
 				paramMap, 
 				new BeanPropertyRowMapper<SensorDao>(SensorDao.class)
 			);
@@ -56,6 +57,17 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 				new BeanPropertyRowMapper<SensorDao>(SensorDao.class)
 			);
 	}
+
+	@Override
+	public SensorDao findByName(String name) throws IncorrectResultSizeDataAccessException {
+		SqlParameterSource paramMap = new MapSqlParameterSource("name", name);
+		return jdbcTemplate.queryForObject(
+				findByColumnNameQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<SensorDao>(SensorDao.class)
+			);
+	}
+
 
 	@Override
 	public SensorDao saveSensor(SensorDao data) throws DataIntegrityViolationException {
@@ -99,6 +111,11 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 		return data;
 	}
 
+	@Override
+	public void deleteByIdentifier(Long sensorIndetifier) throws DataAccessException {
+		SqlParameterSource paramMap = new MapSqlParameterSource("identifier", sensorIndetifier);
+		jdbcTemplate.update(deleteByMacAddressQuery, paramMap);	
+	}
 
 	@Override
 	protected String getTableName() {

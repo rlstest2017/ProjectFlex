@@ -13,6 +13,7 @@ public final class PathConst {
 	// Resources ID
 	public static final String USER_ID_PATH = "/{" + ParamsConst.USER_ID_PARAM + "}";
 	public static final String SENSOR_IDENTIFIER_PATH = "/{" + ParamsConst.SENSOR_IDENTIFIER_PARAM + "}";
+	public static final String SENSOR_UNPAIRED_PATH = "/unpaired";
 	public static final String GATEWAY_MAC_ADDRESS_PATH = "/{" + ParamsConst.GATEWAY_MAC_ADDRESS_PARAM + "}";
 	public static final String ROOM_ID_PATH = "/{" + ParamsConst.ROOM_ID_PARAM + "}";
 	
