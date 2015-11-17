@@ -3,7 +3,9 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -37,8 +39,8 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 	}
 
 	@Override
-	public RoomDao findByRoomId(Long roomId) {
-		SqlParameterSource paramMap = new MapSqlParameterSource("columnId", roomId);
+	public RoomDao findByRoomId(Long roomId) throws IncorrectResultSizeDataAccessException{
+		SqlParameterSource paramMap = new MapSqlParameterSource("Id", roomId);
 		return jdbcTemplate.queryForObject(
 				findByColumnIdQuery, 
 				paramMap, 
@@ -47,7 +49,7 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 	}
 
 	@Override
-	public List<RoomDao> findByGatewayId(Long gatewayId) {
+	public List<RoomDao> findByGatewayId(Long gatewayId) throws IncorrectResultSizeDataAccessException{
 		SqlParameterSource paramMap = new MapSqlParameterSource("gatewayId", gatewayId);
 		return jdbcTemplate.query(
 				findByColumnGatewayIdQuery, 
@@ -57,7 +59,7 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 	}
 
 	@Override
-	public RoomDao findByName(String name) {
+	public RoomDao findByName(String name) throws IncorrectResultSizeDataAccessException{
 		SqlParameterSource paramMap = new MapSqlParameterSource("name", name);
 		return jdbcTemplate.queryForObject(
 				findByColumnNameQuery, 
@@ -81,7 +83,7 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 	}
 	
 	@Override
-	public RoomDao updateRoom(RoomDao data) {
+	public RoomDao updateRoom(RoomDao data) throws DataAccessException{
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
@@ -95,7 +97,7 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 	}
 
 	@Override
-	public RoomDao updateRoomStatus(RoomDao data) {
+	public RoomDao updateRoomStatus(RoomDao data) throws DataAccessException{
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 			
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);

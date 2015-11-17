@@ -28,10 +28,12 @@ public final class DataSqlTemplate {
 			"insert into %s (first_name, last_name, email) values (:firstName, :lastName, :email)";
 	public static final String CREATE_GATEWAY_TEMPLATE = 
 			"insert into %s (mac_address, name, description) values (:macAddress, :name, :description)";
-	public static final String UPDATE_GATEWAY_TEMPLATE = 
-			"update %s set name=:name, description=:description WHERE mac_address=:macAddress";
 	public static final String CREATE_ROOM_TEMPLATE = 
 			"insert into %s (name, gateway_id, address, capacity, description, type, status) values (:name, :gatewayId, :address, :capacity, :description, CAST(:type AS roomtype), CAST(:status AS roomstatus))";
+	public static final String CREATE_SENSOR_TEMPLATE = 
+			"insert into %s (identifier, name, type, profile, description, status, room_id) values (:identifier, :name, CAST(:type AS sensortype), :profile, :description, CAST(:status AS sensorstatus), :roomId)";
+	public static final String UPDATE_GATEWAY_TEMPLATE = 
+			"update %s set name=:name, description=:description WHERE mac_address=:macAddress";
 	public static final String UPDATE_USER_TEMPLATE =
 			"update %s set first_name=:firstName, last_name=:lastName, email=:email WHERE id=:id";
 	public static final String UPDATE_GATEWAY_STATUS_TEMPLATE =
@@ -40,8 +42,12 @@ public final class DataSqlTemplate {
 			"update %s set name=:name, gateway_id=:gatewayId, address=:address, capacity=:capacity, description=:description, type=CAST(:type AS roomtype) WHERE id=:id";
 	public static final String UPDATE_ROOM_STATUS_TEMPLATE =
 			"update %s set status=CAST(:status AS roomstatus), user_id=:userId where id=:id";
+	public static final String UPDATE_SENSOR_TEMPLATE =
+			"update %s set name=:name, type=CAST(:type AS sensortype), profile=:profile, description=:description, room_id:=roomId WHERE identifier=:identifier";
+	public static final String UPDATE_SENSOR_STATUS_TEMPLATE =
+			"update %s set status=CAST(:status AS sensorstatus) WHERE identifier=:identifier";
 	public static final String FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE = 
 			"select %s from %s where %s in (:rowIds)";
-	
+
 	private DataSqlTemplate() {}
 }

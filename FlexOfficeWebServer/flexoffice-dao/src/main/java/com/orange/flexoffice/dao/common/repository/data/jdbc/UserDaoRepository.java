@@ -3,7 +3,9 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc;
 import java.util.List;
 
 
+
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 //import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -38,7 +40,7 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 	}
 	
 	@Override
-	public UserDao findByUserId(Long userId) {
+	public UserDao findByUserId(Long userId) throws IncorrectResultSizeDataAccessException {
 		SqlParameterSource paramMap = new MapSqlParameterSource("columnId", userId);
 		return jdbcTemplate.queryForObject(
 				findByColumnIdQuery, 
@@ -49,7 +51,7 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 
 	
 	@Override
-	public UserDao findByUserEmail(String userEmail) {
+	public UserDao findByUserEmail(String userEmail) throws IncorrectResultSizeDataAccessException {
 		SqlParameterSource paramMap = new MapSqlParameterSource("email", userEmail);
 		return jdbcTemplate.queryForObject(
 				findByColumnMailQuery, 
@@ -59,7 +61,7 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 	}
 	
 	@Override
-	public UserDao updateUser(UserDao data) {
+	public UserDao updateUser(UserDao data) throws IncorrectResultSizeDataAccessException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,7 +82,7 @@ public class UserManagerImpl implements UserManager {
 			// Saves UserDao
 			return userRepository.saveUser(userDao);
 
-		} catch(IncorrectResultSizeDataAccessException e ) {
+		} catch(DataIntegrityViolationException e ) {
 			LOGGER.error("UserManager.save : User already exists");
 			throw new DataAlreadyExistsException("UserManager.save : User already exists");
 		}
@@ -99,7 +100,7 @@ public class UserManagerImpl implements UserManager {
 			// Update RoomDao
 			return userRepository.updateUser(userDao);
 			
-		} catch (IncorrectResultSizeDataAccessException e) {
+		} catch (RuntimeException e) {
 			LOGGER.error("UserManager.update : User to update not found");
 			throw new DataNotExistsException("UserManager.update : User to update not found");
 		}

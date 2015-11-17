@@ -2,10 +2,15 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
@@ -16,7 +21,7 @@ import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 @Repository
 public class SensorDaoRepository extends DataRepository<SensorDao> implements SensorDaoOperations {
 
-	private final Logger LOGGER = Logger.getLogger(SensorDaoRepository.class);
+	//private final Logger LOGGER = Logger.getLogger(SensorDaoRepository.class);
 	
 	public SensorDaoRepository() {
 		super(SensorDao.class);
@@ -33,9 +38,9 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 	}
 
 	@Override
-	public List<SensorDao> findBySensorId(Long sonsorId) {
-		SqlParameterSource paramMap = new MapSqlParameterSource("columnId", sonsorId);
-		return jdbcTemplate.query(
+	public SensorDao findBySensorId(Long sonsorId) throws IncorrectResultSizeDataAccessException {
+		SqlParameterSource paramMap = new MapSqlParameterSource("identifier", sonsorId);
+		return jdbcTemplate.queryForObject(
 				findByColumnIdQuery, 
 				paramMap, 
 				new BeanPropertyRowMapper<SensorDao>(SensorDao.class)
@@ -51,6 +56,49 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 				new BeanPropertyRowMapper<SensorDao>(SensorDao.class)
 			);
 	}
+
+	@Override
+	public SensorDao saveSensor(SensorDao data) throws DataIntegrityViolationException {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(saveSensorQuery, paramBean, keyHolder);
+		
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
+		
+		return data;
+	}
+	
+	@Override
+	public SensorDao updateSensor(SensorDao data) throws DataAccessException {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateSensorQuery, paramBean, keyHolder);
+		
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());	
+		
+		return data;
+	}
+
+	@Override
+	public SensorDao updateSensorStatus(SensorDao data) throws DataAccessException {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+			
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateSensorStatusQuery, paramBean, keyHolder);
+				
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());	
+		
+		return data;
+	}
+
 
 	@Override
 	protected String getTableName() {

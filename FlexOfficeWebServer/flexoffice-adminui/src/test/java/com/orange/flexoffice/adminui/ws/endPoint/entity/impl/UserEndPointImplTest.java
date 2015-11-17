@@ -262,5 +262,25 @@ public class UserEndPointImplTest {
 		// Assert
 		assertEquals(true, expectedResult);	
 	}
+	
+
+	@Test
+	public void TestK_getWrongUser() {
+		// Setup
+		boolean expectedResult = false;
+		
+		try {
+			userEndpoint.findByUserMail("wrongEmailTest");
+
+		} catch(DataNotExistsException e ) {
+			expectedResult = true;
+		}
+
+
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+
+
 
 }
