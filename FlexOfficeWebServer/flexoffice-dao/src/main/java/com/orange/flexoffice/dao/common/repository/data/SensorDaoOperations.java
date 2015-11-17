@@ -30,5 +30,5 @@ public interface SensorDaoOperations {
 
 	SensorDao updateSensorStatus(SensorDao data) throws DataAccessException;
 	
-	void deleteByIdentifier(Long sensorIndetifier) throws DataAccessException;
+	void deleteByIdentifier(String sensorIdentifier) throws DataAccessException;
 }

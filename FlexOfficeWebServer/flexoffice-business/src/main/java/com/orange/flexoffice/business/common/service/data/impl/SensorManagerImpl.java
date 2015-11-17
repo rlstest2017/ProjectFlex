@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 
+
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.SensorManager;
@@ -63,7 +64,7 @@ public class SensorManagerImpl implements SensorManager {
 
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.error("SensorManager.find : Sensor by identifier #" + sensorIdentifier + " is not found");
-			throw new DataNotExistsException("SensorManager.find : Sensor by identifier #" + sensorIdentifier + " is not found");
+			throw new DataNotExistsException("SensorManager.find : Sensor by identifier #" + sensorIdentifier + " is not found" + e.getMessage());
 		}
 
 	}
@@ -72,12 +73,17 @@ public class SensorManagerImpl implements SensorManager {
 	public SensorDao save(SensorDao sensorDao) throws DataAlreadyExistsException {
 
 		try {
+			if (sensorDao.getRoomId() == null) {
+				// Set 0 as room id
+				sensorDao.setRoomId(0);				
+			} 
+			
 			// Save SensorDao
 			return sensorRepository.saveSensor(sensorDao);
 			
 		} catch (DataIntegrityViolationException e) {
 			LOGGER.error("SensorManager.save : Sensor already exists");
-			throw new DataAlreadyExistsException("SensorManager.save : Sensor already exists");
+			throw new DataAlreadyExistsException("SensorManager.save : Sensor already exists" + e.getMessage());
 		}
 	}
 
@@ -85,12 +91,17 @@ public class SensorManagerImpl implements SensorManager {
 	public SensorDao update(SensorDao sensorDao) throws DataNotExistsException {
 
 		try {
+			if (sensorDao.getRoomId() == null) {
+				// Set 0 as room id
+				sensorDao.setRoomId(0);				
+			} 
+			
 			// Update SensorDao
 			return sensorRepository.updateSensor(sensorDao);
 			
 		} catch (RuntimeException e) {
 			LOGGER.error("SensorManager.update : Sensor to update not found");
-			throw new DataNotExistsException("SensorManager.update : Sensor to update not found");
+			throw new DataNotExistsException("SensorManager.update : Sensor to update not found" + e.getMessage());
 		}
 	}
 
@@ -104,22 +115,22 @@ public class SensorManagerImpl implements SensorManager {
 			
 		} catch (RuntimeException e) {
 			LOGGER.error("SensorManager.updateStatus : Sensor to update Status not found");
-			throw new DataNotExistsException("SensorManager.updateStatus : Sensor to update Status not found");
+			throw new DataNotExistsException("SensorManager.updateStatus : Sensor to update Status not found" + e.getMessage());
 		}
 	}
 
 	@Override
-	public void delete(long sensorIdentifier) throws DataNotExistsException {
+	public void delete(String sensorIdentifier) throws DataNotExistsException {
 
 		try {
 			// To generate exception if wrong id
-			sensorRepository.findOne(sensorIdentifier);
+			sensorRepository.findBySensorId(sensorIdentifier);
 			// Delete Sensor
 			sensorRepository.deleteByIdentifier(sensorIdentifier);
 			
 		} catch (IncorrectResultSizeDataAccessException e) {
 			LOGGER.error("SensorManager.delete : Sensor #" + sensorIdentifier + " not found");
-			throw new DataNotExistsException("SensorManager.delete : Sensor #" + sensorIdentifier + " not found");
+			throw new DataNotExistsException("SensorManager.delete : Sensor #" + sensorIdentifier + " not found" + e.getMessage());
 		}
 	}
 
@@ -136,7 +147,7 @@ public class SensorManagerImpl implements SensorManager {
 			return sensorRepository.findByName(name);
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("SensorManager.findByName : Sensor by name #" + name + " is not found");
-			throw new DataNotExistsException("SensorManager.findByName : Sensor by name #" + name + " is not found");
+			throw new DataNotExistsException("SensorManager.findByName : Sensor by name #" + name + " is not found" + e.getMessage());
 		}
 	}
 }

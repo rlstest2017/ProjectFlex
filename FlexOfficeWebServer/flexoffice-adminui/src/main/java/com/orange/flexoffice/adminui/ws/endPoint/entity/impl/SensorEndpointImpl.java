@@ -40,7 +40,7 @@ import com.orange.flexoffice.dao.common.model.object.RoomDto;
 
 public class SensorEndpointImpl implements SensorEndpoint {
 
-	private final Logger LOGGER = Logger.getLogger(SensorEndpointImpl.class);
+	private static final Logger LOGGER = Logger.getLogger(SensorEndpointImpl.class);
 	private final ObjectFactory factory = new ObjectFactory();
 
 	@Context
@@ -61,7 +61,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 	@Override
 	public List<SensorSummary> getSensors() {
 
-		LOGGER.info( "Begin call getSensors method for SensorEndpoint at: " + new Date() );
+		LOGGER.info( "Begin call SensorEndpoint.getSensors at: " + new Date() );
 
 		List<SensorDao> dataList = sensorManager.findAllSensors();
 
@@ -84,9 +84,9 @@ public class SensorEndpointImpl implements SensorEndpoint {
 			sensorList.add(sensor);
 		}
 
-		LOGGER.debug("List of sensors : " + sensorList.size());
+		LOGGER.debug("List of sensors : nb = " + sensorList.size());
 
-		LOGGER.info( "End call getSensors method for SensorEndpoint at: " + new Date() );
+		LOGGER.info( "End call SensorEndpoint.getSensors at: " + new Date() );
 
 		return sensorList;
 	}
@@ -94,7 +94,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 	@Override
 	public List<SensorSummary> getUnpairedSensors() {
 
-		LOGGER.info( "Begin call getUnpairedSensors method for SensorEndpoint at: " + new Date() );
+		LOGGER.info( "Begin call SensorEndpoint.getUnpairedSensors at: " + new Date() );
 
 		List<SensorDao> dataList = sensorManager.findAllSensors();
 
@@ -119,9 +119,9 @@ public class SensorEndpointImpl implements SensorEndpoint {
 			}
 		}
 
-		LOGGER.debug("List of unpaired sensors : " + sensorList.size());
+		LOGGER.debug("List of unpaired sensors : nb = " + sensorList.size());
 
-		LOGGER.info( "End call getUnpairedSensors method for SensorEndpoint at: " + new Date() );
+		LOGGER.info( "End call SensorEndpoint.getUnpairedSensors  at: " + new Date() );
 
 		return sensorList;
 	}
@@ -132,7 +132,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 	@Override
 	public Sensor getSensor(String sensorIdentifier) {
 
-		LOGGER.info( "Begin call getSensor method for SensorEndpoint at: " + new Date() );
+		LOGGER.info( "Begin call SensorEndpoint.getSensor at: " + new Date() );
 
 		try {
 			SensorDao sensorDao = sensorManager.find(sensorIdentifier);
@@ -145,16 +145,18 @@ public class SensorEndpointImpl implements SensorEndpoint {
 			sensor.setDesc(sensorDao.getDescription());
 			sensor.setStatus(EDeviceStatus.valueOf(sensorDao.getStatus().toString()));
 
-			LOGGER.info( "End call getSensor method for SensorEndpoint at: " + new Date() );
+			LOGGER.info( "End call SensorEndpoint.getSensor at: " + new Date() );
 
 			return sensor;
 
 		} catch (DataNotExistsException e){
 
+			LOGGER.debug("DataNotExistsException in SensorEndpoint.getSensor with message :" + e.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_14, Response.Status.NOT_FOUND));
 
 		} catch (RuntimeException ex){
 
+			LOGGER.debug("RuntimeException in SensorEndpoint.getSensor with message :" + ex.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 
 		}
@@ -169,7 +171,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 	@Override
 	public SensorOutput addSensor(SensorInput1 sensorInput) {
 
-		LOGGER.info( "Begin call addSensor method for SensorEndpoint at: " + new Date() );
+		LOGGER.info( "Begin call SensorEndpoint.addSensor at: " + new Date() );
 
 		SensorDao sensorDao = new SensorDao();
 		sensorDao.setIdentifier(sensorInput.getIdentifier());
@@ -177,17 +179,17 @@ public class SensorEndpointImpl implements SensorEndpoint {
 		sensorDao.setType(sensorInput.getType().toString());
 		sensorDao.setDescription(sensorInput.getDesc());
 		sensorDao.setStatus(E_SensorStatus.OFFLINE.toString());
-		sensorDao.setRoomId(Integer.valueOf(sensorInput.getRoom().getId()));
-	
+		sensorDao.setProfile(sensorInput.getProfile());
+		
+		if (sensorInput.getRoom() !=null) {
+			sensorDao.setRoomId(Integer.valueOf(sensorInput.getRoom().getId()));
+		}
 		
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug( "Begin call addSensor(UserInput userInput) method of SensorEndpoint, with parameters :");
+			LOGGER.debug( "addSensor with parameters :");
 			final StringBuffer message = new StringBuffer( 1000 );
 			message.append( "name :" );
 			message.append( sensorInput.getName() );
-			message.append( "\n" );
-			message.append( "room id :" );
-			message.append( sensorInput.getRoom().getId() );
 			message.append( "\n" );
 			LOGGER.debug( message.toString() );
 		}
@@ -197,10 +199,12 @@ public class SensorEndpointImpl implements SensorEndpoint {
 
 		} catch (DataAlreadyExistsException e) {
 			
+			LOGGER.debug("DataNotExistsException in SensorEndpoint.addSensor with message :" + e.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_11, Response.Status.METHOD_NOT_ALLOWED));
 
 		} catch (RuntimeException ex) {
 
+			LOGGER.debug("RuntimeException in SensorEndpoint.addSensor with message :" + ex.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
@@ -209,7 +213,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 		returnedSensor.setIdentifier(sensorDao.getIdentifier());
 		returnedSensor.setName(sensorDao.getName());
 
-		LOGGER.info( "End call addSensor method for SensorEndpoint at: " + new Date() );
+		LOGGER.info( "End call SensorEndpoint.addSensor at: " + new Date() );
 
 		return factory.createSensorOutput(returnedSensor).getValue();
 	}
@@ -221,28 +225,34 @@ public class SensorEndpointImpl implements SensorEndpoint {
 	@Override
 	public Response updateSensor(@PathParam(SENSOR_IDENTIFIER_PARAM)String id, SensorInput2 sensorInput) {
 		
-		LOGGER.info( "Begin call updateSensor method for SensorEndpoint at: " + new Date() );
+		LOGGER.info( "Begin call SensorEndpoint.updateSensor at: " + new Date() );
 
 		SensorDao sensorDao = new SensorDao();
 		sensorDao.setIdentifier(id);
 		sensorDao.setName(sensorInput.getName());
 		sensorDao.setType(sensorInput.getType().toString());
 		sensorDao.setDescription(sensorInput.getDesc());
-		sensorDao.setRoomId(Integer.valueOf(sensorInput.getRoom().getId()));
+		sensorDao.setProfile(sensorInput.getProfile());
 
+		if (sensorInput.getRoom() !=null) {
+			sensorDao.setRoomId(Integer.valueOf(sensorInput.getRoom().getId()));
+		}
+		
 		try {
 			sensorDao = sensorManager.update(sensorDao);
 
 		} catch (DataNotExistsException e){
 			
+			LOGGER.debug("DataNotExistsException in SensorEndpoint.updateSensor with message :" + e.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_12, Response.Status.NOT_FOUND));
 			
 		} catch (RuntimeException ex){
 
+			LOGGER.debug("RuntimeException in SensorEndpoint.updateSensor with message :" + ex.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
-		LOGGER.info( "End call updateSensor method for SensorEndpoint at: " + new Date() );
+		LOGGER.info( "End call SensorEndpoint.updateSensor at: " + new Date() );
 
 		return Response.status(Status.ACCEPTED).build();
 	}
@@ -254,22 +264,24 @@ public class SensorEndpointImpl implements SensorEndpoint {
 	@Override
 	public Response removeSensor(@PathParam(SENSOR_IDENTIFIER_PARAM)String id) {
 		
-		LOGGER.info( "Begin call removeSensor method for SensorEndpoint at: " + new Date() );
+		LOGGER.info( "Begin call SensorEndpoint.removeSensor at: " + new Date() );
 
 		try {
 
-			sensorManager.delete(Long.valueOf(id));
+			sensorManager.delete(id);
 
 		} catch (DataNotExistsException e){
 			
+			LOGGER.debug("DataNotExistsException in SensorEndpoint.removeSensor with message :" + e.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_13, Response.Status.NOT_FOUND));
 			
 		} catch (RuntimeException ex){
 
+			LOGGER.debug("RuntimeException in SensorEndpoint.removeSensor with message :" + ex.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
-		LOGGER.info( "End call removeSensor method for SensorEndpoint at: " + new Date() );
+		LOGGER.info( "End call SensorEndpoint.removeSensor at: " + new Date() );
 
 		return Response.noContent().build();
 	}

@@ -83,6 +83,7 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 		return data;
 	}
 	
+	
 	@Override
 	public SensorDao updateSensor(SensorDao data) throws DataAccessException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -112,9 +113,9 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 	}
 
 	@Override
-	public void deleteByIdentifier(Long sensorIndetifier) throws DataAccessException {
-		SqlParameterSource paramMap = new MapSqlParameterSource("identifier", sensorIndetifier);
-		jdbcTemplate.update(deleteByMacAddressQuery, paramMap);	
+	public void deleteByIdentifier(String sensorIdentifier) throws DataAccessException {
+		SqlParameterSource paramMap = new MapSqlParameterSource("identifier", sensorIdentifier);
+		jdbcTemplate.update(deleteByIdentifier, paramMap);	
 	}
 
 	@Override

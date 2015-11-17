@@ -62,7 +62,7 @@ public interface SensorManager {
 	 * @param sensorIdentifier 
 	 * 		  a sensor ID
 	 */
-	void delete(long sensorIdentifier) throws DataNotExistsException;
+	void delete(String sensorIdentifier) throws DataNotExistsException;
 
 	
 	/**
