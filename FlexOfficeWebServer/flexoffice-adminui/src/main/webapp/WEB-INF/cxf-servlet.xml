@@ -11,9 +11,9 @@
 	
 	<jaxrs:server id="server" address="/">
 		<jaxrs:serviceBeans>
-<!--   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.RoomEndpointImpl"/> -->
+  			<bean class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.RoomEndpointImpl"/>
   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.UserEndpointImpl"/>
-<!--   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.SensorEndpointImpl"/> -->
+  			<bean class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.SensorEndpointImpl"/>
   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.GatewayEndpointImpl"/>
 <!--   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.StatEndpointImpl"/> -->
 <!--   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.SystemEndpointImpl"/> -->
