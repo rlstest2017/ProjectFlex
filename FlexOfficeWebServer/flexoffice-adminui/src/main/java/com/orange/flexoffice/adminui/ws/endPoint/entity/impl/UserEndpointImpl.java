@@ -5,10 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +30,9 @@ import com.orange.flexoffice.business.common.service.data.UserManager;
  */
 public class UserEndpointImpl implements UserEndpoint {
 
-	private final Logger LOGGER = Logger.getLogger(UserEndpointImpl.class);
+	private static final Logger LOGGER = Logger.getLogger(UserEndpointImpl.class);
 	private final ObjectFactory factory = new ObjectFactory();
 
-	@Context
-	private UriInfo uriInfo;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
@@ -94,11 +90,10 @@ public class UserEndpointImpl implements UserEndpoint {
 			return factory.createUser(user).getValue();
 
 		} catch (DataNotExistsException e){
-
+			LOGGER.debug("DataNotExistsException in getUser() UserEndpointImpl with message :" + e.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_8, Response.Status.NOT_FOUND));
-
 		} catch (RuntimeException ex){
-
+			LOGGER.debug("RuntimeException in getUser() UserEndpointImpl with message :" + ex.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 
 		}
@@ -133,11 +128,10 @@ public class UserEndpointImpl implements UserEndpoint {
 			user = userManager.save(user);
 
 		} catch (DataAlreadyExistsException e) {
-			
+			LOGGER.debug("DataNotExistsException in addUser() UserEndpointImpl with message :" + e.getMessage());			
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_9, Response.Status.METHOD_NOT_ALLOWED));
-
 		} catch (RuntimeException ex) {
-
+			LOGGER.debug("RuntimeException in addUser() UserEndpointImpl with message :" + ex.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
@@ -165,11 +159,10 @@ public class UserEndpointImpl implements UserEndpoint {
 			user = userManager.update(user);
 
 		} catch (DataNotExistsException e){
-			
+			LOGGER.debug("DataNotExistsException in updateUser() UserEndpointImpl with message :" + e.getMessage());			
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_6, Response.Status.NOT_FOUND));
-			
 		} catch (RuntimeException ex){
-
+			LOGGER.debug("RuntimeException in updateUser() UserEndpointImpl with message :" + ex.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
@@ -188,11 +181,10 @@ public class UserEndpointImpl implements UserEndpoint {
 			userManager.delete(Long.valueOf(id));
 
 		} catch (DataNotExistsException e){
-			
+			LOGGER.debug("DataNotExistsException in removeUser() UserEndpointImpl with message :" + e.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_7, Response.Status.NOT_FOUND));
-			
 		} catch (RuntimeException ex){
-
+			LOGGER.debug("RuntimeException in removeUser() UserEndpointImpl with message :" + ex.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 

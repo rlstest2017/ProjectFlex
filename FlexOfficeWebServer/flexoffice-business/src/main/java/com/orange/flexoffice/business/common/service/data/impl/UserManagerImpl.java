@@ -24,7 +24,7 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.UserDaoRepository;
 @Transactional
 public class UserManagerImpl implements UserManager {
 	
-	private final Logger LOGGER = Logger.getLogger(UserManagerImpl.class);
+	private static final Logger LOGGER = Logger.getLogger(UserManagerImpl.class);
 	
 	@Autowired
 	private UserDaoRepository userRepository;
@@ -48,6 +48,7 @@ public class UserManagerImpl implements UserManager {
 
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.error("UserManager.find : User by id #" + userDaoId + " is not found");
+			LOGGER.debug("DataAccessException in find() UserManagerImpl with message :" + e.getMessage());
 			throw new DataNotExistsException("UserManager.find : User by id #" + userDaoId + " is not found");
 		}
 
@@ -65,6 +66,7 @@ public class UserManagerImpl implements UserManager {
 
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.error("UserManager.findByUserMail : User by email #" + userEmail + " is not found");
+			LOGGER.debug("DataAccessException in findByUserMail() UserManagerImpl with message :" + e.getMessage());
 			throw new DataNotExistsException("UserManager.findByUserMail : User by email #" + userEmail + " is not found");
 		}
 	}
@@ -84,6 +86,7 @@ public class UserManagerImpl implements UserManager {
 
 		} catch(DataIntegrityViolationException e ) {
 			LOGGER.error("UserManager.save : User already exists");
+			LOGGER.debug("DataIntegrityViolationException in save() UserManagerImpl with message :" + e.getMessage());
 			throw new DataAlreadyExistsException("UserManager.save : User already exists");
 		}
 	}
@@ -102,6 +105,7 @@ public class UserManagerImpl implements UserManager {
 			
 		} catch (RuntimeException e) {
 			LOGGER.error("UserManager.update : User to update not found");
+			LOGGER.debug("RuntimeException in update() UserManagerImpl with message :" + e.getMessage());
 			throw new DataNotExistsException("UserManager.update : User to update not found");
 		}
 	}
@@ -121,6 +125,7 @@ public class UserManagerImpl implements UserManager {
 			userRepository.delete(id);	
 		} catch (IncorrectResultSizeDataAccessException e) {
 			LOGGER.error("UserManager.delete : User #" + id + " not found");
+			LOGGER.debug("DataAccessException in delete() UserManagerImpl with message :" + e.getMessage());
 			throw new DataNotExistsException("UserManager.delete : User #" + id + " not found");
 		}
 	}
