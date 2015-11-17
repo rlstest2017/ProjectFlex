@@ -234,6 +234,11 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 		return testManager.executeInitTestFile();
 	}
 
+	@Override
+	public GatewayDto findByMacAddress(String macAddress) throws DataNotExistsException {
+		return gatewayManager.findByMacAddress(macAddress);
+	}
+
 		
 	
 }

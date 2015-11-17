@@ -24,6 +24,8 @@ import com.orange.flexoffice.adminui.ws.model.GatewayInput3;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput2;
 import com.orange.flexoffice.adminui.ws.model.GatewaySummary;
+import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 
 /**
  * Defines all operations available for a resource "gateway".
@@ -108,6 +110,9 @@ public interface GatewayEndpoint {
 	
 	// used for tests
 	boolean executeInitTestFile();
+	
+	// used for tests
+	GatewayDto findByMacAddress(String macAddress)  throws DataNotExistsException;
 	
 }
 

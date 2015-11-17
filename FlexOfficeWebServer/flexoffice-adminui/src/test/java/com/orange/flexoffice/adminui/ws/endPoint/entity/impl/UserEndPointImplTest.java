@@ -15,7 +15,9 @@ import javax.ws.rs.core.UriInfo;
 
 
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Log4jConfigurer;
 
@@ -29,6 +31,7 @@ import com.orange.flexoffice.adminui.ws.model.User;
 import com.orange.flexoffice.adminui.ws.model.UserInput;
 import com.orange.flexoffice.adminui.ws.model.UserSummary;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserEndPointImplTest {
 
 	static {
@@ -63,7 +66,7 @@ public class UserEndPointImplTest {
 
 
 	@Test
-	public void initTables() {
+	public void TestA_initTables() {
 		// SetUp
 		boolean state = gatewayEndpoint.executeInitTestFile();
 		 
@@ -72,7 +75,7 @@ public class UserEndPointImplTest {
 	}
 
 	@Test
-	public void cleanUserTable() throws WebApplicationException {
+	public void TestB_cleanUserTable() throws WebApplicationException {
 
 		// Test
 		List<UserSummary> response = userEndpoint.getUsers();
@@ -90,7 +93,7 @@ public class UserEndPointImplTest {
 	}
 
 	@Test
-	public void addUser() throws WebApplicationException {
+	public void TestC_addUser() throws WebApplicationException {
 		// Setup
 		final UserInput userHmi = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
 
@@ -102,7 +105,7 @@ public class UserEndPointImplTest {
 	}
 
 	@Test
-	public void getUser() throws WebApplicationException {
+	public void TestD_getUser() throws WebApplicationException {
 		// Setup
 		boolean expectedResult = false;
 		final UserInput expecteduser = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
@@ -130,7 +133,7 @@ public class UserEndPointImplTest {
 
 
 	@Test
-	public void getUsers() throws WebApplicationException {
+	public void TestE_getUsers() throws WebApplicationException {
 
 		// Test
 		final List<UserSummary> response = userEndpoint.getUsers();
@@ -141,7 +144,7 @@ public class UserEndPointImplTest {
 
 
 	@Test
-	public void addUserDataAlreadyExistsException() {
+	public void TestF_addUserDataAlreadyExistsException() {
 		// Setup
 		boolean expectedResult = false;
 		
@@ -168,7 +171,7 @@ public class UserEndPointImplTest {
 
 	
 	@Test
-	public void updateUser() throws WebApplicationException {
+	public void TestG_updateUser() throws WebApplicationException {
 		// Setup
 		boolean expectedResult = false;
 		final UserInput userHmi = factory.createHmiUser("firstNameTest2", "lastNameTest2", "emailTest2");
@@ -192,7 +195,7 @@ public class UserEndPointImplTest {
 	}
 
 	@Test
-	public void updateUserDataNotExistsException() {
+	public void TestH_updateUserDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
 
@@ -213,8 +216,9 @@ public class UserEndPointImplTest {
 		// Assert
 		assertEquals(true, expectedResult);	
 	}
+	
 	@Test
-	public void removeUserDataNotExistsException() {
+	public void TestI_removeUserDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
 
@@ -238,7 +242,7 @@ public class UserEndPointImplTest {
 
 
 	@Test
-	public void removeUser() throws WebApplicationException {
+	public void TestJ_removeUser() throws WebApplicationException {
 		// Setup
 		boolean expectedResult = false;
 

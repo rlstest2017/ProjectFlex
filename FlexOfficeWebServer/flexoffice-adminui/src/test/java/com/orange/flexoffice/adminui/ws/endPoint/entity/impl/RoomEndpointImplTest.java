@@ -13,7 +13,9 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Log4jConfigurer;
 
@@ -28,9 +30,7 @@ import com.orange.flexoffice.adminui.ws.model.RoomSummary;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 
-
-
-
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RoomEndpointImplTest {
 
 	static {
@@ -64,7 +64,7 @@ public class RoomEndpointImplTest {
 
 
 	@Test
-	public void initTables() {
+	public void TestA_initTables() {
 		// SetUp
 		boolean state = gatewayEndpoint.executeInitTestFile();
 
@@ -74,7 +74,7 @@ public class RoomEndpointImplTest {
 
 
 	@Test
-	public void getRooms() {
+	public void TestB_getRooms() {
 		// Test
 		List<RoomSummary> rooms = roomEndpoint.getRooms();
 
@@ -83,7 +83,7 @@ public class RoomEndpointImplTest {
 	}
 
 	@Test
-	public void getRoomByRoomId1() {
+	public void TestC_getRoomByRoomId1() {
 
 		// Test
 		Room room = roomEndpoint.getRoom("1");
@@ -93,7 +93,7 @@ public class RoomEndpointImplTest {
 	}
 
 	@Test
-	public void getRoomByRoomId2() {
+	public void TestD_getRoomByRoomId2() {
 
 		// Test
 		Room room = roomEndpoint.getRoom("2");
@@ -105,7 +105,7 @@ public class RoomEndpointImplTest {
 
 
 	@Test
-	public void getWrongRoomDataNotExistsException() {
+	public void TestE_getWrongRoomDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
 
@@ -123,7 +123,7 @@ public class RoomEndpointImplTest {
 	}
 
 	@Test
-	public void addRoom() throws WebApplicationException {
+	public void TestF_addRoom() throws WebApplicationException {
 		// Setup
 		final RoomInput1 roomInput = new RoomInput1();
 		roomInput.setName("RoomTest1");
@@ -150,7 +150,7 @@ public class RoomEndpointImplTest {
 	}
 
 	@Test
-	public void addRoomAlreadyExists() {
+	public void TestG_addRoomAlreadyExists() {
 		// Setup
 		boolean expectedResult = false;
 		final RoomInput1 roomInput = new RoomInput1();
@@ -175,7 +175,7 @@ public class RoomEndpointImplTest {
 	}
 
 	@Test
-	public void updateRoom() throws WebApplicationException {
+	public void TestH_updateRoom() throws WebApplicationException {
 
 		// Setup
 		boolean expectedResult = false;
@@ -218,7 +218,7 @@ public class RoomEndpointImplTest {
 
 
 	@Test
-	public void updateRoomDataNotExistsException() {
+	public void TestI_updateRoomDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
 		
@@ -255,7 +255,7 @@ public class RoomEndpointImplTest {
 	
 	
 	@Test
-	public void removeRoomDataNotExistsException() {
+	public void TestJ_removeRoomDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
 		try {
@@ -282,7 +282,7 @@ public class RoomEndpointImplTest {
 
 
 	@Test
-	public void removeRoom() throws WebApplicationException {
+	public void TestK_removeRoom() throws WebApplicationException {
 		// Setup
 		boolean expectedResult = false;
 		try {
