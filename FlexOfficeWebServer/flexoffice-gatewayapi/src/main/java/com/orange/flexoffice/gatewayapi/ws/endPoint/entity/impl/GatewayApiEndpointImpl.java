@@ -13,7 +13,7 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.orange.flexoffice.gatewayapi.ws.endPoint.entity.GatewayEndpoint;
+import com.orange.flexoffice.gatewayapi.ws.endPoint.entity.GatewayApiEndpoint;
 import com.orange.flexoffice.gatewayapi.ws.model.ECommandModel;
 import com.orange.flexoffice.gatewayapi.ws.model.EGatewayStatus;
 import com.orange.flexoffice.gatewayapi.ws.model.ESensorStatus;
@@ -31,12 +31,13 @@ import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.business.gatewayapi.dto.GatewayCommand;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
+import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 
 
-public class GatewayEndpointImpl implements GatewayEndpoint {
+public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 	
-	private final Logger LOGGER = Logger.getLogger(GatewayEndpointImpl.class);
+	private final Logger LOGGER = Logger.getLogger(GatewayApiEndpointImpl.class);
 	private final ObjectFactory factory = new ObjectFactory();
 	
 	@Context
@@ -140,5 +141,9 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 		return testManager.executeInitTestFile();
 	}
 
+	@Override
+	public GatewayDto findByMacAddress(String macAddress) throws DataNotExistsException {
+		return gatewayManager.findByMacAddress(macAddress);
+	}
 	
 }

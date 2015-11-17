@@ -10,6 +10,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 import com.orange.flexoffice.gatewayapi.ws.model.GatewayInput;
 import com.orange.flexoffice.gatewayapi.ws.model.GatewayReturn;
 import com.orange.flexoffice.gatewayapi.ws.model.GatewaySummary;
@@ -26,7 +28,7 @@ import java.util.List;
  * Defines all operations available for a resource "gateway".
  */
 @Path(GATEWAYS_PATH)
-public interface GatewayEndpoint {
+public interface GatewayApiEndpoint {
 	
 	/**
 	 * Gets users.
@@ -77,6 +79,10 @@ public interface GatewayEndpoint {
 	
 	// used for tests
 	boolean executeInitTestFile();
+
+	// used for tests
+	GatewayDto findByMacAddress(String macAddress)  throws DataNotExistsException;
+
 	
 }
 

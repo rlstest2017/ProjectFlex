@@ -139,7 +139,6 @@ public class GatewayEndpointImplTest {
 		try {
 			final GatewayDto gatewayOut = gatewayEndpoint.findByMacAddress("AA:DD:SS:PP:SS:MM");
 
-
 			// Test
 			Response response = gatewayEndpoint.updateGateway(gatewayOut.getMacAddress(), gatewayIn);
 
