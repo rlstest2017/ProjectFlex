@@ -124,20 +124,16 @@ public class GatewayApiEndpointImplTest {
 	public void TestE_updateGatewayDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
-
+		String macAddress = "TT:NN:MM:KK:HH:RR";
+		
 		// Test
 		try {
 			// Setup
 			final GatewayInput gatewayIn = factory.createApiGateway("ONLINE");
+			gatewayEndpoint.updateGateway(macAddress, gatewayIn);
 			
-			final GatewayDto gatewayOut = gatewayEndpoint.findByMacAddress("TT:NN:MM:AA:HH:RR");
-
-			gatewayEndpoint.updateGateway(gatewayOut.getId(), gatewayIn);
-
-		} catch(DataNotExistsException e ) {
-			expectedResult = true;
 		} catch (WebApplicationException e) {
-			
+			expectedResult = true;
 		}
 
 		// Assert
