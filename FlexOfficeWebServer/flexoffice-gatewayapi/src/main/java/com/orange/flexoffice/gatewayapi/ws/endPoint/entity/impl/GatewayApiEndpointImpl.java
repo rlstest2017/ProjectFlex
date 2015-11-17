@@ -6,9 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +35,9 @@ import com.orange.flexoffice.dao.common.model.object.RoomDto;
 
 public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 	
-	private final Logger LOGGER = Logger.getLogger(GatewayApiEndpointImpl.class);
+	private static final Logger LOGGER = Logger.getLogger(GatewayApiEndpointImpl.class);
 	private final ObjectFactory factory = new ObjectFactory();
 	
-	@Context
-	private UriInfo uriInfo;
 	@Autowired
 	private GatewayManager gatewayManager;
 	@Autowired
@@ -102,6 +98,7 @@ public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 			return rooms;
 			
 			}  catch (RuntimeException ex){
+				LOGGER.debug("RuntimeException in getGateway() GatewayEndpointImpl with message :" + ex.getMessage());
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 			}
 	}
@@ -126,11 +123,11 @@ public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 			return returnCommand;
 			
 		} catch (DataNotExistsException e){
-			
+			LOGGER.debug("DataNotExistsException in updateGateway() GatewayEndpointImpl with message :" + e.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_23, Response.Status.NOT_FOUND));
 			
 		} catch (RuntimeException ex){
-
+			LOGGER.debug("RuntimeException in updateGateway() GatewayEndpointImpl with message :" + ex.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 	

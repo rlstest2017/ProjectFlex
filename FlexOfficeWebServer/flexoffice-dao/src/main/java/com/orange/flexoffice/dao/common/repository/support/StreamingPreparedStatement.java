@@ -4,11 +4,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 
-
+/**
+ * StreamingPreparedStatement
+ * @author oab
+ *
+ */
 public class StreamingPreparedStatement implements PreparedStatementCreator {
 	
+	private static final Logger LOGGER = Logger.getLogger(StreamingPreparedStatement.class);
 	private String query;
 	
 	public StreamingPreparedStatement(String query) {
@@ -23,7 +29,7 @@ public class StreamingPreparedStatement implements PreparedStatementCreator {
 			ps.setFetchSize(5000);
 		}
 		catch (SQLException e) {
-			
+			LOGGER.debug("SQLException in createPreparedStatement of StreamingPreparedStatement class, as :" + e.getMessage());
 		}
 		return ps;
 	}

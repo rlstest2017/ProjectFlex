@@ -16,7 +16,7 @@ import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 @Repository
 public class AlertDaoRepository extends DataRepository<AlertDao> implements AlertDaoOperations {
 
-	private final Logger LOGGER = Logger.getLogger(AlertDaoRepository.class);
+	private static final Logger LOGGER = Logger.getLogger(AlertDaoRepository.class);
 	
 	public AlertDaoRepository() {
 		super(AlertDao.class);
