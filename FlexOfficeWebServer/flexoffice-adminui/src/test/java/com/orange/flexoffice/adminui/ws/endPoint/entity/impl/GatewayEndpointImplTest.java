@@ -162,14 +162,11 @@ public class GatewayEndpointImplTest {
 		try {
 			// Setup
 			final GatewayInput gatewayIn = factory.createHmi2Gateway("gateway 12", "gateway 12 test");
-			final GatewayDto gatewayOut = gatewayEndpoint.findByMacAddress("TT:NN:MM:KK:HH:RR");
-
-			gatewayEndpoint.updateGateway(gatewayOut.getMacAddress(), gatewayIn);
-
-		} catch(DataNotExistsException e ) {
-			expectedResult = true;
-		} catch (WebApplicationException e) {
 			
+			gatewayEndpoint.updateGateway("TT:NN:MM:KK:HH:RR", gatewayIn);
+
+		} catch (WebApplicationException e) {
+			expectedResult = true;
 		}
 
 		// Assert
