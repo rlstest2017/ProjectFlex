@@ -309,12 +309,13 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		UserDao userDao = null;
 
-		try {
+		if (userId != null) {
+			try {
+				userDao = userManager.find(Long.valueOf(userId));
 
-			userDao = userManager.find(Long.valueOf(userId));
-			
-		} catch(DataNotExistsException e ) {
-			LOGGER.info("Get rooms / Get room id : user not found");
+			} catch(DataNotExistsException e ) {
+				LOGGER.info("Get rooms / Get room id : user not found");
+			}
 		}
 
 		return computeTenant(status, userDao, roomName);
