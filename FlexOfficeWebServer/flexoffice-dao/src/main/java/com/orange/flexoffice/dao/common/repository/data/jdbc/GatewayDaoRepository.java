@@ -21,7 +21,7 @@ import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 @Repository
 public class GatewayDaoRepository extends DataRepository<GatewayDao> implements GatewayDaoOperations {
 
-	private final Logger LOGGER = Logger.getLogger(GatewayDaoRepository.class);
+	private static final Logger LOGGER = Logger.getLogger(GatewayDaoRepository.class);
 	
 	public GatewayDaoRepository() {
 		super(GatewayDao.class);

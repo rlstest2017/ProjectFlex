@@ -34,7 +34,7 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository
 @Transactional
 public class GatewayManagerImpl implements GatewayManager {
 	
-	private final Logger LOGGER = Logger.getLogger(GatewayManagerImpl.class);
+	private static final Logger LOGGER = Logger.getLogger(GatewayManagerImpl.class);
 	
 	@Autowired
 	private GatewayDaoRepository gatewayRepository;
@@ -101,7 +101,7 @@ public class GatewayManagerImpl implements GatewayManager {
 		
 		if (LOGGER.isDebugEnabled()) {
             LOGGER.debug( "Return find(long gatewayId) method for GatewayManagerImpl, with parameters :");
-            final StringBuffer message = new StringBuffer( 100 );
+            final StringBuilder message = new StringBuilder( 100 );
             message.append( "id :" );
             message.append( String.valueOf(gatewayId) );
             message.append( "\n" );
@@ -115,7 +115,7 @@ public class GatewayManagerImpl implements GatewayManager {
         }
 		
 		List<RoomDao> roomsList = getRooms(gatewayId);
-		if ((roomsList != null) && (roomsList.size() > 0)) { 
+		if ((roomsList != null) && (!roomsList.isEmpty() )) { 
 			dto.setRooms(roomsList);
 			dto.setActivated(true);			
 		} else {
@@ -141,7 +141,7 @@ public class GatewayManagerImpl implements GatewayManager {
 				
 				if (LOGGER.isDebugEnabled()) {
 		            LOGGER.debug( "Return findByMacAddress(String macAddress) method for GatewayManagerImpl, with parameters :");
-		            final StringBuffer message = new StringBuffer( 100 );
+		            final StringBuilder message = new StringBuilder( 100 );
 		            message.append( "id :" );
 		            message.append( gatewayDao.getColumnId() );
 		            message.append( "\n" );
@@ -155,7 +155,7 @@ public class GatewayManagerImpl implements GatewayManager {
 		        }
 				
 				List<RoomDao> roomsList = getRooms(gatewayDao.getId());
-				if ((roomsList != null) && (roomsList.size() > 0)) { 
+				if ((roomsList != null) && (!roomsList.isEmpty())) { 
 					dto.setRooms(roomsList);
 					dto.setActivated(true);			
 				} else {
@@ -166,6 +166,7 @@ public class GatewayManagerImpl implements GatewayManager {
 	
 			} catch(IncorrectResultSizeDataAccessException e ) {
 				LOGGER.debug("gateway by macAddress " + macAddress + " is not found");
+				LOGGER.debug("DataAccessException in findByMacAddress() GatewayManagerImpl with message :" + e.getMessage());
 				throw new DataNotExistsException("Gateway not exist");
 			}
 	}
@@ -176,6 +177,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			// Save GatewayDao
 			return gatewayRepository.saveGateway(gatewayDao);
 		} catch (DataIntegrityViolationException e) {
+			LOGGER.debug("DataIntegrityViolationException in save() GatewayManagerImpl with message :" + e.getMessage());
 			throw new DataAlreadyExistsException("gateway already exist.");
 		}
 	}
@@ -187,7 +189,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			// update GatewayDao
 			return gatewayRepository.updateGateway(gatewayDao);
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("gateway is not found");
+			LOGGER.debug("DataAccessException in update() GatewayManagerImpl with message :" + e.getMessage());
 			throw new DataNotExistsException("Gateway not exist");
 		}
 	}
@@ -208,6 +210,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			return command;
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("gateway is not found");
+			LOGGER.debug("DataAccessException in updateStatus() GatewayManagerImpl with message :" + e.getMessage());
 			throw new DataNotExistsException("Gateway not exist");
 		}
 	}
@@ -220,6 +223,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			gatewayRepository.deleteByMacAddress(macAddress);
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("gateway by macAddress " + macAddress + " is not found");
+			LOGGER.debug("DataAccessException in delete() GatewayManagerImpl with message :" + e.getMessage());
 			throw new DataNotExistsException("Gateway not exist");
 		}
 	}

@@ -92,6 +92,24 @@ public class GatewayEndpointImplTest {
 	}
 	
 	@Test
+	public void TestC1_getGatewayDataNotExistsException() {
+		// Setup
+		boolean expectedResult = false;
+		String macAddress = "TT:NN:MM:KK:HH:RR";
+	
+		// Test
+		try {
+			gatewayEndpoint.getGateway(macAddress);
+
+		} catch (WebApplicationException e) {
+			expectedResult = true;
+		}
+
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+	
+	@Test
 	public void TestD_addGateway() {
 		// Setup
 		final GatewayInput3 gateway = factory.createHmiGateway("AA:DD:SS:PP:SS:MM", "gateway 10", "gateway 10 test");
@@ -139,7 +157,6 @@ public class GatewayEndpointImplTest {
 		try {
 			final GatewayDto gatewayOut = gatewayEndpoint.findByMacAddress("AA:DD:SS:PP:SS:MM");
 
-
 			// Test
 			Response response = gatewayEndpoint.updateGateway(gatewayOut.getMacAddress(), gatewayIn);
 
@@ -163,14 +180,11 @@ public class GatewayEndpointImplTest {
 		try {
 			// Setup
 			final GatewayInput gatewayIn = factory.createHmi2Gateway("gateway 12", "gateway 12 test");
-			final GatewayDto gatewayOut = gatewayEndpoint.findByMacAddress("TT:NN:MM:KK:HH:RR");
-
-			gatewayEndpoint.updateGateway(gatewayOut.getMacAddress(), gatewayIn);
-
-		} catch(DataNotExistsException e ) {
-			expectedResult = true;
-		} catch (WebApplicationException e) {
 			
+			gatewayEndpoint.updateGateway("TT:NN:MM:KK:HH:RR", gatewayIn);
+
+		} catch (WebApplicationException e) {
+			expectedResult = true;
 		}
 
 		// Assert
@@ -203,19 +217,15 @@ public class GatewayEndpointImplTest {
 	public void TestI_removeGatewayDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
-
+		String macAddress = "TT:NN:MM:KK:HH:RR";
+		
 		// Test
 		try {
-			// Setup
-			final GatewayDto gatewayOut = gatewayEndpoint.findByMacAddress("AA:DD:SS:PP:SS:MM");
-
 			// Test
-			gatewayEndpoint.removeGateway(gatewayOut.getMacAddress());
+			gatewayEndpoint.removeGateway(macAddress);
 			
-		} catch(DataNotExistsException e ) {
-			expectedResult = true;
 		} catch (WebApplicationException e) {
-			
+			expectedResult = true;	
 		}
 
 		// Assert

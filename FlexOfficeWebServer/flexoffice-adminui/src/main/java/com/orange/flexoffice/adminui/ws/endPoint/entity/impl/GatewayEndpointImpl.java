@@ -5,9 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
@@ -36,11 +34,9 @@ import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 
 public class GatewayEndpointImpl implements GatewayEndpoint {
 	
-	private final Logger LOGGER = Logger.getLogger(GatewayEndpointImpl.class);
+	private static final Logger LOGGER = Logger.getLogger(GatewayEndpointImpl.class);
 	private final ObjectFactory factory = new ObjectFactory();
-	
-	@Context
-	private UriInfo uriInfo;
+		
 	@Autowired
 	private GatewayManager gatewayManager;
 	@Autowired
@@ -63,7 +59,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 		
 		for (GatewayDao gatewayDao : dataList) {
 			GatewaySummary gateway = factory.createGatewaySummary();
-			gateway.setMacAddress((gatewayDao.getMacAddress()));
+			gateway.setMacAddress(gatewayDao.getMacAddress());
 			gateway.setName(gatewayDao.getName());
 			if (gatewayDao.getStatus().equals(E_GatewayStatus.ONTEACHIN.toString())) {
 				gateway.setStatus(EDeviceStatus.ONLINE);
@@ -111,8 +107,10 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 			return factory.createGatewayOutput2(gateway).getValue();
 			
 			} catch (DataNotExistsException e){
+				LOGGER.debug("DataNotExistsException in getGateway() GatewayEndpointImpl with message :" + e.getMessage());
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_25, Response.Status.NOT_FOUND));
 			} catch (RuntimeException ex){
+				LOGGER.debug("RuntimeException in getGateway() GatewayEndpointImpl with message :" + ex.getMessage());
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 			}
 		
@@ -130,7 +128,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call addGateway(GatewayInput1 gateway) method of GatewayEndpoint, with parameters :");
-			final StringBuffer message = new StringBuffer( 1000 );
+			final StringBuilder message = new StringBuilder( 1000 );
 			message.append( "\n" );
 			message.append( "macAddress :" );
 			message.append( gateway.getMacAddress() );
@@ -147,11 +145,11 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 			gatewayDao = gatewayManager.save(gatewayDao);
 
 		} catch (DataAlreadyExistsException e) {
-			
+			LOGGER.debug("DataAlreadyExistsException in addGateway() GatewayEndpointImpl with message :" + e.getMessage());			
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_22, Response.Status.METHOD_NOT_ALLOWED));
 
 		} catch (RuntimeException ex) {
-
+			LOGGER.debug("RuntimeException in addGateway() GatewayEndpointImpl with message :" + ex.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
@@ -176,7 +174,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call updateGateway(String id, GatewayInput gateway) method of GatewayEndpoint, with parameters :");
-			final StringBuffer message = new StringBuffer( 1000 );
+			final StringBuilder message = new StringBuilder( 1000 );
 			message.append( "macAddress :" );
 			message.append( macAddress );
 			message.append( "\n" );
@@ -193,11 +191,11 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 			gatewayDao = gatewayManager.update(gatewayDao);
 
 		} catch (DataNotExistsException e) {
-			
+			LOGGER.debug("DataNotExistsException in updateGateway() GatewayEndpointImpl with message :" + e.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_23, Response.Status.METHOD_NOT_ALLOWED));
 
 		} catch (RuntimeException ex) {
-
+			LOGGER.debug("RuntimeException in updateGateway() GatewayEndpointImpl with message :" + ex.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
@@ -217,11 +215,11 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 			gatewayManager.delete(macAddress);
 
 		} catch (DataNotExistsException e){
-			
+			LOGGER.debug("DataNotExistsException in removeGateway() GatewayEndpointImpl with message :" + e.getMessage());			
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_24, Response.Status.NOT_FOUND));
 			
 		} catch (RuntimeException ex){
-
+			LOGGER.debug("RuntimeException in removeGateway() GatewayEndpointImpl with message :" + ex.getMessage());
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
