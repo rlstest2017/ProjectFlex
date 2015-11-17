@@ -37,8 +37,8 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 			jdbcTemplateForTest.update(sqlSensors, new Object[] {3, "ident 3", "sensor 3", "MOTION_DETECTION", "as-07-01", "sensor 3 desc", "UNSTABLE", 2});
 					
 			String sqlUser = "INSERT INTO users " +
-					"(first_name, last_name, email) values (?, ?, ?)";
-			jdbcTemplateForTest.update(sqlUser, new Object[] {"user FirstName 1", "user LastName 1", "user Email 1"});
+					"(id, first_name, last_name, email) values (?, ?, ?, ?)";
+			jdbcTemplateForTest.update(sqlUser, new Object[] {1, "user FirstName 1", "user LastName 1", "user Email 1"});
 
 			String sqlRooms = "INSERT INTO rooms " +
 					"(id, name, address, capacity, description, status, type, gateway_id, user_id) VALUES (?, ?, ?, ?, ?, CAST(? AS roomStatus), CAST(? AS roomType), ?, ?)";
