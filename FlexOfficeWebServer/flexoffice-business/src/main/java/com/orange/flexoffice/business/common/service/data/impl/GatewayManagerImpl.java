@@ -165,8 +165,7 @@ public class GatewayManagerImpl implements GatewayManager {
 				return dto;
 	
 			} catch(IncorrectResultSizeDataAccessException e ) {
-				LOGGER.debug("gateway by macAddress " + macAddress + " is not found");
-				LOGGER.debug("DataAccessException in findByMacAddress() GatewayManagerImpl with message :" + e.getMessage());
+				LOGGER.debug("gateway by macAddress " + macAddress + " is not found", e);
 				throw new DataNotExistsException("Gateway not exist");
 			}
 	}
@@ -177,7 +176,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			// Save GatewayDao
 			return gatewayRepository.saveGateway(gatewayDao);
 		} catch (DataIntegrityViolationException e) {
-			LOGGER.debug("DataIntegrityViolationException in save() GatewayManagerImpl with message :" + e.getMessage());
+			LOGGER.debug("DataIntegrityViolationException in save() GatewayManagerImpl with message :" + e.getMessage(), e);
 			throw new DataAlreadyExistsException("gateway already exist.");
 		}
 	}
@@ -189,7 +188,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			// update GatewayDao
 			return gatewayRepository.updateGateway(gatewayDao);
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("DataAccessException in update() GatewayManagerImpl with message :" + e.getMessage());
+			LOGGER.debug("DataAccessException in update() GatewayManagerImpl with message :" + e.getMessage(), e);
 			throw new DataNotExistsException("Gateway not exist");
 		}
 	}
@@ -209,8 +208,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			
 			return command;
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("gateway is not found");
-			LOGGER.debug("DataAccessException in updateStatus() GatewayManagerImpl with message :" + e.getMessage());
+			LOGGER.debug("gateway is not found", e);
 			throw new DataNotExistsException("Gateway not exist");
 		}
 	}
@@ -222,8 +220,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			// Deletes UserDao
 			gatewayRepository.deleteByMacAddress(macAddress);
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("gateway by macAddress " + macAddress + " is not found");
-			LOGGER.debug("DataAccessException in delete() GatewayManagerImpl with message :" + e.getMessage());
+			LOGGER.debug("gateway by macAddress " + macAddress + " is not found", e);
 			throw new DataNotExistsException("Gateway not exist");
 		}
 	}

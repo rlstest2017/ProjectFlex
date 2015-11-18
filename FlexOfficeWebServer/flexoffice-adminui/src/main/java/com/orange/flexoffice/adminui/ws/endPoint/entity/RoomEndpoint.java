@@ -12,24 +12,18 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static com.orange.flexoffice.adminui.ws.ParamsConst.GATEWAY_MAC_ADDRESS_PARAM;
 import static com.orange.flexoffice.adminui.ws.ParamsConst.ROOM_ID_PARAM;
-import static com.orange.flexoffice.adminui.ws.PathConst.GATEWAY_MAC_ADDRESS_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.ROOMS_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.ROOM_ID_PATH;
 
 import java.util.List;
 
-import com.orange.flexoffice.adminui.ws.model.GatewayInput;
-import com.orange.flexoffice.adminui.ws.model.GatewayOutput;
 import com.orange.flexoffice.adminui.ws.model.Room;
 import com.orange.flexoffice.adminui.ws.model.RoomInput1;
 import com.orange.flexoffice.adminui.ws.model.RoomOutput;
 import com.orange.flexoffice.adminui.ws.model.RoomSummary;
-import com.orange.flexoffice.adminui.ws.model.User;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
-import com.orange.flexoffice.dao.common.model.data.UserDao;
 
 /**
  * Defines all operations available for a resource "room".
