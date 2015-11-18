@@ -270,12 +270,10 @@ public class UserEndPointImplTest {
 		boolean expectedResult = false;
 		
 		try {
-			final UserDao user = userEndpoint.findByUserMail("user Email 1");
-
 			// Test
-			userEndpoint.getUser(user.getColumnId()+"1");
+			userEndpoint.getUser("1899898985");
 
-		} catch(DataNotExistsException e ) {
+		} catch(WebApplicationException e ) {
 			expectedResult = true;
 		}
 

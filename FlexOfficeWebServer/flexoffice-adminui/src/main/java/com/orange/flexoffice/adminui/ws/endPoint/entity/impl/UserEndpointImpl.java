@@ -59,10 +59,10 @@ public class UserEndpointImpl implements UserEndpoint {
 		for (UserDao UserDao : dataList) {
 			UserSummary user = factory.createUserSummary();
 			user.setId(UserDao.getColumnId());
-			user.setEmail(UserDao.getEmail());
+			user.setLabel(UserDao.getFirstName() + " " + UserDao.getLastName());
 			user.setFirstName(UserDao.getFirstName());
 			user.setLastName(UserDao.getLastName());
-			user.setLabel(UserDao.getFirstName() + " " + UserDao.getLastName());
+			user.setEmail(UserDao.getEmail());
 
 			userList.add(user);
 		}
@@ -81,10 +81,10 @@ public class UserEndpointImpl implements UserEndpoint {
 			UserDao data = userManager.find(Long.valueOf(userId));
 
 			User user = factory.createUser();
-			user.setId(data.getColumnId());
-			user.setEmail(data.getEmail());
+			user.setId(data.getId().toString());
 			user.setFirstName(data.getFirstName());
 			user.setLastName(data.getLastName());
+			user.setEmail(data.getEmail());
 
 			LOGGER.info( "End call UserEndpoint.getUser at: " + new Date() );
 
