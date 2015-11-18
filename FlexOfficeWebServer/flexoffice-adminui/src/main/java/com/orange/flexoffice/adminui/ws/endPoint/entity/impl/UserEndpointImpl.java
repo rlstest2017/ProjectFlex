@@ -41,12 +41,13 @@ public class UserEndpointImpl implements UserEndpoint {
 	@Override
 	public List<UserSummary> getUsers() {
 
-		LOGGER.info( "Begin call getUsers method for UserEndpoint at: " + new Date() );
+		LOGGER.info( "Begin call UserEndpoint.getUsers  at: " + new Date() );
 
 		List<UserDao> dataList = userManager.findAllUsers();
 
 		if (dataList == null) {
 
+			LOGGER.error("UserEndpoint.getUsers : Users not found");
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_4, Response.Status.NOT_FOUND));
 		
 		}
@@ -66,7 +67,7 @@ public class UserEndpointImpl implements UserEndpoint {
 			userList.add(user);
 		}
 
-		LOGGER.info( "End call getUsers method for UserEndpoint at: " + new Date() );
+		LOGGER.info( "End call UserEndpoint.getUsers at: " + new Date() );
 
 		return userList;
 	}
@@ -74,7 +75,7 @@ public class UserEndpointImpl implements UserEndpoint {
 	@Override
 	public User getUser(String userId) {
 
-		LOGGER.info( "Begin call getUser method for UserEndpoint at: " + new Date() );
+		LOGGER.info( "Begin call UserEndpoint.getUser at: " + new Date() );
 
 		try {
 			UserDao data = userManager.find(Long.valueOf(userId));
@@ -85,15 +86,15 @@ public class UserEndpointImpl implements UserEndpoint {
 			user.setFirstName(data.getFirstName());
 			user.setLastName(data.getLastName());
 
-			LOGGER.info( "End call getUser method for UserEndpoint at: " + new Date() );
+			LOGGER.info( "End call UserEndpoint.getUser at: " + new Date() );
 
 			return factory.createUser(user).getValue();
 
 		} catch (DataNotExistsException e){
-			LOGGER.debug("DataNotExistsException in getUser() UserEndpointImpl with message :" + e.getMessage());
+			LOGGER.debug("DataNotExistsException in UserEndpoint.getUser with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_8, Response.Status.NOT_FOUND));
 		} catch (RuntimeException ex){
-			LOGGER.debug("RuntimeException in getUser() UserEndpointImpl with message :" + ex.getMessage());
+			LOGGER.debug("RuntimeException in UserEndpoint.getUser with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 
 		}
@@ -102,7 +103,7 @@ public class UserEndpointImpl implements UserEndpoint {
 	@Override
 	public User addUser(UserInput userInput) {
 
-		LOGGER.info( "Begin call addUser method for UserEndpoint at: " + new Date() );
+		LOGGER.info( "Begin call UserEndpoint.addUser at: " + new Date() );
 
 		UserDao user = new UserDao();
 		user.setEmail(userInput.getEmail());
@@ -110,7 +111,7 @@ public class UserEndpointImpl implements UserEndpoint {
 		user.setLastName(userInput.getLastName());
 
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug( "Begin call addUser(UserInput userInput) method of UserEndpoint, with parameters :");
+			LOGGER.debug( "UserEndpoint.addUser add with parameters :");
 			final StringBuffer message = new StringBuffer( 1000 );
 			message.append( "email :" );
 			message.append( userInput.getEmail() );
@@ -128,10 +129,10 @@ public class UserEndpointImpl implements UserEndpoint {
 			user = userManager.save(user);
 
 		} catch (DataAlreadyExistsException e) {
-			LOGGER.debug("DataNotExistsException in addUser() UserEndpointImpl with message :" + e.getMessage());			
+			LOGGER.debug("DataNotExistsException in UserEndpoint.addUser with message :", e);			
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_9, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex) {
-			LOGGER.debug("RuntimeException in addUser() UserEndpointImpl with message :" + ex.getMessage());
+			LOGGER.debug("RuntimeException in UserEndpoint.addUser with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
@@ -139,7 +140,7 @@ public class UserEndpointImpl implements UserEndpoint {
 		User returnedUser = factory.createUser();
 		returnedUser.setId(user.getColumnId());
 
-		LOGGER.info( "End call addUser method for UserEndpoint at: " + new Date() );
+		LOGGER.info( "End call UserEndpoint.addUser at: " + new Date() );
 
 		return factory.createUser(returnedUser).getValue();
 	}
@@ -147,7 +148,7 @@ public class UserEndpointImpl implements UserEndpoint {
 	@Override
 	public Response updateUser(String id, UserInput userInput) {
 		
-		LOGGER.info( "Begin call updateUser method for UserEndpoint at: " + new Date() );
+		LOGGER.info( "Begin call UserEndpoint.updateUser at: " + new Date() );
 
 		UserDao user = new UserDao();
 		user.setId(Long.valueOf(id));
@@ -159,14 +160,14 @@ public class UserEndpointImpl implements UserEndpoint {
 			user = userManager.update(user);
 
 		} catch (DataNotExistsException e){
-			LOGGER.debug("DataNotExistsException in updateUser() UserEndpointImpl with message :" + e.getMessage());			
+			LOGGER.debug("DataNotExistsException in UserEndpoint.updateUser with message :", e);			
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_6, Response.Status.NOT_FOUND));
 		} catch (RuntimeException ex){
-			LOGGER.debug("RuntimeException in updateUser() UserEndpointImpl with message :" + ex.getMessage());
+			LOGGER.debug("RuntimeException in UserEndpoint.updateUser with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
-		LOGGER.info( "End call updateUser method for UserEndpoint at: " + new Date() );
+		LOGGER.info( "End call UserEndpoint.updateUser at: " + new Date() );
 
 		return Response.status(Status.ACCEPTED).build();
 	}
@@ -174,17 +175,17 @@ public class UserEndpointImpl implements UserEndpoint {
 	@Override
 	public Response removeUser(String id) {
 
-		LOGGER.info( "Begin call removeUser method for UserEndpoint at: " + new Date() );
+		LOGGER.info( "Begin call UserEndpoint.removeUser at: " + new Date() );
 
 		try {
 
 			userManager.delete(Long.valueOf(id));
 
 		} catch (DataNotExistsException e){
-			LOGGER.debug("DataNotExistsException in removeUser() UserEndpointImpl with message :" + e.getMessage());
+			LOGGER.debug("DataNotExistsException in UserEndpoint.removeUser with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_7, Response.Status.NOT_FOUND));
 		} catch (RuntimeException ex){
-			LOGGER.debug("RuntimeException in removeUser() UserEndpointImpl with message :" + ex.getMessage());
+			LOGGER.debug("RuntimeException in UserEndpoint.removeUser with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 

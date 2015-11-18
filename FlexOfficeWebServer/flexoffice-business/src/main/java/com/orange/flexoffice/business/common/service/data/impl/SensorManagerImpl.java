@@ -4,28 +4,16 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
-
-
-
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.SensorManager;
-import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
-import com.orange.flexoffice.dao.common.model.data.UserDao;
-import com.orange.flexoffice.dao.common.model.enumeration.E_SensorStatus;
-import com.orange.flexoffice.dao.common.model.enumeration.E_SensorType;
-import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
-import com.orange.flexoffice.dao.common.repository.data.jdbc.UserDaoRepository;
 
 /**
  * Manage Sensors
@@ -41,13 +29,7 @@ public class SensorManagerImpl implements SensorManager {
 	@Autowired
 	private SensorDaoRepository sensorRepository;
 
-	@Autowired
-	private GatewayDaoRepository gatewayRepository;
 
-	@Autowired
-	private UserDaoRepository userRepository;
-
-	
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -63,8 +45,8 @@ public class SensorManagerImpl implements SensorManager {
 			return sensorRepository.findBySensorId(sensorIdentifier);
 
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("SensorManager.find : Sensor by identifier #" + sensorIdentifier + " is not found");
-			throw new DataNotExistsException("SensorManager.find : Sensor by identifier #" + sensorIdentifier + " is not found" + e.getMessage());
+			LOGGER.error("SensorManager.find : Sensor by identifier #" + sensorIdentifier + " is not found", e);
+			throw new DataNotExistsException("SensorManager.find : Sensor by identifier #" + sensorIdentifier + " is not found");
 		}
 
 	}
@@ -82,8 +64,8 @@ public class SensorManagerImpl implements SensorManager {
 			return sensorRepository.saveSensor(sensorDao);
 			
 		} catch (DataIntegrityViolationException e) {
-			LOGGER.error("SensorManager.save : Sensor already exists");
-			throw new DataAlreadyExistsException("SensorManager.save : Sensor already exists" + e.getMessage());
+			LOGGER.error("SensorManager.save : Sensor already exists", e);
+			throw new DataAlreadyExistsException("SensorManager.save : Sensor already exists");
 		}
 	}
 
@@ -100,8 +82,8 @@ public class SensorManagerImpl implements SensorManager {
 			return sensorRepository.updateSensor(sensorDao);
 			
 		} catch (RuntimeException e) {
-			LOGGER.error("SensorManager.update : Sensor to update not found");
-			throw new DataNotExistsException("SensorManager.update : Sensor to update not found" + e.getMessage());
+			LOGGER.error("SensorManager.update : Sensor to update not found", e);
+			throw new DataNotExistsException("SensorManager.update : Sensor to update not found");
 		}
 	}
 
@@ -114,8 +96,8 @@ public class SensorManagerImpl implements SensorManager {
 			return sensorRepository.updateSensorStatus(sensorDao);
 			
 		} catch (RuntimeException e) {
-			LOGGER.error("SensorManager.updateStatus : Sensor to update Status not found");
-			throw new DataNotExistsException("SensorManager.updateStatus : Sensor to update Status not found" + e.getMessage());
+			LOGGER.error("SensorManager.updateStatus : Sensor to update Status not found", e);
+			throw new DataNotExistsException("SensorManager.updateStatus : Sensor to update Status not found");
 		}
 	}
 
@@ -129,8 +111,8 @@ public class SensorManagerImpl implements SensorManager {
 			sensorRepository.deleteByIdentifier(sensorIdentifier);
 			
 		} catch (IncorrectResultSizeDataAccessException e) {
-			LOGGER.error("SensorManager.delete : Sensor #" + sensorIdentifier + " not found");
-			throw new DataNotExistsException("SensorManager.delete : Sensor #" + sensorIdentifier + " not found" + e.getMessage());
+			LOGGER.error("SensorManager.delete : Sensor #" + sensorIdentifier + " not found", e);
+			throw new DataNotExistsException("SensorManager.delete : Sensor #" + sensorIdentifier + " not found");
 		}
 	}
 

@@ -1,12 +1,8 @@
 package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
 import java.util.List;
-
-
-
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
-//import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -23,7 +19,6 @@ import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 @Repository
 public class UserDaoRepository extends DataRepository<UserDao> implements UserDaoOperations {
 
-	//private final Logger LOGGER = Logger.getLogger(UserDaoRepository.class);
 	
 	public UserDaoRepository() {
 		super(UserDao.class);

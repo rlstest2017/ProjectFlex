@@ -38,7 +38,7 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.UserDaoRepository;
 @Transactional
 public class RoomManagerImpl implements RoomManager {
 
-	private final Logger LOGGER = Logger.getLogger(RoomManagerImpl.class);
+	private static final Logger LOGGER = Logger.getLogger(RoomManagerImpl.class);
 
 	@Autowired
 	private RoomDaoRepository roomRepository;
@@ -69,7 +69,7 @@ public class RoomManagerImpl implements RoomManager {
 			roomDao = roomRepository.findOne(roomId);
 
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("RoomManager.find : Room by id #" + roomId + " is not found");
+			LOGGER.error("RoomManager.find : Room by id #" + roomId + " is not found", e);
 			throw new DataNotExistsException("RoomManager.find : Room by id #" + roomId + " is not found");
 		}
 
@@ -87,7 +87,7 @@ public class RoomManagerImpl implements RoomManager {
 			UserDao userDao = userRepository.findOne(roomDao.getUserId());
 			dto.setUser(userDao);
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("RoomManager.find : User by id #" + roomDao.getUserId() + " for current Room is not found");
+			LOGGER.debug("RoomManager.find : User by id #" + roomDao.getUserId() + " for current Room is not found", e);
 		}
 
 		List<SensorDao> sensorsDao = sensorRepository.findByRoomId(roomId);
@@ -99,7 +99,7 @@ public class RoomManagerImpl implements RoomManager {
 			GatewayDao gatewayDao = gatewayRepository.findOne(roomDao.getGatewayId());
 			dto.setGateway(gatewayDao);
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("RoomManager.find : Gateway by id #" + roomDao.getGatewayId() + " for current Room is not found");
+			LOGGER.debug("RoomManager.find : Gateway by id #" + roomDao.getGatewayId() + " for current Room is not found", e);
 		}
 
 		if (LOGGER.isDebugEnabled()) {
@@ -124,7 +124,7 @@ public class RoomManagerImpl implements RoomManager {
 			// Save RoomDao
 			return roomRepository.saveRoom(roomDao);
 		} catch (DataIntegrityViolationException e) {
-			LOGGER.error("RoomManager.save : Room already exists");
+			LOGGER.error("RoomManager.save : Room already exists", e);
 			throw new DataAlreadyExistsException("RoomManager.save : Room already exists");
 		}
 	}
@@ -136,7 +136,7 @@ public class RoomManagerImpl implements RoomManager {
 			// Update RoomDao
 			return roomRepository.updateRoom(roomDao);
 		} catch (RuntimeException e) {
-			LOGGER.error("RoomManager.update : Room to update not found");
+			LOGGER.error("RoomManager.update : Room to update not found", e);
 			throw new DataNotExistsException("RoomManager.update : Room to update not found");
 		}
 	}
@@ -149,7 +149,7 @@ public class RoomManagerImpl implements RoomManager {
 			// Update RoomDao
 			return roomRepository.updateRoomStatus(roomDao);
 		} catch (RuntimeException e) {
-			LOGGER.error("RoomManager.updateStatus : Room to update Status not found");
+			LOGGER.error("RoomManager.updateStatus : Room to update Status not found", e);
 			throw new DataNotExistsException("RoomManager.updateStatus : Room to update Status not found");
 		}
 	}
@@ -163,7 +163,7 @@ public class RoomManagerImpl implements RoomManager {
 			// Delete Room
 			roomRepository.delete(id);	
 		} catch (IncorrectResultSizeDataAccessException e) {
-			LOGGER.error("RoomManager.delete : Room #" + id + " not found");
+			LOGGER.error("RoomManager.delete : Room #" + id + " not found", e);
 			throw new DataNotExistsException("RoomManager.delete : Room #" + id + " not found");
 		}
 	}
@@ -180,7 +180,7 @@ public class RoomManagerImpl implements RoomManager {
 		try {
 			return roomRepository.findByName(name);
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("RoomManager.findByName : Room by name #" + name + " is not found");
+			LOGGER.debug("RoomManager.findByName : Room by name #" + name + " is not found", e);
 			throw new DataNotExistsException("RoomManager.findByName : Room by name #" + name + " is not found");
 		}
 	}

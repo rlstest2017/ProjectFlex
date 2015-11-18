@@ -47,8 +47,7 @@ public class UserManagerImpl implements UserManager {
 			return userRepository.findOne(userDaoId);
 
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("UserManager.find : User by id #" + userDaoId + " is not found");
-			LOGGER.debug("DataAccessException in find() UserManagerImpl with message :" + e.getMessage());
+			LOGGER.error("UserManager.find : User by id #" + userDaoId + " is not found", e);
 			throw new DataNotExistsException("UserManager.find : User by id #" + userDaoId + " is not found");
 		}
 
@@ -65,8 +64,7 @@ public class UserManagerImpl implements UserManager {
 			return userRepository.findByUserEmail(userEmail);
 
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("UserManager.findByUserMail : User by email #" + userEmail + " is not found");
-			LOGGER.debug("DataAccessException in findByUserMail() UserManagerImpl with message :" + e.getMessage());
+			LOGGER.error("UserManager.findByUserMail : User by email #" + userEmail + " is not found", e);
 			throw new DataNotExistsException("UserManager.findByUserMail : User by email #" + userEmail + " is not found");
 		}
 	}
@@ -85,8 +83,7 @@ public class UserManagerImpl implements UserManager {
 			return userRepository.saveUser(userDao);
 
 		} catch(DataIntegrityViolationException e ) {
-			LOGGER.error("UserManager.save : User already exists");
-			LOGGER.debug("DataIntegrityViolationException in save() UserManagerImpl with message :" + e.getMessage());
+			LOGGER.error("UserManager.save : User already exists", e);
 			throw new DataAlreadyExistsException("UserManager.save : User already exists");
 		}
 	}
@@ -104,8 +101,7 @@ public class UserManagerImpl implements UserManager {
 			return userRepository.updateUser(userDao);
 			
 		} catch (RuntimeException e) {
-			LOGGER.error("UserManager.update : User to update not found");
-			LOGGER.debug("RuntimeException in update() UserManagerImpl with message :" + e.getMessage());
+			LOGGER.error("UserManager.update : User to update not found", e);
 			throw new DataNotExistsException("UserManager.update : User to update not found");
 		}
 	}
@@ -124,8 +120,7 @@ public class UserManagerImpl implements UserManager {
 			// Delete Room
 			userRepository.delete(id);	
 		} catch (IncorrectResultSizeDataAccessException e) {
-			LOGGER.error("UserManager.delete : User #" + id + " not found");
-			LOGGER.debug("DataAccessException in delete() UserManagerImpl with message :" + e.getMessage());
+			LOGGER.error("UserManager.delete : User #" + id + " not found", e);
 			throw new DataNotExistsException("UserManager.delete : User #" + id + " not found");
 		}
 	}

@@ -2,7 +2,6 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -22,7 +21,6 @@ import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 @Repository
 public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDaoOperations {
 
-	private final Logger LOGGER = Logger.getLogger(RoomDaoRepository.class);
 	
 	public RoomDaoRepository() {
 		super(RoomDao.class);

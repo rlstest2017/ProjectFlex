@@ -9,14 +9,11 @@ import java.util.List;
 
 import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import com.orange.flexoffice.adminui.ws.endPoint.entity.RoomEndpoint;
 import com.orange.flexoffice.adminui.ws.model.ERoomStatus;
@@ -47,9 +44,6 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	private static final Logger LOGGER = Logger.getLogger(RoomEndpointImpl.class);
 	private final ObjectFactory factory = new ObjectFactory();
 
-	@Context
-	private UriInfo uriInfo;
-
 	@Autowired
 	private RoomManager roomManager;
 
@@ -71,6 +65,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		if (dataList == null) {
 
+			LOGGER.error("RoomEndpoint.getRooms : Rooms not found");
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_27, Response.Status.NOT_FOUND));
 
 		}
@@ -138,12 +133,12 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		} catch (DataNotExistsException e){
 
-			LOGGER.debug("DataNotExistsException in RoomEndpoint.getSensor with message :" + e.getMessage());
+			LOGGER.debug("DataNotExistsException in RoomEndpoint.getSensor with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_31, Response.Status.NOT_FOUND));
 
 		} catch (RuntimeException ex){
 
-			LOGGER.debug("RuntimeException in RoomEndpoint.getSensor with message :" + ex.getMessage());
+			LOGGER.debug("RuntimeException in RoomEndpoint.getSensor with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 
 		}
@@ -187,12 +182,12 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		} catch (DataAlreadyExistsException e) {
 			
-			LOGGER.debug("DataNotExistsException in RoomEndpoint.addRoom with message :" + e.getMessage());
+			LOGGER.debug("DataNotExistsException in RoomEndpoint.addRoom with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_28, Response.Status.METHOD_NOT_ALLOWED));
 
 		} catch (RuntimeException ex) {
 
-			LOGGER.debug("RuntimeException in RoomEndpoint.addRoom with message :" + ex.getMessage());
+			LOGGER.debug("RuntimeException in RoomEndpoint.addRoom with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
@@ -229,12 +224,12 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		} catch (DataNotExistsException e){
 			
-			LOGGER.debug("DataNotExistsException in RoomEndpoint.updateRoom with message :" + e.getMessage());
+			LOGGER.debug("DataNotExistsException in RoomEndpoint.updateRoom with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));
 			
 		} catch (RuntimeException ex){
 
-			LOGGER.debug("RuntimeException in RoomEndpoint.updateRoom with message :" + ex.getMessage());
+			LOGGER.debug("RuntimeException in RoomEndpoint.updateRoom with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
@@ -258,12 +253,12 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		} catch (DataNotExistsException e){
 			
-			LOGGER.debug("DataNotExistsException in RoomEndpoint.removeRoom with message :" + e.getMessage());
+			LOGGER.debug("DataNotExistsException in RoomEndpoint.removeRoom with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_30, Response.Status.NOT_FOUND));
 			
 		} catch (RuntimeException ex){
 
-			LOGGER.debug("RuntimeException in RoomEndpoint.removeRoom with message :" + ex.getMessage());
+			LOGGER.debug("RuntimeException in RoomEndpoint.removeRoom with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 

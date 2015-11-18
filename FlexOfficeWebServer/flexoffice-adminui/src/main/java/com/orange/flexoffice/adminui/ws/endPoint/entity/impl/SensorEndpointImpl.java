@@ -8,9 +8,7 @@ import java.util.List;
 
 import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
@@ -32,7 +30,6 @@ import com.orange.flexoffice.business.common.exception.DataAlreadyExistsExceptio
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.business.common.service.data.SensorManager;
-import com.orange.flexoffice.business.common.service.data.UserManager;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_SensorStatus;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
@@ -43,17 +40,11 @@ public class SensorEndpointImpl implements SensorEndpoint {
 	private static final Logger LOGGER = Logger.getLogger(SensorEndpointImpl.class);
 	private final ObjectFactory factory = new ObjectFactory();
 
-	@Context
-	private UriInfo uriInfo;
-
 	@Autowired
 	private SensorManager sensorManager;
 
 	@Autowired
 	private RoomManager roomManager;
-
-	@Autowired
-	private UserManager userManager;
 
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
@@ -67,6 +58,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 
 		if (dataList == null) {
 
+			LOGGER.error("SensorEndpoint.getSensors : Sensors not found");
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_10, Response.Status.NOT_FOUND));
 
 		}
@@ -100,6 +92,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 
 		if (dataList == null) {
 
+			LOGGER.error("SensorEndpoint.getUnpairedSensors : Sensors not found");
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_10, Response.Status.NOT_FOUND));
 
 		}
@@ -151,12 +144,12 @@ public class SensorEndpointImpl implements SensorEndpoint {
 
 		} catch (DataNotExistsException e){
 
-			LOGGER.debug("DataNotExistsException in SensorEndpoint.getSensor with message :" + e.getMessage());
+			LOGGER.debug("DataNotExistsException in SensorEndpoint.getSensor with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_14, Response.Status.NOT_FOUND));
 
 		} catch (RuntimeException ex){
 
-			LOGGER.debug("RuntimeException in SensorEndpoint.getSensor with message :" + ex.getMessage());
+			LOGGER.debug("RuntimeException in SensorEndpoint.getSensor with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 
 		}
@@ -199,12 +192,12 @@ public class SensorEndpointImpl implements SensorEndpoint {
 
 		} catch (DataAlreadyExistsException e) {
 			
-			LOGGER.debug("DataNotExistsException in SensorEndpoint.addSensor with message :" + e.getMessage());
+			LOGGER.debug("DataNotExistsException in SensorEndpoint.addSensor with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_11, Response.Status.METHOD_NOT_ALLOWED));
 
 		} catch (RuntimeException ex) {
 
-			LOGGER.debug("RuntimeException in SensorEndpoint.addSensor with message :" + ex.getMessage());
+			LOGGER.debug("RuntimeException in SensorEndpoint.addSensor with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
@@ -243,12 +236,12 @@ public class SensorEndpointImpl implements SensorEndpoint {
 
 		} catch (DataNotExistsException e){
 			
-			LOGGER.debug("DataNotExistsException in SensorEndpoint.updateSensor with message :" + e.getMessage());
+			LOGGER.debug("DataNotExistsException in SensorEndpoint.updateSensor with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_12, Response.Status.NOT_FOUND));
 			
 		} catch (RuntimeException ex){
 
-			LOGGER.debug("RuntimeException in SensorEndpoint.updateSensor with message :" + ex.getMessage());
+			LOGGER.debug("RuntimeException in SensorEndpoint.updateSensor with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
@@ -272,12 +265,12 @@ public class SensorEndpointImpl implements SensorEndpoint {
 
 		} catch (DataNotExistsException e){
 			
-			LOGGER.debug("DataNotExistsException in SensorEndpoint.removeSensor with message :" + e.getMessage());
+			LOGGER.debug("DataNotExistsException in SensorEndpoint.removeSensor with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_13, Response.Status.NOT_FOUND));
 			
 		} catch (RuntimeException ex){
 
-			LOGGER.debug("RuntimeException in SensorEndpoint.removeSensor with message :" + ex.getMessage());
+			LOGGER.debug("RuntimeException in SensorEndpoint.removeSensor with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 

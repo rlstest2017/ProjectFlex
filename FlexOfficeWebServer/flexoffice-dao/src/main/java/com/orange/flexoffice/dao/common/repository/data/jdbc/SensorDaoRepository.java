@@ -13,7 +13,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.repository.data.SensorDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.SensorDaoMetadata;
@@ -22,7 +21,6 @@ import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 @Repository
 public class SensorDaoRepository extends DataRepository<SensorDao> implements SensorDaoOperations {
 
-	//private final Logger LOGGER = Logger.getLogger(SensorDaoRepository.class);
 	
 	public SensorDaoRepository() {
 		super(SensorDao.class);
