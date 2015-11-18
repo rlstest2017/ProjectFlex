@@ -24,8 +24,6 @@ import com.orange.flexoffice.adminui.ws.model.SensorInput1;
 import com.orange.flexoffice.adminui.ws.model.SensorInput2;
 import com.orange.flexoffice.adminui.ws.model.SensorOutput;
 import com.orange.flexoffice.adminui.ws.model.SensorSummary;
-import com.orange.flexoffice.business.common.exception.DataNotExistsException;
-import com.orange.flexoffice.dao.common.model.data.SensorDao;
 
 /**
  * Defines all operations available for a resource "sensor".
