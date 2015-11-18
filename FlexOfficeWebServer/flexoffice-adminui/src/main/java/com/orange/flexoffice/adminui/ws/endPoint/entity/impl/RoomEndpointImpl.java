@@ -25,6 +25,7 @@ import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
 import com.orange.flexoffice.adminui.ws.model.Room;
 import com.orange.flexoffice.adminui.ws.model.RoomInput1;
 import com.orange.flexoffice.adminui.ws.model.RoomOutput;
+import com.orange.flexoffice.adminui.ws.model.UserSummary;
 import com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
@@ -87,7 +88,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			roomList.add(room);
 		}
 
-		LOGGER.debug("List of rooms : nb = " + dataList.size());
+		LOGGER.debug("List of rooms : nb = " + roomList.size());
 
 		LOGGER.info( "End call RoomEndpoint.getRooms  at: " + new Date() );
 
@@ -125,7 +126,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setAddress(roomDto.getAddress());
 			room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));			
 			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
-			room.setTenantName(computeTenant(room.getStatus(), roomDto.getUser(), roomDto.getName()));
+			room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
 
 			LOGGER.info( "End call RoomEndpoint.getRoom  at: " + new Date() );
 
@@ -157,13 +158,16 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		RoomDao roomDao = new RoomDao();
 		roomDao.setName(roomInput.getName());
+		roomDao.setType(roomInput.getType().toString());
+		if (roomInput.getGateway() !=null) {
+			roomDao.setGatewayId(Long.valueOf(roomInput.getGateway().getId()));
+		} else {
+			roomDao.setGatewayId(0l);
+		}
+		roomDao.setDescription(roomInput.getDesc());
 		roomDao.setAddress(roomInput.getAddress());
 		roomDao.setCapacity(roomInput.getCapacity().intValue());
-		roomDao.setDescription(roomInput.getDesc());
-		roomDao.setType(roomInput.getType().toString());
-		roomDao.setStatus("UNKNOWN");
-		roomDao.setGatewayId(Long.valueOf(roomInput.getGateway().getId()));
-	
+		roomDao.setStatus(ERoomStatus.UNKNOWN.toString());	
 		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "addRoom with parameters :");
@@ -172,7 +176,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			message.append( roomInput.getName() );
 			message.append( "\n" );
 			message.append( "gateway id :" );
-			message.append( roomInput.getGateway().getId() );
+			message.append( roomDao.getGatewayId() );
 			message.append( "\n" );
 			LOGGER.debug( message.toString() );
 		}
@@ -213,11 +217,15 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		RoomDao roomDao = new RoomDao();
 		roomDao.setId(Long.valueOf(id));
 		roomDao.setName(roomInput.getName());
+		roomDao.setType(roomInput.getType().toString());
+		if (roomInput.getGateway() !=null) {
+			roomDao.setGatewayId(Long.valueOf(roomInput.getGateway().getId()));
+		} else {
+			roomDao.setGatewayId(0l);
+		}
+		roomDao.setDescription(roomInput.getDesc());
 		roomDao.setAddress(roomInput.getAddress());
 		roomDao.setCapacity(roomInput.getCapacity().intValue());
-		roomDao.setDescription(roomInput.getDesc());
-		roomDao.setType(roomInput.getType().toString());
-		roomDao.setGatewayId(Long.valueOf(roomInput.getGateway().getId()));
 
 		try {
 			roomDao = roomManager.update(roomDao);
@@ -311,18 +319,27 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 */
 	private String computeTenant(final ERoomStatus status, final Long userId, final String roomName) {
 
-		UserDao userDao = null;
+		String tenant = new String("");
 
-		if (userId != null) {
-			try {
-				userDao = userManager.find(Long.valueOf(userId));
+		// Compute tenant name only if room is reserved or occupied
+		if ((status == ERoomStatus.RESERVED) ||
+				(status == ERoomStatus.OCCUPIED)) {
 
-			} catch(DataNotExistsException e ) {
-				LOGGER.info("Get rooms / Get room id : user not found : " + e.getMessage());
+			// And if user is known
+			if (userId != 0) {
+				try {
+					// Get user object from DB
+					UserDao userDao = userManager.find(userId);
+					// Compute tenant name
+					tenant = userDao.getFirstName() + " " + userDao.getLastName();
+
+				} catch(DataNotExistsException e ) {
+					LOGGER.info("Get rooms / Get room id : user not found on room " + roomName, e);
+				}
 			}
 		}
 
-		return computeTenant(status, userDao, roomName);
+		return tenant;
 	}
 
 
@@ -335,20 +352,25 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 * 
 	 * @return tenant
 	 */
-	private String computeTenant(final ERoomStatus status, final UserDao userDao, final String roomName) {
-		String tenant = new String("");
+	private UserSummary computeTenantSummary(final ERoomStatus status, final UserDao userDao, final String roomName) {
+		UserSummary tenant = factory.createUserSummary();
 
+		// Compute tenant name only if room is reserved or occupied
 		if ((status == ERoomStatus.RESERVED) ||
 				(status == ERoomStatus.OCCUPIED)) {
-
 
 			if (userDao == null) {
 
 				LOGGER.info("Get rooms / Get room id   : user not found on room " + roomName);
 
+			// And if user is known
 			} else {
-
-				tenant = userDao.getFirstName() + " " + userDao.getLastName();
+				tenant.setId(userDao.getId().toString());
+				// Compute label
+				tenant.setLabel(userDao.getFirstName() + " " + userDao.getLastName());
+				tenant.setFirstName(userDao.getFirstName());
+				tenant.setLastName(userDao.getLastName());
+				tenant.setEmail(userDao.getEmail());
 			}
 		}
 
