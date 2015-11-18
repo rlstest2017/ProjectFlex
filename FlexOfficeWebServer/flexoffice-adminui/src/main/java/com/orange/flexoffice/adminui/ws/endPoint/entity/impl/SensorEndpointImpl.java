@@ -32,6 +32,7 @@ import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.business.common.service.data.SensorManager;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_SensorStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_SensorType;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 
 
@@ -172,10 +173,12 @@ public class SensorEndpointImpl implements SensorEndpoint {
 		sensorDao.setType(sensorInput.getType().toString());
 		sensorDao.setDescription(sensorInput.getDesc());
 		sensorDao.setStatus(E_SensorStatus.OFFLINE.toString());
-		sensorDao.setProfile(sensorInput.getProfile());
+		sensorDao.setProfile(computeProfile(sensorInput.getProfile(), sensorInput.getType()));
 		
-		if (sensorInput.getRoom() !=null) {
+		if (sensorInput.getRoom() != null) {
 			sensorDao.setRoomId(Integer.valueOf(sensorInput.getRoom().getId()));
+		} else {
+			sensorDao.setRoomId(0);
 		}
 		
 		if (LOGGER.isDebugEnabled()) {
@@ -225,7 +228,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 		sensorDao.setName(sensorInput.getName());
 		sensorDao.setType(sensorInput.getType().toString());
 		sensorDao.setDescription(sensorInput.getDesc());
-		sensorDao.setProfile(sensorInput.getProfile());
+		sensorDao.setProfile(computeProfile(sensorInput.getProfile(), sensorInput.getType()));
 
 		if (sensorInput.getRoom() !=null) {
 			sensorDao.setRoomId(Integer.valueOf(sensorInput.getRoom().getId()));
@@ -306,5 +309,23 @@ public class SensorEndpointImpl implements SensorEndpoint {
 		return (roomOutput);		
 	}
 
+	
+	private String computeProfile(final String currentProfile, final ESensorType eSensorType) {
+		String profile = new String("");
+		
+		if ((currentProfile == null) || (currentProfile.isEmpty())) {
+			// Profile depends on type.
+			// TODO - For V2, add properties or other to avoid change code when a new type will be manage 
+			if (eSensorType.equals(ESensorType.MOTION_DETECTION)) {
+				profile = "A5-07-01";
+			} else {
+				profile = "A5-04-01";
+			}				
+		} else {
+			profile = currentProfile;
+		}
+		return profile;
+	}
+	
 
 }

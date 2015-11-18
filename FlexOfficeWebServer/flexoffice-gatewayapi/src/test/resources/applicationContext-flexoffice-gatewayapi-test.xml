@@ -13,6 +13,9 @@
 	<bean id="gatewayEndpoint" class="com.orange.flexoffice.gatewayapi.ws.endPoint.entity.impl.GatewayApiEndpointImpl">
 	</bean>
 	
+	<bean id="sensorEndpoint" class="com.orange.flexoffice.gatewayapi.ws.endPoint.entity.impl.SensorApiEndpointImpl">
+	</bean>
+	
 	<bean id="errorMessageHandler" class="com.orange.flexoffice.gatewayapi.ws.utils.ErrorMessageHandler">
 	</bean>
 		

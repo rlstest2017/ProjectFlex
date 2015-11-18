@@ -129,11 +129,7 @@ public class SensorEndpointImplTest {
 		sensorInput.setName("Sensor Test 1");
 		sensorInput.setDesc("Sensor Description 1");
 		sensorInput.setType(ESensorType.MOTION_DETECTION);
-		sensorInput.setProfile("Sensor Profile 1");
-
-		//		RoomInput2 room = new RoomInput2();
-		//		room.setId("1");
-		//		sensorInput.setRoom(room);
+		// No Profile and no room
 
 		// Test
 		final SensorOutput response = sensorEndpoint.addSensor(sensorInput);
@@ -158,11 +154,11 @@ public class SensorEndpointImplTest {
 		sensorInput.setName("Sensor Test 2");
 		sensorInput.setDesc("Sensor Description 2");
 		sensorInput.setType(ESensorType.TEMPERATURE_HUMIDITY);
-		sensorInput.setProfile("Sensor Profile 2");
 
 		RoomInput2 room = new RoomInput2();
 		room.setId("1");
 		sensorInput.setRoom(room);
+		// No Profile
 
 		// Test
 		final SensorOutput response = sensorEndpoint.addSensor(sensorInput);
@@ -180,7 +176,35 @@ public class SensorEndpointImplTest {
 
 
 	@Test
-	public void TestH_addSensorAlreadyExists() {
+	public void TestH_addSensorWithProfile() throws WebApplicationException {
+		// Setup
+		final SensorInput1 sensorInput = new SensorInput1();
+		sensorInput.setIdentifier("Sensor Identifier 3");
+		sensorInput.setName("Sensor Test 3");
+		sensorInput.setDesc("Sensor Description 3");
+		sensorInput.setType(ESensorType.TEMPERATURE_HUMIDITY);
+		sensorInput.setProfile("A5-04-01");
+		RoomInput2 room = new RoomInput2();
+		room.setId("2");
+		sensorInput.setRoom(room);
+
+		// Test
+		final SensorOutput response = sensorEndpoint.addSensor(sensorInput);
+
+		// Asserts
+		assertNotNull(response.getIdentifier());
+
+
+		// Test
+		List<SensorSummary> sensors = sensorEndpoint.getSensors();
+
+		// Asserts
+		assertEquals(6, sensors.size());
+	}
+
+
+	@Test
+	public void TestI_addSensorAlreadyExists() {
 		// Setup
 		boolean expectedResult = false;
 		final SensorInput1 sensorInput = new SensorInput1();
@@ -202,7 +226,7 @@ public class SensorEndpointImplTest {
 	}
 
 	@Test
-	public void TestI_updateSensor() throws WebApplicationException {
+	public void TestJ_updateSensor() throws WebApplicationException {
 
 		// Setup
 		boolean expectedResult = false;
@@ -226,7 +250,7 @@ public class SensorEndpointImplTest {
 			List<SensorSummary> sensors = sensorEndpoint.getSensors();
 
 			// Asserts
-			assertEquals(5, sensors.size());
+			assertEquals(6, sensors.size());
 			expectedResult = true;
 
 		} catch(WebApplicationException e ) {
@@ -239,7 +263,7 @@ public class SensorEndpointImplTest {
 
 
 	@Test
-	public void TestJ_updateSensorDataNotExistsException() {
+	public void TestK_updateSensorDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
 
@@ -264,7 +288,7 @@ public class SensorEndpointImplTest {
 
 
 	@Test
-	public void TestK_getUnpairedSensors() {
+	public void TestL_getUnpairedSensors() {
 		// Test
 		List<SensorSummary> sensors = sensorEndpoint.getUnpairedSensors();
 
@@ -274,7 +298,7 @@ public class SensorEndpointImplTest {
 
 
 	@Test
-	public void TestL_removeSensorDataNotExistsException() {
+	public void TestM_removeSensorDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
 		try {
@@ -291,7 +315,7 @@ public class SensorEndpointImplTest {
 
 
 	@Test
-	public void TestM_removeSensor() throws WebApplicationException {
+	public void TestN_removeSensor() throws WebApplicationException {
 
 		// Test
 		Response response = sensorEndpoint.removeSensor("Sensor Identifier 1");
