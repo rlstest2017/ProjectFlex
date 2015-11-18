@@ -135,19 +135,4 @@ public class SensorManagerImpl implements SensorManager {
 	}
 
 
-	/**
-	 * @param name
-	 * 
-	 * @return SensorDao object if found
-	 */
-	@Override
-	public SensorDao findByName(String name) throws DataNotExistsException {
-
-		try {
-			return sensorRepository.findByName(name);
-		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("SensorManager.findByName : Sensor by name #" + name + " is not found");
-			throw new DataNotExistsException("SensorManager.findByName : Sensor by name #" + name + " is not found" + e.getMessage());
-		}
-	}
 }

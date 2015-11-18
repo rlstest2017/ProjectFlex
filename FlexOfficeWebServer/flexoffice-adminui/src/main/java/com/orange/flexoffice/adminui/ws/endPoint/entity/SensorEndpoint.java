@@ -122,9 +122,6 @@ public interface SensorEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	Response removeSensor(@PathParam(SENSOR_IDENTIFIER_PARAM)String id);
 
-	
-	// Used for tests
-	SensorDao findByName(String name) throws DataNotExistsException;
 }
 
 

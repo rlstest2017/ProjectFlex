@@ -64,11 +64,4 @@ public interface SensorManager {
 	 */
 	void delete(String sensorIdentifier) throws DataNotExistsException;
 
-	
-	/**
-	 * @param name
-	 * 
-	 * @return SensorDao object if found
-	 */
-	SensorDao findByName(String name) throws DataNotExistsException;
 }

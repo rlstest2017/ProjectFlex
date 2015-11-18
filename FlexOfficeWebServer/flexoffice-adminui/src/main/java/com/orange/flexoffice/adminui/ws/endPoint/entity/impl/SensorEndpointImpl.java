@@ -107,7 +107,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 		List<SensorSummary> sensorList = new ArrayList<SensorSummary>();
 
 		for (SensorDao sensorDao : dataList) {
-			if ((sensorDao.getRoomId() != null) && (sensorDao.getRoomId() > 0)){
+			if ((sensorDao.getRoomId() != null) && (sensorDao.getRoomId() == 0)){
 				SensorSummary sensor = factory.createSensorSummary();
 				sensor.setIdentifier(sensorDao.getIdentifier());
 				sensor.setName(sensorDao.getName());
@@ -287,15 +287,6 @@ public class SensorEndpointImpl implements SensorEndpoint {
 	}
 
 
-
-	
-	/* (non-Javadoc)
-	 * @see com.orange.flexoffice.adminui.ws.endPoint.entity.SensorEndpoint#findByName
-	 */
-	@Override
-	public SensorDao findByName(String name) throws DataNotExistsException {
-		return sensorManager.findByName(name);
-	}
 
 	/** Create Room output from room id
 	 * 

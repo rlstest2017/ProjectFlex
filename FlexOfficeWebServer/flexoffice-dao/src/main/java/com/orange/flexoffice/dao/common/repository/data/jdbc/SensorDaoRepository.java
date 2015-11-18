@@ -58,16 +58,6 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 			);
 	}
 
-	@Override
-	public SensorDao findByName(String name) throws IncorrectResultSizeDataAccessException {
-		SqlParameterSource paramMap = new MapSqlParameterSource("name", name);
-		return jdbcTemplate.queryForObject(
-				findByColumnNameQuery, 
-				paramMap, 
-				new BeanPropertyRowMapper<SensorDao>(SensorDao.class)
-			);
-	}
-
 
 	@Override
 	public SensorDao saveSensor(SensorDao data) throws DataIntegrityViolationException {
