@@ -10,6 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+
 import static com.orange.flexoffice.adminui.ws.PathConst.SYSTEM_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.LOGIN_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.LOGOUT_PATH;
@@ -20,6 +21,7 @@ import static com.orange.flexoffice.adminui.ws.PathConst.INIT_PATH;
 import static com.orange.flexoffice.adminui.ws.ParamsConst.AUTH_HEADER_PARAM;
 
 import com.orange.flexoffice.adminui.ws.model.Teachin;
+import com.orange.flexoffice.adminui.ws.model.Token;
 import com.orange.flexoffice.adminui.ws.model.System;
 /**
  * Defines all operations available for a resource "system".
@@ -49,7 +51,7 @@ public interface SystemEndpoint {
 	@GET
 	@Path(LOGIN_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response login(@HeaderParam(AUTH_HEADER_PARAM) String auth); // TODO return object Token to add to types.xsd
+	Token login(@HeaderParam(AUTH_HEADER_PARAM) String auth); 
 	
 	/**
 	 * Delete Token from DB

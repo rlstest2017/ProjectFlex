@@ -298,6 +298,15 @@
 		</xsd:sequence>
 	</xsd:complexType>
 	
+	<!-- Token -->
+	<xsd:complexType name="Token">
+		<xsd:sequence>
+			<xsd:element name="accessToken" type="xsd:string"/>
+			<xsd:element name="expiredDate" type="xsd:long"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	
 	<!-- Error Model -->
 	<xsd:complexType name="ErrorModel">
 		<xsd:sequence>

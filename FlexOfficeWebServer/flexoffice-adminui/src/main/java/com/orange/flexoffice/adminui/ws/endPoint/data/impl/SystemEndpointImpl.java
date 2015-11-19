@@ -19,6 +19,7 @@ import com.orange.flexoffice.adminui.ws.model.ERoomType;
 import com.orange.flexoffice.adminui.ws.model.ESensorType;
 import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
 import com.orange.flexoffice.adminui.ws.model.Teachin;
+import com.orange.flexoffice.adminui.ws.model.Token;
 import com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.service.data.SystemManager;
@@ -101,11 +102,15 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	
 	
 	@Override
-	public Response login(String auth) {
-		// TODO Auto-generated method stub
+	public Token login(String auth) {
+		// TODO implement
+		Token token = factory.createToken();
+		token.setAccessToken("testTokenAccess");
+		token.setExpiredDate(Long.valueOf(1447853568741l));
 		String output = "Authorization parameter :"+ auth;
 		LOGGER.info( output);
-		return Response.status(200).entity(output).build(); 
+		//return Response.status(200).entity(output).build();
+		return factory.createToken(token).getValue();
 	}
 	
 	@Override

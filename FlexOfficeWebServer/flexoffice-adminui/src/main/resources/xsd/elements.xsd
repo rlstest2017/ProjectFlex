@@ -28,6 +28,8 @@
 	<xsd:element name="roomInput2" type="RoomInput2"/>
 	<xsd:element name="roomOutput" type="RoomOutput"/>
 	
+	<xsd:element name="token" type="Token"/>
+	
 	<xsd:element name="error" type="ErrorModel"/>
 	
 </xsd:schema>
