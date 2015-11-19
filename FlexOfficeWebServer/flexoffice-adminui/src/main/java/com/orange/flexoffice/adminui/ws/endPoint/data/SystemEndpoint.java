@@ -3,6 +3,7 @@ package com.orange.flexoffice.adminui.ws.endPoint.data;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -16,6 +17,7 @@ import static com.orange.flexoffice.adminui.ws.PathConst.CANCEL_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.SUBMIT_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.TEACHIN_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.INIT_PATH;
+import static com.orange.flexoffice.adminui.ws.ParamsConst.AUTH_HEADER_PARAM;
 
 import com.orange.flexoffice.adminui.ws.model.Teachin;
 import com.orange.flexoffice.adminui.ws.model.System;
@@ -47,7 +49,7 @@ public interface SystemEndpoint {
 	@GET
 	@Path(LOGIN_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response login(); // TODO return object Token to add to types.xsd
+	Response login(@HeaderParam(AUTH_HEADER_PARAM) String auth); // TODO return object Token to add to types.xsd
 	
 	/**
 	 * Delete Token from DB

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/security"
+             xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- Enable Spring Security -->
+ 	<http pattern="/v1/system/login" security="none"/>
+ 	
+    <http  pattern="/v1/**" entry-point-ref="restAuthenticationEntryPoint" use-expressions="true" auto-config="false" create-session="stateless" >
+	     <!-- Adds the custom login filter to the Spring Security filter chain -->
+	    <custom-filter ref="authenticationTokenProcessingFilter" position="FORM_LOGIN_FILTER"   />
+	    <intercept-url pattern="/v1/**" access="isAuthenticated()" />
+	       <logout />
+	</http>
+ 
+     <!-- Configures the authentication entry point -->
+    <beans:bean id="restAuthenticationEntryPoint" class="com.orange.flexoffice.adminui.ws.endPoint.impl.RestAuthenticationEntryPoint"/>
+    
+      <!-- Configures a custom authentication success handler that returns the HTTP status code 200 instead of the 301 HTTP status code -->
+    <beans:bean id="restAuthenticationSuccessHandler" class="com.orange.flexoffice.adminui.ws.filters.TokenSimpleUrlAuthenticationSuccessHandler"/>
+    
+    <beans:bean class="com.orange.flexoffice.adminui.ws.filters.CustomTokenAuthenticationFilter" id="authenticationTokenProcessingFilter">
+    	<beans:constructor-arg type="java.lang.String"><beans:value>/v1/**</beans:value></beans:constructor-arg>
+	</beans:bean>
+	
+	<!-- Configures in-memory implementation of the UserDetailsService implementation -->
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider>
+            <user-service>
+                <user name="user" password="password" authorities="ROLE_USER"/>
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+	
+</beans:beans>

@@ -101,10 +101,13 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	
 	
 	@Override
-	public Response login() {
+	public Response login(String auth) {
 		// TODO Auto-generated method stub
-		return null;
+		String output = "Authorization parameter :"+ auth;
+		LOGGER.info( output);
+		return Response.status(200).entity(output).build(); 
 	}
+	
 	@Override
 	public Response logout() {
 		// TODO Auto-generated method stub
