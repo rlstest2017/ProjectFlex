@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<log xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="../elements.xsd">
-	<user id="1256"/>	
-	<item id="1111"/>
-	<rating>4</rating>
-</log>
