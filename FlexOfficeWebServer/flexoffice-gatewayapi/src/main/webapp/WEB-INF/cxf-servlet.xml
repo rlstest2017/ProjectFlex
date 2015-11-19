@@ -11,8 +11,8 @@
 	
 	<jaxrs:server id="server" address="/">
 		<jaxrs:serviceBeans>
-<!--   			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.entity.impl.SensorEndpointImpl"/> -->
-   			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.entity.impl.GatewayEndpointImpl"/> 
+  			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.entity.impl.SensorApiEndpointImpl"/>
+   			<bean class="com.orange.flexoffice.gatewayapi.ws.endPoint.entity.impl.GatewayApiEndpointImpl"/> 
   		</jaxrs:serviceBeans>
   		 <jaxrs:extensionMappings>
             <entry key="json" value="application/json"/>
