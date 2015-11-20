@@ -21,7 +21,13 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
             AuthenticationException authException ) throws IOException, ServletException {
         String contentType = request.getContentType();
         LOGGER.info(contentType);
-        response.sendError( HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized" );
+        if (request.getMethod() == "OPTIONS" || request.getMethod().equals("OPTIONS")) {
+            response.getWriter().print("OK");
+            response.getWriter().flush();
+            response.setStatus(response.SC_OK);
+        } else {
+        	response.sendError( HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized" );
+        }
     }
  
 }
