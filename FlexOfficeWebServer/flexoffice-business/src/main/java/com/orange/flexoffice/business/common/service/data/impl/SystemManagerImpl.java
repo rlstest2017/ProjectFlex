@@ -1,15 +1,20 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
 import java.nio.charset.Charset;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.naming.AuthenticationException;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
+import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.SystemManager;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
@@ -68,11 +73,12 @@ public class SystemManagerImpl implements SystemManager {
 	}
 
 	@Override
-	public UserDao processLogin(String authorization) {
+	public UserDao processLogin(String authorization) throws DataNotExistsException, AuthenticationException {
 		// TODO 
 		
 	    LOGGER.debug("authorization parameter is :" + authorization);
-		   
+    	UserDao user = new UserDao();
+    	
 		if (authorization != null && authorization.startsWith("Basic")) {
 	        // Authorization: Basic base64credentials
 	        String base64Credentials = authorization.substring("Basic".length()).trim();
@@ -83,22 +89,35 @@ public class SystemManagerImpl implements SystemManager {
 	        
 	        String email = values[0];
 	        String password = values[1];
-	        
-	        String accessToken = createAccessToken(email, password);
-	        
 	        LOGGER.debug("email in processLogin() method is :" + email);
 	        LOGGER.debug("password in processLogin() method is :" + password);
+	        String accessToken = createAccessToken(email, password);
+	        Date expiredTokenDate = createExpiredDate();
 	        
-	        
-	        
-	        
-	        
+	        try {
+	        	userRepository.findByUserEmail(email);
+	        	// save data
+	    
+	        	user.setEmail(email);
+	        	user.setAccessToken(accessToken);
+	        	user.setExpiredTokenDate(expiredTokenDate);
+				// Update UserDao
+				userRepository.updateUserByEmail(user);
+
+				user.setIsCreatedFromUserui(false);
+
+			} catch(IncorrectResultSizeDataAccessException e ) {
+				LOGGER.error("UserManager.findByUserMail : User by email #" + email + " is not found", e);
+				throw new DataNotExistsException("UserManager.findByUserMail : User by email #" + email + " is not found");
+			}
+			
 		} else {
-			// TODO throw exception
+			LOGGER.error("UserManager.processLogin : Authorization parameter is null or wrong format");
+			throw new AuthenticationException("UserManager.processLogin : Authorization parameter is null or wrong format");
 		}
 			
 		
-		return null;
+		return user;
 	}
 	
 	private Long countGateways() {
@@ -131,4 +150,14 @@ public class SystemManagerImpl implements SystemManager {
 		return token;
 	}
 	
+	private Date createExpiredDate() {
+		Date now = new Date();
+		LOGGER.debug("Date now :" + now);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.add(Calendar.DAY_OF_YEAR, 1); // <--1 jour -->
+		Date tomorrow = cal.getTime();
+		LOGGER.debug("Date tomorrow :" + tomorrow);		
+		return tomorrow;
+	}
 }

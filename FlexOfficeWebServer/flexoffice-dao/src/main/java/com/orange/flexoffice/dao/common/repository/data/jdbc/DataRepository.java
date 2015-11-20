@@ -15,6 +15,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_MAC_ADDRESS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_IDENTIFIER_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_BY_MAIL_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_GATEWAY_STATUS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOM_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_GATEWAY_TEMPLATE;
@@ -55,6 +56,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String saveRoomQuery;
 	protected final String saveSensorQuery;
 	protected final String updateUserQuery;
+	protected final String updateUserByMailQuery;
 	protected final String updateGatewayStatusQuery;
 	protected final String updateGatewayQuery;
 	protected final String updateRoomQuery;
@@ -90,6 +92,7 @@ public abstract class DataRepository<T extends Data>
 		saveRoomQuery = String.format(CREATE_ROOM_TEMPLATE, getTableName());
 		saveSensorQuery = String.format(CREATE_SENSOR_TEMPLATE, getTableName());
 		updateUserQuery = String.format(UPDATE_USER_TEMPLATE, getTableName(), getColumnColName());
+		updateUserByMailQuery = String.format(UPDATE_USER_BY_MAIL_TEMPLATE, getTableName());
 		updateGatewayStatusQuery = String.format(UPDATE_GATEWAY_STATUS_TEMPLATE, getTableName());
 		updateRoomQuery = String.format(UPDATE_ROOM_TEMPLATE, getTableName(), getColumnColName());
 		updateRoomStatusQuery = String.format(UPDATE_ROOM_STATUS_TEMPLATE, getTableName(), getColumnColName());
@@ -137,6 +140,7 @@ public abstract class DataRepository<T extends Data>
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public Long count() {
 		return jdbcTemplate.getJdbcOperations().queryForLong(countQuery);

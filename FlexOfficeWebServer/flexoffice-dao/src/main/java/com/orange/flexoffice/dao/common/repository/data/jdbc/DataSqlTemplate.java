@@ -40,6 +40,8 @@ public final class DataSqlTemplate {
 			"update %s set name=:name, description=:description WHERE mac_address=:macAddress";
 	public static final String UPDATE_USER_TEMPLATE =
 			"update %s set first_name=:firstName, last_name=:lastName, email=:email WHERE id=:id";
+	public static final String UPDATE_USER_BY_MAIL_TEMPLATE =
+			"update %s set access_token=:accessToken, expired_token_date=:expiredTokenDate WHERE email=:email";
 	public static final String UPDATE_GATEWAY_STATUS_TEMPLATE =
 			"update %s set status=CAST(:status AS gatewayStatus) where id=:id";
 	public static final String UPDATE_ROOM_TEMPLATE =

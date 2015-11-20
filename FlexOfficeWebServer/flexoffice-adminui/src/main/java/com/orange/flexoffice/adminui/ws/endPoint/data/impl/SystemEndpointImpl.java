@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.naming.AuthenticationException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -22,9 +23,11 @@ import com.orange.flexoffice.adminui.ws.model.Teachin;
 import com.orange.flexoffice.adminui.ws.model.Token;
 import com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
+import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.SystemManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
+import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.object.SystemDto;
 
 
@@ -102,13 +105,18 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	
 	@Override
 	public Response login(String auth, String origin) {
-		// TODO implement
-		systemManager.processLogin(auth);
+		
+		try {
+			
+		UserDao userToken = systemManager.processLogin(auth);
 		
 		Token token = factory.createToken();
-		token.setAccessToken("cmFjaGlkLmxhb3Vlc0BnbWFpbC5jb206cGFzczEyMzE0NDgwMzA5MDY0ODM=");
-		token.setExpiredDate(Long.valueOf(1447853568741l));
-
+		//token.setAccessToken("cmFjaGlkLmxhb3Vlc0BnbWFpbC5jb206cGFzczEyMzE0NDgwMzA5MDY0ODM=");
+		//token.setExpiredDate(Long.valueOf(1447853568741l));
+		
+		token.setAccessToken(userToken.getAccessToken());
+		token.setExpiredDate(userToken.getExpiredTokenDate().getTime());
+				
 		if (origin != null) {
 			LOGGER.debug("Origin value is :" + origin);
 			return Response.ok(token).status(200)
@@ -122,6 +130,19 @@ public class SystemEndpointImpl implements SystemEndpoint {
         	LOGGER.debug("Origin value is null");
         	return Response.status(200).entity(token).build();
         }
+		
+		} catch (DataNotExistsException e) {
+			LOGGER.debug("DataNotExistsException in login() SystemEndpointImpl with message :" + e.getMessage(), e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_23, Response.Status.METHOD_NOT_ALLOWED));
+
+		} catch (AuthenticationException e) {
+			LOGGER.debug("AuthenticationException in login() SystemEndpointImpl with message :" + e.getMessage(), e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_33, Response.Status.UNAUTHORIZED));
+
+		}catch (RuntimeException ex) {
+			LOGGER.debug("RuntimeException in login() SystemEndpointImpl with message :" + ex.getMessage(), ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		}
 	}
 	
 	@Override

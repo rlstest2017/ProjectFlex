@@ -17,8 +17,8 @@ public class UserDao extends AbstractData {
 	private String accessToken;
 	private String role;
 	private Date lastConnectionDate;
-	private Boolean expiredTokenDate;
-	private Date isCreatedFromUserui;
+	private Boolean isCreatedFromUserui;
+	private Date expiredTokenDate;
 	
 	public String getFirstName() {
 		return firstName;
@@ -63,17 +63,17 @@ public class UserDao extends AbstractData {
 	public void setLastConnectionDate(Date lastConnectionDate) {
 		this.lastConnectionDate = lastConnectionDate;
 	}
-	public Boolean getExpiredTokenDate() {
-		return expiredTokenDate;
-	}
-	public void setExpiredTokenDate(Boolean expiredTokenDate) {
-		this.expiredTokenDate = expiredTokenDate;
-	}
-	public Date getIsCreatedFromUserui() {
+	public Boolean getIsCreatedFromUserui() {
 		return isCreatedFromUserui;
 	}
-	public void setIsCreatedFromUserui(Date isCreatedFromUserui) {
+	public void setIsCreatedFromUserui(Boolean isCreatedFromUserui) {
 		this.isCreatedFromUserui = isCreatedFromUserui;
+	}
+	public Date getExpiredTokenDate() {
+		return expiredTokenDate;
+	}
+	public void setExpiredTokenDate(Date expiredTokenDate) {
+		this.expiredTokenDate = expiredTokenDate;
 	}
 	@Override
 	public void setColumnId(String columnId) {

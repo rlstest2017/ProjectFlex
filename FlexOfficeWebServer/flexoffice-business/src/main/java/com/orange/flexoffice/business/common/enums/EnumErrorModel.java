@@ -41,8 +41,8 @@ public enum EnumErrorModel {
 	ERROR_29("R003","impossible de mettre à jour cette salle" /*({{name}})*/),
 	ERROR_30("R004","impossible de supprimer cette salle" /*({{name}})*/),
 	ERROR_31("R005","impossible de charger cette salle" /*({{name}})*/),
-	ERROR_32("500","");
-        
+	ERROR_32("500",""),
+	ERROR_33("U101","erreur dans le paramètre authorization");    
      /**
      * status code
      */

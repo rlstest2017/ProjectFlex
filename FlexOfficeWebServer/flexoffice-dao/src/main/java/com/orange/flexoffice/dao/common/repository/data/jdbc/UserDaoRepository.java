@@ -68,6 +68,20 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 		
 		return data;
 	}
+
+	@Override
+	public UserDao updateUserByEmail(UserDao data) {
+	KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateUserByMailQuery, paramBean, keyHolder);
+		
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
+		
+		return data;
+	}
 	
 	@Override
 	public UserDao saveUser(UserDao data) throws DataIntegrityViolationException {
@@ -105,6 +119,7 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	
 
 }
