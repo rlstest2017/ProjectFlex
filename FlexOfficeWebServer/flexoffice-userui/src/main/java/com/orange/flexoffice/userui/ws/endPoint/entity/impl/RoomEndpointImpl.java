@@ -21,6 +21,7 @@ import com.orange.flexoffice.userui.ws.model.UserSummary;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
+import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.business.common.service.data.UserManager;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
@@ -51,6 +52,8 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	@Autowired
 	private UserManager userManager;
 
+	@Autowired
+	private TestManager testManager;
 	
 	/**
 	 * Gets rooms.
@@ -215,6 +218,17 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	}
 	
 	
+
+	/** Initialize tests data in DB
+	 * 
+	 * @return true if successfully done
+	 */
+	@Override
+	public boolean executeInitTestFile() {
+		return testManager.executeInitTestFile();
+	}
+
+	
 	
 	/**
 	 * @param error
@@ -235,7 +249,6 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	}
 
 	
-
 	/** Create tenant if room status is not free 
 	 * 
 	 * @param status
@@ -304,4 +317,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		return tenant;
 	}
 
+	
+	
+	
 }

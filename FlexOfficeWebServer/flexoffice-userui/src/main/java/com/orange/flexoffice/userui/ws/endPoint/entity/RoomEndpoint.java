@@ -86,6 +86,12 @@ public interface RoomEndpoint {
 	Response cancelRoom(@PathParam(ROOM_ID_CANCEL_PATH) String roomId);
 
 
+	
+	/** Initialize tests data in DB
+	 * 
+	 * @return true if successfully done
+	 */
+	boolean executeInitTestFile();
 }
 
 

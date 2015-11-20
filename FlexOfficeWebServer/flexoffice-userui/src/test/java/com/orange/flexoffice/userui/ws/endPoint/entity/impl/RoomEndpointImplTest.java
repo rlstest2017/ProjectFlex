@@ -15,14 +15,12 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Log4jConfigurer;
 
 import com.orange.flexoffice.userui.ws.endPoint.entity.RoomEndpoint;
 import com.orange.flexoffice.userui.ws.model.Room;
 import com.orange.flexoffice.userui.ws.model.RoomSummary;
-import com.orange.flexoffice.business.common.service.data.TestManager;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RoomEndpointImplTest {
@@ -40,8 +38,6 @@ public class RoomEndpointImplTest {
 
 	private static RoomEndpoint roomEndpoint;
 
-	@Autowired
-	private TestManager testManager;
 
 
 	@Context
@@ -57,14 +53,14 @@ public class RoomEndpointImplTest {
 	}
 
 
-//	@Test
-//	public void TestA_initTables() {
-//		// SetUp
-//		boolean state = testManager.executeInitTestFile();
-//
-//		// Asserts
-//		assertEquals(true, state);
-//	}
+	@Test
+	public void TestA_initTables() {
+		// SetUp
+		boolean state = roomEndpoint.executeInitTestFile();
+
+		// Asserts
+		assertEquals(true, state);
+	}
 
 
 	@Test
@@ -99,7 +95,7 @@ public class RoomEndpointImplTest {
 
 
 	@Test
-	public void TestE_getWrongRoomDataNotExistsException() {
+	public void TestE_getWrongRoom() {
 		// Setup
 		boolean expectedResult = false;
 
@@ -118,7 +114,7 @@ public class RoomEndpointImplTest {
 
 
 	@Test
-	public void TestF_reserveRoom() throws WebApplicationException {
+	public void TestF_reserveRoom() {
 
 		// Setup
 		boolean expectedResult = false;
@@ -132,6 +128,67 @@ public class RoomEndpointImplTest {
 			expectedResult = true;
 			
 		} catch(WebApplicationException e ) {
+		}
+
+		// Asserts
+		assertEquals(true, expectedResult);	
+	}
+	
+
+	@Test
+	public void TestG_cancelRoom() {
+
+		// Setup
+		boolean expectedResult = false;
+		
+		try {
+			// Test
+			final Response response = roomEndpoint.cancelRoom("1");
+
+			// Asserts
+			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+			expectedResult = true;
+			
+		} catch(WebApplicationException e ) {
+		}
+
+		// Asserts
+		assertEquals(true, expectedResult);	
+	}
+	
+
+
+	@Test
+	public void TestH_reserveRoomNotExists() {
+
+		// Setup
+		boolean expectedResult = false;
+		
+		try {
+			// Test
+			roomEndpoint.reserveRoom("19889898");
+			
+		} catch(WebApplicationException e ) {
+			expectedResult = true;
+		}
+
+		// Asserts
+		assertEquals(true, expectedResult);	
+	}
+	
+
+	@Test
+	public void TestH_cancelRoomNotExists() {
+
+		// Setup
+		boolean expectedResult = false;
+		
+		try {
+			// Test
+			roomEndpoint.cancelRoom("19889898");
+			
+		} catch(WebApplicationException e ) {
+			expectedResult = true;
 		}
 
 		// Asserts
