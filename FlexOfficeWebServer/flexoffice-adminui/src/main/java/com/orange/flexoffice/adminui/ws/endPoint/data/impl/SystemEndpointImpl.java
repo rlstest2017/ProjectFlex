@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.OPTIONS;
+import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -163,6 +165,17 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	@Override
 	public boolean executeInitTestFile() {
 		return testManager.executeInitTestFile();
+	}
+	
+	@Override
+	public Response options() {
+	    return Response.ok("")
+	            .header("Access-Control-Allow-Origin", "*")
+	            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+	            .header("Access-Control-Allow-Credentials", "true")
+	            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	            .header("Access-Control-Max-Age", "1209600")
+	            .build();
 	}
 	
 	private List<EDeviceStatus> constructDeviceStatuses() {

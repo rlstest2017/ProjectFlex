@@ -4,6 +4,7 @@ package com.orange.flexoffice.adminui.ws.endPoint.data;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -111,6 +112,10 @@ public interface SystemEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	Response submitTeachin(); // TODO add List[idSensors] in parameter 
+	
+	@OPTIONS
+	@Path("{path : .*}")
+	Response options();
 	
 	// used for tests
 	boolean executeInitTestFile();
