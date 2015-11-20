@@ -129,10 +129,10 @@ public class SystemEndpointImpl implements SystemEndpoint {
 		if (origin != null) {
 			LOGGER.debug("Origin value is :" + origin);
 			return Response.ok().status(200)
-		            .header("Access-Control-Allow-Origin", origin)
+//		            .header("Access-Control-Allow-Origin", origin)
 		            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-		            .header("Access-Control-Allow-Credentials", "true")
-		            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+//		            .header("Access-Control-Allow-Credentials", "true")
+//		            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
 		            .header("Access-Control-Max-Age", "1209600")
 		            .build();
 		} else {
