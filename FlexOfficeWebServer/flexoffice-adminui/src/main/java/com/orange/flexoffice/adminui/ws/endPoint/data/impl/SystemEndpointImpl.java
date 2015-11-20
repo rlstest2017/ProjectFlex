@@ -103,9 +103,10 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	@Override
 	public Response login(String auth, String origin) {
 		// TODO implement
+		systemManager.processLogin(auth);
 		
 		Token token = factory.createToken();
-		token.setAccessToken("testTokenAccess");
+		token.setAccessToken("cmFjaGlkLmxhb3Vlc0BnbWFpbC5jb206cGFzczEyMzE0NDgwMzA5MDY0ODM=");
 		token.setExpiredDate(Long.valueOf(1447853568741l));
 
 		if (origin != null) {

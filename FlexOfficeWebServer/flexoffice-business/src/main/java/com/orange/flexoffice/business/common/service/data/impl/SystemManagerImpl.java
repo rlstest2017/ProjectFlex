@@ -1,14 +1,18 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
+import java.nio.charset.Charset;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import com.orange.flexoffice.business.common.service.data.SystemManager;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
+import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.object.SystemDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
@@ -63,6 +67,40 @@ public class SystemManagerImpl implements SystemManager {
 		return system;
 	}
 
+	@Override
+	public UserDao processLogin(String authorization) {
+		// TODO 
+		
+	    LOGGER.debug("authorization parameter is :" + authorization);
+		   
+		if (authorization != null && authorization.startsWith("Basic")) {
+	        // Authorization: Basic base64credentials
+	        String base64Credentials = authorization.substring("Basic".length()).trim();
+	        String credentials = new String(Base64Utils.decodeFromString(base64Credentials),
+	                Charset.forName("UTF-8"));
+	        // credentials = email:password
+	        final String[] values = credentials.split(":",2);
+	        
+	        String email = values[0];
+	        String password = values[1];
+	        
+	        String accessToken = createAccessToken(email, password);
+	        
+	        LOGGER.debug("email in processLogin() method is :" + email);
+	        LOGGER.debug("password in processLogin() method is :" + password);
+	        
+	        
+	        
+	        
+	        
+		} else {
+			// TODO throw exception
+		}
+			
+		
+		return null;
+	}
+	
 	private Long countGateways() {
 		return gatewayRepository.count();
 	}
@@ -84,4 +122,13 @@ public class SystemManagerImpl implements SystemManager {
 		//return userRepository.countActive(String lastConnectionDuration);
 		return 3l;
 	}
+
+	private String createAccessToken(String email, String password) {
+		String keySource = email + ":" + password + (new Date()).getTime();
+		LOGGER.debug("Original keySource is " + keySource);
+		String token = Base64Utils.encodeToString(keySource.getBytes());
+		LOGGER.debug("Generated keySource is " + token);
+		return token;
+	}
+	
 }
