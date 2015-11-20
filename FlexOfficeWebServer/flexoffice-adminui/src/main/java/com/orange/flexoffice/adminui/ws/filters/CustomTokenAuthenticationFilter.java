@@ -47,6 +47,10 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
             response.addHeader("Access-Control-Allow-Headers",
                     request.getHeader("Access-Control-Request-Headers"));
         }
+    	if (request.getMethod() == "OPTIONS") {
+             response.getWriter().print("OK");
+             response.getWriter().flush();
+         }
     	
     	String token = request.getHeader(HEADER_SECURITY_TOKEN);
         logger.info("token found:"+token);

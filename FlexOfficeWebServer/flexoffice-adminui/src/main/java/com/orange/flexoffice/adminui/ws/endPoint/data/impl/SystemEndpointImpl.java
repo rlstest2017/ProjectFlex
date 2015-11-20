@@ -100,7 +100,6 @@ public class SystemEndpointImpl implements SystemEndpoint {
 
 	}
 	
-	
 	@Override
 	public Response login(String auth, String origin) {
 		// TODO implement
@@ -110,6 +109,11 @@ public class SystemEndpointImpl implements SystemEndpoint {
 		token.setExpiredDate(Long.valueOf(1447853568741l));
 
 		if (origin != null) {
+			LOGGER.debug("Origin value is :" + origin);
+		} else {
+        	LOGGER.debug("Origin value is null");
+        	//return Response.status(200).entity(token).build();
+        }
 //			Response.addHeader("Access-Control-Allow-Origin", origin);
 //            response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
 //            response.addHeader("Access-Control-Allow-Credentials", "true");
@@ -123,9 +127,9 @@ public class SystemEndpointImpl implements SystemEndpoint {
             .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
             .header("Access-Control-Max-Age", "1209600")
             .build();
-        } else {
-        	return Response.status(200).entity(token).build();
-        }
+        
+			//return Response.status(200).entity(token).build();
+        
 		
 		//return Response.status(200).entity(token).build();
 		//return factory.createToken(token).getValue();
