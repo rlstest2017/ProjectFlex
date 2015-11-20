@@ -12,16 +12,6 @@
 		</xsd:sequence>
 	</xsd:complexType>
 	
-	<xsd:complexType name="xmlUser">
-		<xsd:sequence>
- 		   <xsd:element name="firstName" type="xsd:string"/>
-			<xsd:element name="lastName" type="xsd:string"/>
-			<xsd:element name="email" type="xsd:string"/>
-			<xsd:element name="password" type="xsd:string"/>
-		</xsd:sequence>
-		<xsd:attribute name="id" type="xsd:string"/>
-	</xsd:complexType>
-
 
 	<!-- Room -->
 	<xsd:simpleType name="e-roomStatus">

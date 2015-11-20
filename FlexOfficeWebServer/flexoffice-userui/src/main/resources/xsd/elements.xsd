@@ -3,10 +3,10 @@
 
 	<xsd:include id="types" schemaLocation="types.xsd"/>
 	
-	<xsd:element name="user" type="xmlUser"/>
+	<xsd:element name="userSummary" type="UserSummary"/>
 
-	<xsd:element name="roomSummary" type="RoomSummary"/>
 	<xsd:element name="room" type="Room"/>
+	<xsd:element name="roomSummary" type="RoomSummary"/>
 	
 	<xsd:element name="error" type="ErrorModel"/>
 	
