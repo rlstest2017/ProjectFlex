@@ -115,8 +115,14 @@ public class SystemEndpointImpl implements SystemEndpoint {
 //            response.addHeader("Access-Control-Allow-Credentials", "true");
 //            response.addHeader("Access-Control-Allow-Headers",
 //                    request.getHeader("Access-Control-Request-Headers"));
-			
-			return Response.ok(token).header("Access-Control-Allow-Origin", origin).build();
+			//Response.ok(token).header("Access-Control-Allow-Origin", origin).build();
+			return Response.ok(token).status(200)
+            .header("Access-Control-Allow-Origin", "*")
+            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+            .header("Access-Control-Allow-Credentials", "true")
+            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+            .header("Access-Control-Max-Age", "1209600")
+            .build();
         } else {
         	return Response.status(200).entity(token).build();
         }
