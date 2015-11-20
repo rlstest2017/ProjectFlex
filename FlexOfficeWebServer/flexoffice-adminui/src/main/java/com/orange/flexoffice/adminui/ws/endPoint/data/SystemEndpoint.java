@@ -19,6 +19,7 @@ import static com.orange.flexoffice.adminui.ws.PathConst.SUBMIT_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.TEACHIN_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.INIT_PATH;
 import static com.orange.flexoffice.adminui.ws.ParamsConst.AUTH_HEADER_PARAM;
+import static com.orange.flexoffice.adminui.ws.ParamsConst.ORIGIN_HEADER_PARAM;
 
 import com.orange.flexoffice.adminui.ws.model.Teachin;
 import com.orange.flexoffice.adminui.ws.model.Token;
@@ -51,7 +52,7 @@ public interface SystemEndpoint {
 	@GET
 	@Path(LOGIN_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
-	Token login(@HeaderParam(AUTH_HEADER_PARAM) String auth); 
+	Response login(@HeaderParam(AUTH_HEADER_PARAM) String auth, @HeaderParam(ORIGIN_HEADER_PARAM) String origin); 
 	
 	/**
 	 * Delete Token from DB

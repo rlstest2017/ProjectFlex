@@ -102,15 +102,27 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	
 	
 	@Override
-	public Token login(String auth) {
+	public Response login(String auth, String origin) {
 		// TODO implement
+		
 		Token token = factory.createToken();
 		token.setAccessToken("testTokenAccess");
 		token.setExpiredDate(Long.valueOf(1447853568741l));
-		String output = "Authorization parameter :"+ auth;
-		LOGGER.info( output);
-		//return Response.status(200).entity(output).build();
-		return factory.createToken(token).getValue();
+
+		if (origin != null) {
+//			Response.addHeader("Access-Control-Allow-Origin", origin);
+//            response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+//            response.addHeader("Access-Control-Allow-Credentials", "true");
+//            response.addHeader("Access-Control-Allow-Headers",
+//                    request.getHeader("Access-Control-Request-Headers"));
+			
+			return Response.ok(token).header("Access-Control-Allow-Origin", origin).build();
+        } else {
+        	return Response.status(200).entity(token).build();
+        }
+		
+		//return Response.status(200).entity(token).build();
+		//return factory.createToken(token).getValue();
 	}
 	
 	@Override
