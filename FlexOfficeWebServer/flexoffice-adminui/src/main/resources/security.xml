@@ -8,10 +8,14 @@
  	
     <http  pattern="/v1/**" entry-point-ref="restAuthenticationEntryPoint" use-expressions="true" auto-config="false" create-session="stateless" >
 	     <!-- Adds the custom login filter to the Spring Security filter chain -->
+	    <custom-filter ref="corsHandler" position="PRE_AUTH_FILTER"   />
 	    <custom-filter ref="authenticationTokenProcessingFilter" position="FORM_LOGIN_FILTER"   />
 	    <intercept-url pattern="/v1/**" access="isAuthenticated()" />
 	       <logout />
 	</http>
+
+     <!-- Configures CROSS Handler -->
+    <beans:bean id="corsHandler" class="com.orange.flexoffice.adminui.ws.filters.CorsFilter"/>
  
      <!-- Configures the authentication entry point -->
     <beans:bean id="restAuthenticationEntryPoint" class="com.orange.flexoffice.adminui.ws.endPoint.impl.RestAuthenticationEntryPoint"/>
