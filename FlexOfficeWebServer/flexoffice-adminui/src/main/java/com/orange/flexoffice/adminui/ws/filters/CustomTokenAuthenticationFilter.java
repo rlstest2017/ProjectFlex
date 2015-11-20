@@ -23,7 +23,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
      
     private static final Log logger = LogFactory.getLog(CustomTokenAuthenticationFilter.class);
-    
+    static final String ORIGIN = "Origin";
+    		
     public CustomTokenAuthenticationFilter(String defaultFilterProcessesUrl) {
         super(defaultFilterProcessesUrl);
         super.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(defaultFilterProcessesUrl));
@@ -38,7 +39,16 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
      * Attempt to authenticate request - basically just pass over to another method to authenticate request headers 
      */
     @Override public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        String token = request.getHeader(HEADER_SECURITY_TOKEN);
+    	if (request.getHeader(ORIGIN) != null) {
+            String origin = request.getHeader(ORIGIN);
+            response.addHeader("Access-Control-Allow-Origin", origin);
+            response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+            response.addHeader("Access-Control-Allow-Credentials", "true");
+            response.addHeader("Access-Control-Allow-Headers",
+                    request.getHeader("Access-Control-Request-Headers"));
+        }
+    	
+    	String token = request.getHeader(HEADER_SECURITY_TOKEN);
         logger.info("token found:"+token);
         AbstractAuthenticationToken userAuthenticationToken = authUserByToken(token);
         if(userAuthenticationToken == null) throw new AuthenticationServiceException(MessageFormat.format("Error | {0}", "Bad Token"));
