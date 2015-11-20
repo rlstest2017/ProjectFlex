@@ -68,7 +68,7 @@ public interface RoomEndpoint {
 	@POST
 	@Path(ROOM_ID_RESERVE_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
-	void reserveRoom(@PathParam(ROOM_ID_RESERVE_PATH) String roomId);
+	Response reserveRoom(@PathParam(ROOM_ID_RESERVE_PATH) String roomId);
 
 	/**
 	 * Cancel reservation of a room.
@@ -83,7 +83,7 @@ public interface RoomEndpoint {
 	@POST
 	@Path(ROOM_ID_CANCEL_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
-	void cancelRoom(@PathParam(ROOM_ID_CANCEL_PATH) String roomId);
+	Response cancelRoom(@PathParam(ROOM_ID_CANCEL_PATH) String roomId);
 
 
 }

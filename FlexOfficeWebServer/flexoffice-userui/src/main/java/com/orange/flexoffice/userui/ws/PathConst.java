@@ -14,5 +14,6 @@ public final class PathConst {
 	
 	public static final String GENERATE_PATH = "/generate";
 	
-	private PathConst() {}
+	private PathConst() {		
+	}
 }

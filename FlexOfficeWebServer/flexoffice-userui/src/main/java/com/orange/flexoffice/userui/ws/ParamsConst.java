@@ -8,6 +8,7 @@ public final class ParamsConst {
 	public static final String TYPE_PARAM = "type";
 	public static final String NB_PARAM = "nb";
 	
-	private ParamsConst() {}
+	private ParamsConst() {		
+	}
 
 }
