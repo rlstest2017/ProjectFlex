@@ -13,5 +13,8 @@
 	<bean id="roomEndpoint" class="com.orange.flexoffice.userui.ws.endPoint.entity.impl.RoomEndpointImpl">
 	</bean>
 	
+	<bean id="userEndpoint" class="com.orange.flexoffice.userui.ws.endPoint.entity.impl.UserEndpointImpl">
+	</bean>
+	
 		
 </beans>

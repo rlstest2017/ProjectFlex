@@ -64,7 +64,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 */
 	@Override
 	public List<RoomSummary> getRooms() {
-		LOGGER.info( "Begin call RoomEndpoint.getRooms at: " + new Date() );
+		LOGGER.info( "Begin call UserUi.RoomEndpoint.getRooms at: " + new Date() );
 
 		List<RoomDao> dataList = roomManager.findAllRooms();
 
