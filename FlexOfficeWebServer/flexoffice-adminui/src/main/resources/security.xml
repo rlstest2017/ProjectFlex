@@ -5,7 +5,6 @@
 
 	<!-- Enable Spring Security -->
  	<http pattern="/v1/system/login" security="none"/>
- 	<http pattern="/v1/system/logout" security="none"/>
  	
     <http  pattern="/v1/**" entry-point-ref="restAuthenticationEntryPoint" use-expressions="true" auto-config="false" create-session="stateless" >
 	     <!-- Adds the custom login filter to the Spring Security filter chain -->
