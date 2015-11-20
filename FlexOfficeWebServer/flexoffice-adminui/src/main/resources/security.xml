@@ -4,7 +4,7 @@
              xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- Enable Spring Security -->
- 	<http pattern="/v1/system/login" security="none"/>
+<!--  	<http pattern="/v1/system/login" security="none"/> -->
  	
     <http  pattern="/v1/**" entry-point-ref="restAuthenticationEntryPoint" use-expressions="true" auto-config="false" create-session="stateless" >
 	     <!-- Adds the custom login filter to the Spring Security filter chain -->
