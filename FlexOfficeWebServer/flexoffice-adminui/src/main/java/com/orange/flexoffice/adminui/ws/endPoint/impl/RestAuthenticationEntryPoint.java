@@ -16,6 +16,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	
 	private static final Logger LOGGER = Logger.getLogger(RestAuthenticationEntryPoint.class);
     
+	@SuppressWarnings("static-access")
 	@Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException ) throws IOException, ServletException {

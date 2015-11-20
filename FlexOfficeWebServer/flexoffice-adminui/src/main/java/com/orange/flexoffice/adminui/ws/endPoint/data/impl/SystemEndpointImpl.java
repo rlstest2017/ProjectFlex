@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.OPTIONS;
-import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -112,35 +110,35 @@ public class SystemEndpointImpl implements SystemEndpoint {
 
 		if (origin != null) {
 			LOGGER.debug("Origin value is :" + origin);
+			return Response.ok(token).status(200)
+		            .header("Access-Control-Allow-Origin", "*")
+		            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+		            .header("Access-Control-Allow-Credentials", "true")
+		            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+		            .header("Access-Control-Max-Age", "1209600")
+		            .build();
 		} else {
         	LOGGER.debug("Origin value is null");
-        	//return Response.status(200).entity(token).build();
+        	return Response.status(200).entity(token).build();
         }
-//			Response.addHeader("Access-Control-Allow-Origin", origin);
-//            response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-//            response.addHeader("Access-Control-Allow-Credentials", "true");
-//            response.addHeader("Access-Control-Allow-Headers",
-//                    request.getHeader("Access-Control-Request-Headers"));
-			//Response.ok(token).header("Access-Control-Allow-Origin", origin).build();
-			return Response.ok(token).status(200)
-            .header("Access-Control-Allow-Origin", "*")
-            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-            .header("Access-Control-Allow-Credentials", "true")
-            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-            .header("Access-Control-Max-Age", "1209600")
-            .build();
-        
-			//return Response.status(200).entity(token).build();
-        
-		
-		//return Response.status(200).entity(token).build();
-		//return factory.createToken(token).getValue();
 	}
 	
 	@Override
-	public Response logout() {
-		// TODO Auto-generated method stub
-		return null;
+	public Response logout(String token, String origin) {
+		// TODO token process
+		if (origin != null) {
+			LOGGER.debug("Origin value is :" + origin);
+			return Response.ok().status(200)
+		            .header("Access-Control-Allow-Origin", "*")
+		            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+		            .header("Access-Control-Allow-Credentials", "true")
+		            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+		            .header("Access-Control-Max-Age", "1209600")
+		            .build();
+		} else {
+        	LOGGER.debug("Origin value is null");
+        	return Response.status(200).build();
+        }
 	}
 	@Override
 	public Teachin getTeachin() {

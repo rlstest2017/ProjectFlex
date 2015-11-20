@@ -19,11 +19,11 @@ import static com.orange.flexoffice.adminui.ws.PathConst.CANCEL_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.SUBMIT_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.TEACHIN_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.INIT_PATH;
-import static com.orange.flexoffice.adminui.ws.ParamsConst.AUTH_HEADER_PARAM;
+import static com.orange.flexoffice.adminui.ws.ParamsConst.AUTHORIZATION_HEADER_PARAM;
+import static com.orange.flexoffice.adminui.ws.ParamsConst.TOKEN_HEADER_PARAM;
 import static com.orange.flexoffice.adminui.ws.ParamsConst.ORIGIN_HEADER_PARAM;
 
 import com.orange.flexoffice.adminui.ws.model.Teachin;
-import com.orange.flexoffice.adminui.ws.model.Token;
 import com.orange.flexoffice.adminui.ws.model.System;
 /**
  * Defines all operations available for a resource "system".
@@ -53,7 +53,7 @@ public interface SystemEndpoint {
 	@GET
 	@Path(LOGIN_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response login(@HeaderParam(AUTH_HEADER_PARAM) String auth, @HeaderParam(ORIGIN_HEADER_PARAM) String origin); 
+	Response login(@HeaderParam(AUTHORIZATION_HEADER_PARAM) String auth, @HeaderParam(ORIGIN_HEADER_PARAM) String origin); 
 	
 	/**
 	 * Delete Token from DB
@@ -61,7 +61,7 @@ public interface SystemEndpoint {
 	@GET
 	@Path(LOGOUT_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response logout();
+	Response logout(@HeaderParam(TOKEN_HEADER_PARAM) String auth, @HeaderParam(ORIGIN_HEADER_PARAM) String origin);
 	
 	/**
 	 * Get Teachin infos.

@@ -38,7 +38,8 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
     /**
      * Attempt to authenticate request - basically just pass over to another method to authenticate request headers 
      */
-    @Override public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+    @SuppressWarnings("static-access")
+	@Override public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
     	if (request.getHeader(ORIGIN) != null) {
             String origin = request.getHeader(ORIGIN);
             response.addHeader("Access-Control-Allow-Origin", origin);
