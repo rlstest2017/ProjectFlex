@@ -47,10 +47,11 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
             response.addHeader("Access-Control-Allow-Headers",
                     request.getHeader("Access-Control-Request-Headers"));
         }
-    	if (request.getMethod() == "OPTIONS") {
-             response.getWriter().print("OK");
-             response.getWriter().flush();
-         }
+    	if (request.getMethod() == "OPTIONS" || request.getMethod().equals("OPTIONS")) {
+            response.getWriter().print("OK");
+            response.getWriter().flush();
+            response.setStatus(response.SC_OK);
+    	}   
     	
     	String token = request.getHeader(HEADER_SECURITY_TOKEN);
         logger.info("token found:"+token);
