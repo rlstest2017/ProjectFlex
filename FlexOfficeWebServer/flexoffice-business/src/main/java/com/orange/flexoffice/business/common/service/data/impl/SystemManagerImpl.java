@@ -120,6 +120,12 @@ public class SystemManagerImpl implements SystemManager {
 		return user;
 	}
 	
+	@Override
+	public Boolean checkToken(String token) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	
 	private Long countGateways() {
 		return gatewayRepository.count();
 	}
@@ -160,4 +166,6 @@ public class SystemManagerImpl implements SystemManager {
 		LOGGER.debug("Date tomorrow :" + tomorrow);		
 		return tomorrow;
 	}
+
+	
 }

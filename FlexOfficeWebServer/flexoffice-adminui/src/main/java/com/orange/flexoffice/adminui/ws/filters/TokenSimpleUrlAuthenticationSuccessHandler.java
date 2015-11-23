@@ -9,6 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
+/**
+ * TokenSimpleUrlAuthenticationSuccessHandler
+ * forward to origin request if success.
+ * @author oab
+ *
+ */
 public class TokenSimpleUrlAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 	 
     @Override

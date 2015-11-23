@@ -25,4 +25,11 @@ public interface SystemManager {
 	 * @return
 	 */
 	UserDao processLogin(String auth) throws DataNotExistsException, AuthenticationException;
+	
+	/**
+	 * checkToken if token is in BD & not expired return true, else false
+	 * @param token
+	 * @return
+	 */
+	Boolean checkToken(String token);
 }

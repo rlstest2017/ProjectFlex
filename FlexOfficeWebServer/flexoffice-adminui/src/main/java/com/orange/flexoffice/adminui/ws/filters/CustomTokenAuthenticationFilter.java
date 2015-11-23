@@ -71,13 +71,13 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
         if(token==null) {
             return null;
         }
-        AbstractAuthenticationToken authToken = new JWTAuthenticationToken(token);
-        try {
-            return authToken;
-        } catch (Exception e) {
-            logger.error("Authenticate user by token error: ", e);
+        AuthenticationToken authToken = new AuthenticationToken(token);
+        Boolean isValidToken = authToken.checkToken(token);
+        if (isValidToken) {
+        	return authToken;
+        } else {
+        	return null;
         }
-        return authToken;
     }
  
  
