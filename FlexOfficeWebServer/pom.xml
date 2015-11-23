@@ -87,7 +87,14 @@
 			<artifactId>commons-httpclient</artifactId>
 			<version>${commons-httpclient.version}</version>
 		</dependency>
-
+		
+		<!-- Apache Common codec -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.4</version>
+		</dependency>
+		
 		<!-- org.apache.httpcomponents -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>

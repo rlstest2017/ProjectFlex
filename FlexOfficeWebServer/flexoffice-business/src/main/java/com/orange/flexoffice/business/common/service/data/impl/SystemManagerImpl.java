@@ -85,8 +85,8 @@ public class SystemManagerImpl implements SystemManager {
 	        // credentials = email:password
 	        final String[] values = credentials.split(":",2);
 	        
-	        String email = values[0];
-	        String password = values[1];
+	        String email = values[0].trim();
+	        String password = values[1].trim();
 	        LOGGER.debug("email in processLogin() method is :" + email);
 	        LOGGER.debug("password in processLogin() method is :" + password);
 	        String accessToken = createAccessToken(email, password);
@@ -97,7 +97,7 @@ public class SystemManagerImpl implements SystemManager {
 	        	// save data
 	    
 	        	user.setEmail(email);
-	        	user.setAccessToken(accessToken);
+	        	user.setAccessToken(accessToken.trim());
 	        	user.setExpiredTokenDate(expiredTokenDate);
 				// Update UserDao
 				userRepository.updateUserByEmail(user);
