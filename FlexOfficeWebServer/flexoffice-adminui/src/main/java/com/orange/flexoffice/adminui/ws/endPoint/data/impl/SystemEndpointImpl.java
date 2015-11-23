@@ -132,13 +132,13 @@ public class SystemEndpointImpl implements SystemEndpoint {
         }
 		
 		} catch (DataNotExistsException e) {
-			if (origin != null) {
-				LOGGER.debug("Origin value is :" + origin);
-				return errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_8, Response.Status.METHOD_NOT_ALLOWED);
-			} else {
+//			if (origin != null) {
+//				LOGGER.debug("Origin value is :" + origin);
+//				return errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_8, Response.Status.METHOD_NOT_ALLOWED);
+//			} else {
 				LOGGER.debug("DataNotExistsException in login() SystemEndpointImpl with message :" + e.getMessage(), e);
-				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_8, Response.Status.METHOD_NOT_ALLOWED));
-			}
+				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_34, Response.Status.METHOD_NOT_ALLOWED));
+			//}
 
 		} catch (AuthenticationException e) {
 			if (origin != null) {
