@@ -60,7 +60,7 @@ public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 		
 		for (GatewayDao gatewayDao : dataList) {
 			GatewaySummary gateway = factory.createGatewaySummary();
-			gateway.setId(gatewayDao.getColumnId());
+			gateway.setId(gatewayDao.getMacAddress());
 			gateway.setStatus(EGatewayStatus.valueOf(gatewayDao.getStatus().toString()));
 			gatewayList.add(gateway);
 		}
