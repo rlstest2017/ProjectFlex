@@ -1,4 +1,4 @@
-package com.orange.flexoffice.adminui.ws.filters;
+package com.orange.flexoffice.adminui.ws.auth;
 
 import java.io.IOException;
 

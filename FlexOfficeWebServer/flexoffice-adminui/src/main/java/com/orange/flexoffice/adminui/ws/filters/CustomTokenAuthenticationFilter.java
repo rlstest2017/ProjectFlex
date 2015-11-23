@@ -21,6 +21,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.orange.flexoffice.adminui.ws.auth.AuthenticationToken;
+import com.orange.flexoffice.adminui.ws.auth.NoOpAuthenticationManager;
+import com.orange.flexoffice.adminui.ws.auth.TokenSimpleUrlAuthenticationSuccessHandler;
+
 public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
      
     private static final Log logger = LogFactory.getLog(CustomTokenAuthenticationFilter.class);
