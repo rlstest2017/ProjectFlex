@@ -105,32 +105,25 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	
 	@Override
 	public Response login(String auth, String origin) {
-		
 		try {
-			
-		UserDao userToken = systemManager.processLogin(auth);
-		
-		Token token = factory.createToken();
-		//token.setAccessToken("cmFjaGlkLmxhb3Vlc0BnbWFpbC5jb206cGFzczEyMzE0NDgwMzA5MDY0ODM=");
-		//token.setExpiredDate(Long.valueOf(1447853568741l));
-		
-		token.setAccessToken(userToken.getAccessToken());
-		token.setExpiredDate(userToken.getExpiredTokenDate().getTime());
-				
-		if (origin != null) {
-			LOGGER.debug("Origin value is :" + origin);
-			return Response.ok(token).status(200)
-		            .header("Access-Control-Allow-Origin", "*")
-		            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-		            .header("Access-Control-Allow-Credentials", "true")
-		            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-		            .header("Access-Control-Max-Age", "1209600")
-		            .build();
-		} else {
-        	LOGGER.debug("Origin value is null");
-        	return Response.status(200).entity(token).build();
-        }
-		
+			UserDao userToken = systemManager.processLogin(auth);
+			Token token = factory.createToken();
+			token.setAccessToken(userToken.getAccessToken());
+			token.setExpiredDate(userToken.getExpiredTokenDate().getTime());
+					
+			if (origin != null) {
+				LOGGER.debug("Origin value is :" + origin);
+				return Response.ok(token).status(200)
+			            .header("Access-Control-Allow-Origin", "*")
+			            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+			            .header("Access-Control-Allow-Credentials", "true")
+			            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+			            .header("Access-Control-Max-Age", "1209600")
+			            .build();
+			} else {
+	        	LOGGER.debug("Origin value is null");
+	        	return Response.status(200).entity(token).build();
+	        }
 		} catch (DataNotExistsException e) {
 				LOGGER.debug("DataNotExistsException in login() SystemEndpointImpl with message :" + e.getMessage(), e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_34, Response.Status.METHOD_NOT_ALLOWED));
@@ -145,7 +138,9 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	
 	@Override
 	public Response logout(String token, String origin) {
-		// TODO token process
+		
+		systemManager.processLogout(token);
+		
 		if (origin != null) {
 			LOGGER.debug("Origin value is :" + origin);
 			return Response.ok().status(200)

@@ -26,6 +26,8 @@ public interface UserDaoOperations {
 	
 	UserDao updateUser(UserDao data) throws IncorrectResultSizeDataAccessException;
 	
+	UserDao updateAccessToken(UserDao data);
+	
 	UserDao updateUserByEmail(UserDao data);
 	
 	UserDao saveUser(UserDao data) throws DataIntegrityViolationException;

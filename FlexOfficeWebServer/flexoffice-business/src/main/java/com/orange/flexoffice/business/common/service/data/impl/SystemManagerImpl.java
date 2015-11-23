@@ -118,6 +118,14 @@ public class SystemManagerImpl implements SystemManager {
 		
 		return user;
 	}
+	
+	@Override
+	public void processLogout(String accessToken) {
+		UserDao user = new UserDao();
+		user.setAccessToken(accessToken);
+		userRepository.updateAccessToken(user);
+	}
+	
 	/**
 	 * This method is used in Spring-Security authentication process
 	 */

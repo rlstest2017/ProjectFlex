@@ -91,6 +91,21 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 	}
 
 	@Override
+	public UserDao updateAccessToken(UserDao data) {
+	KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateAccessTokenQuery, paramBean, keyHolder);
+		
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
+		
+		return data;
+	
+	}
+	
+	@Override
 	public UserDao updateUserByEmail(UserDao data) {
 	KeyHolder keyHolder = new GeneratedKeyHolder();
 		
