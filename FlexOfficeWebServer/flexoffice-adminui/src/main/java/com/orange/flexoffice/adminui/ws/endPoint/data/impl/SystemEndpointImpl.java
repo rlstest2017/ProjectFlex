@@ -134,7 +134,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
 		} catch (DataNotExistsException e) {
 			if (origin != null) {
 				LOGGER.debug("Origin value is :" + origin);
-				return Response.ok(new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_23, Response.Status.METHOD_NOT_ALLOWED))).status(405)
+				return Response.ok(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_8, Response.Status.METHOD_NOT_ALLOWED)).status(405)
 			            .header("Access-Control-Allow-Origin", "*")
 			            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
 			            .header("Access-Control-Allow-Credentials", "true")
@@ -143,13 +143,13 @@ public class SystemEndpointImpl implements SystemEndpoint {
 			            .build();
 			} else {
 				LOGGER.debug("DataNotExistsException in login() SystemEndpointImpl with message :" + e.getMessage(), e);
-				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_23, Response.Status.METHOD_NOT_ALLOWED));
+				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_8, Response.Status.METHOD_NOT_ALLOWED));
 			}
 
 		} catch (AuthenticationException e) {
 			if (origin != null) {
 				LOGGER.debug("Origin value is :" + origin);
-				return Response.ok(new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_33, Response.Status.UNAUTHORIZED))).status(401)
+				return Response.ok(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_33, Response.Status.UNAUTHORIZED)).status(401)
 			            .header("Access-Control-Allow-Origin", "*")
 			            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
 			            .header("Access-Control-Allow-Credentials", "true")
@@ -163,7 +163,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
 		}catch (RuntimeException ex) {
 			if (origin != null) {
 				LOGGER.debug("Origin value is :" + origin);
-				return Response.ok(new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR))).status(500)
+				return Response.ok(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR)).status(500)
 			            .header("Access-Control-Allow-Origin", "*")
 			            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
 			            .header("Access-Control-Allow-Credentials", "true")
