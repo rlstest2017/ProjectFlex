@@ -93,16 +93,17 @@ public class SystemManagerImpl implements SystemManager {
 	        Date expiredTokenDate = createExpiredDate();
 	        
 	        try {
-	        	userRepository.findByUserEmail(email);
-	        	// save data
-	    
+	        	//userRepository.findByUserEmail(email);
+	        	 
+	        	// find user by mail & password
 	        	user.setEmail(email);
+	        	user.setPassword(password);
+	        	userRepository.findByUserEmailAndPassword(user);
+	        	
 	        	user.setAccessToken(accessToken.trim());
 	        	user.setExpiredTokenDate(expiredTokenDate);
 				// Update UserDao
 				userRepository.updateUserByEmail(user);
-
-				user.setIsCreatedFromUserui(false);
 
 			} catch(IncorrectResultSizeDataAccessException e ) {
 				LOGGER.error("UserManager.findByUserMail : User by email #" + email + " is not found", e);

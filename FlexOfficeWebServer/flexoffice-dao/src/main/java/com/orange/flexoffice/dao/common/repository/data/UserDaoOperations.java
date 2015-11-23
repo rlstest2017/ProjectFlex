@@ -20,6 +20,8 @@ public interface UserDaoOperations {
 	
 	UserDao findByUserEmail(String userEmail) throws IncorrectResultSizeDataAccessException;
 	
+	UserDao findByUserEmailAndPassword(UserDao data) throws IncorrectResultSizeDataAccessException;
+	
 	UserDao findByAccessToken(String accessToken) throws IncorrectResultSizeDataAccessException;
 	
 	UserDao updateUser(UserDao data) throws IncorrectResultSizeDataAccessException;

@@ -56,6 +56,17 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 	}
 	
 	@Override
+	public UserDao findByUserEmailAndPassword(UserDao data) throws IncorrectResultSizeDataAccessException {
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		return jdbcTemplate.queryForObject(
+				findByColumnMailAndPasswordQuery, 
+				paramBean, 
+				new BeanPropertyRowMapper<UserDao>(UserDao.class)
+			);
+	}
+	
+	
+	@Override
 	public UserDao findByAccessToken(String accessToken) throws IncorrectResultSizeDataAccessException {
 		SqlParameterSource paramMap = new MapSqlParameterSource("accessToken", accessToken);
 		return jdbcTemplate.queryForObject(
@@ -129,9 +140,5 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	
-
-	
-
 }

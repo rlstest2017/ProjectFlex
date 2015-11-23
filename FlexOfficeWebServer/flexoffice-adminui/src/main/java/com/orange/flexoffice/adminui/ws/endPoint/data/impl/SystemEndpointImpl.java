@@ -132,42 +132,14 @@ public class SystemEndpointImpl implements SystemEndpoint {
         }
 		
 		} catch (DataNotExistsException e) {
-//			if (origin != null) {
-//				LOGGER.debug("Origin value is :" + origin);
-//				return errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_8, Response.Status.METHOD_NOT_ALLOWED);
-//			} else {
 				LOGGER.debug("DataNotExistsException in login() SystemEndpointImpl with message :" + e.getMessage(), e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_34, Response.Status.METHOD_NOT_ALLOWED));
-			//}
-
 		} catch (AuthenticationException e) {
-			if (origin != null) {
-				LOGGER.debug("Origin value is :" + origin);
-				return Response.ok(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_33, Response.Status.UNAUTHORIZED)).status(401)
-			            .header("Access-Control-Allow-Origin", "*")
-			            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-			            .header("Access-Control-Allow-Credentials", "true")
-			            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-			            .header("Access-Control-Max-Age", "1209600")
-			            .build();
-			} else {
 				LOGGER.debug("AuthenticationException in login() SystemEndpointImpl with message :" + e.getMessage(), e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_33, Response.Status.UNAUTHORIZED));
-			}
 		}catch (RuntimeException ex) {
-			if (origin != null) {
-				LOGGER.debug("Origin value is :" + origin);
-				return Response.ok(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR)).status(500)
-			            .header("Access-Control-Allow-Origin", "*")
-			            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-			            .header("Access-Control-Allow-Credentials", "true")
-			            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-			            .header("Access-Control-Max-Age", "1209600")
-			            .build();
-			} else {
 				LOGGER.debug("RuntimeException in login() SystemEndpointImpl with message :" + ex.getMessage(), ex);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
-			}
 		}
 	}
 	
