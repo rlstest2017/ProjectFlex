@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -24,7 +25,9 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
      
     private static final Log logger = LogFactory.getLog(CustomTokenAuthenticationFilter.class);
     static final String ORIGIN = "Origin";
-    		
+    @Autowired
+    AuthenticationToken authToken;
+    
     public CustomTokenAuthenticationFilter(String defaultFilterProcessesUrl) {
         super(defaultFilterProcessesUrl);
         super.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(defaultFilterProcessesUrl));
@@ -71,7 +74,6 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
         if(token==null) {
             return null;
         }
-        AuthenticationToken authToken = new AuthenticationToken(token);
         Boolean isValidToken = authToken.checkToken(token);
         if (isValidToken) {
         	return authToken;

@@ -1,23 +1,25 @@
 package com.orange.flexoffice.adminui.ws.filters;
 
 import java.util.Collection;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
 import com.orange.flexoffice.business.common.service.data.SystemManager;
-import com.orange.flexoffice.business.common.service.data.impl.SystemManagerImpl;
 
 public class AuthenticationToken extends AbstractAuthenticationToken {
 	
     private static final long serialVersionUID = 1L;
     private Object principal;
+    @Autowired
+    SystemManager systemManager; 
     
-    public AuthenticationToken( String jwtToken) {
+    public AuthenticationToken() {
         super(null);
         super.setAuthenticated(true);
     }
     
     public Boolean checkToken(String token) {
-    	SystemManager systemManager = new SystemManagerImpl();
         Boolean isValidToken = systemManager.checkToken(token);
         if (isValidToken) {
         	return true;

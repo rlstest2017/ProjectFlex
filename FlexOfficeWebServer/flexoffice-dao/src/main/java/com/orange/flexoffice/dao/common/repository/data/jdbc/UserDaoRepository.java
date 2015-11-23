@@ -56,6 +56,16 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 	}
 	
 	@Override
+	public UserDao findByAccessToken(String accessToken) throws IncorrectResultSizeDataAccessException {
+		SqlParameterSource paramMap = new MapSqlParameterSource("accessToken", accessToken);
+		return jdbcTemplate.queryForObject(
+				findByColumnAccessTokenQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<UserDao>(UserDao.class)
+			);
+	}
+	
+	@Override
 	public UserDao updateUser(UserDao data) throws IncorrectResultSizeDataAccessException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		
@@ -119,6 +129,8 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
 
 	
 

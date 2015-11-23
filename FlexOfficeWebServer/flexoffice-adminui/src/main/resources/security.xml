@@ -23,7 +23,11 @@
     <!-- If x-auth-token is OK then redirect to request, else return UNAUTHORIZATION response -->
     <beans:bean class="com.orange.flexoffice.adminui.ws.filters.CustomTokenAuthenticationFilter" id="authenticationTokenProcessingFilter">
     	<beans:constructor-arg type="java.lang.String"><beans:value>/v1/**</beans:value></beans:constructor-arg>
+    	
 	</beans:bean>
+	
+	<!-- Used for @autowired spring context SystemManager -->
+	<beans:bean class="com.orange.flexoffice.adminui.ws.filters.AuthenticationToken" id="authToken" />
 	
 	<!-- Configures in-memory implementation of the UserDetailsService implementation -->
     <authentication-manager alias="authenticationManager">

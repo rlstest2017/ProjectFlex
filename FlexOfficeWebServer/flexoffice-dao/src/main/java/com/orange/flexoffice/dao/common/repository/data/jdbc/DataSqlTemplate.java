@@ -14,6 +14,8 @@ public final class DataSqlTemplate {
 			"select * from %s where name=:name";
 	public static final String FIND_BY_COL_MAIL_TEMPLATE = 
 			"select * from %s where email=:email";
+	public static final String FIND_BY_COL_ACCESS_TOKEN_TEMPLATE = 
+			"select * from %s where access_token=:accessToken";
 	public static final String FIND_BY_COL_ROOM_ID_TEMPLATE = 
 			"select * from %s where room_id=:roomId";
 	public static final String FIND_BY_IDENTIFIER_TEMPLATE = 

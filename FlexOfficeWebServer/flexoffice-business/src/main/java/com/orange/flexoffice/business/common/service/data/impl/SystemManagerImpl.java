@@ -74,8 +74,6 @@ public class SystemManagerImpl implements SystemManager {
 
 	@Override
 	public UserDao processLogin(String authorization) throws DataNotExistsException, AuthenticationException {
-		// TODO 
-		
 	    LOGGER.debug("authorization parameter is :" + authorization);
     	UserDao user = new UserDao();
     	
@@ -119,11 +117,29 @@ public class SystemManagerImpl implements SystemManager {
 		
 		return user;
 	}
-	
+	/**
+	 * This method is used in Spring-Security authentication process
+	 */
 	@Override
 	public Boolean checkToken(String token) {
-		// TODO Auto-generated method stub
-		return true;
+
+		try {
+			UserDao user = userRepository.findByAccessToken(token);
+			
+			if (user == null)  {
+				LOGGER.debug("checkToken return : accessToken not found in DB.");
+				return false;
+			}else if (user.getExpiredTokenDate().before(new Date())) {
+				LOGGER.debug("checkToken return : The accessToken is expired at :" + user.getExpiredTokenDate());
+				return false;
+			} else {
+				LOGGER.debug("checkToken return : accessToken is valid.");
+				return true;
+			}
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.error("UserManager.findByAccessToken : User by token #" + token + " DataAccessException", e);
+			return false;
+		}
 	}
 	
 	private Long countGateways() {
