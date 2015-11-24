@@ -41,6 +41,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	
 	@Autowired
 	private TestManager testManager;
+	
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
 	

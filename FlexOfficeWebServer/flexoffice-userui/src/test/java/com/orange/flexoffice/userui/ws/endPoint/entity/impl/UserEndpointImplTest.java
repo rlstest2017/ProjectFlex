@@ -3,13 +3,9 @@ package com.orange.flexoffice.userui.ws.endPoint.entity.impl;
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
-import java.util.List;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.core.Response.Status;
 
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -65,7 +61,7 @@ public class UserEndpointImplTest {
 	@Test
 	public void TestB_getUserCurrent() {
 		// Test
-		UserSummary user = userEndpoint.getUserCurrent();
+		UserSummary user = userEndpoint.getUserCurrent(null, null);
 
 		// Asserts
 		assertEquals("user Email 1", user.getEmail());

@@ -119,14 +119,16 @@ public class SystemManagerImpl implements SystemManager {
 	        	
 	    		// Update UserDao
 				userRepository.updateUserByEmail(user);
+				
+				user.setIsCreatedFromUserui(false);
 
 			} catch(IncorrectResultSizeDataAccessException e ) {
 				LOGGER.error("UserManager.findByUserMail : User by email #" + email + " is not found", e);
-				if (isFromAdminUi) {
+				//if (isFromAdminUi) {
 					throw new DataNotExistsException("UserManager.findByUserMail : User by email #" + email + " is not found");
-				} else {
+				//} else {
 					// TODO createuser
-				}
+				//}
 			}
 		} else {
 			LOGGER.error("UserManager.processLogin : Authorization parameter is null or wrong format");

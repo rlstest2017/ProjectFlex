@@ -4,9 +4,9 @@ public final class ParamsConst {
 	
 	public static final String USER_ID_PARAM = "userId";
 	public static final String ROOM_ID_PARAM = "roomId";
-	
-	public static final String TYPE_PARAM = "type";
-	public static final String NB_PARAM = "nb";
+	public static final String AUTHORIZATION_HEADER_PARAM = "Authorization";
+	public static final String TOKEN_HEADER_PARAM = "x-auth-token";
+	public static final String ORIGIN_HEADER_PARAM = "Origin";
 	
 	private ParamsConst() {		
 	}
