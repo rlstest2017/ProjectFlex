@@ -43,7 +43,10 @@ public enum EnumErrorModel {
 	ERROR_31("R005","impossible de charger cette salle" /*({{name}})*/),
 	ERROR_32("500",""),
 	ERROR_33("U101","erreur dans le paramètre authorization"),
-	ERROR_34("L001", "authentification impossible");
+	ERROR_34("L001", "authentification impossible"),
+	ERROR_35("T001", "impossible de démarrer une détection de capteurs"),
+	ERROR_36("T002", "une détection de capteurs est déjà en cours");
+
 	
      /**
      * status code

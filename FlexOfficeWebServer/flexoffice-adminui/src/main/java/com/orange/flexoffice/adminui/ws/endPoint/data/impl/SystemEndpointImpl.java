@@ -106,7 +106,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	@Override
 	public Response login(String auth, String origin) {
 		try {
-			UserDao userToken = systemManager.processLogin(auth);
+			UserDao userToken = systemManager.processLogin(auth, true);
 			Token token = factory.createToken();
 			token.setAccessToken(userToken.getAccessToken());
 			token.setExpiredDate(userToken.getExpiredTokenDate().getTime());
@@ -152,6 +152,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
         	return Response.status(200).build();
         }
 	}
+	
 	@Override
 	public Teachin getTeachin() {
 		// TODO Auto-generated method stub

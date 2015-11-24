@@ -73,7 +73,7 @@ public class SystemManagerImpl implements SystemManager {
 	}
 
 	@Override
-	public UserDao processLogin(String authorization) throws DataNotExistsException, AuthenticationException {
+	public UserDao processLogin(String authorization, Boolean isFromAdminUi) throws DataNotExistsException, AuthenticationException {
 	    LOGGER.debug("authorization parameter is :" + authorization);
     	UserDao user = new UserDao();
     	
@@ -82,34 +82,52 @@ public class SystemManagerImpl implements SystemManager {
 	        String base64Credentials = authorization.substring("Basic".length()).trim();
 	        String credentials = new String(Base64Utils.decodeFromString(base64Credentials),
 	                Charset.forName("UTF-8"));
-	        // credentials = email:password
-	        final String[] values = credentials.split(":",2);
 	        
-	        String email = values[0].trim();
-	        String password = values[1].trim();
-	        LOGGER.debug("email in processLogin() method is :" + email);
-	        LOGGER.debug("password in processLogin() method is :" + password);
-	        String accessToken = createAccessToken(email, password);
+	        String email = null;
+	        String password = null;
+	        String accessToken = null;
+	        
+	        if (isFromAdminUi) {
+	        	// credentials = email:password
+		        final String[] values = credentials.split(":",2);
+		        email = values[0].trim();
+		        password = values[1].trim();
+		        LOGGER.debug("email in processLogin() method is :" + email);
+		        LOGGER.debug("password in processLogin() method is :" + password);
+		        accessToken = createAccessToken(email, password);
+	        } else {
+	        	// credentials = email
+	        	email =credentials;
+	        	LOGGER.debug("email in processLogin() method is :" + email);
+		        accessToken = createAccessToken(email, null);
+	        }
+	        
 	        Date expiredTokenDate = createExpiredDate();
 	        
 	        try {
-	        	//userRepository.findByUserEmail(email);
-	        	 
-	        	// find user by mail & password
 	        	user.setEmail(email);
-	        	user.setPassword(password);
-	        	userRepository.findByUserEmailAndPassword(user);
-	        	
 	        	user.setAccessToken(accessToken.trim());
 	        	user.setExpiredTokenDate(expiredTokenDate);
-				// Update UserDao
+		    	
+	        	if (isFromAdminUi) {
+	        		// find user by mail & password
+		        	user.setPassword(password);
+		        	userRepository.findByUserEmailAndPassword(user);
+	        	} else {
+	        		userRepository.findByUserEmail(email);
+	        	}
+	        	
+	    		// Update UserDao
 				userRepository.updateUserByEmail(user);
 
 			} catch(IncorrectResultSizeDataAccessException e ) {
 				LOGGER.error("UserManager.findByUserMail : User by email #" + email + " is not found", e);
-				throw new DataNotExistsException("UserManager.findByUserMail : User by email #" + email + " is not found");
+				if (isFromAdminUi) {
+					throw new DataNotExistsException("UserManager.findByUserMail : User by email #" + email + " is not found");
+				} else {
+					// TODO createuser
+				}
 			}
-			
 		} else {
 			LOGGER.error("UserManager.processLogin : Authorization parameter is null or wrong format");
 			throw new AuthenticationException("UserManager.processLogin : Authorization parameter is null or wrong format");
@@ -174,7 +192,12 @@ public class SystemManagerImpl implements SystemManager {
 	}
 
 	private String createAccessToken(String email, String password) {
-		String keySource = email + ":" + password + (new Date()).getTime();
+		String keySource = null;
+		if (password != null) {
+			keySource = email + ":" + password + ":" + (new Date()).getTime();
+		} else {
+			keySource = email + ":" + (new Date()).getTime();
+		}
 		LOGGER.debug("Original keySource is " + keySource);
 		String token = Base64Utils.encodeToString(keySource.getBytes());
 		LOGGER.debug("Generated keySource is " + token);
