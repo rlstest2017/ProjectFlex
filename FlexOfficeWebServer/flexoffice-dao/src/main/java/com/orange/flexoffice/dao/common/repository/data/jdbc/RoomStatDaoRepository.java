@@ -2,7 +2,6 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -16,8 +15,6 @@ import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 @Repository
 public class RoomStatDaoRepository extends DataRepository<RoomStatDao> implements RoomStatDaoOperations {
 
-	private final Logger LOGGER = Logger.getLogger(RoomStatDaoRepository.class);
-	
 	public RoomStatDaoRepository() {
 		super(RoomStatDao.class);
 	}

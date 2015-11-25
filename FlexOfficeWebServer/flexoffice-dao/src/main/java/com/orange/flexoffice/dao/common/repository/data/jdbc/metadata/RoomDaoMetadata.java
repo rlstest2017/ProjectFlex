@@ -19,6 +19,8 @@ public final class RoomDaoMetadata {
 	public static final String ROOM_USER_ID_COL = "user_id";
 	public static final String ROOM_SENSORS_ID_COL = "sensors_id";
 	
-	private RoomDaoMetadata(){}
+	private RoomDaoMetadata(){
+		
+	}
 
 }

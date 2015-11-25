@@ -11,8 +11,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -27,8 +25,8 @@ import com.orange.flexoffice.userui.ws.auth.TokenSimpleUrlAuthenticationSuccessH
 
 public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
      
-    private static final Log logger = LogFactory.getLog(CustomTokenAuthenticationFilter.class);
     static final String ORIGIN = "Origin";
+    
     @Autowired
     AuthenticationToken authToken;
     
@@ -55,7 +53,7 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
             response.addHeader("Access-Control-Allow-Headers",
                     request.getHeader("Access-Control-Request-Headers"));
         }
-    	if (request.getMethod() == "OPTIONS" || request.getMethod().equals("OPTIONS")) {
+    	if (request.getMethod().equals("OPTIONS")) {
             response.getWriter().print("OK");
             response.getWriter().flush();
             response.setStatus(response.SC_OK);

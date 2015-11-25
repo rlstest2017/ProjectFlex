@@ -65,5 +65,7 @@ public final class DataSqlTemplate {
 	public static final String FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE = 
 			"select %s from %s where %s in (:rowIds)";
 
-	private DataSqlTemplate() {}
+	private DataSqlTemplate() {
+		
+	}
 }

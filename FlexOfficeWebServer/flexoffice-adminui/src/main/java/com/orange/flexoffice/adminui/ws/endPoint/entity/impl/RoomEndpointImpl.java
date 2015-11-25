@@ -162,7 +162,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		if (roomInput.getGateway() !=null) {
 			roomDao.setGatewayId(Long.valueOf(roomInput.getGateway().getId()));
 		} else {
-			roomDao.setGatewayId(0l);
+			roomDao.setGatewayId(0L);
 		}
 		roomDao.setDescription(roomInput.getDesc());
 		roomDao.setAddress(roomInput.getAddress());
@@ -171,7 +171,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "addRoom with parameters :");
-			final StringBuffer message = new StringBuffer( 1000 );
+			final StringBuilder message = new StringBuilder( 1000 );
 			message.append( "name :" );
 			message.append( roomInput.getName() );
 			message.append( "\n" );
@@ -221,7 +221,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		if (roomInput.getGateway() !=null) {
 			roomDao.setGatewayId(Long.valueOf(roomInput.getGateway().getId()));
 		} else {
-			roomDao.setGatewayId(0l);
+			roomDao.setGatewayId(0L);
 		}
 		roomDao.setDescription(roomInput.getDesc());
 		roomDao.setAddress(roomInput.getAddress());

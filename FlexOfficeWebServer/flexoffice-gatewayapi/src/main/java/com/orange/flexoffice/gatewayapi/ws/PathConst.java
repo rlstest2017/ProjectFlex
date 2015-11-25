@@ -13,5 +13,7 @@ public final class PathConst {
 	// Resources 2nd level
 	public static final String INFO_PATH = "/info";  
 	
-	private PathConst() {}
+	private PathConst() {
+		
+	}
 }

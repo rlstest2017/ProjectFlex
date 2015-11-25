@@ -22,7 +22,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
             AuthenticationException authException ) throws IOException, ServletException {
         String contentType = request.getContentType();
         LOGGER.info(contentType);
-        if (request.getMethod() == "OPTIONS" || request.getMethod().equals("OPTIONS")) {
+        if (request.getMethod().equals("OPTIONS")) {
             response.getWriter().print("OK");
             response.getWriter().flush();
             response.setStatus(response.SC_OK);

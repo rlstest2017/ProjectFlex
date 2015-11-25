@@ -29,7 +29,7 @@ public class StreamingPreparedStatement implements PreparedStatementCreator {
 			ps.setFetchSize(5000);
 		}
 		catch (SQLException e) {
-			LOGGER.debug("SQLException in createPreparedStatement of StreamingPreparedStatement class, as :" + e.getMessage());
+			LOGGER.debug("SQLException in createPreparedStatement of StreamingPreparedStatement class, as :" + e.getMessage(), e);
 		}
 		return ps;
 	}

@@ -6,9 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
@@ -34,8 +32,6 @@ import com.orange.flexoffice.userui.ws.model.ObjectFactory;
 import com.orange.flexoffice.userui.ws.model.Room;
 import com.orange.flexoffice.userui.ws.model.RoomSummary;
 
-
-
 /**
  * @author oab
  *
@@ -45,9 +41,6 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	private static final Logger LOGGER = Logger.getLogger(RoomEndpointImpl.class);
 	private final ObjectFactory factory = new ObjectFactory();
 	
-	@Context
-	private UriInfo uriInfo;
-
 	@Autowired
 	private RoomManager roomManager;
 

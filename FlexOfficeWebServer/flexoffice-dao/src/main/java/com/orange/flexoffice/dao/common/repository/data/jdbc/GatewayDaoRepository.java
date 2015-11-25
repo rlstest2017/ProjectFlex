@@ -61,19 +61,6 @@ public class GatewayDaoRepository extends DataRepository<GatewayDao> implements 
 		return data;
 	}
 	
-	
-//	@Override
-//	public GatewayDao findByName(String name) {
-//		SqlParameterSource paramMap = new MapSqlParameterSource("name", name);
-//		GatewayDao data = null;
-//		data = jdbcTemplate.queryForObject(
-//				findByColumnNameQuery, 
-//				paramMap, 
-//				new BeanPropertyRowMapper<GatewayDao>(GatewayDao.class)
-//			);
-//		return data;
-//	}
-	
 	@Override
 	public GatewayDao saveGateway(GatewayDao data) throws DataIntegrityViolationException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();

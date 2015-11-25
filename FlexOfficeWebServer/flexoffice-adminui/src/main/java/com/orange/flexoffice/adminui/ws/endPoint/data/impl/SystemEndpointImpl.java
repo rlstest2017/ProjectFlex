@@ -98,7 +98,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
 			return factory.createSystem(system).getValue();
 			
 			} catch (RuntimeException ex){
-				LOGGER.debug("RuntimeException in getSystem() SystemEndpointImpl with message :" + ex.getMessage());
+				LOGGER.debug("RuntimeException in getSystem() SystemEndpointImpl with message :" + ex.getMessage(), ex);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 			}
 

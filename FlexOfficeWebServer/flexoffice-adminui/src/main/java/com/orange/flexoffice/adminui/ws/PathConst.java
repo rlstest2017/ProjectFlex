@@ -31,5 +31,7 @@ public final class PathConst {
 	public static final String OCCUPANCY_PATH = "/occupancy";
 	
 	
-	private PathConst() {}
+	private PathConst() {
+		
+	}
 }

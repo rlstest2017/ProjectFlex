@@ -4,9 +4,7 @@ import java.util.Date;
 
 import javax.naming.AuthenticationException;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +29,6 @@ public class UserEndpointImpl implements UserEndpoint {
 	
 	private static final Logger LOGGER = Logger.getLogger(UserEndpointImpl.class);
 	private final ObjectFactory factory = new ObjectFactory();
-	
-	@Context
-	private UriInfo uriInfo;
 	
 	@Autowired
 	private UserManager userManager;

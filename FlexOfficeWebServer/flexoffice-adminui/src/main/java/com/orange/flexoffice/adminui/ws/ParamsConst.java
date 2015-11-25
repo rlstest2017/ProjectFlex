@@ -10,6 +10,8 @@ public final class ParamsConst {
 	public static final String ORIGIN_HEADER_PARAM = "Origin";
 	public static final String ROOM_ID_PARAM = "roomId";
 	
-	private ParamsConst() {}
+	private ParamsConst() {
+		
+	}
 
 }

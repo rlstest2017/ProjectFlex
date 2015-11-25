@@ -20,8 +20,6 @@ public interface GatewayDaoOperations {
 	
 	GatewayDao findByMacAddress(String macAddress) throws IncorrectResultSizeDataAccessException;
 	
-	//GatewayDao findByName(String name);
-	
 	GatewayDao updateGatewayStatus(GatewayDao data); 
 	
 	GatewayDao saveGateway(GatewayDao data) throws DataIntegrityViolationException;

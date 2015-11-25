@@ -13,6 +13,8 @@ public final class UserDaoMetadata {
 	public static final String USER_FIRSTNAME_COL = "first_name";
 	public static final String USER_LASTNAME_COL = "last_name";
 	
-	private UserDaoMetadata(){}
+	private UserDaoMetadata(){
+		
+	}
 
 }

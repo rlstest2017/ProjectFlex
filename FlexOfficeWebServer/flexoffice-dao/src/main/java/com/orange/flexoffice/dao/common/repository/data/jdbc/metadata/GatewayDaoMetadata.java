@@ -17,6 +17,8 @@ public final class GatewayDaoMetadata {
 	public static final String GATEWAY_ROOMS_ID_COL = "rooms_id";
 	public static final String GATEWAY_LAST_POLLING_DATE_COL = "last_polling_date";
 	
-	private GatewayDaoMetadata(){}
+	private GatewayDaoMetadata(){
+		
+	}
 
 }

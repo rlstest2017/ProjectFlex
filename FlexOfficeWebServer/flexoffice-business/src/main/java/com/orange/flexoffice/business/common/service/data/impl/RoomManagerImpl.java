@@ -105,7 +105,7 @@ public class RoomManagerImpl implements RoomManager {
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Return find(long roomId) method for RoomManagerImpl, with parameters :");
-			final StringBuffer message = new StringBuffer( 1000 );
+			final StringBuilder message = new StringBuilder( 1000 );
 			message.append( "id :" );
 			message.append( String.valueOf(roomId) );
 			message.append( "\n" );

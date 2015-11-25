@@ -45,7 +45,7 @@ public interface UserManager {
 	 * @return a saved {@link UserDao}
 	 * @throws DataAlreadyExistsException 
 	 */
-	UserDao save(UserDao UserDao) throws DataAlreadyExistsException;
+	UserDao save(UserDao userDao) throws DataAlreadyExistsException;
 
 	/**
 	 * Updates a {@link UserDao}
@@ -54,7 +54,7 @@ public interface UserManager {
 	 * 		  the new {@link UserDao}
 	 * @return a saved {@link UserDao}
 	 */
-	UserDao update(UserDao UserDao) throws DataNotExistsException;
+	UserDao update(UserDao userDao) throws DataNotExistsException;
 
 	/**
 	 * Deletes a {@link UserDao}.

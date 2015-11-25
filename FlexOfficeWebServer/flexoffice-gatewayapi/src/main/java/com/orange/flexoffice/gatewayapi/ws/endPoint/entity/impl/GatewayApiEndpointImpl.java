@@ -98,7 +98,7 @@ public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 			return rooms;
 			
 			}  catch (RuntimeException ex){
-				LOGGER.debug("RuntimeException in getGateway() GatewayEndpointImpl with message :" + ex.getMessage());
+				LOGGER.debug("RuntimeException in getGateway() GatewayEndpointImpl with message :" + ex.getMessage(), ex);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 			}
 	}
@@ -123,11 +123,11 @@ public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 			return returnCommand;
 			
 		} catch (DataNotExistsException e){
-			LOGGER.debug("DataNotExistsException in updateGateway() GatewayEndpointImpl with message :" + e.getMessage());
+			LOGGER.debug("DataNotExistsException in updateGateway() GatewayEndpointImpl with message :" + e.getMessage(), e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_23, Response.Status.NOT_FOUND));
 			
 		} catch (RuntimeException ex){
-			LOGGER.debug("RuntimeException in updateGateway() GatewayEndpointImpl with message :" + ex.getMessage());
+			LOGGER.debug("RuntimeException in updateGateway() GatewayEndpointImpl with message :" + ex.getMessage(), ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 	

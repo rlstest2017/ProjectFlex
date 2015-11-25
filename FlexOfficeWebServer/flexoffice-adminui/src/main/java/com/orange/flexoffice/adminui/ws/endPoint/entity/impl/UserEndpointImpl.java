@@ -56,13 +56,13 @@ public class UserEndpointImpl implements UserEndpoint {
 
 		List<UserSummary> userList = new ArrayList<UserSummary>();
 
-		for (UserDao UserDao : dataList) {
+		for (UserDao userDao : dataList) {
 			UserSummary user = factory.createUserSummary();
-			user.setId(UserDao.getColumnId());
-			user.setLabel(UserDao.getFirstName() + " " + UserDao.getLastName());
-			user.setFirstName(UserDao.getFirstName());
-			user.setLastName(UserDao.getLastName());
-			user.setEmail(UserDao.getEmail());
+			user.setId(userDao.getColumnId());
+			user.setLabel(userDao.getFirstName() + " " + userDao.getLastName());
+			user.setFirstName(userDao.getFirstName());
+			user.setLastName(userDao.getLastName());
+			user.setEmail(userDao.getEmail());
 
 			userList.add(user);
 		}
@@ -112,7 +112,7 @@ public class UserEndpointImpl implements UserEndpoint {
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "UserEndpoint.addUser add with parameters :");
-			final StringBuffer message = new StringBuffer( 1000 );
+			final StringBuilder message = new StringBuilder( 1000 );
 			message.append( "email :" );
 			message.append( userInput.getEmail() );
 			message.append( "\n" );

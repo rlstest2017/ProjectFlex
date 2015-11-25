@@ -32,7 +32,6 @@ import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.business.common.service.data.SensorManager;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_SensorStatus;
-import com.orange.flexoffice.dao.common.model.enumeration.E_SensorType;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 
 
@@ -183,7 +182,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "addSensor with parameters :");
-			final StringBuffer message = new StringBuffer( 1000 );
+			final StringBuilder message = new StringBuilder( 1000 );
 			message.append( "name :" );
 			message.append( sensorInput.getName() );
 			message.append( "\n" );

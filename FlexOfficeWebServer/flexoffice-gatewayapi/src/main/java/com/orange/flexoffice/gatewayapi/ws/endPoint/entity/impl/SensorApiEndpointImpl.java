@@ -56,7 +56,7 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "addSensor with parameters :");
-			final StringBuffer message = new StringBuffer( 1000 );
+			final StringBuilder message = new StringBuilder( 1000 );
 			message.append( "Identifier :" );
 			message.append( sensorInput.getId() );
 			message.append( "\n" );

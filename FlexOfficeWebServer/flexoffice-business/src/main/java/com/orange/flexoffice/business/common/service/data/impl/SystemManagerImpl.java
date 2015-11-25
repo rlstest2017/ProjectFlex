@@ -195,8 +195,8 @@ public class SystemManagerImpl implements SystemManager {
 	
 	private Long countActiveUsers() {
 		// TODO get activeUsers
-		//return userRepository.countActive(String lastConnectionDuration);
-		return 3l;
+		//TODO userRepository.countActive(String lastConnectionDuration);
+		return 3L;
 	}
 
 	private String createAccessToken(String email, String password) {

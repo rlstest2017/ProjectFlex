@@ -18,6 +18,8 @@ public final class SensorDaoMetadata {
 	public static final String SENSOR_ROOM_ID_COL = "room_id";
 	public static final String SENSOR_LAST_MEASURE_DATE_COL = "last_measure_date";
 	
-	private SensorDaoMetadata(){}
+	private SensorDaoMetadata(){
+		
+	}
 
 }
