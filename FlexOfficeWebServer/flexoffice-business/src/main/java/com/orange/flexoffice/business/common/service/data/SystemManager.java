@@ -20,11 +20,15 @@ public interface SystemManager {
 	SystemDto getSystem();
 	
 	/**
-	 * Create accessToken for authentication
+	 * 
 	 * @param auth
+	 * @param isFromAdminUi
+	 * @param object  used in UserUI interface UserDao parameter
 	 * @return
+	 * @throws DataNotExistsException
+	 * @throws AuthenticationException
 	 */
-	UserDao processLogin(String auth, Boolean isFromAdminUi) throws DataNotExistsException, AuthenticationException;
+	UserDao processLogin(String auth, Boolean isFromAdminUi, Object object) throws DataNotExistsException, AuthenticationException;
 	
 	void processLogout(String accessToken); 
 	

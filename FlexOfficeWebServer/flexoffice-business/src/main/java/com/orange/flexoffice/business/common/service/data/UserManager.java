@@ -2,9 +2,12 @@ package com.orange.flexoffice.business.common.service.data;
 
 import java.util.List;
 
+import javax.naming.AuthenticationException;
+
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
+import com.orange.flexoffice.dao.common.model.object.UserDto;
 
 public interface UserManager {
 
@@ -26,6 +29,14 @@ public interface UserManager {
 	 */
 	UserDao findByUserMail(String userEmail) throws DataNotExistsException;
 
+	/**
+	 * 
+	 * @param accessToken
+	 * @return
+	 * @throws AuthenticationException
+	 */
+	UserDto findByUserAccessToken(String accessToken) throws AuthenticationException;
+	
 	/**
 	 * Saves a {@link UserDao}
 	 * 

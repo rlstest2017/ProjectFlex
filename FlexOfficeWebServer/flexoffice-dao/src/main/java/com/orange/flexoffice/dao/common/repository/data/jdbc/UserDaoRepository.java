@@ -132,6 +132,20 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 		
 		return data;
 	}
+	
+	@Override
+	public UserDao saveUserFromUserUI(UserDao data) throws DataIntegrityViolationException {
+	KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(saveUserFromUserUIQuery, paramBean, keyHolder);
+		
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
+		
+		return data;
+	}
 		
 	@Override
 	protected String getTableName() {
@@ -155,5 +169,6 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	
 }

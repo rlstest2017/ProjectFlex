@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.business.common.exception.RoomAlreadyUsedException;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
-import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 
 /**
@@ -56,7 +56,7 @@ public interface RoomManager {
 	 * 		  the new {@link RoomDao}
 	 * @return a saved {@link RoomDao}
 	 */
-	RoomDao updateStatus(RoomDao roomDao) throws DataNotExistsException;
+	RoomDao updateStatus(RoomDao roomDao) throws DataNotExistsException, RoomAlreadyUsedException;
 
 	/**
 	 * Deletes a room

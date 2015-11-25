@@ -123,6 +123,7 @@ public class RoomEndpointImplTest {
 			// Test
 			final Response response = roomEndpoint.reserveRoom("1");
 
+			System.out.println("test");
 			// Asserts
 			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
 			expectedResult = true;

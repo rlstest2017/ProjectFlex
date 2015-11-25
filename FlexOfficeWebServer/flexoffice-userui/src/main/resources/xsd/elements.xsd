@@ -5,6 +5,8 @@
 	
 	<xsd:element name="userSummary" type="UserSummary"/>
 
+	<xsd:element name="userInput" type="UserInput"/>
+
 	<xsd:element name="room" type="Room"/>
 	<xsd:element name="roomSummary" type="RoomSummary"/>
 	

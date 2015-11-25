@@ -32,4 +32,7 @@ public interface UserDaoOperations {
 	
 	UserDao saveUser(UserDao data) throws DataIntegrityViolationException;
 	
+	UserDao saveUserFromUserUI(UserDao data) throws DataIntegrityViolationException;
+	
+	
 }

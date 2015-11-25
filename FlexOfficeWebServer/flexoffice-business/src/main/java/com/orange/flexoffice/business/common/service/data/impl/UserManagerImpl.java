@@ -1,6 +1,9 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
+import java.util.Date;
 import java.util.List;
+
+import javax.naming.AuthenticationException;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.UserManager;
+import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
+import com.orange.flexoffice.dao.common.model.object.UserDto;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.UserDaoRepository;
 
 /**
@@ -28,6 +34,9 @@ public class UserManagerImpl implements UserManager {
 	
 	@Autowired
 	private UserDaoRepository userRepository;
+	
+	@Autowired
+	private RoomDaoRepository roomRepository;
 	
 	@Transactional(readOnly=true)
 	public List<UserDao> findAllUsers() {
@@ -53,12 +62,12 @@ public class UserManagerImpl implements UserManager {
 
 	}
 
-	
 	/**
 	 * 
 	 * @param userEmail
 	 * @return
 	 */
+	@Transactional(readOnly=true)
 	public UserDao findByUserMail(String userEmail) throws DataNotExistsException {
 		try {
 			return userRepository.findByUserEmail(userEmail);
@@ -69,6 +78,45 @@ public class UserManagerImpl implements UserManager {
 		}
 	}
 
+	/**
+	 * 
+	 * @param userEmail
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public UserDto findByUserAccessToken(String accessToken) throws AuthenticationException {
+		try {
+			UserDto user = new UserDto();
+			
+			UserDao userDao = userRepository.findByAccessToken(accessToken);
+			if (userDao == null)  {
+				LOGGER.debug("checkToken return : accessToken not found in DB.");
+				throw new AuthenticationException("UserManager.findByUserAccessToken : User by accessToken #" + accessToken + " is not found in DB");
+			}else if (userDao.getExpiredTokenDate().before(new Date())) {
+				LOGGER.debug("checkToken return : The accessToken is expired at :" + user.getExpiredTokenDate());
+				throw new AuthenticationException("UserManager.findByUserAccessToken : User by accessToken #" + accessToken + " is expired");
+			} else {
+				user.setId(userDao.getColumnId());
+				user.setFirstName(userDao.getFirstName());
+				user.setLastName(userDao.getLastName());
+				user.setEmail(userDao.getEmail());
+				try {
+					RoomDao room = roomRepository.findByUserId(userDao.getColumnId());
+					user.setRoomId(room.getColumnId());
+				} catch(IncorrectResultSizeDataAccessException e ) {
+					LOGGER.error("UserManager.findByUserId ROOM : User by iD #" + userDao.getColumnId() + " is not found", e);
+					user.setRoomId(null);
+				}	
+			}
+			
+			return user;
+
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.error("UserManager.findByUserAccessToken : User by accessToken #" + accessToken + " is not found", e);
+			throw new AuthenticationException("UserManager.findByUserAccessToken : User by accessToken #" + accessToken + " is not found");
+		}
+	}
+	
 	/**
 	 * Saves a {@link UserDao}
 	 * 

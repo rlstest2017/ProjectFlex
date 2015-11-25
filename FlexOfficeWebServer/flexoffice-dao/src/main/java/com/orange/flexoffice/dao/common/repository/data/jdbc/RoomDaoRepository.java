@@ -38,7 +38,7 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 
 	@Override
 	public RoomDao findByRoomId(Long roomId) throws IncorrectResultSizeDataAccessException{
-		SqlParameterSource paramMap = new MapSqlParameterSource("Id", roomId);
+		SqlParameterSource paramMap = new MapSqlParameterSource("columnId", roomId);
 		return jdbcTemplate.queryForObject(
 				findByColumnIdQuery, 
 				paramMap, 
@@ -66,6 +66,16 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 			);
 	}
 
+	@Override
+	public RoomDao findByUserId(String userId) throws IncorrectResultSizeDataAccessException{
+		SqlParameterSource paramMap = new MapSqlParameterSource("userId", userId);
+		return jdbcTemplate.queryForObject(
+				findByUserIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<RoomDao>(RoomDao.class)
+			);
+	}
+	
 	@Override
 	public RoomDao saveRoom(RoomDao data) throws DataIntegrityViolationException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();

@@ -16,10 +16,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.userui.ws.model.ERoomStatus;
+import com.orange.flexoffice.userui.ws.model.ERoomType;
 import com.orange.flexoffice.userui.ws.model.ErrorModel;
 import com.orange.flexoffice.userui.ws.model.UserSummary;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.business.common.exception.RoomAlreadyUsedException;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.business.common.service.data.UserManager;
@@ -82,6 +84,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			RoomSummary room = factory.createRoomSummary();
 			room.setId(roomDao.getColumnId());
 			room.setName(roomDao.getName());
+			room.setType(ERoomType.valueOf(roomDao.getType()));
 			room.setAddress(roomDao.getAddress());
 			room.setCapacity(BigInteger.valueOf(roomDao.getCapacity()));
 			room.setStatus(ERoomStatus.valueOf(roomDao.getStatus().toString()));
@@ -118,6 +121,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			Room room = factory.createRoom();
 			room.setId(roomDto.getId());
 			room.setName(roomDto.getName());
+			room.setType(ERoomType.valueOf(roomDto.getType().toString()));
 			room.setDesc(roomDto.getDescription());
 			room.setAddress(roomDto.getAddress());
 			room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));			
@@ -168,6 +172,11 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.reserveRoom with message :", e);
 			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));
 			
+		} catch (RoomAlreadyUsedException e){
+			
+			LOGGER.debug("RoomAlreadyUsedException in UserUi.RoomEndpoint.reserveRoom with message :", e);
+			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.METHOD_NOT_ALLOWED));
+			
 		} catch (RuntimeException ex){
 
 			LOGGER.debug("RuntimeException in UserUi.RoomEndpoint.reserveRoom with message :", ex);
@@ -202,12 +211,12 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			roomDao = roomManager.updateStatus(roomDao);
 
 		} catch (DataNotExistsException e){
-			
 			LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.cancelRoom with message :", e);
 			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));
-			
+		} catch (RoomAlreadyUsedException e){
+			LOGGER.debug("RoomAlreadyUsedException in UserUi.RoomEndpoint.cancelRoom with message :", e);
+			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex){
-
 			LOGGER.debug("RuntimeException in UserUi.RoomEndpoint.cancelRoom with message :", ex);
 			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}

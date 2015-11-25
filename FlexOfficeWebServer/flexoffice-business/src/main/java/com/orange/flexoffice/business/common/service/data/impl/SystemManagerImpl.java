@@ -73,7 +73,7 @@ public class SystemManagerImpl implements SystemManager {
 	}
 
 	@Override
-	public UserDao processLogin(String authorization, Boolean isFromAdminUi) throws DataNotExistsException, AuthenticationException {
+	public UserDao processLogin(String authorization, Boolean isFromAdminUi, Object object) throws DataNotExistsException, AuthenticationException {
 	    LOGGER.debug("authorization parameter is :" + authorization);
     	UserDao user = new UserDao();
     	
@@ -124,11 +124,17 @@ public class SystemManagerImpl implements SystemManager {
 
 			} catch(IncorrectResultSizeDataAccessException e ) {
 				LOGGER.error("UserManager.findByUserMail : User by email #" + email + " is not found", e);
-				//if (isFromAdminUi) {
+				if (isFromAdminUi) {
 					throw new DataNotExistsException("UserManager.findByUserMail : User by email #" + email + " is not found");
-				//} else {
-					// TODO createuser
-				//}
+				} else {
+					if ((object != null)&&(object instanceof UserDao)) {
+								user.setFirstName((String)((UserDao) object).getFirstName());
+								user.setLastName((String)((UserDao) object).getLastName());
+					}
+					user.setIsCreatedFromUserui(true);
+					// Create new user
+					userRepository.saveUserFromUserUI(user);
+				}
 			}
 		} else {
 			LOGGER.error("UserManager.processLogin : Authorization parameter is null or wrong format");

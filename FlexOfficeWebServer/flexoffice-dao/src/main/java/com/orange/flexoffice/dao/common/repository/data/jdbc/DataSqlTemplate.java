@@ -20,6 +20,8 @@ public final class DataSqlTemplate {
 			"select * from %s where access_token=:accessToken";
 	public static final String FIND_BY_COL_ROOM_ID_TEMPLATE = 
 			"select * from %s where room_id=:roomId";
+	public static final String FIND_BY_COL_USER_ID_TEMPLATE = 
+			"select * from %s where user_id=:userId";
 	public static final String FIND_BY_IDENTIFIER_TEMPLATE = 
 			"select * from %s where identifier=:identifier";
 	public static final String FIND_ALL_TEMPLATE = 
@@ -34,6 +36,8 @@ public final class DataSqlTemplate {
 			"select count(id) from %s";
 	public static final String CREATE_USER_TEMPLATE = 
 			"insert into %s (first_name, last_name, email) values (:firstName, :lastName, :email)";
+	public static final String CREATE_USER_FROM_USERUI_TEMPLATE = 
+			"insert into %s (first_name, last_name, email, is_created_from_userui) values (:firstName, :lastName, :email, :isCreatedFromUserui)";
 	public static final String CREATE_GATEWAY_TEMPLATE = 
 			"insert into %s (mac_address, name, description) values (:macAddress, :name, :description)";
 	public static final String CREATE_ROOM_TEMPLATE = 

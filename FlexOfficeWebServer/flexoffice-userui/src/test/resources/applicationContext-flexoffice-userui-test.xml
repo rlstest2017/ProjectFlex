@@ -16,5 +16,7 @@
 	<bean id="userEndpoint" class="com.orange.flexoffice.userui.ws.endPoint.entity.impl.UserEndpointImpl">
 	</bean>
 	
+	<bean id="errorMessageHandler" class="com.orange.flexoffice.userui.ws.utils.ErrorMessageHandler">
+	</bean>
 		
 </beans>

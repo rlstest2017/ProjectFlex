@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.business.common.exception.RoomAlreadyUsedException;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
@@ -77,6 +78,7 @@ public class RoomManagerImpl implements RoomManager {
 		dto.setId(String.valueOf(roomId));
 		dto.setDescription(roomDao.getDescription());
 		dto.setName(roomDao.getName());
+		dto.setType(E_RoomType.valueOf(roomDao.getType()));
 		dto.setAddress(roomDao.getAddress());
 		dto.setCapacity(roomDao.getCapacity());
 		dto.setStatus(E_RoomStatus.valueOf(roomDao.getStatus()));
@@ -142,9 +144,17 @@ public class RoomManagerImpl implements RoomManager {
 
 
 	@Override
-	public RoomDao updateStatus(RoomDao roomDao) throws DataNotExistsException {
-
+	public RoomDao updateStatus(RoomDao roomDao) throws DataNotExistsException, RoomAlreadyUsedException {
 		try {
+
+			// Use in case of RESERVED Room in UserUI
+			if  (roomDao.getStatus().equals(E_RoomStatus.RESERVED.toString())) { 
+				RoomDao foundRoom = roomRepository.findByRoomId(roomDao.getId());
+				if (!foundRoom.getStatus().equals(E_RoomStatus.FREE.toString())) {
+					LOGGER.debug("Room status is not FREE !!!");
+					throw new RoomAlreadyUsedException("RoomManager.updateStatus : Room is not in FREE status");
+				}
+			}
 			// Update RoomDao
 			return roomRepository.updateRoomStatus(roomDao);
 		} catch (RuntimeException e) {
