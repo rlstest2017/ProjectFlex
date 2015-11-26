@@ -16,8 +16,6 @@ import org.junit.runners.MethodSorters;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Log4jConfigurer;
 
-import com.orange.flexoffice.business.common.exception.DataNotExistsException;
-import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 import com.orange.flexoffice.gatewayapi.ws.endPoint.entity.GatewayApiEndpoint;
 import com.orange.flexoffice.gatewayapi.ws.endPoint.support.ObjectFactory;
 import com.orange.flexoffice.gatewayapi.ws.model.ECommandModel;
@@ -77,12 +75,12 @@ public class GatewayApiEndpointImplTest {
 	}
 
 	@Test
-	public void TestC_getGatewayByGatewayId() {
+	public void TestC_getGatewayByGatewayMacAddress() {
 		// SetUp
-		String gatewayId = "1";
+		String gatewayMacAddress = "FF:EE:ZZ:AA:GG:PP";
 		
 		// Test
-		List<Room> rooms = gatewayEndpoint.getGateway(gatewayId);
+		List<Room> rooms = gatewayEndpoint.getGateway(gatewayMacAddress);
 		
 		// Asserts
 		assertEquals(2, rooms.size());
@@ -99,25 +97,13 @@ public class GatewayApiEndpointImplTest {
 	@Test
 	public void TestD_updateGateway() {
 		// Setup
-		boolean expectedResult = false;
 		final GatewayInput gatewayIn = factory.createApiGateway("ONLINE");
 
-		try {
-			final GatewayDto gatewayOut = gatewayEndpoint.findByMacAddress("FF:TT:ZZ:AA:GG:PP");
-
 			// Test
-			final GatewayReturn response = gatewayEndpoint.updateGateway(gatewayOut.getId(), gatewayIn);
+			final GatewayReturn response = gatewayEndpoint.updateGateway("FF:TT:ZZ:AA:GG:PP", gatewayIn);
 
 			// Assert
 			assertEquals(ECommandModel.NONE, response.getCommand());
-			expectedResult = true;
-
-		} catch(DataNotExistsException e ) {
-		}
-
-		// Assert
-		assertEquals(true, expectedResult);	
-
 	}
 	
 	@Test

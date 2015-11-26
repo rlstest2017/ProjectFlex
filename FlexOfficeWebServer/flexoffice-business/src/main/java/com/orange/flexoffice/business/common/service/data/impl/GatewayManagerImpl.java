@@ -53,13 +53,15 @@ public class GatewayManagerImpl implements GatewayManager {
 
 	@Override
 	@Transactional(readOnly=true)
-	public List<RoomDto> findGatewayRooms(long gatewayId) {
+	public List<RoomDto> findGatewayRooms(String gatewayMacAddress) {
 		
 		List<RoomDto> roomDtoList = new ArrayList<RoomDto>();
 		
-		List<RoomDao> roomsDao = roomRepository.findByGatewayId(gatewayId);
+		GatewayDao gateway = gatewayRepository.findByMacAddress(gatewayMacAddress);
 		
-		LOGGER.debug("There is: " + roomsDao.size() + " rooms for gateway :" + gatewayId );
+		List<RoomDao> roomsDao = roomRepository.findByGatewayId(gateway.getId());
+		
+		LOGGER.debug("There is: " + roomsDao.size() + " rooms for gateway (macAddress) :" + gatewayMacAddress );
 		
 		for (RoomDao roomDao : roomsDao) {
 			RoomDto roomDto = new RoomDto();
@@ -196,8 +198,10 @@ public class GatewayManagerImpl implements GatewayManager {
 	@Override
 	public GatewayCommand updateStatus(GatewayDao gatewayDao) throws DataNotExistsException {
 		try {
-			Long gatewayId = gatewayDao.getId();
-			gatewayRepository.findOne(gatewayId);
+			String macAddress = gatewayDao.getMacAddress();
+			GatewayDao gateway = gatewayRepository.findByMacAddress(macAddress);
+			gatewayDao.setId(gateway.getId());
+			
 			// update Gateway Status
 			gatewayRepository.updateGatewayStatus(gatewayDao);
 			

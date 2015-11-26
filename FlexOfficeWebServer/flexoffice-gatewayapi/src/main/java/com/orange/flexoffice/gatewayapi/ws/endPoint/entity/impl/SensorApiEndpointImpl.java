@@ -86,11 +86,11 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 	}
 
 	@Override
-	public Response updateSensor(String id, SensorInput sensor) {
+	public Response updateSensor(String identifier, SensorInput sensor) {
 		LOGGER.info( "Begin call SensorEndpoint.updateSensor at: " + new Date() );
 
 		SensorDao sensorDao = new SensorDao();
-		sensorDao.setIdentifier(id);
+		sensorDao.setIdentifier(identifier);
 		sensorDao.setStatus(sensor.getSensorStatus().toString());
 
 

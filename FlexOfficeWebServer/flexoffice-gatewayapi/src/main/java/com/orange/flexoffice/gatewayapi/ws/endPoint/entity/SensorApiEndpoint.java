@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 import com.orange.flexoffice.gatewayapi.ws.model.SensorInput;
 import com.orange.flexoffice.gatewayapi.ws.model.SensorNewSummary;
 
-import static com.orange.flexoffice.gatewayapi.ws.ParamsConst.SENSOR_ID_PARAM;
+import static com.orange.flexoffice.gatewayapi.ws.ParamsConst.SENSOR_IDENTIFIER_PARAM;
 import static com.orange.flexoffice.gatewayapi.ws.PathConst.SENSORS_PATH;
 import static com.orange.flexoffice.gatewayapi.ws.PathConst.SENSOR_ID_PATH;
 
@@ -62,7 +62,7 @@ public interface SensorApiEndpoint {
 	@Path(SENSOR_ID_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response updateSensor(@PathParam(SENSOR_ID_PARAM)String id, SensorInput sensor);
+	Response updateSensor(@PathParam(SENSOR_IDENTIFIER_PARAM)String identifier, SensorInput sensor);
 
 }
 

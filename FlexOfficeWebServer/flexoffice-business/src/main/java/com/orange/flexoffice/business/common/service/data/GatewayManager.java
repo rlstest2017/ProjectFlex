@@ -26,7 +26,7 @@ public interface GatewayManager {
 	 * @param gatewayId
 	 * @return
 	 */
-	List<RoomDto> findGatewayRooms(long gatewayId);
+	List<RoomDto> findGatewayRooms(String gatewayMacAddress);
 	
 	/**
 	 * Finds a {@link GatewayDto} by its ID.

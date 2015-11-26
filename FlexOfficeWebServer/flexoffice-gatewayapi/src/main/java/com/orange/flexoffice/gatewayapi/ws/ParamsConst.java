@@ -7,8 +7,8 @@ package com.orange.flexoffice.gatewayapi.ws;
  */
 public final class ParamsConst {
 	
-		public static final String SENSOR_ID_PARAM = "sensorId";
-	public static final String GATEWAY_ID_PARAM = "gatewayId";
+		public static final String SENSOR_IDENTIFIER_PARAM = "sensorIdentifier";
+	public static final String GATEWAY_MAC_ADDRESS_PARAM = "gatewayMacAddress";
 		
 	private ParamsConst() {
 		

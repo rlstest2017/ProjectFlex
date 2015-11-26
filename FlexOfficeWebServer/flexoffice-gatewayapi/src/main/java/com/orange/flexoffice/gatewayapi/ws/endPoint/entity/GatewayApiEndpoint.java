@@ -17,7 +17,7 @@ import com.orange.flexoffice.gatewayapi.ws.model.GatewayReturn;
 import com.orange.flexoffice.gatewayapi.ws.model.GatewaySummary;
 import com.orange.flexoffice.gatewayapi.ws.model.Room;
 
-import static com.orange.flexoffice.gatewayapi.ws.ParamsConst.GATEWAY_ID_PARAM;
+import static com.orange.flexoffice.gatewayapi.ws.ParamsConst.GATEWAY_MAC_ADDRESS_PARAM;
 import static com.orange.flexoffice.gatewayapi.ws.PathConst.GATEWAYS_PATH;
 import static com.orange.flexoffice.gatewayapi.ws.PathConst.GATEWAY_ID_PATH;
 import static com.orange.flexoffice.gatewayapi.ws.PathConst.INFO_PATH;
@@ -55,7 +55,7 @@ public interface GatewayApiEndpoint {
 	@Path(GATEWAY_ID_PATH  + INFO_PATH)
 	@Consumes (MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	List<Room> getGateway(@PathParam(GATEWAY_ID_PARAM) String gatewayId);
+	List<Room> getGateway(@PathParam(GATEWAY_MAC_ADDRESS_PARAM) String gatewayMacAddress);
 	
 	/**
 	 * Modifies a specific user.
@@ -74,7 +74,7 @@ public interface GatewayApiEndpoint {
 	@Path(GATEWAY_ID_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	GatewayReturn updateGateway(@PathParam(GATEWAY_ID_PARAM)String id, GatewayInput gateway);
+	GatewayReturn updateGateway(@PathParam(GATEWAY_MAC_ADDRESS_PARAM)String macAddress, GatewayInput gateway);
 
 	
 	// used for tests

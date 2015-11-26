@@ -69,11 +69,11 @@ public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 	}
 
 	@Override
-	public List<Room> getGateway(String gatewayId) {
+	public List<Room> getGateway(String gatewayMacAddress) {
 		try {
 			List<Room> rooms = new ArrayList<Room>();
 			
-			List<RoomDto> data = gatewayManager.findGatewayRooms(Long.valueOf(gatewayId));
+			List<RoomDto> data = gatewayManager.findGatewayRooms(gatewayMacAddress);
 			
 			LOGGER.debug("There is: " + data.size() + " rooms");
 			
@@ -104,11 +104,11 @@ public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 	}
 
 	@Override
-	public GatewayReturn updateGateway(String id, GatewayInput gateway) {
+	public GatewayReturn updateGateway(String macAddress, GatewayInput gateway) {
 		try {
 		LOGGER.info( "Begin call doPut method for GatewayEndpoint at: " + new Date() );
 		GatewayDao gatewayDao = new GatewayDao();
-		gatewayDao.setId(Long.valueOf(id));
+		gatewayDao.setMacAddress(macAddress);
 		gatewayDao.setStatus(gateway.getGatewayStatus().toString());
 		
 			GatewayCommand command = gatewayManager.updateStatus(gatewayDao);
