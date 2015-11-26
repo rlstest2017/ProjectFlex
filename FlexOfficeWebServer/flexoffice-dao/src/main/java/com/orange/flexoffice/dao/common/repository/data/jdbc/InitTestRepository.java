@@ -1,16 +1,22 @@
 package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.InitForTestDao;
 import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
+import com.orange.flexoffice.dao.common.utils.TokenTools;
 
 @Repository
 public class InitTestRepository extends DataRepository<InitForTestDao>  {
 
+	@Autowired
+	private TokenTools tokenTools;
+	
 	public InitTestRepository() {
 		super(InitForTestDao.class);
 	}
+	
 	/**
 	 * Script execute in BE GATEWAYAPI Class Test
 	 */
@@ -37,8 +43,10 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 			jdbcTemplateForTest.update(sqlSensors, new Object[] {3, "ident 3", "sensor 3", "MOTION_DETECTION", "as-07-01", "sensor 3 desc", "UNSTABLE", 2});
 					
 			String sqlUser = "INSERT INTO users " +
-					"(id, first_name, last_name, email) values (?, ?, ?, ?)";
-			jdbcTemplateForTest.update(sqlUser, new Object[] {1, "user FirstName 1", "user LastName 1", "user Email 1"});
+					"(id, first_name, last_name, email, access_token, expired_token_date, password) values (?, ?, ?, ?, ?, ?, ?)";
+			jdbcTemplateForTest.update(sqlUser, new Object[] {1, "user FirstName 1", "user LastName 1", "user Email 1", null, null, null});
+			jdbcTemplateForTest.update(sqlUser, new Object[] {2, "user FirstName 2", "user LastName 2", "first.last5@test.com:test", "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0", tokenTools.createExpiredDate(), null});
+			jdbcTemplateForTest.update(sqlUser, new Object[] {3, "user FirstName 3", "user LastName 3", "admin@oab.com", null, null, "flexoffice"});
 
 			String sqlRooms = "INSERT INTO rooms " +
 					"(id, name, address, capacity, description, status, type, gateway_id, user_id) VALUES (?, ?, ?, ?, ?, CAST(? AS roomStatus), CAST(? AS roomType), ?, ?)";
@@ -75,5 +83,7 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
 
 }

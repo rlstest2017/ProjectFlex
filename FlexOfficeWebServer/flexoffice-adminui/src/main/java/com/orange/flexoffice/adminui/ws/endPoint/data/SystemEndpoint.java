@@ -61,7 +61,7 @@ public interface SystemEndpoint {
 	@GET
 	@Path(LOGOUT_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response logout(@HeaderParam(TOKEN_HEADER_PARAM) String auth, @HeaderParam(ORIGIN_HEADER_PARAM) String origin);
+	Response logout(@HeaderParam(TOKEN_HEADER_PARAM) String auth);
 	
 	/**
 	 * Get Teachin infos.

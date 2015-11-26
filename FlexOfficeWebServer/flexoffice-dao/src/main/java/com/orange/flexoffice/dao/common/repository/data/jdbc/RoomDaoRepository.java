@@ -67,7 +67,7 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 	}
 
 	@Override
-	public RoomDao findByUserId(String userId) throws IncorrectResultSizeDataAccessException{
+	public RoomDao findByUserId(Long userId) throws IncorrectResultSizeDataAccessException{
 		SqlParameterSource paramMap = new MapSqlParameterSource("userId", userId);
 		return jdbcTemplate.queryForObject(
 				findByUserIdQuery, 

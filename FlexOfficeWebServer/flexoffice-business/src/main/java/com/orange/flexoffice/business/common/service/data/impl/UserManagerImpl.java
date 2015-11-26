@@ -101,7 +101,7 @@ public class UserManagerImpl implements UserManager {
 				user.setLastName(userDao.getLastName());
 				user.setEmail(userDao.getEmail());
 				try {
-					RoomDao room = roomRepository.findByUserId(userDao.getColumnId());
+					RoomDao room = roomRepository.findByUserId(userDao.getId());
 					user.setRoomId(room.getColumnId());
 				} catch(IncorrectResultSizeDataAccessException e ) {
 					LOGGER.error("UserManager.findByUserId ROOM : User by iD #" + userDao.getColumnId() + " is not found", e);

@@ -23,7 +23,7 @@ public interface RoomDaoOperations {
 
 	RoomDao findByName(String name) throws IncorrectResultSizeDataAccessException;
 	
-	RoomDao findByUserId(String userId) throws IncorrectResultSizeDataAccessException;
+	RoomDao findByUserId(Long userId) throws IncorrectResultSizeDataAccessException;
 	
 	RoomDao saveRoom(RoomDao data) throws DataIntegrityViolationException;
 	

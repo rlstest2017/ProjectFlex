@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
 
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -57,9 +60,32 @@ public class SystemEndpointImplTest {
 		
 		// Asserts
 		assertEquals(2, system.getGatewayCount().intValue());
-		assertEquals(1, system.getUserCount().intValue());
+		assertEquals(3, system.getUserCount().intValue());
 		assertEquals(2, system.getRoomCount().intValue());
 	}
 
+	@Test
+	public void TestC_logout() {
+		// Setup
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
+		
+		// Test
+		Response response = systemEndpoint.logout(token);
+
+		// Asserts
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+	}
+
+	@Test
+	public void TestD_login() {
+		// Setup
+		String authorization = "Basic YWRtaW5Ab2FiLmNvbTpmbGV4b2ZmaWNl";
+		
+		// Test
+		Response response = systemEndpoint.login(authorization, null);
+
+		// Asserts
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+	}
 
 }

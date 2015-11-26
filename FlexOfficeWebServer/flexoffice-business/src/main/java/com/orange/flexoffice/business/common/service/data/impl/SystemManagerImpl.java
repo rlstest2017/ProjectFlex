@@ -1,7 +1,6 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
 import java.nio.charset.Charset;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +22,7 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.UserDaoRepository;
+import com.orange.flexoffice.dao.common.utils.TokenTools;
 
 /**
  * Manages {@link SystemDto}.
@@ -43,6 +43,8 @@ public class SystemManagerImpl implements SystemManager {
 	private UserDaoRepository userRepository;
 	@Autowired
 	private AlertDaoRepository alertRepository;
+	@Autowired
+	private TokenTools tokenTools;
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -94,15 +96,15 @@ public class SystemManagerImpl implements SystemManager {
 		        password = values[1].trim();
 		        LOGGER.debug("email in processLogin() method is :" + email);
 		        LOGGER.debug("password in processLogin() method is :" + password);
-		        accessToken = createAccessToken(email, password);
+		        accessToken = tokenTools.createAccessToken(email, password);
 	        } else {
 	        	// credentials = email
 	        	email =credentials;
 	        	LOGGER.debug("email in processLogin() method is :" + email);
-		        accessToken = createAccessToken(email, null);
+		        accessToken = tokenTools.createAccessToken(email, null);
 	        }
 	        
-	        Date expiredTokenDate = createExpiredDate();
+	        Date expiredTokenDate = tokenTools.createExpiredDate();
 	        
 	        try {
 	        	user.setEmail(email);
@@ -197,30 +199,6 @@ public class SystemManagerImpl implements SystemManager {
 		// TODO get activeUsers
 		//TODO userRepository.countActive(String lastConnectionDuration);
 		return 3L;
-	}
-
-	private String createAccessToken(String email, String password) {
-		String keySource = null;
-		if (password != null) {
-			keySource = email + ":" + password + ":" + (new Date()).getTime();
-		} else {
-			keySource = email + ":" + (new Date()).getTime();
-		}
-		LOGGER.debug("Original keySource is " + keySource);
-		String token = Base64Utils.encodeToString(keySource.getBytes());
-		LOGGER.debug("Generated keySource is " + token);
-		return token;
-	}
-	
-	private Date createExpiredDate() {
-		Date now = new Date();
-		LOGGER.debug("Date now :" + now);
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(now);
-		cal.add(Calendar.DAY_OF_YEAR, 1); // <--1 jour -->
-		Date tomorrow = cal.getTime();
-		LOGGER.debug("Date tomorrow :" + tomorrow);		
-		return tomorrow;
 	}
 
 	

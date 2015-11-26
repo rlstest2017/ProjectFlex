@@ -138,20 +138,11 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	}
 	
 	@Override
-	public Response logout(String token, String origin) {
+	public Response logout(String token) {
 		
 		systemManager.processLogout(token);
 		
-		if (origin != null) {
-			LOGGER.debug("Origin value is :" + origin);
-			return Response.ok().status(200)
-		            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-		            .header("Access-Control-Max-Age", "1209600")
-		            .build();
-		} else {
-        	LOGGER.debug("Origin value is null");
-        	return Response.status(200).build();
-        }
+		return Response.status(200).build();
 	}
 	
 	@Override

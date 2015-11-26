@@ -5,7 +5,9 @@ import static org.junit.Assert.*;
 import java.io.FileNotFoundException;
 
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -56,17 +58,44 @@ public class UserEndpointImplTest {
 		// Asserts
 		assertEquals(true, state);
 	}
-
-
+	
 	@Test
 	public void TestB_getUserCurrent() {
+		// SetUp
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
+		
 		// Test
-		// TODO à refaire
-		//UserSummary user = userEndpoint.getUserCurrent(null);
+		UserSummary user = userEndpoint.getUserCurrent(token);
 
 		// Asserts
-		//assertEquals("user Email 1", user.getEmail());
-		assertEquals(true, true);
+		assertEquals("first.last5@test.com:test", user.getEmail());
+		
 	}
+
+	@Test
+	public void TestC_logout() {
+		// Setup
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
+		
+		// Test
+		Response response = userEndpoint.logout(token);
+
+		// Asserts
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+	}
+
+	@Test
+	public void TestD_login() {
+		// Setup
+		String authorization = "Basic Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdA==";
+		
+		// Test
+		Response response = userEndpoint.login(authorization, null, null);
+
+		// Asserts
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+	}
+	
+	
 
 }
