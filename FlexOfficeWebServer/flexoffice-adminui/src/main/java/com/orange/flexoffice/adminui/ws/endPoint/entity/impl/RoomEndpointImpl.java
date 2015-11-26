@@ -1,13 +1,10 @@
 package com.orange.flexoffice.adminui.ws.endPoint.entity.impl;
 
-import static com.orange.flexoffice.adminui.ws.ParamsConst.ROOM_ID_PARAM;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -210,7 +207,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 * @see com.orange.flexoffice.adminui.ws.endPoint.entity.RoomEndpoint#updateRoom
 	 */
 	@Override
-	public Response updateRoom(@PathParam(ROOM_ID_PARAM)String id, RoomInput1 roomInput) {
+	public Response updateRoom(String id, RoomInput1 roomInput) {
 		
 		LOGGER.info( "Begin call RoomEndpoint.updateRoom at: " + new Date() );
 
@@ -251,7 +248,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 * @see com.orange.flexoffice.adminui.ws.endPoint.entity.RoomEndpoint#removeRoom
 	 */
 	@Override
-	public Response removeRoom(@PathParam(ROOM_ID_PARAM)String id) {
+	public Response removeRoom(String id) {
 		
 		LOGGER.info( "Begin call RoomEndpoint.removeRoom at: " + new Date() );
 

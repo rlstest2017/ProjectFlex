@@ -10,7 +10,8 @@
 	     <!-- Adds the custom login filter to the Spring Security filter chain -->
 	    <custom-filter ref="authenticationTokenProcessingFilter" position="FORM_LOGIN_FILTER"   />
 	    <intercept-url pattern="/v1/**" access="isAuthenticated()" />
-	       <logout />
+	    <logout />
+	    <csrf disabled="true"/>
 	</http>
  
      <!-- Configures the authentication entry point -->

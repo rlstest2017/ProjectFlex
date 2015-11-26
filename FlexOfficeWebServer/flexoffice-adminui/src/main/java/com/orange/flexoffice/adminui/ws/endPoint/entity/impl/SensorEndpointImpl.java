@@ -1,12 +1,9 @@
 package com.orange.flexoffice.adminui.ws.endPoint.entity.impl;
 
-import static com.orange.flexoffice.adminui.ws.ParamsConst.SENSOR_IDENTIFIER_PARAM;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -218,7 +215,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 	 * @see com.orange.flexoffice.adminui.ws.endPoint.entity.SensorEndpoint#updateSensor
 	 */
 	@Override
-	public Response updateSensor(@PathParam(SENSOR_IDENTIFIER_PARAM)String id, SensorInput2 sensorInput) {
+	public Response updateSensor(String id, SensorInput2 sensorInput) {
 		
 		LOGGER.info( "Begin call SensorEndpoint.updateSensor at: " + new Date() );
 
@@ -257,7 +254,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 	 * @see com.orange.flexoffice.adminui.ws.endPoint.entity.SensorEndpoint#removeSensor
 	 */
 	@Override
-	public Response removeSensor(@PathParam(SENSOR_IDENTIFIER_PARAM)String id) {
+	public Response removeSensor(String id) {
 		
 		LOGGER.info( "Begin call SensorEndpoint.removeSensor at: " + new Date() );
 
