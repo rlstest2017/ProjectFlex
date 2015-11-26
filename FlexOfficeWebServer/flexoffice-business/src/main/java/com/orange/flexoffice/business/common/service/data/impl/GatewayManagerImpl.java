@@ -65,7 +65,7 @@ public class GatewayManagerImpl implements GatewayManager {
 		
 		for (RoomDao roomDao : roomsDao) {
 			RoomDto roomDto = new RoomDto();
-			roomDto.setId(roomDao.getColumnId());
+			roomDto.setId(roomDao.getId());
 			roomDto.setName(roomDao.getName());
 			List<SensorDao> sonsensDao = getSensors(roomDao.getId());
 			
@@ -234,6 +234,7 @@ public class GatewayManagerImpl implements GatewayManager {
 	 * @param gatewayId
 	 * @return
 	 */
+	@Transactional(readOnly=true)
 	private List<RoomDao> getRooms(long gatewayId) {
 		List<RoomDao> roomsDao =roomRepository.findByGatewayId(gatewayId);
 		
@@ -245,6 +246,7 @@ public class GatewayManagerImpl implements GatewayManager {
 	 * @param roomId
 	 * @return
 	 */
+	@Transactional(readOnly=true)
 	private List<SensorDao> getSensors(long roomId) {
 		List<SensorDao> sensorsDao = sensorRepository.findByRoomId(roomId);
 		

@@ -38,7 +38,7 @@ Install & Configure Maven:
 	  <active>true</active>
 	  <protocol>http</protocol>
 	  <username>hbcp0056</username>
-	  <password>FTlara_1</password>
+	  <password>*****</password>
 	  <host>nrs-csn-proxy.ad-subs.w2k.francetelecom.fr</host>
 	  <port>3128</port>
 	  <nonProxyHosts>local.net|some.host.com</nonProxyHosts>
@@ -112,3 +112,7 @@ this connection. The IP/Hotsname must be at least the administration station.
   > sudo service postgres restart
 
 
+Fixed error Tomcat7 stop : "The web application registered the JDBC driver [org.postgresql.Driver] but failed to unregister it when the web application was stopped."
+--------------------------
+sudo cp /home/oab/.m2/repository/org/postgresql/postgresql/9.3-1100-jdbc41/postgresql-9.3-1100-jdbc41-sources.jar /usr/share/tomcat7/lib
+sudo chmod a+x /usr/share/tomcat7/libpostgresql-9.3-1100-jdbc41-sources.jar

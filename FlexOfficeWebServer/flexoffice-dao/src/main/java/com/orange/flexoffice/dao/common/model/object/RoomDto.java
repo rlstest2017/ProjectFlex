@@ -19,7 +19,7 @@ public class RoomDto {
 	/**
 	 * A serial Gateway ID.
 	 */
-	private String id;
+	private Long id;
 	private String name;
 	private String address;
 	private Integer capacity;
@@ -67,10 +67,10 @@ public class RoomDto {
 	public void setType(E_RoomType type) {
 		this.type = type;
 	}
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public GatewayDao getGateway() {

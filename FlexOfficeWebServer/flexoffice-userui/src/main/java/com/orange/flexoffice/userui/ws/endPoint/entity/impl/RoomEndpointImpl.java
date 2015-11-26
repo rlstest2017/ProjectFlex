@@ -112,7 +112,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			RoomDto roomDto = roomManager.find(Long.valueOf(roomId));
 
 			Room room = factory.createRoom();
-			room.setId(roomDto.getId());
+			room.setId(String.valueOf(roomDto.getId()));
 			room.setName(roomDto.getName());
 			room.setType(ERoomType.valueOf(roomDto.getType().toString()));
 			room.setDesc(roomDto.getDescription());

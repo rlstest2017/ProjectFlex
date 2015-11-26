@@ -86,7 +86,7 @@ public class GatewayApiEndpointImplTest {
 		assertEquals(2, rooms.size());
 				
 		for (Room room : rooms) {
-		 if (room.getId().equals("1")) {
+		 if (room.getId().toString().equals("1")) {
 			 assertEquals(2, room.getSensors().size());
 		 } else {
 			 assertEquals(1, room.getSensors().size());

@@ -75,7 +75,7 @@ public class RoomManagerImpl implements RoomManager {
 
 
 		RoomDto dto = new RoomDto();
-		dto.setId(String.valueOf(roomId));
+		dto.setId(roomId);
 		dto.setDescription(roomDao.getDescription());
 		dto.setName(roomDao.getName());
 		dto.setType(E_RoomType.valueOf(roomDao.getType()));
@@ -184,6 +184,7 @@ public class RoomManagerImpl implements RoomManager {
 	 * @return RoomDao object if found
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public RoomDao findByName(String name) throws DataNotExistsException {
 
 		try {

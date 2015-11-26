@@ -82,7 +82,7 @@
 	
 	<xsd:complexType name="Room">
 		<xsd:sequence>
-			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="id" type="xsd:integer"/>
 			<xsd:element name="name" type="xsd:string" minOccurs="0" maxOccurs="1"/>
  		    <xsd:element name="occupancyTimeout" type="xsd:integer"/>
 			<xsd:element name="sensors" type="SensorSummary" minOccurs="0" maxOccurs="unbounded"/>

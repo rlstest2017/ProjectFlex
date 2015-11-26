@@ -295,7 +295,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 		try {
 			final RoomDto roomDto = roomManager.find(roomId);
 			
-			roomOutput.setId(roomDto.getId());
+			roomOutput.setId(String.valueOf(roomDto.getId()));
 			roomOutput.setName(roomDto.getName());
 			
 		} catch(DataNotExistsException e ) {

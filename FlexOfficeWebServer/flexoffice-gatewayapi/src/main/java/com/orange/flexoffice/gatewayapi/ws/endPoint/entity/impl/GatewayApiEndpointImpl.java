@@ -79,7 +79,7 @@ public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 			
 			for (RoomDto roomDto : data) {
 				Room room = factory.createRoom();
-				room.setId(roomDto.getId());
+				room.setId(BigInteger.valueOf(roomDto.getId()));
 				room.setName(roomDto.getName());
 				room.setOccupancyTimeout(BigInteger.valueOf(5)); // TODO from config file	
 				List<SensorDao> sensors = roomDto.getSensors();

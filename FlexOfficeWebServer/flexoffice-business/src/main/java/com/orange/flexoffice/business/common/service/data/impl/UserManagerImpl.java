@@ -26,7 +26,7 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.UserDaoRepository;
  * 
  * @author oab
  */
-@Service("UserDaoManager")
+@Service("UserManager")
 @Transactional
 public class UserManagerImpl implements UserManager {
 	
@@ -38,6 +38,7 @@ public class UserManagerImpl implements UserManager {
 	@Autowired
 	private RoomDaoRepository roomRepository;
 	
+	@Override
 	@Transactional(readOnly=true)
 	public List<UserDao> findAllUsers() {
 		return userRepository.findAllUsers();
@@ -50,6 +51,7 @@ public class UserManagerImpl implements UserManager {
 	 * 		  the {@link UserDao} ID
 	 * @return a {@link UserDao}
 	 */
+	@Override
 	@Transactional(readOnly=true)
 	public UserDao find(long userDaoId) throws DataNotExistsException {
 		try {
@@ -67,6 +69,7 @@ public class UserManagerImpl implements UserManager {
 	 * @param userEmail
 	 * @return
 	 */
+	@Override
 	@Transactional(readOnly=true)
 	public UserDao findByUserMail(String userEmail) throws DataNotExistsException {
 		try {
@@ -83,6 +86,7 @@ public class UserManagerImpl implements UserManager {
 	 * @param userEmail
 	 * @return
 	 */
+	@Override
 	@Transactional(readOnly=true)
 	public UserDto findByUserAccessToken(String accessToken) throws AuthenticationException {
 		try {
@@ -125,6 +129,7 @@ public class UserManagerImpl implements UserManager {
 	 * @return a saved {@link UserDao}
 	 * @throws DataAlreadyExistsException 
 	 */
+	@Override
 	public UserDao save(UserDao userDao) throws DataAlreadyExistsException {
 		try {		
 			// Saves UserDao
@@ -143,6 +148,7 @@ public class UserManagerImpl implements UserManager {
 	 * 		  the new {@link UserDao}
 	 * @return a saved {@link UserDao}
 	 */
+	@Override
 	public UserDao update(UserDao userDao) throws DataNotExistsException {
 		try {
 			// Update RoomDao
@@ -160,6 +166,7 @@ public class UserManagerImpl implements UserManager {
 	 * @param id 
 	 * 		  a {@link UserDao} ID
 	 */
+	@Override
 	public void delete(long id) throws DataNotExistsException {
 	
 		try {

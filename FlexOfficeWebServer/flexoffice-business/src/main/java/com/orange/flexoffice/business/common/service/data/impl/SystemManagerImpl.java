@@ -179,22 +179,27 @@ public class SystemManagerImpl implements SystemManager {
 		}
 	}
 	
+	@Transactional(readOnly=true)
 	private Long countGateways() {
 		return gatewayRepository.count();
 	}
 	
+	@Transactional(readOnly=true)
 	private Long countRooms() {
 		return roomRepository.count();
 	}
 	
+	@Transactional(readOnly=true)
 	private Long countUsers() {
 		return userRepository.count();
 	}
 	
+	@Transactional(readOnly=true)
 	private List<AlertDao> findAllAlerts() {
 		return alertRepository.findAllAlerts();
 	}
 	
+	@Transactional(readOnly=true)
 	private Long countActiveUsers() {
 		// TODO get activeUsers
 		//TODO userRepository.countActive(String lastConnectionDuration);
