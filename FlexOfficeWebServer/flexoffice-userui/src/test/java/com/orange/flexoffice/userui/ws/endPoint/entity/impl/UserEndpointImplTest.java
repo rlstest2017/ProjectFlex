@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -17,6 +18,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Log4jConfigurer;
 
 import com.orange.flexoffice.userui.ws.endPoint.entity.UserEndpoint;
+import com.orange.flexoffice.userui.ws.model.UserInput;
 import com.orange.flexoffice.userui.ws.model.UserSummary;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -60,7 +62,7 @@ public class UserEndpointImplTest {
 	}
 	
 	@Test
-	public void TestB_getUserCurrent() {
+	public void TestB_getUserCurrentWithoutRoomId() {
 		// SetUp
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		
@@ -73,7 +75,38 @@ public class UserEndpointImplTest {
 	}
 
 	@Test
-	public void TestC_logout() {
+	public void TestC_getUserCurrentWithRoomId() {
+		// SetUp
+		String token = "Zmlyc3QubGFzdDFAdGVzdC5jb206cGFzczoxNDQ4NjEzNjU2MDk4";
+		
+		// Test
+		UserSummary user = userEndpoint.getUserCurrent(token);
+
+		// Asserts
+		assertEquals("first.last1@test.com:pass", user.getEmail());
+		
+	}
+
+	@Test
+	public void TestD_getUserCurrentBadToken() {
+		// SetUp
+		String badToken = "RAsalyc3QubGFzdDFAdGVzdC5jb206cGFaerdtNDQ4NjEzNjU2Medz";
+		boolean expectedResult = false;
+		
+		// Test
+		try {
+			userEndpoint.getUserCurrent(badToken);
+		} catch (WebApplicationException e) {
+			expectedResult = true;
+		}
+
+		// Asserts
+		assertEquals(true, expectedResult);
+		
+	}
+	
+	@Test
+	public void TestE_logout() {
 		// Setup
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		
@@ -85,7 +118,7 @@ public class UserEndpointImplTest {
 	}
 
 	@Test
-	public void TestD_login() {
+	public void TestF_login() {
 		// Setup
 		String authorization = "Basic Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdA==";
 		
@@ -95,6 +128,52 @@ public class UserEndpointImplTest {
 		// Asserts
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 	}
+
+	@Test
+	public void TestG_loginNotExistWithoutUserInput() {
+		// Setup
+		// first.last10@test.com:pass
+		String authorization = "Basic Zmlyc3QubGFzdDEwQHRlc3QuY29tOnBhc3M=";
+		
+		
+		// Test
+		Response response = userEndpoint.login(authorization, null, null);
+
+		// Asserts
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+	}
+
+	@Test
+	public void TestH_loginNotExistWithUserInput() {
+		// Setup
+		// first.last15@test.com:pass
+		String authorization = "Basic Zmlyc3QubGFzdDE1QHRlc3QuY29tOnBhc3M=";
+		UserInput user = new UserInput();
+		user.setFirstName("firstTest");
+		user.setLastName("LastTest");
+		
+		// Test
+		Response response = userEndpoint.login(authorization, null, user);
+
+		// Asserts
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void TestI_loginNotExistWithLastName() {
+		// Setup
+		// first.last20@test.com:pass
+		String authorization = "Basic Zmlyc3QubGFzdDIwQHRlc3QuY29tOnBhc3M=";
+		UserInput user = new UserInput();
+		user.setLastName("LastTest");
+		
+		// Test
+		Response response = userEndpoint.login(authorization, null, user);
+
+		// Asserts
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+	}
+
 	
 	
 

@@ -79,7 +79,7 @@ public class RoomEndpointImplTest {
 		List<RoomSummary> rooms = roomEndpoint.getRooms();
 
 		// Asserts
-		assertEquals(2, rooms.size());
+		assertEquals(3, rooms.size());
 	}
 
 	@Test
@@ -146,7 +146,7 @@ public class RoomEndpointImplTest {
 		List<RoomSummary> rooms = roomEndpoint.getRooms();
 
 		// Asserts
-		assertEquals(3, rooms.size());
+		assertEquals(4, rooms.size());
 	}
 
 	@Test
@@ -205,7 +205,7 @@ public class RoomEndpointImplTest {
 			List<RoomSummary> rooms = roomEndpoint.getRooms();
 
 			// Asserts
-			assertEquals(3, rooms.size());
+			assertEquals(4, rooms.size());
 			expectedResult = true;
 			
 		} catch(DataNotExistsException e ) {

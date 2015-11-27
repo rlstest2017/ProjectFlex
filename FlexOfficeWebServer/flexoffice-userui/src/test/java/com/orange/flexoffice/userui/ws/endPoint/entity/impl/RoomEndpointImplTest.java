@@ -69,7 +69,7 @@ public class RoomEndpointImplTest {
 		List<RoomSummary> rooms = roomEndpoint.getRooms();
 
 		// Asserts
-		assertEquals(2, rooms.size());
+		assertEquals(3, rooms.size());
 	}
 
 	@Test
@@ -135,9 +135,26 @@ public class RoomEndpointImplTest {
 		assertEquals(true, expectedResult);	
 	}
 	
+	@Test
+	public void TestG_reserveRoomAlreadyReserved() {
+
+		// Setup
+		boolean expectedResult = false;
+		
+		try {
+			// Test
+			roomEndpoint.reserveRoom("2");
+					
+		} catch(WebApplicationException e ) {
+			expectedResult = true;
+		}
+
+		// Asserts
+		assertEquals(true, expectedResult);	
+	}
 
 	@Test
-	public void TestG_cancelRoom() {
+	public void TestH_cancelRoom() {
 
 		// Setup
 		boolean expectedResult = false;
@@ -160,7 +177,7 @@ public class RoomEndpointImplTest {
 
 
 	@Test
-	public void TestH_reserveRoomNotExists() {
+	public void TestI_reserveRoomNotExists() {
 
 		// Setup
 		boolean expectedResult = false;
@@ -179,7 +196,7 @@ public class RoomEndpointImplTest {
 	
 
 	@Test
-	public void TestH_cancelRoomNotExists() {
+	public void TestJ_cancelRoomNotExists() {
 
 		// Setup
 		boolean expectedResult = false;
