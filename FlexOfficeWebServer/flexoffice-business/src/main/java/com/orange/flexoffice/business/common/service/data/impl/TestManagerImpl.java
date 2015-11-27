@@ -24,5 +24,10 @@ public class TestManagerImpl implements TestManager {
 	public boolean executeInitTestFile() {
 		return testRepository.executeInitTestData();
 	}
+
+	@Override
+	public boolean executeDropTables() {
+		return testRepository.executeDropTables();
+	}
 	
 }

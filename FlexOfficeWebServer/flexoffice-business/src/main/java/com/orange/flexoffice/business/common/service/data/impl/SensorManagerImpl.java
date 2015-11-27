@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.SensorManager;
+import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
 
 /**
@@ -29,6 +31,8 @@ public class SensorManagerImpl implements SensorManager {
 	@Autowired
 	private SensorDaoRepository sensorRepository;
 
+	@Autowired
+	private RoomDaoRepository roomRepository;
 
 	
 	@Override
@@ -89,11 +93,13 @@ public class SensorManagerImpl implements SensorManager {
 
 
 	@Override
-	public SensorDao updateStatus(SensorDao sensorDao) throws DataNotExistsException {
-
+	public void updateStatus(SensorDao sensorDao, RoomDao roomDao) throws DataNotExistsException {
 		try {
 			// Update SensorDao
-			return sensorRepository.updateSensorStatus(sensorDao);
+			sensorRepository.updateSensorStatus(sensorDao); 
+			if (roomDao != null) {
+				roomRepository.updateRoomStatus(roomDao);
+			}
 			
 		} catch (RuntimeException e) {
 			LOGGER.error("SensorManager.updateStatus : Sensor to update Status not found", e);

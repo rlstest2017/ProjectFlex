@@ -6,6 +6,7 @@ import javax.naming.AuthenticationException;
 
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.object.UserDto;
 
@@ -62,6 +63,6 @@ public interface UserManager {
 	 * @param id 
 	 * 		  a {@link UserDao} ID
 	 */
-	void delete(long id) throws DataNotExistsException;
+	void delete(long id) throws DataNotExistsException, IntegrityViolationException;
 
 }

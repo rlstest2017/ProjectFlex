@@ -237,6 +237,11 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 		return gatewayManager.findByMacAddress(macAddress);
 	}
 
+	@Override
+	public boolean executeDropTables() {
+		return testManager.executeDropTables();
+	}
+
 		
 	
 }

@@ -21,6 +21,7 @@ import com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.common.service.data.UserManager;
 
 
@@ -184,6 +185,9 @@ public class UserEndpointImpl implements UserEndpoint {
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in UserEndpoint.removeUser with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_7, Response.Status.NOT_FOUND));
+		} catch (IntegrityViolationException e){
+			LOGGER.debug("IntegrityViolationException in UserEndpoint.removeUser with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_7, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in UserEndpoint.removeUser with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));

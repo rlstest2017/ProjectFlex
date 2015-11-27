@@ -13,4 +13,10 @@ public interface TestManager {
 	 */
 	boolean executeInitTestFile();
 	
+	/**
+	 * Drop Tables
+	 * @return
+	 */
+	boolean executeDropTables();
+	
 }

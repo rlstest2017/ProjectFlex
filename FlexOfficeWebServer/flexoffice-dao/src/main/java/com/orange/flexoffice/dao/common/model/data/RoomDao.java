@@ -10,6 +10,8 @@ public class RoomDao extends AbstractData {
 	private String name;
 	private String address;
 	private Integer capacity;
+	private Double temperature;
+	private Double humidity;
 	private String description;
 	private String status;
 	private String type;
@@ -34,6 +36,19 @@ public class RoomDao extends AbstractData {
 	}
 	public void setCapacity(Integer capacity) {
 		this.capacity = capacity;
+	}
+	
+	public Double getTemperature() {
+		return temperature;
+	}
+	public void setTemperature(Double temperature) {
+		this.temperature = temperature;
+	}
+	public Double getHumidity() {
+		return humidity;
+	}
+	public void setHumidity(Double humidity) {
+		this.humidity = humidity;
 	}
 	public String getDescription() {
 		return description;

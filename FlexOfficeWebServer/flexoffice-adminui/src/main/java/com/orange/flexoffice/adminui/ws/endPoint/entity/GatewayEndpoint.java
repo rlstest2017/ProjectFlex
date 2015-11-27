@@ -112,6 +112,9 @@ public interface GatewayEndpoint {
 	boolean executeInitTestFile();
 	
 	// used for tests
+	boolean executeDropTables();
+		
+	// used for tests
 	GatewayDto findByMacAddress(String macAddress)  throws DataNotExistsException;
 	
 }

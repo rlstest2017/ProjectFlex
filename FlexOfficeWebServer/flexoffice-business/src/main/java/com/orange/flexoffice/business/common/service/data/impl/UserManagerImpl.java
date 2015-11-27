@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.common.service.data.UserManager;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
@@ -167,7 +168,7 @@ public class UserManagerImpl implements UserManager {
 	 * 		  a {@link UserDao} ID
 	 */
 	@Override
-	public void delete(long id) throws DataNotExistsException {
+	public void delete(long id) throws DataNotExistsException, IntegrityViolationException {
 	
 		try {
 			// To generate exception if wrong id
@@ -177,6 +178,9 @@ public class UserManagerImpl implements UserManager {
 		} catch (IncorrectResultSizeDataAccessException e) {
 			LOGGER.error("UserManager.delete : User #" + id + " not found", e);
 			throw new DataNotExistsException("UserManager.delete : User #" + id + " not found");
+		} catch(DataIntegrityViolationException e ) {
+			LOGGER.error("UserManager.delete : User associated to a room", e);
+			throw new IntegrityViolationException("UserManager.delete : User associated to a room");
 		}
 	}
 

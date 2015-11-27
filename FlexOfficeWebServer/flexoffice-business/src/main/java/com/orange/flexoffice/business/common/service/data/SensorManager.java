@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 
 /**
@@ -51,10 +52,11 @@ public interface SensorManager {
 	 * Updates status {@link SensorDao}
 	 * method used by adminui
 	 * @param sensorDao
+	 * @param roomDao
 	 * 		  the new {@link SensorDao}
 	 * @return a saved {@link SensorDao}
 	 */
-	SensorDao updateStatus(SensorDao sensorDao) throws DataNotExistsException;
+	void updateStatus(SensorDao sensorDao, RoomDao roomDao) throws DataNotExistsException;
 
 	/**
 	 * Deletes a sensor

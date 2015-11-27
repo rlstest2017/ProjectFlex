@@ -76,20 +76,11 @@ public class UserEndPointImplTest {
 
 	@Test
 	public void TestB_cleanUserTable() throws WebApplicationException {
-
-		// Test
-		List<UserSummary> response = userEndpoint.getUsers();
-
-		if (response.size() > 0) {
-			for(final UserSummary user: response) {
-				userEndpoint.removeUser(user.getId());
-			}			
-		}		
-
-		response = userEndpoint.getUsers();
-
+		// SetUp
+		boolean state = gatewayEndpoint.executeDropTables();
+				 
 		// Assert
-		assertEquals(0, response.size());
+		assertEquals(true, state);	
 	}
 
 	@Test
