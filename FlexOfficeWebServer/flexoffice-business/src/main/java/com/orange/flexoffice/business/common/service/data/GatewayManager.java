@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.gatewayapi.dto.GatewayCommand;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
@@ -80,6 +81,6 @@ public interface GatewayManager {
 	 * @param id 
 	 * 		  a {@link GatewayDto} macAddress
 	 */
-	void delete(String macAddress) throws DataNotExistsException;
+	void delete(String macAddress) throws DataNotExistsException, IntegrityViolationException;
 	
 }

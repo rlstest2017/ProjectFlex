@@ -65,17 +65,9 @@ public class UserEndPointImplTest {
 	}
 
 
-	@Test
-	public void TestA_initTables() {
-		// SetUp
-		boolean state = gatewayEndpoint.executeInitTestFile();
-		 
-		// Assert
-		assertEquals(true, state);
-	}
 
 	@Test
-	public void TestB_cleanUserTable() throws WebApplicationException {
+	public void TestA_cleanUserTable() throws WebApplicationException {
 		// SetUp
 		boolean state = gatewayEndpoint.executeDropTables();
 				 
@@ -84,7 +76,7 @@ public class UserEndPointImplTest {
 	}
 
 	@Test
-	public void TestC_addUser() throws WebApplicationException {
+	public void TestB_addUser() throws WebApplicationException {
 		// Setup
 		final UserInput userHmi = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
 
@@ -96,7 +88,7 @@ public class UserEndPointImplTest {
 	}
 
 	@Test
-	public void TestD_getUser() throws WebApplicationException {
+	public void TestC_getUser() throws WebApplicationException {
 		// Setup
 		boolean expectedResult = false;
 		final UserInput expecteduser = factory.createHmiUser("firstNameTest1", "lastNameTest1", "emailTest1");
@@ -124,7 +116,7 @@ public class UserEndPointImplTest {
 
 
 	@Test
-	public void TestE_getUsers() throws WebApplicationException {
+	public void TestD_getUsers() throws WebApplicationException {
 
 		// Test
 		final List<UserSummary> response = userEndpoint.getUsers();
@@ -135,7 +127,7 @@ public class UserEndPointImplTest {
 
 
 	@Test
-	public void TestF_addUserDataAlreadyExistsException() {
+	public void TestE_addUserDataAlreadyExistsException() {
 		// Setup
 		boolean expectedResult = false;
 		
@@ -162,7 +154,7 @@ public class UserEndPointImplTest {
 
 	
 	@Test
-	public void TestG_updateUser() throws WebApplicationException {
+	public void TestF_updateUser() throws WebApplicationException {
 		// Setup
 		boolean expectedResult = false;
 		final UserInput userHmi = factory.createHmiUser("firstNameTest2", "lastNameTest2", "emailTest2");
@@ -186,7 +178,7 @@ public class UserEndPointImplTest {
 	}
 
 	@Test
-	public void TestH_updateUserDataNotExistsException() {
+	public void TestG_updateUserDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
 
@@ -209,7 +201,7 @@ public class UserEndPointImplTest {
 	}
 	
 	@Test
-	public void TestI_removeUserDataNotExistsException() {
+	public void TestH_removeUserDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
 
@@ -233,7 +225,7 @@ public class UserEndPointImplTest {
 
 
 	@Test
-	public void TestJ_removeUser() throws WebApplicationException {
+	public void TestI_removeUser() throws WebApplicationException {
 		// Setup
 		boolean expectedResult = false;
 
@@ -256,7 +248,35 @@ public class UserEndPointImplTest {
 	
 
 	@Test
-	public void TestK_getWrongUser() {
+	public void TestJ_initTables() {
+		// SetUp
+		boolean state = gatewayEndpoint.executeInitTestFile();
+		 
+		// Assert
+		assertEquals(true, state);
+	}
+	
+	@Test
+	public void TestK_removeUserAssociatedToRoom()  {
+		// Setup
+		boolean expectedResult = false;
+
+		try {
+			final UserDao user = userEndpoint.findByUserMail("first.last1@test.com:pass");
+			// Test
+			userEndpoint.removeUser(user.getColumnId());
+			
+		} catch(DataNotExistsException e ) {
+		} catch(WebApplicationException e ) {
+			expectedResult = true;
+		}
+		
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+	
+	@Test
+	public void TestL_getWrongUser() {
 		// Setup
 		boolean expectedResult = false;
 		

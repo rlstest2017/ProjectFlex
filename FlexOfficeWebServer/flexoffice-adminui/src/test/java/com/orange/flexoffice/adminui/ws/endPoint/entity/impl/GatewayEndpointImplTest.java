@@ -232,4 +232,21 @@ public class GatewayEndpointImplTest {
 		assertEquals(true, expectedResult);	
 	}
 
+	@Test
+	public void TestJ_removeGatewayAssociatedToRoom()  {
+		// Setup
+		boolean expectedResult = false;
+		String macAddress = "FF:EE:ZZ:AA:GG:PP";
+		
+		try {
+			// Test
+			gatewayEndpoint.removeGateway(macAddress);
+			
+		} catch(WebApplicationException e ) {
+			expectedResult = true;
+		}
+		
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
 }

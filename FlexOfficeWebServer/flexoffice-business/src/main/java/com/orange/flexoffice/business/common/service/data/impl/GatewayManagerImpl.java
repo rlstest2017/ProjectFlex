@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
 import com.orange.flexoffice.business.gatewayapi.dto.GatewayCommand;
 import com.orange.flexoffice.business.gatewayapi.enums.EnumCommandModel;
@@ -218,7 +219,7 @@ public class GatewayManagerImpl implements GatewayManager {
 	}
 
 	@Override
-	public void delete(String macAddress) throws DataNotExistsException {
+	public void delete(String macAddress) throws DataNotExistsException, IntegrityViolationException {
 		try {
 			gatewayRepository.findByMacAddress(macAddress);
 			// Deletes UserDao
@@ -226,6 +227,9 @@ public class GatewayManagerImpl implements GatewayManager {
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("gateway by macAddress " + macAddress + " is not found", e);
 			throw new DataNotExistsException("Gateway not exist");
+		} catch(DataIntegrityViolationException e ) {
+			LOGGER.error("GatewayManager.delete : Gateway associated to a room", e);
+			throw new IntegrityViolationException("GatewayManager.delete : Gateway associated to a room");
 		}
 	}
 	
