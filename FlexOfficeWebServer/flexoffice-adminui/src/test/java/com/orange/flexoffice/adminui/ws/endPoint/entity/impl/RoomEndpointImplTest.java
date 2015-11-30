@@ -303,5 +303,40 @@ public class RoomEndpointImplTest {
 		assertEquals(true, expectedResult);	
 	}
 
+	@Test
+	public void TestL_removeRoomHasSensors()  {
+		// Setup
+		boolean expectedResult = false;
+		String id  = "1";
+		
+		try {
+			// Test
+			roomEndpoint.removeRoom(id);
+			
+		} catch(WebApplicationException e ) {
+			expectedResult = true;
+		}
+		
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+	
+	@Test
+	public void TestM_removeRoomIsReserved()  {
+		// Setup
+		boolean expectedResult = false;
+		String id  = "2";
+		
+		try {
+			// Test
+			roomEndpoint.removeRoom(id);
+			
+		} catch(WebApplicationException e ) {
+			expectedResult = true;
+		}
+		
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
 
 }

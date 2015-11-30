@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.common.exception.RoomAlreadyUsedException;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
@@ -64,7 +65,7 @@ public interface RoomManager {
 	 * @param roomId 
 	 * 		  a room ID
 	 */
-	void delete(long roomId) throws DataNotExistsException;
+	void delete(long roomId) throws DataNotExistsException, IntegrityViolationException;
 
 	
 	/**

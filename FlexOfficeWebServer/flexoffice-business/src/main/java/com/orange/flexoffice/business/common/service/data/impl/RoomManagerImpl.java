@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.common.exception.RoomAlreadyUsedException;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
@@ -166,13 +167,25 @@ public class RoomManagerImpl implements RoomManager {
 	}
 
 	@Override
-	public void delete(long id) throws DataNotExistsException {
+	public void delete(long id) throws DataNotExistsException, IntegrityViolationException {
 
 		try {
 			// To generate exception if wrong id
-			roomRepository.findOne(id);
-			// Delete Room
-			roomRepository.delete(id);	
+			RoomDao room = roomRepository.findOne(id);
+			
+			if (room.getUserId() == null){
+				List<SensorDao> sensors = sensorRepository.findByRoomId(id);
+				if ((sensors != null) && (!sensors.isEmpty())) {
+					LOGGER.error("RoomManager.delete : Room #" + id + " has a sensors");
+					throw new IntegrityViolationException("RoomManager.delete : Room #" + id + " has a sensors");
+				} else {
+					// Delete Room
+					roomRepository.delete(id);
+				}
+			} else {
+				LOGGER.error("RoomManager.delete : Room #" + id + " is reserved by userId:" + room.getUserId());
+				throw new IntegrityViolationException("RoomManager.delete : Room #" + id + " is reserved");
+			}
 		} catch (IncorrectResultSizeDataAccessException e) {
 			LOGGER.error("RoomManager.delete : Room #" + id + " not found", e);
 			throw new DataNotExistsException("RoomManager.delete : Room #" + id + " not found");
