@@ -84,11 +84,13 @@ public class RoomManagerImpl implements RoomManager {
 		dto.setStatus(E_RoomStatus.valueOf(roomDao.getStatus()));
 		dto.setType(E_RoomType.valueOf(roomDao.getType()));
 
-		try {
-			UserDao userDao = userRepository.findOne(roomDao.getUserId());
-			dto.setUser(userDao);
-		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("RoomManager.find : User by id #" + roomDao.getUserId() + " for current Room is not found", e);
+		if (roomDao.getUserId() != null) {
+			try {
+				UserDao userDao = userRepository.findOne(roomDao.getUserId());
+				dto.setUser(userDao);
+			} catch(IncorrectResultSizeDataAccessException e ) {
+				LOGGER.debug("RoomManager.find : User by id #" + roomDao.getUserId() + " for current Room is not found", e);
+			}
 		}
 
 		List<SensorDao> sensorsDao = sensorRepository.findByRoomId(roomId);

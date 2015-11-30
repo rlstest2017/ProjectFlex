@@ -291,17 +291,18 @@ public class SensorEndpointImpl implements SensorEndpoint {
 
 		RoomOutput roomOutput = factory.createRoomOutput();
 		roomOutput.setId("0");
-
-		try {
-			final RoomDto roomDto = roomManager.find(roomId);
-			
-			roomOutput.setId(String.valueOf(roomDto.getId()));
-			roomOutput.setName(roomDto.getName());
-			
-		} catch(DataNotExistsException e ) {
-			LOGGER.warn("Get sensors / Get sensor id : Wrong Room on sensor #" + sensorIdentifier, e);
+		if (roomId != 0) {
+			try {
+				
+				final RoomDto roomDto = roomManager.find(roomId);
+				
+				roomOutput.setId(String.valueOf(roomDto.getId()));
+				roomOutput.setName(roomDto.getName());
+				
+			} catch(DataNotExistsException e ) {
+				LOGGER.warn("Get sensors / Get sensor id : Wrong Room on sensor #" + sensorIdentifier, e);
+			}
 		}
-
 		return (roomOutput);		
 	}
 

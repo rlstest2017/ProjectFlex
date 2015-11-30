@@ -109,7 +109,11 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 						roomDao.setStatus(E_RoomStatus.FREE.toString());
 					} else if (sensor.getOccupancyInfo().equals(EOccupancyInfo.OCCUPIED)) {
 						roomDao.setStatus(E_RoomStatus.OCCUPIED.toString());
+					} else {
+						roomDao.setStatus(E_RoomStatus.UNKNOWN.toString());
 					}
+				} else {
+					roomDao.setStatus(E_RoomStatus.UNKNOWN.toString());
 				}
 				
 				if (LOGGER.isDebugEnabled()) {
