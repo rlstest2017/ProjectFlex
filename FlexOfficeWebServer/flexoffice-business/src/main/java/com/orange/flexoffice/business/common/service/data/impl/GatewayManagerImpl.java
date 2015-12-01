@@ -17,12 +17,14 @@ import com.orange.flexoffice.business.common.service.data.AlertManager;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
 import com.orange.flexoffice.business.gatewayapi.dto.GatewayCommand;
 import com.orange.flexoffice.business.gatewayapi.enums.EnumCommandModel;
+import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
@@ -46,6 +48,9 @@ public class GatewayManagerImpl implements GatewayManager {
 	
 	@Autowired
 	private SensorDaoRepository sensorRepository;
+	
+	@Autowired
+	private AlertDaoRepository alertRepository;
 	
 	@Autowired
 	private AlertManager alertManager;
@@ -230,9 +235,20 @@ public class GatewayManagerImpl implements GatewayManager {
 	@Override
 	public void delete(String macAddress) throws DataNotExistsException, IntegrityViolationException {
 		try {
-			gatewayRepository.findByMacAddress(macAddress);
-			// Deletes UserDao
-			gatewayRepository.deleteByMacAddress(macAddress);
+			GatewayDao gateway = gatewayRepository.findByMacAddress(macAddress);
+			try {
+				AlertDao alert = alertRepository.findByGatewayId(gateway.getId());
+				if (alert != null) {
+					// delete alert
+					alertRepository.delete(alert.getId());
+					// delete gateway
+					gatewayRepository.deleteByMacAddress(macAddress);
+				}
+			} catch(IncorrectResultSizeDataAccessException e ) {
+				LOGGER.debug("gateway by macAddress " + macAddress + " has not alert", e);
+				// delete gateway
+				gatewayRepository.deleteByMacAddress(macAddress);	
+			}
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("gateway by macAddress " + macAddress + " is not found", e);
 			throw new DataNotExistsException("Gateway not exist");

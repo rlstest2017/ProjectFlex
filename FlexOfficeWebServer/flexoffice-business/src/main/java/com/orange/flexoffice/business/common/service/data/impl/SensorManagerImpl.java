@@ -13,8 +13,10 @@ import com.orange.flexoffice.business.common.exception.DataAlreadyExistsExceptio
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.AlertManager;
 import com.orange.flexoffice.business.common.service.data.SensorManager;
+import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
 
@@ -35,6 +37,9 @@ public class SensorManagerImpl implements SensorManager {
 	@Autowired
 	private RoomDaoRepository roomRepository;
 
+	@Autowired
+	private AlertDaoRepository alertRepository;
+	
 	@Autowired
 	private AlertManager alertManager;
 	
@@ -121,10 +126,20 @@ public class SensorManagerImpl implements SensorManager {
 
 		try {
 			// To generate exception if wrong id
-			sensorRepository.findBySensorId(sensorIdentifier);
-			// Delete Sensor
-			sensorRepository.deleteByIdentifier(sensorIdentifier);
-			
+			SensorDao sensor = sensorRepository.findBySensorId(sensorIdentifier);
+			try {
+				AlertDao alert = alertRepository.findBySensorId(sensor.getId());
+				if (alert != null) {
+					// delete alert
+					alertRepository.delete(alert.getId());
+					// Delete Sensor
+					sensorRepository.deleteByIdentifier(sensorIdentifier);
+				}
+			} catch(IncorrectResultSizeDataAccessException e ) {
+				LOGGER.debug("sensor by identifer " + sensorIdentifier + " has not alert", e);
+				// Delete Sensor
+				sensorRepository.deleteByIdentifier(sensorIdentifier);	
+			}
 		} catch (IncorrectResultSizeDataAccessException e) {
 			LOGGER.error("SensorManager.delete : Sensor #" + sensorIdentifier + " not found", e);
 			throw new DataNotExistsException("SensorManager.delete : Sensor #" + sensorIdentifier + " not found");
