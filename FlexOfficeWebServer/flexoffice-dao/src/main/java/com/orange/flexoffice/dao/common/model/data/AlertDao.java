@@ -11,6 +11,8 @@ public class AlertDao extends AbstractData {
 	
 	private String name;
 	private String type;
+	private Integer gatewayId;
+	private Integer sensorId;
 	private Date lastNotification;
 	
 	public String getName() {
@@ -25,6 +27,19 @@ public class AlertDao extends AbstractData {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	public Integer getGatewayId() {
+		return gatewayId;
+	}
+	public void setGatewayId(Integer gatewayId) {
+		this.gatewayId = gatewayId;
+	}
+	public Integer getSensorId() {
+		return sensorId;
+	}
+	public void setSensorId(Integer sensorId) {
+		this.sensorId = sensorId;
 	}
 	public Date getLastNotification() {
 		return lastNotification;
