@@ -182,7 +182,7 @@
 	</xsd:complexType>
 	<xsd:complexType name="GatewayInput2">
 		<xsd:sequence>
-			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="macAddress" type="xsd:string"/>
 			<xsd:element name="name" type="xsd:string"/>
 		</xsd:sequence>
 	</xsd:complexType>

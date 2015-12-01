@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
+import com.orange.flexoffice.business.common.service.data.AlertManager;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
 import com.orange.flexoffice.business.gatewayapi.dto.GatewayCommand;
 import com.orange.flexoffice.business.gatewayapi.enums.EnumCommandModel;
@@ -45,6 +46,9 @@ public class GatewayManagerImpl implements GatewayManager {
 	
 	@Autowired
 	private SensorDaoRepository sensorRepository;
+	
+	@Autowired
+	private AlertManager alertManager;
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -205,6 +209,11 @@ public class GatewayManagerImpl implements GatewayManager {
 			
 			// update Gateway Status
 			gatewayRepository.updateGatewayStatus(gatewayDao);
+			
+			// update Gateway Alert
+			Long gatewayId =gateway.getId();
+			String status = gatewayDao.getStatus();
+			alertManager.updateGatewayAlert(gatewayId, status);
 			
 			GatewayCommand command = new GatewayCommand();
 			// TODO if Teachin return roomId and command = "TEACHIN"

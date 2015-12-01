@@ -68,7 +68,11 @@ public class SensorEndpointImpl implements SensorEndpoint {
 			sensor.setName(sensorDao.getName());
 			sensor.setType(ESensorType.valueOf(sensorDao.getType().toString()));		
 			sensor.setRoom(getRoomFromId(sensorDao.getRoomId(), sensorDao.getIdentifier()));
-			sensor.setStatus(EDeviceStatus.valueOf(sensorDao.getStatus().toString()));
+			if ((sensorDao.getStatus().equals(E_SensorStatus.UNSTABLE_RSSI.toString())) || (sensorDao.getStatus().equals(E_SensorStatus.UNSTABLE_VOLTAGE.toString()))) {
+				sensor.setStatus(EDeviceStatus.UNSTABLE);
+			} else {
+				sensor.setStatus(EDeviceStatus.valueOf(sensorDao.getStatus().toString()));
+			}
 
 			sensorList.add(sensor);
 		}
@@ -103,7 +107,11 @@ public class SensorEndpointImpl implements SensorEndpoint {
 				sensor.setName(sensorDao.getName());
 				sensor.setType(ESensorType.valueOf(sensorDao.getType().toString()));		
 				sensor.setRoom(getRoomFromId(sensorDao.getRoomId(), sensorDao.getIdentifier()));
-				sensor.setStatus(EDeviceStatus.valueOf(sensorDao.getStatus().toString()));
+				if ((sensorDao.getStatus().equals(E_SensorStatus.UNSTABLE_RSSI.toString())) || (sensorDao.getStatus().equals(E_SensorStatus.UNSTABLE_VOLTAGE.toString()))) {
+					sensor.setStatus(EDeviceStatus.UNSTABLE);
+				} else {
+					sensor.setStatus(EDeviceStatus.valueOf(sensorDao.getStatus().toString()));
+				}
 
 				sensorList.add(sensor);
 			}
@@ -133,7 +141,11 @@ public class SensorEndpointImpl implements SensorEndpoint {
 			sensor.setType(ESensorType.valueOf(sensorDao.getType().toString()));
 			sensor.setRoom(getRoomFromId(sensorDao.getRoomId(), sensorDao.getIdentifier()));
 			sensor.setDesc(sensorDao.getDescription());
-			sensor.setStatus(EDeviceStatus.valueOf(sensorDao.getStatus().toString()));
+			if ((sensorDao.getStatus().equals(E_SensorStatus.UNSTABLE_RSSI.toString())) || (sensorDao.getStatus().equals(E_SensorStatus.UNSTABLE_VOLTAGE.toString()))) {
+				sensor.setStatus(EDeviceStatus.UNSTABLE);
+			} else {
+				sensor.setStatus(EDeviceStatus.valueOf(sensorDao.getStatus().toString()));
+			}
 
 			LOGGER.info( "End call SensorEndpoint.getSensor at: " + new Date() );
 

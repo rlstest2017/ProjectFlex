@@ -126,7 +126,7 @@ public class SensorApiEndpointImplTest {
 		try {
 			// Setup
 			final SensorInput sensorInput = new SensorInput();
-			sensorInput.setSensorStatus(ESensorStatus.UNSTABLE);
+			sensorInput.setSensorStatus(ESensorStatus.UNSTABLE_VOLTAGE);
 
 			// Test
 			final Response response = sensorEndpoint.updateSensor("Sensor from Gateway Id 1", sensorInput);

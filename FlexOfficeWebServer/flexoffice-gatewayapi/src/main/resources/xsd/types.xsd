@@ -6,6 +6,8 @@
 	 <xsd:restriction base="xsd:string">
 	 	<xsd:enumeration value="ONLINE"/>
 	 	<xsd:enumeration value="UNSTABLE"/>
+	 	<xsd:enumeration value="UNSTABLE_VOLTAGE"/>
+	 	<xsd:enumeration value="UNSTABLE_RSSI"/>
 	 	<xsd:enumeration value="OFFLINE"/>
 	 </xsd:restriction>
 	</xsd:simpleType>
@@ -15,6 +17,8 @@
 	 	<xsd:enumeration value="ONLINE"/>
 	 	<xsd:enumeration value="ONTEACHIN"/>
 	 	<xsd:enumeration value="OFFLINE"/>
+	 	<xsd:enumeration value="ERROR_NO_USB_DEVICE"/>
+	 	<xsd:enumeration value="ERROR_FIFO_FILE"/>
 	 </xsd:restriction>
 	</xsd:simpleType>
 	

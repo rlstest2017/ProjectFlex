@@ -9,6 +9,9 @@
 
   	<context:property-placeholder  ignore-resource-not-found="true" location="file:/home/oab/Config/flexoffice.properties"/>
 
+	<bean id="alertManager" class="com.orange.flexoffice.business.common.service.data.impl.AlertManagerImpl">
+	</bean>
+	
 	<!-- Import -->
 	<import resource="classpath*:spring/applicationContext-flexoffice-dao-test.xml" />
 

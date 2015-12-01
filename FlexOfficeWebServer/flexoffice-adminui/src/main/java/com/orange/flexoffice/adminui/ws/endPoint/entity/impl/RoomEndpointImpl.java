@@ -155,17 +155,28 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	public RoomOutput addRoom(RoomInput1 roomInput) {
 
 		LOGGER.info( "Begin call RoomEndpoint.addRoom  at: " + new Date() );
-
+		
+		try {
+			
 		RoomDao roomDao = new RoomDao();
 		roomDao.setName(roomInput.getName());
 		roomDao.setType(roomInput.getType().toString());
 		if (roomInput.getGateway() !=null) {
-			roomDao.setGatewayId(Long.valueOf(roomInput.getGateway().getId()));
+			GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress());
+			roomDao.setGatewayId(Long.valueOf(gateway.getId()));
 		} else {
 			roomDao.setGatewayId(0L);
 		}
-		roomDao.setDescription(roomInput.getDesc());
-		roomDao.setAddress(roomInput.getAddress());
+		
+		String desc = roomInput.getDesc(); 
+		if ( desc != null) { 
+			roomDao.setDescription(roomInput.getDesc());
+		}
+		String address = roomInput.getAddress();
+		if (address != null) {
+			roomDao.setAddress(roomInput.getAddress());
+		}
+		
 		roomDao.setCapacity(roomInput.getCapacity().intValue());
 		roomDao.setStatus(ERoomStatus.UNKNOWN.toString());	
 		
@@ -181,9 +192,20 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			LOGGER.debug( message.toString() );
 		}
 
-		try {
 			roomDao = roomManager.save(roomDao);
+			
+			RoomOutput returnedRoom = factory.createRoomOutput();
+			returnedRoom.setId(roomDao.getColumnId());
+			returnedRoom.setName(roomDao.getName());
 
+			LOGGER.info( "End call RoomEndpoint.addRoom at: " + new Date() );
+
+			return factory.createRoomOutput(returnedRoom).getValue();
+
+
+		} catch (DataNotExistsException e){
+			LOGGER.debug("DataNotExistsException in RoomEndpoint.saveRoom with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));
 		} catch (DataAlreadyExistsException e) {
 			
 			LOGGER.debug("DataNotExistsException in RoomEndpoint.addRoom with message :", e);
@@ -196,14 +218,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		}
 
 
-		RoomOutput returnedRoom = factory.createRoomOutput();
-		returnedRoom.setId(roomDao.getColumnId());
-		returnedRoom.setName(roomDao.getName());
-
-		LOGGER.info( "End call RoomEndpoint.addRoom at: " + new Date() );
-
-		return factory.createRoomOutput(returnedRoom).getValue();
-	}
+		}
 
 	
 	/* (non-Javadoc)
@@ -214,36 +229,42 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		
 		LOGGER.info( "Begin call RoomEndpoint.updateRoom at: " + new Date() );
 
+		try {
+			
 		RoomDao roomDao = new RoomDao();
 		roomDao.setId(Long.valueOf(id));
 		roomDao.setName(roomInput.getName());
 		roomDao.setType(roomInput.getType().toString());
 		if (roomInput.getGateway() !=null) {
-			roomDao.setGatewayId(Long.valueOf(roomInput.getGateway().getId()));
+			GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress());
+			roomDao.setGatewayId(Long.valueOf(gateway.getId()));
 		} else {
 			roomDao.setGatewayId(0L);
 		}
-		roomDao.setDescription(roomInput.getDesc());
-		roomDao.setAddress(roomInput.getAddress());
+		
+		String desc = roomInput.getDesc(); 
+		if ( desc != null) { 
+			roomDao.setDescription(roomInput.getDesc());
+		}
+		String address = roomInput.getAddress();
+		if (address != null) {
+			roomDao.setAddress(roomInput.getAddress());
+		}
 		roomDao.setCapacity(roomInput.getCapacity().intValue());
-
-		try {
+		
 			roomDao = roomManager.update(roomDao);
 
+		LOGGER.info( "End call RoomEndpoint.updateRoom at: " + new Date() );
+		return Response.status(Status.ACCEPTED).build();
+
 		} catch (DataNotExistsException e){
-			
 			LOGGER.debug("DataNotExistsException in RoomEndpoint.updateRoom with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));
-			
 		} catch (RuntimeException ex){
-
 			LOGGER.debug("RuntimeException in RoomEndpoint.updateRoom with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
-		LOGGER.info( "End call RoomEndpoint.updateRoom at: " + new Date() );
-
-		return Response.status(Status.ACCEPTED).build();
 	}
 
 
