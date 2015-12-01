@@ -67,7 +67,7 @@ public final class DataSqlTemplate {
 	public static final String UPDATE_ROOM_STATUS_TEMPLATE =
 			"update %s set status=CAST(:status AS roomstatus), temperature=:temperature, humidity=:humidity where id=:id";
 	public static final String UPDATE_ALERT_TEMPLATE =
-			"update %s set name=:name, lastNotification=:lastNotification where id=:id";
+			"update %s set name=:name, last_notification=:lastNotification where id=:id";
 	public static final String UPDATE_SENSOR_TEMPLATE =
 			"update %s set name=:name, type=CAST(:type AS sensortype), profile=:profile, description=:description, room_id=:roomId WHERE identifier=:identifier";
 	public static final String UPDATE_SENSOR_STATUS_TEMPLATE =

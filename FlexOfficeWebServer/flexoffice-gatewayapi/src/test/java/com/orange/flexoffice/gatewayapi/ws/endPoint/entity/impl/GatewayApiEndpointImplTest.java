@@ -105,9 +105,71 @@ public class GatewayApiEndpointImplTest {
 			// Assert
 			assertEquals(ECommandModel.NONE, response.getCommand());
 	}
+
+	@Test
+	public void TestE_updateGatewayCreateAlert() {
+		// Setup
+		final GatewayInput gatewayIn = factory.createApiGateway("OFFLINE");
+
+			// Test
+			final GatewayReturn response = gatewayEndpoint.updateGateway("FF:TT:ZZ:AA:GG:PP", gatewayIn);
+
+			// Assert
+			assertEquals(ECommandModel.NONE, response.getCommand());
+	}
+
+	@Test
+	public void TestF_updateGatewayUpdateAlert() {
+		// Setup
+		final GatewayInput gatewayIn = factory.createApiGateway("ERROR_NO_USB_DEVICE");
+
+			// Test
+			final GatewayReturn response = gatewayEndpoint.updateGateway("FF:TT:ZZ:AA:GG:PP", gatewayIn);
+
+			// Assert
+			assertEquals(ECommandModel.NONE, response.getCommand());
+	}
+
+	@Test
+	public void TestG_updateGatewayUpdateAlert() {
+		// Setup
+		final GatewayInput gatewayIn = factory.createApiGateway("ERROR_FIFO_FILE");
+
+			// Test
+			final GatewayReturn response = gatewayEndpoint.updateGateway("FF:TT:ZZ:AA:GG:PP", gatewayIn);
+
+			// Assert
+			assertEquals(ECommandModel.NONE, response.getCommand());
+	}
+
+	@Test
+	public void TestH_updateGatewaySameAlert() {
+		// Setup
+		final GatewayInput gatewayIn = factory.createApiGateway("ERROR_FIFO_FILE");
+
+			// Test
+			final GatewayReturn response = gatewayEndpoint.updateGateway("FF:TT:ZZ:AA:GG:PP", gatewayIn);
+
+			// Assert
+			assertEquals(ECommandModel.NONE, response.getCommand());
+	}
 	
 	@Test
-	public void TestE_updateGatewayDataNotExistsException() {
+	public void TestI_updateGatewayDeleteAlert() {
+		// Setup
+		final GatewayInput gatewayIn = factory.createApiGateway("ONLINE");
+
+			// Test
+			final GatewayReturn response = gatewayEndpoint.updateGateway("FF:TT:ZZ:AA:GG:PP", gatewayIn);
+
+			// Assert
+			assertEquals(ECommandModel.NONE, response.getCommand());
+	}
+	
+	// TODO test updateGateway OFFLINE not associated
+	
+	@Test
+	public void TestJ_updateGatewayDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
 		String macAddress = "TT:NN:MM:KK:HH:RR";

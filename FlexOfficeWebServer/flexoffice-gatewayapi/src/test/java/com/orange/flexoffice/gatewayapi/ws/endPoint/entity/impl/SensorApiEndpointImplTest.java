@@ -126,7 +126,7 @@ public class SensorApiEndpointImplTest {
 		try {
 			// Setup
 			final SensorInput sensorInput = new SensorInput();
-			sensorInput.setSensorStatus(ESensorStatus.UNSTABLE_VOLTAGE);
+			sensorInput.setSensorStatus(ESensorStatus.ONLINE);
 
 			// Test
 			final Response response = sensorEndpoint.updateSensor("Sensor from Gateway Id 1", sensorInput);
@@ -144,7 +144,134 @@ public class SensorApiEndpointImplTest {
 	}
 	
 	@Test
-	public void TestF_updateSensorDataNotExistsException() {
+	public void TestF_updateSensorCreateAlert() {
+		// Setup
+		boolean expectedResult = false;
+
+		try {
+			// Setup
+			final SensorInput sensorInput = new SensorInput();
+			sensorInput.setSensorStatus(ESensorStatus.OFFLINE);
+
+			// Test
+			final Response response = sensorEndpoint.updateSensor("ident 1", sensorInput);
+
+			// Asserts
+			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+
+			expectedResult = true;
+
+		} catch(WebApplicationException e ) {
+		}
+
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+
+	@Test
+	public void TestG_updateSensorUpdateAlert() {
+		// Setup
+		boolean expectedResult = false;
+
+		try {
+			// Setup
+			final SensorInput sensorInput = new SensorInput();
+			sensorInput.setSensorStatus(ESensorStatus.UNSTABLE_VOLTAGE);
+
+			// Test
+			final Response response = sensorEndpoint.updateSensor("ident 1", sensorInput);
+
+			// Asserts
+			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+
+			expectedResult = true;
+
+		} catch(WebApplicationException e ) {
+		}
+
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+
+	@Test
+	public void TestH_updateSensorUpdateAlert() {
+		// Setup
+		boolean expectedResult = false;
+
+		try {
+			// Setup
+			final SensorInput sensorInput = new SensorInput();
+			sensorInput.setSensorStatus(ESensorStatus.UNSTABLE_RSSI);
+
+			// Test
+			final Response response = sensorEndpoint.updateSensor("ident 1", sensorInput);
+
+			// Asserts
+			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+
+			expectedResult = true;
+
+		} catch(WebApplicationException e ) {
+		}
+
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+
+	@Test
+	public void TestI_updateSensorSameAlert() {
+		// Setup
+		boolean expectedResult = false;
+
+		try {
+			// Setup
+			final SensorInput sensorInput = new SensorInput();
+			sensorInput.setSensorStatus(ESensorStatus.UNSTABLE_RSSI);
+
+			// Test
+			final Response response = sensorEndpoint.updateSensor("ident 1", sensorInput);
+
+			// Asserts
+			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+
+			expectedResult = true;
+
+		} catch(WebApplicationException e ) {
+		}
+
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+	
+	@Test
+	public void TestJ_updateSensorDeleteAlert() {
+		// Setup
+		boolean expectedResult = false;
+
+		try {
+			// Setup
+			final SensorInput sensorInput = new SensorInput();
+			sensorInput.setSensorStatus(ESensorStatus.ONLINE);
+
+			// Test
+			final Response response = sensorEndpoint.updateSensor("ident 1", sensorInput);
+
+			// Asserts
+			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+
+			expectedResult = true;
+
+		} catch(WebApplicationException e ) {
+		}
+
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+
+	// TODO test updateSensor OFFLINE not appared
+	
+	@Test
+	public void TestK_updateSensorDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
 		
