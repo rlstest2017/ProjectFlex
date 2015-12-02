@@ -75,7 +75,7 @@ public class GatewayEndpointImplTest {
 		List<GatewaySummary> gateways =	gatewayEndpoint.getGateways();
 		
 		// Asserts
-		assertEquals(2, gateways.size());
+		assertEquals(3, gateways.size());
 	}
 
 	@Test

@@ -71,7 +71,7 @@ public class GatewayApiEndpointImplTest {
 		List<GatewaySummary> gateways =	gatewayEndpoint.getGateways();
 		
 		// Asserts
-		assertEquals(2, gateways.size());
+		assertEquals(3, gateways.size());
 	}
 
 	@Test
@@ -166,10 +166,32 @@ public class GatewayApiEndpointImplTest {
 			assertEquals(ECommandModel.NONE, response.getCommand());
 	}
 	
-	// TODO test updateGateway OFFLINE not associated
-	
 	@Test
-	public void TestJ_updateGatewayDataNotExistsException() {
+	public void TestJ_updateGatewayNotAssociatedCreateAlert() {
+		// Setup
+		final GatewayInput gatewayIn = factory.createApiGateway("ERROR_FIFO_FILE");
+
+			// Test
+			final GatewayReturn response = gatewayEndpoint.updateGateway("AA:BB:CC:AA:GG:PP", gatewayIn);
+
+			// Assert
+			assertEquals(ECommandModel.NONE, response.getCommand());
+	}
+
+	@Test
+	public void TestK_updateGatewayNotAssociatedDeleteAlert() {
+		// Setup
+		final GatewayInput gatewayIn = factory.createApiGateway("OFFLINE");
+
+			// Test
+			final GatewayReturn response = gatewayEndpoint.updateGateway("AA:BB:CC:AA:GG:PP", gatewayIn);
+
+			// Assert
+			assertEquals(ECommandModel.NONE, response.getCommand());
+	}
+
+	@Test
+	public void TestL_updateGatewayDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
 		String macAddress = "TT:NN:MM:KK:HH:RR";

@@ -59,7 +59,7 @@ public class SystemEndpointImplTest {
 		com.orange.flexoffice.adminui.ws.model.System system =	systemEndpoint.getSystem();
 		
 		// Asserts
-		assertEquals(2, system.getGatewayCount().intValue());
+		assertEquals(3, system.getGatewayCount().intValue());
 		assertEquals(4, system.getUserCount().intValue());
 		assertEquals(3, system.getRoomCount().intValue());
 	}

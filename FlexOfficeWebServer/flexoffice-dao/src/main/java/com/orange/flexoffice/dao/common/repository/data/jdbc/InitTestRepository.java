@@ -36,6 +36,7 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 						"(id, name, mac_address, description, status) VALUES (?, ?, ?, ?, CAST(? AS gatewayStatus))";
 			jdbcTemplateForTest.update(sqlGateways, new Object[] {1, "gateway 1", "FF:EE:ZZ:AA:GG:PP", "gateway 1 test", "ONLINE"});
 			jdbcTemplateForTest.update(sqlGateways, new Object[] {2, "gateway 2", "FF:TT:ZZ:AA:GG:PP", "gateway 2 test", "OFFLINE"});
+			jdbcTemplateForTest.update(sqlGateways, new Object[] {3, "gateway 3", "AA:BB:CC:AA:GG:PP", "gateway 3 test", "ONLINE"});
 			
 			String sqlSensors = "INSERT INTO sensors " +
 					 	            "(id, identifier, name, type, profile, description, status, room_id) VALUES (?, ?, ?, CAST(? AS sensorType), ?, ?, CAST(? AS sensorStatus), ?)";

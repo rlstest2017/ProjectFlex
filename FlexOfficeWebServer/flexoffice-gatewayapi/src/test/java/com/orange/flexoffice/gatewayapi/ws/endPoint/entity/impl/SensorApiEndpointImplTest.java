@@ -268,10 +268,58 @@ public class SensorApiEndpointImplTest {
 		assertEquals(true, expectedResult);	
 	}
 
-	// TODO test updateSensor OFFLINE not appared
-	
 	@Test
-	public void TestK_updateSensorDataNotExistsException() {
+	public void TestK_updateSensorNotApparedCreateAlert() {
+		// Setup
+		boolean expectedResult = false;
+
+		try {
+			// Setup
+			final SensorInput sensorInput = new SensorInput();
+			sensorInput.setSensorStatus(ESensorStatus.UNSTABLE_RSSI);
+
+			// Test
+			final Response response = sensorEndpoint.updateSensor("Sensor from Gateway Id 1", sensorInput);
+
+			// Asserts
+			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+
+			expectedResult = true;
+
+		} catch(WebApplicationException e ) {
+		}
+
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+
+	@Test
+	public void TestL_updateSensorNotApparedDeleteAlert() {
+		// Setup
+		boolean expectedResult = false;
+
+		try {
+			// Setup
+			final SensorInput sensorInput = new SensorInput();
+			sensorInput.setSensorStatus(ESensorStatus.OFFLINE);
+
+			// Test
+			final Response response = sensorEndpoint.updateSensor("Sensor from Gateway Id 1", sensorInput);
+
+			// Asserts
+			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+
+			expectedResult = true;
+
+		} catch(WebApplicationException e ) {
+		}
+
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+
+	@Test
+	public void TestM_updateSensorDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
 		
