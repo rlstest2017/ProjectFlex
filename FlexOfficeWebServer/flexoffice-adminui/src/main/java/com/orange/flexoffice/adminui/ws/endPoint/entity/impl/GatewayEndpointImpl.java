@@ -62,10 +62,12 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 			GatewaySummary gateway = factory.createGatewaySummary();
 			gateway.setMacAddress(gatewayDao.getMacAddress());
 			gateway.setName(gatewayDao.getName());
-			if (gatewayDao.getStatus().equals(E_GatewayStatus.ONTEACHIN.toString())) {
+			if ((gatewayDao.getStatus().equals(E_GatewayStatus.ONTEACHIN.toString())) || (gatewayDao.getStatus().equals(E_GatewayStatus.ONLINE.toString()))) {
 				gateway.setStatus(EDeviceStatus.ONLINE);
+			} else if (gatewayDao.getStatus().equals(E_GatewayStatus.OFFLINE.toString())) {
+				gateway.setStatus(EDeviceStatus.OFFLINE);
 			} else {
-				gateway.setStatus(EDeviceStatus.valueOf(gatewayDao.getStatus().toString()));
+				gateway.setStatus(EDeviceStatus.UNSTABLE);
 			}
 			if (gatewayDao.getLastPollingDate() != null) {
 				gateway.setLastPollingDate(gatewayDao.getLastPollingDate().getTime());

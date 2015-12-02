@@ -19,6 +19,7 @@ import org.springframework.util.Log4jConfigurer;
 
 import com.orange.flexoffice.gatewayapi.ws.endPoint.entity.SensorApiEndpoint;
 import com.orange.flexoffice.gatewayapi.ws.endPoint.entity.GatewayApiEndpoint;
+import com.orange.flexoffice.gatewayapi.ws.model.EOccupancyInfo;
 import com.orange.flexoffice.gatewayapi.ws.model.ESensorStatus;
 import com.orange.flexoffice.gatewayapi.ws.model.SensorInput;
 import com.orange.flexoffice.gatewayapi.ws.model.SensorNewSummary;
@@ -244,7 +245,7 @@ public class SensorApiEndpointImplTest {
 	}
 	
 	@Test
-	public void TestJ_updateSensorDeleteAlert() {
+	public void TestJ_updateSensorDeleteAlertAndOccupancyInfo() {
 		// Setup
 		boolean expectedResult = false;
 
@@ -252,6 +253,7 @@ public class SensorApiEndpointImplTest {
 			// Setup
 			final SensorInput sensorInput = new SensorInput();
 			sensorInput.setSensorStatus(ESensorStatus.ONLINE);
+			sensorInput.setOccupancyInfo(EOccupancyInfo.OCCUPIED);
 
 			// Test
 			final Response response = sensorEndpoint.updateSensor("ident 1", sensorInput);
@@ -267,9 +269,35 @@ public class SensorApiEndpointImplTest {
 		// Assert
 		assertEquals(true, expectedResult);	
 	}
+	
+	@Test
+	public void TestK_updateSensorOccupancyInfo() {
+		// Setup
+		boolean expectedResult = false;
+
+		try {
+			// Setup
+			final SensorInput sensorInput = new SensorInput();
+			sensorInput.setSensorStatus(ESensorStatus.ONLINE);
+			sensorInput.setOccupancyInfo(EOccupancyInfo.UNOCCUPIED);
+
+			// Test
+			final Response response = sensorEndpoint.updateSensor("ident 2", sensorInput);
+
+			// Asserts
+			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+
+			expectedResult = true;
+
+		} catch(WebApplicationException e ) {
+		}
+
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
 
 	@Test
-	public void TestK_updateSensorNotApparedCreateAlert() {
+	public void TestL_updateSensorNotApparedCreateAlert() {
 		// Setup
 		boolean expectedResult = false;
 
@@ -294,7 +322,7 @@ public class SensorApiEndpointImplTest {
 	}
 
 	@Test
-	public void TestL_updateSensorNotApparedDeleteAlert() {
+	public void TestM_updateSensorNotApparedDeleteAlert() {
 		// Setup
 		boolean expectedResult = false;
 
@@ -319,7 +347,7 @@ public class SensorApiEndpointImplTest {
 	}
 
 	@Test
-	public void TestM_updateSensorDataNotExistsException() {
+	public void TestN_updateSensorDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
 		
