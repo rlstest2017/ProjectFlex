@@ -46,9 +46,6 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 		SensorDao sensorDao = new SensorDao();
 		sensorDao.setIdentifier(sensorInput.getId());
 		sensorDao.setProfile(sensorInput.getProfile());
-		// TODO set the   sensorInput.getGatewayId() ?
-		sensorDao.setName("");
-		sensorDao.setDescription("");
 		sensorDao.setStatus(E_SensorStatus.OFFLINE.toString());
 		// Type depends on profile.
 		sensorDao.setType(computeType(sensorInput.getProfile()));

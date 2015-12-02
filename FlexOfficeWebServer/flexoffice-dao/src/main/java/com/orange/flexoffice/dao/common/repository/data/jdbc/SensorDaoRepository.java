@@ -128,13 +128,10 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 
 	@Override
 	public void forEach(DataExtractor dataExtractor) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	protected String getRowColName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

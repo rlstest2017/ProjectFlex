@@ -79,28 +79,23 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 
 	@Override
 	public void forEach(DataExtractor dataExtractor) {
-		// TODO Auto-generated method stub
-		
 	}
 
 
 	@Override
 	protected String getTableName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	@Override
 	protected String getColumnColName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	@Override
 	protected String getRowColName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

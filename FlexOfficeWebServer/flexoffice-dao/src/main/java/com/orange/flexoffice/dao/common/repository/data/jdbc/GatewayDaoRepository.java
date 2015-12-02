@@ -127,13 +127,10 @@ public class GatewayDaoRepository extends DataRepository<GatewayDao> implements 
 
 	@Override
 	public void forEach(DataExtractor dataExtractor) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	protected String getRowColName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
