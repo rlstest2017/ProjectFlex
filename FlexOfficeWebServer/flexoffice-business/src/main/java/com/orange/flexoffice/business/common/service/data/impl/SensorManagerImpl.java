@@ -16,6 +16,8 @@ import com.orange.flexoffice.business.common.service.data.SensorManager;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_OccupancyInfo;
+import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
@@ -103,18 +105,30 @@ public class SensorManagerImpl implements SensorManager {
 	@Override
 	public void updateStatus(SensorDao sensorDao, RoomDao roomDao) throws DataNotExistsException {
 		try {
-			// update SensorDao
-			sensorRepository.updateSensorStatus(sensorDao); 
+			if (roomDao != null) {
+				if (sensorDao.getOccupancyInfo() != null) {
+					if (sensorDao.getOccupancyInfo().equals(E_OccupancyInfo.OCCUPIED)) {
+						roomDao.setStatus(E_RoomStatus.OCCUPIED.toString());
+						roomRepository.updateRoomStatus(roomDao);		
+					} else if (sensorDao.getOccupancyInfo().equals(E_OccupancyInfo.UNOCCUPIED)) {
+						// search in DB if another sensor has said thar the room is OCCUPIED 
+						List<SensorDao> sensors = sensorRepository.findByRoomIdAndOccupiedInfo(roomDao.getId());
+						if ((sensors == null) || (sensors.isEmpty())) {
+							roomDao.setStatus(E_RoomStatus.FREE.toString());
+							roomRepository.updateRoomStatus(roomDao);
+						}
+					}
+				}
+			}
 			
+			// update SensorDao status & occupancyInfo
+			sensorRepository.updateSensorStatus(sensorDao); 
+						
 			// update Sensor Alert
 			Long sensorId = sensorDao.getId();
 			String status = sensorDao.getStatus();
-			alertManager.updateSensorAlert(sensorId, status);
-			
-			if (roomDao != null) {
-				roomRepository.updateRoomStatus(roomDao);
-			}
-			
+			alertManager.updateSensorAlert(sensorId, status);	
+						
 		} catch (RuntimeException e) {
 			LOGGER.error("SensorManager.updateStatus : Sensor to update Status not found", e);
 			throw new DataNotExistsException("SensorManager.updateStatus : Sensor to update Status not found");

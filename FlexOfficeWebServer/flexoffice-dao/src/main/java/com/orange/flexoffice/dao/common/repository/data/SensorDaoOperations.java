@@ -21,6 +21,8 @@ public interface SensorDaoOperations {
 	
 	List<SensorDao> findByRoomId(Long roomId);
 	
+	List<SensorDao> findByRoomIdAndOccupiedInfo(Long roomId);
+	
 	SensorDao saveSensor(SensorDao data) throws DataIntegrityViolationException;
 	
 	SensorDao updateSensor(SensorDao data) throws DataAccessException; 

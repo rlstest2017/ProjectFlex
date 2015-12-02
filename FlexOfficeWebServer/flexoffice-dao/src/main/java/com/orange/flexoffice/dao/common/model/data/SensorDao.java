@@ -15,6 +15,7 @@ public class SensorDao extends AbstractData {
 	private String profile; // profile back as a5-07-01 & a5-04-01
 	private String description;
 	private String status;
+	private String occupancyInfo;
 	private Integer roomId;
 	private Date lastMeasureDate;
 	
@@ -55,6 +56,12 @@ public class SensorDao extends AbstractData {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getOccupancyInfo() {
+		return occupancyInfo;
+	}
+	public void setOccupancyInfo(String occupancyInfo) {
+		this.occupancyInfo = occupancyInfo;
 	}
 	public Integer getRoomId() {
 		return roomId;

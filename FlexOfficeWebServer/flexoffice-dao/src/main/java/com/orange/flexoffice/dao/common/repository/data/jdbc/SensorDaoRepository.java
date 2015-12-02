@@ -56,7 +56,16 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 			);
 	}
 
-
+	@Override
+	public List<SensorDao> findByRoomIdAndOccupiedInfo(Long roomId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("roomId", roomId);
+		return jdbcTemplate.query(
+				findByColumnRoomIdAndOccupancyInfoQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<SensorDao>(SensorDao.class)
+			);
+	}
+	
 	@Override
 	public SensorDao saveSensor(SensorDao data) throws DataIntegrityViolationException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -128,7 +137,5 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-
 
 }

@@ -22,6 +22,8 @@ public final class DataSqlTemplate {
 			"select * from %s where access_token=:accessToken";
 	public static final String FIND_BY_COL_ROOM_ID_TEMPLATE = 
 			"select * from %s where room_id=:roomId";
+	public static final String FIND_BY_COL_ROOM_ID_OCCUPIED_INFO_TEMPLATE = 
+			"select * from %s where room_id=:roomId and occupancy_info='OCCUPIED'";
 	public static final String FIND_BY_COL_USER_ID_TEMPLATE = 
 			"select * from %s where user_id=:userId";
 	public static final String FIND_BY_IDENTIFIER_TEMPLATE = 
@@ -71,7 +73,7 @@ public final class DataSqlTemplate {
 	public static final String UPDATE_SENSOR_TEMPLATE =
 			"update %s set name=:name, type=CAST(:type AS sensortype), profile=:profile, description=:description, room_id=:roomId WHERE identifier=:identifier";
 	public static final String UPDATE_SENSOR_STATUS_TEMPLATE =
-			"update %s set status=CAST(:status AS sensorstatus) WHERE identifier=:identifier";
+			"update %s set status=CAST(:status AS sensorstatus), occupancy_info=CAST(:occupancyInfo AS sensorOccupancyInfo) WHERE identifier=:identifier";
 	public static final String FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE = 
 			"select %s from %s where %s in (:rowIds)";
 

@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.gatewayapi.ws.endPoint.entity.SensorApiEndpoint;
-import com.orange.flexoffice.gatewayapi.ws.model.EOccupancyInfo;
 import com.orange.flexoffice.gatewayapi.ws.model.SensorInput;
 import com.orange.flexoffice.gatewayapi.ws.model.SensorNewSummary;
 import com.orange.flexoffice.gatewayapi.ws.utils.ErrorMessageHandler;
@@ -20,7 +19,6 @@ import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.SensorManager;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
-import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_SensorStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_SensorType;
 
@@ -97,6 +95,27 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 			
 			SensorDao sensorDao = sensorManager.find(identifier);
 			sensorDao.setStatus(sensor.getSensorStatus().toString());
+			if (sensor.getOccupancyInfo() != null) {
+				sensorDao.setOccupancyInfo(sensor.getOccupancyInfo().toString());
+			}
+			
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("updateSensor with room parameters :");
+				final StringBuilder message = new StringBuilder( 1000 );
+				message.append( "room Id :" );
+				message.append( sensorDao.getRoomId() );
+				message.append( "\n" );
+				message.append( "sensor room Temperature Info :" );
+				message.append( sensor.getTemperature() );
+				message.append( "\n" );
+				message.append( "sensor room Humidity Info :" );
+				message.append( sensor.getHumidity() );
+				message.append( "\n" );
+				message.append( "sensor Occupancy Info :" );
+				message.append( sensor.getOccupancyInfo() );
+				message.append( "\n" );
+				LOGGER.debug( message.toString() );
+			}
 			
 			RoomDao roomDao = null;
 			if ((sensorDao.getRoomId() != null) && (sensorDao.getRoomId() != 0)) {
@@ -104,35 +123,6 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 				roomDao.setId(Long.valueOf(sensorDao.getRoomId()));
 				roomDao.setTemperature(sensor.getTemperature());
 				roomDao.setHumidity(sensor.getHumidity());
-				if (sensor.getOccupancyInfo() != null) {
-					if (sensor.getOccupancyInfo().equals(EOccupancyInfo.UNOCCUPIED)) {
-						roomDao.setStatus(E_RoomStatus.FREE.toString());
-					} else if (sensor.getOccupancyInfo().equals(EOccupancyInfo.OCCUPIED)) {
-						roomDao.setStatus(E_RoomStatus.OCCUPIED.toString());
-					} else {
-						roomDao.setStatus(E_RoomStatus.UNKNOWN.toString());
-					}
-				} else {
-					roomDao.setStatus(E_RoomStatus.UNKNOWN.toString());
-				}
-				
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("updateSensor with room parameters :");
-					final StringBuilder message = new StringBuilder( 1000 );
-					message.append( "room Id :" );
-					message.append( sensorDao.getRoomId() );
-					message.append( "\n" );
-					message.append( "sensor room Temperature Info :" );
-					message.append( sensor.getTemperature() );
-					message.append( "\n" );
-					message.append( "sensor room Humidity Info :" );
-					message.append( sensor.getHumidity() );
-					message.append( "\n" );
-					message.append( "sensor Occupancy Info :" );
-					message.append( sensor.getOccupancyInfo() );
-					message.append( "\n" );
-					LOGGER.debug( message.toString() );
-				}
 			}
 	
 			sensorManager.updateStatus(sensorDao, roomDao);
