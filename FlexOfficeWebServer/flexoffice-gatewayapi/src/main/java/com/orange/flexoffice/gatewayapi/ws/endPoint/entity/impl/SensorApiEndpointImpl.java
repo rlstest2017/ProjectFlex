@@ -123,6 +123,7 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 				roomDao.setId(Long.valueOf(sensorDao.getRoomId()));
 				roomDao.setTemperature(sensor.getTemperature());
 				roomDao.setHumidity(sensor.getHumidity());
+				LOGGER.debug("RoomDao is instanciated");
 			}
 	
 			sensorManager.updateStatus(sensorDao, roomDao);

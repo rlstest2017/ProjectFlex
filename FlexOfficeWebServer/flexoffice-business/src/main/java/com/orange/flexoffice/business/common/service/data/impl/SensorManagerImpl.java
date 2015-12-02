@@ -105,21 +105,6 @@ public class SensorManagerImpl implements SensorManager {
 	@Override
 	public void updateStatus(SensorDao sensorDao, RoomDao roomDao) throws DataNotExistsException {
 		try {
-			if (roomDao != null) {
-				if (sensorDao.getOccupancyInfo() != null) {
-					if (sensorDao.getOccupancyInfo().equals(E_OccupancyInfo.OCCUPIED)) {
-						roomDao.setStatus(E_RoomStatus.OCCUPIED.toString());
-						roomRepository.updateRoomStatus(roomDao);		
-					} else if (sensorDao.getOccupancyInfo().equals(E_OccupancyInfo.UNOCCUPIED)) {
-						// search in DB if another sensor has said thar the room is OCCUPIED 
-						List<SensorDao> sensors = sensorRepository.findByRoomIdAndOccupiedInfo(roomDao.getId());
-						if ((sensors == null) || (sensors.isEmpty())) {
-							roomDao.setStatus(E_RoomStatus.FREE.toString());
-							roomRepository.updateRoomStatus(roomDao);
-						}
-					}
-				}
-			}
 			
 			// update SensorDao status & occupancyInfo
 			sensorRepository.updateSensorStatus(sensorDao); 
@@ -127,7 +112,31 @@ public class SensorManagerImpl implements SensorManager {
 			// update Sensor Alert
 			Long sensorId = sensorDao.getId();
 			String status = sensorDao.getStatus();
-			alertManager.updateSensorAlert(sensorId, status);	
+			alertManager.updateSensorAlert(sensorId, status);
+			
+			if (roomDao != null) {
+				if (sensorDao.getOccupancyInfo() != null) {
+					if (sensorDao.getOccupancyInfo().equals(E_OccupancyInfo.OCCUPIED.toString())) {
+						LOGGER.debug("RoomDao in updateStatus() is going to set RoomStatus to OCCUPIED");
+						roomDao.setStatus(E_RoomStatus.OCCUPIED.toString());
+						roomRepository.updateRoomStatus(roomDao);		
+					} else if (sensorDao.getOccupancyInfo().equals(E_OccupancyInfo.UNOCCUPIED.toString())) {
+						// search in DB if another sensor has said thar the room is OCCUPIED 
+						List<SensorDao> sensors = sensorRepository.findByRoomIdAndOccupiedInfo(roomDao.getId());
+						if ((sensors == null) || (sensors.isEmpty())) {
+							LOGGER.debug("RoomDao in updateStatus() is going to set RoomStatus to FREE");
+							roomDao.setStatus(E_RoomStatus.FREE.toString());
+							roomRepository.updateRoomStatus(roomDao);
+						}
+					}
+				} else {
+					LOGGER.debug("SensorDao occupancyInfo propertie in updateStatus() method is null");
+				}
+			} else {
+				LOGGER.debug("RoomDao in updateStatus() method is null");
+			}
+			
+				
 						
 		} catch (RuntimeException e) {
 			LOGGER.error("SensorManager.updateStatus : Sensor to update Status not found", e);

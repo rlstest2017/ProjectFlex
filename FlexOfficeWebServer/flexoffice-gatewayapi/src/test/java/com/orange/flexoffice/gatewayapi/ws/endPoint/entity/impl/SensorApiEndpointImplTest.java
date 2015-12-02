@@ -245,7 +245,7 @@ public class SensorApiEndpointImplTest {
 	}
 	
 	@Test
-	public void TestJ_updateSensorDeleteAlertAndOccupancyInfo() {
+	public void TestJ_updateSensorDeleteAlertAndOccupancyInfoOCCUPIED() {
 		// Setup
 		boolean expectedResult = false;
 
@@ -256,7 +256,7 @@ public class SensorApiEndpointImplTest {
 			sensorInput.setOccupancyInfo(EOccupancyInfo.OCCUPIED);
 
 			// Test
-			final Response response = sensorEndpoint.updateSensor("ident 1", sensorInput);
+			final Response response = sensorEndpoint.updateSensor("ident 1", sensorInput);// ident 1 !!!!
 
 			// Asserts
 			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
@@ -271,7 +271,7 @@ public class SensorApiEndpointImplTest {
 	}
 	
 	@Test
-	public void TestK_updateSensorOccupancyInfo() {
+	public void TestK_updateSensorOccupancyInfoINCHANGED() {
 		// Setup
 		boolean expectedResult = false;
 
@@ -282,7 +282,7 @@ public class SensorApiEndpointImplTest {
 			sensorInput.setOccupancyInfo(EOccupancyInfo.UNOCCUPIED);
 
 			// Test
-			final Response response = sensorEndpoint.updateSensor("ident 2", sensorInput);
+			final Response response = sensorEndpoint.updateSensor("ident 2", sensorInput);// ident 2 !!!!
 
 			// Asserts
 			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
@@ -297,7 +297,33 @@ public class SensorApiEndpointImplTest {
 	}
 
 	@Test
-	public void TestL_updateSensorNotApparedCreateAlert() {
+	public void TestL_updateSensorOccupancyInfoCHANGED() {
+		// Setup
+		boolean expectedResult = false;
+
+		try {
+			// Setup
+			final SensorInput sensorInput = new SensorInput();
+			sensorInput.setSensorStatus(ESensorStatus.ONLINE);
+			sensorInput.setOccupancyInfo(EOccupancyInfo.UNOCCUPIED);
+
+			// Test
+			final Response response = sensorEndpoint.updateSensor("ident 1", sensorInput);// ident 1 !!!!
+
+			// Asserts
+			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+
+			expectedResult = true;
+
+		} catch(WebApplicationException e ) {
+		}
+
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+	
+	@Test
+	public void TestM_updateSensorNotApparedCreateAlert() {
 		// Setup
 		boolean expectedResult = false;
 
@@ -322,7 +348,7 @@ public class SensorApiEndpointImplTest {
 	}
 
 	@Test
-	public void TestM_updateSensorNotApparedDeleteAlert() {
+	public void TestN_updateSensorNotApparedDeleteAlert() {
 		// Setup
 		boolean expectedResult = false;
 
@@ -347,7 +373,7 @@ public class SensorApiEndpointImplTest {
 	}
 
 	@Test
-	public void TestN_updateSensorDataNotExistsException() {
+	public void TestO_updateSensorDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
 		
