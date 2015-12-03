@@ -29,6 +29,7 @@ public class RoomDto {
 	private GatewayDao gateway;
 	private UserDao user;
 	private List<SensorDao> sensors;
+	private Long occupancyTimeOut;
 	
 	public String getName() {
 		return name;
@@ -94,7 +95,11 @@ public class RoomDto {
 	public void setSensors(List<SensorDao> sensors) {
 		this.sensors = sensors;
 	}
-
-
+	public Long getOccupancyTimeOut() {
+		return occupancyTimeOut;
+	}
+	public void setOccupancyTimeOut(Long occupancyTimeOut) {
+		this.occupancyTimeOut = occupancyTimeOut;
+	}
 
 }

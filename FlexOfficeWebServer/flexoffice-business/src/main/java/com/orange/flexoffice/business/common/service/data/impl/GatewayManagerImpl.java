@@ -18,13 +18,16 @@ import com.orange.flexoffice.business.common.service.data.GatewayManager;
 import com.orange.flexoffice.business.gatewayapi.dto.GatewayCommand;
 import com.orange.flexoffice.business.gatewayapi.enums.EnumCommandModel;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
+import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
@@ -42,18 +45,16 @@ public class GatewayManagerImpl implements GatewayManager {
 	
 	@Autowired
 	private GatewayDaoRepository gatewayRepository;
-	
 	@Autowired
 	private RoomDaoRepository roomRepository;
-	
 	@Autowired
 	private SensorDaoRepository sensorRepository;
-	
 	@Autowired
 	private AlertDaoRepository alertRepository;
-	
 	@Autowired
 	private AlertManager alertManager;
+	@Autowired
+	private ConfigurationDaoRepository configRepository;
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -77,6 +78,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			RoomDto roomDto = new RoomDto();
 			roomDto.setId(roomDao.getId());
 			roomDto.setName(roomDao.getName());
+			roomDto.setOccupancyTimeOut(getOccupancyTimeOut());
 			List<SensorDao> sonsensDao = getSensors(roomDao.getId());
 			
 			LOGGER.debug("There is: " + sonsensDao.size() + " sensors for room :" + roomDao.getColumnId());
@@ -281,5 +283,15 @@ public class GatewayManagerImpl implements GatewayManager {
 		
 		return sensorsDao;
 	}
-	
+	/**
+	 * getOccupancyTimeOut
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	private Long getOccupancyTimeOut() {
+		// get activeUsers
+		ConfigurationDao occupancyTimeOut = configRepository.findByKey(E_ConfigurationKey.OCCUPANCY_TIMEOUT.toString());
+		String occupancyTimeOutValueValue = occupancyTimeOut.getValue();
+		return Long.valueOf(occupancyTimeOutValueValue);
+	}
 }
