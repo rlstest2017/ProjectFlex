@@ -7,7 +7,7 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc.metadata;
  */
 public final class RoomStatDaoMetadata {
 	
-	public static final String ROOM_STAT_TABLE_NAME = "ROOM_STAT_stats";
+	public static final String ROOM_STAT_TABLE_NAME = "room_stats";
 	public static final String ROOM_STAT_ID_COL = "id";
 	public static final String ROOM_STAT_ROOM_ID_COL = "room_id";
 	public static final String ROOM_STAT_ROOM_TYPE_COL = "room_type";

@@ -5,18 +5,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.naming.AuthenticationException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.userui.ws.model.ERoomStatus;
 import com.orange.flexoffice.userui.ws.model.ERoomType;
-import com.orange.flexoffice.userui.ws.model.ErrorModel;
 import com.orange.flexoffice.userui.ws.model.UserSummary;
+import com.orange.flexoffice.userui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.RoomAlreadyUsedException;
@@ -27,6 +27,7 @@ import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
+import com.orange.flexoffice.dao.common.model.object.UserDto;
 import com.orange.flexoffice.userui.ws.endPoint.entity.RoomEndpoint;
 import com.orange.flexoffice.userui.ws.model.ObjectFactory;
 import com.orange.flexoffice.userui.ws.model.Room;
@@ -48,6 +49,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	private UserManager userManager;
 
 	@Autowired
+	private ErrorMessageHandler errorMessageHandler;
+	
+	@Autowired
 	private TestManager testManager;
 	
 	/**
@@ -66,7 +70,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		if (dataList == null) {
 
 			LOGGER.error("UserUi.RoomEndpoint.getRooms : Rooms not found");
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_27, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_27, Response.Status.NOT_FOUND));
 
 		}
 
@@ -128,12 +132,12 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		} catch (DataNotExistsException e){
 
 			LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.getSensor with message :", e);
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_31, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_31, Response.Status.NOT_FOUND));
 
 		} catch (RuntimeException ex){
 
 			LOGGER.debug("RuntimeException in UserUi.RoomEndpoint.getSensor with message :", ex);
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 
 		}
 	}
@@ -149,7 +153,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 * @see Response
 	 */
 	@Override
-	public Response reserveRoom(String roomId) {
+	public Response reserveRoom(String auth, String roomId) {
 		
 		LOGGER.info( "Begin call UserUi.RoomEndpoint.reserveRoom at: " + new Date() );
 
@@ -158,22 +162,25 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		roomDao.setStatus(E_RoomStatus.RESERVED.toString());
 
 		try {
+			// get UserDto
+			UserDto data = userManager.findByUserAccessToken(auth);
+			// set userId in roomDao
+			roomDao.setUserId(Long.valueOf(data.getId()));
+			
 			roomDao = roomManager.updateStatus(roomDao);
 
-		} catch (DataNotExistsException e){
-			
+		} catch (AuthenticationException e){
+			LOGGER.debug("DataNotExistsException in UserUi.UserEndpoint.getUserCurrent with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_34, Response.Status.UNAUTHORIZED));
+		}catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.reserveRoom with message :", e);
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));
-			
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));
 		} catch (RoomAlreadyUsedException e){
-			
 			LOGGER.debug("RoomAlreadyUsedException in UserUi.RoomEndpoint.reserveRoom with message :", e);
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.METHOD_NOT_ALLOWED));
-			
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex){
-
 			LOGGER.debug("RuntimeException in UserUi.RoomEndpoint.reserveRoom with message :", ex);
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
 		LOGGER.info( "End call UserUi.RoomEndpoint.reserveRoom at: " + new Date() );
@@ -205,13 +212,13 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.cancelRoom with message :", e);
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));
 		} catch (RoomAlreadyUsedException e){
 			LOGGER.debug("RoomAlreadyUsedException in UserUi.RoomEndpoint.cancelRoom with message :", e);
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.METHOD_NOT_ALLOWED));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in UserUi.RoomEndpoint.cancelRoom with message :", ex);
-			throw new WebApplicationException(createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
 		LOGGER.info( "End call UserUi.RoomEndpoint.cancelRoom at: " + new Date() );
@@ -229,27 +236,6 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	public boolean executeInitTestFile() {
 		return testManager.executeInitTestFile();
 	}
-
-	
-	
-	/**
-	 * @param error
-	 * @param status
-	 * @return
-	 */
-	private Response createErrorMessage(final EnumErrorModel error, Status status) {
-		ErrorModel errorModel = factory.createErrorModel();
-		errorModel.setCode(error.code());
-		errorModel.setMessage(error.value());
-
-		ResponseBuilderImpl builder = new ResponseBuilderImpl();
-		builder.status(status);
-		builder.entity(errorModel);
-		Response response = builder.build();
-
-		return response;
-	}
-
 	
 	/** Create tenant if room status is not free 
 	 * 

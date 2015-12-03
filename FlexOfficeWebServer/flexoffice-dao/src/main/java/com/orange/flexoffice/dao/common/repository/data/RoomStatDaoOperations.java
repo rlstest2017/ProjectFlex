@@ -13,4 +13,6 @@ public interface RoomStatDaoOperations {
 	
 	List<RoomStatDao> findAllRoomStats();
 	
+	RoomStatDao saveReservedRoomStat(RoomStatDao data);
+	
 }

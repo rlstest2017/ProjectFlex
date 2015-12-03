@@ -56,6 +56,8 @@ public final class DataSqlTemplate {
 			"insert into %s (mac_address, name, description) values (:macAddress, :name, :description)";
 	public static final String CREATE_ROOM_TEMPLATE = 
 			"insert into %s (name, gateway_id, address, capacity, description, type, status) values (:name, :gatewayId, :address, :capacity, :description, CAST(:type AS roomtype), CAST(:status AS roomstatus))";
+	public static final String CREATE_RESERVED_ROOMSTAT_TEMPLATE = 
+			"insert into %s (room_id, user_id, reservation_date) values (:roomId, :userId, now())";
 	public static final String CREATE_SENSOR_TEMPLATE = 
 			"insert into %s (identifier, name, type, profile, description, status, room_id) values (:identifier, :name, CAST(:type AS sensortype), :profile, :description, CAST(:status AS sensorstatus), :roomId)";
 	public static final String UPDATE_GATEWAY_TEMPLATE = 
@@ -71,7 +73,7 @@ public final class DataSqlTemplate {
 	public static final String UPDATE_ROOM_TEMPLATE =
 			"update %s set name=:name, gateway_id=:gatewayId, address=:address, capacity=:capacity, description=:description, type=CAST(:type AS roomtype) WHERE id=:id";
 	public static final String UPDATE_ROOM_STATUS_TEMPLATE =
-			"update %s set status=CAST(:status AS roomstatus), temperature=:temperature, humidity=:humidity where id=:id";
+			"update %s set status=CAST(:status AS roomstatus), temperature=:temperature, humidity=:humidity, user_id=:userId where id=:id";
 	public static final String UPDATE_ALERT_TEMPLATE =
 			"update %s set name=:name, last_notification=:lastNotification where id=:id";
 	public static final String UPDATE_SENSOR_TEMPLATE =

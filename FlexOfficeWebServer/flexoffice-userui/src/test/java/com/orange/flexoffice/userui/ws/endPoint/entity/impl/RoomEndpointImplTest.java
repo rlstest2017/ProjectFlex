@@ -118,10 +118,10 @@ public class RoomEndpointImplTest {
 
 		// Setup
 		boolean expectedResult = false;
-		
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		try {
 			// Test
-			final Response response = roomEndpoint.reserveRoom("1");
+			final Response response = roomEndpoint.reserveRoom(token, "1");
 
 			System.out.println("test");
 			// Asserts
@@ -140,10 +140,11 @@ public class RoomEndpointImplTest {
 
 		// Setup
 		boolean expectedResult = false;
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		
 		try {
 			// Test
-			roomEndpoint.reserveRoom("2");
+			roomEndpoint.reserveRoom(token, "2");
 					
 		} catch(WebApplicationException e ) {
 			expectedResult = true;
@@ -181,10 +182,11 @@ public class RoomEndpointImplTest {
 
 		// Setup
 		boolean expectedResult = false;
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		
 		try {
 			// Test
-			roomEndpoint.reserveRoom("19889898");
+			roomEndpoint.reserveRoom(token, "19889898");
 			
 		} catch(WebApplicationException e ) {
 			expectedResult = true;

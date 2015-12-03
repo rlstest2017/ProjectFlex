@@ -38,6 +38,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_GATEWAY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_ALERT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_ROOM_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_RESERVED_ROOMSTAT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_SENSOR_TEMPLATE;
 
 import java.util.ArrayList;
@@ -67,6 +68,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String saveUserFromUserUIQuery;	
 	protected final String saveGatewayQuery;
 	protected final String saveRoomQuery;
+	protected final String saveReservedRoomStatQuery;
 	protected final String saveAlertQuery;
 	protected final String saveSensorQuery;
 	protected final String updateUserQuery;
@@ -116,6 +118,7 @@ public abstract class DataRepository<T extends Data>
 		saveUserFromUserUIQuery = String.format(CREATE_USER_FROM_USERUI_TEMPLATE, getTableName());
 		saveGatewayQuery = String.format(CREATE_GATEWAY_TEMPLATE, getTableName());
 		saveRoomQuery = String.format(CREATE_ROOM_TEMPLATE, getTableName());
+		saveReservedRoomStatQuery = String.format(CREATE_RESERVED_ROOMSTAT_TEMPLATE, getTableName());
 		saveAlertQuery = String.format(CREATE_ALERT_TEMPLATE, getTableName());
 		saveSensorQuery = String.format(CREATE_SENSOR_TEMPLATE, getTableName());
 		updateUserQuery = String.format(UPDATE_USER_TEMPLATE, getTableName(), getColumnColName());
@@ -124,7 +127,7 @@ public abstract class DataRepository<T extends Data>
 		updateGatewayStatusQuery = String.format(UPDATE_GATEWAY_STATUS_TEMPLATE, getTableName());
 		updateRoomQuery = String.format(UPDATE_ROOM_TEMPLATE, getTableName(), getColumnColName());
 		updateAlertQuery = String.format(UPDATE_ALERT_TEMPLATE, getTableName());
-		updateRoomStatusQuery = String.format(UPDATE_ROOM_STATUS_TEMPLATE, getTableName());
+		updateRoomStatusQuery = String.format(UPDATE_ROOM_STATUS_TEMPLATE, getTableName());// set also humidity, temperature & user_id if filled
 		updateSensorQuery = String.format(UPDATE_SENSOR_TEMPLATE, getTableName(), getColumnColName());
 		updateSensorStatusQuery = String.format(UPDATE_SENSOR_STATUS_TEMPLATE, getTableName(), getColumnColName());
 		updateGatewayQuery = String.format(UPDATE_GATEWAY_TEMPLATE, getTableName());

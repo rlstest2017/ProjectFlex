@@ -20,6 +20,7 @@ import com.orange.flexoffice.business.common.exception.RoomAlreadyUsedException;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
+import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
@@ -27,6 +28,7 @@ import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomStatDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.UserDaoRepository;
 
@@ -43,15 +45,14 @@ public class RoomManagerImpl implements RoomManager {
 
 	@Autowired
 	private RoomDaoRepository roomRepository;
-
 	@Autowired
 	private GatewayDaoRepository gatewayRepository;
-
 	@Autowired
 	private SensorDaoRepository sensorRepository;
-
 	@Autowired
 	private UserDaoRepository userRepository;
+	@Autowired
+	private RoomStatDaoRepository roomStatRepository;
 
 	@Override
 	@Transactional(readOnly=true)
@@ -156,9 +157,14 @@ public class RoomManagerImpl implements RoomManager {
 				if (!foundRoom.getStatus().equals(E_RoomStatus.FREE.toString())) {
 					LOGGER.debug("Room status is not FREE !!!");
 					throw new RoomAlreadyUsedException("RoomManager.updateStatus : Room is not in FREE status");
+				} else {
+					RoomStatDao roomStat = new RoomStatDao();
+					roomStat.setRoomId(roomDao.getId().intValue());
+					roomStat.setUserId(roomDao.getUserId().intValue());
+					roomStatRepository.saveReservedRoomStat(roomStat);
 				}
 			}
-			// Update RoomDao
+			// update RoomDao => status & user_id
 			return roomRepository.updateRoomStatus(roomDao);
 		} catch (RuntimeException e) {
 			LOGGER.error("RoomManager.updateStatus : Room to update Status not found", e);

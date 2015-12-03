@@ -2,8 +2,6 @@ package com.orange.flexoffice.dao.common.model.data;
 
 import java.util.Date;
 
-import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
-
 /**
  * RoomStatDao
  * @author oab
@@ -12,9 +10,12 @@ import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
 public class RoomStatDao extends AbstractData {
 	
 	private Integer roomId;
-	private E_RoomType roomType;
+	private Integer userId;
 	private Date beginOccupancyDate;
 	private Date endOccupancyDate;
+	private Date reservationDate;
+	private Boolean isReservationHonored;
+	private Boolean isReservationTimeOut;
 	
 	public Integer getRoomId() {
 		return roomId;
@@ -22,11 +23,11 @@ public class RoomStatDao extends AbstractData {
 	public void setRoomId(Integer roomId) {
 		this.roomId = roomId;
 	}
-	public E_RoomType getRoomType() {
-		return roomType;
+	public Integer getUserId() {
+		return userId;
 	}
-	public void setRoomType(E_RoomType roomType) {
-		this.roomType = roomType;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 	public Date getBeginOccupancyDate() {
 		return beginOccupancyDate;
@@ -39,6 +40,24 @@ public class RoomStatDao extends AbstractData {
 	}
 	public void setEndOccupancyDate(Date endOccupancyDate) {
 		this.endOccupancyDate = endOccupancyDate;
+	}
+	public Date getReservationDate() {
+		return reservationDate;
+	}
+	public void setReservationDate(Date reservationDate) {
+		this.reservationDate = reservationDate;
+	}
+	public Boolean getIsReservationHonored() {
+		return isReservationHonored;
+	}
+	public void setIsReservationHonored(Boolean isReservationHonored) {
+		this.isReservationHonored = isReservationHonored;
+	}
+	public Boolean getIsReservationTimeOut() {
+		return isReservationTimeOut;
+	}
+	public void setIsReservationTimeOut(Boolean isReservationTimeOut) {
+		this.isReservationTimeOut = isReservationTimeOut;
 	}
 	@Override
 	public void setColumnId(String columnId) {

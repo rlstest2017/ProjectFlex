@@ -3,8 +3,11 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
@@ -31,6 +34,21 @@ public class RoomStatDaoRepository extends DataRepository<RoomStatDao> implement
 	}
 	
 	@Override
+	public RoomStatDao saveReservedRoomStat(RoomStatDao data) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(saveReservedRoomStatQuery, paramBean, keyHolder);
+		
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
+		
+		return data;
+
+	}
+	
+	@Override
 	protected String getTableName() {
 		return RoomStatDaoMetadata.ROOM_STAT_TABLE_NAME;
 	}
@@ -49,5 +67,6 @@ public class RoomStatDaoRepository extends DataRepository<RoomStatDao> implement
 	protected String getRowColName() {
 		return null;
 	}
+
 
 }
