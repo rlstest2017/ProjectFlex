@@ -1,5 +1,6 @@
 package com.orange.flexoffice.dao.common.repository.data;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -33,6 +34,8 @@ public interface UserDaoOperations {
 	UserDao saveUser(UserDao data) throws DataIntegrityViolationException;
 	
 	UserDao saveUserFromUserUI(UserDao data) throws DataIntegrityViolationException;
+	
+	Long countActiveUsers(Date lastConnexionDate);
 	
 	
 }

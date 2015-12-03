@@ -1,5 +1,6 @@
 package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -147,6 +148,16 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 		return data;
 	}
 		
+	@Override
+	public Long countActiveUsers(Date lastConnexionDate) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("lastConnexionDate", lastConnexionDate);
+		return jdbcTemplate.queryForObject(
+				countActiveUsersQuery, 
+				paramMap, 
+				Long.class
+			);
+	}
+	
 	@Override
 	protected String getTableName() {
 		return UserDaoMetadata.USER_TABLE_NAME;

@@ -15,10 +15,14 @@ import org.springframework.util.Base64Utils;
 
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.SystemManager;
+import com.orange.flexoffice.business.common.utils.DateTools;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
+import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.object.SystemDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.UserDaoRepository;
@@ -44,7 +48,11 @@ public class SystemManagerImpl implements SystemManager {
 	@Autowired
 	private AlertDaoRepository alertRepository;
 	@Autowired
+	private ConfigurationDaoRepository configRepository;
+	@Autowired
 	private TokenTools tokenTools;
+	@Autowired
+	private DateTools dateTools;
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -201,9 +209,12 @@ public class SystemManagerImpl implements SystemManager {
 	
 	@Transactional(readOnly=true)
 	private Long countActiveUsers() {
-		// TODO get activeUsers
-		//TODO userRepository.countActive(String lastConnectionDuration);
-		return 3L;
+		// get activeUsers
+		ConfigurationDao lastConnectionDuration = configRepository.findByKey(E_ConfigurationKey.LAST_CONNECTION_DURATION.toString());
+		String lastConnectionDurationValue = lastConnectionDuration.getValue();
+		Date date = dateTools.lastConnexionDate(lastConnectionDurationValue);
+		Long count = userRepository.countActiveUsers(date);
+		return count;
 	}
 
 	

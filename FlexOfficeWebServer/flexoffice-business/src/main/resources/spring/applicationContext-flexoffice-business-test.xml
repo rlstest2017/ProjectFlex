@@ -12,6 +12,9 @@
 	<bean id="alertManager" class="com.orange.flexoffice.business.common.service.data.impl.AlertManagerImpl">
 	</bean>
 	
+	<bean id="dateTools"
+	class="com.orange.flexoffice.business.common.utils.DateTools" />
+	
 	<!-- Import -->
 	<import resource="classpath*:spring/applicationContext-flexoffice-dao-test.xml" />
 

@@ -6,6 +6,8 @@ public final class DataSqlTemplate {
 			"select * from %s where id=:id";
 	public static final String FIND_BY_COL_ID_TEMPLATE = 
 			"select * from %s where %s=:columnId";
+	public static final String FIND_BY_COL_KEY_TEMPLATE = 
+			"select * from %s where key=:key";
 	public static final String FIND_BY_MAC_ADDRESS_TEMPLATE = 
 			"select * from %s where mac_address=:macAddress";
 	public static final String FIND_BY_COL_GATEWAY_ID_TEMPLATE = 
@@ -42,6 +44,8 @@ public final class DataSqlTemplate {
 			"delete from %s where id=:id";
 	public static final String COUNT_TEMPLATE =
 			"select count(id) from %s";
+	public static final String COUNT_ACTIVE_USERS_TEMPLATE =
+			"select count(id) from %s where last_connection_date >:lastConnexionDate";
 	public static final String CREATE_ALERT_TEMPLATE = 
 			"insert into %s (name, type, gateway_id, sensor_id) values (:name, CAST(:type AS deviceType), :gatewayId, :sensorId)";
 	public static final String CREATE_USER_TEMPLATE = 
@@ -61,7 +65,7 @@ public final class DataSqlTemplate {
 	public static final String UPDATE_USER_ACCESS_TOKEN_TEMPLATE =
 			"update %s set access_token=NULL  WHERE access_token=:accessToken";
 	public static final String UPDATE_USER_BY_MAIL_TEMPLATE =
-			"update %s set access_token=:accessToken, expired_token_date=:expiredTokenDate WHERE email=:email";
+			"update %s set access_token=:accessToken, expired_token_date=:expiredTokenDate, last_connection_date=now() WHERE email=:email";
 	public static final String UPDATE_GATEWAY_STATUS_TEMPLATE =
 			"update %s set status=CAST(:status AS gatewayStatus), last_polling_date=now() where id=:id";
 	public static final String UPDATE_ROOM_TEMPLATE =
