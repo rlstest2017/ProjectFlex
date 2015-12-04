@@ -65,8 +65,11 @@ public class RoomEndpointImplTest {
 
 	@Test
 	public void TestB_getRooms() {
+		// SetUp
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
+		
 		// Test
-		List<RoomSummary> rooms = roomEndpoint.getRooms();
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false);
 
 		// Asserts
 		assertEquals(3, rooms.size());
@@ -199,6 +202,5 @@ public class RoomEndpointImplTest {
 		// Asserts
 		assertEquals(true, expectedResult);	
 	}
-
 
 }

@@ -34,6 +34,16 @@ public class RoomStatDaoRepository extends DataRepository<RoomStatDao> implement
 	}
 	
 	@Override
+	public List<RoomStatDao> findLatestReservedRoomsByUserId(Long userId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("userId", userId);
+		return jdbcTemplate.query(
+				findLatestReservedRoomsQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<RoomStatDao>(RoomStatDao.class)
+			);
+	}
+	
+	@Override
 	public RoomStatDao saveReservedRoomStat(RoomStatDao data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		

@@ -13,6 +13,8 @@ public interface RoomStatDaoOperations {
 	
 	List<RoomStatDao> findAllRoomStats();
 	
+	List<RoomStatDao> findLatestReservedRoomsByUserId(Long userId);
+	
 	RoomStatDao saveReservedRoomStat(RoomStatDao data);
 	
 	RoomStatDao updateReservedRoomStat(RoomStatDao data);

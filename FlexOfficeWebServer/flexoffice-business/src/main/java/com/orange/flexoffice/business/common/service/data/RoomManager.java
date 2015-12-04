@@ -22,6 +22,13 @@ public interface RoomManager {
 	List<RoomDao> findAllRooms();
 
 	/**
+	 * findLatestReservedRoomsByUserId
+	 * @param userId
+	 * @return
+	 */
+	List<RoomDao> findLatestReservedRoomsByUserId(String userId);
+	
+	/**
 	 * Finds a room by its ID.
 	 * method used by adminui
 	 * @param roomId

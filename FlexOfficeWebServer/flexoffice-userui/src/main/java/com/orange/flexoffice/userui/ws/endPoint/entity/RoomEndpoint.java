@@ -8,6 +8,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -15,6 +16,7 @@ import static com.orange.flexoffice.userui.ws.ParamsConst.AUTHORIZATION_HEADER_P
 import static com.orange.flexoffice.userui.ws.ParamsConst.ROOM_ID_PARAM;
 import static com.orange.flexoffice.userui.ws.PathConst.ROOMS_PATH;
 import static com.orange.flexoffice.userui.ws.PathConst.ROOM_ID_PATH;
+import static com.orange.flexoffice.userui.ws.ParamsConst.LATEST_PARAM;
 import static com.orange.flexoffice.userui.ws.PathConst.ROOM_ID_RESERVE_PATH;
 
 import java.util.List;
@@ -39,7 +41,7 @@ public interface RoomEndpoint {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	List<RoomSummary> getRooms();
+	List<RoomSummary> getRooms(@HeaderParam(AUTHORIZATION_HEADER_PARAM) String auth, @QueryParam(LATEST_PARAM) Boolean latest);
 
 	/**
 	 * Gets information on a specific room.

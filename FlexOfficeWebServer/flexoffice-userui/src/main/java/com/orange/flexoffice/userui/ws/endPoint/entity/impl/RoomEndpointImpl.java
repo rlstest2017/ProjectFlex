@@ -62,21 +62,30 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 * @see RoomSummary
 	 */
 	@Override
-	public List<RoomSummary> getRooms() {
+	public List<RoomSummary> getRooms(String auth, Boolean latest) {
 		LOGGER.info( "Begin call UserUi.RoomEndpoint.getRooms at: " + new Date() );
-
-		List<RoomDao> dataList = roomManager.findAllRooms();
-
-		if (dataList == null) {
-
-			LOGGER.error("UserUi.RoomEndpoint.getRooms : Rooms not found");
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_27, Response.Status.NOT_FOUND));
-
+		List<RoomDao> dataList = null;
+		
+		if (latest) { // get latest reserved rooms
+			try {
+				// get UserDto
+				UserDto data = userManager.findByUserAccessToken(auth);
+				 // get latest reserved rooms by userId
+				dataList = roomManager.findLatestReservedRoomsByUserId(data.getId());
+			} catch (AuthenticationException e){
+				LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.getRooms with message :", e);
+				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_34, Response.Status.UNAUTHORIZED));
+			}	
+		} else { // get all rooms
+			dataList = roomManager.findAllRooms();
 		}
 
+		if (dataList == null) {
+			LOGGER.error("UserUi.RoomEndpoint.getRooms : Rooms not found");
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_27, Response.Status.NOT_FOUND));
+		}
 
 		List<RoomSummary> roomList = new ArrayList<RoomSummary>();
-
 		for (RoomDao roomDao : dataList) {
 			RoomSummary room = factory.createRoomSummary();
 			room.setId(roomDao.getColumnId());
@@ -86,14 +95,11 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setCapacity(BigInteger.valueOf(roomDao.getCapacity()));
 			room.setStatus(ERoomStatus.valueOf(roomDao.getStatus().toString()));
 			room.setTenantName(computeTenant(room.getStatus(), roomDao.getUserId(), roomDao.getName()));
-
 			roomList.add(room);
 		}
 
 		LOGGER.debug("UserUi.RoomEndpoint.getRooms List of rooms : nb = " + roomList.size());
-
 		LOGGER.info( "End call UserUi.RoomEndpoint.getRooms  at: " + new Date() );
-
 		return roomList;
 	}
 

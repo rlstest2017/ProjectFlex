@@ -32,6 +32,8 @@ public final class DataSqlTemplate {
 			"select * from %s where identifier=:identifier";
 	public static final String FIND_ALL_TEMPLATE = 
 			"select * from %s";
+	public static final String FIND_LATEST_RESERVED_ROOM_TEMPLATE = 
+			"select * from %s where user_id=:userId";
 	public static final String REMOVE_BY_MAC_ADDRESS_TEMPLATE = 
 			"delete from %s where mac_address=:macAddress";
 	public static final String REMOVE_BY_GATEWAY_ID_TEMPLATE = 

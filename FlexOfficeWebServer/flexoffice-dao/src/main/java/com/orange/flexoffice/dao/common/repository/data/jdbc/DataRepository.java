@@ -4,6 +4,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_ACTIVE_USERS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_LATEST_RESERVED_ROOM_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_KEY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_IDENTIFIER_TEMPLATE;
@@ -65,6 +66,7 @@ public abstract class DataRepository<T extends Data>
 	
 	private final String findOneQuery;
 	protected final String findAllQuery;
+	protected final String findLatestReservedRoomsQuery;
 	protected final String saveUserQuery;
 	protected final String saveUserFromUserUIQuery;	
 	protected final String saveGatewayQuery;
@@ -116,6 +118,7 @@ public abstract class DataRepository<T extends Data>
 		
 		findOneQuery = String.format(FIND_ONE_TEMPLATE, getTableName());
 		findAllQuery = String.format(FIND_ALL_TEMPLATE, getTableName());
+		findLatestReservedRoomsQuery = String.format(FIND_LATEST_RESERVED_ROOM_TEMPLATE, getTableName());
 		saveUserQuery = String.format(CREATE_USER_TEMPLATE, getTableName());
 		saveUserFromUserUIQuery = String.format(CREATE_USER_FROM_USERUI_TEMPLATE, getTableName());
 		saveGatewayQuery = String.format(CREATE_GATEWAY_TEMPLATE, getTableName());

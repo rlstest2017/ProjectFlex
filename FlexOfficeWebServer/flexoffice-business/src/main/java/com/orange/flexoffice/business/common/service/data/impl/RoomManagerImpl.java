@@ -1,5 +1,6 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -18,14 +19,17 @@ import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.common.exception.RoomAlreadyUsedException;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
+import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomStatDaoRepository;
@@ -53,14 +57,14 @@ public class RoomManagerImpl implements RoomManager {
 	private UserDaoRepository userRepository;
 	@Autowired
 	private RoomStatDaoRepository roomStatRepository;
+	@Autowired
+	private ConfigurationDaoRepository configRepository;
 
 	@Override
 	@Transactional(readOnly=true)
 	public List<RoomDao> findAllRooms() {
 		return roomRepository.findAllRooms();
 	}
-
-
 
 	@Override
 	@Transactional(readOnly=true)
@@ -206,7 +210,6 @@ public class RoomManagerImpl implements RoomManager {
 		}
 	}
 
-
 	/**
 	 * @param name
 	 * 
@@ -215,7 +218,6 @@ public class RoomManagerImpl implements RoomManager {
 	@Override
 	@Transactional(readOnly=true)
 	public RoomDao findByName(String name) throws DataNotExistsException {
-
 		try {
 			return roomRepository.findByName(name);
 		} catch(IncorrectResultSizeDataAccessException e ) {
@@ -223,4 +225,33 @@ public class RoomManagerImpl implements RoomManager {
 			throw new DataNotExistsException("RoomManager.findByName : Room by name #" + name + " is not found");
 		}
 	}
+
+
+	@Override
+	@Transactional(readOnly=true)
+	public List<RoomDao> findLatestReservedRoomsByUserId(String userId) {
+		List<RoomDao> dataList = null;
+		
+		ConfigurationDao lastReservedCount = configRepository.findByKey(E_ConfigurationKey.LAST_RESERVED_COUNT.toString());
+		int lastReservedCountValue = Integer.valueOf(lastReservedCount.getValue());
+		int countAddedRoomStats = 0;
+		
+		// get latest reserved roomStats by userId
+		List<RoomStatDao> roomStats = roomStatRepository.findLatestReservedRoomsByUserId(Long.valueOf(userId));
+		
+		if ((roomStats != null) && (!roomStats.isEmpty())) {
+			dataList = new ArrayList<RoomDao>();
+			for (RoomStatDao roomStatDao : roomStats) {
+				RoomDao roomDao = roomRepository.findByRoomId(Long.valueOf(roomStatDao.getRoomId()));
+				dataList.add(roomDao);
+				countAddedRoomStats = countAddedRoomStats +1;
+				if ((lastReservedCountValue != 0)&&(countAddedRoomStats == lastReservedCountValue)) {
+					break; // sortir de la boucle for
+				} 
+			}
+		}
+		
+		return dataList;
+	}
+	
 }
