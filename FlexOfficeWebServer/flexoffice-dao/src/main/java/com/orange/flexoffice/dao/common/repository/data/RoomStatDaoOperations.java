@@ -15,4 +15,6 @@ public interface RoomStatDaoOperations {
 	
 	RoomStatDao saveReservedRoomStat(RoomStatDao data);
 	
+	RoomStatDao updateReservedRoomStat(RoomStatDao data);
+	
 }

@@ -60,6 +60,8 @@ public final class DataSqlTemplate {
 			"insert into %s (room_id, user_id, reservation_date) values (:roomId, :userId, now())";
 	public static final String CREATE_SENSOR_TEMPLATE = 
 			"insert into %s (identifier, name, type, profile, description, status, room_id) values (:identifier, :name, CAST(:type AS sensortype), :profile, :description, CAST(:status AS sensorstatus), :roomId)";
+	public static final String UPDATE_RESERVED_ROOMSTAT_TEMPLATE = 
+			"update %s set is_reservation_timeout=true WHERE room_id=:roomId and user_id=:userId";
 	public static final String UPDATE_GATEWAY_TEMPLATE = 
 			"update %s set name=:name, description=:description WHERE mac_address=:macAddress";
 	public static final String UPDATE_USER_TEMPLATE =

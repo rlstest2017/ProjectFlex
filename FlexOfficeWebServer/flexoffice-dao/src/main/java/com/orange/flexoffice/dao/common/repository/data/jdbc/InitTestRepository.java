@@ -23,6 +23,8 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 	public boolean executeInitTestData() {
 			String query = "DELETE FROM alerts";
 			jdbcTemplateForTest.execute(query); 
+			query = "DELETE FROM room_stats";
+			jdbcTemplateForTest.execute(query);
 			query = "DELETE FROM sensors";
 			jdbcTemplateForTest.execute(query);
 			query = "DELETE FROM rooms";

@@ -115,7 +115,6 @@ public class RoomEndpointImplTest {
 
 	@Test
 	public void TestF_reserveRoom() {
-
 		// Setup
 		boolean expectedResult = false;
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
@@ -130,18 +129,15 @@ public class RoomEndpointImplTest {
 			
 		} catch(WebApplicationException e ) {
 		}
-
 		// Asserts
 		assertEquals(true, expectedResult);	
 	}
 	
 	@Test
 	public void TestG_reserveRoomAlreadyReserved() {
-
 		// Setup
 		boolean expectedResult = false;
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
-		
 		try {
 			// Test
 			roomEndpoint.reserveRoom(token, "2");
@@ -149,20 +145,18 @@ public class RoomEndpointImplTest {
 		} catch(WebApplicationException e ) {
 			expectedResult = true;
 		}
-
 		// Asserts
 		assertEquals(true, expectedResult);	
 	}
 
 	@Test
 	public void TestH_cancelRoom() {
-
 		// Setup
 		boolean expectedResult = false;
-		
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		try {
 			// Test
-			final Response response = roomEndpoint.cancelRoom("1");
+			final Response response = roomEndpoint.cancelRoom(token, "1");
 
 			// Asserts
 			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
@@ -170,20 +164,15 @@ public class RoomEndpointImplTest {
 			
 		} catch(WebApplicationException e ) {
 		}
-
 		// Asserts
 		assertEquals(true, expectedResult);	
 	}
 	
-
-
 	@Test
 	public void TestI_reserveRoomNotExists() {
-
 		// Setup
 		boolean expectedResult = false;
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
-		
 		try {
 			// Test
 			roomEndpoint.reserveRoom(token, "19889898");
@@ -191,29 +180,25 @@ public class RoomEndpointImplTest {
 		} catch(WebApplicationException e ) {
 			expectedResult = true;
 		}
-
 		// Asserts
 		assertEquals(true, expectedResult);	
 	}
 	
-
 	@Test
 	public void TestJ_cancelRoomNotExists() {
-
 		// Setup
 		boolean expectedResult = false;
-		
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		try {
 			// Test
-			roomEndpoint.cancelRoom("19889898");
+			roomEndpoint.cancelRoom(token, "19889898");
 			
 		} catch(WebApplicationException e ) {
 			expectedResult = true;
 		}
-
 		// Asserts
 		assertEquals(true, expectedResult);	
 	}
-	
+
 
 }

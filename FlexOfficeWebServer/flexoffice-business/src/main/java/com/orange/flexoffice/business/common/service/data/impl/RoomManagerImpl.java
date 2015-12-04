@@ -152,7 +152,7 @@ public class RoomManagerImpl implements RoomManager {
 		try {
 
 			// Use in case of RESERVED Room in UserUI
-			if  (roomDao.getStatus().equals(E_RoomStatus.RESERVED.toString())) { 
+			if  (roomDao.getStatus().equals(E_RoomStatus.RESERVED.toString())) { // from UserUi.RoomEndpoint.reserveRoom
 				RoomDao foundRoom = roomRepository.findByRoomId(roomDao.getId());
 				if (!foundRoom.getStatus().equals(E_RoomStatus.FREE.toString())) {
 					LOGGER.debug("Room status is not FREE !!!");
@@ -162,6 +162,14 @@ public class RoomManagerImpl implements RoomManager {
 					roomStat.setRoomId(roomDao.getId().intValue());
 					roomStat.setUserId(roomDao.getUserId().intValue());
 					roomStatRepository.saveReservedRoomStat(roomStat);
+				}
+			} else if  (roomDao.getStatus().equals(E_RoomStatus.FREE.toString())) { // from UserUi.RoomEndpoint.cancelRoom
+				RoomDao foundRoom = roomRepository.findByRoomId(roomDao.getId());
+				if (foundRoom.getStatus().equals(E_RoomStatus.RESERVED.toString())) {
+					RoomStatDao roomStat = new RoomStatDao();
+					roomStat.setRoomId(roomDao.getId().intValue());
+					roomStat.setUserId(roomDao.getUserId().intValue());
+					roomStatRepository.updateReservedRoomStat(roomStat);
 				}
 			}
 			// update RoomDao => status & user_id

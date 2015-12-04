@@ -85,7 +85,7 @@ public interface RoomEndpoint {
 	@POST
 	@Path(ROOM_ID_CANCEL_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
-	Response cancelRoom(@PathParam(ROOM_ID_CANCEL_PATH) String roomId);
+	Response cancelRoom(@HeaderParam(AUTHORIZATION_HEADER_PARAM) String auth, @PathParam(ROOM_ID_CANCEL_PATH) String roomId);
 
 
 	

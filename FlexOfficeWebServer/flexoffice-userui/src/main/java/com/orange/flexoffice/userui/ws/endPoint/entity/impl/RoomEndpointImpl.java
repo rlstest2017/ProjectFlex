@@ -130,15 +130,11 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			return room;
 
 		} catch (DataNotExistsException e){
-
 			LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.getSensor with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_31, Response.Status.NOT_FOUND));
-
 		} catch (RuntimeException ex){
-
 			LOGGER.debug("RuntimeException in UserUi.RoomEndpoint.getSensor with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
-
 		}
 	}
 
@@ -170,7 +166,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			roomDao = roomManager.updateStatus(roomDao);
 
 		} catch (AuthenticationException e){
-			LOGGER.debug("DataNotExistsException in UserUi.UserEndpoint.getUserCurrent with message :", e);
+			LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.reserveRoom with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_34, Response.Status.UNAUTHORIZED));
 		}catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.reserveRoom with message :", e);
@@ -199,7 +195,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 * @see Response
 	 */
 	@Override
-	public Response cancelRoom(String roomId) {
+	public Response cancelRoom(String auth, String roomId) {
 		
 		LOGGER.info( "Begin call UserUi.RoomEndpoint.cancelRoom at: " + new Date() );
 
@@ -208,8 +204,16 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		roomDao.setStatus(E_RoomStatus.FREE.toString());
 
 		try {
+			// get UserDto
+			UserDto data = userManager.findByUserAccessToken(auth);
+			// set userId in roomDao
+			roomDao.setUserId(Long.valueOf(data.getId()));
+
 			roomDao = roomManager.updateStatus(roomDao);
 
+		} catch (AuthenticationException e){
+			LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.cancelRoom with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_34, Response.Status.UNAUTHORIZED));
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.cancelRoom with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));

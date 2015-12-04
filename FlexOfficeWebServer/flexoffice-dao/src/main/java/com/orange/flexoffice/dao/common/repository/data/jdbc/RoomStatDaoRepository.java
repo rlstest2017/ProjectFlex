@@ -45,7 +45,20 @@ public class RoomStatDaoRepository extends DataRepository<RoomStatDao> implement
 		data.setId(id.longValue());
 		
 		return data;
-
+	}
+	
+	@Override
+	public RoomStatDao updateReservedRoomStat(RoomStatDao data) {
+	KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateReservedRoomStatQuery, paramBean, keyHolder);
+		
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
+		
+		return data;	
 	}
 	
 	@Override
@@ -67,6 +80,5 @@ public class RoomStatDaoRepository extends DataRepository<RoomStatDao> implement
 	protected String getRowColName() {
 		return null;
 	}
-
 
 }
