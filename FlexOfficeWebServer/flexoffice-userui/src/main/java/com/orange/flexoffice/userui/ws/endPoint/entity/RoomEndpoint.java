@@ -12,17 +12,15 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static com.orange.flexoffice.userui.ws.ParamsConst.AUTHORIZATION_HEADER_PARAM;
+import static com.orange.flexoffice.userui.ws.ParamsConst.TOKEN_HEADER_PARAM;
 import static com.orange.flexoffice.userui.ws.ParamsConst.ROOM_ID_PARAM;
 import static com.orange.flexoffice.userui.ws.PathConst.ROOMS_PATH;
+import static com.orange.flexoffice.userui.ws.PathConst.RESERVE_PATH;
+import static com.orange.flexoffice.userui.ws.PathConst.CANCEL_PATH;
 import static com.orange.flexoffice.userui.ws.PathConst.ROOM_ID_PATH;
 import static com.orange.flexoffice.userui.ws.ParamsConst.LATEST_PARAM;
-import static com.orange.flexoffice.userui.ws.PathConst.ROOM_ID_RESERVE_PATH;
 
 import java.util.List;
-
-import static com.orange.flexoffice.userui.ws.PathConst.ROOM_ID_CANCEL_PATH;
-
 import com.orange.flexoffice.userui.ws.model.Room;
 import com.orange.flexoffice.userui.ws.model.RoomSummary;
 
@@ -40,8 +38,9 @@ public interface RoomEndpoint {
 	 * @see RoomSummary
 	 */
 	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	List<RoomSummary> getRooms(@HeaderParam(AUTHORIZATION_HEADER_PARAM) String auth, @QueryParam(LATEST_PARAM) Boolean latest);
+	List<RoomSummary> getRooms(@HeaderParam(TOKEN_HEADER_PARAM) String auth, @QueryParam(LATEST_PARAM) Boolean latest);
 
 	/**
 	 * Gets information on a specific room.
@@ -70,9 +69,10 @@ public interface RoomEndpoint {
 	 * @see Response
 	 */
 	@POST
-	@Path(ROOM_ID_RESERVE_PATH)
+	@Path(ROOM_ID_PATH + RESERVE_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
-	Response reserveRoom(@HeaderParam(AUTHORIZATION_HEADER_PARAM) String auth, @PathParam(ROOM_ID_RESERVE_PATH) String roomId);
+	@Produces(MediaType.APPLICATION_JSON)
+	Response reserveRoom(@HeaderParam(TOKEN_HEADER_PARAM) String auth, @PathParam(ROOM_ID_PARAM) String roomId);
 
 	/**
 	 * Cancel reservation of a room.
@@ -85,9 +85,10 @@ public interface RoomEndpoint {
 	 * @see Response
 	 */
 	@POST
-	@Path(ROOM_ID_CANCEL_PATH)
+	@Path(ROOM_ID_PATH + CANCEL_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
-	Response cancelRoom(@HeaderParam(AUTHORIZATION_HEADER_PARAM) String auth, @PathParam(ROOM_ID_CANCEL_PATH) String roomId);
+	@Produces(MediaType.APPLICATION_JSON)
+	Response cancelRoom(@HeaderParam(TOKEN_HEADER_PARAM) String auth, @PathParam(ROOM_ID_PARAM) String roomId);
 
 
 	

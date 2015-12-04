@@ -170,9 +170,11 @@ public class RoomManagerImpl implements RoomManager {
 					roomStat.setRoomId(roomDao.getId().intValue());
 					roomStat.setUserId(roomDao.getUserId().intValue());
 					roomStatRepository.updateReservedRoomStat(roomStat);
+					roomDao.setUserId(null);
 				}
 			}
 			// update RoomDao => status & user_id
+			
 			return roomRepository.updateRoomStatus(roomDao);
 		} catch (RuntimeException e) {
 			LOGGER.error("RoomManager.updateStatus : Room to update Status not found", e);
@@ -232,24 +234,28 @@ public class RoomManagerImpl implements RoomManager {
 		int lastReservedCountValue = Integer.valueOf(lastReservedCount.getValue());
 		int countAddedRoomStats = 0;
 		
+		try {
 		// get reserved roomStats by userId order by reservation_date desc
 		List<RoomStatDao> roomStatsFromDB = roomStatRepository.findLatestReservedRoomsByUserId(Long.valueOf(userId));
 		
 		// get latest reserved roomStats by userId
 		List<RoomStatDao> roomStats = removeDuplicateFromList(roomStatsFromDB);
 		
-		if ((roomStats != null) && (!roomStats.isEmpty())) {
-			dataList = new ArrayList<RoomDao>();
-			for (RoomStatDao roomStatDao : roomStats) {
-				RoomDao roomDao = roomRepository.findByRoomId(Long.valueOf(roomStatDao.getRoomId()));
-				dataList.add(roomDao);
-				countAddedRoomStats = countAddedRoomStats +1;
-				if ((lastReservedCountValue != 0)&&(countAddedRoomStats == lastReservedCountValue)) {
-					break; // sortir de la boucle for
-				} 
+			if ((roomStats != null) && (!roomStats.isEmpty())) {
+				dataList = new ArrayList<RoomDao>();
+				for (RoomStatDao roomStatDao : roomStats) {
+					RoomDao roomDao = roomRepository.findByRoomId(Long.valueOf(roomStatDao.getRoomId()));
+					dataList.add(roomDao);
+					countAddedRoomStats = countAddedRoomStats +1;
+					if ((lastReservedCountValue != 0)&&(countAddedRoomStats == lastReservedCountValue)) {
+						break; // sortir de la boucle for
+					} 
+				}
 			}
-		}
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.debug("user by id " + userId + " has not roomStats", e);
 		
+		}
 		return dataList;
 	}
 	

@@ -2,6 +2,7 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
 import java.util.List;
 
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -34,7 +35,7 @@ public class RoomStatDaoRepository extends DataRepository<RoomStatDao> implement
 	}
 	
 	@Override
-	public List<RoomStatDao> findLatestReservedRoomsByUserId(Long userId) {
+	public List<RoomStatDao> findLatestReservedRoomsByUserId(Long userId) throws IncorrectResultSizeDataAccessException {
 		SqlParameterSource paramMap = new MapSqlParameterSource("userId", userId);
 		return jdbcTemplate.query(
 				findLatestReservedRoomsQuery, 

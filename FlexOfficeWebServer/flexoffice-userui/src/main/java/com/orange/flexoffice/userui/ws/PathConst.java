@@ -11,14 +11,14 @@ public final class PathConst {
 	public static final String LOGIN_PATH = "/login";  
 	public static final String LOGOUT_PATH = "/logout";
 	
-	// Resources 3rd level
-	public static final String CURRENT_PATH = "/current";
-		
 	// Resources ID
 	public static final String ROOM_ID_PATH = "/{" + ParamsConst.ROOM_ID_PARAM + "}";
-	public static final String ROOM_ID_RESERVE_PATH = "/{" + ParamsConst.ROOM_ID_PARAM + "}/reserve";
-	public static final String ROOM_ID_CANCEL_PATH = "/{" + ParamsConst.ROOM_ID_PARAM + "}/cancel";
 	
+	// Resources 3rd level
+	public static final String CURRENT_PATH = "/current";
+	public static final String RESERVE_PATH = "/reserve";
+	public static final String CANCEL_PATH = "/cancel";
+		
 	private PathConst() {		
 	}
 }
