@@ -33,7 +33,7 @@ public final class DataSqlTemplate {
 	public static final String FIND_ALL_TEMPLATE = 
 			"select * from %s";
 	public static final String FIND_LATEST_RESERVED_ROOM_TEMPLATE = 
-			"select * from %s where user_id=:userId";
+			"select * from %s where user_id=:userId order by reservation_date desc";
 	public static final String REMOVE_BY_MAC_ADDRESS_TEMPLATE = 
 			"delete from %s where mac_address=:macAddress";
 	public static final String REMOVE_BY_GATEWAY_ID_TEMPLATE = 

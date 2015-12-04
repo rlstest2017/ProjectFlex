@@ -61,7 +61,7 @@ public class SystemEndpointImplTest {
 		// Asserts
 		assertEquals(3, system.getGatewayCount().intValue());
 		assertEquals(4, system.getUserCount().intValue());
-		assertEquals(3, system.getRoomCount().intValue());
+		assertEquals(5, system.getRoomCount().intValue());
 	}
 
 	@Test

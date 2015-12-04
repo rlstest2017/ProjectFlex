@@ -10,10 +10,6 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
-
-
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
@@ -236,8 +232,11 @@ public class RoomManagerImpl implements RoomManager {
 		int lastReservedCountValue = Integer.valueOf(lastReservedCount.getValue());
 		int countAddedRoomStats = 0;
 		
+		// get reserved roomStats by userId order by reservation_date desc
+		List<RoomStatDao> roomStatsFromDB = roomStatRepository.findLatestReservedRoomsByUserId(Long.valueOf(userId));
+		
 		// get latest reserved roomStats by userId
-		List<RoomStatDao> roomStats = roomStatRepository.findLatestReservedRoomsByUserId(Long.valueOf(userId));
+		List<RoomStatDao> roomStats = removeDuplicateFromList(roomStatsFromDB);
 		
 		if ((roomStats != null) && (!roomStats.isEmpty())) {
 			dataList = new ArrayList<RoomDao>();
@@ -253,5 +252,32 @@ public class RoomManagerImpl implements RoomManager {
 		
 		return dataList;
 	}
+	
+	/**
+	 * removeDuplicateFromList
+	 * @param roomStats
+	 * @return
+	 */
+	private List<RoomStatDao> removeDuplicateFromList(List<RoomStatDao> roomStats) {
+		List<RoomStatDao> dataList = null;
+		if ((roomStats != null) && (!roomStats.isEmpty())) {
+			int s=0;
+			dataList = new ArrayList<RoomStatDao>();
+			for (RoomStatDao roomStatDao : roomStats) {
+				for (RoomStatDao data : dataList) {
+					if (roomStatDao.getRoomId() == data.getRoomId()) {
+						s=1;
+						break;
+					} 
+				} if (s==0) {
+					dataList.add(roomStatDao);
+				}
+				s=0;
+			}
+		}
+		
+		return dataList;
+	}
+	
 	
 }

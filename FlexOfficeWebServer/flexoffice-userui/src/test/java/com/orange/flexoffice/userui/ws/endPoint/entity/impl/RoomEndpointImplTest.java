@@ -72,11 +72,23 @@ public class RoomEndpointImplTest {
 		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false);
 
 		// Asserts
+		assertEquals(5, rooms.size());
+	}
+
+	@Test
+	public void TestC_getLatestRooms() {
+		// SetUp
+		String token = "Zmlyc3QubGFzdDFAdGVzdC5jb206cGFzczoxNDQ4NjEzNjU2MDk4";
+		
+		// Test
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, true);
+
+		// Asserts
 		assertEquals(3, rooms.size());
 	}
 
 	@Test
-	public void TestC_getRoomByRoomId1() {
+	public void TestD_getRoomByRoomId1() {
 
 		// Test
 		Room room = roomEndpoint.getRoom("1");
@@ -86,7 +98,7 @@ public class RoomEndpointImplTest {
 	}
 
 	@Test
-	public void TestD_getRoomByRoomId2() {
+	public void TestE_getRoomByRoomId2() {
 
 		// Test
 		Room room = roomEndpoint.getRoom("2");
@@ -98,7 +110,7 @@ public class RoomEndpointImplTest {
 
 
 	@Test
-	public void TestE_getWrongRoom() {
+	public void TestF_getWrongRoom() {
 		// Setup
 		boolean expectedResult = false;
 
@@ -117,7 +129,7 @@ public class RoomEndpointImplTest {
 
 
 	@Test
-	public void TestF_reserveRoom() {
+	public void TestG_reserveRoom() {
 		// Setup
 		boolean expectedResult = false;
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
@@ -137,7 +149,7 @@ public class RoomEndpointImplTest {
 	}
 	
 	@Test
-	public void TestG_reserveRoomAlreadyReserved() {
+	public void TestH_reserveRoomAlreadyReserved() {
 		// Setup
 		boolean expectedResult = false;
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
@@ -153,7 +165,7 @@ public class RoomEndpointImplTest {
 	}
 
 	@Test
-	public void TestH_cancelRoom() {
+	public void TestI_cancelRoom() {
 		// Setup
 		boolean expectedResult = false;
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
@@ -172,7 +184,7 @@ public class RoomEndpointImplTest {
 	}
 	
 	@Test
-	public void TestI_reserveRoomNotExists() {
+	public void TestJ_reserveRoomNotExists() {
 		// Setup
 		boolean expectedResult = false;
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
@@ -188,7 +200,7 @@ public class RoomEndpointImplTest {
 	}
 	
 	@Test
-	public void TestJ_cancelRoomNotExists() {
+	public void TestK_cancelRoomNotExists() {
 		// Setup
 		boolean expectedResult = false;
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
