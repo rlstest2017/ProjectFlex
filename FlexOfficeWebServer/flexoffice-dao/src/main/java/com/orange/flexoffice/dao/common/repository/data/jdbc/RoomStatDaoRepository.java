@@ -45,30 +45,69 @@ public class RoomStatDaoRepository extends DataRepository<RoomStatDao> implement
 	}
 	
 	@Override
+	public RoomStatDao findbyRoomId(RoomStatDao data) throws IncorrectResultSizeDataAccessException {
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		return jdbcTemplate.queryForObject(
+				findRoomStatByRoomIdQuery, 
+				paramBean, 
+				new BeanPropertyRowMapper<RoomStatDao>(RoomStatDao.class)
+			);
+	}
+	
+	@Override
 	public RoomStatDao saveReservedRoomStat(RoomStatDao data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
-		
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
 		jdbcTemplate.update(saveReservedRoomStatQuery, paramBean, keyHolder);
-		
 		// Retrieves generated id of saved data.
 		Integer id = (Integer)keyHolder.getKeys().get("id");
 		data.setId(id.longValue());
-		
 		return data;
 	}
 	
 	@Override
-	public RoomStatDao updateReservedRoomStat(RoomStatDao data) {
-	KeyHolder keyHolder = new GeneratedKeyHolder();
-		
+	public RoomStatDao saveOccupiedRoomStat(RoomStatDao data) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
-		jdbcTemplate.update(updateReservedRoomStatQuery, paramBean, keyHolder);
-		
+		jdbcTemplate.update(saveOccupiedRoomStatQuery, paramBean, keyHolder);
 		// Retrieves generated id of saved data.
 		Integer id = (Integer)keyHolder.getKeys().get("id");
 		data.setId(id.longValue());
-		
+		return data;
+	}
+
+	
+	@Override
+	public RoomStatDao updateReservedRoomStat(RoomStatDao data) {
+	KeyHolder keyHolder = new GeneratedKeyHolder();
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateReservedRoomStatQuery, paramBean, keyHolder);
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
+		return data;	
+	}
+
+	@Override
+	public RoomStatDao updateBeginOccupancyDate(RoomStatDao data) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateOccupiedRoomStatQuery, paramBean, keyHolder);
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
+		return data;	
+	}
+
+
+	@Override
+	public RoomStatDao updateEndOccupancyDate(RoomStatDao data) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateUnOccupiedRoomStatQuery, paramBean, keyHolder);
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
 		return data;	
 	}
 	

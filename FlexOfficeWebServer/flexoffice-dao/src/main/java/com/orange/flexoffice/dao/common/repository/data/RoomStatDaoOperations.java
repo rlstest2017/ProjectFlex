@@ -19,6 +19,14 @@ public interface RoomStatDaoOperations {
 	
 	RoomStatDao saveReservedRoomStat(RoomStatDao data);
 	
+	RoomStatDao saveOccupiedRoomStat(RoomStatDao data);
+	
 	RoomStatDao updateReservedRoomStat(RoomStatDao data);
 	
+	RoomStatDao findbyRoomId(RoomStatDao data) throws IncorrectResultSizeDataAccessException;
+	
+	RoomStatDao updateBeginOccupancyDate(RoomStatDao data);
+	
+	RoomStatDao updateEndOccupancyDate(RoomStatDao data);
+		
 }

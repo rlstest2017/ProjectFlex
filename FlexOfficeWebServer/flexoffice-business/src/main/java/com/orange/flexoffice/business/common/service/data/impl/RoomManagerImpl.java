@@ -137,7 +137,6 @@ public class RoomManagerImpl implements RoomManager {
 
 	@Override
 	public RoomDao update(RoomDao roomDao) throws DataNotExistsException {
-
 		try {
 			// Update RoomDao
 			return roomRepository.updateRoom(roomDao);

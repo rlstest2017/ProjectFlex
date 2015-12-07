@@ -8,6 +8,8 @@ public final class DataSqlTemplate {
 			"select * from %s where %s=:columnId";
 	public static final String FIND_BY_COL_KEY_TEMPLATE = 
 			"select * from %s where key=:key";
+	public static final String FIND_ROOMSTAT_BY_ROOMID_TEMPLATE = 
+			"select * from %s where room_id=:roomId and room_info=CAST(:roomInfo AS roomInfo)";
 	public static final String FIND_BY_MAC_ADDRESS_TEMPLATE = 
 			"select * from %s where mac_address=:macAddress";
 	public static final String FIND_BY_COL_GATEWAY_ID_TEMPLATE = 
@@ -60,10 +62,16 @@ public final class DataSqlTemplate {
 			"insert into %s (name, gateway_id, address, capacity, description, type, status) values (:name, :gatewayId, :address, :capacity, :description, CAST(:type AS roomtype), CAST(:status AS roomstatus))";
 	public static final String CREATE_RESERVED_ROOMSTAT_TEMPLATE = 
 			"insert into %s (room_id, user_id, reservation_date, room_info) values (:roomId, :userId, now(), CAST(:roomInfo AS roomInfo))";
+	public static final String CREATE_OCCUPIED_ROOMSTAT_TEMPLATE = 
+			"insert into %s (room_id, room_info, begin_occupancy_date) values (:roomId, CAST(:roomInfo AS roomInfo), now())";
 	public static final String CREATE_SENSOR_TEMPLATE = 
 			"insert into %s (identifier, name, type, profile, description, status, room_id) values (:identifier, :name, CAST(:type AS sensortype), :profile, :description, CAST(:status AS sensorstatus), :roomId)";
 	public static final String UPDATE_RESERVED_ROOMSTAT_TEMPLATE = 
 			"update %s set room_info=CAST(:roomInfo AS roomInfo) WHERE room_id=:roomId and user_id=:userId and room_info='RESERVED'";
+	public static final String UPDATE_OCCUPIED_ROOMSTAT_TEMPLATE = 
+			"update %s set room_info='OCCUPIED', begin_occupancy_date=now(), is_reservation_honored=true WHERE room_id=:roomId and room_info='RESERVED'";
+	public static final String UPDATE_UNOCCUPIED_ROOMSTAT_TEMPLATE = 
+			"update %s set room_info='UNOCCUPIED', end_occupancy_date=now() WHERE room_id=:roomId and room_info='OCCUPIED'";
 	public static final String UPDATE_GATEWAY_TEMPLATE = 
 			"update %s set name=:name, description=:description WHERE mac_address=:macAddress";
 	public static final String UPDATE_USER_TEMPLATE =
