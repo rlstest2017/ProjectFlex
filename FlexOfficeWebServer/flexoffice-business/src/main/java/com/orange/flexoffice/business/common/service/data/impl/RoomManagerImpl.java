@@ -22,6 +22,7 @@ import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
+import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
@@ -158,18 +159,22 @@ public class RoomManagerImpl implements RoomManager {
 					LOGGER.debug("Room status is not FREE !!!");
 					throw new RoomAlreadyUsedException("RoomManager.updateStatus : Room is not in FREE status");
 				} else {
+					LOGGER.debug("RoomStat to create !!!");
 					RoomStatDao roomStat = new RoomStatDao();
 					roomStat.setRoomId(roomDao.getId().intValue());
 					roomStat.setUserId(roomDao.getUserId().intValue());
+					roomStat.setRoomInfo(E_RoomInfo.RESERVED.toString());
 					roomStatRepository.saveReservedRoomStat(roomStat);
 				}
 			} else if  (roomDao.getStatus().equals(E_RoomStatus.FREE.toString())) { // from UserUi.RoomEndpoint.cancelRoom
 				RoomDao foundRoom = roomRepository.findByRoomId(roomDao.getId());
-				if (foundRoom.getStatus().equals(E_RoomStatus.RESERVED.toString())) {
+				if (foundRoom.getStatus().equals(E_RoomStatus.RESERVED.toString())) { // cancel is operate only if room is in RESERVED status
+					LOGGER.debug("RoomStat to update !!!");
 					RoomStatDao roomStat = new RoomStatDao();
 					roomStat.setRoomId(roomDao.getId().intValue());
 					roomStat.setUserId(roomDao.getUserId().intValue());
-					roomStatRepository.updateReservedRoomStat(roomStat);
+					roomStat.setRoomInfo(E_RoomInfo.CANCELED.toString());
+					roomStatRepository.updateReservedRoomStat(roomStat); // PS : there is only one line in room_stats with the same room_id, user_id and room_info=RESERVED !!!
 					roomDao.setUserId(null);
 				}
 			}

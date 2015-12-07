@@ -63,12 +63,12 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 			jdbcTemplateForTest.update(sqlRooms, new Object[] {5, "room 5", "41 rue de l'amour", 20, "room 5 desc", "FREE", "BOX", 2, null});
 			
 			String sqlRoomStats = "INSERT INTO room_stats " +
-					"(id, room_id, user_id, reservation_date) VALUES (?, ?, ?,CAST(? AS date))";
-			jdbcTemplateForTest.update(sqlRoomStats, new Object[] {1, 3, 4, "2015-12-02" });
-			jdbcTemplateForTest.update(sqlRoomStats, new Object[] {2, 2, 4, "2015-11-27"});
-			jdbcTemplateForTest.update(sqlRoomStats, new Object[] {3, 2, 4, "2015-12-03" });
-			jdbcTemplateForTest.update(sqlRoomStats, new Object[] {4, 1, 4, "2015-12-04"});
-			jdbcTemplateForTest.update(sqlRoomStats, new Object[] {5, 1, 4, "2015-11-03" });
+					"(id, room_id, user_id, reservation_date, room_info) VALUES (?, ?, ?, CAST(? AS date), CAST(? AS roomInfo))";
+			jdbcTemplateForTest.update(sqlRoomStats, new Object[] {1, 3, 4, "2015-12-02", "UNOCCUPIED" });
+			jdbcTemplateForTest.update(sqlRoomStats, new Object[] {2, 2, 4, "2015-11-27", "UNOCCUPIED"});
+			jdbcTemplateForTest.update(sqlRoomStats, new Object[] {3, 2, 4, "2015-12-03", "UNOCCUPIED" });
+			jdbcTemplateForTest.update(sqlRoomStats, new Object[] {4, 1, 4, "2015-12-04", "UNOCCUPIED"});
+			jdbcTemplateForTest.update(sqlRoomStats, new Object[] {5, 1, 4, "2015-11-03", "UNOCCUPIED" });
 			
 			return true;
 	}

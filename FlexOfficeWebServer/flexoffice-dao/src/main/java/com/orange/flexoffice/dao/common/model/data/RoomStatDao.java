@@ -15,7 +15,7 @@ public class RoomStatDao extends AbstractData {
 	private Date endOccupancyDate;
 	private Date reservationDate;
 	private Boolean isReservationHonored;
-	private Boolean isReservationTimeOut;
+	private String roomInfo;
 	
 	public Integer getRoomId() {
 		return roomId;
@@ -53,11 +53,11 @@ public class RoomStatDao extends AbstractData {
 	public void setIsReservationHonored(Boolean isReservationHonored) {
 		this.isReservationHonored = isReservationHonored;
 	}
-	public Boolean getIsReservationTimeOut() {
-		return isReservationTimeOut;
+	public String getRoomInfo() {
+		return roomInfo;
 	}
-	public void setIsReservationTimeOut(Boolean isReservationTimeOut) {
-		this.isReservationTimeOut = isReservationTimeOut;
+	public void setRoomInfo(String roomInfo) {
+		this.roomInfo = roomInfo;
 	}
 	@Override
 	public void setColumnId(String columnId) {
