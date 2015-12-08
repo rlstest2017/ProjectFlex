@@ -37,6 +37,7 @@
     <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version> 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spring.version>4.1.1.RELEASE</spring.version>
+    <spring.batch.version>3.0.3.RELEASE</spring.batch.version>
     <spring-security.version>4.0.0.RELEASE</spring-security.version>
     <javax.annotation.version>1.0</javax.annotation.version>
     
@@ -156,7 +157,12 @@
 			<artifactId>spring-jdbc</artifactId>
 	   		<version>${spring.version}</version>
 		</dependency>
-		
+		<dependency>
+    		<groupId>org.springframework</groupId>
+      		<artifactId>spring-expression</artifactId>
+      		<version>${spring.version}</version>
+    	</dependency>
+    
 		<!-- Database -->
 		<dependency>
 			<groupId>commons-dbcp</groupId>

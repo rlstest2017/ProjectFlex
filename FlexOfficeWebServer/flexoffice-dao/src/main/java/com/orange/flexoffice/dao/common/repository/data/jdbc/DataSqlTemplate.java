@@ -10,6 +10,8 @@ public final class DataSqlTemplate {
 			"select * from %s where key=:key";
 	public static final String FIND_ROOMSTAT_BY_ROOMID_TEMPLATE = 
 			"select * from %s where room_id=:roomId and room_info=CAST(:roomInfo AS roomInfo)";
+	public static final String FIND_ROOMSTAT_BY_ROOMINFO_TEMPLATE = 
+			"select * from %s where room_info=CAST(:roomInfo AS roomInfo)";
 	public static final String FIND_BY_MAC_ADDRESS_TEMPLATE = 
 			"select * from %s where mac_address=:macAddress";
 	public static final String FIND_BY_COL_GATEWAY_ID_TEMPLATE = 
@@ -68,6 +70,8 @@ public final class DataSqlTemplate {
 			"insert into %s (identifier, name, type, profile, description, status, room_id) values (:identifier, :name, CAST(:type AS sensortype), :profile, :description, CAST(:status AS sensorstatus), :roomId)";
 	public static final String UPDATE_RESERVED_ROOMSTAT_TEMPLATE = 
 			"update %s set room_info=CAST(:roomInfo AS roomInfo) WHERE room_id=:roomId and user_id=:userId and room_info='RESERVED'";
+	public static final String UPDATE_ROOMSTAT_BY_ID_TEMPLATE = 
+			"update %s set room_info=CAST(:roomInfo AS roomInfo) WHERE id=:id";
 	public static final String UPDATE_OCCUPIED_ROOMSTAT_TEMPLATE = 
 			"update %s set room_info='OCCUPIED', begin_occupancy_date=now(), is_reservation_honored=true WHERE room_id=:roomId and room_info='RESERVED'";
 	public static final String UPDATE_UNOCCUPIED_ROOMSTAT_TEMPLATE = 

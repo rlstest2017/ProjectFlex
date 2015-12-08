@@ -17,13 +17,17 @@ public interface RoomStatDaoOperations {
 	
 	List<RoomStatDao> findLatestReservedRoomsByUserId(Long userId)  throws IncorrectResultSizeDataAccessException;
 	
+	RoomStatDao findbyRoomId(RoomStatDao data) throws IncorrectResultSizeDataAccessException;
+	
+	List<RoomStatDao> findbyRoomInfo(RoomStatDao data) throws IncorrectResultSizeDataAccessException;
+
 	RoomStatDao saveReservedRoomStat(RoomStatDao data);
 	
 	RoomStatDao saveOccupiedRoomStat(RoomStatDao data);
 	
 	RoomStatDao updateReservedRoomStat(RoomStatDao data);
 	
-	RoomStatDao findbyRoomId(RoomStatDao data) throws IncorrectResultSizeDataAccessException;
+	RoomStatDao updateRoomStatById(RoomStatDao data);
 	
 	RoomStatDao updateBeginOccupancyDate(RoomStatDao data);
 	

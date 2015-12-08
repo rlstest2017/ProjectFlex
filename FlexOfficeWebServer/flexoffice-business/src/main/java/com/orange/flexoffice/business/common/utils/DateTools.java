@@ -31,9 +31,26 @@ public class DateTools {
 		return lastConnexionDate;
 	}
 	
+	/**
+	 * reservationDateDelayBeforeTimeOut 
+	 * Current Date + booking duration
+	 * @param bookingDurationValue
+	 * @return
+	 */
+	public Date reservationDateDelayBeforeTimeOut(Date reservationDate, int bookingDurationValue) {
+		//System.out.println("reservationDate :"+ reservationDate);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(reservationDate);
+		cal.add(Calendar.SECOND, bookingDurationValue); // <-- 300 secondes -->
+		Date bookingDate = cal.getTime();
+		//System.out.println("bookingDate :"+ bookingDate);
+		return bookingDate; 
+	}
+	
 	public static void main(String[] args) {
 		DateTools date = new DateTools();
-		date.lastConnexionDate("15");
+		//date.lastConnexionDate("15");
+		date.reservationDateDelayBeforeTimeOut(new Date(), 300);
 	}
 	
 }

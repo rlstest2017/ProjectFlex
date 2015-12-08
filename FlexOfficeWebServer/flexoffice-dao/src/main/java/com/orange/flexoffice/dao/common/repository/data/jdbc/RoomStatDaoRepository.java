@@ -55,6 +55,16 @@ public class RoomStatDaoRepository extends DataRepository<RoomStatDao> implement
 	}
 	
 	@Override
+	public List<RoomStatDao> findbyRoomInfo(RoomStatDao data) throws IncorrectResultSizeDataAccessException {
+		SqlParameterSource paramMap = new MapSqlParameterSource("roomInfo", data.getRoomInfo());
+		return jdbcTemplate.query(
+				findRoomStatByRoomInfoQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<RoomStatDao>(RoomStatDao.class)
+			);
+	}
+	
+	@Override
 	public RoomStatDao saveReservedRoomStat(RoomStatDao data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
@@ -88,6 +98,17 @@ public class RoomStatDaoRepository extends DataRepository<RoomStatDao> implement
 		return data;	
 	}
 
+	@Override
+	public RoomStatDao updateRoomStatById(RoomStatDao data) {
+	KeyHolder keyHolder = new GeneratedKeyHolder();
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateRoomStatByIdQuery, paramBean, keyHolder);
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
+		return data;	
+	}
+	
 	@Override
 	public RoomStatDao updateBeginOccupancyDate(RoomStatDao data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();

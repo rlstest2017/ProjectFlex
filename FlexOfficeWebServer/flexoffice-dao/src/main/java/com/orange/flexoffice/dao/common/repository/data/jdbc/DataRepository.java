@@ -19,6 +19,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_SENSOR_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_NAME_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ROOMSTAT_BY_ROOMID_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ROOMSTAT_BY_ROOMINFO_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ONE_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_MAC_ADDRESS_TEMPLATE;
@@ -26,6 +27,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_SENSOR_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_IDENTIFIER_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_RESERVED_ROOMSTAT_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOMSTAT_BY_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_OCCUPIED_ROOMSTAT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_UNOCCUPIED_ROOMSTAT_TEMPLATE;
 
@@ -69,40 +71,14 @@ import com.orange.flexoffice.dao.common.repository.data.DataOperations;
 public abstract class DataRepository<T extends Data> 
 	implements DataOperations<T> {
 	
-	private final String findOneQuery;
+	// FIND QUERIES ------------------
+	private   final String findOneQuery;
 	protected final String findAllQuery;
 	protected final String findLatestReservedRoomsQuery;
-	protected final String saveUserQuery;
-	protected final String saveUserFromUserUIQuery;	
-	protected final String saveGatewayQuery;
-	protected final String saveRoomQuery;
-	protected final String saveReservedRoomStatQuery;
-	protected final String saveAlertQuery;
-	protected final String saveSensorQuery;
-	protected final String updateReservedRoomStatQuery;
-	protected final String saveOccupiedRoomStatQuery;
-	protected final String updateOccupiedRoomStatQuery;
-	protected final String updateUnOccupiedRoomStatQuery;
-	protected final String updateUserQuery;
-	protected final String updateAccessTokenQuery;
-	protected final String updateUserByMailQuery;
-	protected final String updateGatewayStatusQuery;
-	protected final String updateGatewayQuery;
-	protected final String updateRoomQuery;
-	protected final String updateAlertQuery;
-	protected final String updateRoomStatusQuery;
-	protected final String updateSensorQuery;
-	protected final String updateSensorStatusQuery;
-	protected final String deleteByMacAddressQuery;
-	protected final String deleteByGatewayIdQuery;
-	protected final String deleteBySensorIdQuery;
-	protected final String deleteByIdentifier;
-	private final String deleteQuery;
-	private final String countQuery;
-	protected final String countActiveUsersQuery;
 	protected final String findByColumnIdQuery;
 	protected final String findByKeyQuery;
 	protected final String findRoomStatByRoomIdQuery;
+	protected final String findRoomStatByRoomInfoQuery;
 	protected final String findByIdentifierQuery;
 	protected final String findByMacAddressQuery;
 	protected final String findByColumnMailQuery;
@@ -115,9 +91,41 @@ public abstract class DataRepository<T extends Data>
 	protected final String findByColumnSensorIdQuery;
 	protected final String findByColumnNameQuery;
 	protected final String findAllColumnIdsWithRowIdConditionQuery;
-	
+	// SAVE QUERIES ---------------------
+	protected final String saveUserQuery;
+	protected final String saveUserFromUserUIQuery;	
+	protected final String saveGatewayQuery;
+	protected final String saveRoomQuery;
+	protected final String saveReservedRoomStatQuery;
+	protected final String saveAlertQuery;
+	protected final String saveSensorQuery;
+	protected final String saveOccupiedRoomStatQuery;
+	// UPDATE QUERIES --------------------------------
+	protected final String updateReservedRoomStatQuery;
+	protected final String updateRoomStatByIdQuery;
+	protected final String updateOccupiedRoomStatQuery;
+	protected final String updateUnOccupiedRoomStatQuery;
+	protected final String updateUserQuery;
+	protected final String updateAccessTokenQuery;
+	protected final String updateUserByMailQuery;
+	protected final String updateGatewayStatusQuery;
+	protected final String updateGatewayQuery;
+	protected final String updateRoomQuery;
+	protected final String updateAlertQuery;
+	protected final String updateRoomStatusQuery;
+	protected final String updateSensorQuery;
+	protected final String updateSensorStatusQuery;
+	// DELETE QUERIES -----------------------------
+	protected final String deleteByMacAddressQuery;
+	protected final String deleteByGatewayIdQuery;
+	protected final String deleteBySensorIdQuery;
+	protected final String deleteByIdentifier;
+	private   final String deleteQuery;
+	// COUNT QUERIES --------------
+	private   final String countQuery;
+	protected final String countActiveUsersQuery;
+		
 	protected NamedParameterJdbcTemplate jdbcTemplate;
-
 	protected JdbcTemplate jdbcTemplateForTest;
 	
 	private Class<T> entityClass;
@@ -125,40 +133,14 @@ public abstract class DataRepository<T extends Data>
 	public DataRepository(Class<T> entitClass) {
 		this.entityClass = entitClass;
 		
+		// FIND QUERIES ------------------------------------------------------------------------------
 		findOneQuery = String.format(FIND_ONE_TEMPLATE, getTableName());
 		findAllQuery = String.format(FIND_ALL_TEMPLATE, getTableName());
 		findLatestReservedRoomsQuery = String.format(FIND_LATEST_RESERVED_ROOM_TEMPLATE, getTableName());
-		saveUserQuery = String.format(CREATE_USER_TEMPLATE, getTableName());
-		saveUserFromUserUIQuery = String.format(CREATE_USER_FROM_USERUI_TEMPLATE, getTableName());
-		saveGatewayQuery = String.format(CREATE_GATEWAY_TEMPLATE, getTableName());
-		saveRoomQuery = String.format(CREATE_ROOM_TEMPLATE, getTableName());
-		saveReservedRoomStatQuery = String.format(CREATE_RESERVED_ROOMSTAT_TEMPLATE, getTableName());
-		saveOccupiedRoomStatQuery = String.format(CREATE_OCCUPIED_ROOMSTAT_TEMPLATE, getTableName());
-		saveAlertQuery = String.format(CREATE_ALERT_TEMPLATE, getTableName());
-		saveSensorQuery = String.format(CREATE_SENSOR_TEMPLATE, getTableName());
-		updateReservedRoomStatQuery = String.format(UPDATE_RESERVED_ROOMSTAT_TEMPLATE, getTableName());
-		updateOccupiedRoomStatQuery = String.format(UPDATE_OCCUPIED_ROOMSTAT_TEMPLATE, getTableName());
-		updateUnOccupiedRoomStatQuery = String.format(UPDATE_UNOCCUPIED_ROOMSTAT_TEMPLATE, getTableName());
-		updateUserQuery = String.format(UPDATE_USER_TEMPLATE, getTableName(), getColumnColName());
-		updateAccessTokenQuery = String.format(UPDATE_USER_ACCESS_TOKEN_TEMPLATE, getTableName());
-		updateUserByMailQuery = String.format(UPDATE_USER_BY_MAIL_TEMPLATE, getTableName());
-		updateGatewayStatusQuery = String.format(UPDATE_GATEWAY_STATUS_TEMPLATE, getTableName());
-		updateRoomQuery = String.format(UPDATE_ROOM_TEMPLATE, getTableName(), getColumnColName());
-		updateAlertQuery = String.format(UPDATE_ALERT_TEMPLATE, getTableName());
-		updateRoomStatusQuery = String.format(UPDATE_ROOM_STATUS_TEMPLATE, getTableName());// set also humidity, temperature & user_id if filled
-		updateSensorQuery = String.format(UPDATE_SENSOR_TEMPLATE, getTableName(), getColumnColName());
-		updateSensorStatusQuery = String.format(UPDATE_SENSOR_STATUS_TEMPLATE, getTableName(), getColumnColName());
-		updateGatewayQuery = String.format(UPDATE_GATEWAY_TEMPLATE, getTableName());
-		deleteQuery = String.format(REMOVE_TEMPLATE, getTableName());
-		deleteByMacAddressQuery = String.format(REMOVE_BY_MAC_ADDRESS_TEMPLATE, getTableName());
-		deleteByGatewayIdQuery = String.format(REMOVE_BY_GATEWAY_ID_TEMPLATE, getTableName());
-		deleteBySensorIdQuery = String.format(REMOVE_BY_SENSOR_ID_TEMPLATE, getTableName());
-		deleteByIdentifier = String.format(REMOVE_BY_IDENTIFIER_TEMPLATE, getTableName());
-		countQuery = String.format(COUNT_TEMPLATE, getTableName());
-		countActiveUsersQuery = String.format(COUNT_ACTIVE_USERS_TEMPLATE, getTableName());
 		findByColumnIdQuery = String.format(FIND_BY_COL_ID_TEMPLATE, getTableName(), getColumnColName());
 		findByKeyQuery = String.format(FIND_BY_COL_KEY_TEMPLATE, getTableName());
 		findRoomStatByRoomIdQuery = String.format(FIND_ROOMSTAT_BY_ROOMID_TEMPLATE, getTableName());
+		findRoomStatByRoomInfoQuery = String.format(FIND_ROOMSTAT_BY_ROOMINFO_TEMPLATE, getTableName());
 		findByIdentifierQuery = String.format(FIND_BY_IDENTIFIER_TEMPLATE, getTableName(), getColumnColName());
 		findByMacAddressQuery = String.format(FIND_BY_MAC_ADDRESS_TEMPLATE, getTableName());
 		findByColumnMailQuery = String.format(FIND_BY_COL_MAIL_TEMPLATE, getTableName());
@@ -171,6 +153,44 @@ public abstract class DataRepository<T extends Data>
 		findByColumnSensorIdQuery = String.format(FIND_BY_COL_SENSOR_ID_TEMPLATE, getTableName());
 		findByColumnNameQuery = String.format(FIND_BY_COL_NAME_TEMPLATE, getTableName());
 		findAllColumnIdsWithRowIdConditionQuery = String.format(FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE, getColumnColName(), getTableName(), getRowColName());
+		
+		// SAVE QUERIES -------------------------------------------------------
+		saveUserQuery = String.format(CREATE_USER_TEMPLATE, getTableName());
+		saveUserFromUserUIQuery = String.format(CREATE_USER_FROM_USERUI_TEMPLATE, getTableName());
+		saveGatewayQuery = String.format(CREATE_GATEWAY_TEMPLATE, getTableName());
+		saveRoomQuery = String.format(CREATE_ROOM_TEMPLATE, getTableName());
+		saveReservedRoomStatQuery = String.format(CREATE_RESERVED_ROOMSTAT_TEMPLATE, getTableName());
+		saveOccupiedRoomStatQuery = String.format(CREATE_OCCUPIED_ROOMSTAT_TEMPLATE, getTableName());
+		saveAlertQuery = String.format(CREATE_ALERT_TEMPLATE, getTableName());
+		saveSensorQuery = String.format(CREATE_SENSOR_TEMPLATE, getTableName());
+		
+		// UPDATE QUERIES ------------------------------------------------------------------------------
+		updateReservedRoomStatQuery = String.format(UPDATE_RESERVED_ROOMSTAT_TEMPLATE, getTableName());
+		updateRoomStatByIdQuery = String.format(UPDATE_ROOMSTAT_BY_ID_TEMPLATE, getTableName());
+		updateOccupiedRoomStatQuery = String.format(UPDATE_OCCUPIED_ROOMSTAT_TEMPLATE, getTableName());
+		updateUnOccupiedRoomStatQuery = String.format(UPDATE_UNOCCUPIED_ROOMSTAT_TEMPLATE, getTableName());
+		updateUserQuery = String.format(UPDATE_USER_TEMPLATE, getTableName(), getColumnColName());
+		updateAccessTokenQuery = String.format(UPDATE_USER_ACCESS_TOKEN_TEMPLATE, getTableName());
+		updateUserByMailQuery = String.format(UPDATE_USER_BY_MAIL_TEMPLATE, getTableName());
+		updateGatewayStatusQuery = String.format(UPDATE_GATEWAY_STATUS_TEMPLATE, getTableName());
+		updateRoomQuery = String.format(UPDATE_ROOM_TEMPLATE, getTableName(), getColumnColName());
+		updateAlertQuery = String.format(UPDATE_ALERT_TEMPLATE, getTableName());
+		updateRoomStatusQuery = String.format(UPDATE_ROOM_STATUS_TEMPLATE, getTableName());// set also humidity, temperature & user_id if filled
+		updateSensorQuery = String.format(UPDATE_SENSOR_TEMPLATE, getTableName(), getColumnColName());
+		updateSensorStatusQuery = String.format(UPDATE_SENSOR_STATUS_TEMPLATE, getTableName(), getColumnColName());
+		updateGatewayQuery = String.format(UPDATE_GATEWAY_TEMPLATE, getTableName());
+		
+		// DELETE QUERIES ----------------------------------------------------------------------
+		deleteQuery = String.format(REMOVE_TEMPLATE, getTableName());
+		deleteByMacAddressQuery = String.format(REMOVE_BY_MAC_ADDRESS_TEMPLATE, getTableName());
+		deleteByGatewayIdQuery = String.format(REMOVE_BY_GATEWAY_ID_TEMPLATE, getTableName());
+		deleteBySensorIdQuery = String.format(REMOVE_BY_SENSOR_ID_TEMPLATE, getTableName());
+		deleteByIdentifier = String.format(REMOVE_BY_IDENTIFIER_TEMPLATE, getTableName());
+		
+		// COUNT QUERIES ----------------------------------------------------------------------
+		countQuery = String.format(COUNT_TEMPLATE, getTableName());
+		countActiveUsersQuery = String.format(COUNT_ACTIVE_USERS_TEMPLATE, getTableName());
+		
 	}
 	
 	@Autowired
