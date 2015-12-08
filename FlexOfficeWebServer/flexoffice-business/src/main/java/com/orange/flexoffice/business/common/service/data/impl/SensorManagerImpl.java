@@ -138,15 +138,15 @@ public class SensorManagerImpl implements SensorManager {
 									// update begin_occupancy_date=now() & isReservationHonored=true & room_info=OCCUPIED
 									roomStatRepository.updateBeginOccupancyDate(roomStat);
 								} else {
-									// create a new line with roomId, begin_occupancy_date=now() & room_info=OCCUPIED
+									// create a new line with roomId, begin_occupancy_date=now() & room_info=OCCUPIED if not created yet !!!
 									data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
-									roomStatRepository.saveOccupiedRoomStat(data);
+									processOccupiedRoom(data);
 								}
 							} catch(IncorrectResultSizeDataAccessException e ) {
 								LOGGER.debug("SensorManager.updateStatus : There is no RESERVED roomStat with roomId #" + roomDao.getId(), e);
-								// create a new line with roomId, begin_occupancy_date=now() & room_info=OCCUPIED
+								// create a new line with roomId, begin_occupancy_date=now() & room_info=OCCUPIED if not created yet !!!
 								data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
-								roomStatRepository.saveOccupiedRoomStat(data);
+								processOccupiedRoom(data);
 							}
 					} else if (sensorDao.getOccupancyInfo().equals(E_OccupancyInfo.UNOCCUPIED.toString())) {  // L'info room UNOCCUPIED
 						// search in DB if another sensor has said thar the room is OCCUPIED 
@@ -212,5 +212,20 @@ public class SensorManagerImpl implements SensorManager {
 		}
 	}
 
+	private void processOccupiedRoom(RoomStatDao data) {
+		try {
+			// if roomId & room_info=OCCUPIED in roomStats
+			RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
+			if (roomStat == null) {
+				// create a new line with roomId, begin_occupancy_date=now() & room_info=OCCUPIED
+				roomStatRepository.saveOccupiedRoomStat(data);
+			} 
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.debug("SensorManager.updateStatus.processOccupiedRoom : There is no OCCUPIED roomStat with roomId #" + data.getRoomId(), e);
+			// create a new line with roomId, begin_occupancy_date=now() & room_info=OCCUPIED
+			roomStatRepository.saveOccupiedRoomStat(data);
+		}
+
+	}
 
 }
