@@ -92,11 +92,17 @@ public interface RoomEndpoint {
 
 
 	
-	/** Initialize tests data in DB
+	/** Initialise tests data in DB
 	 * 
 	 * @return true if successfully done
 	 */
 	boolean executeInitTestFile();
+	
+	/**
+	 * Initialise RoomStats tests data in DB
+	 * @return true if successfully done
+	 */
+	boolean initRoomStatsTable();
 }
 
 

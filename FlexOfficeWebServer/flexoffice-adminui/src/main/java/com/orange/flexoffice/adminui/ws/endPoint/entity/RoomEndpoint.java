@@ -108,9 +108,22 @@ public interface RoomEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	Response removeRoom(@PathParam(ROOM_ID_PARAM)String id);
 
-	
+	/**
+	 * findByName
+	 * @param name
+	 * @return
+	 * @throws DataNotExistsException
+	 */
 	// Used for tests
 	RoomDao findByName(String name) throws DataNotExistsException;
+	
+	/**
+	 * Initialise RoomStats tests data in DB
+	 * @return true if successfully done
+	 */
+	// Used for tests
+	boolean initRoomStatsTable();
+	
 }
 
 

@@ -89,7 +89,34 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 			return true;
 	}
 
+	public boolean initRoomStatsTableForUserUi() {
+		String query = "DELETE FROM room_stats";
+		jdbcTemplateForTest.execute(query);
+		String sqlRoomStats = "INSERT INTO room_stats " +
+				"(id, room_id, user_id, reservation_date, room_info) VALUES (?, ?, ?, CAST(? AS timestamp), CAST(? AS roomInfo))";
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {1, 3, 4, "2015-12-02 11:35:44.704504", "RESERVED" });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {2, 2, 4, "2015-11-27 11:35:44.704504", "RESERVED"});
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {3, 2, 4, "2015-12-03 11:35:44.704504", "RESERVED" });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {4, 1, 4, "2015-12-04 11:35:44.704504", "RESERVED"});
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {5, 1, 4, "now()", "RESERVED" });
+		
+		return true;
+	}
 
+	public boolean initRoomStatsTableForAdminUi() {
+		String query = "DELETE FROM room_stats";
+		jdbcTemplateForTest.execute(query);
+		String sqlRoomStats = "INSERT INTO room_stats " +
+				"(id, room_id, begin_occupancy_date, end_occupancy_date, room_info) VALUES (?, ?, CAST(? AS timestamp), CAST(? AS timestamp), CAST(? AS roomInfo))";
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {1, 1, "2015-12-01 11:35:44.704504", "2015-12-02 11:35:44.704504", "UNOCCUPIED" });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {2, 2, "2015-12-09 11:35:44.704504", "2015-11-27 15:35:44.704504", "OCCUPIED"});
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {3, 2, "2015-12-09 11:35:44.704504", "2015-12-03 17:35:44.704504", "UNOCCUPIED" });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {4, 3, "2015-12-09 11:35:44.704504", "2015-12-04 14:35:44.704504", "RESERVED"});
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {5, 3, "2015-12-09 11:35:44.704504", "now()", "UNOCCUPIED" });
+		
+		return true;
+	}
+	
 	@Override
 	public void forEach(DataExtractor dataExtractor) {
 	}

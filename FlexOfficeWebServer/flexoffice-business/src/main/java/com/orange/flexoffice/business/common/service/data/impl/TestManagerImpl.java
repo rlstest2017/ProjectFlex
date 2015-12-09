@@ -19,7 +19,6 @@ public class TestManagerImpl implements TestManager {
 	@Autowired
 	private InitTestRepository testRepository;
 	
-	
 	@Override
 	public boolean executeInitTestFile() {
 		return testRepository.executeInitTestData();
@@ -28,6 +27,16 @@ public class TestManagerImpl implements TestManager {
 	@Override
 	public boolean executeDropTables() {
 		return testRepository.executeDropTables();
+	}
+
+	@Override
+	public boolean initRoomStatsTableForUserUI() {
+		return testRepository.initRoomStatsTableForUserUi();
+	}
+
+	@Override
+	public boolean initRoomStatsTableForAdminUI() {
+		return testRepository.initRoomStatsTableForAdminUi();
 	}
 	
 }

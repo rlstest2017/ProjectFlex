@@ -30,6 +30,7 @@ import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
+import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.business.common.service.data.UserManager;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
@@ -52,6 +53,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	@Autowired
 	private UserManager userManager;
 
+	@Autowired
+	private TestManager testManager;
+	
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
 
@@ -298,9 +302,6 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		return Response.noContent().build();
 	}
-
-
-
 	
 	/* (non-Javadoc)
 	 * @see com.orange.flexoffice.adminui.ws.endPoint.entity.RoomEndpoint#findByName
@@ -308,6 +309,11 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	@Override
 	public RoomDao findByName(String name) throws DataNotExistsException {
 		return roomManager.findByName(name);
+	}
+
+	@Override
+	public boolean initRoomStatsTable() {
+		return testManager.initRoomStatsTableForAdminUI();
 	}
 
 	/** Create Gateway output from gateway id

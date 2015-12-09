@@ -15,6 +15,8 @@ public interface RoomStatDaoOperations {
 	
 	List<RoomStatDao> findAllRoomStats();
 	
+	List<RoomStatDao> findAllOccupiedDailyRoomStats(RoomStatDao data); // room_info='UNOCCUPIED' => Room occupied in the day and released !!!
+	
 	List<RoomStatDao> findLatestReservedRoomsByUserId(Long userId)  throws IncorrectResultSizeDataAccessException;
 	
 	RoomStatDao findbyRoomId(RoomStatDao data) throws IncorrectResultSizeDataAccessException;

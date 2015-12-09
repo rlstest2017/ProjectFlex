@@ -18,5 +18,16 @@ public interface TestManager {
 	 * @return
 	 */
 	boolean executeDropTables();
+
+	/**
+	 * Initialise RoomStats tests data in DB
+	 * @return true if successfully done
+	 */
+	boolean initRoomStatsTableForUserUI();
 	
+	/**
+	 * Initialise RoomStats tests data in DB
+	 * @return true if successfully done
+	 */
+	boolean initRoomStatsTableForAdminUI();
 }

@@ -21,6 +21,7 @@ import org.springframework.util.Log4jConfigurer;
 import com.orange.flexoffice.userui.ws.endPoint.entity.RoomEndpoint;
 import com.orange.flexoffice.userui.ws.model.Room;
 import com.orange.flexoffice.userui.ws.model.RoomSummary;
+import com.orange.flexoffice.userui.ws.task.CheckReservationTimeOutTask;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RoomEndpointImplTest {
@@ -38,6 +39,7 @@ public class RoomEndpointImplTest {
 
 	private static RoomEndpoint roomEndpoint;
 
+	private static CheckReservationTimeOutTask checkReservationTimeOutTask;
 
 
 	@Context
@@ -50,6 +52,7 @@ public class RoomEndpointImplTest {
 	public static void initSpringContextAndDatabase() throws Exception {
 		context = new ClassPathXmlApplicationContext("applicationContext-flexoffice-userui-test.xml");
 		roomEndpoint = (RoomEndpointImpl)context.getBean("roomEndpoint");
+		checkReservationTimeOutTask = (CheckReservationTimeOutTask)context.getBean("checkReservationTimeOutTask");
 	}
 
 
@@ -214,5 +217,24 @@ public class RoomEndpointImplTest {
 		// Asserts
 		assertEquals(true, expectedResult);	
 	}
+	
+	@Test
+	public void TestL_initRoomStatsTable() {
+		// SetUp
+		boolean state = roomEndpoint.initRoomStatsTable();
+
+		// Asserts
+		assertEquals(true, state);
+	}
+
+	@Test
+	public void TestM_checkReservedRoomsTask() {
+		// SetUp
+		boolean state = checkReservationTimeOutTask.checkReservationMethod();
+
+		// Asserts
+		assertEquals(true, state);
+	}
+
 
 }

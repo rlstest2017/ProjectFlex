@@ -55,9 +55,26 @@ public class TaskManagerImpl implements TaskManager {
 	}
 
 	@Override
-	public void generateDailyStats() {
-		// TODO Auto-generated method stub
+	public void processDailyStats() {
+		// 1 - Get Date with DATE_BEGIN_DAY & DATE_END_DAY parameters
+		ConfigurationDao beginDay = configRepository.findByKey(E_ConfigurationKey.DATE_BEGIN_DAY.toString());
+		String  beginDayValue = beginDay.getValue(); // in hh:mm
+		ConfigurationDao endDay = configRepository.findByKey(E_ConfigurationKey.DATE_END_DAY.toString());
+		String  endDayValue = endDay.getValue(); // in hh:mm
 		
+		// 2 - Process the Dates
+		Date beginDayDate = dateTools.dateBeginDay(beginDayValue);
+		Date endDayDate = dateTools.dateEndDay(endDayValue);
+		
+		// 3 - find used RoomStats in the current day
+		RoomStatDao roomStat = new RoomStatDao();
+		roomStat.setBeginOccupancyDate(beginDayDate);
+		roomStat.setEndOccupancyDate(endDayDate);
+		roomStat.setRoomInfo(E_RoomInfo.UNOCCUPIED.toString());
+		List<RoomStatDao> roomSt = roomStatsRepository.findAllOccupiedDailyRoomStats(roomStat);
+		
+		// 4 - cumulate the stats by roomId and save them in DB
+		System.out.println("Nombre le lignes retournées : " + roomSt.size());
 	}
 	
 }

@@ -247,6 +247,11 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		return testManager.executeInitTestFile();
 	}
 	
+	@Override
+	public boolean initRoomStatsTable() {
+		return testManager.initRoomStatsTableForUserUI();
+	}
+	
 	/** Create tenant if room status is not free 
 	 * 
 	 * @param status
@@ -315,7 +320,5 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		return tenant;
 	}
 
-	
-	
 	
 }

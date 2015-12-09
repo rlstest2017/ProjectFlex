@@ -18,9 +18,10 @@ public class ProcessDailyStats {
 	// Every every day at 23:00
 	//second, minute, hour, day of month, month, day(s) of week
 	@Scheduled(cron="0 0 23 * * ?")
-    public void processDailyStatsMethod()  {
+    public boolean processDailyStatsMethod()  {
 		LOGGER.debug("Before Method executed every day at 23:00. Current time is :: "+ new Date());
-		taskManager.checkReservationTimeOut();
+		taskManager.processDailyStats();
 		LOGGER.debug("After Method executed every day at 23:00. Current time is :: "+ new Date());
+		return true;
     }
 }

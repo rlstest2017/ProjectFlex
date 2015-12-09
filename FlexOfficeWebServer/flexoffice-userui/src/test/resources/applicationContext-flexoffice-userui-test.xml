@@ -18,5 +18,8 @@
 	
 	<bean id="errorMessageHandler" class="com.orange.flexoffice.userui.ws.utils.ErrorMessageHandler">
 	</bean>
+	
+	<bean id="checkReservationTimeOutTask" class="com.orange.flexoffice.userui.ws.task.CheckReservationTimeOutTask">
+	</bean>
 		
 </beans>

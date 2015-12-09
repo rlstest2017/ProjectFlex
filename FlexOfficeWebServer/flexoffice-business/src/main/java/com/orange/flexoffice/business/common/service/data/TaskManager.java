@@ -17,6 +17,6 @@ public interface TaskManager {
 	 * generateDailyStats
 	 * Every day at night one cumulate line is calculated from RoomStats to RoomDailyOccupancy 
 	 */
-	void generateDailyStats();
+	void processDailyStats();
 	
 }
