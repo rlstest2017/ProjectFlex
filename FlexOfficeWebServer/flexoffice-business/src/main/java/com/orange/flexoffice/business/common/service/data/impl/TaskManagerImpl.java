@@ -1,5 +1,6 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.orange.flexoffice.business.common.service.data.TaskManager;
 import com.orange.flexoffice.business.common.utils.DateTools;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
+import com.orange.flexoffice.dao.common.model.data.RoomDailyOccupancyDao;
 import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
@@ -73,8 +75,64 @@ public class TaskManagerImpl implements TaskManager {
 		roomStat.setRoomInfo(E_RoomInfo.UNOCCUPIED.toString());
 		List<RoomStatDao> roomSt = roomStatsRepository.findAllOccupiedDailyRoomStats(roomStat);
 		
+		// Only for Test
+		//System.out.println("Nombre le lignes retournées : " + roomSt.size());
+		
 		// 4 - cumulate the stats by roomId and save them in DB
-		System.out.println("Nombre le lignes retournées : " + roomSt.size());
+		List<RoomDailyOccupancyDao> roomDailyList = new ArrayList<RoomDailyOccupancyDao>();
+		
+		for (RoomStatDao rstat : roomSt) { // the roomStats are order by roomId
+			Integer index = getRoomInList(rstat.getRoomId(), roomDailyList);
+			if (index != -1) {
+				// calculate occupancyDuration
+				Long duration = dateTools.calculateDuration(rstat.getBeginOccupancyDate(), rstat.getEndOccupancyDate());
+				RoomDailyOccupancyDao roomGet = roomDailyList.get(index);
+				// ------ update Occupancy Duration for existing Room (cumulate) ------
+				roomGet.setOccupancyDuration(roomGet.getOccupancyDuration() + duration);
+				//
+			} else {
+				// add entry
+				RoomDailyOccupancyDao roomEntry = new RoomDailyOccupancyDao();
+				// calculate occupancyDuration
+				Long duration = dateTools.calculateDuration(rstat.getBeginOccupancyDate(), rstat.getEndOccupancyDate());
+				roomEntry.setRoomId(rstat.getRoomId());
+				roomEntry.setOccupancyDuration(duration);
+				// ------ Add new room in the list ----
+				roomDailyList.add(roomEntry);
+			}
+			
+		}
+		
+		// TODO  5 - save in Table room_daily_occupancy
+		
+		
 	}
 	
+	/**
+	 * isRoomInList
+	 * @param roomId
+	 * @param roomDailyList
+	 * @return
+	 */
+	private Integer getRoomInList(Integer roomId, List<RoomDailyOccupancyDao> roomDailyList) {
+		boolean state = false;
+		Integer index = -1;
+		if (!roomDailyList.isEmpty()) {
+			for (RoomDailyOccupancyDao roomDaily : roomDailyList) {
+				index = index + 1;
+				if (roomId == roomDaily.getRoomId()) {
+					state = true;
+					break;
+				} 
+			}
+		}
+		
+		if (!state) { // if entry not exist return -1
+			index = -1;
+		}
+		
+		return index;
+	}
+	
+		
 }

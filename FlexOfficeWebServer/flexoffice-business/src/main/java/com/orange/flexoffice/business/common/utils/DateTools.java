@@ -1,5 +1,7 @@
 package com.orange.flexoffice.business.common.utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -91,12 +93,31 @@ public class DateTools {
 		return endDayDate;
 	}
 	
-	public static void main(String[] args) {
+	/**
+	 * calculateDuration in seconds
+	 * @return
+	 */
+	public Long calculateDuration(Date beginOccupancyDate, Date endOccupancyDate) {
+		Long occupancyDuration = endOccupancyDate.getTime()-beginOccupancyDate.getTime();
+		occupancyDuration = occupancyDuration/1000;
+		//System.out.println("Le temps est :" + occupancyDuration);
+		return occupancyDuration;
+	}
+	
+	
+	
+	public static void main(String[] args) throws ParseException {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String dateBeginInString = "2015-12-08 18:56:25.620506";
+		String dateEndInString = "2015-12-08 18:59:35.164569";
 		DateTools date = new DateTools();
 		//date.lastConnexionDate("15");
 		//date.reservationDateDelayBeforeTimeOut(new Date(), 300);
 		//date.dateBeginDay("07:30");
-		date.dateEndDay("20:00");
+		//date.dateEndDay("20:00");
+		Date dateBegin = formatter.parse(dateBeginInString);
+		Date dateEnd = formatter.parse(dateEndInString);
+		date.calculateDuration(dateBegin, dateEnd);
 	}
 	
 }

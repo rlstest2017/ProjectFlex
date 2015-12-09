@@ -37,7 +37,7 @@ public final class DataSqlTemplate {
 	public static final String FIND_ALL_TEMPLATE = 
 			"select * from %s";
 	public static final String FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE = 
-			"select * from %s where room_info=CAST(:roomInfo AS roomInfo) and begin_occupancy_date >:beginOccupancyDate and end_occupancy_date <:endOccupancyDate";
+			"select * from %s where room_info=CAST(:roomInfo AS roomInfo) and begin_occupancy_date >:beginOccupancyDate and end_occupancy_date <:endOccupancyDate order by room_id";
 	public static final String FIND_LATEST_RESERVED_ROOM_TEMPLATE = 
 			"select * from %s where user_id=:userId order by reservation_date desc";
 	public static final String REMOVE_BY_MAC_ADDRESS_TEMPLATE = 
