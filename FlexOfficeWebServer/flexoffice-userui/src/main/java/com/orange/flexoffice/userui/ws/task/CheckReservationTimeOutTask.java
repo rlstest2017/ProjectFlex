@@ -17,7 +17,14 @@ public class CheckReservationTimeOutTask {
 	
 	// Every 5 secondes
 	@Scheduled(cron="*/5 * * * * ?")
-    public boolean checkReservationMethod()  {
+    public void checkReservationMethod()  {
+		LOGGER.debug("Before Method executed at every 5 seconds. Current time is :: "+ new Date());
+		taskManager.checkReservationTimeOut();
+		LOGGER.debug("After Method executed at every 5 seconds. Current time is :: "+ new Date());
+    }
+	
+	// Only for Tests
+	public boolean checkReservationTestMethod()  {
 		LOGGER.debug("Before Method executed at every 5 seconds. Current time is :: "+ new Date());
 		taskManager.checkReservationTimeOut();
 		LOGGER.debug("After Method executed at every 5 seconds. Current time is :: "+ new Date());

@@ -354,7 +354,7 @@ public class RoomEndpointImplTest {
 	@Test
 	public void TestO_processDailyStatsTask() {
 		// SetUp
-		boolean state = processDailyStats.processDailyStatsMethod();
+		boolean state = processDailyStats.processDailyStatsTestMethod();
 
 		// Asserts
 		assertEquals(true, state);

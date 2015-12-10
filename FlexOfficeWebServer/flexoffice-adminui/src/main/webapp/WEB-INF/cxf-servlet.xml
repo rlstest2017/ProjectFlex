@@ -15,7 +15,7 @@
   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.UserEndpointImpl"/>
   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.SensorEndpointImpl"/>
   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.GatewayEndpointImpl"/>
-<!--   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.StatEndpointImpl"/> -->
+  			<bean class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.StatEndpointImpl"/>
   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.SystemEndpointImpl"/>
   		</jaxrs:serviceBeans>
   		 <jaxrs:extensionMappings>

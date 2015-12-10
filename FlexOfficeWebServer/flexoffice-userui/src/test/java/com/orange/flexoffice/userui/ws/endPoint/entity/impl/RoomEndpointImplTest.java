@@ -230,7 +230,7 @@ public class RoomEndpointImplTest {
 	@Test
 	public void TestM_checkReservedRoomsTask() {
 		// SetUp
-		boolean state = checkReservationTimeOutTask.checkReservationMethod();
+		boolean state = checkReservationTimeOutTask.checkReservationTestMethod();
 
 		// Asserts
 		assertEquals(true, state);
