@@ -1,5 +1,9 @@
 package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.RoomDailyOccupancyDao;
@@ -15,7 +19,17 @@ public class RoomDailyOccupancyDaoRepository extends DataRepository<RoomDailyOcc
 	}
 	
 	
-		
+	@Override
+	public RoomDailyOccupancyDao saveRoomDaily(RoomDailyOccupancyDao data) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(saveRoomDailyQuery, paramBean, keyHolder);
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
+		return data;
+	}
+	
 	@Override
 	protected String getTableName() {
 		return RoomDailyOccupancyDaoMetadata.ROOM_DAILY_OCCUPANCY_TABLE_NAME;

@@ -66,6 +66,8 @@ public final class DataSqlTemplate {
 			"insert into %s (name, gateway_id, address, capacity, description, type, status) values (:name, :gatewayId, :address, :capacity, :description, CAST(:type AS roomtype), CAST(:status AS roomstatus))";
 	public static final String CREATE_RESERVED_ROOMSTAT_TEMPLATE = 
 			"insert into %s (room_id, user_id, reservation_date, room_info) values (:roomId, :userId, now(), CAST(:roomInfo AS roomInfo))";
+	public static final String CREATE_ROOMDAILY_TEMPLATE = 
+			"insert into %s (room_id, occupancy_duration) values (:roomId, :occupancyDuration)";
 	public static final String CREATE_OCCUPIED_ROOMSTAT_TEMPLATE = 
 			"insert into %s (room_id, room_info, begin_occupancy_date) values (:roomId, CAST(:roomInfo AS roomInfo), now())";
 	public static final String CREATE_SENSOR_TEMPLATE = 

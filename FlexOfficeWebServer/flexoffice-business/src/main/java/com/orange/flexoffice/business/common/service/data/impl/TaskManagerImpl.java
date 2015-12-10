@@ -16,6 +16,7 @@ import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDailyOccupancyDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomStatDaoRepository;
 
 /**
@@ -30,6 +31,8 @@ public class TaskManagerImpl implements TaskManager {
 	private RoomStatDaoRepository roomStatsRepository;
 	@Autowired
 	private ConfigurationDaoRepository configRepository;
+	@Autowired
+	private RoomDailyOccupancyDaoRepository roomDailyRepository;
 	@Autowired
 	DateTools dateTools;
 
@@ -58,6 +61,9 @@ public class TaskManagerImpl implements TaskManager {
 
 	@Override
 	public void processDailyStats() {
+		
+		List<RoomDailyOccupancyDao> roomDailyList = new ArrayList<RoomDailyOccupancyDao>();
+			
 		// 1 - Get Date with DATE_BEGIN_DAY & DATE_END_DAY parameters
 		ConfigurationDao beginDay = configRepository.findByKey(E_ConfigurationKey.DATE_BEGIN_DAY.toString());
 		String  beginDayValue = beginDay.getValue(); // in hh:mm
@@ -74,14 +80,10 @@ public class TaskManagerImpl implements TaskManager {
 		roomStat.setEndOccupancyDate(endDayDate);
 		roomStat.setRoomInfo(E_RoomInfo.UNOCCUPIED.toString());
 		List<RoomStatDao> roomSt = roomStatsRepository.findAllOccupiedDailyRoomStats(roomStat);
-		
-		// Only for Test
 		//System.out.println("Nombre le lignes retournées : " + roomSt.size());
 		
-		// 4 - cumulate the stats by roomId and save them in DB
-		List<RoomDailyOccupancyDao> roomDailyList = new ArrayList<RoomDailyOccupancyDao>();
-		
-		for (RoomStatDao rstat : roomSt) { // the roomStats are order by roomId
+		// 4 - cumulate the stats by roomId
+		for (RoomStatDao rstat : roomSt) { // the roomStats are order by roomId 1,2,3,....
 			Integer index = getRoomInList(rstat.getRoomId(), roomDailyList);
 			if (index != -1) {
 				// calculate occupancyDuration
@@ -100,10 +102,12 @@ public class TaskManagerImpl implements TaskManager {
 				// ------ Add new room in the list ----
 				roomDailyList.add(roomEntry);
 			}
-			
 		}
 		
-		// TODO  5 - save in Table room_daily_occupancy
+		// 5 - save in Table room_daily_occupancy
+		for (RoomDailyOccupancyDao roomDailyOccupancyDao : roomDailyList) {
+			roomDailyRepository.saveRoomDaily(roomDailyOccupancyDao);	
+		}
 		
 		
 	}
