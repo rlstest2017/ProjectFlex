@@ -17,7 +17,7 @@ public class ProcessDailyStats {
 	
 	// Every every day at 23:00
 	//second, minute, hour, day of month, month, day(s) of week
-	@Scheduled(cron="0 0 16 * * ?")
+	@Scheduled(cron="0 0 23 * * ?")
     public void processDailyStatsMethod()  {
 		LOGGER.debug("Before Method executed every day at 23:00. Current time is :: "+ new Date());
 		taskManager.processDailyStats();

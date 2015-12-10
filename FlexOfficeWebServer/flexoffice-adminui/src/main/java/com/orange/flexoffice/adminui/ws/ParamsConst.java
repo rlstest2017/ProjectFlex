@@ -9,6 +9,9 @@ public final class ParamsConst {
 	public static final String TOKEN_HEADER_PARAM = "x-auth-token";
 	public static final String ORIGIN_HEADER_PARAM = "Origin";
 	public static final String ROOM_ID_PARAM = "roomId";
+	public static final String FROM_PARAM = "from";
+	public static final String TO_PARAM = "to";
+	public static final String VIEW_TYPE_PARAM = "viewtype";
 	
 	private ParamsConst() {
 		

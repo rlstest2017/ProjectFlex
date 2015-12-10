@@ -60,7 +60,7 @@ public class StatEndpointImpl implements StatEndpoint {
 	}
 
 	@Override
-	public List<MultiStatSet> getOccupancyStats() {
+	public List<MultiStatSet> getOccupancyStats(Integer from, Integer to, String viewtype) {
 		LOGGER.info( "Begin call StatEndpoint.getOccupancyStats at: " + new Date() );
 		
 		LOGGER.info( "End call StatEndpoint.getOccupancyStats at: " + new Date() );
