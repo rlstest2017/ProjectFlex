@@ -1,12 +1,17 @@
 package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
+import java.util.List;
+
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.RoomDailyOccupancyDao;
+import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.repository.data.RoomDailyOccupancyDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.RoomDailyOccupancyDaoMetadata;
 import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
@@ -18,6 +23,15 @@ public class RoomDailyOccupancyDaoRepository extends DataRepository<RoomDailyOcc
 		super(RoomDailyOccupancyDao.class);
 	}
 	
+	@Override
+	public List<RoomDailyOccupancyDao> findAllRoomsDailyOccupancy() {
+		SqlParameterSource paramMap = new MapSqlParameterSource();
+		return jdbcTemplate.query(
+				findAllRoomDailyQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<RoomDailyOccupancyDao>(RoomDailyOccupancyDao.class)
+			);
+	}
 	
 	@Override
 	public RoomDailyOccupancyDao saveRoomDaily(RoomDailyOccupancyDao data) {
@@ -49,5 +63,6 @@ public class RoomDailyOccupancyDaoRepository extends DataRepository<RoomDailyOcc
 	protected String getRowColName() {
 		return null;
 	}
+
 
 }
