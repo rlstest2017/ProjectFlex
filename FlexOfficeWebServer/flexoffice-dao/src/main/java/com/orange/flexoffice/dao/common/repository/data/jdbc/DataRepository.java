@@ -6,6 +6,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_ROOM_DAILY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_REQUESTED_ROOM_DAILY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_LATEST_RESERVED_ROOM_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_KEY_TEMPLATE;
@@ -79,6 +80,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String findAllQuery;
 	protected final String findAllRoomDailyQuery;
 	protected final String findAllDailyQuery;
+	protected final String findRequestedDailyQuery;
 	protected final String findLatestReservedRoomsQuery;
 	protected final String findByColumnIdQuery;
 	protected final String findByKeyQuery;
@@ -144,6 +146,7 @@ public abstract class DataRepository<T extends Data>
 		findAllQuery = String.format(FIND_ALL_TEMPLATE, getTableName());
 		findAllRoomDailyQuery = String.format(FIND_ALL_ROOM_DAILY_TEMPLATE, getTableName());
 		findAllDailyQuery = String.format(FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE, getTableName());
+		findRequestedDailyQuery = String.format(FIND_REQUESTED_ROOM_DAILY_TEMPLATE, getTableName());
 		findLatestReservedRoomsQuery = String.format(FIND_LATEST_RESERVED_ROOM_TEMPLATE, getTableName());
 		findByColumnIdQuery = String.format(FIND_BY_COL_ID_TEMPLATE, getTableName(), getColumnColName());
 		findByKeyQuery = String.format(FIND_BY_COL_KEY_TEMPLATE, getTableName());

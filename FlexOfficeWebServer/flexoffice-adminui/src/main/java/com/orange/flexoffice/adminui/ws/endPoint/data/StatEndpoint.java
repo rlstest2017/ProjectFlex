@@ -48,7 +48,7 @@ public interface StatEndpoint {
 	@GET
 	@Path(ROOMS_PATH + OCCUPANCY_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
-	List<MultiStatSet> getOccupancyStats(@QueryParam(FROM_PARAM) Integer from, @QueryParam(TO_PARAM) Integer to, @QueryParam(VIEW_TYPE_PARAM) String viewtype);
+	MultiStatSet getOccupancyStats(@QueryParam(FROM_PARAM) Integer from, @QueryParam(TO_PARAM) Integer to, @QueryParam(VIEW_TYPE_PARAM) String viewtype);
 		
 	// used for tests
 	boolean executeInitTestFile();

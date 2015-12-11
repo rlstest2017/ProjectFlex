@@ -18,6 +18,7 @@ import com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.service.data.StatManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
+import com.orange.flexoffice.dao.common.model.object.MultiStatSetDto;
 import com.orange.flexoffice.dao.common.model.object.SimpleStatDto;
 
 /**
@@ -60,12 +61,28 @@ public class StatEndpointImpl implements StatEndpoint {
 	}
 
 	@Override
-	public List<MultiStatSet> getOccupancyStats(Integer from, Integer to, String viewtype) {
+	public MultiStatSet getOccupancyStats(Integer from, Integer to, String viewtype) {
+		try {
 		LOGGER.info( "Begin call StatEndpoint.getOccupancyStats at: " + new Date() );
 		
+		MultiStatSet set = factory.createMultiStatSet();
+		
+		MultiStatSetDto setDto = statManager.getOccupancyStats(from, to, viewtype);
+		
+		set.setStartdate(setDto.getStartdate());
+		set.setEnddate(setDto.getEnddate());
+		// TODO to continus ...
+		
 		LOGGER.info( "End call StatEndpoint.getOccupancyStats at: " + new Date() );
-		return null;
+		
+		return factory.createMultiStatSet(set).getValue();
+		
+		} catch (RuntimeException ex){
+			LOGGER.debug("RuntimeException in getOccupancyStats() StatEndpointImpl with message :" + ex.getMessage(), ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		}
 	}
+	
 	
 	@Override
 	public boolean executeInitTestFile() {

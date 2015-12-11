@@ -117,9 +117,10 @@ public class DateTools {
 		//Date dateBegin = formatter.parse(dateBeginInString);
 		//Date dateEnd = formatter.parse(dateEndInString);
 		//date.calculateDuration(dateBegin, dateEnd);
+		//float rate = ((float)1500l*100/(float)225000l);
 		
-		float rate = ((float)1500l*100/(float)225000l);
-		System.out.println("rate is:" + rate);
+		
+		System.out.println("date is:" + new Date().getTime());
 		
 	}
 	

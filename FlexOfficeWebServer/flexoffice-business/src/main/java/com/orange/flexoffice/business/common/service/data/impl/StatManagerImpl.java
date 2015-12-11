@@ -9,12 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.orange.flexoffice.business.common.enums.EnumViewType;
 import com.orange.flexoffice.business.common.service.data.StatManager;
 import com.orange.flexoffice.business.common.utils.DateTools;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDailyOccupancyDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
+import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
+import com.orange.flexoffice.dao.common.model.object.MultiStatDto;
+import com.orange.flexoffice.dao.common.model.object.MultiStatSetDto;
+import com.orange.flexoffice.dao.common.model.object.RoomDailyOccupancyDto;
 import com.orange.flexoffice.dao.common.model.object.SimpleStatDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDailyOccupancyDaoRepository;
@@ -120,6 +125,75 @@ public class StatManagerImpl implements StatManager {
 		
 		return index;
 	}
+
+	@Override
+	public MultiStatSetDto getOccupancyStats(Integer from, Integer to, String viewtype) {
+		
+		MultiStatSetDto multiStatSet = new MultiStatSetDto();
+		
+		// 1 - Get Room Daily Data requested by From & To parameters
+		RoomDailyOccupancyDto parameters = new RoomDailyOccupancyDto(); 
+		Date fromDate = new Date(from);
+		Date toDate = new Date(to);
+		parameters.setFromDate(fromDate);
+		parameters.setToDate(toDate);
+		List<RoomDailyOccupancyDao> dailyRoomsList = roomDailyRepository.findRequestedRoomsDailyOccupancy(parameters);
+		
+		if ((dailyRoomsList != null)&&(!dailyRoomsList.isEmpty())) {
+			// 2 - Get startdate & enddate
+			RoomDailyOccupancyDao firstEntry = dailyRoomsList.get(0);
+			Date startdate = firstEntry.getDay();
+			multiStatSet.setStartdate(startdate.getTime());  // set startdate
+			
+			RoomDailyOccupancyDao endEntry = dailyRoomsList.get(dailyRoomsList.size()-1);
+			Date enddate = endEntry.getDay();
+			multiStatSet.setEnddate(enddate.getTime());  // set enddate
+			
+			// 3 - Get categories 
+			List<String> categories = getCategories();
+			multiStatSet.setCategories(categories); // set categories
+			
+			// 4 - Get data object
+			List<MultiStatDto> multiStat = getMultiStat(viewtype);
+			multiStatSet.setData(multiStat);
+		}
+
+		return multiStatSet;
+	}
 	
+	/**
+	 * getCategories
+	 * @return
+	 */
+	private List<String> getCategories() {
+		
+		List<String> list = new ArrayList<String>();
+		
+		E_RoomType[] types = E_RoomType.values();
+		for (E_RoomType e_RoomType : types) {
+			list.add(e_RoomType.toString());
+		}
+		
+		return list;
+	}
 	
+	/**
+	 * getMultiStat
+	 * @return
+	 */
+	private List<MultiStatDto> getMultiStat(String viewtype) {
+	
+		List<MultiStatDto> multiStatList = new ArrayList<MultiStatDto>();
+		
+		// TODO to continous 
+		if (viewtype.equals(EnumViewType.DAY.toString())) {
+			
+		} else if (viewtype.equals(EnumViewType.WEEK.toString())) {
+			
+		} else if (viewtype.equals(EnumViewType.MONTH.toString())) {
+			
+		}
+		
+		return multiStatList;
+	}
 }
