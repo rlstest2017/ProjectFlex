@@ -260,19 +260,23 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 */
 	private String computeTenant(final ERoomStatus status, final Long userId, final String roomName) {
 
-		String tenant = new String("");
+		String tenant = null;
 
 		// Compute tenant name only if room is reserved or occupied
 		if ((status == ERoomStatus.RESERVED) ||
 				(status == ERoomStatus.OCCUPIED)) {
 
 			// And if user is known
-			if ((userId != null) &&(userId != 0)) {
+			if ((userId != null)&&(userId != 0)) {
 				try {
 					// Get user object from DB
 					UserDao userDao = userManager.find(userId);
 					// Compute tenant name
-					tenant = userDao.getFirstName() + " " + userDao.getLastName();
+					if ((userDao.getLastName() != null)&&(!userDao.getLastName().isEmpty())) {
+						tenant = userDao.getFirstName() + " " + userDao.getLastName();
+					} else {
+						tenant = userDao.getEmail();
+					}
 
 				} catch(DataNotExistsException e ) {
 					LOGGER.info("UserUi Get rooms / Get room id : user not found on room " + roomName, e);
@@ -301,9 +305,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				(status == ERoomStatus.OCCUPIED)) {
 
 			if (userDao == null) {
-
 				LOGGER.info("UserUi Get rooms / Get room id   : user not found on room " + roomName);
-
 			// And if user is known
 			} else {
 				tenant.setId(userDao.getId().toString());

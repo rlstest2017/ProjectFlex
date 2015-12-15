@@ -1,6 +1,5 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -107,26 +106,6 @@ public class StatManagerImpl implements StatManager {
 		return simpleStatList;
 	}
 	
-	private Integer getStatInList(Integer roomId, List<SimpleStatDto> simpleStatList) {
-		boolean state = false;
-		Integer index = -1;
-		if (!simpleStatList.isEmpty()) {
-			for (SimpleStatDto statSimple : simpleStatList) {
-				index = index + 1;
-				if (roomId == statSimple.getRoomId()) {
-					state = true;
-					break;
-				} 
-			}
-		}
-		
-		if (!state) { // if entry not exist return -1
-			index = -1;
-		}
-		
-		return index;
-	}
-
 	@Override
 	public MultiStatSetDto getOccupancyStats(Long from, Long to, String viewtype) {
 		
@@ -180,6 +159,8 @@ public class StatManagerImpl implements StatManager {
 	
 	/**
 	 * getMultiStat
+	 * @param viewtype
+	 * @param dailyRoomsList
 	 * @return
 	 */
 	private List<MultiStatDto> getMultiStat(String viewtype, List<RoomDailyOccupancyDao> dailyRoomsList) {
@@ -200,6 +181,13 @@ public class StatManagerImpl implements StatManager {
 			for (Date date : distinctDayList) {
 				MultiStatDto multiStatDto = new MultiStatDto();
 				multiStatDto.setDay(date);
+				for (RoomDailyOccupancyDao daily : dailyRoomsList) {
+					if ((daily.getDay().after(dateTools.beginOfDay(date)))&& (daily.getDay().before(dateTools.endOfDay(date)))) {  // comptabiliser la ligne
+						
+						
+					}
+				}
+				
 				
 			}
 			
@@ -212,4 +200,57 @@ public class StatManagerImpl implements StatManager {
 		
 		return multiStatList;
 	}
+	
+	/**
+	 * getStatInList
+	 * @param roomId
+	 * @param simpleStatList
+	 * @return
+	 */
+	private Integer getStatInList(Integer roomId, List<SimpleStatDto> simpleStatList) {
+		boolean state = false;
+		Integer index = -1;
+		if (!simpleStatList.isEmpty()) {
+			for (SimpleStatDto statSimple : simpleStatList) {
+				index = index + 1;
+				if (roomId == statSimple.getRoomId()) {
+					state = true;
+					break;
+				} 
+			}
+		}
+		
+		if (!state) { // if entry not exist return -1
+			index = -1;
+		}
+		
+		return index;
+	}
+	
+	/**
+	 * getDayInList
+	 * @param day
+	 * @param multiStatList
+	 * @return
+	 */
+	private Integer getDayInList(Date day, List<MultiStatDto> multiStatList) {
+		boolean state = false;
+		Integer index = -1;
+		if (!multiStatList.isEmpty()) {
+			for (MultiStatDto statMulti : multiStatList) {
+				index = index + 1;
+				if (day.getTime() == statMulti.getDay().getTime()) {
+					state = true;
+					break;
+				} 
+			}
+		}
+		
+		if (!state) { // if entry not exist return -1
+			index = -1;
+		}
+		
+		return index;
+	}
+
 }
