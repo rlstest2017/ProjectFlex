@@ -39,7 +39,7 @@ public interface UserEndpoint {
 	@GET
 	@Path(USER_PATH + CURRENT_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
-	UserSummary getUserCurrent(@HeaderParam(AUTHORIZATION_HEADER_PARAM) String auth);
+	UserSummary getUserCurrent(@HeaderParam(TOKEN_HEADER_PARAM) String auth);
 	
 	/**
 	 * Get accessToken.

@@ -1,7 +1,10 @@
 package com.orange.flexoffice.dao.common.model.object;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
 
 /**
  * MultiStatDto
@@ -12,6 +15,9 @@ public class MultiStatDto {
 	
 	private String label;
 	private List<String> values;
+	private E_RoomType roomType;
+	private Long occupancyDuration;
+	private Date Day;
 	/**
 	 * @return the label
 	 */
@@ -38,6 +44,42 @@ public class MultiStatDto {
 	 */
 	public void setValues(List<String> values) {
 		this.values = values;
+	}
+	/**
+	 * @return the roomType
+	 */
+	public E_RoomType getRoomType() {
+		return roomType;
+	}
+	/**
+	 * @param roomType the roomType to set
+	 */
+	public void setRoomType(E_RoomType roomType) {
+		this.roomType = roomType;
+	}
+	/**
+	 * @return the occupancyDuration
+	 */
+	public Long getOccupancyDuration() {
+		return occupancyDuration;
+	}
+	/**
+	 * @param occupancyDuration the occupancyDuration to set
+	 */
+	public void setOccupancyDuration(Long occupancyDuration) {
+		this.occupancyDuration = occupancyDuration;
+	}
+	/**
+	 * @return the day
+	 */
+	public Date getDay() {
+		return Day;
+	}
+	/**
+	 * @param day the day to set
+	 */
+	public void setDay(Date day) {
+		Day = day;
 	}
 		
 	

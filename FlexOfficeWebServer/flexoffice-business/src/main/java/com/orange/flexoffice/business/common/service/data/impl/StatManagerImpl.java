@@ -155,7 +155,7 @@ public class StatManagerImpl implements StatManager {
 			multiStatSet.setCategories(categories); // set categories
 			
 			// 4 - Get data object
-			List<MultiStatDto> multiStat = getMultiStat(viewtype);
+			List<MultiStatDto> multiStat = getMultiStat(viewtype, dailyRoomsList);
 			multiStatSet.setData(multiStat);
 		}
 
@@ -182,12 +182,27 @@ public class StatManagerImpl implements StatManager {
 	 * getMultiStat
 	 * @return
 	 */
-	private List<MultiStatDto> getMultiStat(String viewtype) {
+	private List<MultiStatDto> getMultiStat(String viewtype, List<RoomDailyOccupancyDao> dailyRoomsList) {
 	
 		List<MultiStatDto> multiStatList = new ArrayList<MultiStatDto>();
 		
-		// TODO to continous 
 		if (viewtype.equals(EnumViewType.DAY.toString())) {
+			// 1 - Make distinct daily List
+			List<Date> distinctDayList = new ArrayList<Date>();
+			for (RoomDailyOccupancyDao daily : dailyRoomsList) {
+				Date formattedDaily = dateTools.beginOfDay(daily.getDay());
+				if (!dateTools.isDateInList(distinctDayList, formattedDaily)) {
+					distinctDayList.add(formattedDaily);
+				}
+			}
+			
+			// 2 - Make MultiStatDto List for (day, occupancyDuration & roomType )
+			for (Date date : distinctDayList) {
+				MultiStatDto multiStatDto = new MultiStatDto();
+				multiStatDto.setDay(date);
+				
+			}
+			
 			
 		} else if (viewtype.equals(EnumViewType.WEEK.toString())) {
 			

@@ -1,9 +1,9 @@
 package com.orange.flexoffice.business.common.utils;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -93,6 +93,46 @@ public class DateTools {
 		return endDayDate;
 	}
 	
+	// hh:00; mm:00; ss:00
+	/**
+	 * beginOfDay
+	 * @param dailyDate
+	 * @return
+	 */
+	public Date beginOfDay(Date dailyDate) {
+		
+		//System.out.println("now :"+ now);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dailyDate);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND,0);
+		cal.set(Calendar.MILLISECOND,0);
+		Date dayDate = cal.getTime();
+		System.out.println("dayDate :"+ dayDate);
+		return dayDate;
+	}
+	
+	// hh:23; mm:59; ss:59
+		/**
+		 * endOfDay
+		 * @param dailyDate
+		 * @return
+		 */
+		public Date endOfDay(Date dailyDate) {
+			
+			//System.out.println("now :"+ now);
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(dailyDate);
+			cal.set(Calendar.HOUR_OF_DAY, 23);
+			cal.set(Calendar.MINUTE, 59);
+			cal.set(Calendar.SECOND,59);
+			cal.set(Calendar.MILLISECOND,0);
+			Date dayDate = cal.getTime();
+			System.out.println("dayDate :"+ dayDate);
+			return dayDate;
+		}
+		
 	/**
 	 * calculateDuration in seconds
 	 * @return
@@ -104,13 +144,25 @@ public class DateTools {
 		return occupancyDuration;
 	}
 	
+	public Boolean isDateInList(List<Date> dateList, Date toCompare) {
+		Boolean state = false;
+		
+		for (Date date : dateList) {
+			if (date.getTime() == toCompare.getTime()) {
+				state = true;
+				break;
+			}
+		}
+		
+		return state;
+	}
 	
 	
 	public static void main(String[] args) throws ParseException {
 		//SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		//String dateBeginInString = "2015-12-08 18:56:25.620506";
 		//String dateEndInString = "2015-12-08 18:59:35.164569";
-		//DateTools date = new DateTools();
+		DateTools date = new DateTools();
 		//date.lastConnexionDate("15");
 		//date.reservationDateDelayBeforeTimeOut(new Date(), 300);
 		//date.dateBeginDay("07:30");
@@ -122,11 +174,19 @@ public class DateTools {
 		
 		//System.out.println("date is:" + new Date().getTime());
 				
-		System.out.println("startdate is:" + new SimpleDateFormat("dd/MM/yyyy").format(new Date(1449784800166l)));
+		//System.out.println("startdate is:" + new SimpleDateFormat("dd/MM/yyyy").format(new Date(1449784800166l)));
 		
-		System.out.println("enddate is:" + new SimpleDateFormat("dd/MM/yyyy").format(new Date(1450130402479l)));
+		//System.out.println("enddate is:" + new SimpleDateFormat("dd/MM/yyyy").format(new Date(1450130402479l)));
 		
+		//System.out.println("new startdate timestamp:" + (new SimpleDateFormat("dd/MM/yyyy").format(new Date(1450130402479l))));
 		
+		Date now = new Date();
+		System.out.println("date is:" + now);
+		System.out.println("timestamp is:" + now.getTime());
+		Date formattedDate =date.beginOfDay(now);
+		System.out.println("formatted date is:" + formattedDate);
+		System.out.println("formatted timestamp is:" + formattedDate.getTime());
+				
 	}
 	
 }
