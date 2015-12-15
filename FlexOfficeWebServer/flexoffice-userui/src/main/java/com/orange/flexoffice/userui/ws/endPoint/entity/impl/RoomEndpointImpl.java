@@ -298,8 +298,8 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 * @return tenant
 	 */
 	private UserSummary computeTenantSummary(final ERoomStatus status, final UserDao userDao, final String roomName) {
-		UserSummary tenant = factory.createUserSummary();
-
+		
+		UserSummary tenant = null;
 		// Compute tenant name only if room is reserved or occupied
 		if ((status == ERoomStatus.RESERVED) ||
 				(status == ERoomStatus.OCCUPIED)) {
@@ -308,6 +308,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				LOGGER.info("UserUi Get rooms / Get room id   : user not found on room " + roomName);
 			// And if user is known
 			} else {
+				tenant = factory.createUserSummary();
 				tenant.setId(userDao.getId().toString());
 				// Compute label
 				tenant.setLabel(userDao.getFirstName() + " " + userDao.getLastName());
