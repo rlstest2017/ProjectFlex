@@ -1,6 +1,7 @@
 package com.orange.flexoffice.business.common.utils;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -119,8 +120,12 @@ public class DateTools {
 		//date.calculateDuration(dateBegin, dateEnd);
 		//float rate = ((float)1500l*100/(float)225000l);
 		
+		//System.out.println("date is:" + new Date().getTime());
+				
+		System.out.println("startdate is:" + new SimpleDateFormat("dd/MM/yyyy").format(new Date(1449784800166l)));
 		
-		System.out.println("date is:" + new Date().getTime());
+		System.out.println("enddate is:" + new SimpleDateFormat("dd/MM/yyyy").format(new Date(1450130402479l)));
+		
 		
 	}
 	

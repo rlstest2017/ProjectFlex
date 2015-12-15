@@ -25,6 +25,6 @@ public interface StatManager {
 	 * @param viewtype
 	 * @return
 	 */
-	MultiStatSetDto getOccupancyStats(Integer from, Integer to, String viewtype);
+	MultiStatSetDto getOccupancyStats(Long from, Long to, String viewtype);
 	
 }

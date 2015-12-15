@@ -1,5 +1,6 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -127,7 +128,7 @@ public class StatManagerImpl implements StatManager {
 	}
 
 	@Override
-	public MultiStatSetDto getOccupancyStats(Integer from, Integer to, String viewtype) {
+	public MultiStatSetDto getOccupancyStats(Long from, Long to, String viewtype) {
 		
 		MultiStatSetDto multiStatSet = new MultiStatSetDto();
 		
