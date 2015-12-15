@@ -80,22 +80,20 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			dataList = roomManager.findAllRooms();
 		}
 
-		if (dataList == null) {
-			LOGGER.error("UserUi.RoomEndpoint.getRooms : Rooms not found");
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_27, Response.Status.NOT_FOUND));
-		}
-
 		List<RoomSummary> roomList = new ArrayList<RoomSummary>();
-		for (RoomDao roomDao : dataList) {
-			RoomSummary room = factory.createRoomSummary();
-			room.setId(roomDao.getColumnId());
-			room.setName(roomDao.getName());
-			room.setType(ERoomType.valueOf(roomDao.getType()));
-			room.setAddress(roomDao.getAddress());
-			room.setCapacity(BigInteger.valueOf(roomDao.getCapacity()));
-			room.setStatus(ERoomStatus.valueOf(roomDao.getStatus().toString()));
-			room.setTenantName(computeTenant(room.getStatus(), roomDao.getUserId(), roomDao.getName()));
-			roomList.add(room);
+		
+		if (dataList != null) {
+			for (RoomDao roomDao : dataList) {
+				RoomSummary room = factory.createRoomSummary();
+				room.setId(roomDao.getColumnId());
+				room.setName(roomDao.getName());
+				room.setType(ERoomType.valueOf(roomDao.getType()));
+				room.setAddress(roomDao.getAddress());
+				room.setCapacity(BigInteger.valueOf(roomDao.getCapacity()));
+				room.setStatus(ERoomStatus.valueOf(roomDao.getStatus().toString()));
+				room.setTenantName(computeTenant(room.getStatus(), roomDao.getUserId(), roomDao.getName()));
+				roomList.add(room);
+			}
 		}
 
 		LOGGER.debug("UserUi.RoomEndpoint.getRooms List of rooms : nb = " + roomList.size());
