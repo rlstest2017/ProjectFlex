@@ -20,6 +20,7 @@ import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
 import com.orange.flexoffice.dao.common.model.object.MultiStatDto;
 import com.orange.flexoffice.dao.common.model.object.MultiStatSetDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDailyOccupancyDto;
+import com.orange.flexoffice.dao.common.model.object.RoomDailyTypeDto;
 import com.orange.flexoffice.dao.common.model.object.SimpleStatDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDailyOccupancyDaoRepository;
@@ -164,10 +165,14 @@ public class StatManagerImpl implements StatManager {
 	 * @return
 	 */
 	private List<MultiStatDto> getMultiStat(String viewtype, List<RoomDailyOccupancyDao> dailyRoomsList) {
-	
-		List<MultiStatDto> multiStatList = new ArrayList<MultiStatDto>();
+		// list with MultiStatDto (label, values)
+		List<MultiStatDto> multiStatListReturned = new ArrayList<MultiStatDto>();
 		
 		if (viewtype.equals(EnumViewType.DAY.toString())) {
+			
+			// 0 - create list with MultiStatDto (roomType, occupancyDuration, day)
+			List<MultiStatDto> multiStatList = new ArrayList<MultiStatDto>();
+			
 			// 1 - Make distinct daily List
 			List<Date> distinctDayList = new ArrayList<Date>();
 			for (RoomDailyOccupancyDao daily : dailyRoomsList) {
@@ -177,20 +182,31 @@ public class StatManagerImpl implements StatManager {
 				}
 			}
 			
-			// 2 - Make MultiStatDto List for (day, occupancyDuration & roomType )
+			// 2 - Get List of RoomDailyTypeDto (roomType, occupancyDuration & Day) from DB
+			List<RoomDailyTypeDto> roomslist = roomDailyRepository.findRoomsDailyAndType();
+			
+			// 3 - Make MultiStatDto List for (day, occupancyDuration & roomType )
 			for (Date date : distinctDayList) {
-				MultiStatDto multiStatDto = new MultiStatDto();
-				multiStatDto.setDay(date);
-				for (RoomDailyOccupancyDao daily : dailyRoomsList) {
-					if ((daily.getDay().after(dateTools.beginOfDay(date)))&& (daily.getDay().before(dateTools.endOfDay(date)))) {  // comptabiliser la ligne
-						
-						
-					}
+				for (RoomDailyTypeDto roomDailyTypeDto : roomslist) {
+					if ((roomDailyTypeDto.getDay().after(dateTools.beginOfDay(date)))&& (roomDailyTypeDto.getDay().before(dateTools.endOfDay(date)))) {  // comptabiliser la ligne
+						Integer index = getMultiStatDtoInList(date, roomDailyTypeDto.getType(),  multiStatList);
+						if (index != -1) { // update multiStatDto
+							MultiStatDto sdto = multiStatList.get(index);
+							sdto.setOccupancyDuration(sdto.getOccupancyDuration() + roomDailyTypeDto.getOccupancyDuration());
+						} else { // create new multiStatDto
+							MultiStatDto multiStatDto = new MultiStatDto();
+							multiStatDto.setDay(date);
+							multiStatDto.setOccupancyDuration(roomDailyTypeDto.getOccupancyDuration());
+							multiStatDto.setRoomType(E_RoomType.valueOf(roomDailyTypeDto.getType()));
+							
+							multiStatList.add(multiStatDto); // add entry
+						}
+					}	
 				}
-				
-				
 			}
 			
+			// 4 - Construct multiStatListReturned list
+			// TODO
 			
 		} else if (viewtype.equals(EnumViewType.WEEK.toString())) {
 			
@@ -198,7 +214,7 @@ public class StatManagerImpl implements StatManager {
 			
 		}
 		
-		return multiStatList;
+		return multiStatListReturned;
 	}
 	
 	/**
@@ -252,5 +268,32 @@ public class StatManagerImpl implements StatManager {
 		
 		return index;
 	}
+	
+	/**
+	 * getMultiStatDtoInList
+	 * @param dto
+	 * @param multiStatList
+	 * @return
+	 */
+	private Integer getMultiStatDtoInList(Date date, String roomType, List<MultiStatDto> multiStatList) {
+		boolean state = false;
+		Integer index = -1;
+		if (!multiStatList.isEmpty()) {
+			for (MultiStatDto statMulti : multiStatList) {
+				index = index + 1;
+				if ((date.getTime() == statMulti.getDay().getTime())&&(roomType.equals(statMulti.getRoomType()))) {
+					state = true;
+					break;
+				} 
+			}
+		}
+		
+		if (!state) { // if entry not exist return -1
+			index = -1;
+		}
+		
+		return index;
+	}
+	
 
 }

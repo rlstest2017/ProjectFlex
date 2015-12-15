@@ -17,7 +17,7 @@ public class MultiStatDto {
 	private List<String> values;
 	private E_RoomType roomType;
 	private Long occupancyDuration;
-	private Date Day;
+	private Date day;
 	/**
 	 * @return the label
 	 */
@@ -73,13 +73,13 @@ public class MultiStatDto {
 	 * @return the day
 	 */
 	public Date getDay() {
-		return Day;
+		return day;
 	}
 	/**
 	 * @param day the day to set
 	 */
 	public void setDay(Date day) {
-		Day = day;
+		this.day = day;
 	}
 		
 	

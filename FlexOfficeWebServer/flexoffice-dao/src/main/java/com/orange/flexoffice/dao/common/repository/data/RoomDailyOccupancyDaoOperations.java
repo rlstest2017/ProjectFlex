@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.orange.flexoffice.dao.common.model.data.RoomDailyOccupancyDao;
 import com.orange.flexoffice.dao.common.model.object.RoomDailyOccupancyDto;
+import com.orange.flexoffice.dao.common.model.object.RoomDailyTypeDto;
 
 /**
  * RoomDailyOccupancyDaoOperations
@@ -17,5 +18,7 @@ public interface RoomDailyOccupancyDaoOperations {
 	List<RoomDailyOccupancyDao> findRequestedRoomsDailyOccupancy(RoomDailyOccupancyDto data); // by From and To parameters
 	
 	RoomDailyOccupancyDao saveRoomDaily(RoomDailyOccupancyDao data);
+	
+	List<RoomDailyTypeDto> findRoomsDailyAndType();
 			
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.RoomDailyOccupancyDao;
 import com.orange.flexoffice.dao.common.model.object.RoomDailyOccupancyDto;
+import com.orange.flexoffice.dao.common.model.object.RoomDailyTypeDto;
 import com.orange.flexoffice.dao.common.repository.data.RoomDailyOccupancyDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.RoomDailyOccupancyDaoMetadata;
 import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
@@ -44,6 +45,16 @@ public class RoomDailyOccupancyDaoRepository extends DataRepository<RoomDailyOcc
 	}
 
 	@Override
+	public List<RoomDailyTypeDto> findRoomsDailyAndType() {
+		SqlParameterSource paramMap = new MapSqlParameterSource();
+		return jdbcTemplate.query(
+				findAllDailyAndTypesQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<RoomDailyTypeDto>(RoomDailyTypeDto.class)
+			);
+	}
+	
+	@Override
 	public RoomDailyOccupancyDao saveRoomDaily(RoomDailyOccupancyDao data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
@@ -73,6 +84,7 @@ public class RoomDailyOccupancyDaoRepository extends DataRepository<RoomDailyOcc
 	protected String getRowColName() {
 		return null;
 	}
+
 
 
 }
