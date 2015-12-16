@@ -272,11 +272,11 @@ public class RoomEndpointImpl implements RoomEndpoint {
 					// Get user object from DB
 					UserDao userDao = userManager.find(userId);
 					// Compute tenant name
-					if ((userDao.getLastName() != null)&&(!userDao.getLastName().isEmpty())) {
-						tenant = userDao.getFirstName() + " " + userDao.getLastName();
-					} else {
+					tenant = userDao.getFirstName() + " " + userDao.getLastName();
+					if (tenant.isEmpty()) {
 						tenant = userDao.getEmail();
-					}
+					}	
+					
 
 				} catch(DataNotExistsException e ) {
 					LOGGER.info("UserUi Get rooms / Get room id : user not found on room " + roomName, e);

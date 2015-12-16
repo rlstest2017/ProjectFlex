@@ -63,7 +63,7 @@ public class StatEndpointImpl implements StatEndpoint {
 	}
 
 	@Override
-	public MultiStatSet getOccupancyStats(Long from, Long to, String viewtype) {
+	public MultiStatSet getOccupancyStats(String from, String to, String viewtype) {
 		try {
 		LOGGER.info( "Begin call StatEndpoint.getOccupancyStats at: " + new Date() );
 		
@@ -106,6 +106,11 @@ public class StatEndpointImpl implements StatEndpoint {
 	@Override
 	public boolean executeInitTestFile() {
 		return testManager.executeInitTestFile();
+	}
+
+	@Override
+	public boolean initRoomDailyOccupancyTable() {
+		return testManager.initRoomDailyOccupancyTable();
 	}
 	
 }

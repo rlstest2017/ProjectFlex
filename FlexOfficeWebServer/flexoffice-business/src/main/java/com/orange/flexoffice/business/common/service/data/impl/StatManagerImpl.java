@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.orange.flexoffice.business.common.enums.EnumViewType;
 import com.orange.flexoffice.business.common.service.data.StatManager;
 import com.orange.flexoffice.business.common.utils.DateTools;
+import com.orange.flexoffice.business.common.utils.StatTools;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDailyOccupancyDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
@@ -45,7 +46,9 @@ public class StatManagerImpl implements StatManager {
 	
 	@Autowired
 	private DateTools dateTools;
-
+	@Autowired
+	private StatTools statTools;
+	
 	@Override
 	@Transactional(readOnly=true)
 	public List<SimpleStatDto> getPopularStats() {
@@ -53,28 +56,18 @@ public class StatManagerImpl implements StatManager {
 		LOGGER.debug("Begin method StatManager.getPopularStats");
 		List<SimpleStatDto> simpleStatList = new ArrayList<SimpleStatDto>(); 
 				
-		// 1 - Get Date with DATE_BEGIN_DAY & DATE_END_DAY parameters
-		ConfigurationDao beginDay = configRepository.findByKey(E_ConfigurationKey.DATE_BEGIN_DAY.toString());
-		String  beginDayValue = beginDay.getValue(); // in hh:mm
-		ConfigurationDao endDay = configRepository.findByKey(E_ConfigurationKey.DATE_END_DAY.toString());
-		String  endDayValue = endDay.getValue(); // in hh:mm
-		
-		// 2 - Process the Dates
-		Date beginDayDate = dateTools.dateBeginDay(beginDayValue);
-		Date endDayDate = dateTools.dateEndDay(endDayValue); 
-		
-		// 3 - Calculate duration between beginDayDate & endDayDate in seconds
-		Long duration = dateTools.calculateDuration(beginDayDate, endDayDate);
+		// 1 - Calculate day duration between beginDayDate & endDayDate in seconds
+		Long duration = calculateDayDuration();
 		LOGGER.debug("duration betwwen beginDayDate and endDayDate :" + duration);
 		
-		// 4 - Find All RoomDailOccupancy DATA order by roomId
+		// 2 - Find All RoomDailOccupancy DATA order by roomId
 		List<RoomDailyOccupancyDao> roomDailyList = roomDailyRepository.findAllRoomsDailyOccupancy();
 		
 		LOGGER.debug("roomDailyList size :" + roomDailyList.size());
 		
-		// 5 - cumulate & calculate the rates by roomId
+		// 3 - cumulate & calculate the rates by roomId
 		for (RoomDailyOccupancyDao roomDailyOccupancyDao : roomDailyList) { // the statsDaily are order by roomId 1,2,3,....
-			Integer index = getStatInList(roomDailyOccupancyDao.getRoomId(), simpleStatList);
+			Integer index = statTools.getStatInList(roomDailyOccupancyDao.getRoomId(), simpleStatList);
 			if (index != -1) {
 				// calculate occupancyDuration
 				SimpleStatDto statGet = simpleStatList.get(index);
@@ -93,7 +86,7 @@ public class StatManagerImpl implements StatManager {
 			}
 		}
 		
-		// 6 - Calculate the rates & Get RoomNames in the simpleStatList
+		// 4 - Calculate the rates & Get RoomNames in the simpleStatList
 		for (SimpleStatDto simpleStatDto : simpleStatList) {
 			// Get roomName
 			RoomDao room =  roomRepository.findByRoomId(simpleStatDto.getRoomId().longValue());
@@ -108,20 +101,24 @@ public class StatManagerImpl implements StatManager {
 	}
 	
 	@Override
-	public MultiStatSetDto getOccupancyStats(Long from, Long to, String viewtype) {
+	public MultiStatSetDto getOccupancyStats(String from, String to, String viewtype) {
 		
 		MultiStatSetDto multiStatSet = new MultiStatSetDto();
 		
 		// 1 - Get Room Daily Data requested by From & To parameters
-		RoomDailyOccupancyDto parameters = new RoomDailyOccupancyDto(); 
-		Date fromDate = new Date(from);
-		Date toDate = new Date(to);
+		RoomDailyOccupancyDto parameters = new RoomDailyOccupancyDto();
+		Date fromDate = dateTools.getDateFromString(from);;
+		Date toDate = dateTools.getDateFromString(to);
 		parameters.setFromDate(fromDate);
 		parameters.setToDate(toDate);
 		List<RoomDailyOccupancyDao> dailyRoomsList = roomDailyRepository.findRequestedRoomsDailyOccupancy(parameters);
-		
+
+		// 2 - Get categories 
+		List<String> categories = statTools.getCategories();
+		multiStatSet.setCategories(categories); // set categories
+
 		if ((dailyRoomsList != null)&&(!dailyRoomsList.isEmpty())) {
-			// 2 - Get startdate & enddate
+			// 3 - Get startdate & enddate
 			RoomDailyOccupancyDao firstEntry = dailyRoomsList.get(0);
 			Date startdate = firstEntry.getDay();
 			multiStatSet.setStartdate(startdate.getTime());  // set startdate
@@ -130,33 +127,18 @@ public class StatManagerImpl implements StatManager {
 			Date enddate = endEntry.getDay();
 			multiStatSet.setEnddate(enddate.getTime());  // set enddate
 			
-			// 3 - Get categories 
-			List<String> categories = getCategories();
-			multiStatSet.setCategories(categories); // set categories
-			
 			// 4 - Get data object
-			List<MultiStatDto> multiStat = getMultiStat(viewtype, dailyRoomsList);
+			List<MultiStatDto> multiStat = getMultiStat(viewtype, dailyRoomsList, categories.size());
 			multiStatSet.setData(multiStat);
+		} else {
+			multiStatSet.setStartdate(fromDate.getTime());  // set startdate fromDate
+			multiStatSet.setEnddate(toDate.getTime());  // set enddate toDate
 		}
 
 		return multiStatSet;
 	}
 	
-	/**
-	 * getCategories
-	 * @return
-	 */
-	private List<String> getCategories() {
-		
-		List<String> list = new ArrayList<String>();
-		
-		E_RoomType[] types = E_RoomType.values();
-		for (E_RoomType e_RoomType : types) {
-			list.add(e_RoomType.toString());
-		}
-		
-		return list;
-	}
+	
 	
 	/**
 	 * getMultiStat
@@ -164,12 +146,15 @@ public class StatManagerImpl implements StatManager {
 	 * @param dailyRoomsList
 	 * @return
 	 */
-	private List<MultiStatDto> getMultiStat(String viewtype, List<RoomDailyOccupancyDao> dailyRoomsList) {
-		// list with MultiStatDto (label, values)
+	private List<MultiStatDto> getMultiStat(String viewtype, List<RoomDailyOccupancyDao> dailyRoomsList, int sizeCategories) {
+		// List with MultiStatDto (label, values) to returned
 		List<MultiStatDto> multiStatListReturned = new ArrayList<MultiStatDto>();
 		
+		// Calculate day duration between beginDayDate & endDayDate in seconds
+		Long duration = calculateDayDuration();
+		LOGGER.debug("duration betwwen beginDayDate and endDayDate :" + duration);
+				
 		if (viewtype.equals(EnumViewType.DAY.toString())) {
-			
 			// 0 - create list with MultiStatDto (roomType, occupancyDuration, day)
 			List<MultiStatDto> multiStatList = new ArrayList<MultiStatDto>();
 			
@@ -189,7 +174,7 @@ public class StatManagerImpl implements StatManager {
 			for (Date date : distinctDayList) {
 				for (RoomDailyTypeDto roomDailyTypeDto : roomslist) {
 					if ((roomDailyTypeDto.getDay().after(dateTools.beginOfDay(date)))&& (roomDailyTypeDto.getDay().before(dateTools.endOfDay(date)))) {  // comptabiliser la ligne
-						Integer index = getMultiStatDtoInList(date, roomDailyTypeDto.getType(),  multiStatList);
+						Integer index = statTools.getMultiStatDtoInList(date, roomDailyTypeDto.getType(),  multiStatList);
 						if (index != -1) { // update multiStatDto
 							MultiStatDto sdto = multiStatList.get(index);
 							sdto.setOccupancyDuration(sdto.getOccupancyDuration() + roomDailyTypeDto.getOccupancyDuration());
@@ -205,8 +190,16 @@ public class StatManagerImpl implements StatManager {
 				}
 			}
 			
-			// 4 - Construct multiStatListReturned list
-			// TODO
+			// 4 - Construct multiStatListReturned list (label, values)
+			for (MultiStatDto multiStatDto : multiStatList) {
+				Integer index = statTools.getMultiStatLabelInList(String.valueOf(multiStatDto.getDay().getTime()), multiStatListReturned);
+				if (index != -1) { // update multiStatDto
+					statTools.updateReturnedMultiStatDto(multiStatListReturned.get(index), multiStatDto, duration);
+				} else { // create new multiStatDto
+					MultiStatDto multiStatDtoReturned = statTools.createReturnedMultiStatDto(multiStatDto, duration);
+					multiStatListReturned.add(multiStatDtoReturned);
+				}
+			}
 			
 		} else if (viewtype.equals(EnumViewType.WEEK.toString())) {
 			
@@ -217,82 +210,26 @@ public class StatManagerImpl implements StatManager {
 		return multiStatListReturned;
 	}
 	
+		
 	/**
-	 * getStatInList
-	 * @param roomId
-	 * @param simpleStatList
+	 * calculateDayDuration
 	 * @return
 	 */
-	private Integer getStatInList(Integer roomId, List<SimpleStatDto> simpleStatList) {
-		boolean state = false;
-		Integer index = -1;
-		if (!simpleStatList.isEmpty()) {
-			for (SimpleStatDto statSimple : simpleStatList) {
-				index = index + 1;
-				if (roomId == statSimple.getRoomId()) {
-					state = true;
-					break;
-				} 
-			}
-		}
+	private Long calculateDayDuration() {
+		// 1 - Get Date with DATE_BEGIN_DAY & DATE_END_DAY parameters
+		ConfigurationDao beginDay = configRepository.findByKey(E_ConfigurationKey.DATE_BEGIN_DAY.toString());
+		String  beginDayValue = beginDay.getValue(); // in hh:mm
+		ConfigurationDao endDay = configRepository.findByKey(E_ConfigurationKey.DATE_END_DAY.toString());
+		String  endDayValue = endDay.getValue(); // in hh:mm
 		
-		if (!state) { // if entry not exist return -1
-			index = -1;
-		}
+		// 2 - Process the Dates
+		Date beginDayDate = dateTools.dateBeginDay(beginDayValue);
+		Date endDayDate = dateTools.dateEndDay(endDayValue); 
 		
-		return index;
-	}
-	
-	/**
-	 * getDayInList
-	 * @param day
-	 * @param multiStatList
-	 * @return
-	 */
-	private Integer getDayInList(Date day, List<MultiStatDto> multiStatList) {
-		boolean state = false;
-		Integer index = -1;
-		if (!multiStatList.isEmpty()) {
-			for (MultiStatDto statMulti : multiStatList) {
-				index = index + 1;
-				if (day.getTime() == statMulti.getDay().getTime()) {
-					state = true;
-					break;
-				} 
-			}
-		}
-		
-		if (!state) { // if entry not exist return -1
-			index = -1;
-		}
-		
-		return index;
-	}
-	
-	/**
-	 * getMultiStatDtoInList
-	 * @param dto
-	 * @param multiStatList
-	 * @return
-	 */
-	private Integer getMultiStatDtoInList(Date date, String roomType, List<MultiStatDto> multiStatList) {
-		boolean state = false;
-		Integer index = -1;
-		if (!multiStatList.isEmpty()) {
-			for (MultiStatDto statMulti : multiStatList) {
-				index = index + 1;
-				if ((date.getTime() == statMulti.getDay().getTime())&&(roomType.equals(statMulti.getRoomType()))) {
-					state = true;
-					break;
-				} 
-			}
-		}
-		
-		if (!state) { // if entry not exist return -1
-			index = -1;
-		}
-		
-		return index;
+		// 3 - Calculate duration between beginDayDate & endDayDate in seconds
+		Long duration = dateTools.calculateDuration(beginDayDate, endDayDate);
+
+		return duration;
 	}
 	
 

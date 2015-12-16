@@ -30,4 +30,10 @@ public interface TestManager {
 	 * @return true if successfully done
 	 */
 	boolean initRoomStatsTableForAdminUI();
+	
+	/**
+	 * Initialise RoomDailyOccupancy tests data in DB
+	 * @return true if successfully done
+	 */
+	boolean initRoomDailyOccupancyTable();
 }

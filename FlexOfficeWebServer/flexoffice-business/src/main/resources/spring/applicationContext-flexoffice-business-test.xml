@@ -15,6 +15,9 @@
 	<bean id="dateTools"
 	class="com.orange.flexoffice.business.common.utils.DateTools" />
 	
+	<bean id="statTools"
+	class="com.orange.flexoffice.business.common.utils.StatTools" />
+	
 	<!-- Import -->
 	<import resource="classpath*:spring/applicationContext-flexoffice-dao-test.xml" />
 

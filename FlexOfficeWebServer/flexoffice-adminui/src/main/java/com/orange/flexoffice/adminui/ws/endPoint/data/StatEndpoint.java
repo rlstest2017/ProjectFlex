@@ -48,12 +48,13 @@ public interface StatEndpoint {
 	@GET
 	@Path(ROOMS_PATH + OCCUPANCY_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
-	MultiStatSet getOccupancyStats(@QueryParam(FROM_PARAM) Long from, @QueryParam(TO_PARAM) Long to, @QueryParam(VIEW_TYPE_PARAM) String viewtype);
+	MultiStatSet getOccupancyStats(@QueryParam(FROM_PARAM) String from, @QueryParam(TO_PARAM) String to, @QueryParam(VIEW_TYPE_PARAM) String viewtype);
 		
 	// used for tests
 	boolean executeInitTestFile();
 	
-	
+	// used for tests
+	boolean initRoomDailyOccupancyTable();
 	
 }
 

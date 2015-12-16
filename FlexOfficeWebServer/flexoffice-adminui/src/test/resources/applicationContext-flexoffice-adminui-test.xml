@@ -25,6 +25,9 @@
 	<bean id="systemEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.SystemEndpointImpl">
 	</bean>
 	
+	<bean id="statEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.StatEndpointImpl">
+	</bean>
+	
 	<bean id="errorMessageHandler" class="com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler">
 	</bean>
 	

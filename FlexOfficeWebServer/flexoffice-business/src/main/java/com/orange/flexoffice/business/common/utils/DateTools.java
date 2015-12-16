@@ -1,8 +1,10 @@
 package com.orange.flexoffice.business.common.utils;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.FormatFlagsConversionMismatchException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -109,7 +111,7 @@ public class DateTools {
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MILLISECOND,0);
 		Date dayDate = cal.getTime();
-		System.out.println("dayDate :"+ dayDate);
+		//System.out.println("dayDate :"+ dayDate);
 		return dayDate;
 	}
 	
@@ -129,7 +131,7 @@ public class DateTools {
 			cal.set(Calendar.SECOND,59);
 			cal.set(Calendar.MILLISECOND,0);
 			Date dayDate = cal.getTime();
-			System.out.println("dayDate :"+ dayDate);
+			//System.out.println("dayDate :"+ dayDate);
 			return dayDate;
 		}
 		
@@ -157,12 +159,33 @@ public class DateTools {
 		return state;
 	}
 	
+	/**
+	 * getDateFromString
+	 * @param dateInString
+	 * @return
+	 */
+	public Date getDateFromString(String dateInString) {
+		try {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		Date date = null;;
+		if (dateInString.equals("0")) { // default value
+			date = new Date(0l);
+		} else {
+		date = formatter.parse(dateInString);
+		}
+		return date;
+		
+		} catch (ParseException e) {
+			LOGGER.error("Format Date exeption in DateTools.getDateFromString :" + dateInString);
+			throw new FormatFlagsConversionMismatchException(e.getMessage(), ' ');
+		}
+	}
 	
 	public static void main(String[] args) throws ParseException {
 		//SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		//String dateBeginInString = "2015-12-08 18:56:25.620506";
 		//String dateEndInString = "2015-12-08 18:59:35.164569";
-		DateTools date = new DateTools();
+		//DateTools date = new DateTools();
 		//date.lastConnexionDate("15");
 		//date.reservationDateDelayBeforeTimeOut(new Date(), 300);
 		//date.dateBeginDay("07:30");
@@ -176,16 +199,17 @@ public class DateTools {
 				
 		//System.out.println("startdate is:" + new SimpleDateFormat("dd/MM/yyyy").format(new Date(1449784800166l)));
 		
-		//System.out.println("enddate is:" + new SimpleDateFormat("dd/MM/yyyy").format(new Date(1450130402479l)));
+		System.out.println("stardate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(1449784800166l)));
+		System.out.println("enddate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(1450216800210l)));
 		
 		//System.out.println("new startdate timestamp:" + (new SimpleDateFormat("dd/MM/yyyy").format(new Date(1450130402479l))));
 		
-		Date now = new Date();
-		System.out.println("date is:" + now);
-		System.out.println("timestamp is:" + now.getTime());
-		Date formattedDate =date.beginOfDay(now);
-		System.out.println("formatted date is:" + formattedDate);
-		System.out.println("formatted timestamp is:" + formattedDate.getTime());
+//		Date now = new Date();
+//		System.out.println("date is:" + now);
+//		System.out.println("timestamp is:" + now.getTime());
+//		Date formattedDate =date.beginOfDay(now);
+//		System.out.println("formatted date is:" + formattedDate);
+//		System.out.println("formatted timestamp is:" + formattedDate.getTime());
 				
 	}
 	
