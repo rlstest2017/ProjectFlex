@@ -178,11 +178,13 @@ public class StatManagerImpl implements StatManager {
 						if (index != -1) { // update multiStatDto
 							MultiStatDto sdto = multiStatList.get(index);
 							sdto.setOccupancyDuration(sdto.getOccupancyDuration() + roomDailyTypeDto.getOccupancyDuration());
+							sdto.setNbDaysDuration(sdto.getNbDaysDuration() + 1);
 						} else { // create new multiStatDto
 							MultiStatDto multiStatDto = new MultiStatDto();
 							multiStatDto.setDay(date);
 							multiStatDto.setOccupancyDuration(roomDailyTypeDto.getOccupancyDuration());
 							multiStatDto.setRoomType(E_RoomType.valueOf(roomDailyTypeDto.getType()));
+							multiStatDto.setNbDaysDuration(1l);
 							
 							multiStatList.add(multiStatDto); // add entry
 						}

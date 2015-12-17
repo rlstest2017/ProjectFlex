@@ -154,7 +154,7 @@ public class StatTools {
 		multiStatDtoReturned.setLabel(String.valueOf(multiStatDto.getDay().getTime()));
 		
 		// 2 - calculate rate
-		float rate = ((float)multiStatDto.getOccupancyDuration()*100/(float)duration);
+		float rate = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)multiStatDto.getNbDaysDuration()));
 				
 		// 4 - add value rate
 		int index = getRoomTypeIndex(multiStatDto.getRoomType().toString());
@@ -181,7 +181,7 @@ public class StatTools {
 	 */
 	public void updateReturnedMultiStatDto(MultiStatDto multiStatDtoReturned, MultiStatDto multiStatDto, Long duration) {
 		// 1 - calculate rate
-		float rate = ((float)multiStatDto.getOccupancyDuration()*100/(float)duration);
+		float rate = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)multiStatDto.getNbDaysDuration()));
 		
 		// 4 - update value rate
 		int index = getRoomTypeIndex(multiStatDto.getRoomType().toString());

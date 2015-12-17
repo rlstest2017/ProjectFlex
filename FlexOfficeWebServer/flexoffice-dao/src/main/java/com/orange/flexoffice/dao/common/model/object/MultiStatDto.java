@@ -18,6 +18,8 @@ public class MultiStatDto {
 	private E_RoomType roomType;
 	private Long occupancyDuration;
 	private Date day;
+	private Long nbDaysDuration;
+	
 	/**
 	 * @return the label
 	 */
@@ -81,6 +83,19 @@ public class MultiStatDto {
 	public void setDay(Date day) {
 		this.day = day;
 	}
+	/**
+	 * @return the nbDaysDuration
+	 */
+	public Long getNbDaysDuration() {
+		return nbDaysDuration;
+	}
+	/**
+	 * @param nbDaysDuration the nbDaysDuration to set
+	 */
+	public void setNbDaysDuration(Long nbDaysDuration) {
+		this.nbDaysDuration = nbDaysDuration;
+	}
 		
+	
 	
 }
