@@ -155,10 +155,7 @@ public class StatManagerImpl implements StatManager {
 		LOGGER.debug("duration betwwen beginDayDate and endDayDate :" + duration);
 				
 		if (viewtype.equals(EnumViewType.DAY.toString())) {
-			// 0 - create list with MultiStatDto (roomType, occupancyDuration, day)
-			List<MultiStatDto> multiStatList = new ArrayList<MultiStatDto>();
-			
-			// 1 - Make distinct daily List
+			// 0 - Make distinct daily List
 			List<Date> distinctDayList = new ArrayList<Date>();
 			for (RoomDailyOccupancyDao daily : dailyRoomsList) {
 				Date formattedDaily = dateTools.beginOfDay(daily.getDay());
@@ -167,10 +164,32 @@ public class StatManagerImpl implements StatManager {
 				}
 			}
 			
-			// 2 - Get List of RoomDailyTypeDto (roomType, occupancyDuration & Day) from DB
+			// Compute returned List
+			constructReturnedList(distinctDayList, multiStatListReturned, duration);
+			
+					
+		} else if (viewtype.equals(EnumViewType.WEEK.toString())) {
+			
+		} else if (viewtype.equals(EnumViewType.MONTH.toString())) {
+			
+		}
+		
+		return multiStatListReturned;
+	}
+	
+	/**
+	 * constructReturnedList
+	 * @param distinctDayList
+	 * @param multiStatListReturned
+	 */
+	private void constructReturnedList(List<Date> distinctDayList, List<MultiStatDto> multiStatListReturned, Long duration) {
+			// 0 - create list with MultiStatDto (roomType, occupancyDuration, day)
+			List<MultiStatDto> multiStatList = new ArrayList<MultiStatDto>();
+			
+			// 1 - Get List of RoomDailyTypeDto (roomType, occupancyDuration & Day) from DB
 			List<RoomDailyTypeDto> roomslist = roomDailyRepository.findRoomsDailyAndType();
 			
-			// 3 - Make MultiStatDto List for (day, occupancyDuration & roomType )
+			// 2 - Make MultiStatDto List for (day, occupancyDuration & roomType )
 			for (Date date : distinctDayList) {
 				for (RoomDailyTypeDto roomDailyTypeDto : roomslist) {
 					if ((roomDailyTypeDto.getDay().after(dateTools.beginOfDay(date)))&& (roomDailyTypeDto.getDay().before(dateTools.endOfDay(date)))) {  // comptabiliser la ligne
@@ -192,7 +211,7 @@ public class StatManagerImpl implements StatManager {
 				}
 			}
 			
-			// 4 - Construct multiStatListReturned list (label, values)
+			// 3 - Construct multiStatListReturned list (label, values)
 			for (MultiStatDto multiStatDto : multiStatList) {
 				Integer index = statTools.getMultiStatLabelInList(String.valueOf(multiStatDto.getDay().getTime()), multiStatListReturned);
 				if (index != -1) { // update multiStatDto
@@ -202,16 +221,7 @@ public class StatManagerImpl implements StatManager {
 					multiStatListReturned.add(multiStatDtoReturned);
 				}
 			}
-			
-		} else if (viewtype.equals(EnumViewType.WEEK.toString())) {
-			
-		} else if (viewtype.equals(EnumViewType.MONTH.toString())) {
-			
-		}
-		
-		return multiStatListReturned;
 	}
-	
 		
 	/**
 	 * calculateDayDuration
