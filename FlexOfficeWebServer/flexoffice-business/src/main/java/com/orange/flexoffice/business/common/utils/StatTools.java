@@ -101,7 +101,7 @@ public class StatTools {
 		if (!multiStatList.isEmpty()) {
 			for (MultiStatDto statMulti : multiStatList) {
 				index = index + 1;
-				if ((date.getTime() == statMulti.getDay().getTime())&&(roomType.equals(statMulti.getRoomType()))) {
+				if ((date.getTime() == statMulti.getDay().getTime())&&(roomType.equals(statMulti.getRoomType().toString()))) {
 					state = true;
 					break;
 				} 
