@@ -43,5 +43,10 @@ public class TestManagerImpl implements TestManager {
 	public boolean initRoomDailyOccupancyTable() {
 		return testRepository.initRoomDailyOccupancyTable();
 	}
+
+	@Override
+	public boolean initRoomMonthlyOccupancyTable() {
+		return testRepository.initRoomMonthlyOccupancyTable();
+	}
 	
 }

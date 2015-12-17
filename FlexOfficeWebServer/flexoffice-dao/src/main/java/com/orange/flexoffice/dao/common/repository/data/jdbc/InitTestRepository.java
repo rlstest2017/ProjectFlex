@@ -138,6 +138,27 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		return true;
 	}
 	
+	public boolean initRoomMonthlyOccupancyTable() {
+		String query = "DELETE FROM room_daily_occupancy";
+		jdbcTemplateForTest.execute(query);
+		String sqlRoomStats = "INSERT INTO room_daily_occupancy " +
+				"(id, room_id, day, occupancy_duration) VALUES (?, ?, CAST(? AS timestamp), ?)";
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {1, 3, "2014-11-10 23:00:00.166785", 10343 });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {2, 4, "2014-11-15 23:00:00.166785", 28864 });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {3, 5, "2014-11-30 23:00:00.166785", 6263 });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {4, 3, "2015-01-01 23:00:00.085779", 11741 });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {5, 4, "2015-01-14 23:00:00.085779", 2313 });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {6, 5, "2015-01-29 23:00:00.085779", 8443 });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {7, 3, "2015-06-04 23:00:02.479225", 17744 });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {8, 4, "2015-06-14 23:00:02.479225", 27499 });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {9, 5, "2015-06-24 23:00:02.479225", 9800 });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {10, 3, "2015-11-10 23:00:00.210389", 23275 });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {11, 4, "2015-11-15 23:00:00.210389", 28750 });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {12, 5, "2015-11-30 23:00:00.210389", 7531 });
+		
+		return true;
+	}
+	
 	@Override
 	public void forEach(DataExtractor dataExtractor) {
 	}

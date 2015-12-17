@@ -56,6 +56,9 @@ public interface StatEndpoint {
 	// used for tests
 	boolean initRoomDailyOccupancyTable();
 	
+	// used for tests
+	boolean initRoomMonthlyOccupancyTable();
+	
 }
 
 

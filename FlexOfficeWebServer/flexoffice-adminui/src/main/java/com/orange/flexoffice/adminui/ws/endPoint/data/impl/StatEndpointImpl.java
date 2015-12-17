@@ -112,5 +112,10 @@ public class StatEndpointImpl implements StatEndpoint {
 	public boolean initRoomDailyOccupancyTable() {
 		return testManager.initRoomDailyOccupancyTable();
 	}
+
+	@Override
+	public boolean initRoomMonthlyOccupancyTable() {
+		return testManager.initRoomMonthlyOccupancyTable();
+	}
 	
 }

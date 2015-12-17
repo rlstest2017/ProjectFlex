@@ -146,6 +146,12 @@ public class DateTools {
 		return occupancyDuration;
 	}
 	
+	/**
+	 * isDateInList
+	 * @param dateList
+	 * @param toCompare
+	 * @return
+	 */
 	public Boolean isDateInList(List<Date> dateList, Date toCompare) {
 		Boolean state = false;
 		
@@ -158,6 +164,34 @@ public class DateTools {
 		
 		return state;
 	}
+	
+	/**
+	 * isMonthInList
+	 * @param dateList
+	 * @param toCompare
+	 * @return
+	 */
+	public Boolean isMonthInList(List<Date> dateList, Date toCompare) {
+		Boolean state = false;
+		
+		Calendar cal = Calendar.getInstance();
+	    cal.setTime(toCompare);
+	    int yearToCompare = cal.get(Calendar.YEAR);
+	    int monthToCompare = cal.get(Calendar.MONTH);
+	    
+		for (Date date : dateList) {
+			cal.setTime(date);
+		    int year = cal.get(Calendar.YEAR);
+		    int month = cal.get(Calendar.MONTH);
+			if ((monthToCompare == month)&&(yearToCompare == year)) {
+				state = true;
+				break;
+			}
+		}
+		
+		return state;
+	}
+	
 	
 	/**
 	 * getDateFromString
@@ -199,8 +233,10 @@ public class DateTools {
 				
 		//System.out.println("startdate is:" + new SimpleDateFormat("dd/MM/yyyy").format(new Date(1449784800166l)));
 		
-		System.out.println("stardate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(1449784800166l)));
-		System.out.println("enddate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(1450216800210l)));
+		System.out.println("stardate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(1447628400000l)));
+		System.out.println("enddate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(1420066800000l)));
+		System.out.println("enddate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(1433368800000l)));
+		System.out.println("enddate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(1447110000000l)));
 		
 		//System.out.println("new startdate timestamp:" + (new SimpleDateFormat("dd/MM/yyyy").format(new Date(1450130402479l))));
 		

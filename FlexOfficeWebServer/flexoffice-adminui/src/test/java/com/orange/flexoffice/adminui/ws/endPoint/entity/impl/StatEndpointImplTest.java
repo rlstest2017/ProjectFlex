@@ -71,7 +71,7 @@ public class StatEndpointImplTest {
 	}
 	
 	@Test
-	public void TestD_statOccupancy() {
+	public void TestD_statOccupancyDaily() {
 		// SetUp
 		String from="0";
 		String to="2015-12-16T15:00:22.806Z";
@@ -85,4 +85,27 @@ public class StatEndpointImplTest {
 		assertEquals(4, statSet.getData().size());
 	}
 	
+	@Test
+	public void TestE_initRoomMonthlyOccupancyTables() {
+		// SetUp
+		boolean state = statEndpoint.initRoomMonthlyOccupancyTable();
+		 
+		// Asserts
+		assertEquals(true, state);
+	}
+	
+	@Test
+	public void TestF_statOccupancyMonthly() {
+		// SetUp
+		String from="0";
+		String to="2015-12-16T15:00:22.806Z";
+		String viewtype = "MONTH";
+		
+		// Test
+		MultiStatSet statSet =	statEndpoint.getOccupancyStats(from, to, viewtype);
+		System.out.println("Test app");
+		
+		// Asserts
+		assertEquals(4, statSet.getData().size());
+	}
 }

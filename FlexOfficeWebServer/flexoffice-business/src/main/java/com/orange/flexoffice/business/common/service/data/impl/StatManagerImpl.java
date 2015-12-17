@@ -1,6 +1,7 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -155,7 +156,7 @@ public class StatManagerImpl implements StatManager {
 		LOGGER.debug("duration betwwen beginDayDate and endDayDate :" + duration);
 				
 		if (viewtype.equals(EnumViewType.DAY.toString())) {
-			// 0 - Make distinct daily List
+			// Make distinct daily List
 			List<Date> distinctDayList = new ArrayList<Date>();
 			for (RoomDailyOccupancyDao daily : dailyRoomsList) {
 				Date formattedDaily = dateTools.beginOfDay(daily.getDay());
@@ -165,12 +166,23 @@ public class StatManagerImpl implements StatManager {
 			}
 			
 			// Compute returned List
-			constructReturnedList(distinctDayList, multiStatListReturned, duration);
+			constructReturnedList(distinctDayList, multiStatListReturned, duration, viewtype);
 			
 					
 		} else if (viewtype.equals(EnumViewType.WEEK.toString())) {
 			
 		} else if (viewtype.equals(EnumViewType.MONTH.toString())) {
+			// Make distinct monthly List
+			List<Date> distinctMonthList = new ArrayList<Date>();
+			for (RoomDailyOccupancyDao daily : dailyRoomsList) {
+				Date formattedDaily = dateTools.beginOfDay(daily.getDay());
+				if (!dateTools.isMonthInList(distinctMonthList, formattedDaily)) {
+					distinctMonthList.add(formattedDaily);
+				}
+			}
+			
+			// Compute returned List
+			constructReturnedList(distinctMonthList, multiStatListReturned, duration, viewtype);
 			
 		}
 		
@@ -182,35 +194,65 @@ public class StatManagerImpl implements StatManager {
 	 * @param distinctDayList
 	 * @param multiStatListReturned
 	 */
-	private void constructReturnedList(List<Date> distinctDayList, List<MultiStatDto> multiStatListReturned, Long duration) {
+	private void constructReturnedList(List<Date> distinctDayList, List<MultiStatDto> multiStatListReturned, Long duration, String viewtype) {
 			// 0 - create list with MultiStatDto (roomType, occupancyDuration, day)
 			List<MultiStatDto> multiStatList = new ArrayList<MultiStatDto>();
 			
 			// 1 - Get List of RoomDailyTypeDto (roomType, occupancyDuration & Day) from DB
+			// TODO by parameters
 			List<RoomDailyTypeDto> roomslist = roomDailyRepository.findRoomsDailyAndType();
 			
 			// 2 - Make MultiStatDto List for (day, occupancyDuration & roomType )
-			for (Date date : distinctDayList) {
-				for (RoomDailyTypeDto roomDailyTypeDto : roomslist) {
-					if ((roomDailyTypeDto.getDay().after(dateTools.beginOfDay(date)))&& (roomDailyTypeDto.getDay().before(dateTools.endOfDay(date)))) {  // comptabiliser la ligne
-						Integer index = statTools.getMultiStatDtoInList(date, roomDailyTypeDto.getType(),  multiStatList);
-						if (index != -1) { // update multiStatDto
-							MultiStatDto sdto = multiStatList.get(index);
-							sdto.setOccupancyDuration(sdto.getOccupancyDuration() + roomDailyTypeDto.getOccupancyDuration());
-							sdto.setNbDaysDuration(sdto.getNbDaysDuration() + 1);
-						} else { // create new multiStatDto
-							MultiStatDto multiStatDto = new MultiStatDto();
-							multiStatDto.setDay(date);
-							multiStatDto.setOccupancyDuration(roomDailyTypeDto.getOccupancyDuration());
-							multiStatDto.setRoomType(E_RoomType.valueOf(roomDailyTypeDto.getType()));
-							multiStatDto.setNbDaysDuration(1l);
-							
-							multiStatList.add(multiStatDto); // add entry
-						}
-					}	
+			if (viewtype.equals(EnumViewType.DAY.toString())) {
+				for (Date date : distinctDayList) {
+					for (RoomDailyTypeDto roomDailyTypeDto : roomslist) {
+						if ((roomDailyTypeDto.getDay().after(dateTools.beginOfDay(date)))&& (roomDailyTypeDto.getDay().before(dateTools.endOfDay(date)))) {  // comptabiliser la ligne
+							Integer index = statTools.getMultiStatDtoInList(date, roomDailyTypeDto.getType(),  multiStatList);
+							if (index != -1) { // update multiStatDto
+								MultiStatDto sdto = multiStatList.get(index);
+								sdto.setOccupancyDuration(sdto.getOccupancyDuration() + roomDailyTypeDto.getOccupancyDuration());
+								sdto.setNbDaysDuration(sdto.getNbDaysDuration() + 1);
+							} else { // create new multiStatDto
+								MultiStatDto multiStatDto = new MultiStatDto();
+								multiStatDto.setDay(date);
+								multiStatDto.setOccupancyDuration(roomDailyTypeDto.getOccupancyDuration());
+								multiStatDto.setRoomType(E_RoomType.valueOf(roomDailyTypeDto.getType()));
+								multiStatDto.setNbDaysDuration(1l);
+								
+								multiStatList.add(multiStatDto); // add entry
+							}
+						}	
+					}
+				}
+			} else if (viewtype.equals(EnumViewType.MONTH.toString())) {
+				for (Date date : distinctDayList) {
+					Calendar cal = Calendar.getInstance();
+				    cal.setTime(date);
+				    int yearToCompare = cal.get(Calendar.YEAR);
+				    int monthToCompare = cal.get(Calendar.MONTH);
+					for (RoomDailyTypeDto roomDailyTypeDto : roomslist) {
+						cal.setTime(roomDailyTypeDto.getDay());
+					    int year = cal.get(Calendar.YEAR);
+					    int month = cal.get(Calendar.MONTH);
+					    if ((monthToCompare == month)&&(yearToCompare == year)) {  // comptabiliser la ligne
+							Integer index = statTools.getMultiStatDtoInList(date, roomDailyTypeDto.getType(),  multiStatList);
+							if (index != -1) { // update multiStatDto
+								MultiStatDto sdto = multiStatList.get(index);
+								sdto.setOccupancyDuration(sdto.getOccupancyDuration() + roomDailyTypeDto.getOccupancyDuration());
+								sdto.setNbDaysDuration(sdto.getNbDaysDuration() + 1);
+							} else { // create new multiStatDto
+								MultiStatDto multiStatDto = new MultiStatDto();
+								multiStatDto.setDay(date);
+								multiStatDto.setOccupancyDuration(roomDailyTypeDto.getOccupancyDuration());
+								multiStatDto.setRoomType(E_RoomType.valueOf(roomDailyTypeDto.getType()));
+								multiStatDto.setNbDaysDuration(1l);
+								
+								multiStatList.add(multiStatDto); // add entry
+							}
+						}	
+					}
 				}
 			}
-			
 			// 3 - Construct multiStatListReturned list (label, values)
 			for (MultiStatDto multiStatDto : multiStatList) {
 				Integer index = statTools.getMultiStatLabelInList(String.valueOf(multiStatDto.getDay().getTime()), multiStatListReturned);
