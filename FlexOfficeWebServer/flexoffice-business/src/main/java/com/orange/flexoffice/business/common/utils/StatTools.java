@@ -153,17 +153,22 @@ public class StatTools {
 		// 1 - set label
 		multiStatDtoReturned.setLabel(String.valueOf(multiStatDto.getDay().getTime()));
 		
-		// 2 - init values
+		// 2 - calculate rate
+		float rate = ((float)multiStatDto.getOccupancyDuration()*100/(float)duration);
+				
+		// 4 - add value rate
+		int index = getRoomTypeIndex(multiStatDto.getRoomType().toString());
 		List<String> values = new ArrayList<String>();
 		int size = getCategories().size();
-		for (int i=0; i < size; i++) {values.add("0");}
-		multiStatDtoReturned.setValues(values);
-		// 3 - calculate rate
-		float rate = ((float)multiStatDto.getOccupancyDuration()*100/(float)duration);
+		for (int i=0; i < size; i++) {
+			if (i == index) {
+				values.add(String.valueOf(rate));
+			} else {
+				values.add("0");
+			}
+		}
 		
-		// 4 - update value rate
-		int index = getRoomTypeIndex(multiStatDto.getRoomType().toString());
-		multiStatDtoReturned.getValues().get(index).replace("0", String.valueOf(rate));
+		multiStatDtoReturned.setValues(values);
 		
 		return multiStatDtoReturned;
 	}
@@ -180,9 +185,24 @@ public class StatTools {
 		
 		// 4 - update value rate
 		int index = getRoomTypeIndex(multiStatDto.getRoomType().toString());
-		multiStatDtoReturned.getValues().get(index).replace("0", String.valueOf(rate));
+		List<String> values = new ArrayList<String>();
+		int size = getCategories().size();
+		for (int i=0; i < size; i++) {
+			if (i == index) {
+				values.add(String.valueOf(rate));
+			} else {
+				values.add(multiStatDtoReturned.getValues().get(i));
+			}
+		}
+		
+		multiStatDtoReturned.setValues(values);
 	}
 	
+	/**
+	 * getRoomTypeIndex
+	 * @param type
+	 * @return
+	 */
 	private Integer getRoomTypeIndex(String type) {
 		Integer index = 0;
 		Integer rang = 0;
@@ -205,7 +225,18 @@ public class StatTools {
 	 */
 	public static void main(String[] args) throws ParseException {
 		
-		System.out.println("formatted timestamp is:" );
+		StatTools statTools = new StatTools();
+		
+		MultiStatDto multiStatDto = new MultiStatDto();
+		multiStatDto.setDay(new Date());
+		multiStatDto.setOccupancyDuration(24l);
+		multiStatDto.setRoomType(E_RoomType.VIDEO_CONF);
+		
+		Long duration = 15l;
+		
+		MultiStatDto multiStatDtoReturned = statTools.createReturnedMultiStatDto(multiStatDto, duration); 
+				
+		System.out.println("multiStatDtoReturned :" + multiStatDtoReturned.getValues().get(1));
 				
 	}
 	
