@@ -19,6 +19,6 @@ public interface RoomDailyOccupancyDaoOperations {
 	
 	RoomDailyOccupancyDao saveRoomDaily(RoomDailyOccupancyDao data);
 	
-	List<RoomDailyTypeDto> findRoomsDailyAndType();
+	List<RoomDailyTypeDto> findRoomsDailyAndType(RoomDailyOccupancyDto data);
 			
 }

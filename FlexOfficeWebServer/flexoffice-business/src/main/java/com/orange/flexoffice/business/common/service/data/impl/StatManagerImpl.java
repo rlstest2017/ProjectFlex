@@ -141,7 +141,7 @@ public class StatManagerImpl implements StatManager {
 				multiStatSet.setEnddate(toDate.getTime());  // set enddate toDate
 			}
 			// 4 - Get data object
-			List<MultiStatDto> multiStat = getMultiStat(viewtype, dailyRoomsList, categories.size());
+			List<MultiStatDto> multiStat = getMultiStat(viewtype, dailyRoomsList, categories.size(), parameters);
 			multiStatSet.setData(multiStat);
 		} else {
 			multiStatSet.setStartdate(fromDate.getTime());  // set startdate fromDate
@@ -159,7 +159,7 @@ public class StatManagerImpl implements StatManager {
 	 * @param dailyRoomsList
 	 * @return
 	 */
-	private List<MultiStatDto> getMultiStat(String viewtype, List<RoomDailyOccupancyDao> dailyRoomsList, int sizeCategories) {
+	private List<MultiStatDto> getMultiStat(String viewtype, List<RoomDailyOccupancyDao> dailyRoomsList, int sizeCategories, RoomDailyOccupancyDto parameters) {
 		// List with MultiStatDto (label, values) to returned
 		List<MultiStatDto> multiStatListReturned = new ArrayList<MultiStatDto>();
 		
@@ -178,7 +178,7 @@ public class StatManagerImpl implements StatManager {
 			}
 			
 			// Compute returned List
-			constructReturnedList(distinctDayList, multiStatListReturned, duration, viewtype);
+			constructReturnedList(distinctDayList, multiStatListReturned, duration, viewtype, parameters);
 			
 					
 		} else if (viewtype.equals(EnumViewType.WEEK.toString())) {
@@ -194,7 +194,7 @@ public class StatManagerImpl implements StatManager {
 			}
 			
 			// Compute returned List
-			constructReturnedList(distinctMonthList, multiStatListReturned, duration, viewtype);
+			constructReturnedList(distinctMonthList, multiStatListReturned, duration, viewtype, parameters);
 			
 		}
 		
@@ -206,13 +206,12 @@ public class StatManagerImpl implements StatManager {
 	 * @param distinctDayList
 	 * @param multiStatListReturned
 	 */
-	private void constructReturnedList(List<Date> distinctDayList, List<MultiStatDto> multiStatListReturned, Long duration, String viewtype) {
+	private void constructReturnedList(List<Date> distinctDayList, List<MultiStatDto> multiStatListReturned, Long duration, String viewtype, RoomDailyOccupancyDto parameters) {
 			// 0 - create list with MultiStatDto (roomType, occupancyDuration, day)
 			List<MultiStatDto> multiStatList = new ArrayList<MultiStatDto>();
 			
 			// 1 - Get List of RoomDailyTypeDto (roomType, occupancyDuration & Day) from DB
-			// TODO by parameters
-			List<RoomDailyTypeDto> roomslist = roomDailyRepository.findRoomsDailyAndType();
+			List<RoomDailyTypeDto> roomslist = roomDailyRepository.findRoomsDailyAndType(parameters);
 			
 			// 2 - Make MultiStatDto List for (day, occupancyDuration & roomType )
 			if (viewtype.equals(EnumViewType.DAY.toString())) {

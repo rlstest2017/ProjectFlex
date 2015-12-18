@@ -45,11 +45,11 @@ public class RoomDailyOccupancyDaoRepository extends DataRepository<RoomDailyOcc
 	}
 
 	@Override
-	public List<RoomDailyTypeDto> findRoomsDailyAndType() {
-		SqlParameterSource paramMap = new MapSqlParameterSource();
+	public List<RoomDailyTypeDto> findRoomsDailyAndType(RoomDailyOccupancyDto data) {
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
 		return jdbcTemplate.query(
-				findAllDailyAndTypesQuery, 
-				paramMap, 
+				findRequestedDailyAndTypesQuery, 
+				paramBean, 
 				new BeanPropertyRowMapper<RoomDailyTypeDto>(RoomDailyTypeDto.class)
 			);
 	}
