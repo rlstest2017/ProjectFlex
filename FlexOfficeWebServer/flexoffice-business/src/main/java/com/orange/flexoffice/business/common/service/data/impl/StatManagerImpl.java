@@ -108,26 +108,38 @@ public class StatManagerImpl implements StatManager {
 		
 		// 1 - Get Room Daily Data requested by From & To parameters
 		RoomDailyOccupancyDto parameters = new RoomDailyOccupancyDto();
-		Date fromDate = dateTools.getDateFromString(from);;
-		Date toDate = dateTools.getDateFromString(to);
+		Date fromDate = null;
+		Date toDate = null;
+		if (viewtype.equals(EnumViewType.MONTH.toString())) { 
+			// transform dates fromDate => begin day of the month & toDate => end day of the month  
+			fromDate = dateTools.getFirstDayOfMonth(from, null);
+			toDate = dateTools.getLastDayOfMonth(to, null);
+		} else {
+			fromDate = dateTools.getDateFromString(from);
+			toDate = dateTools.getDateFromString(to);
+		}
 		parameters.setFromDate(fromDate);
 		parameters.setToDate(toDate);
 		List<RoomDailyOccupancyDao> dailyRoomsList = roomDailyRepository.findRequestedRoomsDailyOccupancy(parameters);
-
+		
 		// 2 - Get categories 
 		List<String> categories = statTools.getCategories();
 		multiStatSet.setCategories(categories); // set categories
 
-		if ((dailyRoomsList != null)&&(!dailyRoomsList.isEmpty())) {
+		if ( (dailyRoomsList != null) && (!dailyRoomsList.isEmpty()) ) {
 			// 3 - Get startdate & enddate
-			RoomDailyOccupancyDao firstEntry = dailyRoomsList.get(0);
-			Date startdate = firstEntry.getDay();
-			multiStatSet.setStartdate(startdate.getTime());  // set startdate
-			
-			RoomDailyOccupancyDao endEntry = dailyRoomsList.get(dailyRoomsList.size()-1);
-			Date enddate = endEntry.getDay();
-			multiStatSet.setEnddate(enddate.getTime());  // set enddate
-			
+			if (!viewtype.equals(EnumViewType.MONTH.toString())) {
+				RoomDailyOccupancyDao firstEntry = dailyRoomsList.get(0);
+				Date startdate = firstEntry.getDay();
+				multiStatSet.setStartdate(startdate.getTime());  // set startdate
+				
+				RoomDailyOccupancyDao endEntry = dailyRoomsList.get(dailyRoomsList.size()-1);
+				Date enddate = endEntry.getDay();
+				multiStatSet.setEnddate(enddate.getTime());  // set enddate
+			} else {
+				multiStatSet.setStartdate(fromDate.getTime());  // set startdate fromDate
+				multiStatSet.setEnddate(toDate.getTime());  // set enddate toDate
+			}
 			// 4 - Get data object
 			List<MultiStatDto> multiStat = getMultiStat(viewtype, dailyRoomsList, categories.size());
 			multiStatSet.setData(multiStat);
@@ -239,13 +251,15 @@ public class StatManagerImpl implements StatManager {
 							if (index != -1) { // update multiStatDto
 								MultiStatDto sdto = multiStatList.get(index);
 								sdto.setOccupancyDuration(sdto.getOccupancyDuration() + roomDailyTypeDto.getOccupancyDuration());
-								sdto.setNbDaysDuration(sdto.getNbDaysDuration() + 1);
 							} else { // create new multiStatDto
 								MultiStatDto multiStatDto = new MultiStatDto();
 								multiStatDto.setDay(date);
 								multiStatDto.setOccupancyDuration(roomDailyTypeDto.getOccupancyDuration());
 								multiStatDto.setRoomType(E_RoomType.valueOf(roomDailyTypeDto.getType()));
-								multiStatDto.setNbDaysDuration(1l);
+								Date beginMonth = dateTools.getFirstDayOfMonth(null, date);
+								Date endMonth = dateTools.getLastDayOfMonth(null, date);
+								int nb = dateTools.nbJoursOuvrableByMonth(beginMonth, endMonth, true, true, true, true, true, true, false, false);
+								multiStatDto.setNbDaysDuration((long)nb);
 								
 								multiStatList.add(multiStatDto); // add entry
 							}
