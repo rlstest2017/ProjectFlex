@@ -29,5 +29,7 @@ public interface RoomDaoOperations {
 	
 	RoomDao updateRoom(RoomDao data) throws DataAccessException; 
 	
-	RoomDao updateRoomStatus(RoomDao data) throws DataAccessException; 	
+	RoomDao updateRoomStatus(RoomDao data) throws DataAccessException;
+	
+	Long countRoomsByType(String type);
 }

@@ -60,6 +60,8 @@ public final class DataSqlTemplate {
 			"select count(id) from %s";
 	public static final String COUNT_ACTIVE_USERS_TEMPLATE =
 			"select count(id) from %s where last_connection_date >:lastConnexionDate";
+	public static final String COUNT_ROOM_BY_TYPE_TEMPLATE =
+			"select count(id) from %s where type=CAST(:type AS roomtype)";
 	public static final String CREATE_ALERT_TEMPLATE = 
 			"insert into %s (name, type, gateway_id, sensor_id) values (:name, CAST(:type AS deviceType), :gatewayId, :sensorId)";
 	public static final String CREATE_USER_TEMPLATE = 

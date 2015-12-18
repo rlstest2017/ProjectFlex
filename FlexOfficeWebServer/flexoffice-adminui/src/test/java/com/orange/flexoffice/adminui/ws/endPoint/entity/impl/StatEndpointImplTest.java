@@ -79,7 +79,6 @@ public class StatEndpointImplTest {
 		
 		// Test
 		MultiStatSet statSet =	statEndpoint.getOccupancyStats(from, to, viewtype);
-		System.out.println("Test app");
 		
 		// Asserts
 		assertEquals(4, statSet.getData().size());
@@ -103,9 +102,22 @@ public class StatEndpointImplTest {
 		
 		// Test
 		MultiStatSet statSet =	statEndpoint.getOccupancyStats(from, to, viewtype);
-		System.out.println("Test app");
 		
 		// Asserts
 		assertEquals(4, statSet.getData().size());
+	}
+	
+	@Test
+	public void TestG_statOccupancyWeekly() {
+		// SetUp
+		String from="0";
+		String to="2015-12-16T15:00:22.806Z";
+		String viewtype = "WEEK";
+		
+		// Test
+		MultiStatSet statSet =	statEndpoint.getOccupancyStats(from, to, viewtype);
+		
+		// Asserts
+		assertEquals(5, statSet.getData().size());
 	}
 }

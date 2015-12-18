@@ -168,6 +168,35 @@ public class DateTools {
 	}
 	
 	/**
+	 * isWeekInList
+	 * @param dateList
+	 * @param toCompare
+	 * @return
+	 */
+	public Boolean isWeekInList(List<Date> dateList, Date toCompare) {
+		Boolean state = false;
+		
+		Calendar cal = Calendar.getInstance();
+	    cal.setTime(toCompare);
+	    int yearToCompare = cal.get(Calendar.YEAR);
+	    int monthToCompare = cal.get(Calendar.MONTH);
+	    int weekToCompare = cal.get(Calendar.WEEK_OF_MONTH);
+	    
+		for (Date date : dateList) {
+			cal.setTime(date);
+		    int year = cal.get(Calendar.YEAR);
+		    int month = cal.get(Calendar.MONTH);
+		    int week = cal.get(Calendar.WEEK_OF_MONTH);
+			if ((monthToCompare == month)&&(yearToCompare == year)&&(weekToCompare == week)) {
+				state = true;
+				break;
+			}
+		}
+		
+		return state;
+	}
+	
+	/**
 	 * isMonthInList
 	 * @param dateList
 	 * @param toCompare
@@ -272,6 +301,62 @@ public class DateTools {
 	}
 	
 	/**
+	 * getFirstDayOfWeek
+	 * @param dateInString
+	 * @param dateParameter
+	 * @return
+	 */
+	public Date getFirstDayOfWeek(String dateInString, Date dateParameter) {
+		Calendar cal = Calendar.getInstance();
+		Date date = null;
+		Date dayDate = null;
+		if (dateParameter == null) {
+			date = getDateFromString(dateInString);
+		} else {
+			date = dateParameter;
+		}
+		cal.setTime(date);
+		int year = cal.get(Calendar.YEAR);
+		if (year != 1970) {
+			cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+			cal.set(Calendar.HOUR_OF_DAY, 00);
+			cal.set(Calendar.MINUTE, 00);
+			cal.set(Calendar.SECOND,00);
+			cal.set(Calendar.MILLISECOND,0);
+			dayDate = cal.getTime();
+		} else {
+			dayDate = date;
+		}
+		
+		return dayDate;
+	}
+	
+	/**
+	 * getLastDayOfWeek
+	 * @param dateInString
+	 * @param dateParameter
+	 * @return
+	 */
+	public Date getLastDayOfWeek(String dateInString, Date dateParameter) {
+		Calendar cal = Calendar.getInstance();
+		Date date = null;
+		if (dateParameter == null) {
+			date = getDateFromString(dateInString);
+		} else {
+			date = dateParameter;
+		}
+		cal.setTime(date);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+		cal.set(Calendar.HOUR_OF_DAY, 23);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND,59);
+		cal.set(Calendar.MILLISECOND,0);
+		Date dayDate = cal.getTime();
+		
+		return dayDate;
+	}
+	
+	/**
 	 * nbJoursOuvrableByMonth
 	 * @param d1
 	 * @param d2
@@ -285,7 +370,7 @@ public class DateTools {
 	 * @param priseCompteDimanche
 	 * @return
 	 */
-	public int nbJoursOuvrableByMonth(Date d1, Date d2, boolean notionJourFerie,
+	public int nbJoursOuvrable(Date d1, Date d2, boolean notionJourFerie,
 			boolean priseCompteLundi, boolean priseCompteMardi,
 			boolean priseCompteMercredi, boolean priseCompteJeudi,
 			boolean priseCompteVendredi, boolean priseCompteSamedi,
@@ -431,16 +516,22 @@ public class DateTools {
 				
 		//System.out.println("startdate is:" + new SimpleDateFormat("dd/MM/yyyy").format(new Date(1449784800166l)));
 		
-		System.out.println("stardate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(0l)));
-		System.out.println("enddate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(1451602799000l)));
+		System.out.println("stardate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(1451602799000l)));
+		System.out.println("enddate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(1450479599000l)));
+	
+		
+//		Date valueBegin = date.getFirstDayOfMonth("2015-11-18T15:00:22.806Z", null);
+//		System.out.println("Begin month date is : " + valueBegin);
+//		Date valueEnd = date.getLastDayOfMonth("2015-11-28T15:00:22.806Z", null);
+//		System.out.println("End month date is : " + valueEnd);
 		
 		
-		Date valueBegin = date.getFirstDayOfMonth("2015-11-18T15:00:22.806Z", null);
+		Date valueBegin = date.getFirstDayOfWeek("2015-12-23T15:00:22.806Z", null);
 		System.out.println("Begin month date is : " + valueBegin);
-		Date valueEnd = date.getLastDayOfMonth("2015-11-28T15:00:22.806Z", null);
+		Date valueEnd = date.getLastDayOfWeek("2015-12-23T15:00:22.806Z", null);
 		System.out.println("End month date is : " + valueEnd);
 		
-		int nb = date.nbJoursOuvrableByMonth(valueBegin, valueEnd, true, true, true, true, true, true, false, false);
+		int nb = date.nbJoursOuvrable(valueBegin, valueEnd, true, true, true, true, true, true, false, false);
 		System.out.println("NB : " + nb);
 		
 		//System.out.println("new startdate timestamp:" + (new SimpleDateFormat("dd/MM/yyyy").format(new Date(1450130402479l))));

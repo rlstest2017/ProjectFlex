@@ -2,6 +2,7 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_ACTIVE_USERS_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_ROOM_BY_TYPE_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_REQUESTED_ROOM_DAILY_AND_TYPE_TEMPLATE;
@@ -134,6 +135,7 @@ public abstract class DataRepository<T extends Data>
 	// COUNT QUERIES --------------
 	private   final String countQuery;
 	protected final String countActiveUsersQuery;
+	protected final String countNbRoomsByTypeQuery;
 		
 	protected NamedParameterJdbcTemplate jdbcTemplate;
 	protected JdbcTemplate jdbcTemplateForTest;
@@ -205,6 +207,7 @@ public abstract class DataRepository<T extends Data>
 		// COUNT QUERIES ----------------------------------------------------------------------
 		countQuery = String.format(COUNT_TEMPLATE, getTableName());
 		countActiveUsersQuery = String.format(COUNT_ACTIVE_USERS_TEMPLATE, getTableName());
+		countNbRoomsByTypeQuery = String.format(COUNT_ROOM_BY_TYPE_TEMPLATE, getTableName());
 		
 	}
 	

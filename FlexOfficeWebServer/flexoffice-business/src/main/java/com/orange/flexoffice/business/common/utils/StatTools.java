@@ -3,7 +3,9 @@ package com.orange.flexoffice.business.common.utils;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //import org.apache.log4j.Logger;
 
@@ -146,15 +148,15 @@ public class StatTools {
 	 * @param multiStatDto
 	 * @return
 	 */
-	public MultiStatDto createReturnedMultiStatDto(MultiStatDto multiStatDto, Long duration) {
+	public MultiStatDto createReturnedMultiStatDto(MultiStatDto multiStatDto, Long duration, Map<String, Long> nbRoomsByType) {
 		
 		MultiStatDto multiStatDtoReturned = new MultiStatDto();
 		
 		// 1 - set label
 		multiStatDtoReturned.setLabel(String.valueOf(multiStatDto.getDay().getTime()));
 		
-		// 2 - calculate rate
-		float rate = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)multiStatDto.getNbDaysDuration()));
+		// 2 - calculate average of rates
+		float averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)multiStatDto.getNbDaysDuration()*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));
 				
 		// 4 - add value rate
 		int index = getRoomTypeIndex(multiStatDto.getRoomType().toString());
@@ -162,7 +164,7 @@ public class StatTools {
 		int size = getCategories().size();
 		for (int i=0; i < size; i++) {
 			if (i == index) {
-				values.add(String.valueOf(rate));
+				values.add(String.valueOf(averageOfRates));
 			} else {
 				values.add("0");
 			}
@@ -179,17 +181,17 @@ public class StatTools {
 	 * @param duration
 	 * @return
 	 */
-	public void updateReturnedMultiStatDto(MultiStatDto multiStatDtoReturned, MultiStatDto multiStatDto, Long duration) {
-		// 1 - calculate rate
-		float rate = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)multiStatDto.getNbDaysDuration()));
+	public void updateReturnedMultiStatDto(MultiStatDto multiStatDtoReturned, MultiStatDto multiStatDto, Long duration, Map<String, Long> nbRoomsByType) {
+		// 1 - calculate average of rate 
+		float averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)multiStatDto.getNbDaysDuration()*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));
 		
-		// 4 - update value rate
+		// 4 - update value of average of rate 
 		int index = getRoomTypeIndex(multiStatDto.getRoomType().toString());
 		List<String> values = new ArrayList<String>();
 		int size = getCategories().size();
 		for (int i=0; i < size; i++) {
 			if (i == index) {
-				values.add(String.valueOf(rate));
+				values.add(String.valueOf(averageOfRates));
 			} else {
 				values.add(multiStatDtoReturned.getValues().get(i));
 			}
@@ -225,19 +227,29 @@ public class StatTools {
 	 */
 	public static void main(String[] args) throws ParseException {
 		
-		StatTools statTools = new StatTools();
+		Map<String, Long> nbRoomsByType = new HashMap<String, Long>();
 		
-		MultiStatDto multiStatDto = new MultiStatDto();
-		multiStatDto.setDay(new Date());
-		multiStatDto.setOccupancyDuration(24l);
-		multiStatDto.setRoomType(E_RoomType.VIDEO_CONF);
+//		StatTools statTools = new StatTools();
+//		
+//		MultiStatDto multiStatDto = new MultiStatDto();
+//		multiStatDto.setDay(new Date());
+//		multiStatDto.setOccupancyDuration(24l);
+//		multiStatDto.setRoomType(E_RoomType.VIDEO_CONF);
+//		
+//		Long duration = 15l;
+//		
+//		MultiStatDto multiStatDtoReturned = statTools.createReturnedMultiStatDto(multiStatDto, duration, null); 
+//				
+//		System.out.println("multiStatDtoReturned :" + multiStatDtoReturned.getValues().get(1));
+	
+		E_RoomType[] types = E_RoomType.values();
+		for (E_RoomType e_RoomType : types) {
+			nbRoomsByType.put(e_RoomType.toString(), 5l);
+		}
 		
-		Long duration = 15l;
+		System.out.println("Box nb salles :" + nbRoomsByType.get(E_RoomType.BOX.toString()));
 		
-		MultiStatDto multiStatDtoReturned = statTools.createReturnedMultiStatDto(multiStatDto, duration); 
-				
-		System.out.println("multiStatDtoReturned :" + multiStatDtoReturned.getValues().get(1));
-				
 	}
+	
 	
 }

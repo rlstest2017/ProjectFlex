@@ -116,6 +116,16 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 	}
 
 	@Override
+	public Long countRoomsByType(String type) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("type", type);
+		return jdbcTemplate.queryForObject(
+				countNbRoomsByTypeQuery, 
+				paramMap, 
+				Long.class
+			);
+	}
+	
+	@Override
 	protected String getTableName() {
 		return RoomDaoMetadata.ROOM_TABLE_NAME;
 	}
@@ -135,7 +145,5 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 		return null;
 	}
 
-
-	
 
 }

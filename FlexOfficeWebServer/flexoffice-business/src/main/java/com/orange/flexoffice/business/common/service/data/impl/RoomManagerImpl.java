@@ -263,6 +263,13 @@ public class RoomManagerImpl implements RoomManager {
 		return dataList;
 	}
 	
+	@Override
+	@Transactional(readOnly=true)
+	public Long countRoomsByType(String type) {
+		return roomRepository.countRoomsByType(type);
+	}
+	
+	
 	/**
 	 * removeDuplicateFromList
 	 * @param roomStats

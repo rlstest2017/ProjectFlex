@@ -81,4 +81,11 @@ public interface RoomManager {
 	 * @return RoomDao object if found
 	 */
 	RoomDao findByName(String name) throws DataNotExistsException;
+	
+	/**
+	 * countRoomsByType
+	 * @param type
+	 * @return
+	 */
+	public Long countRoomsByType(String type);
 }

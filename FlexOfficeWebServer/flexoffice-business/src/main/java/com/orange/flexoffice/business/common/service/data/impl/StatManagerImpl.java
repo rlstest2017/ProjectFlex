@@ -3,7 +3,9 @@ package com.orange.flexoffice.business.common.service.data.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,8 @@ public class StatManagerImpl implements StatManager {
 	@Autowired
 	private StatTools statTools;
 	
+	private Map<String, Long> nbRoomsByType = new HashMap<String, Long>();
+		    
 	@Override
 	@Transactional(readOnly=true)
 	public List<SimpleStatDto> getPopularStats() {
@@ -105,7 +109,13 @@ public class StatManagerImpl implements StatManager {
 	public MultiStatSetDto getOccupancyStats(String from, String to, String viewtype) {
 		
 		MultiStatSetDto multiStatSet = new MultiStatSetDto();
-		
+		// 0 - Get nb Rooms by type => used for calculate the average of rates (la moyenne des taux !!!)
+		E_RoomType[] types = E_RoomType.values();
+		for (E_RoomType e_RoomType : types) {
+			long nb = roomRepository.countRoomsByType(e_RoomType.toString());
+			nbRoomsByType.put(e_RoomType.toString(), nb);
+		}
+
 		// 1 - Get Room Daily Data requested by From & To parameters
 		RoomDailyOccupancyDto parameters = new RoomDailyOccupancyDto();
 		Date fromDate = null;
@@ -114,6 +124,10 @@ public class StatManagerImpl implements StatManager {
 			// transform dates fromDate => begin day of the month & toDate => end day of the month  
 			fromDate = dateTools.getFirstDayOfMonth(from, null);
 			toDate = dateTools.getLastDayOfMonth(to, null);
+		} else if (viewtype.equals(EnumViewType.WEEK.toString())) { 
+			// transform dates fromDate => begin day of the week & toDate => end day of the week  
+			fromDate = dateTools.getFirstDayOfWeek(from, null);
+			toDate = dateTools.getLastDayOfWeek(to, null);
 		} else {
 			fromDate = dateTools.getDateFromString(from);
 			toDate = dateTools.getDateFromString(to);
@@ -128,7 +142,7 @@ public class StatManagerImpl implements StatManager {
 
 		if ( (dailyRoomsList != null) && (!dailyRoomsList.isEmpty()) ) {
 			// 3 - Get startdate & enddate
-			if (!viewtype.equals(EnumViewType.MONTH.toString())) {
+			if (viewtype.equals(EnumViewType.DAY.toString())) {
 				RoomDailyOccupancyDao firstEntry = dailyRoomsList.get(0);
 				Date startdate = firstEntry.getDay();
 				multiStatSet.setStartdate(startdate.getTime());  // set startdate
@@ -182,7 +196,18 @@ public class StatManagerImpl implements StatManager {
 			
 					
 		} else if (viewtype.equals(EnumViewType.WEEK.toString())) {
-			
+			// Make distinct weekly List
+			List<Date> distinctWeekthList = new ArrayList<Date>();
+			for (RoomDailyOccupancyDao daily : dailyRoomsList) {
+				Date formattedDaily = dateTools.beginOfDay(daily.getDay());
+				if (!dateTools.isWeekInList(distinctWeekthList, formattedDaily)) {
+					distinctWeekthList.add(formattedDaily);
+				}
+			}
+						
+			// Compute returned List
+			constructReturnedList(distinctWeekthList, multiStatListReturned, duration, viewtype, parameters);
+						
 		} else if (viewtype.equals(EnumViewType.MONTH.toString())) {
 			// Make distinct monthly List
 			List<Date> distinctMonthList = new ArrayList<Date>();
@@ -257,7 +282,39 @@ public class StatManagerImpl implements StatManager {
 								multiStatDto.setRoomType(E_RoomType.valueOf(roomDailyTypeDto.getType()));
 								Date beginMonth = dateTools.getFirstDayOfMonth(null, date);
 								Date endMonth = dateTools.getLastDayOfMonth(null, date);
-								int nb = dateTools.nbJoursOuvrableByMonth(beginMonth, endMonth, true, true, true, true, true, true, false, false);
+								int nb = dateTools.nbJoursOuvrable(beginMonth, endMonth, true, true, true, true, true, true, false, false);
+								multiStatDto.setNbDaysDuration((long)nb);
+								
+								multiStatList.add(multiStatDto); // add entry
+							}
+						}	
+					}
+				}
+			} else if (viewtype.equals(EnumViewType.WEEK.toString())) {
+				for (Date date : distinctDayList) {
+					Calendar cal = Calendar.getInstance();
+				    cal.setTime(date);
+				    int yearToCompare = cal.get(Calendar.YEAR);
+				    int monthToCompare = cal.get(Calendar.MONTH);
+				    int weekToCompare = cal.get(Calendar.WEEK_OF_MONTH);
+					for (RoomDailyTypeDto roomDailyTypeDto : roomslist) {
+						cal.setTime(roomDailyTypeDto.getDay());
+					    int year = cal.get(Calendar.YEAR);
+					    int month = cal.get(Calendar.MONTH);
+					    int week = cal.get(Calendar.WEEK_OF_MONTH);
+					    if ((monthToCompare == month)&&(yearToCompare == year)&&(weekToCompare == week)) {  // comptabiliser la ligne
+							Integer index = statTools.getMultiStatDtoInList(date, roomDailyTypeDto.getType(),  multiStatList);
+							if (index != -1) { // update multiStatDto
+								MultiStatDto sdto = multiStatList.get(index);
+								sdto.setOccupancyDuration(sdto.getOccupancyDuration() + roomDailyTypeDto.getOccupancyDuration());
+							} else { // create new multiStatDto
+								MultiStatDto multiStatDto = new MultiStatDto();
+								multiStatDto.setDay(date);
+								multiStatDto.setOccupancyDuration(roomDailyTypeDto.getOccupancyDuration());
+								multiStatDto.setRoomType(E_RoomType.valueOf(roomDailyTypeDto.getType()));
+								Date beginWeek = dateTools.getFirstDayOfWeek(null, date);
+								Date endWeek = dateTools.getLastDayOfWeek(null, date);
+								int nb = dateTools.nbJoursOuvrable(beginWeek, endWeek, true, true, true, true, true, true, false, false);
 								multiStatDto.setNbDaysDuration((long)nb);
 								
 								multiStatList.add(multiStatDto); // add entry
@@ -266,13 +323,14 @@ public class StatManagerImpl implements StatManager {
 					}
 				}
 			}
+			
 			// 3 - Construct multiStatListReturned list (label, values)
 			for (MultiStatDto multiStatDto : multiStatList) {
 				Integer index = statTools.getMultiStatLabelInList(String.valueOf(multiStatDto.getDay().getTime()), multiStatListReturned);
 				if (index != -1) { // update multiStatDto
-					statTools.updateReturnedMultiStatDto(multiStatListReturned.get(index), multiStatDto, duration);
+					statTools.updateReturnedMultiStatDto(multiStatListReturned.get(index), multiStatDto, duration, nbRoomsByType);
 				} else { // create new multiStatDto
-					MultiStatDto multiStatDtoReturned = statTools.createReturnedMultiStatDto(multiStatDto, duration);
+					MultiStatDto multiStatDtoReturned = statTools.createReturnedMultiStatDto(multiStatDto, duration, nbRoomsByType);
 					multiStatListReturned.add(multiStatDtoReturned);
 				}
 			}
