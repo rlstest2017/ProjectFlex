@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.orange.flexoffice.business.common.enums.EnumViewType;
+
 //import org.apache.log4j.Logger;
 
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
@@ -21,6 +25,8 @@ import com.orange.flexoffice.dao.common.model.object.SimpleStatDto;
 public class StatTools {
 	
 	//private static final Logger LOGGER = Logger.getLogger(StatTools.class);
+	@Autowired
+	private DateTools dateTools;
 
 	/**
 	 * getCategories
@@ -148,12 +154,17 @@ public class StatTools {
 	 * @param multiStatDto
 	 * @return
 	 */
-	public MultiStatDto createReturnedMultiStatDto(MultiStatDto multiStatDto, Long duration, Map<String, Long> nbRoomsByType) {
+	public MultiStatDto createReturnedMultiStatDto(MultiStatDto multiStatDto, Long duration, Map<String, Long> nbRoomsByType, String viewtype) {
 		
 		MultiStatDto multiStatDtoReturned = new MultiStatDto();
 		
 		// 1 - set label
-		multiStatDtoReturned.setLabel(String.valueOf(multiStatDto.getDay().getTime()));
+		if (viewtype.equals(EnumViewType.WEEK.toString())) {
+			int num = dateTools.getNumberOfWeek(multiStatDto.getDay());
+			multiStatDtoReturned.setLabel(String.valueOf(num));
+		} else {
+			multiStatDtoReturned.setLabel(String.valueOf(multiStatDto.getDay().getTime()));
+		}
 		
 		// 2 - calculate average of rates
 		float averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)multiStatDto.getNbDaysDuration()*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));

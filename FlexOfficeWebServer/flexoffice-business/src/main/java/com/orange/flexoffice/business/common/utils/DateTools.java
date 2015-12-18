@@ -357,6 +357,18 @@ public class DateTools {
 	}
 	
 	/**
+	 * getNumberOfWeek
+	 * @param date
+	 * @return
+	 */
+	public int getNumberOfWeek(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		int num = cal.get(Calendar.WEEK_OF_YEAR);
+		return num;
+	}
+	
+	/**
 	 * nbJoursOuvrableByMonth
 	 * @param d1
 	 * @param d2
@@ -497,7 +509,7 @@ public class DateTools {
 		date.add(GregorianCalendar.DAY_OF_MONTH, 1);
 		return date;
 	}
-
+	
 	public static void main(String[] args) throws ParseException {
 		//SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		//String dateBeginInString = "2015-12-08 18:56:25.620506";
@@ -533,6 +545,9 @@ public class DateTools {
 		
 		int nb = date.nbJoursOuvrable(valueBegin, valueEnd, true, true, true, true, true, true, false, false);
 		System.out.println("NB : " + nb);
+		
+		int num = date.getNumberOfWeek(new Date(1451602799000l));
+		System.out.println("num : " + num);
 		
 		//System.out.println("new startdate timestamp:" + (new SimpleDateFormat("dd/MM/yyyy").format(new Date(1450130402479l))));
 		

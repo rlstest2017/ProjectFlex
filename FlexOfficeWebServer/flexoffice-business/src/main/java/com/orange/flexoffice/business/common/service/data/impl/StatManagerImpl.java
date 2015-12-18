@@ -330,7 +330,7 @@ public class StatManagerImpl implements StatManager {
 				if (index != -1) { // update multiStatDto
 					statTools.updateReturnedMultiStatDto(multiStatListReturned.get(index), multiStatDto, duration, nbRoomsByType);
 				} else { // create new multiStatDto
-					MultiStatDto multiStatDtoReturned = statTools.createReturnedMultiStatDto(multiStatDto, duration, nbRoomsByType);
+					MultiStatDto multiStatDtoReturned = statTools.createReturnedMultiStatDto(multiStatDto, duration, nbRoomsByType, viewtype);
 					multiStatListReturned.add(multiStatDtoReturned);
 				}
 			}
