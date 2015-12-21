@@ -170,7 +170,8 @@ public class StatTools {
 		}
 		
 		// 2 - calculate average of rates
-		float averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)multiStatDto.getNbDaysDuration()*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));
+		//float averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)multiStatDto.getNbDaysDuration()*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));
+		float averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));
 				
 		// 4 - add value rate
 		int index = getRoomTypeIndex(multiStatDto.getRoomType().toString());
@@ -197,7 +198,8 @@ public class StatTools {
 	 */
 	public void updateReturnedMultiStatDto(MultiStatDto multiStatDtoReturned, MultiStatDto multiStatDto, Long duration, Map<String, Long> nbRoomsByType) {
 		// 1 - calculate average of rate 
-		float averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)multiStatDto.getNbDaysDuration()*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));
+		//float averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)multiStatDto.getNbDaysDuration()*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));
+		float averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));
 		
 		// 4 - update value of average of rate 
 		int index = getRoomTypeIndex(multiStatDto.getRoomType().toString());
