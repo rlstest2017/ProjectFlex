@@ -170,8 +170,12 @@ public class StatTools {
 		}
 		
 		// 2 - calculate average of rates
-		//float averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)multiStatDto.getNbDaysDuration()*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));
-		float averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));
+		float averageOfRates = 0;
+		if (viewtype.equals(EnumViewType.DAY.toString())) {
+			averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));
+		} else {
+			averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)multiStatDto.getNbDaysDuration()*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));
+		}
 				
 		// 4 - add value rate
 		int index = getRoomTypeIndex(multiStatDto.getRoomType().toString());
