@@ -23,7 +23,7 @@ public final class DataSqlTemplate {
 	public static final String FIND_BY_COL_MAIL_TEMPLATE = 
 			"select * from %s where email=:email";
 	public static final String FIND_BY_COL_MAIL_PASSWORD_TEMPLATE = 
-			"select * from %s where email=:email and password=:password";
+			"select * from %s where email=:email and password=:password and role=CAST(:role AS userRole)";
 	public static final String FIND_BY_COL_ACCESS_TOKEN_TEMPLATE = 
 			"select * from %s where access_token=:accessToken";
 	public static final String FIND_BY_COL_ROOM_ID_TEMPLATE = 

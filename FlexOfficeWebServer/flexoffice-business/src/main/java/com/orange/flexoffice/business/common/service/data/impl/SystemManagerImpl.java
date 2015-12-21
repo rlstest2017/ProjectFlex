@@ -20,6 +20,7 @@ import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
+import com.orange.flexoffice.dao.common.model.enumeration.E_UserRole;
 import com.orange.flexoffice.dao.common.model.object.SystemDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
@@ -118,9 +119,10 @@ public class SystemManagerImpl implements SystemManager {
 	        	user.setEmail(email);
 	        	user.setAccessToken(accessToken.trim());
 	        	user.setExpiredTokenDate(expiredTokenDate);
-		    	
+	        	user.setRole(E_UserRole.ADMIN.toString());
+	        	
 	        	if (isFromAdminUi) {
-	        		// find user by mail & password
+	        		// find user by mail & password & role
 		        	user.setPassword(password);
 		        	userRepository.findByUserEmailAndPassword(user);
 	        	} else {
