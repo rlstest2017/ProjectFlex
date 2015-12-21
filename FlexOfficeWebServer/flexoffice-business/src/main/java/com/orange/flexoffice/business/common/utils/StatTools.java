@@ -129,13 +129,13 @@ public class StatTools {
 	 * @param multiStatListReturned
 	 * @return
 	 */
-	public Integer getMultiStatLabelInList(String label, List<MultiStatDto> multiStatListReturned) {
+	public Integer getMultiStatDayInList(Long day, List<MultiStatDto> multiStatListReturned) {
 		boolean state = false;
 		Integer index = -1;
 		if (!multiStatListReturned.isEmpty()) {
 			for (MultiStatDto statMulti : multiStatListReturned) {
 				index = index + 1;
-				if (label.equals(statMulti.getLabel())) {
+				if (day == statMulti.getDay().getTime()) {
 					state = true;
 					break;
 				} 
@@ -157,6 +157,9 @@ public class StatTools {
 	public MultiStatDto createReturnedMultiStatDto(MultiStatDto multiStatDto, Long duration, Map<String, Long> nbRoomsByType, String viewtype) {
 		
 		MultiStatDto multiStatDtoReturned = new MultiStatDto();
+		
+		// 0 - set Day used in getMultiStatDayInList(...) method
+		multiStatDtoReturned.setDay(multiStatDto.getDay());
 		
 		// 1 - set label
 		if (viewtype.equals(EnumViewType.WEEK.toString())) {

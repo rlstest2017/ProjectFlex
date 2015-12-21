@@ -326,7 +326,7 @@ public class StatManagerImpl implements StatManager {
 			
 			// 3 - Construct multiStatListReturned list (label, values)
 			for (MultiStatDto multiStatDto : multiStatList) {
-				Integer index = statTools.getMultiStatLabelInList(String.valueOf(multiStatDto.getDay().getTime()), multiStatListReturned);
+				Integer index = statTools.getMultiStatDayInList(multiStatDto.getDay().getTime(), multiStatListReturned);
 				if (index != -1) { // update multiStatDto
 					statTools.updateReturnedMultiStatDto(multiStatListReturned.get(index), multiStatDto, duration, nbRoomsByType);
 				} else { // create new multiStatDto
