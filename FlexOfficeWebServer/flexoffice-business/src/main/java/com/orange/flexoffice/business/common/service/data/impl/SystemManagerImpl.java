@@ -18,6 +18,8 @@ import com.orange.flexoffice.business.common.service.data.SystemManager;
 import com.orange.flexoffice.business.common.utils.DateTools;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
+import com.orange.flexoffice.dao.common.model.data.GatewayDao;
+import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_UserRole;
@@ -26,6 +28,7 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.UserDaoRepository;
 import com.orange.flexoffice.dao.common.utils.TokenTools;
 
@@ -42,6 +45,8 @@ public class SystemManagerImpl implements SystemManager {
 	
 	@Autowired
 	private GatewayDaoRepository gatewayRepository;
+	@Autowired
+	private SensorDaoRepository sensorRepository;
 	@Autowired
 	private RoomDaoRepository roomRepository;
 	@Autowired
@@ -206,7 +211,17 @@ public class SystemManagerImpl implements SystemManager {
 	
 	@Transactional(readOnly=true)
 	private List<AlertDao> findAllAlerts() {
-		return alertRepository.findAllAlerts();
+		List<AlertDao> alertList = alertRepository.findAllAlerts();
+		for (AlertDao alertDao : alertList) {
+			if (alertDao.getGatewayId() != null) {
+				GatewayDao gateway = gatewayRepository.findByGatewayId(Long.valueOf(alertDao.getGatewayId()));
+				alertDao.setName(gateway.getName() + " " + alertDao.getName());
+			} else if (alertDao.getSensorId() != null) {
+				SensorDao sensor = sensorRepository.findOne(Long.valueOf(alertDao.getSensorId()));
+				alertDao.setName(sensor.getName() + " " + alertDao.getName());
+			} 
+		}
+		return alertList;
 	}
 	
 	@Transactional(readOnly=true)
