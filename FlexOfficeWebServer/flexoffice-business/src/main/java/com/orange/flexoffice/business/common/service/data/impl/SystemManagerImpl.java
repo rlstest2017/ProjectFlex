@@ -1,6 +1,7 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
 import java.nio.charset.Charset;
+import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.List;
 
@@ -89,7 +90,7 @@ public class SystemManagerImpl implements SystemManager {
 	}
 
 	@Override
-	public UserDao processLogin(String authorization, Boolean isFromAdminUi, Object object) throws DataNotExistsException, AuthenticationException {
+	public UserDao processLogin(String authorization, Boolean isFromAdminUi, Object object, int infosDBLength) throws DataNotExistsException, AuthenticationException {
 	    LOGGER.debug("authorization parameter is :" + authorization);
     	UserDao user = new UserDao();
     	
@@ -114,6 +115,10 @@ public class SystemManagerImpl implements SystemManager {
 	        } else {
 	        	// credentials = email
 	        	email =credentials;
+	        	if (email.length() > infosDBLength) {
+	        		LOGGER.debug("Invalid email length in processLogin() method is : " + email);
+	        		throw new InvalidParameterException("Invalid email length : " + email);
+	        	}
 	        	LOGGER.debug("email in processLogin() method is :" + email);
 		        accessToken = tokenTools.createAccessToken(email, null);
 	        }

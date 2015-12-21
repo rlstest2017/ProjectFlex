@@ -28,7 +28,7 @@ public interface SystemManager {
 	 * @throws DataNotExistsException
 	 * @throws AuthenticationException
 	 */
-	UserDao processLogin(String auth, Boolean isFromAdminUi, Object object) throws DataNotExistsException, AuthenticationException;
+	UserDao processLogin(String auth, Boolean isFromAdminUi, Object object, int infosDBLength) throws DataNotExistsException, AuthenticationException;
 	
 	void processLogout(String accessToken); 
 	

@@ -107,7 +107,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	@Override
 	public Response login(String auth, String origin) {
 		try {
-			UserDao userToken = systemManager.processLogin(auth, true, null);
+			UserDao userToken = systemManager.processLogin(auth, true, null, 0); 
 			Token token = factory.createToken();
 			token.setAccessToken(userToken.getAccessToken());
 			token.setExpiredDate(userToken.getExpiredTokenDate().getTime());

@@ -174,7 +174,68 @@ public class UserEndpointImplTest {
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 	}
 
-	
-	
+	@Test
+	public void TestJ_loginBadFirstNameLength() {
+		// Setup
+		boolean expectedResult = false;
+		String authorization = "Basic Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdA==";
+		UserInput user = new UserInput();
+		// 101 caractères
+		user.setFirstName("A1531236541235874123569874154236mfpesndealoszmape124531236541235874123569874154236mfpesndealoszmapeza");		
+		// Test
+		try {
+			// Test
+			userEndpoint.login(authorization, null, user);
 
+		} catch (WebApplicationException e) {
+			expectedResult = true;
+		}
+
+		// Asserts
+		assertEquals(true, expectedResult);	
+	}
+
+	@Test
+	public void TestK_loginBadLastNameLength() {
+		// Setup
+		boolean expectedResult = false;
+		String authorization = "Basic Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdA==";
+		UserInput user = new UserInput();
+		// 101 caractères
+		user.setLastName("A1531236541235874123569874154236mfpesndealoszmape124531236541235874123569874154236mfpesndealoszmapeza");
+		
+		// Test
+		try {
+			// Test
+			userEndpoint.login(authorization, null, user);
+
+		} catch (WebApplicationException e) {
+			expectedResult = true;
+		}
+
+		// Asserts
+		assertEquals(true, expectedResult);	
+	}
+
+	@Test
+	public void TestL_loginBadEmailLength() {
+		// Setup
+		boolean expectedResult = false;
+		// user 101 caractères : test@gmail.comaldeosmzpaodenslezaqlpmasleomapeznsltesttiogmail.comaldeosmzpaodenslezaqlpmasleomapeznsl 
+		String authorization = "Basic dGVzdEBnbWFpbC5jb21hbGRlb3NtenBhb2RlbnNsZXphcWxwbWFzbGVvbWFwZXpuc2x0ZXN0dGlvZ21haWwuY29tYWxkZW9zbXpwYW9kZW5zbGV6YXFscG1hc2xlb21hcGV6bnNs";
+		
+		// Test
+		try {
+			// Test
+			userEndpoint.login(authorization, null, null);
+		} catch (WebApplicationException e) {
+			expectedResult = true;
+		}
+
+		// Asserts
+		assertEquals(true, expectedResult);	
+	}
+
+	
+	
 }

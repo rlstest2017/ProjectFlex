@@ -1,5 +1,6 @@
 package com.orange.flexoffice.userui.ws.endPoint.entity.impl;
 
+import java.security.InvalidParameterException;
 import java.util.Date;
 
 import javax.naming.AuthenticationException;
@@ -28,6 +29,7 @@ import com.orange.flexoffice.userui.ws.model.UserSummary;
 public class UserEndpointImpl implements UserEndpoint {
 	
 	private static final Logger LOGGER = Logger.getLogger(UserEndpointImpl.class);
+	private static final int LOGIN_INFOS_LENGTH = 100;
 	private final ObjectFactory factory = new ObjectFactory();
 	
 	@Autowired
@@ -80,15 +82,25 @@ public class UserEndpointImpl implements UserEndpoint {
 			UserDao userToCreate = null;
 			if (user != null) {
 				userToCreate = new UserDao();
-				if (user.getFirstName() != null) {
-					userToCreate.setFirstName(user.getFirstName());
+				String firstName = user.getFirstName();
+				if (firstName != null) {
+					if (firstName.trim().length() > LOGIN_INFOS_LENGTH) {
+						LOGGER.debug("Invalid firstName length in UserEndpoint.login() method.");
+						throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_5, Response.Status.METHOD_NOT_ALLOWED));
+					}
+					userToCreate.setFirstName(firstName.trim());
 				}
-				if  (user.getLastName() != null) {
-					userToCreate.setLastName(user.getLastName());
+				String lastName = user.getLastName();
+				if  (lastName != null) {
+					if (lastName.trim().length() > LOGIN_INFOS_LENGTH) {
+						LOGGER.debug("Invalid lastName length in UserEndpoint.login() method.");
+						throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_5, Response.Status.METHOD_NOT_ALLOWED));
+					}
+					userToCreate.setLastName(lastName.trim());
 				}
 			}
 			
-			UserDao userToken = systemManager.processLogin(auth, false, userToCreate);
+			UserDao userToken = systemManager.processLogin(auth, false, userToCreate, LOGIN_INFOS_LENGTH);
 			Token token = factory.createToken();
 			token.setAccessToken(userToken.getAccessToken());
 			token.setExpiredDate(userToken.getExpiredTokenDate().getTime());
@@ -108,13 +120,18 @@ public class UserEndpointImpl implements UserEndpoint {
 	        	return Response.status(200).entity(token).build();
 	        }
 		} catch (DataNotExistsException e) {
-				LOGGER.debug("DataNotExistsException in login() SystemEndpointImpl with message :" + e.getMessage(), e);
+				LOGGER.debug("DataNotExistsException in login() UserEndpointImpl with message :" + e.getMessage(), e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_34, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (AuthenticationException e) {
-				LOGGER.debug("AuthenticationException in login() SystemEndpointImpl with message :" + e.getMessage(), e);
+				LOGGER.debug("AuthenticationException in login() UserEndpointImpl with message :" + e.getMessage(), e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_33, Response.Status.UNAUTHORIZED));
-		}catch (RuntimeException ex) {
-				LOGGER.debug("RuntimeException in login() SystemEndpointImpl with message :" + ex.getMessage(), ex);
+				
+		} catch (InvalidParameterException e) {
+			LOGGER.debug("InvalidParameterException in login() UserEndpointImpl with message :" + e.getMessage(), e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_5, Response.Status.METHOD_NOT_ALLOWED));
+			
+		} catch (RuntimeException ex) {
+				LOGGER.debug("RuntimeException in login() UserEndpointImpl with message :" + ex.getMessage(), ex);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 	}
