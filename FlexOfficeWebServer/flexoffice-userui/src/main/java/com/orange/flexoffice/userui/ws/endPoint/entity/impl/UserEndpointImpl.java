@@ -25,10 +25,18 @@ import com.orange.flexoffice.userui.ws.model.ObjectFactory;
 import com.orange.flexoffice.userui.ws.model.UserSummary;
 
 
-
+/**
+ * UserEndpointImpl
+ * @author oab
+ *
+ */
 public class UserEndpointImpl implements UserEndpoint {
 	
 	private static final Logger LOGGER = Logger.getLogger(UserEndpointImpl.class);
+	//------------------------------------------------
+	// WARNING !!! : If this value is modified in DB (length of firstName, lastName or email fields of users table)
+	// the value must be modified too !!!
+	//------------------------------------------------
 	private static final int LOGIN_INFOS_LENGTH = 100;
 	private final ObjectFactory factory = new ObjectFactory();
 	
