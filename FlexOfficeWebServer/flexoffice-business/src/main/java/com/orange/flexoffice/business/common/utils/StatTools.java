@@ -200,10 +200,14 @@ public class StatTools {
 	 * @param duration
 	 * @return
 	 */
-	public void updateReturnedMultiStatDto(MultiStatDto multiStatDtoReturned, MultiStatDto multiStatDto, Long duration, Map<String, Long> nbRoomsByType) {
+	public void updateReturnedMultiStatDto(MultiStatDto multiStatDtoReturned, MultiStatDto multiStatDto, Long duration, Map<String, Long> nbRoomsByType, String viewtype) {
 		// 1 - calculate average of rate 
-		//float averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)multiStatDto.getNbDaysDuration()*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));
-		float averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));
+		float averageOfRates = 0;
+		if (viewtype.equals(EnumViewType.DAY.toString())) {
+			averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));
+		} else {
+			averageOfRates = (((float)multiStatDto.getOccupancyDuration()*100)/((float)duration*(float)multiStatDto.getNbDaysDuration()*(float)nbRoomsByType.get(multiStatDto.getRoomType().toString())));
+		}
 		
 		// 4 - update value of average of rate 
 		int index = getRoomTypeIndex(multiStatDto.getRoomType().toString());

@@ -328,7 +328,7 @@ public class StatManagerImpl implements StatManager {
 			for (MultiStatDto multiStatDto : multiStatList) {
 				Integer index = statTools.getMultiStatDayInList(multiStatDto.getDay().getTime(), multiStatListReturned);
 				if (index != -1) { // update multiStatDto
-					statTools.updateReturnedMultiStatDto(multiStatListReturned.get(index), multiStatDto, duration, nbRoomsByType);
+					statTools.updateReturnedMultiStatDto(multiStatListReturned.get(index), multiStatDto, duration, nbRoomsByType, viewtype);
 				} else { // create new multiStatDto
 					MultiStatDto multiStatDtoReturned = statTools.createReturnedMultiStatDto(multiStatDto, duration, nbRoomsByType, viewtype);
 					multiStatListReturned.add(multiStatDtoReturned);
