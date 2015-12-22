@@ -61,7 +61,7 @@ public class StatManagerImpl implements StatManager {
 		LOGGER.debug("Begin method StatManager.getPopularStats");
 		List<SimpleStatDto> simpleStatList = new ArrayList<SimpleStatDto>(); 
 				
-		// 1 - Calculate day duration between beginDayDate & endDayDate in seconds
+		// 1 - Calculate day duration between beginDayDate & endDayDate in seconds. Ex : [7:30 ; 20:00]=> 45000 seconds 
 		Long duration = calculateDayDuration();
 		LOGGER.debug("duration betwwen beginDayDate and endDayDate :" + duration);
 		
@@ -78,26 +78,30 @@ public class StatManagerImpl implements StatManager {
 				SimpleStatDto statGet = simpleStatList.get(index);
 				// ------ update Occupancy Duration for existing Room (cumulate) ------
 				statGet.setOccupancyDuration(statGet.getOccupancyDuration() + roomDailyOccupancyDao.getOccupancyDuration());
-				statGet.setNbDaysDuration(statGet.getNbDaysDuration() + duration);
 			} else {
 				// add entry
 				SimpleStatDto statEntry = new SimpleStatDto();
 				// set Data
 				statEntry.setRoomId(roomDailyOccupancyDao.getRoomId());
 				statEntry.setOccupancyDuration(roomDailyOccupancyDao.getOccupancyDuration());
-				statEntry.setNbDaysDuration(duration); // duration in seconds of One day
+				
 				// ------ Add new stat in the list ----
 				simpleStatList.add(statEntry);
 			}
 		}
 		
 		// 4 - Calculate the rates & Get RoomNames in the simpleStatList
+		
+		// calculate number of ouvrable days since the first data in room_occupancy_daily to current date (new date())
+		int nb = nbJoursOuvrableForPopular();
+			
 		for (SimpleStatDto simpleStatDto : simpleStatList) {
 			// Get roomName
 			RoomDao room =  roomRepository.findByRoomId(simpleStatDto.getRoomId().longValue());
 			simpleStatDto.setRoomName(room.getName());
+
 			// calculate rate
-			float rate = ((float)simpleStatDto.getOccupancyDuration()*100/(float)simpleStatDto.getNbDaysDuration());
+			float rate = ((float)simpleStatDto.getOccupancyDuration()*100/(float)(nb*duration));
 			simpleStatDto.setRate(rate);
 		}
 		
@@ -134,7 +138,7 @@ public class StatManagerImpl implements StatManager {
 		}
 		parameters.setFromDate(fromDate);
 		parameters.setToDate(toDate);
-		List<RoomDailyOccupancyDao> dailyRoomsList = roomDailyRepository.findRequestedRoomsDailyOccupancy(parameters);
+		List<RoomDailyOccupancyDao> dailyRoomsList = dailyRoomsList(parameters);
 		
 		// 2 - Get categories 
 		List<String> categories = statTools.getCategories();
@@ -357,5 +361,43 @@ public class StatManagerImpl implements StatManager {
 		return duration;
 	}
 	
+	/**
+	 * dailyRoomsList
+	 * @param from
+	 * @param to
+	 * @param viewtype
+	 * @return
+	 */
+	private List<RoomDailyOccupancyDao> dailyRoomsList(RoomDailyOccupancyDto parameters ) {
+		// 1 - Get Room Daily Data requested by From & To parameters
+		List<RoomDailyOccupancyDao> dailyRoomsList = roomDailyRepository.findRequestedRoomsDailyOccupancy(parameters);
+		return dailyRoomsList;
+	}
+	
+	/**
+	 * nbJoursOuvrableForPopular
+	 * @return
+	 */
+	private int nbJoursOuvrableForPopular() {
+		int returnedValue = 1;
+		RoomDailyOccupancyDto parameters = new RoomDailyOccupancyDto();
+		parameters.setFromDate(dateTools.getDateFromString("0"));
+		parameters.setToDate(new Date());
+		List<RoomDailyOccupancyDao> dailyRoomsList = dailyRoomsList(parameters);
+		if ( (dailyRoomsList != null) && (!dailyRoomsList.isEmpty()) ) {
+				// - Get startdate & enddate
+				RoomDailyOccupancyDao firstEntry = dailyRoomsList.get(0);
+				Date startdate = firstEntry.getDay();
+								
+				RoomDailyOccupancyDao endEntry = dailyRoomsList.get(dailyRoomsList.size()-1);
+				Date enddate = endEntry.getDay();
+				
+				returnedValue = dateTools.nbJoursOuvrable(startdate, enddate, true, true, true, true, true, true, false, false);
+				
+		} else {
+			returnedValue = 1; // default value (not influence in calculate of rate (division))
+		}
+		return returnedValue;
+	}
 
 }
