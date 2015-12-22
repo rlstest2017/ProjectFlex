@@ -151,6 +151,7 @@ public class RoomManagerImpl implements RoomManager {
 	public RoomDao updateStatus(RoomDao roomDao) throws DataNotExistsException, RoomAlreadyUsedException {
 		try {
 
+			LOGGER.debug("Room id is : " + roomDao.getId());
 			// Use in case of RESERVED Room in UserUI
 			if  (roomDao.getStatus().equals(E_RoomStatus.RESERVED.toString())) { // from UserUi.RoomEndpoint.reserveRoom
 				RoomDao foundRoom = roomRepository.findByRoomId(roomDao.getId());

@@ -7,7 +7,7 @@
   </context-param>
   <context-param>
     <param-name>log4jConfigLocation</param-name>
-    <param-value>file:/home/oab/Config/log4j-flexoffice-adminui.xml</param-value>
+    <param-value>file:/home/flexoffice/flexoffice-webserver/Config/log4j-flexoffice-adminui.xml</param-value>
   </context-param>
   <context-param>
     <param-name>contextConfigLocation</param-name>

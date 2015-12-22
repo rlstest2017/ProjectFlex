@@ -156,7 +156,8 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	public Response reserveRoom(String auth, String roomId) {
 		
 		LOGGER.info( "Begin call UserUi.RoomEndpoint.reserveRoom at: " + new Date() );
-
+		LOGGER.debug("Room id in reserveRoom.RoomEndpoint metod is : " + roomId);
+		
 		RoomDao roomDao = new RoomDao();
 		roomDao.setId(Long.valueOf(roomId));
 		roomDao.setStatus(E_RoomStatus.RESERVED.toString());
