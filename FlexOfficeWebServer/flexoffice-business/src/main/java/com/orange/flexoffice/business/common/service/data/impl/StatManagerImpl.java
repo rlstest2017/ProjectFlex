@@ -91,16 +91,18 @@ public class StatManagerImpl implements StatManager {
 		}
 		
 		// 4 - Calculate the rates & Get RoomNames in the simpleStatList
-		
 		// calculate number of ouvrable days since the first data in room_occupancy_daily to current date (new date())
+		// Ex : [10/12/2105 ; 21/12/2015] => 8 jours
 		int nb = nbJoursOuvrableForPopular();
-			
+		LOGGER.debug("nbJoursOuvrableForPopular :" + nb);
+		
 		for (SimpleStatDto simpleStatDto : simpleStatList) {
 			// Get roomName
 			RoomDao room =  roomRepository.findByRoomId(simpleStatDto.getRoomId().longValue());
 			simpleStatDto.setRoomName(room.getName());
 
 			// calculate rate
+			// The rate is calculate for all the ouvrableDays since begin of states (first entry date in room_occupancy_daily table) to current day (new day()) when the request is done
 			float rate = ((float)simpleStatDto.getOccupancyDuration()*100/(float)(nb*duration));
 			simpleStatDto.setRate(rate);
 		}
@@ -112,12 +114,20 @@ public class StatManagerImpl implements StatManager {
 	@Override
 	public MultiStatSetDto getOccupancyStats(String from, String to, String viewtype) {
 		
+		LOGGER.debug("Begin method StatManager.getOccupancyStats");
 		MultiStatSetDto multiStatSet = new MultiStatSetDto();
+		
+		LOGGER.debug("from value is : " + from);
+		LOGGER.debug("to value is : " + to);
+		LOGGER.debug("viewtype value is : " + viewtype);
+		
 		// 0 - Get nb Rooms by type => used for calculate the average of rates (la moyenne des taux !!!)
+		// The values are saved in nbRoomsByType HashMap()
 		E_RoomType[] types = E_RoomType.values();
 		for (E_RoomType e_RoomType : types) {
 			long nb = roomRepository.countRoomsByType(e_RoomType.toString());
 			nbRoomsByType.put(e_RoomType.toString(), nb);
+			LOGGER.debug("There is " + nb + " rooms of type " + e_RoomType.toString());
 		}
 
 		// 1 - Get Room Daily Data requested by From & To parameters
@@ -125,25 +135,28 @@ public class StatManagerImpl implements StatManager {
 		Date fromDate = null;
 		Date toDate = null;
 		if (viewtype.equals(EnumViewType.MONTH.toString())) { 
-			// transform dates fromDate => begin day of the month & toDate => end day of the month  
+			// transform dates : "fromDate" => begin day of the month & "toDate" => end day of the month  
 			fromDate = dateTools.getFirstDayOfMonth(from, null);
 			toDate = dateTools.getLastDayOfMonth(to, null);
 		} else if (viewtype.equals(EnumViewType.WEEK.toString())) { 
-			// transform dates fromDate => begin day of the week & toDate => end day of the week  
+			// transform dates : "fromDate" => begin day of the week & "toDate" => end day of the week  
 			fromDate = dateTools.getFirstDayOfWeek(from, null);
 			toDate = dateTools.getLastDayOfWeek(to, null);
 		} else {
+			// Keep the dates sent in the request parameters "from" and "to"
 			fromDate = dateTools.getDateFromString(from);
 			toDate = dateTools.getDateFromString(to);
 		}
 		parameters.setFromDate(fromDate);
 		parameters.setToDate(toDate);
 		List<RoomDailyOccupancyDao> dailyRoomsList = dailyRoomsList(parameters);
+		LOGGER.debug("size of dailyRoomsList is : " + dailyRoomsList.size());
 		
 		// 2 - Get categories 
 		List<String> categories = statTools.getCategories();
 		multiStatSet.setCategories(categories); // set categories
-
+		LOGGER.debug("number of categories is : " + categories.size());
+		
 		if ( (dailyRoomsList != null) && (!dailyRoomsList.isEmpty()) ) {
 			// 3 - Get startdate & enddate
 			if (viewtype.equals(EnumViewType.DAY.toString())) {
@@ -159,31 +172,38 @@ public class StatManagerImpl implements StatManager {
 				multiStatSet.setEnddate(toDate.getTime());  // set enddate toDate
 			}
 			// 4 - Get data object
+			//----------------------------------------------------------------------
+			// getMultiStat() is the first principal method in getOccupancyStats algorithm
+			//----------------------------------------------------------------------
 			List<MultiStatDto> multiStat = getMultiStat(viewtype, dailyRoomsList, categories.size(), parameters);
+			
 			multiStatSet.setData(multiStat);
+			
 		} else {
+			LOGGER.debug("dailyRoomsList is null or empty !!!");
 			multiStatSet.setStartdate(fromDate.getTime());  // set startdate fromDate
 			multiStatSet.setEnddate(toDate.getTime());  // set enddate toDate
 		}
 
+		LOGGER.debug("End method StatManager.getOccupancyStats");
 		return multiStatSet;
 	}
 	
-	
-	
 	/**
-	 * getMultiStat
+	 * getMultiStat is the first principal method in getOccupancyStats algorithm
 	 * @param viewtype
 	 * @param dailyRoomsList
-	 * @return
+	 * @param sizeCategories
+	 * @param parameters
+	 * @return List<MultiStatDto> with MultiStatDto (label, values)
 	 */
 	private List<MultiStatDto> getMultiStat(String viewtype, List<RoomDailyOccupancyDao> dailyRoomsList, int sizeCategories, RoomDailyOccupancyDto parameters) {
-		// List with MultiStatDto (label, values) to returned
+		// Returned List with MultiStatDto (label, values) 
 		List<MultiStatDto> multiStatListReturned = new ArrayList<MultiStatDto>();
 		
 		// Calculate day duration between beginDayDate & endDayDate in seconds
 		Long duration = calculateDayDuration();
-		LOGGER.debug("duration betwwen beginDayDate and endDayDate :" + duration);
+		LOGGER.debug("duration betwwen beginDayDate and endDayDate : " + duration);
 				
 		if (viewtype.equals(EnumViewType.DAY.toString())) {
 			// Make distinct daily List
@@ -194,7 +214,7 @@ public class StatManagerImpl implements StatManager {
 					distinctDayList.add(formattedDaily);
 				}
 			}
-			
+			LOGGER.debug("distinctDayList size for viewType DAY is : " + distinctDayList.size());
 			// Compute returned List
 			constructReturnedList(distinctDayList, multiStatListReturned, duration, viewtype, parameters);
 			
@@ -208,7 +228,7 @@ public class StatManagerImpl implements StatManager {
 					distinctWeekthList.add(formattedDaily);
 				}
 			}
-						
+			LOGGER.debug("distinctWeekthList size for viewType WEEK is : " + distinctWeekthList.size());						
 			// Compute returned List
 			constructReturnedList(distinctWeekthList, multiStatListReturned, duration, viewtype, parameters);
 						
@@ -221,7 +241,7 @@ public class StatManagerImpl implements StatManager {
 					distinctMonthList.add(formattedDaily);
 				}
 			}
-			
+			LOGGER.debug("distinctMonthList size for viewType MONTH is : " + distinctMonthList.size());
 			// Compute returned List
 			constructReturnedList(distinctMonthList, multiStatListReturned, duration, viewtype, parameters);
 			
@@ -231,33 +251,37 @@ public class StatManagerImpl implements StatManager {
 	}
 	
 	/**
-	 * constructReturnedList
+	 * constructReturnedList is the second principal method in getOccupancyStats algorithm
 	 * @param distinctDayList
 	 * @param multiStatListReturned
+	 * @param duration
+	 * @param viewtype
+	 * @param parameters
 	 */
 	private void constructReturnedList(List<Date> distinctDayList, List<MultiStatDto> multiStatListReturned, Long duration, String viewtype, RoomDailyOccupancyDto parameters) {
 			// 0 - create list with MultiStatDto (roomType, occupancyDuration, day)
 			List<MultiStatDto> multiStatList = new ArrayList<MultiStatDto>();
 			
 			// 1 - Get List of RoomDailyTypeDto (roomType, occupancyDuration & Day) from DB
+			// " select room_daily_occupancy.day, room_daily_occupancy.occupancy_duration, rooms.type From room_daily_occupancy, rooms 
+			// where rooms.id=room_daily_occupancy.room_id and room_daily_occupancy.day >:fromDate and room_daily_occupancy.day <:toDate order by room_daily_occupancy.day ";
 			List<RoomDailyTypeDto> roomslist = roomDailyRepository.findRoomsDailyAndType(parameters);
+			LOGGER.debug("roomslist size in constructReturnedList method : " + roomslist.size());
 			
 			// 2 - Make MultiStatDto List for (day, occupancyDuration & roomType )
 			if (viewtype.equals(EnumViewType.DAY.toString())) {
 				for (Date date : distinctDayList) {
 					for (RoomDailyTypeDto roomDailyTypeDto : roomslist) {
-						if ((roomDailyTypeDto.getDay().after(dateTools.beginOfDay(date)))&& (roomDailyTypeDto.getDay().before(dateTools.endOfDay(date)))) {  // comptabiliser la ligne
+						if ((roomDailyTypeDto.getDay().after(dateTools.beginOfDay(date)))&& (roomDailyTypeDto.getDay().before(dateTools.endOfDay(date)))) {  // comptabiliser la ligne in the roomDailyTypeDto day
 							Integer index = statTools.getMultiStatDtoInList(date, roomDailyTypeDto.getType(),  multiStatList);
-							if (index != -1) { // update multiStatDto
+							if (index != -1) { // update the occupancyDuration in created multiStatDto for the roomDailyTypeDto day
 								MultiStatDto sdto = multiStatList.get(index);
 								sdto.setOccupancyDuration(sdto.getOccupancyDuration() + roomDailyTypeDto.getOccupancyDuration());
-								sdto.setNbDaysDuration(sdto.getNbDaysDuration() + 1);
-							} else { // create new multiStatDto
+							} else { // create new multiStatDto for the roomDailyTypeDto day
 								MultiStatDto multiStatDto = new MultiStatDto();
 								multiStatDto.setDay(date);
 								multiStatDto.setOccupancyDuration(roomDailyTypeDto.getOccupancyDuration());
 								multiStatDto.setRoomType(E_RoomType.valueOf(roomDailyTypeDto.getType()));
-								multiStatDto.setNbDaysDuration(1l);
 								
 								multiStatList.add(multiStatDto); // add entry
 							}
@@ -274,19 +298,21 @@ public class StatManagerImpl implements StatManager {
 						cal.setTime(roomDailyTypeDto.getDay());
 					    int year = cal.get(Calendar.YEAR);
 					    int month = cal.get(Calendar.MONTH);
-					    if ((monthToCompare == month)&&(yearToCompare == year)) {  // comptabiliser la ligne
+					    if ((monthToCompare == month)&&(yearToCompare == year)) {  // comptabiliser la ligne in the roomDailyTypeDto month
 							Integer index = statTools.getMultiStatDtoInList(date, roomDailyTypeDto.getType(),  multiStatList);
-							if (index != -1) { // update multiStatDto
+							if (index != -1) { // update the occupancyDuration for created multiStatDto for roomDailyTypeDto MONTH
 								MultiStatDto sdto = multiStatList.get(index);
 								sdto.setOccupancyDuration(sdto.getOccupancyDuration() + roomDailyTypeDto.getOccupancyDuration());
-							} else { // create new multiStatDto
+							} else { // create new multiStatDto for roomDailyTypeDto MONTH
 								MultiStatDto multiStatDto = new MultiStatDto();
 								multiStatDto.setDay(date);
 								multiStatDto.setOccupancyDuration(roomDailyTypeDto.getOccupancyDuration());
 								multiStatDto.setRoomType(E_RoomType.valueOf(roomDailyTypeDto.getType()));
 								Date beginMonth = dateTools.getFirstDayOfMonth(null, date);
 								Date endMonth = dateTools.getLastDayOfMonth(null, date);
+								// [Important] calculate nb ouvrables days in the roomDailyTypeDto month
 								int nb = dateTools.nbJoursOuvrable(beginMonth, endMonth, true, true, true, true, true, true, false, false);
+								LOGGER.debug("nbJoursOuvrable from beginMonth " + beginMonth + " to endMonth " + endMonth + " is : " + nb);
 								multiStatDto.setNbDaysDuration((long)nb);
 								
 								multiStatList.add(multiStatDto); // add entry
@@ -306,19 +332,21 @@ public class StatManagerImpl implements StatManager {
 					    int year = cal.get(Calendar.YEAR);
 					    int month = cal.get(Calendar.MONTH);
 					    int week = cal.get(Calendar.WEEK_OF_MONTH);
-					    if ((monthToCompare == month)&&(yearToCompare == year)&&(weekToCompare == week)) {  // comptabiliser la ligne
+					    if ((monthToCompare == month)&&(yearToCompare == year)&&(weekToCompare == week)) {  // comptabiliser la ligne in the roomDailyTypeDto week
 							Integer index = statTools.getMultiStatDtoInList(date, roomDailyTypeDto.getType(),  multiStatList);
-							if (index != -1) { // update multiStatDto
+							if (index != -1) { // update the occupancyDuration for created multiStatDto for roomDailyTypeDto WEEK
 								MultiStatDto sdto = multiStatList.get(index);
 								sdto.setOccupancyDuration(sdto.getOccupancyDuration() + roomDailyTypeDto.getOccupancyDuration());
-							} else { // create new multiStatDto
+							} else { // create new multiStatDto for roomDailyTypeDto WEEK
 								MultiStatDto multiStatDto = new MultiStatDto();
 								multiStatDto.setDay(date);
 								multiStatDto.setOccupancyDuration(roomDailyTypeDto.getOccupancyDuration());
 								multiStatDto.setRoomType(E_RoomType.valueOf(roomDailyTypeDto.getType()));
 								Date beginWeek = dateTools.getFirstDayOfWeek(null, date);
 								Date endWeek = dateTools.getLastDayOfWeek(null, date);
+								// [Important] calculate nb ouvrables days in the roomDailyTypeDto week
 								int nb = dateTools.nbJoursOuvrable(beginWeek, endWeek, true, true, true, true, true, true, false, false);
+								LOGGER.debug("nbJoursOuvrable from beginWeek " + beginWeek + " to endWeek " + endWeek + " is : " + nb);
 								multiStatDto.setNbDaysDuration((long)nb);
 								
 								multiStatList.add(multiStatDto); // add entry
@@ -332,8 +360,11 @@ public class StatManagerImpl implements StatManager {
 			for (MultiStatDto multiStatDto : multiStatList) {
 				Integer index = statTools.getMultiStatDayInList(multiStatDto.getDay().getTime(), multiStatListReturned);
 				if (index != -1) { // update multiStatDto
+					// [[Important]] put the value of different type in values[] array !!!
+					// Ex : type=VIDEO_CONF then values[1] is calculate
 					statTools.updateReturnedMultiStatDto(multiStatListReturned.get(index), multiStatDto, duration, nbRoomsByType, viewtype);
 				} else { // create new multiStatDto
+					// Ex : type=BOX then values[0] is calculate
 					MultiStatDto multiStatDtoReturned = statTools.createReturnedMultiStatDto(multiStatDto, duration, nbRoomsByType, viewtype);
 					multiStatListReturned.add(multiStatDtoReturned);
 				}
@@ -341,7 +372,8 @@ public class StatManagerImpl implements StatManager {
 	}
 		
 	/**
-	 * calculateDayDuration
+	 * calculateDayDuration 
+	 * Ex : [7:30 ; 20:00]=> 45000 seconds
 	 * @return
 	 */
 	private Long calculateDayDuration() {
@@ -363,6 +395,7 @@ public class StatManagerImpl implements StatManager {
 	
 	/**
 	 * dailyRoomsList
+	 * "select * from room_occupancy_daily where day >:fromDate and day <:toDate order by day"
 	 * @param from
 	 * @param to
 	 * @param viewtype
@@ -376,6 +409,7 @@ public class StatManagerImpl implements StatManager {
 	
 	/**
 	 * nbJoursOuvrableForPopular
+	 * Ex : [10/12/2105 ; 21/12/2015] => 8 jours
 	 * @return
 	 */
 	private int nbJoursOuvrableForPopular() {
