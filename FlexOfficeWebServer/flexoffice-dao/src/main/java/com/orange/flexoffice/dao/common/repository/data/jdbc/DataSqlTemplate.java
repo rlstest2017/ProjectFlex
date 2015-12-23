@@ -6,6 +6,8 @@ public final class DataSqlTemplate {
 			"select * from %s where id=:id";
 	public static final String FIND_BY_COL_ID_TEMPLATE = 
 			"select * from %s where %s=:columnId";
+	public static final String FIND_BY_TEACHIN_STATUS_TEMPLATE = 
+			"select * from %s where teachin_status is not null";
 	public static final String FIND_BY_COL_KEY_TEMPLATE = 
 			"select * from %s where key=:key";
 	public static final String FIND_ROOMSTAT_BY_ROOMID_TEMPLATE = 
@@ -56,6 +58,8 @@ public final class DataSqlTemplate {
 			"delete from %s where identifier=:identifier";
 	public static final String REMOVE_TEMPLATE = 
 			"delete from %s where id=:id";
+	public static final String REMOVE_ALL_TEMPLATE = 
+			"delete from %s";
 	public static final String COUNT_TEMPLATE =
 			"select count(id) from %s";
 	public static final String COUNT_ACTIVE_USERS_TEMPLATE =
@@ -72,6 +76,8 @@ public final class DataSqlTemplate {
 			"insert into %s (mac_address, name, description) values (:macAddress, :name, :description)";
 	public static final String CREATE_ROOM_TEMPLATE = 
 			"insert into %s (name, gateway_id, address, capacity, description, type, status) values (:name, :gatewayId, :address, :capacity, :description, CAST(:type AS roomtype), CAST(:status AS roomstatus))";
+	public static final String CREATE_TEACHIN_SENSOR_TEMPLATE = 
+			"insert into %s (sensor_identifier, sensor_status) values (:sensorIdentifier, CAST(:sensorStatus AS sensorTeachinStatus))";
 	public static final String CREATE_RESERVED_ROOMSTAT_TEMPLATE = 
 			"insert into %s (room_id, user_id, reservation_date, room_info) values (:roomId, :userId, now(), CAST(:roomInfo AS roomInfo))";
 	public static final String CREATE_ROOMDAILY_TEMPLATE = 
@@ -100,6 +106,8 @@ public final class DataSqlTemplate {
 			"update %s set status=CAST(:status AS gatewayStatus), last_polling_date=now() where id=:id";
 	public static final String UPDATE_ROOM_TEMPLATE =
 			"update %s set name=:name, gateway_id=:gatewayId, address=:address, capacity=:capacity, description=:description, type=CAST(:type AS roomtype) WHERE id=:id";
+	public static final String UPDATE_TEACHIN_STATUS_TEMPLATE =
+			"update %s set teachin_status=CAST(:teachinStatus AS teachinStatus) WHERE id=:id";
 	public static final String UPDATE_ROOM_STATUS_TEMPLATE =
 			"update %s set status=CAST(:status AS roomstatus), temperature=:temperature, humidity=:humidity, user_id=:userId where id=:id";
 	public static final String UPDATE_ALERT_TEMPLATE =

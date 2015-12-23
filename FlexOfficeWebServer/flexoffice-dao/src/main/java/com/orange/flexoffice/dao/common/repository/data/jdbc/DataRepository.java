@@ -6,6 +6,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_REQUESTED_ROOM_DAILY_AND_TYPE_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_TEACHIN_STATUS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_ROOM_DAILY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_REQUESTED_ROOM_DAILY_TEMPLATE;
@@ -27,6 +28,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ROOMSTAT_BY_ROOMINFO_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ONE_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_ALL_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_MAC_ADDRESS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_GATEWAY_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_SENSOR_ID_TEMPLATE;
@@ -39,6 +41,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_ACCESS_TOKEN_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_BY_MAIL_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_TEACHIN_STATUS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_GATEWAY_STATUS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOM_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_GATEWAY_TEMPLATE;
@@ -55,6 +58,8 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_RESERVED_ROOMSTAT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_OCCUPIED_ROOMSTAT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_SENSOR_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_TEACHIN_SENSOR_TEMPLATE;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -86,6 +91,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String findRequestedDailyQuery;
 	protected final String findLatestReservedRoomsQuery;
 	protected final String findByColumnIdQuery;
+	protected final String findByTeachinStatusQuery;
 	protected final String findByKeyQuery;
 	protected final String findRoomStatByRoomIdQuery;
 	protected final String findRoomStatByRoomInfoQuery;
@@ -106,6 +112,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String saveUserFromUserUIQuery;	
 	protected final String saveGatewayQuery;
 	protected final String saveRoomQuery;
+	protected final String saveTeachinSensorQuery;
 	protected final String saveRoomDailyQuery;
 	protected final String saveReservedRoomStatQuery;
 	protected final String saveAlertQuery;
@@ -122,6 +129,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String updateGatewayStatusQuery;
 	protected final String updateGatewayQuery;
 	protected final String updateRoomQuery;
+	protected final String updateTeachinStatusQuery;
 	protected final String updateAlertQuery;
 	protected final String updateRoomStatusQuery;
 	protected final String updateSensorQuery;
@@ -132,6 +140,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String deleteBySensorIdQuery;
 	protected final String deleteByIdentifier;
 	private   final String deleteQuery;
+	protected   final String deleteAllQuery;
 	// COUNT QUERIES --------------
 	private   final String countQuery;
 	protected final String countActiveUsersQuery;
@@ -154,6 +163,7 @@ public abstract class DataRepository<T extends Data>
 		findRequestedDailyQuery = String.format(FIND_REQUESTED_ROOM_DAILY_TEMPLATE, getTableName());
 		findLatestReservedRoomsQuery = String.format(FIND_LATEST_RESERVED_ROOM_TEMPLATE, getTableName());
 		findByColumnIdQuery = String.format(FIND_BY_COL_ID_TEMPLATE, getTableName(), getColumnColName());
+		findByTeachinStatusQuery = String.format(FIND_BY_TEACHIN_STATUS_TEMPLATE, getTableName());
 		findByKeyQuery = String.format(FIND_BY_COL_KEY_TEMPLATE, getTableName());
 		findRoomStatByRoomIdQuery = String.format(FIND_ROOMSTAT_BY_ROOMID_TEMPLATE, getTableName());
 		findRoomStatByRoomInfoQuery = String.format(FIND_ROOMSTAT_BY_ROOMINFO_TEMPLATE, getTableName());
@@ -175,6 +185,7 @@ public abstract class DataRepository<T extends Data>
 		saveUserFromUserUIQuery = String.format(CREATE_USER_FROM_USERUI_TEMPLATE, getTableName());
 		saveGatewayQuery = String.format(CREATE_GATEWAY_TEMPLATE, getTableName());
 		saveRoomQuery = String.format(CREATE_ROOM_TEMPLATE, getTableName());
+		saveTeachinSensorQuery = String.format(CREATE_TEACHIN_SENSOR_TEMPLATE, getTableName());
 		saveRoomDailyQuery = String.format(CREATE_ROOMDAILY_TEMPLATE, getTableName());
 		saveReservedRoomStatQuery = String.format(CREATE_RESERVED_ROOMSTAT_TEMPLATE, getTableName());
 		saveOccupiedRoomStatQuery = String.format(CREATE_OCCUPIED_ROOMSTAT_TEMPLATE, getTableName());
@@ -191,6 +202,7 @@ public abstract class DataRepository<T extends Data>
 		updateUserByMailQuery = String.format(UPDATE_USER_BY_MAIL_TEMPLATE, getTableName());
 		updateGatewayStatusQuery = String.format(UPDATE_GATEWAY_STATUS_TEMPLATE, getTableName());
 		updateRoomQuery = String.format(UPDATE_ROOM_TEMPLATE, getTableName(), getColumnColName());
+		updateTeachinStatusQuery = String.format(UPDATE_TEACHIN_STATUS_TEMPLATE, getTableName());
 		updateAlertQuery = String.format(UPDATE_ALERT_TEMPLATE, getTableName());
 		updateRoomStatusQuery = String.format(UPDATE_ROOM_STATUS_TEMPLATE, getTableName());// set also humidity, temperature & user_id if filled
 		updateSensorQuery = String.format(UPDATE_SENSOR_TEMPLATE, getTableName(), getColumnColName());
@@ -199,6 +211,7 @@ public abstract class DataRepository<T extends Data>
 		
 		// DELETE QUERIES ----------------------------------------------------------------------
 		deleteQuery = String.format(REMOVE_TEMPLATE, getTableName());
+		deleteAllQuery = String.format(REMOVE_ALL_TEMPLATE, getTableName());
 		deleteByMacAddressQuery = String.format(REMOVE_BY_MAC_ADDRESS_TEMPLATE, getTableName());
 		deleteByGatewayIdQuery = String.format(REMOVE_BY_GATEWAY_ID_TEMPLATE, getTableName());
 		deleteBySensorIdQuery = String.format(REMOVE_BY_SENSOR_ID_TEMPLATE, getTableName());

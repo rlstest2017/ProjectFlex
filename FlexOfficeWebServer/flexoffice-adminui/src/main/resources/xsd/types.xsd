@@ -40,11 +40,18 @@
 	 </xsd:restriction>
 	</xsd:simpleType>
 	
-	<xsd:simpleType name="e-teachinSensorsStatus">
+	<xsd:simpleType name="e-teachinSensorStatus">
 	 <xsd:restriction base="xsd:string">
 	 	<xsd:enumeration value="NOT_PAIRED"/>
 	 	<xsd:enumeration value="PAIRED_OK"/>
 	 	<xsd:enumeration value="PAIRED_KO"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="e-teachinStatus">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="INITIALIZING"/>
+	 	<xsd:enumeration value="RUNNING"/>
+	 	<xsd:enumeration value="ENDED"/>
 	 </xsd:restriction>
 	</xsd:simpleType>
 	<!-- End Enumeration Type -->
@@ -283,18 +290,17 @@
 	<!-- Teachin -->
 	<xsd:complexType name="Teachin">
 		<xsd:sequence>
-			<xsd:element name="id" type="xsd:string"/>
 			<xsd:element name="roomId" type="xsd:string"/>
  		    <xsd:element name="gatewayId" type="xsd:string"/>
+ 		    <xsd:element name="status" type="e-teachinStatus"/>
 			<xsd:element name="sensors" type="TeachinSensor" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	
 	<xsd:complexType name="TeachinSensor">
 		<xsd:sequence>
-			<xsd:element name="id" type="xsd:string"/>
-			<xsd:element name="roomId" type="xsd:string"/>
- 			<xsd:element name="teachinSensorsStatus" type="e-teachinSensorsStatus" />	    
+			<xsd:element name="identifier" type="xsd:string"/>
+ 			<xsd:element name="teachinSensorStatus" type="e-teachinSensorStatus" />	    
 		</xsd:sequence>
 	</xsd:complexType>
 	
