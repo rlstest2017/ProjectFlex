@@ -23,6 +23,7 @@ import com.orange.flexoffice.adminui.ws.model.Teachin;
 import com.orange.flexoffice.adminui.ws.model.Token;
 import com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
+import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.SystemManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
@@ -156,8 +157,17 @@ public class SystemEndpointImpl implements SystemEndpoint {
 		return null;
 	}
 	@Override
-	public void initTeachin() {
-		// TODO Auto-generated method stub
+	public Response initTeachin(String auth, String roomId) {
+		try {
+			systemManager.initTeachin(auth, Long.parseLong(roomId));
+			return Response.status(200).entity(new Date().getTime()).build();
+		} catch(DataAlreadyExistsException e) {
+			LOGGER.debug("DataAlreadyExistsException in initTeachin() SystemEndpointImpl with message :" + e.getMessage(), e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_36, Response.Status.METHOD_NOT_ALLOWED));
+		} catch(DataNotExistsException ex) {
+			LOGGER.debug("DataNotExistsException in initTeachin() SystemEndpointImpl with message :" + ex.getMessage(), ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_35, Response.Status.NOT_FOUND));
+		}
 		
 	}
 	

@@ -87,6 +87,20 @@ public class TeachinSensorsDaoRepository extends DataRepository<TeachinSensorDao
 	}
 
 	@Override
+	public TeachinSensorDao saveTechinStatus(TeachinSensorDao data) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(saveTeachinStatusQuery, paramBean, keyHolder);
+		
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
+		
+		return data;
+	}
+	
+	@Override
 	public void deleteAllTeachinSensors() {
 		SqlParameterSource paramMap = new MapSqlParameterSource();
 		jdbcTemplate.update(deleteAllQuery, paramMap);
@@ -111,6 +125,5 @@ public class TeachinSensorsDaoRepository extends DataRepository<TeachinSensorDao
 	protected String getRowColName() {
 		return null;
 	}
-
 
 }

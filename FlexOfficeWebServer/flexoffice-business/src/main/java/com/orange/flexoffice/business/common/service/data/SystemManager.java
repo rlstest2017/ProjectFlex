@@ -2,6 +2,7 @@ package com.orange.flexoffice.business.common.service.data;
 
 import javax.naming.AuthenticationException;
 
+import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.object.SystemDto;
@@ -49,6 +50,12 @@ public interface SystemManager {
 	 * @param userId
 	 */
 	void deleteAllTeachinSensorsByUserId(Long userId);
+	
+	/**
+	 * initTeachin
+	 * @param roomId
+	 */
+	void initTeachin(String auth, Long roomId) throws DataAlreadyExistsException, DataNotExistsException;
 	
 	/**
 	 * updateTeachinStatusByUser

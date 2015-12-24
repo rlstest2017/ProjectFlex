@@ -24,6 +24,8 @@ public interface TeachinSensorDaoOperations {
 	
 	TeachinSensorDao saveTechinSensor(TeachinSensorDao data);
 	
+	TeachinSensorDao saveTechinStatus(TeachinSensorDao data);
+	
 	void deleteAllTeachinSensors();
 
 }

@@ -14,12 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
+import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.SystemManager;
 import com.orange.flexoffice.business.common.utils.DateTools;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
+import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
@@ -218,6 +220,22 @@ public class SystemManagerImpl implements SystemManager {
 	}
 	
 	@Override
+	public void initTeachin(String auth, Long roomId) throws DataAlreadyExistsException, DataNotExistsException {
+		try {
+			TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
+			// the teachin is founded (teachin_status not null)
+			if ( teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()) || teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()) ) {
+				LOGGER.error("SystemManager.initTeachin : Teachin founded");
+				throw new DataAlreadyExistsException("SystemManager.initTeachin : Teachin already active");
+			} else { // status ENDED
+				processInitTeachin(auth, roomId);
+			}
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			processInitTeachin(auth, roomId);
+		}	
+	}
+	
+	@Override
 	public void updateTeachinStatusByUser(Long userId) {
 		try {
 			TeachinSensorDao teachin = teachinRepository.findByUserId(userId);
@@ -286,6 +304,30 @@ public class SystemManagerImpl implements SystemManager {
 		Date date = dateTools.lastConnexionDate(lastConnectionDurationValue);
 		Long count = userRepository.countActiveUsers(date);
 		return count;
+	}
+
+	private void processInitTeachin(String auth, Long roomId) throws DataNotExistsException {
+		
+		teachinRepository.deleteAllTeachinSensors();
+		try {
+			RoomDao room = roomRepository.findOne(roomId);
+			TeachinSensorDao newTeachin = new TeachinSensorDao();
+			newTeachin.setRoomId(roomId);
+			newTeachin.setGatewayId(room.getGatewayId());
+			newTeachin.setTeachinStatus(E_TeachinStatus.INITIALIZING.toString());
+			
+			// get user 
+			UserDao user = userRepository.findByAccessToken(auth);
+			newTeachin.setUserId(user.getId());
+			// save teachin
+			LOGGER.debug("newTeachin room is :" + newTeachin.getRoomId());
+			teachinRepository.saveTechinStatus(newTeachin);
+			
+		} catch(IncorrectResultSizeDataAccessException ex ) {
+			LOGGER.error("SystemManager.initTeachin : roomId# : " + roomId + "not found");
+			throw new DataNotExistsException("SystemManager.initTeachin : RoomId ont found");
+			
+		}	
 	}
 		
 }

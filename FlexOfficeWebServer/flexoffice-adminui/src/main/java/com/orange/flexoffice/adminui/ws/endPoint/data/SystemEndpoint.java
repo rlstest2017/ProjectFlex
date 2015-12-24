@@ -8,6 +8,7 @@ import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -20,6 +21,7 @@ import static com.orange.flexoffice.adminui.ws.PathConst.SUBMIT_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.TEACHIN_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.INIT_PATH;
 import static com.orange.flexoffice.adminui.ws.ParamsConst.AUTHORIZATION_HEADER_PARAM;
+import static com.orange.flexoffice.adminui.ws.ParamsConst.ROOM_ID_PARAM;
 import static com.orange.flexoffice.adminui.ws.ParamsConst.TOKEN_HEADER_PARAM;
 import static com.orange.flexoffice.adminui.ws.ParamsConst.ORIGIN_HEADER_PARAM;
 
@@ -86,7 +88,7 @@ public interface SystemEndpoint {
 	@Path(TEACHIN_PATH + INIT_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	void initTeachin(); // TODO add roomId in query ?roomId=  // TODO add TeachinStart object in types.xsd
+	Response initTeachin(@HeaderParam(TOKEN_HEADER_PARAM) String auth, @QueryParam(ROOM_ID_PARAM) String roomId); 
 	
 	/**
 	 * Cancel Teachin.
