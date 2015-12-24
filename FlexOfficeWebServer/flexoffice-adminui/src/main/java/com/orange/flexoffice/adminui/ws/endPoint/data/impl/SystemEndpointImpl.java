@@ -107,11 +107,15 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	@Override
 	public Response login(String auth, String origin) {
 		try {
+			// check & process login
 			UserDao userToken = systemManager.processLogin(auth, true, null, 0); 
 			Token token = factory.createToken();
 			token.setAccessToken(userToken.getAccessToken());
 			token.setExpiredDate(userToken.getExpiredTokenDate().getTime());
-					
+
+			// init teachin_sensors table 
+			systemManager.deleteAllTeachinSensors();
+			
 			if (origin != null) {
 				LOGGER.debug("Origin value is :" + origin);
 				return Response.ok(token).status(200)

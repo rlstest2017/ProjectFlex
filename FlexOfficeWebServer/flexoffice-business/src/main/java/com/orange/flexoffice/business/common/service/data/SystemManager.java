@@ -38,4 +38,9 @@ public interface SystemManager {
 	 * @return
 	 */
 	Boolean checkToken(String token);
+	
+	/**
+	 * deleteAllTeachinSensors
+	 */
+	void deleteAllTeachinSensors();
 }

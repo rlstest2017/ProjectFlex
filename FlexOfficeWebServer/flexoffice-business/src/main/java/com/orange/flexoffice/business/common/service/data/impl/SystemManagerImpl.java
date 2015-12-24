@@ -30,6 +30,7 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRep
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.TeachinSensorsDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.UserDaoRepository;
 import com.orange.flexoffice.dao.common.utils.TokenTools;
 
@@ -56,6 +57,8 @@ public class SystemManagerImpl implements SystemManager {
 	private AlertDaoRepository alertRepository;
 	@Autowired
 	private ConfigurationDaoRepository configRepository;
+	@Autowired
+	private TeachinSensorsDaoRepository teachinRepository;
 	@Autowired
 	private TokenTools tokenTools;
 	@Autowired
@@ -199,6 +202,11 @@ public class SystemManagerImpl implements SystemManager {
 		}
 	}
 	
+	@Override
+	public void deleteAllTeachinSensors() {
+		teachinRepository.deleteAllTeachinSensors();
+	}
+	
 	@Transactional(readOnly=true)
 	private Long countGateways() {
 		return gatewayRepository.count();
@@ -238,6 +246,5 @@ public class SystemManagerImpl implements SystemManager {
 		Long count = userRepository.countActiveUsers(date);
 		return count;
 	}
-
-	
+		
 }
