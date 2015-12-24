@@ -38,7 +38,7 @@ public class TeachinSensorsDaoRepository extends DataRepository<TeachinSensorDao
 	}
 	
 	@Override
-	public TeachinSensorDao findByTeachinStatus() {
+	public TeachinSensorDao findByTeachinStatus() throws IncorrectResultSizeDataAccessException {
 		SqlParameterSource paramMap = new MapSqlParameterSource();
 		return jdbcTemplate.queryForObject(
 				findByTeachinStatusQuery, 

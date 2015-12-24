@@ -144,9 +144,9 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	
 	@Override
 	public Response logout(String token) {
-		
-		systemManager.processLogout(token);
-		
+		UserDao user = systemManager.processLogout(token);
+		// update teachin status to ENDED if launched by the user 
+		systemManager.updateTeachinStatusByUser(user.getId());
 		return Response.status(200).build();
 	}
 	

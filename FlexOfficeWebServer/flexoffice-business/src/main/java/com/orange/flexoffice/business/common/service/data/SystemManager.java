@@ -30,7 +30,12 @@ public interface SystemManager {
 	 */
 	UserDao processLogin(String auth, Boolean isFromAdminUi, Object object, int infosDBLength) throws DataNotExistsException, AuthenticationException;
 	
-	void processLogout(String accessToken); 
+	/**
+	 * processLogout
+	 * @param accessToken
+	 * @return
+	 */
+	UserDao processLogout(String accessToken); 
 	
 	/**
 	 * checkToken if token is in BD & not expired return true, else false
@@ -44,4 +49,10 @@ public interface SystemManager {
 	 * @param userId
 	 */
 	void deleteAllTeachinSensorsByUserId(Long userId);
+	
+	/**
+	 * updateTeachinStatusByUser
+	 * @param userId
+	 */
+	void updateTeachinStatusByUser(Long userId);
 }

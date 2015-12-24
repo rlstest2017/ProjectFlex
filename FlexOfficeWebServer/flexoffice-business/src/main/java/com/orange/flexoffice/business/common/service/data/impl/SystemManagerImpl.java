@@ -21,8 +21,10 @@ import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
+import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
+import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_UserRole;
 import com.orange.flexoffice.dao.common.model.object.SystemDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
@@ -173,10 +175,10 @@ public class SystemManagerImpl implements SystemManager {
 	}
 	
 	@Override
-	public void processLogout(String accessToken) {
+	public UserDao processLogout(String accessToken) {
 		UserDao user = new UserDao();
 		user.setAccessToken(accessToken);
-		userRepository.updateAccessToken(user);
+		return userRepository.updateAccessToken(user); 
 	}
 	
 	/**
@@ -212,6 +214,18 @@ public class SystemManagerImpl implements SystemManager {
 			teachinRepository.deleteAllTeachinSensors();	
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.error("UserManager.deleteAllTeachinSensorsByUserId : Teachin for user by id #" + userId + " is not found", e);
+		}	
+	}
+	
+	@Override
+	public void updateTeachinStatusByUser(Long userId) {
+		try {
+			TeachinSensorDao teachin = teachinRepository.findByUserId(userId);
+			// the teachin is founded and matches to user Id
+			teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
+			teachinRepository.updateTeachinStatus(teachin);	
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.error("UserManager.updateTeachinStatusByUser : Teachin for user by id #" + userId + " is not found", e);
 		}	
 		
 	}
@@ -255,5 +269,6 @@ public class SystemManagerImpl implements SystemManager {
 		Long count = userRepository.countActiveUsers(date);
 		return count;
 	}
+
 		
 }

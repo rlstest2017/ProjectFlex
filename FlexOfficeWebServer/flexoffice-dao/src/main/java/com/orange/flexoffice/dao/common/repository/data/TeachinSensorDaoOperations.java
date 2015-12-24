@@ -16,7 +16,7 @@ public interface TeachinSensorDaoOperations {
 	List<TeachinSensorDao> findAllTeachinSensors();
 	
 	//select * from teachin_sensors where teachin_status is not null //
-	TeachinSensorDao findByTeachinStatus();
+	TeachinSensorDao findByTeachinStatus() throws IncorrectResultSizeDataAccessException;
 	
 	TeachinSensorDao findByUserId(Long userId) throws IncorrectResultSizeDataAccessException;
 	
