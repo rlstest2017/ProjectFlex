@@ -160,11 +160,18 @@ public class SystemEndpointImpl implements SystemEndpoint {
 		// TODO Auto-generated method stub
 		
 	}
+	
 	@Override
 	public Response cancelTeachin() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+				systemManager.updateTeachinStatus();
+				return Response.status(200).build();
+			} catch (DataNotExistsException e) {
+				LOGGER.debug("DataNotExistsException in cancelTeachin() SystemEndpointImpl with message :" + e.getMessage(), e);
+				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_37, Response.Status.NOT_FOUND));
+		}
 	}
+	
 	@Override
 	public Response submitTeachin() {
 		// TODO Auto-generated method stub

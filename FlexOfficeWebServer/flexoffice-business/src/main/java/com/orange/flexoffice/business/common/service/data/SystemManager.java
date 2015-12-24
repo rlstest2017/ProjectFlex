@@ -55,4 +55,9 @@ public interface SystemManager {
 	 * @param userId
 	 */
 	void updateTeachinStatusByUser(Long userId);
+	
+	/**
+	 * updateTeachinStatus
+	 */
+	void updateTeachinStatus() throws DataNotExistsException;
 }

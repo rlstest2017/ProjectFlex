@@ -152,9 +152,9 @@ public class SystemManagerImpl implements SystemManager {
 				user.setIsCreatedFromUserui(false);
 
 			} catch(IncorrectResultSizeDataAccessException e ) {
-				LOGGER.error("UserManager.findByUserMail : User by email #" + email + " is not found", e);
+				LOGGER.error("SystemManager.findByUserMail : User by email #" + email + " is not found", e);
 				if (isFromAdminUi) {
-					throw new DataNotExistsException("UserManager.findByUserMail : User by email #" + email + " is not found");
+					throw new DataNotExistsException("SystemManager.findByUserMail : User by email #" + email + " is not found");
 				} else {
 					if ((object != null)&&(object instanceof UserDao)) {
 								user.setFirstName((String)((UserDao) object).getFirstName());
@@ -166,8 +166,8 @@ public class SystemManagerImpl implements SystemManager {
 				}
 			}
 		} else {
-			LOGGER.error("UserManager.processLogin : Authorization parameter is null or wrong format");
-			throw new AuthenticationException("UserManager.processLogin : Authorization parameter is null or wrong format");
+			LOGGER.error("SystemManager.processLogin : Authorization parameter is null or wrong format");
+			throw new AuthenticationException("SystemManager.processLogin : Authorization parameter is null or wrong format");
 		}
 			
 		
@@ -201,7 +201,7 @@ public class SystemManagerImpl implements SystemManager {
 				return true;
 			}
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("UserManager.findByAccessToken : User by token #" + token + " DataAccessException", e);
+			LOGGER.error("SystemManager.findByAccessToken : User by token #" + token + " DataAccessException", e);
 			return false;
 		}
 	}
@@ -213,7 +213,7 @@ public class SystemManagerImpl implements SystemManager {
 			// the teachin is founded and matches to user Id
 			teachinRepository.deleteAllTeachinSensors();	
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("UserManager.deleteAllTeachinSensorsByUserId : Teachin for user by id #" + userId + " is not found", e);
+			LOGGER.error("SystemManager.deleteAllTeachinSensorsByUserId : Teachin for user by id #" + userId + " is not found", e);
 		}	
 	}
 	
@@ -225,7 +225,25 @@ public class SystemManagerImpl implements SystemManager {
 			teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
 			teachinRepository.updateTeachinStatus(teachin);	
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("UserManager.updateTeachinStatusByUser : Teachin for user by id #" + userId + " is not found", e);
+			LOGGER.error("SystemManager.updateTeachinStatusByUser : Teachin for user by id #" + userId + " is not found", e);
+		}	
+		
+	}
+	
+	@Override
+	public void updateTeachinStatus() throws DataNotExistsException {
+		try {
+			TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
+			// the teachin is founded (teachin_status not null)
+			if ( teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()) || teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()) ) {
+				teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
+				teachinRepository.updateTeachinStatus(teachin);	
+			} else {
+				throw new DataNotExistsException("SystemManager.updateTeachinStatus : Teachin not active");
+			}
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.error("SystemManager.updateTeachinStatus : Teachin not found", e);
+			throw new DataNotExistsException("SystemManager.updateTeachinStatus : Teachin not found");
 		}	
 		
 	}
@@ -269,6 +287,5 @@ public class SystemManagerImpl implements SystemManager {
 		Long count = userRepository.countActiveUsers(date);
 		return count;
 	}
-
 		
 }
