@@ -2,6 +2,7 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
 import java.util.List;
 
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -10,6 +11,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 //import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
+
 import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
 
 import com.orange.flexoffice.dao.common.repository.data.TeachinSensorDaoOperations;
@@ -45,7 +47,16 @@ public class TeachinSensorsDaoRepository extends DataRepository<TeachinSensorDao
 			);
 	}
 
-
+	@Override
+	public TeachinSensorDao findByUserId(Long userId) throws IncorrectResultSizeDataAccessException {
+		SqlParameterSource paramMap = new MapSqlParameterSource("userId", userId);
+		return jdbcTemplate.queryForObject(
+				findByUserIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<TeachinSensorDao>(TeachinSensorDao.class)
+			);
+	}
+	
 	@Override
 	public TeachinSensorDao updateTeachinStatus(TeachinSensorDao data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();

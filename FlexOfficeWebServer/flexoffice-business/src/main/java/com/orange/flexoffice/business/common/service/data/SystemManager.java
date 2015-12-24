@@ -40,7 +40,8 @@ public interface SystemManager {
 	Boolean checkToken(String token);
 	
 	/**
-	 * deleteAllTeachinSensors
+	 * deleteAllTeachinSensorsByUserId
+	 * @param userId
 	 */
-	void deleteAllTeachinSensors();
+	void deleteAllTeachinSensorsByUserId(Long userId);
 }

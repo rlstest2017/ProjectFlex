@@ -137,7 +137,9 @@ public class SystemManagerImpl implements SystemManager {
 	        	if (isFromAdminUi) {
 	        		// find user by mail & password & role
 		        	user.setPassword(password);
-		        	userRepository.findByUserEmailAndPassword(user);
+		        	UserDao returnedUser = userRepository.findByUserEmailAndPassword(user);
+		        	// user id is used for clear teachin !!!
+		        	user.setId(returnedUser.getId());
 	        	} else {
 	        		userRepository.findByUserEmail(email);
 	        	}
@@ -203,8 +205,15 @@ public class SystemManagerImpl implements SystemManager {
 	}
 	
 	@Override
-	public void deleteAllTeachinSensors() {
-		teachinRepository.deleteAllTeachinSensors();
+	public void deleteAllTeachinSensorsByUserId(Long userId) {
+		try {
+			teachinRepository.findByUserId(userId);
+			// the teachin is founded and matches to user Id
+			teachinRepository.deleteAllTeachinSensors();	
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.error("UserManager.deleteAllTeachinSensorsByUserId : Teachin for user by id #" + userId + " is not found", e);
+		}	
+		
 	}
 	
 	@Transactional(readOnly=true)

@@ -114,7 +114,8 @@ public class SystemEndpointImpl implements SystemEndpoint {
 			token.setExpiredDate(userToken.getExpiredTokenDate().getTime());
 
 			// init teachin_sensors table 
-			systemManager.deleteAllTeachinSensors();
+			// if teachin was launched by the logged user !!!
+			systemManager.deleteAllTeachinSensorsByUserId(userToken.getId());
 			
 			if (origin != null) {
 				LOGGER.debug("Origin value is :" + origin);

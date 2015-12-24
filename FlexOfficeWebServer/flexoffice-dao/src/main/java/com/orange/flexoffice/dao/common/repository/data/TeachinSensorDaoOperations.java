@@ -2,6 +2,8 @@ package com.orange.flexoffice.dao.common.repository.data;
 
 import java.util.List;
 
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
+
 import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
 
 /**
@@ -15,6 +17,8 @@ public interface TeachinSensorDaoOperations {
 	
 	//select * from teachin_sensors where teachin_status is not null //
 	TeachinSensorDao findByTeachinStatus();
+	
+	TeachinSensorDao findByUserId(Long userId) throws IncorrectResultSizeDataAccessException;
 	
 	TeachinSensorDao updateTeachinStatus(TeachinSensorDao data);
 	

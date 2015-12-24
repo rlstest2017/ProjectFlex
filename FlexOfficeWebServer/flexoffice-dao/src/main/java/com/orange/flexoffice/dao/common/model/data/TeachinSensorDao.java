@@ -8,7 +8,8 @@ package com.orange.flexoffice.dao.common.model.data;
 public class TeachinSensorDao extends AbstractData {
 
 	private Long roomId;
-	private Long gatewayId; 
+	private Long gatewayId;
+	private Long userId;
 	private String sensorIdentifier; // sensor back id on hexa 4 octets
 	private String sensorStatus;
 	private String teachinStatus;
@@ -39,6 +40,20 @@ public class TeachinSensorDao extends AbstractData {
 	 */
 	public void setGatewayId(Long gatewayId) {
 		this.gatewayId = gatewayId;
+	}
+	
+	/**
+	 * @return the userId
+	 */
+	public Long getUserId() {
+		return userId;
+	}
+
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	/**
