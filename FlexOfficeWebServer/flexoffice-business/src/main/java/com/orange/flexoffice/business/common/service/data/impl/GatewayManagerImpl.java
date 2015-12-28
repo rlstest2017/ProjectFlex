@@ -22,8 +22,10 @@ import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
+import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
@@ -31,6 +33,7 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRep
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.TeachinSensorsDaoRepository;
 
 /**
  * Manages {@link GatewayDto}.
@@ -55,6 +58,8 @@ public class GatewayManagerImpl implements GatewayManager {
 	private AlertManager alertManager;
 	@Autowired
 	private ConfigurationDaoRepository configRepository;
+	@Autowired
+	private TeachinSensorsDaoRepository teachinRepository;
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -223,11 +228,54 @@ public class GatewayManagerImpl implements GatewayManager {
 			alertManager.updateGatewayAlert(gatewayId, status);
 			
 			GatewayCommand command = new GatewayCommand();
-			// TODO if Teachin return roomId and command = "TEACHIN"
-			// TODO if stop Teachin return roomId and command = "STOPTEACHIN"
-			command.setCommand(EnumCommandModel.NONE);
+			
+			String gatewayStatus = gatewayDao.getStatus();
+				// process teachin
+				try {
+					TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
+					
+					if (teachin.getGatewayId() == gatewayId) {
+						if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
+							// the teachin is founded (teachin_status not null)
+							if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()))  {
+								// update status to running
+								teachin.setTeachinStatus(E_TeachinStatus.RUNNING.toString());
+								teachinRepository.updateTeachinStatus(teachin);
+								command.setRoomId(teachin.getRoomId());
+								command.setCommand(EnumCommandModel.TEACHIN);
+							} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString())) { // status RUNNING
+								command.setRoomId(teachin.getRoomId());
+								command.setCommand(EnumCommandModel.TEACHIN);
+							} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
+								command.setRoomId(teachin.getRoomId());
+								command.setCommand(EnumCommandModel.STOPTEACHIN);
+							}
+						} else {
+							// the teachin is founded (teachin_status not null)
+							if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()) || teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()))  {
+								// update status to running
+								teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
+								teachinRepository.updateTeachinStatus(teachin);
+								command.setCommand(EnumCommandModel.NONE);
+							} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
+								command.setCommand(EnumCommandModel.NONE);
+							}
+						}
+					} else {
+						command.setCommand(EnumCommandModel.NONE);
+					}
+					
+				} catch(IncorrectResultSizeDataAccessException e ) {
+					// Table teachin_sensors is empty
+					if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
+						command.setCommand(EnumCommandModel.STOPTEACHIN);
+					} else {
+						command.setCommand(EnumCommandModel.NONE);
+					}	
+			}
 			
 			return command;
+			
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("gateway is not found", e);
 			throw new DataNotExistsException("Gateway not exist");
