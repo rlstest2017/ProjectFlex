@@ -169,7 +169,7 @@ public abstract class DataRepository<T extends Data>
 		findByKeyQuery = String.format(FIND_BY_COL_KEY_TEMPLATE, getTableName());
 		findRoomStatByRoomIdQuery = String.format(FIND_ROOMSTAT_BY_ROOMID_TEMPLATE, getTableName());
 		findRoomStatByRoomInfoQuery = String.format(FIND_ROOMSTAT_BY_ROOMINFO_TEMPLATE, getTableName());
-		findByIdentifierQuery = String.format(FIND_BY_IDENTIFIER_TEMPLATE, getTableName(), getColumnColName());
+		findByIdentifierQuery = String.format(FIND_BY_IDENTIFIER_TEMPLATE, getTableName());
 		findByMacAddressQuery = String.format(FIND_BY_MAC_ADDRESS_TEMPLATE, getTableName());
 		findByColumnMailQuery = String.format(FIND_BY_COL_MAIL_TEMPLATE, getTableName());
 		findByColumnMailAndPasswordQuery = String.format(FIND_BY_COL_MAIL_PASSWORD_TEMPLATE, getTableName());

@@ -45,6 +45,7 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 
 		SensorDao sensorDao = new SensorDao();
 		sensorDao.setIdentifier(sensorInput.getId());
+		sensorDao.setName("["+sensorInput.getId()+"]");
 		sensorDao.setProfile(sensorInput.getProfile());
 		sensorDao.setStatus(E_SensorStatus.OFFLINE.toString());
 		// Type depends on profile.
@@ -65,15 +66,13 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 		}
 
 		try {
-			sensorDao = sensorManager.save(sensorDao);
+			sensorManager.save(sensorDao, sensorInput.getGatewayId());
 
 		} catch (DataAlreadyExistsException e) {
-
-			LOGGER.debug("DataNotExistsException in SensorApiEndpoint.addSensor with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_11, Response.Status.METHOD_NOT_ALLOWED));
-
+			LOGGER.debug("DataAlreadyExistsException in SensorApiEndpoint.addSensor with message :", e);
+			// process Sensor Teachin if Teachin exist & actif
+			sensorManager.processTeachinSensor(sensorInput.getId(), sensorInput.getGatewayId());
 		} catch (RuntimeException ex) {
-
 			LOGGER.debug("RuntimeException in SensorApiEndpoint.addSensor with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}

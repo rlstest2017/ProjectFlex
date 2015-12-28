@@ -29,14 +29,13 @@ public interface SensorManager {
 	SensorDao find(String sensorIdentifier)  throws DataNotExistsException;
 
 	/**
-	 * Saves a {@link SensorDao}
-	 * method used by adminui
+	 * save
 	 * @param sensorDao
-	 * 		  the new {@link SensorDao}
-	 * @return a saved {@link SensorDao}
-	 * @throws DataAlreadyExistsException 
+	 * @param gatewayMacAdress
+	 * @return
+	 * @throws DataAlreadyExistsException
 	 */
-	SensorDao save(SensorDao sensorDao) throws DataAlreadyExistsException;
+	SensorDao save(SensorDao sensorDao, String gatewayMacAdress) throws DataAlreadyExistsException;
 
 	/**
 	 * Updates a {@link SensorDao}
@@ -65,5 +64,12 @@ public interface SensorManager {
 	 * 		  a sensor ID
 	 */
 	void delete(String sensorIdentifier) throws DataNotExistsException;
+	
+	/**
+	 * processTeachinSensor
+	 * @param identifier
+	 * @param gatewayMacAdress
+	 */
+	void processTeachinSensor(String identifier, String gatewayMacAdress);
 
 }

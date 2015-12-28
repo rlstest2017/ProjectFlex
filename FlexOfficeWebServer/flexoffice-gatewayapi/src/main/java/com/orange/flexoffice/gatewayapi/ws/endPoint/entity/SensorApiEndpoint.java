@@ -40,7 +40,6 @@ public interface SensorApiEndpoint {
 	 * @see Response
 	 */
 	@POST
-	@Path(SENSOR_ID_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	Response addSensor(SensorNewSummary sensor);

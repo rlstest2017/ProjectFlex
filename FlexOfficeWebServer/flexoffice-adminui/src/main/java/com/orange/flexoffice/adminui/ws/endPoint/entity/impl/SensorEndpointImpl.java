@@ -35,6 +35,7 @@ import com.orange.flexoffice.dao.common.model.object.RoomDto;
 public class SensorEndpointImpl implements SensorEndpoint {
 
 	private static final Logger LOGGER = Logger.getLogger(SensorEndpointImpl.class);
+	
 	private final ObjectFactory factory = new ObjectFactory();
 
 	@Autowired
@@ -199,7 +200,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 		}
 
 		try {
-			sensorDao = sensorManager.save(sensorDao);
+			sensorDao = sensorManager.save(sensorDao, null); // 2nd parameter used by gatewayApi
 
 		} catch (DataAlreadyExistsException e) {
 			

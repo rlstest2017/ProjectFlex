@@ -111,9 +111,9 @@ public class SensorApiEndpointImplTest {
 		try {
 			// Test
 			sensorEndpoint.addSensor(sensorInput);
-
-		} catch (WebApplicationException e) {
 			expectedResult = true;
+		} catch (WebApplicationException e) {
+			
 		}
 		// Asserts
 		assertEquals(true, expectedResult);	

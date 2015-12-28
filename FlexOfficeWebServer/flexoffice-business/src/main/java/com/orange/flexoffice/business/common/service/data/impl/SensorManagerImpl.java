@@ -14,16 +14,22 @@ import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.AlertManager;
 import com.orange.flexoffice.business.common.service.data.SensorManager;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
+import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
+import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_OccupancyInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_SensorTeachinStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomStatDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.TeachinSensorsDaoRepository;
 
 /**
  * Manage Sensors
@@ -38,18 +44,18 @@ public class SensorManagerImpl implements SensorManager {
 
 	@Autowired
 	private SensorDaoRepository sensorRepository;
-
+	@Autowired
+	private GatewayDaoRepository gatewayRepository;
 	@Autowired
 	private RoomDaoRepository roomRepository;
-
 	@Autowired
 	private RoomStatDaoRepository roomStatRepository;
-	
 	@Autowired
 	private AlertDaoRepository alertRepository;
-	
 	@Autowired
 	private AlertManager alertManager;
+	@Autowired
+	private TeachinSensorsDaoRepository teachinRepository;
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -72,7 +78,7 @@ public class SensorManagerImpl implements SensorManager {
 	}
 
 	@Override
-	public SensorDao save(SensorDao sensorDao) throws DataAlreadyExistsException {
+	public SensorDao save(SensorDao sensorDao, String gatewayMacAdress) throws DataAlreadyExistsException {
 
 		try {
 			if (sensorDao.getRoomId() == null) {
@@ -81,7 +87,25 @@ public class SensorManagerImpl implements SensorManager {
 			} 
 			
 			// Save SensorDao
-			return sensorRepository.saveSensor(sensorDao);
+			SensorDao returnedSensor = sensorRepository.saveSensor(sensorDao);
+			
+			if (gatewayMacAdress != null) { // method called by gatewayApi
+				// process teachin
+				try {
+					TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
+					// Save teachin_sensors
+					if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()) || teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()))  {
+						TeachinSensorDao teachinSensor = new TeachinSensorDao();
+						teachinSensor.setSensorIdentifier(sensorDao.getIdentifier());
+						teachinSensor.setSensorStatus(E_SensorTeachinStatus.NOT_PAIRED.toString());
+						teachinRepository.saveTechinSensor(teachinSensor);
+					}
+				} catch(IncorrectResultSizeDataAccessException e ) {
+					LOGGER.error("SensorManager.save : There is no activate teachin", e);
+			    }
+			}
+			
+			return returnedSensor; 
 			
 		} catch (DataIntegrityViolationException e) {
 			LOGGER.error("SensorManager.save : Sensor already exists", e);
@@ -212,6 +236,48 @@ public class SensorManagerImpl implements SensorManager {
 		}
 	}
 
+	/**
+	 * processTeachin used in save public method in case of catch DataIntegrityException
+	 * @param identifier
+	 * @param gatewayMacAdress
+	 */
+	@Override
+	public void processTeachinSensor(String identifier, String gatewayMacAdress) {
+		// compute status PAIRED_OK or PAIRED_KO & save data in techin_sensors 
+		LOGGER.debug("identifier is :" + identifier);
+		
+		// process teachin
+		try {
+			TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
+			// Save teachin_sensors
+			if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()) || teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()))  {
+				SensorDao sensor = sensorRepository.findBySensorId(identifier);
+				
+				TeachinSensorDao teachinSensor = new TeachinSensorDao();
+				teachinSensor.setSensorIdentifier(identifier);
+				
+				if (sensor.getRoomId() == 0) {
+					teachinSensor.setSensorStatus(E_SensorTeachinStatus.NOT_PAIRED.toString());
+					teachinRepository.saveTechinSensor(teachinSensor);
+				} else {
+					RoomDao room = roomRepository.findByRoomId(Long.valueOf(sensor.getRoomId()));
+					GatewayDao gateway = gatewayRepository.findByGatewayId(room.getGatewayId());
+					if (gateway.getMacAddress().equals(gatewayMacAdress)) {
+						teachinSensor.setSensorStatus(E_SensorTeachinStatus.PAIRED_OK.toString());
+						teachinRepository.saveTechinSensor(teachinSensor);
+					} else {
+						teachinSensor.setSensorStatus(E_SensorTeachinStatus.PAIRED_KO.toString());
+						teachinRepository.saveTechinSensor(teachinSensor);
+					}
+				}
+			}
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.error("SensorManager.processTeachinSensor : There is no activate teachin", e);
+	    }
+		
+			
+	}
+
 	private void processOccupiedRoom(RoomStatDao data) {
 		try {
 			// if roomId & room_info=OCCUPIED in roomStats
@@ -227,5 +293,6 @@ public class SensorManagerImpl implements SensorManager {
 		}
 
 	}
-
+	
+	
 }

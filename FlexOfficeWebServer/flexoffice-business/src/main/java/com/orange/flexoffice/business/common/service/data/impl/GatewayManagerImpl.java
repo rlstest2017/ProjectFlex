@@ -272,7 +272,7 @@ public class GatewayManagerImpl implements GatewayManager {
 					} else {
 						command.setCommand(EnumCommandModel.NONE);
 					}	
-			}
+			    }
 			
 			return command;
 			
