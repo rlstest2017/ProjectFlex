@@ -85,7 +85,7 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 			jdbcTemplateForTest.execute(query);
 			query = "DELETE FROM users";
 			jdbcTemplateForTest.execute(query);
-			
+
 			return true;
 	}
 
@@ -165,7 +165,7 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		jdbcTemplateForTest.execute(query);
 		String sqlRoomStats = "INSERT INTO teachin_sensors " +
 				"(id, room_id, gateway_id, teachin_status, user_id) VALUES (?, ?, ?, CAST(? AS teachinStatus), ?)";
-		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {1, 1, 1, "INITIALIZING", 1 });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {1, 1, 1, "INITIALIZING", 3 });
 		
 		return true;
 	}

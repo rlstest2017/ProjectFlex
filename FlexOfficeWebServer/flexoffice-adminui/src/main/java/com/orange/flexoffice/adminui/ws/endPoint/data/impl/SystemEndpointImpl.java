@@ -202,6 +202,11 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	            .header("Access-Control-Max-Age", "1209600")
 	            .build();
 	}
+
+	@Override
+	public boolean initTeachinSensorsTable() {
+			return testManager.initTeachinSensorsTable();
+	}
 	
 	private List<EDeviceStatus> constructDeviceStatuses() {
 		List<EDeviceStatus> deviceStatuses = new ArrayList<EDeviceStatus>();
@@ -227,4 +232,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
 		
 		return roomTypes;
 	}
+
+
+	
 }

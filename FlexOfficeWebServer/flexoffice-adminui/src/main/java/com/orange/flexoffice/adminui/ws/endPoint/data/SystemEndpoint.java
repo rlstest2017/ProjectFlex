@@ -121,9 +121,9 @@ public interface SystemEndpoint {
 	
 	// used for tests
 	boolean executeInitTestFile();
-	
-	
-	
+
+	// used for tests
+	boolean initTeachinSensorsTable();
 }
 
 

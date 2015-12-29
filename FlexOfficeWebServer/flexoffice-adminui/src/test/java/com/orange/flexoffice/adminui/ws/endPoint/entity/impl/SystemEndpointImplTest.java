@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -52,6 +53,14 @@ public class SystemEndpointImplTest {
 		assertEquals(true, state);
 	}
 
+	@Test
+	public void TestAB_initTeachinSensorsTable() {
+		// SetUp
+		boolean state = systemEndpoint.initTeachinSensorsTable();
+		 
+		// Asserts
+		assertEquals(true, state);
+	}
 	
 	@Test
 	public void TestB_getSystem() {
@@ -88,4 +97,62 @@ public class SystemEndpointImplTest {
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 	}
 
+	@Test
+	public void TestE_initTeachin() {
+		// Setup
+		String token = "Zmlyc3QubGFzdDFAdGVzdC5jb206cGFzczoxNDQ4NjEzNjU2MDk4";
+		String roomId = "1";
+		
+		// Test
+		Response response = systemEndpoint.initTeachin(token, roomId);
+
+		// Asserts
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+	}
+
+	@Test
+	public void TestF_initTeachinTeachinAlreadyExist() {
+		// Setup
+		boolean expectedResult = false;
+		String token = "Zmlyc3QubGFzdDFAdGVzdC5jb206cGFzczoxNDQ4NjEzNjU2MDk4";
+		String roomId = "3";
+		
+		try {
+			// Test
+			systemEndpoint.initTeachin(token, roomId);
+			
+		} catch (WebApplicationException e) {
+			expectedResult = true;
+		}
+		
+		// Asserts
+		assertEquals(true, expectedResult);
+	}
+	
+	@Test
+	public void TestG_cancelTeachin() {
+		// Test
+		Response response = systemEndpoint.cancelTeachin();
+
+		// Asserts
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void TestH_cancelTeachinNotActive() {
+		// Setup
+		boolean expectedResult = false;
+		
+		try {
+			// Test
+			systemEndpoint.cancelTeachin();
+			
+		} catch (WebApplicationException e) {
+			expectedResult = true;
+		}
+		
+		// Asserts
+		assertEquals(true, expectedResult);	
+	}
+	
 }
