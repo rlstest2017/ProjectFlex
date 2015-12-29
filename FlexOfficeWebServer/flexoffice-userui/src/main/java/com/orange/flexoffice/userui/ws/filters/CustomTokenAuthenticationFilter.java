@@ -37,7 +37,7 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
         setAuthenticationSuccessHandler(new TokenSimpleUrlAuthenticationSuccessHandler());
     }
    
-    public final String HEADER_SECURITY_TOKEN = "x-auth-token";
+    public static final String HEADER_SECURITY_TOKEN = "x-auth-token";
  
  
     /**

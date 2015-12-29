@@ -10,9 +10,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.business.common.enums.EnumViewType;
-
-//import org.apache.log4j.Logger;
-
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
 import com.orange.flexoffice.dao.common.model.object.MultiStatDto;
 import com.orange.flexoffice.dao.common.model.object.SimpleStatDto;
@@ -24,7 +21,6 @@ import com.orange.flexoffice.dao.common.model.object.SimpleStatDto;
  */
 public class StatTools {
 	
-	//private static final Logger LOGGER = Logger.getLogger(StatTools.class);
 	@Autowired
 	private DateTools dateTools;
 
@@ -252,19 +248,6 @@ public class StatTools {
 	public static void main(String[] args) throws ParseException {
 		
 		Map<String, Long> nbRoomsByType = new HashMap<String, Long>();
-		
-//		StatTools statTools = new StatTools();
-//		
-//		MultiStatDto multiStatDto = new MultiStatDto();
-//		multiStatDto.setDay(new Date());
-//		multiStatDto.setOccupancyDuration(24l);
-//		multiStatDto.setRoomType(E_RoomType.VIDEO_CONF);
-//		
-//		Long duration = 15l;
-//		
-//		MultiStatDto multiStatDtoReturned = statTools.createReturnedMultiStatDto(multiStatDto, duration, null); 
-//				
-//		System.out.println("multiStatDtoReturned :" + multiStatDtoReturned.getValues().get(1));
 	
 		E_RoomType[] types = E_RoomType.values();
 		for (E_RoomType e_RoomType : types) {

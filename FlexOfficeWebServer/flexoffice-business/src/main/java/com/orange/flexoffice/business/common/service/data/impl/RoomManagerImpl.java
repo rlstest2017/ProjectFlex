@@ -97,7 +97,7 @@ public class RoomManagerImpl implements RoomManager {
 		}
 
 		List<SensorDao> sensorsDao = sensorRepository.findByRoomId(roomId);
-		if ((sensorsDao != null) && (sensorsDao.size() > 0)) {
+		if (sensorsDao != null && !sensorsDao.isEmpty()) {
 			dto.setSensors(sensorsDao);
 		}
 

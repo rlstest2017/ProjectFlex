@@ -80,7 +80,6 @@ public class TaskManagerImpl implements TaskManager {
 		roomStat.setEndOccupancyDate(endDayDate);
 		roomStat.setRoomInfo(E_RoomInfo.UNOCCUPIED.toString());
 		List<RoomStatDao> roomSt = roomStatsRepository.findAllOccupiedDailyRoomStats(roomStat);
-		//System.out.println("Nombre le lignes retournées : " + roomSt.size());
 		
 		// 4 - cumulate the stats by roomId
 		for (RoomStatDao rstat : roomSt) { // the roomStats are order by roomId 1,2,3,....

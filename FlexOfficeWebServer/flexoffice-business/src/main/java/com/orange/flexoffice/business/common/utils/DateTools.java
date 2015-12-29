@@ -27,13 +27,11 @@ public class DateTools {
 	public Date lastConnexionDate(String lastConnexionDuration) {
 		Date now = new Date();
 		LOGGER.debug("Date now :" + now);
-		//System.out.println("now :"+ now);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
 		cal.add(Calendar.DAY_OF_YEAR, -Integer.valueOf(lastConnexionDuration)); // <--15 jour -->
 		Date lastConnexionDate = cal.getTime();
 		LOGGER.debug("last accepted Date " +lastConnexionDuration +" days later: " + lastConnexionDate);
-		//System.out.println("lastConnexionDate :"+ lastConnexionDate);
 		return lastConnexionDate;
 	}
 	
@@ -44,12 +42,10 @@ public class DateTools {
 	 * @return
 	 */
 	public Date reservationDateDelayBeforeTimeOut(Date reservationDate, int bookingDurationValue) {
-		//System.out.println("reservationDate :"+ reservationDate);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(reservationDate);
 		cal.add(Calendar.SECOND, bookingDurationValue); // <-- 300 secondes -->
 		Date bookingDate = cal.getTime();
-		//System.out.println("bookingDate :"+ bookingDate);
 		return bookingDate; 
 	}
 	
@@ -63,7 +59,6 @@ public class DateTools {
 		String hours = values[0];
 		String minutes = values[1];
 		Date now = new Date();
-		//System.out.println("now :"+ now);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
 		cal.set(Calendar.HOUR_OF_DAY, Integer.valueOf(hours));
@@ -71,7 +66,6 @@ public class DateTools {
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MILLISECOND,0);
 		Date beginDayDate = cal.getTime();
-		//System.out.println("beginDayDate :"+ beginDayDate);
 		return beginDayDate;
 	}
 	
@@ -85,7 +79,6 @@ public class DateTools {
 		String hours = values[0];
 		String minutes = values[1];
 		Date now = new Date();
-		//System.out.println("now :"+ now);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
 		cal.set(Calendar.HOUR_OF_DAY, Integer.valueOf(hours));
@@ -93,7 +86,6 @@ public class DateTools {
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MILLISECOND,0);
 		Date endDayDate = cal.getTime();
-		//System.out.println("endDayDate :"+ endDayDate);
 		return endDayDate;
 	}
 	
@@ -104,8 +96,6 @@ public class DateTools {
 	 * @return
 	 */
 	public Date beginOfDay(Date dailyDate) {
-		
-		//System.out.println("now :"+ now);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(dailyDate);
 		cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -113,29 +103,25 @@ public class DateTools {
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MILLISECOND,0);
 		Date dayDate = cal.getTime();
-		//System.out.println("dayDate :"+ dayDate);
 		return dayDate;
 	}
 	
 	// hh:23; mm:59; ss:59
-		/**
-		 * endOfDay
-		 * @param dailyDate
-		 * @return
-		 */
-		public Date endOfDay(Date dailyDate) {
-			
-			//System.out.println("now :"+ now);
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(dailyDate);
-			cal.set(Calendar.HOUR_OF_DAY, 23);
-			cal.set(Calendar.MINUTE, 59);
-			cal.set(Calendar.SECOND,59);
-			cal.set(Calendar.MILLISECOND,0);
-			Date dayDate = cal.getTime();
-			//System.out.println("dayDate :"+ dayDate);
-			return dayDate;
-		}
+	/**
+	 * endOfDay
+	 * @param dailyDate
+	 * @return
+	 */
+	public Date endOfDay(Date dailyDate) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dailyDate);
+		cal.set(Calendar.HOUR_OF_DAY, 23);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND,59);
+		cal.set(Calendar.MILLISECOND,0);
+		Date dayDate = cal.getTime();
+		return dayDate;
+	}
 		
 	/**
 	 * calculateDuration in seconds
@@ -144,7 +130,6 @@ public class DateTools {
 	public Long calculateDuration(Date beginOccupancyDate, Date endOccupancyDate) {
 		Long occupancyDuration = endOccupancyDate.getTime()-beginOccupancyDate.getTime();
 		occupancyDuration = occupancyDuration/1000;
-		//System.out.println("Le temps est :" + occupancyDuration);
 		return occupancyDuration;
 	}
 	
@@ -156,7 +141,6 @@ public class DateTools {
 	 */
 	public Boolean isDateInList(List<Date> dateList, Date toCompare) {
 		Boolean state = false;
-		
 		for (Date date : dateList) {
 			if (date.getTime() == toCompare.getTime()) {
 				state = true;
@@ -233,7 +217,7 @@ public class DateTools {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		Date date = null;;
 		if (dateInString.equals("0")) { // default value
-			date = new Date(0l);
+			date = new Date(0L);
 		} else {
 		date = formatter.parse(dateInString);
 		}
@@ -388,9 +372,10 @@ public class DateTools {
 			boolean priseCompteVendredi, boolean priseCompteSamedi,
 			boolean priseCompteDimanche) {
 
-		if (d2.compareTo(d1) <= 0)
+		if (d2.compareTo(d1) <= 0) {
 			return 0;
-
+		}
+		
 		// Tableau des jours a prendre en compte
 		Boolean[] joursPrisEncompte = new Boolean[] { priseCompteDimanche,
 				priseCompteLundi, priseCompteMardi, priseCompteMercredi,
@@ -412,8 +397,9 @@ public class DateTools {
 		int nbJour = 0;
 		while (date1.before(date2) || date1.equals(date2)) {
 			if (!notionJourFerie || !joursFeries.contains(date1.getTime())) {
-				if (joursPrisEncompte[date1.get(GregorianCalendar.DAY_OF_WEEK) - 1])
+				if (joursPrisEncompte[date1.get(GregorianCalendar.DAY_OF_WEEK) - 1]) {
 					nbJour++;
+				}
 			}
 
 			date1.add(GregorianCalendar.DAY_OF_MONTH, 1);
@@ -511,32 +497,9 @@ public class DateTools {
 	}
 	
 	public static void main(String[] args) throws ParseException {
-		//SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		//String dateBeginInString = "2015-12-08 18:56:25.620506";
-		//String dateEndInString = "2015-12-08 18:59:35.164569";
 		DateTools date = new DateTools();
-		//date.lastConnexionDate("15");
-		//date.reservationDateDelayBeforeTimeOut(new Date(), 300);
-		//date.dateBeginDay("07:30");
-		//date.dateEndDay("20:00");
-		//Date dateBegin = formatter.parse(dateBeginInString);
-		//Date dateEnd = formatter.parse(dateEndInString);
-		//date.calculateDuration(dateBegin, dateEnd);
-		//float rate = ((float)1500l*100/(float)225000l);
-		
-		//System.out.println("date is:" + new Date().getTime());
-				
-		//System.out.println("startdate is:" + new SimpleDateFormat("dd/MM/yyyy").format(new Date(1449784800166l)));
-		
-		System.out.println("stardate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(1449702000000l)));
-		System.out.println("enddate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(1450047600000l)));
-	
-		
-//		Date valueBegin = date.getFirstDayOfMonth("2015-11-18T15:00:22.806Z", null);
-//		System.out.println("Begin month date is : " + valueBegin);
-//		Date valueEnd = date.getLastDayOfMonth("2015-11-28T15:00:22.806Z", null);
-//		System.out.println("End month date is : " + valueEnd);
-		
+		System.out.println("stardate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(1449702000000L)));
+		System.out.println("enddate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(1450047600000L)));
 		
 		Date valueBegin = date.getFirstDayOfWeek("2015-12-23T15:00:22.806Z", null);
 		System.out.println("Begin month date is : " + valueBegin);
@@ -546,18 +509,9 @@ public class DateTools {
 		int nb = date.nbJoursOuvrable(valueBegin, valueEnd, true, true, true, true, true, true, false, false);
 		System.out.println("NB : " + nb);
 		
-		int num = date.getNumberOfWeek(new Date(1451602799000l));
+		int num = date.getNumberOfWeek(new Date(1451602799000L));
 		System.out.println("num : " + num);
-		
-		//System.out.println("new startdate timestamp:" + (new SimpleDateFormat("dd/MM/yyyy").format(new Date(1450130402479l))));
-		
-//		Date now = new Date();
-//		System.out.println("date is:" + now);
-//		System.out.println("timestamp is:" + now.getTime());
-//		Date formattedDate =date.beginOfDay(now);
-//		System.out.println("formatted date is:" + formattedDate);
-//		System.out.println("formatted timestamp is:" + formattedDate.getTime());
-				
+
 	}
 	
 }

@@ -268,7 +268,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				(status == ERoomStatus.OCCUPIED)) {
 
 			// And if user is known
-			if ((userId != null)&&(userId != 0)) {
+			if (userId != null && userId != 0) {
 				try {
 					// Get user object from DB
 					UserDao userDao = userManager.find(userId);

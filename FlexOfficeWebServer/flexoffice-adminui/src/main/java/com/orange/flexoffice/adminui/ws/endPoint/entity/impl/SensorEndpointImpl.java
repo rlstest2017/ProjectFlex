@@ -316,7 +316,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 				LOGGER.warn("Get sensors / Get sensor id : Wrong Room on sensor #" + sensorIdentifier, e);
 			}
 		}
-		return (roomOutput);		
+		return roomOutput;		
 	}
 
 	

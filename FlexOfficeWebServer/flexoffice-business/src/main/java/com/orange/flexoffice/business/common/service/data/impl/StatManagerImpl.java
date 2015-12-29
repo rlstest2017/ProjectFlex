@@ -263,8 +263,7 @@ public class StatManagerImpl implements StatManager {
 			List<MultiStatDto> multiStatList = new ArrayList<MultiStatDto>();
 			
 			// 1 - Get List of RoomDailyTypeDto (roomType, occupancyDuration & Day) from DB
-			// " select room_daily_occupancy.day, room_daily_occupancy.occupancy_duration, rooms.type From room_daily_occupancy, rooms 
-			// where rooms.id=room_daily_occupancy.room_id and room_daily_occupancy.day >:fromDate and room_daily_occupancy.day <:toDate order by room_daily_occupancy.day ";
+			// " select room_daily_occupancy.day, room_daily_occupancy.occupancy_duration, rooms.type From room_daily_occupancy, rooms where rooms.id=room_daily_occupancy.room_id and room_daily_occupancy.day >:fromDate and room_daily_occupancy.day <:toDate order by room_daily_occupancy.day ";
 			List<RoomDailyTypeDto> roomslist = roomDailyRepository.findRoomsDailyAndType(parameters);
 			LOGGER.debug("roomslist size in constructReturnedList method : " + roomslist.size());
 			

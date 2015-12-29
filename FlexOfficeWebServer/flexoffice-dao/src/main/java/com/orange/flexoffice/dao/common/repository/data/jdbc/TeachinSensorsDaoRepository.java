@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-//import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
@@ -21,7 +20,6 @@ import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 @Repository
 public class TeachinSensorsDaoRepository extends DataRepository<TeachinSensorDao> implements TeachinSensorDaoOperations {
 
-	//private static final Logger LOGGER = Logger.getLogger(TeachinSensorsDaoRepository.class);
 	
 	public TeachinSensorsDaoRepository() {
 		super(TeachinSensorDao.class);

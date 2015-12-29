@@ -36,7 +36,7 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
         setAuthenticationSuccessHandler(new TokenSimpleUrlAuthenticationSuccessHandler());
     }
    
-    public final String HEADER_SECURITY_TOKEN = "x-auth-token";
+    public static final String HEADER_SECURITY_TOKEN = "x-auth-token";
  
  
     /**
@@ -61,7 +61,9 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
     	String token = request.getHeader(HEADER_SECURITY_TOKEN);
         logger.info("token found:"+token);
         AbstractAuthenticationToken userAuthenticationToken = authUserByToken(token);
-        if(userAuthenticationToken == null) throw new AuthenticationServiceException(MessageFormat.format("Error | {0}", "Bad Token"));
+        if(userAuthenticationToken == null) { 
+        	throw new AuthenticationServiceException(MessageFormat.format("Error | {0}", "Bad Token"));
+        }	
         return userAuthenticationToken;
     }
  
