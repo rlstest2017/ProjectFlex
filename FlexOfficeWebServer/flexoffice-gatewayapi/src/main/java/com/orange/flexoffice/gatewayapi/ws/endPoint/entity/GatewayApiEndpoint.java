@@ -83,7 +83,9 @@ public interface GatewayApiEndpoint {
 	// used for tests
 	GatewayDto findByMacAddress(String macAddress)  throws DataNotExistsException;
 
-	
+	// used for tests
+	boolean initTeachinSensorsTable();
+
 }
 
 

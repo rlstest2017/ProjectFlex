@@ -159,6 +159,17 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		return true;
 	}
 	
+	
+	public boolean initTeachinSensorsTable() {
+		String query = "DELETE FROM teachin_sensors";
+		jdbcTemplateForTest.execute(query);
+		String sqlRoomStats = "INSERT INTO teachin_sensors " +
+				"(id, room_id, gateway_id, teachin_status, user_id) VALUES (?, ?, ?, CAST(? AS teachinStatus), ?)";
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {1, 1, 1, "INITIALIZING", 1 });
+		
+		return true;
+	}
+	
 	@Override
 	public void forEach(DataExtractor dataExtractor) {
 	}

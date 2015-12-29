@@ -209,5 +209,63 @@ public class GatewayApiEndpointImplTest {
 		// Assert
 		assertEquals(true, expectedResult);	
 	}
+	
+	@Test
+	public void TestM_initTeachinSensorsTable() {
+		// SetUp
+		boolean state = gatewayEndpoint.initTeachinSensorsTable();
+		 
+		// Asserts
+		assertEquals(true, state);
+	}
+
+	@Test
+	public void TestN_updateGatewayTeachinActiveForGatewayId() { // teachin_status='INITIALIZING'
+		// Setup
+		final GatewayInput gatewayIn = factory.createApiGateway("ONTEACHIN");
+
+			// Test
+			final GatewayReturn response = gatewayEndpoint.updateGateway("FF:EE:ZZ:AA:GG:PP", gatewayIn);
+			// teachin_status become 'RUNNING'
+			
+			// Assert
+			assertEquals(ECommandModel.TEACHIN, response.getCommand());
+	}
+	
+	@Test
+	public void TestO_updateGatewayTeachinSetENDED() {
+		// Setup
+		final GatewayInput gatewayIn = factory.createApiGateway("ERROR_NO_USB_DEVICE");
+
+			// Test
+			final GatewayReturn response = gatewayEndpoint.updateGateway("FF:EE:ZZ:AA:GG:PP", gatewayIn);
+			// teachin_status become 'ENDED'
+			// Assert
+			assertEquals(ECommandModel.NONE, response.getCommand());
+	}
+	
+	@Test
+	public void TestP_updateGatewayTeachinActiveForGatewayIdButENDED() { // teachin_status='ENDED'
+		// Setup
+		final GatewayInput gatewayIn = factory.createApiGateway("ONTEACHIN");
+
+			// Test
+			final GatewayReturn response = gatewayEndpoint.updateGateway("FF:EE:ZZ:AA:GG:PP", gatewayIn);
+						
+			// Assert
+			assertEquals(ECommandModel.STOPTEACHIN, response.getCommand());
+	}
+	
+	@Test
+	public void TestQ_updateGatewayTeachinActiveForAnotherGatewayId() {
+		// Setup
+		final GatewayInput gatewayIn = factory.createApiGateway("ONTEACHIN");
+
+			// Test
+			final GatewayReturn response = gatewayEndpoint.updateGateway("FF:TT:ZZ:AA:GG:PP", gatewayIn);
+
+			// Assert
+			assertEquals(ECommandModel.STOPTEACHIN, response.getCommand());
+	}
 
 }

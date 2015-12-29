@@ -65,6 +65,15 @@ public class SensorApiEndpointImplTest {
 		// Asserts
 		assertEquals(true, state);
 	}
+	
+	@Test
+	public void TestAB_initTeachinSensorsTable() {
+		// SetUp
+		boolean state = gatewayEndpoint.initTeachinSensorsTable();
+		 
+		// Asserts
+		assertEquals(true, state);
+	}
 
 	@Test
 	public void TestB_addSensorMotion() throws WebApplicationException {
@@ -89,7 +98,7 @@ public class SensorApiEndpointImplTest {
 		final SensorNewSummary sensorInput = new SensorNewSummary();
 		sensorInput.setId("Sensor from Gateway Id 2");
 		sensorInput.setProfile("A5-04-01");
-		sensorInput.setGatewayId("1");
+		sensorInput.setGatewayId("2");
 
 		// Test
 		final Response response = sensorEndpoint.addSensor(sensorInput);
@@ -106,7 +115,7 @@ public class SensorApiEndpointImplTest {
 		final SensorNewSummary sensorInput = new SensorNewSummary();
 		sensorInput.setId("Sensor from Gateway Id 2");
 		sensorInput.setProfile("A5-04-01");
-		sensorInput.setGatewayId("1");
+		sensorInput.setGatewayId("2");
 
 		try {
 			// Test

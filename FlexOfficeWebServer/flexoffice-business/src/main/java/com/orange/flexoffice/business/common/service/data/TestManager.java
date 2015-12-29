@@ -43,4 +43,10 @@ public interface TestManager {
 	 */
 	boolean initRoomMonthlyOccupancyTable();
 	
+	/**
+	 * initTeachinSensorsTable
+	 * @return
+	 */
+	boolean initTeachinSensorsTable();
+	
 }

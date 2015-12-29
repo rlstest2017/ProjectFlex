@@ -134,13 +134,18 @@ public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 	}
 	
 	@Override
+	public GatewayDto findByMacAddress(String macAddress) throws DataNotExistsException {
+		return gatewayManager.findByMacAddress(macAddress);
+	}
+
+	@Override
 	public boolean executeInitTestFile() {
 		return testManager.executeInitTestFile();
 	}
 
 	@Override
-	public GatewayDto findByMacAddress(String macAddress) throws DataNotExistsException {
-		return gatewayManager.findByMacAddress(macAddress);
+	public boolean initTeachinSensorsTable() {
+		return testManager.initTeachinSensorsTable();
 	}
 	
 }

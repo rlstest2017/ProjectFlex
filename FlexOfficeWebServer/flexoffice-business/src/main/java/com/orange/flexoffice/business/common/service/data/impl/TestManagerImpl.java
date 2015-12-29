@@ -18,7 +18,7 @@ public class TestManagerImpl implements TestManager {
 	
 	@Autowired
 	private InitTestRepository testRepository;
-	
+
 	@Override
 	public boolean executeInitTestFile() {
 		return testRepository.executeInitTestData();
@@ -47,6 +47,11 @@ public class TestManagerImpl implements TestManager {
 	@Override
 	public boolean initRoomMonthlyOccupancyTable() {
 		return testRepository.initRoomMonthlyOccupancyTable();
+	}
+
+	@Override
+	public boolean initTeachinSensorsTable() {
+		return testRepository.initTeachinSensorsTable();
 	}
 	
 }

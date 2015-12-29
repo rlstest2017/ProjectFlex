@@ -262,7 +262,11 @@ public class GatewayManagerImpl implements GatewayManager {
 							}
 						}
 					} else {
-						command.setCommand(EnumCommandModel.NONE);
+						if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
+							command.setCommand(EnumCommandModel.STOPTEACHIN);
+						} else {
+							command.setCommand(EnumCommandModel.NONE);
+						}
 					}
 					
 				} catch(IncorrectResultSizeDataAccessException e ) {
