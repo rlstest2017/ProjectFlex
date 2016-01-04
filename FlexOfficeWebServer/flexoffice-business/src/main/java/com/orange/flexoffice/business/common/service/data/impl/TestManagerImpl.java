@@ -53,5 +53,10 @@ public class TestManagerImpl implements TestManager {
 	public boolean initTeachinSensorsTable() {
 		return testRepository.initTeachinSensorsTable();
 	}
+
+	@Override
+	public boolean setTeachinSensorsTable() {
+		return testRepository.setTeachinSensorsTable();
+	}
 	
 }

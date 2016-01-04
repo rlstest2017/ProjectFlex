@@ -166,4 +166,23 @@ public class SystemEndpointImplTest {
 		assertEquals(true, expectedResult);	
 	}
 	
+	@Test
+	public void TestI_setTeachinSensorsTable() {
+		// SetUp
+		boolean state = systemEndpoint.setTeachinSensorsTable();
+		 
+		// Asserts
+		assertEquals(true, state);
+	}
+	
+	@Test
+	public void TestJ_getTeachin() {
+		// SetUp
+		Teachin teachin = systemEndpoint.getTeachin();
+		 
+		// Asserts
+		assertEquals(teachin.getStatus(), ETeachinStatus.RUNNING);
+	}
+	
+	
 }

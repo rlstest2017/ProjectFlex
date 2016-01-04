@@ -124,6 +124,10 @@ public interface SystemEndpoint {
 
 	// used for tests
 	boolean initTeachinSensorsTable();
+	
+	// used for tests
+	boolean setTeachinSensorsTable();
+	
 }
 
 

@@ -262,6 +262,12 @@ public class SystemEndpointImpl implements SystemEndpoint {
 			return testManager.initTeachinSensorsTable();
 	}
 	
+	@Override
+	public boolean setTeachinSensorsTable() {
+		return testManager.setTeachinSensorsTable();
+	}
+	
+	
 	private List<EDeviceStatus> constructDeviceStatuses() {
 		List<EDeviceStatus> deviceStatuses = new ArrayList<EDeviceStatus>();
 		deviceStatuses.add(EDeviceStatus.OFFLINE);
@@ -286,7 +292,5 @@ public class SystemEndpointImpl implements SystemEndpoint {
 		
 		return roomTypes;
 	}
-
-
 	
 }

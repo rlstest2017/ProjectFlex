@@ -170,6 +170,19 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		return true;
 	}
 	
+	public boolean setTeachinSensorsTable() {
+		String query = "DELETE FROM teachin_sensors";
+		jdbcTemplateForTest.execute(query);
+		String sqlRoomStats = "INSERT INTO teachin_sensors " +
+				"(id, room_id, gateway_id, sensor_identifier, sensor_status, teachin_status, user_id) VALUES (?, ?, ?, ?,CAST(? AS sensorTeachinStatus) ,CAST(? AS teachinStatus), ?)";
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {1, 1, 1, null, null, "RUNNING", null });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {2, null, null, "test1", "NOT_PAIRED", null, null });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {3, null, null, "test2", "PAIRED_OK", null, null });
+		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {4, null, null, "test3", "PAIRED_KO", null, null });
+		
+		return true;
+	}
+	
 	@Override
 	public void forEach(DataExtractor dataExtractor) {
 	}

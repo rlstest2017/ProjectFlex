@@ -49,4 +49,10 @@ public interface TestManager {
 	 */
 	boolean initTeachinSensorsTable();
 	
+	/**
+	 * setTeachinSensorsTable
+	 * @return
+	 */
+	boolean setTeachinSensorsTable();
+	
 }
