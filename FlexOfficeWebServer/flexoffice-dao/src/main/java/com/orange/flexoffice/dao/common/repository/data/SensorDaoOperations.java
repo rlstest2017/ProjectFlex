@@ -29,5 +29,7 @@ public interface SensorDaoOperations {
 
 	SensorDao updateSensorStatus(SensorDao data) throws DataAccessException;
 	
+	SensorDao updateSensorRoomId(SensorDao data) throws DataAccessException;
+	
 	void deleteByIdentifier(String sensorIdentifier) throws DataAccessException;
 }

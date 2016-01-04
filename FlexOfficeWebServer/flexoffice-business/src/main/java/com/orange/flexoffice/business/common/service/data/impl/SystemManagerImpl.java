@@ -302,6 +302,27 @@ public class SystemManagerImpl implements SystemManager {
 		}
 	}
 	
+	@Override
+	public void submitTeachin(List<String> sensorIdentifiers) throws DataNotExistsException {
+		try {
+			TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
+			
+			// associate sensor to room
+			for (String ident : sensorIdentifiers) {
+				SensorDao sensor = new SensorDao();
+				sensor.setIdentifier(ident);
+				sensor.setRoomId(teachin.getRoomId());
+				sensorRepository.updateSensorRoomId(sensor);
+			}
+			
+			
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.error("SystemManager.submitTeachin : Teachin not found", e);
+			throw new DataNotExistsException("SystemManager.submitTeachin : Teachin not found");
+		}
+		
+	}
+	
 	@Transactional(readOnly=true)
 	private Long countGateways() {
 		return gatewayRepository.count();
@@ -348,13 +369,13 @@ public class SystemManagerImpl implements SystemManager {
 		try {
 			RoomDao room = roomRepository.findOne(roomId);
 			TeachinSensorDao newTeachin = new TeachinSensorDao();
-			newTeachin.setRoomId(roomId);
-			newTeachin.setGatewayId(room.getGatewayId());
+			newTeachin.setRoomId(roomId.intValue());
+			newTeachin.setGatewayId(room.getGatewayId().intValue());
 			newTeachin.setTeachinStatus(E_TeachinStatus.INITIALIZING.toString());
 			
 			// get user 
 			UserDao user = userRepository.findByAccessToken(auth);
-			newTeachin.setUserId(user.getId());
+			newTeachin.setUserId(user.getId().intValue());
 			// save teachin
 			LOGGER.debug("newTeachin room is :" + newTeachin.getRoomId());
 			teachinRepository.saveTechinStatus(newTeachin);

@@ -237,10 +237,23 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	}
 	
 	@Override
-	public Response submitTeachin() {
-		// TODO Auto-generated method stub
-		return null;
+	public Response submitTeachin(List<String> sensorIdentifiers) {
+		try {
+			// setTeachinStatus to ENDED
+			systemManager.updateTeachinStatus();
+			
+			systemManager.submitTeachin(sensorIdentifiers);
+			return Response.status(200).build();
+			
+		} catch (DataNotExistsException e) {
+			LOGGER.debug("DataNotExistsException in submitTeachin() SystemEndpointImpl with message :" + e.getMessage(), e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_37, Response.Status.NOT_FOUND));
+		}  catch (RuntimeException ex) {
+			LOGGER.debug("RuntimeException in submitTeachin() SystemEndpointImpl with message :" + ex.getMessage(), ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		}
 	}
+	
 	@Override
 	public boolean executeInitTestFile() {
 		return testManager.executeInitTestFile();

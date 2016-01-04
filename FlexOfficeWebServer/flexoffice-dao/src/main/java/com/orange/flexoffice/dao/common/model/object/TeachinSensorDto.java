@@ -10,36 +10,36 @@ import java.util.List;
  */
 public class TeachinSensorDto  {
 
-	private Long roomId;
-	private Long gatewayId;
+	private Integer roomId;
+	private Integer gatewayId;
 	private String teachinStatus;
 	private List<SensorDto> sensors; 
 	
 	/**
 	 * @return the roomId
 	 */
-	public Long getRoomId() {
+	public Integer getRoomId() {
 		return roomId;
 	}
 
 	/**
 	 * @param roomId the roomId to set
 	 */
-	public void setRoomId(Long roomId) {
+	public void setRoomId(Integer roomId) {
 		this.roomId = roomId;
 	}
 
 	/**
 	 * @return the gatewayId
 	 */
-	public Long getGatewayId() {
+	public Integer getGatewayId() {
 		return gatewayId;
 	}
 
 	/**
 	 * @param gatewayId the gatewayId to set
 	 */
-	public void setGatewayId(Long gatewayId) {
+	public void setGatewayId(Integer gatewayId) {
 		this.gatewayId = gatewayId;
 	}
 	

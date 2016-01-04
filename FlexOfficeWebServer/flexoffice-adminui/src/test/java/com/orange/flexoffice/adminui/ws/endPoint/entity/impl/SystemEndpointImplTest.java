@@ -3,6 +3,8 @@ package com.orange.flexoffice.adminui.ws.endPoint.entity.impl;
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -184,5 +186,18 @@ public class SystemEndpointImplTest {
 		assertEquals(teachin.getStatus(), ETeachinStatus.RUNNING);
 	}
 	
+	@Test
+	public void TestK_submitTeachin() {
+		// SetUp
+		List<String> sensorIdentifiers = new ArrayList<String>();
+		sensorIdentifiers.add("ident 1");
+		sensorIdentifiers.add("ident 2");
+		sensorIdentifiers.add("ident 3");
+		
+		systemEndpoint.submitTeachin(sensorIdentifiers);
+		 
+		// Asserts
+		assertEquals("ENDED", ETeachinStatus.ENDED.toString());
+	}
 	
 }

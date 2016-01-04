@@ -1,5 +1,7 @@
 package com.orange.flexoffice.business.common.service.data;
 
+import java.util.List;
+
 import javax.naming.AuthenticationException;
 
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
@@ -74,4 +76,11 @@ public interface SystemManager {
 	 * @return
 	 */
 	TeachinSensorDto getTeachin() throws DataNotExistsException;
+	
+	/**
+	 * submitTeachin
+	 */
+	void submitTeachin(List<String> sensorIdentifiers) throws DataNotExistsException;
+	
+	
 }

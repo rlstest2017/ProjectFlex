@@ -110,6 +110,20 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 	}
 
 	@Override
+	public SensorDao updateSensorRoomId(SensorDao data) throws DataAccessException {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+			
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateSensorRoomIdQuery, paramBean, keyHolder);
+				
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());	
+		
+		return data;
+	}
+	
+	@Override
 	public void deleteByIdentifier(String sensorIdentifier) throws DataAccessException {
 		SqlParameterSource paramMap = new MapSqlParameterSource("identifier", sensorIdentifier);
 		jdbcTemplate.update(deleteByIdentifier, paramMap);	

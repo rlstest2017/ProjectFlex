@@ -19,6 +19,9 @@ import static com.orange.flexoffice.adminui.ws.PathConst.LOGOUT_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.CANCEL_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.SUBMIT_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.TEACHIN_PATH;
+
+import java.util.List;
+
 import static com.orange.flexoffice.adminui.ws.PathConst.INIT_PATH;
 import static com.orange.flexoffice.adminui.ws.ParamsConst.AUTHORIZATION_HEADER_PARAM;
 import static com.orange.flexoffice.adminui.ws.ParamsConst.ROOM_ID_PARAM;
@@ -113,7 +116,7 @@ public interface SystemEndpoint {
 	@Path(TEACHIN_PATH + SUBMIT_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response submitTeachin(); // TODO add List[idSensors] in parameter 
+	Response submitTeachin(List<String> sensorIdentifiers);  
 	
 	@OPTIONS
 	@Path("{path : .*}")

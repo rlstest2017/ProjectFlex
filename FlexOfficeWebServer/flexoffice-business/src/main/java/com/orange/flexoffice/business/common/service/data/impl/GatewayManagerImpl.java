@@ -234,7 +234,7 @@ public class GatewayManagerImpl implements GatewayManager {
 				try {
 					TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
 					
-					if (teachin.getGatewayId() == gatewayId) {
+					if (teachin.getGatewayId().intValue() == gatewayId) {
 						if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
 							// the teachin is founded (teachin_status not null)
 							if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()))  {

@@ -49,6 +49,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOM_STATUS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_SENSOR_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_SENSOR_STATUS_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_SENSOR_ROOM_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_USER_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_USER_FROM_USERUI_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_GATEWAY_TEMPLATE;
@@ -136,6 +137,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String updateRoomStatusQuery;
 	protected final String updateSensorQuery;
 	protected final String updateSensorStatusQuery;
+	protected final String updateSensorRoomIdQuery;
 	// DELETE QUERIES -----------------------------
 	protected final String deleteByMacAddressQuery;
 	protected final String deleteByGatewayIdQuery;
@@ -210,6 +212,7 @@ public abstract class DataRepository<T extends Data>
 		updateRoomStatusQuery = String.format(UPDATE_ROOM_STATUS_TEMPLATE, getTableName());// set also humidity, temperature & user_id if filled
 		updateSensorQuery = String.format(UPDATE_SENSOR_TEMPLATE, getTableName(), getColumnColName());
 		updateSensorStatusQuery = String.format(UPDATE_SENSOR_STATUS_TEMPLATE, getTableName(), getColumnColName());
+		updateSensorRoomIdQuery = String.format(UPDATE_SENSOR_ROOM_ID_TEMPLATE, getTableName());
 		updateGatewayQuery = String.format(UPDATE_GATEWAY_TEMPLATE, getTableName());
 		
 		// DELETE QUERIES ----------------------------------------------------------------------
