@@ -6,6 +6,7 @@ import com.orange.flexoffice.business.common.exception.DataAlreadyExistsExceptio
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.object.SystemDto;
+import com.orange.flexoffice.dao.common.model.object.TeachinSensorDto;
 
 /**
  * SystemManager
@@ -67,4 +68,10 @@ public interface SystemManager {
 	 * updateTeachinStatus
 	 */
 	void updateTeachinStatus() throws DataNotExistsException;
+	
+	/**
+	 * getTeachin
+	 * @return
+	 */
+	TeachinSensorDto getTeachin() throws DataNotExistsException;
 }

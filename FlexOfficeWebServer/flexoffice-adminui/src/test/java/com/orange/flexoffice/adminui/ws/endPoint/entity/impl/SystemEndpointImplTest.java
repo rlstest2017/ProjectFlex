@@ -17,6 +17,8 @@ import org.springframework.util.Log4jConfigurer;
 
 import com.orange.flexoffice.adminui.ws.endPoint.data.SystemEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.data.impl.SystemEndpointImpl;
+import com.orange.flexoffice.adminui.ws.model.ETeachinStatus;
+import com.orange.flexoffice.adminui.ws.model.Teachin;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SystemEndpointImplTest {
@@ -60,6 +62,15 @@ public class SystemEndpointImplTest {
 		 
 		// Asserts
 		assertEquals(true, state);
+	}
+	
+	@Test
+	public void TestAC_getTeachin() {
+		// SetUp
+		Teachin teachin = systemEndpoint.getTeachin();
+		 
+		// Asserts
+		assertEquals(teachin.getStatus(), ETeachinStatus.INITIALIZING);
 	}
 	
 	@Test
@@ -109,7 +120,7 @@ public class SystemEndpointImplTest {
 		// Asserts
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 	}
-
+	
 	@Test
 	public void TestF_initTeachinTeachinAlreadyExist() {
 		// Setup

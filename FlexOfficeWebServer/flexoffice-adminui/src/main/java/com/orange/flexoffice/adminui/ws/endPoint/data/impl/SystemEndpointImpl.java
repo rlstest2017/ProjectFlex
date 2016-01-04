@@ -18,8 +18,11 @@ import com.orange.flexoffice.adminui.ws.model.EDeviceStatus;
 import com.orange.flexoffice.adminui.ws.model.EDeviceType;
 import com.orange.flexoffice.adminui.ws.model.ERoomType;
 import com.orange.flexoffice.adminui.ws.model.ESensorType;
+import com.orange.flexoffice.adminui.ws.model.ETeachinSensorStatus;
+import com.orange.flexoffice.adminui.ws.model.ETeachinStatus;
 import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
 import com.orange.flexoffice.adminui.ws.model.Teachin;
+import com.orange.flexoffice.adminui.ws.model.TeachinSensor;
 import com.orange.flexoffice.adminui.ws.model.Token;
 import com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
@@ -29,7 +32,11 @@ import com.orange.flexoffice.business.common.service.data.SystemManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_SensorTeachinStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
+import com.orange.flexoffice.dao.common.model.object.SensorDto;
 import com.orange.flexoffice.dao.common.model.object.SystemDto;
+import com.orange.flexoffice.dao.common.model.object.TeachinSensorDto;
 
 
 public class SystemEndpointImpl implements SystemEndpoint {
@@ -137,7 +144,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
 		} catch (AuthenticationException e) {
 				LOGGER.debug("AuthenticationException in login() SystemEndpointImpl with message :" + e.getMessage(), e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_33, Response.Status.UNAUTHORIZED));
-		}catch (RuntimeException ex) {
+		} catch (RuntimeException ex) {
 				LOGGER.debug("RuntimeException in login() SystemEndpointImpl with message :" + ex.getMessage(), ex);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
@@ -146,16 +153,57 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	@Override
 	public Response logout(String token) {
 		UserDao user = systemManager.processLogout(token);
+		
 		// update teachin status to ENDED if launched by the user 
 		systemManager.updateTeachinStatusByUser(user.getId());
+		
 		return Response.status(200).build();
+		
 	}
 	
 	@Override
 	public Teachin getTeachin() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			TeachinSensorDto teachinDto = systemManager.getTeachin();
+			
+			Teachin teachin = factory.createTeachin();
+			
+			teachin.setRoomId(String.valueOf(teachinDto.getRoomId()));
+			teachin.setGatewayId(String.valueOf(teachinDto.getGatewayId()));
+			
+			if (teachinDto.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString())) {
+				teachin.setStatus(ETeachinStatus.INITIALIZING);
+			} else if (teachinDto.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString())) {
+				teachin.setStatus(ETeachinStatus.RUNNING);
+			} else if (teachinDto.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) {
+				teachin.setStatus(ETeachinStatus.ENDED);
+			}  
+				
+			List<SensorDto> sensorsDto = teachinDto.getSensors();
+			for (SensorDto sensorDto : sensorsDto) {
+				TeachinSensor sensor = factory.createTeachinSensor();
+				sensor.setIdentifier(sensorDto.getSensorIdentifier());
+				if (sensorDto.getSensorStatus().equals(E_SensorTeachinStatus.NOT_PAIRED.toString())) {
+					sensor.setTeachinSensorStatus(ETeachinSensorStatus.NOT_PAIRED);
+				} else if (sensorDto.getSensorStatus().equals(E_SensorTeachinStatus.PAIRED_KO.toString())) {
+					sensor.setTeachinSensorStatus(ETeachinSensorStatus.PAIRED_KO);
+				} else if (sensorDto.getSensorStatus().equals(E_SensorTeachinStatus.PAIRED_OK.toString())) {
+					sensor.setTeachinSensorStatus(ETeachinSensorStatus.PAIRED_OK);
+				}
+				teachin.getSensors().add(sensor);
+			}
+			
+			return factory.createTeachin(teachin).getValue();
+			
+		} catch(DataNotExistsException ex) {
+			LOGGER.debug("DataNotExistsException in getTeachin() SystemEndpointImpl with message :" + ex.getMessage(), ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_37, Response.Status.NOT_FOUND));
+		} catch (RuntimeException ex) {
+			LOGGER.debug("RuntimeException in getTeachin() SystemEndpointImpl with message :" + ex.getMessage(), ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		}
 	}
+	
 	@Override
 	public Response initTeachin(String auth, String roomId) {
 		try {
@@ -167,6 +215,9 @@ public class SystemEndpointImpl implements SystemEndpoint {
 		} catch(DataNotExistsException ex) {
 			LOGGER.debug("DataNotExistsException in initTeachin() SystemEndpointImpl with message :" + ex.getMessage(), ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_35, Response.Status.NOT_FOUND));
+		} catch (RuntimeException ex) {
+			LOGGER.debug("RuntimeException in initTeachin() SystemEndpointImpl with message :" + ex.getMessage(), ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 		
 	}
@@ -179,6 +230,9 @@ public class SystemEndpointImpl implements SystemEndpoint {
 			} catch (DataNotExistsException e) {
 				LOGGER.debug("DataNotExistsException in cancelTeachin() SystemEndpointImpl with message :" + e.getMessage(), e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_37, Response.Status.NOT_FOUND));
+		}  catch (RuntimeException ex) {
+			LOGGER.debug("RuntimeException in cancelTeachin() SystemEndpointImpl with message :" + ex.getMessage(), ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 	}
 	

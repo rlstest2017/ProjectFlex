@@ -28,7 +28,9 @@ import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_UserRole;
+import com.orange.flexoffice.dao.common.model.object.SensorDto;
 import com.orange.flexoffice.dao.common.model.object.SystemDto;
+import com.orange.flexoffice.dao.common.model.object.TeachinSensorDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
@@ -266,6 +268,40 @@ public class SystemManagerImpl implements SystemManager {
 		
 	}
 	
+	@Override
+	public TeachinSensorDto getTeachin() throws DataNotExistsException {
+		try {
+			TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
+			
+			TeachinSensorDto teachinDto = new TeachinSensorDto();
+			teachinDto.setRoomId(teachin.getRoomId());
+			teachinDto.setGatewayId(teachin.getGatewayId());
+			teachinDto.setTeachinStatus(teachin.getTeachinStatus());
+			
+			// the teachin is founded (teachin_status not null)
+			if (!teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString())) {
+				
+				// get teached sensors List
+				List<TeachinSensorDao> teachinList = teachinRepository.findAllTeachinSensors();
+				for (TeachinSensorDao teachinSensorDao : teachinList) {
+					if (teachinSensorDao.getTeachinStatus() == null) {	
+						SensorDto sensor = new SensorDto();
+						sensor.setSensorIdentifier(teachinSensorDao.getSensorIdentifier());
+						sensor.setSensorStatus(teachinSensorDao.getSensorStatus());
+						teachinDto.getSensors().add(sensor);
+					}
+				}
+					
+			} 
+			
+			return teachinDto;
+			
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.error("SystemManager.getTeachin : Teachin not found", e);
+			throw new DataNotExistsException("SystemManager.getTeachin : Teachin not found");
+		}
+	}
+	
 	@Transactional(readOnly=true)
 	private Long countGateways() {
 		return gatewayRepository.count();
@@ -329,5 +365,6 @@ public class SystemManagerImpl implements SystemManager {
 			
 		}	
 	}
+
 		
 }
