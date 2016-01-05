@@ -16,7 +16,6 @@ import org.springframework.stereotype.Repository;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.repository.data.SensorDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.SensorDaoMetadata;
-import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 
 @Repository
 public class SensorDaoRepository extends DataRepository<SensorDao> implements SensorDaoOperations {
@@ -138,15 +137,6 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 	protected String getColumnColName() {
 		return SensorDaoMetadata.SENSOR_ID_COL;
 		
-	}
-
-	@Override
-	public void forEach(DataExtractor dataExtractor) {
-	}
-
-	@Override
-	protected String getRowColName() {
-		return null;
 	}
 
 }

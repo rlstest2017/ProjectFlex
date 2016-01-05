@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.repository.data.ConfigurationDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.ConfigurationDaoMetadata;
-import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 
 @Repository
 public class ConfigurationDaoRepository extends DataRepository<ConfigurationDao> implements ConfigurationDaoOperations {
@@ -36,16 +35,7 @@ public class ConfigurationDaoRepository extends DataRepository<ConfigurationDao>
 	}
 
 	@Override
-	public void forEach(DataExtractor dataExtractor) {
-	}
-
-	@Override
 	protected String getColumnColName() {
-		return null;
-	}
-
-	@Override
-	protected String getRowColName() {
 		return null;
 	}
 

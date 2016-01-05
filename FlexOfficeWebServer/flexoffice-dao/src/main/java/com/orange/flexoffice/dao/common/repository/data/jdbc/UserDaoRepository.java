@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.repository.data.UserDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.UserDaoMetadata;
-import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 
 @Repository
 public class UserDaoRepository extends DataRepository<UserDao> implements UserDaoOperations {
@@ -168,15 +167,5 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 		return UserDaoMetadata.USER_ID_COL;
 		
 	}
-
-	@Override
-	public void forEach(DataExtractor dataExtractor) {
-	}
-
-	@Override
-	protected String getRowColName() {
-		return null;
-	}
-
 	
 }

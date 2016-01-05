@@ -3,7 +3,6 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_ACTIVE_USERS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_ROOM_BY_TYPE_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_REQUESTED_ROOM_DAILY_AND_TYPE_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_TEACHIN_STATUS_TEMPLATE;
@@ -64,7 +63,6 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -73,7 +71,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -108,7 +105,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String findByColumnGatewayIdQuery;
 	protected final String findByColumnSensorIdQuery;
 	protected final String findByColumnNameQuery;
-	protected final String findAllColumnIdsWithRowIdConditionQuery;
+	
 	// SAVE QUERIES ---------------------
 	protected final String saveUserQuery;
 	protected final String saveUserFromUserUIQuery;	
@@ -182,8 +179,7 @@ public abstract class DataRepository<T extends Data>
 		findByColumnGatewayIdQuery = String.format(FIND_BY_COL_GATEWAY_ID_TEMPLATE, getTableName());
 		findByColumnSensorIdQuery = String.format(FIND_BY_COL_SENSOR_ID_TEMPLATE, getTableName());
 		findByColumnNameQuery = String.format(FIND_BY_COL_NAME_TEMPLATE, getTableName());
-		findAllColumnIdsWithRowIdConditionQuery = String.format(FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE, getColumnColName(), getTableName(), getRowColName());
-		
+				
 		// SAVE QUERIES -------------------------------------------------------
 		saveUserQuery = String.format(CREATE_USER_TEMPLATE, getTableName());
 		saveUserFromUserUIQuery = String.format(CREATE_USER_FROM_USERUI_TEMPLATE, getTableName());
@@ -273,20 +269,8 @@ public abstract class DataRepository<T extends Data>
 			);
 		return new ArrayList<Data>(datas);
 	}
-
-
-	@Override
-	public List<String> findColumnIdsRowConditions(Collection<String> rowIds) {
-		SqlParameterSource paramMap = new MapSqlParameterSource("rowIds", rowIds);
-		return jdbcTemplate.query(
-				findAllColumnIdsWithRowIdConditionQuery, 
-				paramMap, 
-				new SingleColumnRowMapper<String>()
-			);
-	}
 	
 	protected abstract String getTableName();
 	protected abstract String getColumnColName();
-	protected abstract String getRowColName();
 
 }

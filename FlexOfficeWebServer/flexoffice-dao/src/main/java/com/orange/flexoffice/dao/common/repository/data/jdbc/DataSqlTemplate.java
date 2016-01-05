@@ -120,8 +120,6 @@ public final class DataSqlTemplate {
 			"update %s set status=CAST(:status AS sensorstatus), occupancy_info=CAST(:occupancyInfo AS sensorOccupancyInfo) WHERE identifier=:identifier";
 	public static final String UPDATE_SENSOR_ROOM_ID_TEMPLATE =
 			"update %s set room_id=:roomId WHERE identifier=:identifier";
-	public static final String FIND_ALL_COL_IDS_WITH_ROW_ID_CONDITIONS_TEMPLATE = 
-			"select %s from %s where %s in (:rowIds)";
 
 	private DataSqlTemplate() {
 		

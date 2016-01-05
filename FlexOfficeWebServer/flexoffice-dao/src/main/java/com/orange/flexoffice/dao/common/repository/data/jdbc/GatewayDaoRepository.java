@@ -16,7 +16,6 @@ import org.springframework.stereotype.Repository;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.repository.data.GatewayDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.GatewayDaoMetadata;
-import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 
 @Repository
 public class GatewayDaoRepository extends DataRepository<GatewayDao> implements GatewayDaoOperations {
@@ -124,15 +123,5 @@ public class GatewayDaoRepository extends DataRepository<GatewayDao> implements 
 		return GatewayDaoMetadata.GATEWAY_ID_COL;
 		
 	}
-
-	@Override
-	public void forEach(DataExtractor dataExtractor) {
-	}
-
-	@Override
-	protected String getRowColName() {
-		return null;
-	}
-	
 
 }

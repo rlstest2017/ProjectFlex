@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.repository.data.AlertDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.AlertDaoMetadata;
-import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 
 @Repository
 public class AlertDaoRepository extends DataRepository<AlertDao> implements AlertDaoOperations {
@@ -95,15 +94,6 @@ public class AlertDaoRepository extends DataRepository<AlertDao> implements Aler
 	public void deleteAlertBySensorId(Long sensorId) {
 		SqlParameterSource paramMap = new MapSqlParameterSource("sensorId", sensorId);
 		jdbcTemplate.update(deleteBySensorIdQuery, paramMap);
-	}
-
-	@Override
-	public void forEach(DataExtractor dataExtractor) {
-	}
-
-	@Override
-	protected String getRowColName() {
-		return null;
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.InitForTestDao;
-import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 import com.orange.flexoffice.dao.common.utils.TokenTools;
 
 @Repository
@@ -184,11 +183,6 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 	}
 	
 	@Override
-	public void forEach(DataExtractor dataExtractor) {
-	}
-
-
-	@Override
 	protected String getTableName() {
 		return null;
 	}
@@ -198,13 +192,5 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 	protected String getColumnColName() {
 		return null;
 	}
-
-
-	@Override
-	protected String getRowColName() {
-		return null;
-	}
-	
-	
 
 }

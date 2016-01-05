@@ -15,7 +15,6 @@ import com.orange.flexoffice.dao.common.model.object.RoomDailyOccupancyDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDailyTypeDto;
 import com.orange.flexoffice.dao.common.repository.data.RoomDailyOccupancyDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.RoomDailyOccupancyDaoMetadata;
-import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 
 @Repository
 public class RoomDailyOccupancyDaoRepository extends DataRepository<RoomDailyOccupancyDao> implements RoomDailyOccupancyDaoOperations {
@@ -75,16 +74,5 @@ public class RoomDailyOccupancyDaoRepository extends DataRepository<RoomDailyOcc
 		return RoomDailyOccupancyDaoMetadata.ROOM_DAILY_OCCUPANCY_ROOM_ID_COL;
 		
 	}
-
-	@Override
-	public void forEach(DataExtractor dataExtractor) {
-	}
-
-	@Override
-	protected String getRowColName() {
-		return null;
-	}
-
-
 
 }

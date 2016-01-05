@@ -15,7 +15,6 @@ import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
 
 import com.orange.flexoffice.dao.common.repository.data.TeachinSensorDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.TeachinSensorsDaoMetadata;
-import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 
 @Repository
 public class TeachinSensorsDaoRepository extends DataRepository<TeachinSensorDao> implements TeachinSensorDaoOperations {
@@ -113,15 +112,6 @@ public class TeachinSensorsDaoRepository extends DataRepository<TeachinSensorDao
 	protected String getColumnColName() {
 		return TeachinSensorsDaoMetadata.TEACHIN_SENSORS_ID_COL;
 		
-	}
-
-	@Override
-	public void forEach(DataExtractor dataExtractor) {
-	}
-
-	@Override
-	protected String getRowColName() {
-		return null;
 	}
 
 }

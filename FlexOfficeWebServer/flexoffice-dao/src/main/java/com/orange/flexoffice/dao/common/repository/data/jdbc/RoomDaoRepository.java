@@ -16,7 +16,6 @@ import org.springframework.stereotype.Repository;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.repository.data.RoomDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.RoomDaoMetadata;
-import com.orange.flexoffice.dao.common.repository.support.DataExtractor;
 
 @Repository
 public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDaoOperations {
@@ -135,15 +134,5 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 		return RoomDaoMetadata.ROOM_ID_COL;
 		
 	}
-
-	@Override
-	public void forEach(DataExtractor dataExtractor) {
-	}
-
-	@Override
-	protected String getRowColName() {
-		return null;
-	}
-
 
 }
