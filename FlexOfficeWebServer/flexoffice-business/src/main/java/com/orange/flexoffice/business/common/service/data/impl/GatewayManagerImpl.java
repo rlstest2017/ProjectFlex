@@ -356,11 +356,14 @@ public class GatewayManagerImpl implements GatewayManager {
 						LOGGER.debug( "teachin will be send TEACHIN Command" );
 						// the teachin is founded (teachin_status not null)
 						if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()))  {
+							command.setRoomId(teachin.getRoomId());
+							command.setCommand(EnumCommandModel.TEACHIN);
+							LOGGER.debug( "setted command is :" + command.getCommand().toString() );
+							
 							// update status to running
 							teachin.setTeachinStatus(E_TeachinStatus.RUNNING.toString());
 							teachinRepository.updateTeachinStatus(teachin);
-							command.setRoomId(teachin.getRoomId());
-							command.setCommand(EnumCommandModel.TEACHIN);
+							
 						}	
 					} else {
 						// the teachin is founded (teachin_status not null)
