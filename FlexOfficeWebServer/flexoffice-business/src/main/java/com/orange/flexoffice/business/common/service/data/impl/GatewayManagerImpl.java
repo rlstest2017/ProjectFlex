@@ -225,6 +225,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			gatewayDao.setId(gateway.getId());
 			
 			// update Gateway Status
+			gatewayDao.setCommand(gateway.getCommand()); // ne pas changer l'état courant de la colon Command !!!
 			gatewayRepository.updateGatewayStatus(gatewayDao);
 			
 			// update Gateway Alert
