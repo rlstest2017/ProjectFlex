@@ -353,9 +353,9 @@ public class GatewayManagerImpl implements GatewayManager {
 					}
 				} else {
 					if (gatewayStatus.equals(E_GatewayStatus.ONLINE.toString())) {
-						LOGGER.debug( "teachin will be send TEACHIN Command" );
 						// the teachin is founded (teachin_status not null)
 						if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()))  {
+							LOGGER.debug( "In INITIALIZING state teachin will be send TEACHIN Command " );
 							commandToSendToGateway.setRoomId(teachin.getRoomId());
 							commandToSendToGateway.setCommand(EnumCommandModel.TEACHIN);
 							LOGGER.debug( "setted command is :" + commandToSendToGateway.getCommand().toString() );
@@ -402,7 +402,7 @@ public class GatewayManagerImpl implements GatewayManager {
 
 	    }
 		
-		LOGGER.debug( "returned command is :" + commandToSendToGateway.getCommand().toString() );
+		//LOGGER.debug( "returned command is :" + commandToSendToGateway.getCommand().toString() );
 		LOGGER.info( "End call processCommand method for GatewayEndpoint at: " + new Date() );
 		
 		return commandToSendToGateway;
