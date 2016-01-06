@@ -1,6 +1,7 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -309,11 +310,31 @@ public class GatewayManagerImpl implements GatewayManager {
 	 */
 	@Transactional
 	private GatewayCommand processCommand(String gatewayStatus, Long gatewayId, String commandGateway) {
+		
+		LOGGER.info( "Begin call processCommand method for GatewayEndpoint at: " + new Date() );
+		
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug( "Call processCommand(String gatewayStatus, Long gatewayId, String commandGateway) method of GatewayEndpoint, with parameters :");
+			final StringBuilder message = new StringBuilder( 1000 );
+			message.append( "\n" );
+			message.append( "gatewayStatus :" );
+			message.append( gatewayStatus );
+			message.append( "gatewayId :" );
+			message.append( gatewayId );
+			message.append( "\n" );
+			message.append( "commandGateway :" );
+			message.append( commandGateway );
+			message.append( "\n" );
+			LOGGER.debug( message.toString() );
+		}
+
+		
 		GatewayCommand command = new GatewayCommand();
 		try {
 			TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
 			
 			if (teachin.getGatewayId().intValue() == gatewayId) {
+				LOGGER.debug( "teachin.getGatewayId() is the same as gatewayId" );
 				if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
 					// the teachin is founded (teachin_status not null)
 					if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()))  {
@@ -330,21 +351,34 @@ public class GatewayManagerImpl implements GatewayManager {
 						command.setCommand(EnumCommandModel.STOPTEACHIN);
 					}
 				} else {
-					// the teachin is founded (teachin_status not null)
-					if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()) || teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()))  {
-						// update status to running
-						teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
-						teachinRepository.updateTeachinStatus(teachin);
-						// -----------------------------------------------------------------------------------------
-						command = setCommand(gatewayStatus, gatewayId, commandGateway);
-						// -----------------------------------------------------------------------------------------
-					} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
-						// -----------------------------------------------------------------------------------------
-						command = setCommand(gatewayStatus, gatewayId, commandGateway);	
-						// -----------------------------------------------------------------------------------------
+					if (gatewayStatus.equals(E_GatewayStatus.ONLINE.toString())) {
+						LOGGER.debug( "teachin will be send TEACHIN Command" );
+						// the teachin is founded (teachin_status not null)
+						if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()))  {
+							// update status to running
+							teachin.setTeachinStatus(E_TeachinStatus.RUNNING.toString());
+							teachinRepository.updateTeachinStatus(teachin);
+							command.setRoomId(teachin.getRoomId());
+							command.setCommand(EnumCommandModel.TEACHIN);
+						}	
+					} else {
+						// the teachin is founded (teachin_status not null)
+						if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()) || teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()))  {
+							// update status to running
+							teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
+							teachinRepository.updateTeachinStatus(teachin);
+							// -----------------------------------------------------------------------------------------
+							command = setCommand(gatewayStatus, gatewayId, commandGateway);
+							// -----------------------------------------------------------------------------------------
+						} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
+							// -----------------------------------------------------------------------------------------
+							command = setCommand(gatewayStatus, gatewayId, commandGateway);	
+							// -----------------------------------------------------------------------------------------
+						}
 					}
 				}
 			} else {
+				LOGGER.debug( "teachin.getGatewayId() is not same as gatewayId" );
 				if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
 					command.setCommand(EnumCommandModel.STOPTEACHIN);
 				} else 
@@ -363,6 +397,9 @@ public class GatewayManagerImpl implements GatewayManager {
 			// -----------------------------------------------------------------------------------------
 
 	    }
+		
+		LOGGER.debug( "returned command is :" + command );
+		LOGGER.info( "End call processCommand method for GatewayEndpoint at: " + new Date() );
 		
 		return command;
 	}
