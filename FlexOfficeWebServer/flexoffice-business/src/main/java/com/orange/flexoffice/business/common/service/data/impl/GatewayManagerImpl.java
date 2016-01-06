@@ -23,8 +23,11 @@ import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_CommandModel;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_SensorStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
@@ -215,6 +218,8 @@ public class GatewayManagerImpl implements GatewayManager {
 	@Override
 	public GatewayCommand updateStatus(GatewayDao gatewayDao) throws DataNotExistsException {
 		try {
+			String status = gatewayDao.getStatus();
+			
 			String macAddress = gatewayDao.getMacAddress();
 			GatewayDao gateway = gatewayRepository.findByMacAddress(macAddress);
 			gatewayDao.setId(gateway.getId());
@@ -224,61 +229,11 @@ public class GatewayManagerImpl implements GatewayManager {
 			
 			// update Gateway Alert
 			Long gatewayId =gateway.getId();
-			String status = gatewayDao.getStatus();
 			alertManager.updateGatewayAlert(gatewayId, status);
 			
-			GatewayCommand command = new GatewayCommand();
-			
-			String gatewayStatus = gatewayDao.getStatus();
-				// process teachin
-				try {
-					TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
-					
-					if (teachin.getGatewayId().intValue() == gatewayId) {
-						if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
-							// the teachin is founded (teachin_status not null)
-							if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()))  {
-								// update status to running
-								teachin.setTeachinStatus(E_TeachinStatus.RUNNING.toString());
-								teachinRepository.updateTeachinStatus(teachin);
-								command.setRoomId(teachin.getRoomId());
-								command.setCommand(EnumCommandModel.TEACHIN);
-							} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString())) { // status RUNNING
-								command.setRoomId(teachin.getRoomId());
-								command.setCommand(EnumCommandModel.TEACHIN);
-							} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
-								command.setRoomId(teachin.getRoomId());
-								command.setCommand(EnumCommandModel.STOPTEACHIN);
-							}
-						} else {
-							// the teachin is founded (teachin_status not null)
-							if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()) || teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()))  {
-								// update status to running
-								teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
-								teachinRepository.updateTeachinStatus(teachin);
-								command.setCommand(EnumCommandModel.NONE);
-							} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
-								command.setCommand(EnumCommandModel.NONE);
-							}
-						}
-					} else {
-						if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
-							command.setCommand(EnumCommandModel.STOPTEACHIN);
-						} else {
-							command.setCommand(EnumCommandModel.NONE);
-						}
-					}
-					
-				} catch(IncorrectResultSizeDataAccessException e ) {
-					// Table teachin_sensors is empty
-					if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
-						command.setCommand(EnumCommandModel.STOPTEACHIN);
-					} else {
-						command.setCommand(EnumCommandModel.NONE);
-					}	
-			    }
-			
-			return command;
+			// process commandGateway
+			String commandGateway = gateway.getCommand();
+			return processCommand(status, gatewayId, commandGateway);
 			
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("gateway is not found", e);
@@ -345,5 +300,109 @@ public class GatewayManagerImpl implements GatewayManager {
 		ConfigurationDao occupancyTimeOut = configRepository.findByKey(E_ConfigurationKey.OCCUPANCY_TIMEOUT.toString());
 		String occupancyTimeOutValueValue = occupancyTimeOut.getValue();
 		return Long.valueOf(occupancyTimeOutValueValue);
+	}
+	
+	/**
+	 * processCommand
+	 * @param gatewayStatus
+	 */
+	@Transactional
+	private GatewayCommand processCommand(String gatewayStatus, Long gatewayId, String commandGateway) {
+		GatewayCommand command = new GatewayCommand();
+		try {
+			TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
+			
+			if (teachin.getGatewayId().intValue() == gatewayId) {
+				if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
+					// the teachin is founded (teachin_status not null)
+					if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()))  {
+						// update status to running
+						teachin.setTeachinStatus(E_TeachinStatus.RUNNING.toString());
+						teachinRepository.updateTeachinStatus(teachin);
+						command.setRoomId(teachin.getRoomId());
+						command.setCommand(EnumCommandModel.TEACHIN);
+					} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString())) { // status RUNNING
+						command.setRoomId(teachin.getRoomId());
+						command.setCommand(EnumCommandModel.TEACHIN);
+					} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
+						command.setRoomId(teachin.getRoomId());
+						command.setCommand(EnumCommandModel.STOPTEACHIN);
+					}
+				} else {
+					// the teachin is founded (teachin_status not null)
+					if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()) || teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()))  {
+						// update status to running
+						teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
+						teachinRepository.updateTeachinStatus(teachin);
+						// -----------------------------------------------------------------------------------------
+						command = setCommand(gatewayStatus, gatewayId, commandGateway);
+						// -----------------------------------------------------------------------------------------
+					} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
+						// -----------------------------------------------------------------------------------------
+						command = setCommand(gatewayStatus, gatewayId, commandGateway);	
+						// -----------------------------------------------------------------------------------------
+					}
+				}
+			} else {
+				if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
+					command.setCommand(EnumCommandModel.STOPTEACHIN);
+				} else 
+					// -----------------------------------------------------------------------------------------
+					command = setCommand(gatewayStatus, gatewayId, commandGateway);
+					// -----------------------------------------------------------------------------------------
+			}
+			
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			// Table teachin_sensors is empty
+			if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
+				command.setCommand(EnumCommandModel.STOPTEACHIN);
+			} else 
+				// -----------------------------------------------------------------------------------------
+				command = setCommand(gatewayStatus, gatewayId, commandGateway);
+			// -----------------------------------------------------------------------------------------
+
+	    }
+		
+		return command;
+	}
+	
+	/**
+	 * setCommand
+	 * @param gatewayStatus
+	 * @param commandGateway
+	 * @return
+	 */
+	@Transactional
+	private GatewayCommand setCommand(String gatewayStatus, Long gatewayId, String commandGateway) {
+		GatewayCommand command = new GatewayCommand();
+		
+		if (gatewayStatus.equals(E_GatewayStatus.ONLINE.toString())) {
+			if (commandGateway != null && commandGateway.equals(E_CommandModel.RESET.toString())) {
+				command.setCommand(EnumCommandModel.RESET);
+				// update Command colon for this Gateway "Delete REST state"
+				GatewayDao gateway = new GatewayDao();
+				gateway.setId(gatewayId);
+				gatewayRepository.updateGatewayCommand(gateway);
+			} else {
+				command.setCommand(EnumCommandModel.NONE);
+			}
+		} else {
+			command.setCommand(EnumCommandModel.NONE);
+
+			// Set status associated Rooms to UNKNOWN
+			List<RoomDao> rooms = roomRepository.findByGatewayId(gatewayId);
+			for (RoomDao room : rooms) {
+				room.setStatus(E_RoomStatus.UNKNOWN.toString());
+				roomRepository.updateRoomStatus(room);
+				// Set status associated Sensors to OFFLINE
+				List<SensorDao> sensors = sensorRepository.findByRoomId(room.getId());
+				for (SensorDao sensor : sensors) {
+					sensor.setStatus(E_SensorStatus.OFFLINE.toString());
+					sensorRepository.updateSensorStatus(sensor);
+				}
+			}
+		}
+		
+		return command;
 	}
 }
