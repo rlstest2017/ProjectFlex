@@ -319,6 +319,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			message.append( "\n" );
 			message.append( "gatewayStatus :" );
 			message.append( gatewayStatus );
+			message.append( "\n" );
 			message.append( "gatewayId :" );
 			message.append( gatewayId );
 			message.append( "\n" );
@@ -398,7 +399,7 @@ public class GatewayManagerImpl implements GatewayManager {
 
 	    }
 		
-		LOGGER.debug( "returned command is :" + command );
+		LOGGER.debug( "returned command is :" + command.getCommand().toString() );
 		LOGGER.info( "End call processCommand method for GatewayEndpoint at: " + new Date() );
 		
 		return command;
