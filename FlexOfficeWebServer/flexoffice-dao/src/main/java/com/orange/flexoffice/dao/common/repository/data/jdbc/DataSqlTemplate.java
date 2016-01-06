@@ -106,6 +106,8 @@ public final class DataSqlTemplate {
 			"update %s set access_token=:accessToken, expired_token_date=:expiredTokenDate, last_connection_date=now() WHERE email=:email";
 	public static final String UPDATE_GATEWAY_STATUS_TEMPLATE =
 			"update %s set status=CAST(:status AS gatewayStatus), last_polling_date=now() where id=:id";
+	public static final String UPDATE_GATEWAY_COMMAND_TEMPLATE =
+			"update %s set command=CAST(:command AS commandModel) where id=:id";
 	public static final String UPDATE_ROOM_TEMPLATE =
 			"update %s set name=:name, gateway_id=:gatewayId, address=:address, capacity=:capacity, description=:description, type=CAST(:type AS roomtype) WHERE id=:id";
 	public static final String UPDATE_TEACHIN_STATUS_TEMPLATE =

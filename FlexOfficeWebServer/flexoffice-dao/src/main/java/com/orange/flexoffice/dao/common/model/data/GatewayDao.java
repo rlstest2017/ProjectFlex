@@ -14,7 +14,7 @@ public class GatewayDao extends AbstractData {
 	private String description;
 	private String status;
 	private Date lastPollingDate;
-	
+	private String command;
 	
 	public String getName() {
 		return name;
@@ -46,6 +46,18 @@ public class GatewayDao extends AbstractData {
 	}
 	public void setLastPollingDate(Date lastPollingDate) {
 		this.lastPollingDate = lastPollingDate;
+	}
+	/**
+	 * @return the command
+	 */
+	public String getCommand() {
+		return command;
+	}
+	/**
+	 * @param command the command to set
+	 */
+	public void setCommand(String command) {
+		this.command = command;
 	}
 	@Override
 	public void setColumnId(String columnId) {

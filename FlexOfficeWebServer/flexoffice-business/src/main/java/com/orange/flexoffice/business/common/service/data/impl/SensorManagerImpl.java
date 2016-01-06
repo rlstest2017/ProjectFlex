@@ -19,6 +19,7 @@ import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_CommandModel;
 import com.orange.flexoffice.dao.common.model.enumeration.E_OccupancyInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
@@ -217,6 +218,15 @@ public class SensorManagerImpl implements SensorManager {
 		try {
 			// To generate exception if wrong id
 			SensorDao sensor = sensorRepository.findBySensorId(sensorIdentifier);
+			// Add REST command to Gateways Table
+			if (sensor.getRoomId() != null && sensor.getRoomId() != 0) {
+				RoomDao room = roomRepository.findByRoomId(sensor.getRoomId().longValue());
+				//
+				GatewayDao gateway = new GatewayDao();
+				gateway.setId(room.getGatewayId());
+				gateway.setCommand(E_CommandModel.RESET.toString());
+				gatewayRepository.updateGatewayCommand(gateway);
+			}
 			try {
 				AlertDao alert = alertRepository.findBySensorId(sensor.getId());
 				if (alert != null) {
