@@ -330,7 +330,7 @@ public class GatewayManagerImpl implements GatewayManager {
 		}
 
 		
-		GatewayCommand command = new GatewayCommand();
+		GatewayCommand commandToSendToGateway = new GatewayCommand();
 		try {
 			TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
 			
@@ -342,23 +342,23 @@ public class GatewayManagerImpl implements GatewayManager {
 						// update status to running
 						teachin.setTeachinStatus(E_TeachinStatus.RUNNING.toString());
 						teachinRepository.updateTeachinStatus(teachin);
-						command.setRoomId(teachin.getRoomId());
-						command.setCommand(EnumCommandModel.TEACHIN);
+						commandToSendToGateway.setRoomId(teachin.getRoomId());
+						commandToSendToGateway.setCommand(EnumCommandModel.TEACHIN);
 					} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString())) { // status RUNNING
-						command.setRoomId(teachin.getRoomId());
-						command.setCommand(EnumCommandModel.TEACHIN);
+						commandToSendToGateway.setRoomId(teachin.getRoomId());
+						commandToSendToGateway.setCommand(EnumCommandModel.TEACHIN);
 					} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
-						command.setRoomId(teachin.getRoomId());
-						command.setCommand(EnumCommandModel.STOPTEACHIN);
+						commandToSendToGateway.setRoomId(teachin.getRoomId());
+						commandToSendToGateway.setCommand(EnumCommandModel.STOPTEACHIN);
 					}
 				} else {
 					if (gatewayStatus.equals(E_GatewayStatus.ONLINE.toString())) {
 						LOGGER.debug( "teachin will be send TEACHIN Command" );
 						// the teachin is founded (teachin_status not null)
 						if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()))  {
-							command.setRoomId(teachin.getRoomId());
-							command.setCommand(EnumCommandModel.TEACHIN);
-							LOGGER.debug( "setted command is :" + command.getCommand().toString() );
+							commandToSendToGateway.setRoomId(teachin.getRoomId());
+							commandToSendToGateway.setCommand(EnumCommandModel.TEACHIN);
+							LOGGER.debug( "setted command is :" + commandToSendToGateway.getCommand().toString() );
 							
 							// update status to running
 							teachin.setTeachinStatus(E_TeachinStatus.RUNNING.toString());
@@ -372,11 +372,11 @@ public class GatewayManagerImpl implements GatewayManager {
 							teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
 							teachinRepository.updateTeachinStatus(teachin);
 							// -----------------------------------------------------------------------------------------
-							command = setCommand(gatewayStatus, gatewayId, commandGateway);
+							commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
 							// -----------------------------------------------------------------------------------------
 						} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
 							// -----------------------------------------------------------------------------------------
-							command = setCommand(gatewayStatus, gatewayId, commandGateway);	
+							commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);	
 							// -----------------------------------------------------------------------------------------
 						}
 					}
@@ -384,28 +384,28 @@ public class GatewayManagerImpl implements GatewayManager {
 			} else {
 				LOGGER.debug( "teachin.getGatewayId() is not same as gatewayId" );
 				if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
-					command.setCommand(EnumCommandModel.STOPTEACHIN);
+					commandToSendToGateway.setCommand(EnumCommandModel.STOPTEACHIN);
 				} else 
 					// -----------------------------------------------------------------------------------------
-					command = setCommand(gatewayStatus, gatewayId, commandGateway);
+					commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
 					// -----------------------------------------------------------------------------------------
 			}
 			
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			// Table teachin_sensors is empty
 			if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
-				command.setCommand(EnumCommandModel.STOPTEACHIN);
+				commandToSendToGateway.setCommand(EnumCommandModel.STOPTEACHIN);
 			} else 
 				// -----------------------------------------------------------------------------------------
-				command = setCommand(gatewayStatus, gatewayId, commandGateway);
+				commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
 			// -----------------------------------------------------------------------------------------
 
 	    }
 		
-		LOGGER.debug( "returned command is :" + command.getCommand().toString() );
+		LOGGER.debug( "returned command is :" + commandToSendToGateway.getCommand().toString() );
 		LOGGER.info( "End call processCommand method for GatewayEndpoint at: " + new Date() );
 		
-		return command;
+		return commandToSendToGateway;
 	}
 	
 	/**
@@ -415,21 +415,21 @@ public class GatewayManagerImpl implements GatewayManager {
 	 * @return
 	 */
 	@Transactional
-	private GatewayCommand setCommand(String gatewayStatus, Long gatewayId, String commandGateway) {
-		GatewayCommand command = new GatewayCommand();
+	private GatewayCommand setCommandToSend(String gatewayStatus, Long gatewayId, String commandGateway) {
+		GatewayCommand commandStateProcess = new GatewayCommand();
 		
 		if (gatewayStatus.equals(E_GatewayStatus.ONLINE.toString())) {
 			if (commandGateway != null && commandGateway.equals(E_CommandModel.RESET.toString())) {
-				command.setCommand(EnumCommandModel.RESET);
+				commandStateProcess.setCommand(EnumCommandModel.RESET);
 				// update Command colon for this Gateway "Delete REST state"
 				GatewayDao gateway = new GatewayDao();
 				gateway.setId(gatewayId);
 				gatewayRepository.updateGatewayCommand(gateway);
 			} else {
-				command.setCommand(EnumCommandModel.NONE);
+				commandStateProcess.setCommand(EnumCommandModel.NONE);
 			}
 		} else {
-			command.setCommand(EnumCommandModel.NONE);
+			commandStateProcess.setCommand(EnumCommandModel.NONE);
 
 			// Set status associated Rooms to UNKNOWN
 			List<RoomDao> rooms = roomRepository.findByGatewayId(gatewayId);
@@ -445,6 +445,6 @@ public class GatewayManagerImpl implements GatewayManager {
 			}
 		}
 		
-		return command;
+		return commandStateProcess;
 	}
 }
