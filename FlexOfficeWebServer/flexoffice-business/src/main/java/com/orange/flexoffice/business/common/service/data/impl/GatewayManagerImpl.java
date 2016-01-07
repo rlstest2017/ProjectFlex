@@ -344,23 +344,35 @@ public class GatewayManagerImpl implements GatewayManager {
 						teachinRepository.updateTeachinStatus(teachin);
 						commandToSendToGateway.setRoomId(teachin.getRoomId());
 						commandToSendToGateway.setCommand(EnumCommandModel.TEACHIN);
+						LOGGER.debug( "setted command in ONTEACHIN => INITIALIZING case, is :" + commandToSendToGateway.getCommand().toString() );
 					} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString())) { // status RUNNING
 						commandToSendToGateway.setRoomId(teachin.getRoomId());
 						commandToSendToGateway.setCommand(EnumCommandModel.TEACHIN);
+						LOGGER.debug( "setted command in ONTEACHIN => RUNNING case, is :" + commandToSendToGateway.getCommand().toString() );
 					} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
 						commandToSendToGateway.setRoomId(teachin.getRoomId());
 						commandToSendToGateway.setCommand(EnumCommandModel.STOPTEACHIN);
+						LOGGER.debug( "setted command in ONTEACHIN => ENDED case, is :" + commandToSendToGateway.getCommand().toString() );
 					}
 				} else {
 					if (gatewayStatus.equals(E_GatewayStatus.ONLINE.toString())) {
 						// the teachin is founded (teachin_status not null)
 						if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()))  {
-							LOGGER.debug( "In INITIALIZING state teachin will be send TEACHIN Command " );
+							LOGGER.debug( "In ONLINE => INITIALIZING state teachin will be send TEACHIN Command " );
 							commandToSendToGateway.setRoomId(teachin.getRoomId());
 							commandToSendToGateway.setCommand(EnumCommandModel.TEACHIN);
-							LOGGER.debug( "setted command is :" + commandToSendToGateway.getCommand().toString() );
-						}	
-					} else {
+							LOGGER.debug( "setted command in ONLINE => INITIALIZING case, is :" + commandToSendToGateway.getCommand().toString() );
+						} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()))  {
+							// update status to ended
+							teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
+							teachinRepository.updateTeachinStatus(teachin);
+							commandToSendToGateway.setCommand(EnumCommandModel.NONE);
+							LOGGER.debug( "setted command in ONLINE => RUNNING case, is :" + commandToSendToGateway.getCommand().toString() );
+						} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString()))  {
+							commandToSendToGateway.setCommand(EnumCommandModel.NONE);
+							LOGGER.debug( "setted command in ONLINE => ENDED case, is :" + commandToSendToGateway.getCommand().toString() );
+						} 		
+					} else { // OFFLINE or ERRORs
 						// the teachin is founded (teachin_status not null)
 						if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()) || teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()))  {
 							// update status to running
@@ -368,11 +380,13 @@ public class GatewayManagerImpl implements GatewayManager {
 							teachinRepository.updateTeachinStatus(teachin);
 							// -----------------------------------------------------------------------------------------
 							commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
+							LOGGER.debug( "setted command in OFFLINE or ERRORs => INITIALIZING or RUNNING case, is :" + commandToSendToGateway.getCommand().toString() );
 							// -----------------------------------------------------------------------------------------
 						} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
 							// -----------------------------------------------------------------------------------------
 							commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);	
 							// -----------------------------------------------------------------------------------------
+							LOGGER.debug( "setted command in OFFLINE or ERRORs => ENDED case, is :" + commandToSendToGateway.getCommand().toString() );
 						}
 					}
 				}
@@ -380,20 +394,26 @@ public class GatewayManagerImpl implements GatewayManager {
 				LOGGER.debug( "teachin.getGatewayId() is not same as gatewayId" );
 				if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
 					commandToSendToGateway.setCommand(EnumCommandModel.STOPTEACHIN);
-				} else 
+					LOGGER.debug( "setted command in ONTEACHIN => teachin founded but not same gateway case, is :" + commandToSendToGateway.getCommand().toString() );
+				} else {
 					// -----------------------------------------------------------------------------------------
 					commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
 					// -----------------------------------------------------------------------------------------
+					LOGGER.debug( "setted command in other then ONTEACHIN => teachin founded but not same gateway case, is :" + commandToSendToGateway.getCommand().toString() );
+				}	
 			}
 			
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			// Table teachin_sensors is empty
 			if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
 				commandToSendToGateway.setCommand(EnumCommandModel.STOPTEACHIN);
-			} else 
+				LOGGER.debug( "setted command in ONTEACHIN => no teachin founded case, is :" + commandToSendToGateway.getCommand().toString() );
+			} else {
 				// -----------------------------------------------------------------------------------------
 				commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
-			// -----------------------------------------------------------------------------------------
+				// -----------------------------------------------------------------------------------------
+				LOGGER.debug( "setted command in other then ONTEACHIN => no teachin founded case, is :" + commandToSendToGateway.getCommand().toString() );
+			}
 
 	    }
 		
