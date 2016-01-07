@@ -347,7 +347,7 @@ public class GatewayManagerImpl implements GatewayManager {
 						LOGGER.debug( "setted command in ONTEACHIN => INITIALIZING case, is :" + commandToSendToGateway.getCommand().toString() );
 					} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString())) { // status RUNNING
 						commandToSendToGateway.setRoomId(teachin.getRoomId());
-						commandToSendToGateway.setCommand(EnumCommandModel.TEACHIN);
+						commandToSendToGateway.setCommand(EnumCommandModel.NONE);
 						LOGGER.debug( "setted command in ONTEACHIN => RUNNING case, is :" + commandToSendToGateway.getCommand().toString() );
 					} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
 						commandToSendToGateway.setRoomId(teachin.getRoomId());

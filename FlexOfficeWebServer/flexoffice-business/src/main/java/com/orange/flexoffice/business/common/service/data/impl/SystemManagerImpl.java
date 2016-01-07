@@ -382,7 +382,7 @@ public class SystemManagerImpl implements SystemManager {
 			
 		} catch(IncorrectResultSizeDataAccessException ex ) {
 			LOGGER.error("SystemManager.initTeachin : roomId# : " + roomId + "not found");
-			throw new DataNotExistsException("SystemManager.initTeachin : RoomId ont found");
+			throw new DataNotExistsException("SystemManager.initTeachin : RoomId not found");
 			
 		}	
 	}
