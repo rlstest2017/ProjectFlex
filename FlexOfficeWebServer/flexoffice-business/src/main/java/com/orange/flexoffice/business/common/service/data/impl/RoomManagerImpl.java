@@ -86,6 +86,7 @@ public class RoomManagerImpl implements RoomManager {
 		dto.setCapacity(roomDao.getCapacity());
 		dto.setStatus(E_RoomStatus.valueOf(roomDao.getStatus()));
 		dto.setType(E_RoomType.valueOf(roomDao.getType()));
+		dto.setLastMeasureDate(roomDao.getLastMeasureDate());
 
 		if (roomDao.getUserId() != null) {
 			try {

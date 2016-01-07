@@ -113,7 +113,7 @@ public final class DataSqlTemplate {
 	public static final String UPDATE_TEACHIN_STATUS_TEMPLATE =
 			"update %s set teachin_status=CAST(:teachinStatus AS teachinStatus) WHERE id=:id";
 	public static final String UPDATE_ROOM_STATUS_TEMPLATE =
-			"update %s set status=CAST(:status AS roomstatus), temperature=:temperature, humidity=:humidity, user_id=:userId where id=:id";
+			"update %s set status=CAST(:status AS roomstatus), temperature=:temperature, humidity=:humidity, last_measure_date=now(), user_id=:userId where id=:id";
 	public static final String UPDATE_ALERT_TEMPLATE =
 			"update %s set name=:name, last_notification=:lastNotification where id=:id";
 	public static final String UPDATE_SENSOR_TEMPLATE =

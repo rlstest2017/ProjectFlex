@@ -1,5 +1,7 @@
 package com.orange.flexoffice.dao.common.model.data;
 
+import java.util.Date;
+
 /**
  * RoomDao
  * @author oab
@@ -17,6 +19,7 @@ public class RoomDao extends AbstractData {
 	private String type;
 	private Long gatewayId;
 	private Long userId;
+	private Date lastMeasureDate; // the last time since the status has been modified 
 	
 	public String getName() {
 		return name;
@@ -90,6 +93,18 @@ public class RoomDao extends AbstractData {
 	@Override
 	public String getColumnId() {
 		return getId().toString();
+	}
+	/**
+	 * @return the lastMeasureDate
+	 */
+	public Date getLastMeasureDate() {
+		return lastMeasureDate;
+	}
+	/**
+	 * @param lastMeasureDate the lastMeasureDate to set
+	 */
+	public void setLastMeasureDate(Date lastMeasureDate) {
+		this.lastMeasureDate = lastMeasureDate;
 	}
 	
 

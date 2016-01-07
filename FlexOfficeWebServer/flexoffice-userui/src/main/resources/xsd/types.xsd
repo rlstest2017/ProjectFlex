@@ -59,6 +59,7 @@
 			<xsd:element name="desc" type="xsd:string"/>
 			<xsd:element name="address" type="xsd:string"/>
 			<xsd:element name="capacity" type="xsd:integer"/>
+			<xsd:element name="lastMeasureDate" type="xsd:integer"/>
 			<xsd:element name="status" type="e-roomStatus"/>
 			<xsd:element name="tenant" type="UserSummary"/>
 		</xsd:sequence>

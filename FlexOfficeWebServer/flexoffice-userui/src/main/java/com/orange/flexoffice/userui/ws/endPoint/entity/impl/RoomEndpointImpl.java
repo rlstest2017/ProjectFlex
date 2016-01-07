@@ -129,6 +129,10 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
 			room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
 
+			if (roomDto.getLastMeasureDate() != null) {
+				room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
+			}
+			
 			LOGGER.info( "End call UserUi.RoomEndpoint.getRoom  at: " + new Date() );
 
 			return room;

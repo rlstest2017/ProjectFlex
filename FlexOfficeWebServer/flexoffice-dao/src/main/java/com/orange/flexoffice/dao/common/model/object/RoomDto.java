@@ -1,6 +1,7 @@
 package com.orange.flexoffice.dao.common.model.object;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
@@ -30,6 +31,7 @@ public class RoomDto {
 	private UserDao user;
 	private List<SensorDao> sensors;
 	private Long occupancyTimeOut;
+	private Date lastMeasureDate; // the last time since the status has been modified
 	
 	public String getName() {
 		return name;
@@ -100,6 +102,18 @@ public class RoomDto {
 	}
 	public void setOccupancyTimeOut(Long occupancyTimeOut) {
 		this.occupancyTimeOut = occupancyTimeOut;
+	}
+	/**
+	 * @return the lastMeasureDate
+	 */
+	public Date getLastMeasureDate() {
+		return lastMeasureDate;
+	}
+	/**
+	 * @param lastMeasureDate the lastMeasureDate to set
+	 */
+	public void setLastMeasureDate(Date lastMeasureDate) {
+		this.lastMeasureDate = lastMeasureDate;
 	}
 
 }

@@ -293,7 +293,7 @@
 			<xsd:element name="roomId" type="xsd:string"/>
  		    <xsd:element name="gatewayId" type="xsd:string"/>
  		    <xsd:element name="status" type="e-teachinStatus"/>
-			<xsd:element name="sensors" type="TeachinSensor" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+			<xsd:element name="sensors" type="TeachinSensor" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	
