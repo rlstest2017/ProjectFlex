@@ -180,17 +180,21 @@ public class SystemEndpointImpl implements SystemEndpoint {
 			}  
 				
 			List<SensorDto> sensorsDto = teachinDto.getSensors();
-			for (SensorDto sensorDto : sensorsDto) {
-				TeachinSensor sensor = factory.createTeachinSensor();
-				sensor.setIdentifier(sensorDto.getSensorIdentifier());
-				if (sensorDto.getSensorStatus().equals(E_SensorTeachinStatus.NOT_PAIRED.toString())) {
-					sensor.setTeachinSensorStatus(ETeachinSensorStatus.NOT_PAIRED);
-				} else if (sensorDto.getSensorStatus().equals(E_SensorTeachinStatus.PAIRED_KO.toString())) {
-					sensor.setTeachinSensorStatus(ETeachinSensorStatus.PAIRED_KO);
-				} else if (sensorDto.getSensorStatus().equals(E_SensorTeachinStatus.PAIRED_OK.toString())) {
-					sensor.setTeachinSensorStatus(ETeachinSensorStatus.PAIRED_OK);
+			if (sensorsDto != null) {
+				for (SensorDto sensorDto : sensorsDto) {
+					TeachinSensor sensor = factory.createTeachinSensor();
+					sensor.setIdentifier(sensorDto.getSensorIdentifier());
+					if (sensorDto.getSensorStatus().equals(E_SensorTeachinStatus.NOT_PAIRED.toString())) {
+						sensor.setTeachinSensorStatus(ETeachinSensorStatus.NOT_PAIRED);
+					} else if (sensorDto.getSensorStatus().equals(E_SensorTeachinStatus.PAIRED_KO.toString())) {
+						sensor.setTeachinSensorStatus(ETeachinSensorStatus.PAIRED_KO);
+					} else if (sensorDto.getSensorStatus().equals(E_SensorTeachinStatus.PAIRED_OK.toString())) {
+						sensor.setTeachinSensorStatus(ETeachinSensorStatus.PAIRED_OK);
+					}
+					teachin.getSensors().add(sensor);
 				}
-				teachin.getSensors().add(sensor);
+			} else {
+				teachin.getSensors(); 
 			}
 			
 			return factory.createTeachin(teachin).getValue();
