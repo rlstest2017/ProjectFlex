@@ -1,0 +1,4 @@
+
+ALTER TABLE sensors
+	ALTER COLUMN room_id SET DEFAULT 0;
+
