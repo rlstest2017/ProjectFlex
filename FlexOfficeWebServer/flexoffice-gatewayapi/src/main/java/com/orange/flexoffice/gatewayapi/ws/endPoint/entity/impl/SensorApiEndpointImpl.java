@@ -13,20 +13,22 @@ import com.orange.flexoffice.gatewayapi.ws.endPoint.entity.SensorApiEndpoint;
 import com.orange.flexoffice.gatewayapi.ws.model.SensorInput;
 import com.orange.flexoffice.gatewayapi.ws.model.SensorNewSummary;
 import com.orange.flexoffice.gatewayapi.ws.utils.ErrorMessageHandler;
+import com.orange.flexoffice.business.common.enums.EnumAcceptedProfile;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.business.common.exception.WrongProfileException;
 import com.orange.flexoffice.business.common.service.data.SensorManager;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_SensorStatus;
-import com.orange.flexoffice.dao.common.model.enumeration.E_SensorType;
 
 
 public class SensorApiEndpointImpl implements SensorApiEndpoint {
 
 	private static final Logger LOGGER = Logger.getLogger(SensorApiEndpointImpl.class);
-
+	private static final String defaultProfile = "UNKNOWN";
+	
 	@Autowired
 	private SensorManager sensorManager;
 
@@ -42,7 +44,8 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 	public Response addSensor(SensorNewSummary sensorInput) {
 
 		LOGGER.info( "Begin call SensorApiEndpoint.addSensor at: " + new Date() );
-
+		try {
+			
 		SensorDao sensorDao = new SensorDao();
 		sensorDao.setIdentifier(sensorInput.getId());
 		sensorDao.setName("["+sensorInput.getId()+"]");
@@ -64,14 +67,16 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 			message.append( "\n" );
 			LOGGER.debug( message.toString() );
 		}
-
-		try {
+		
 			sensorManager.save(sensorDao, sensorInput.getGatewayId());
 
 		} catch (DataAlreadyExistsException e) {
 			LOGGER.debug("DataAlreadyExistsException in SensorApiEndpoint.addSensor with message :", e);
 			// process Sensor Teachin if Teachin exist & actif
 			sensorManager.processTeachinSensor(sensorInput.getId(), sensorInput.getGatewayId());
+		} catch (WrongProfileException ex1) {
+			LOGGER.debug("WrongProfileException in SensorApiEndpoint.addSensor with message :", ex1);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_38, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex) {
 			LOGGER.debug("RuntimeException in SensorApiEndpoint.addSensor with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -141,15 +146,25 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 	}
 
 
-
-	private String computeType(final String currentProfile) {
-		String type = new String(E_SensorType.TEMPERATURE_HUMIDITY.toString());
-
-		// Type depends on profile.
-		// TODO - For V2, add properties or other to avoid change code when a new type will be manage 
-		if (currentProfile.contains("A5-07")) {
-			type = E_SensorType.MOTION_DETECTION.toString();
+	/**
+	 * computeType
+	 * @param currentProfile
+	 * @return
+	 * @throws WrongProfileException
+	 */
+	private String computeType(final String currentProfile) throws WrongProfileException {
+		String type = defaultProfile;
+		EnumAcceptedProfile[] values = EnumAcceptedProfile.values();
+		for (EnumAcceptedProfile profile : values) {
+			if (profile.code().equalsIgnoreCase(currentProfile)) {
+				type = profile.value();
+				break;
+			}
 		}
+		 
+		if (type.equals(defaultProfile)) {
+			throw new WrongProfileException("wrong profile is detected !!!");
+		} 
 
 		return type;
 	}

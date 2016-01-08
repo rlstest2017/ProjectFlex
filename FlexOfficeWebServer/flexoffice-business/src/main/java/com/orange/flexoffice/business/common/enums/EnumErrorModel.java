@@ -46,7 +46,8 @@ public enum EnumErrorModel {
 	ERROR_34("L001", "authentification impossible"),
 	ERROR_35("T001", "impossible de démarrer une détection de capteurs"),
 	ERROR_36("T002", "une détection de capteurs est déjà en cours"),
-	ERROR_37("T003", "pas de détection de capteurs en cours");
+	ERROR_37("T003", "pas de détection de capteurs en cours"),
+	ERROR_38("T004", "Le profile est incorrect !!!");
 
 	
      /**
