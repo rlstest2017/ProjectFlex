@@ -275,12 +275,13 @@ public class SystemManagerImpl implements SystemManager {
 			
 			TeachinSensorDto teachinDto = new TeachinSensorDto();
 			teachinDto.setRoomId(teachin.getRoomId());
-			teachinDto.setGatewayId(teachin.getGatewayId());
 			teachinDto.setTeachinStatus(teachin.getTeachinStatus());
+			// Get GatewayMacAddress
+			GatewayDao gateway =gatewayRepository.findOne(teachin.getGatewayId().longValue());
+			teachinDto.setGatewayMacAddress(gateway.getMacAddress());
 			
 			// the teachin is founded (teachin_status not null)
 			if (!teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString())) {
-				
 				// get teached sensors List
 				List<TeachinSensorDao> teachinList = teachinRepository.findAllTeachinSensors();
 				for (TeachinSensorDao teachinSensorDao : teachinList) {

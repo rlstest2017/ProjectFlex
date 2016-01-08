@@ -11,7 +11,7 @@ import java.util.List;
 public class TeachinSensorDto  {
 
 	private Integer roomId;
-	private Integer gatewayId;
+	private String gatewayMacAddress;
 	private String teachinStatus;
 	private List<SensorDto> sensors; 
 	
@@ -28,21 +28,20 @@ public class TeachinSensorDto  {
 	public void setRoomId(Integer roomId) {
 		this.roomId = roomId;
 	}
-
 	/**
-	 * @return the gatewayId
+	 * @return the gatewayMacAddress
 	 */
-	public Integer getGatewayId() {
-		return gatewayId;
+	public String getGatewayMacAddress() {
+		return gatewayMacAddress;
 	}
 
 	/**
-	 * @param gatewayId the gatewayId to set
+	 * @param gatewayMacAddress the gatewayMacAddress to set
 	 */
-	public void setGatewayId(Integer gatewayId) {
-		this.gatewayId = gatewayId;
+	public void setGatewayMacAddress(String gatewayMacAddress) {
+		this.gatewayMacAddress = gatewayMacAddress;
 	}
-	
+
 	/**
 	 * @return the teachinStatus
 	 */

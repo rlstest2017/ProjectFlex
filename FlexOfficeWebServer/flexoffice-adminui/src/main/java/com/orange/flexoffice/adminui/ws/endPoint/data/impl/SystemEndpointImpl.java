@@ -38,7 +38,11 @@ import com.orange.flexoffice.dao.common.model.object.SensorDto;
 import com.orange.flexoffice.dao.common.model.object.SystemDto;
 import com.orange.flexoffice.dao.common.model.object.TeachinSensorDto;
 
-
+/**
+ * SystemEndpointImpl
+ * @author oab
+ *
+ */
 public class SystemEndpointImpl implements SystemEndpoint {
 	
 	private static final Logger LOGGER = Logger.getLogger(SystemEndpointImpl.class);
@@ -169,7 +173,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
 			Teachin teachin = factory.createTeachin();
 			
 			teachin.setRoomId(String.valueOf(teachinDto.getRoomId()));
-			teachin.setGatewayId(String.valueOf(teachinDto.getGatewayId()));
+			teachin.setGatewayId(teachinDto.getGatewayMacAddress());
 			
 			if (teachinDto.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString())) {
 				teachin.setStatus(ETeachinStatus.INITIALIZING);
