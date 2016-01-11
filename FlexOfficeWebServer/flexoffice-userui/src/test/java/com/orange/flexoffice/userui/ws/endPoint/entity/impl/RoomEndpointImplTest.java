@@ -7,9 +7,7 @@ import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.core.Response.Status;
 
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -138,11 +136,11 @@ public class RoomEndpointImplTest {
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		try {
 			// Test
-			final Response response = roomEndpoint.reserveRoom(token, "1");
+			roomEndpoint.reserveRoom(token, "1");
 
 			System.out.println("test");
 			// Asserts
-			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+			assertEquals(false, expectedResult);
 			expectedResult = true;
 			
 		} catch(WebApplicationException e ) {
@@ -174,10 +172,10 @@ public class RoomEndpointImplTest {
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		try {
 			// Test
-			final Response response = roomEndpoint.cancelRoom(token, "1");
+			roomEndpoint.cancelRoom(token, "1");
 
 			// Asserts
-			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+			assertEquals(false, expectedResult);
 			expectedResult = true;
 			
 		} catch(WebApplicationException e ) {

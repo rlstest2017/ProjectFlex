@@ -8,7 +8,6 @@ import java.util.List;
 import javax.naming.AuthenticationException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,7 +156,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 * @see Response
 	 */
 	@Override
-	public Response reserveRoom(String auth, String roomId) {
+	public Room reserveRoom(String auth, String roomId) {
 		
 		LOGGER.info( "Begin call UserUi.RoomEndpoint.reserveRoom at: " + new Date() );
 		LOGGER.debug("Room id in reserveRoom.RoomEndpoint metod is : " + roomId);
@@ -172,7 +171,29 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			// set userId in roomDao
 			roomDao.setUserId(Long.valueOf(data.getId()));
 			
-			roomDao = roomManager.updateStatus(roomDao);
+			// update status 
+			roomManager.updateStatus(roomDao);
+			
+			// get Room
+			RoomDto roomDto = roomManager.find(Long.valueOf(roomId));
+
+			Room room = factory.createRoom();
+			room.setId(String.valueOf(roomDto.getId()));
+			room.setName(roomDto.getName());
+			room.setType(ERoomType.valueOf(roomDto.getType().toString()));
+			room.setDesc(roomDto.getDescription());
+			room.setAddress(roomDto.getAddress());
+			room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));			
+			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
+			room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
+
+			if (roomDto.getLastMeasureDate() != null) {
+				room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
+			}
+			
+			LOGGER.info( "End call UserUi.RoomEndpoint.reserveRoom at: " + new Date() );
+			
+			return room;
 
 		} catch (AuthenticationException e){
 			LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.reserveRoom with message :", e);
@@ -188,9 +209,6 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
-		LOGGER.info( "End call UserUi.RoomEndpoint.reserveRoom at: " + new Date() );
-
-		return Response.status(Status.ACCEPTED).build();
 	}
 
 	/**
@@ -204,7 +222,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 * @see Response
 	 */
 	@Override
-	public Response cancelRoom(String auth, String roomId) {
+	public Room cancelRoom(String auth, String roomId) {
 		
 		LOGGER.info( "Begin call UserUi.RoomEndpoint.cancelRoom at: " + new Date() );
 
@@ -218,7 +236,28 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			// set userId in roomDao
 			roomDao.setUserId(Long.valueOf(data.getId()));
 
-			roomDao = roomManager.updateStatus(roomDao);
+			// update status
+			roomManager.updateStatus(roomDao);
+
+			// get Room
+			RoomDto roomDto = roomManager.find(Long.valueOf(roomId));
+
+			Room room = factory.createRoom();
+			room.setId(String.valueOf(roomDto.getId()));
+			room.setName(roomDto.getName());
+			room.setType(ERoomType.valueOf(roomDto.getType().toString()));
+			room.setDesc(roomDto.getDescription());
+			room.setAddress(roomDto.getAddress());
+			room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));			
+			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
+
+			if (roomDto.getLastMeasureDate() != null) {
+				room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
+			}
+			
+			LOGGER.info( "End call UserUi.RoomEndpoint.cancelRoom at: " + new Date() );
+			
+			return room;
 
 		} catch (AuthenticationException e){
 			LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.cancelRoom with message :", e);
@@ -234,9 +273,6 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
-		LOGGER.info( "End call UserUi.RoomEndpoint.cancelRoom at: " + new Date() );
-
-		return Response.status(Status.ACCEPTED).build();
 	}
 	
 	

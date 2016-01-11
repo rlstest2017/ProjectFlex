@@ -72,7 +72,7 @@ public interface RoomEndpoint {
 	@Path(ROOM_ID_PATH + RESERVE_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response reserveRoom(@HeaderParam(TOKEN_HEADER_PARAM) String auth, @PathParam(ROOM_ID_PARAM) String roomId);
+	Room reserveRoom(@HeaderParam(TOKEN_HEADER_PARAM) String auth, @PathParam(ROOM_ID_PARAM) String roomId);
 
 	/**
 	 * Cancel reservation of a room.
@@ -88,7 +88,7 @@ public interface RoomEndpoint {
 	@Path(ROOM_ID_PATH + CANCEL_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response cancelRoom(@HeaderParam(TOKEN_HEADER_PARAM) String auth, @PathParam(ROOM_ID_PARAM) String roomId);
+	Room cancelRoom(@HeaderParam(TOKEN_HEADER_PARAM) String auth, @PathParam(ROOM_ID_PARAM) String roomId);
 
 
 	
