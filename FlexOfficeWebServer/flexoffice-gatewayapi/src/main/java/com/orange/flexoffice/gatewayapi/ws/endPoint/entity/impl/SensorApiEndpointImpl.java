@@ -50,7 +50,7 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 		sensorDao.setIdentifier(sensorInput.getId());
 		sensorDao.setName("["+sensorInput.getId()+"]");
 		sensorDao.setProfile(sensorInput.getProfile());
-		sensorDao.setStatus(E_SensorStatus.OFFLINE.toString());
+		sensorDao.setStatus(E_SensorStatus.ONLINE.toString());
 		// Type depends on profile.
 		sensorDao.setType(computeType(sensorInput.getProfile()));
 		// No room by default
