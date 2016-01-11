@@ -89,11 +89,14 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 			gateway.setMacAddress(data.getMacAddress());
 			gateway.setName(data.getName());
 			gateway.setDesc(data.getDescription());
-			if (data.getStatus().equals(E_GatewayStatus.ONTEACHIN.toString())) {
+			if ((data.getStatus().equals(E_GatewayStatus.ONTEACHIN.toString())) || (data.getStatus().equals(E_GatewayStatus.ONLINE.toString()))) {
 				gateway.setStatus(EDeviceStatus.ONLINE);
+			} else if (data.getStatus().equals(E_GatewayStatus.OFFLINE.toString())) {
+				gateway.setStatus(EDeviceStatus.OFFLINE);
 			} else {
-				gateway.setStatus(EDeviceStatus.valueOf(data.getStatus().toString()));
+				gateway.setStatus(EDeviceStatus.UNSTABLE);
 			}
+			
 			if (data.getLastPollingDate() != null) {
 				gateway.setLastPollingDate(data.getLastPollingDate().getTime());
 			}
