@@ -100,6 +100,7 @@ public class SensorManagerImpl implements SensorManager {
 						teachinSensor.setSensorIdentifier(sensorDao.getIdentifier());
 						teachinSensor.setSensorStatus(E_SensorTeachinStatus.NOT_PAIRED.toString());
 						teachinRepository.saveTechinSensor(teachinSensor);
+						teachinRepository.updateTeachinDate(teachin);
 					}
 				} catch(IncorrectResultSizeDataAccessException e ) {
 					LOGGER.error("SensorManager.save : There is no activate teachin", e);
@@ -268,18 +269,18 @@ public class SensorManagerImpl implements SensorManager {
 				
 				if (sensor.getRoomId() == 0) {
 					teachinSensor.setSensorStatus(E_SensorTeachinStatus.NOT_PAIRED.toString());
-					teachinRepository.saveTechinSensor(teachinSensor);
 				} else {
 					RoomDao room = roomRepository.findByRoomId(Long.valueOf(sensor.getRoomId()));
 					GatewayDao gateway = gatewayRepository.findByGatewayId(room.getGatewayId());
 					if (gateway.getMacAddress().equals(gatewayMacAdress)) {
 						teachinSensor.setSensorStatus(E_SensorTeachinStatus.PAIRED_OK.toString());
-						teachinRepository.saveTechinSensor(teachinSensor);
 					} else {
 						teachinSensor.setSensorStatus(E_SensorTeachinStatus.PAIRED_KO.toString());
-						teachinRepository.saveTechinSensor(teachinSensor);
 					}
 				}
+				
+				teachinRepository.saveTechinSensor(teachinSensor);
+				teachinRepository.updateTeachinDate(teachin);
 			}
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.error("SensorManager.processTeachinSensor : There is no activate teachin", e);

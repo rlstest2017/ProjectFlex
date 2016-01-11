@@ -342,6 +342,7 @@ public class GatewayManagerImpl implements GatewayManager {
 						// update status to running
 						teachin.setTeachinStatus(E_TeachinStatus.RUNNING.toString());
 						teachinRepository.updateTeachinStatus(teachin);
+						teachinRepository.updateTeachinDate(teachin);
 						commandToSendToGateway.setRoomId(teachin.getRoomId());
 						commandToSendToGateway.setCommand(EnumCommandModel.TEACHIN);
 						LOGGER.debug( "setted command in ONTEACHIN => INITIALIZING case, is :" + commandToSendToGateway.getCommand().toString() );

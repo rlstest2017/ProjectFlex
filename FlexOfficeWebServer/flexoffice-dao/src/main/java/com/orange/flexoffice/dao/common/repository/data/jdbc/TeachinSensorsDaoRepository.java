@@ -68,7 +68,20 @@ public class TeachinSensorsDaoRepository extends DataRepository<TeachinSensorDao
 		return data;
 	}
 
-
+	@Override
+	public TeachinSensorDao updateTeachinDate(TeachinSensorDao data) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateTeachinDateQuery, paramBean, keyHolder);
+		
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());	
+		
+		return data;
+	}
+	
 	@Override
 	public TeachinSensorDao saveTechinSensor(TeachinSensorDao data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();

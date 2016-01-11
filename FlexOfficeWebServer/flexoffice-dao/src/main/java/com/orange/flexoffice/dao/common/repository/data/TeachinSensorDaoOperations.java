@@ -22,6 +22,8 @@ public interface TeachinSensorDaoOperations {
 	
 	TeachinSensorDao updateTeachinStatus(TeachinSensorDao data);
 	
+	TeachinSensorDao updateTeachinDate(TeachinSensorDao data);
+	
 	TeachinSensorDao saveTechinSensor(TeachinSensorDao data);
 	
 	TeachinSensorDao saveTechinStatus(TeachinSensorDao data);

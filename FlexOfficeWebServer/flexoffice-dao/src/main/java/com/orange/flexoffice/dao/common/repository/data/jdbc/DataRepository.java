@@ -41,6 +41,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_ACCESS_TOKEN_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_BY_MAIL_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_TEACHIN_STATUS_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_TEACHIN_DATE_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_GATEWAY_STATUS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_GATEWAY_COMMAND_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOM_TEMPLATE;
@@ -132,6 +133,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String updateGatewayQuery;
 	protected final String updateRoomQuery;
 	protected final String updateTeachinStatusQuery;
+	protected final String updateTeachinDateQuery;
 	protected final String updateAlertQuery;
 	protected final String updateRoomStatusQuery;
 	protected final String updateSensorQuery;
@@ -207,6 +209,7 @@ public abstract class DataRepository<T extends Data>
 		updateGatewayCommandQuery = String.format(UPDATE_GATEWAY_COMMAND_TEMPLATE, getTableName());
 		updateRoomQuery = String.format(UPDATE_ROOM_TEMPLATE, getTableName(), getColumnColName());
 		updateTeachinStatusQuery = String.format(UPDATE_TEACHIN_STATUS_TEMPLATE, getTableName());
+		updateTeachinDateQuery = String.format(UPDATE_TEACHIN_DATE_TEMPLATE, getTableName());
 		updateAlertQuery = String.format(UPDATE_ALERT_TEMPLATE, getTableName());
 		updateRoomStatusQuery = String.format(UPDATE_ROOM_STATUS_TEMPLATE, getTableName());// set also humidity, temperature & user_id if filled
 		updateSensorQuery = String.format(UPDATE_SENSOR_TEMPLATE, getTableName(), getColumnColName());
