@@ -227,6 +227,7 @@ public class SensorManagerImpl implements SensorManager {
 				gateway.setId(room.getGatewayId());
 				gateway.setCommand(E_CommandModel.RESET.toString());
 				gatewayRepository.updateGatewayCommand(gateway);
+				LOGGER.debug("RESET command has set in table for gateway id #: " + room.getGatewayId());
 			}
 			try {
 				AlertDao alert = alertRepository.findBySensorId(sensor.getId());
