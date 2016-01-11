@@ -142,7 +142,7 @@ public class SensorEndpointImplTest {
 		List<SensorSummary> sensors = sensorEndpoint.getSensors();
 
 		// Asserts
-		assertEquals(4, sensors.size());
+		assertEquals(3, sensors.size());
 	}
 
 
@@ -171,7 +171,7 @@ public class SensorEndpointImplTest {
 		List<SensorSummary> sensors = sensorEndpoint.getSensors();
 
 		// Asserts
-		assertEquals(5, sensors.size());
+		assertEquals(4, sensors.size());
 	}
 
 
@@ -199,7 +199,7 @@ public class SensorEndpointImplTest {
 		List<SensorSummary> sensors = sensorEndpoint.getSensors();
 
 		// Asserts
-		assertEquals(6, sensors.size());
+		assertEquals(5, sensors.size());
 	}
 
 
@@ -250,7 +250,7 @@ public class SensorEndpointImplTest {
 			List<SensorSummary> sensors = sensorEndpoint.getSensors();
 
 			// Asserts
-			assertEquals(6, sensors.size());
+			assertEquals(5, sensors.size());
 			expectedResult = true;
 
 		} catch(WebApplicationException e ) {

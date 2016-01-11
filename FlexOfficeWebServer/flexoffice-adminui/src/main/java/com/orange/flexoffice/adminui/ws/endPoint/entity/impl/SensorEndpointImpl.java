@@ -55,27 +55,30 @@ public class SensorEndpointImpl implements SensorEndpoint {
 		List<SensorDao> dataList = sensorManager.findAllSensors();
 
 		if (dataList == null) {
-
 			LOGGER.error("SensorEndpoint.getSensors : Sensors not found");
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_10, Response.Status.NOT_FOUND));
-
 		}
 
 		List<SensorSummary> sensorList = new ArrayList<SensorSummary>();
 
+		// Retrun only paired ones !!!
+		// for avoid the suppression of unpaired ones in HMI interface, which will produce
+		// a RESETgateway problem (room_id = 0 !!!) 
 		for (SensorDao sensorDao : dataList) {
-			SensorSummary sensor = factory.createSensorSummary();
-			sensor.setIdentifier(sensorDao.getIdentifier());
-			sensor.setName(sensorDao.getName());
-			sensor.setType(ESensorType.valueOf(sensorDao.getType().toString()));		
-			sensor.setRoom(getRoomFromId(sensorDao.getRoomId(), sensorDao.getIdentifier()));
-			if ((sensorDao.getStatus().equals(E_SensorStatus.UNSTABLE_RSSI.toString())) || (sensorDao.getStatus().equals(E_SensorStatus.UNSTABLE_VOLTAGE.toString()))) {
-				sensor.setStatus(EDeviceStatus.UNSTABLE);
-			} else {
-				sensor.setStatus(EDeviceStatus.valueOf(sensorDao.getStatus().toString()));
+			if (sensorDao.getRoomId() != 0) {
+				SensorSummary sensor = factory.createSensorSummary();
+				sensor.setIdentifier(sensorDao.getIdentifier());
+				sensor.setName(sensorDao.getName());
+				sensor.setType(ESensorType.valueOf(sensorDao.getType().toString()));		
+				sensor.setRoom(getRoomFromId(sensorDao.getRoomId(), sensorDao.getIdentifier()));
+				if ((sensorDao.getStatus().equals(E_SensorStatus.UNSTABLE_RSSI.toString())) || (sensorDao.getStatus().equals(E_SensorStatus.UNSTABLE_VOLTAGE.toString()))) {
+					sensor.setStatus(EDeviceStatus.UNSTABLE);
+				} else {
+					sensor.setStatus(EDeviceStatus.valueOf(sensorDao.getStatus().toString()));
+				}
+	
+				sensorList.add(sensor);
 			}
-
-			sensorList.add(sensor);
 		}
 
 		LOGGER.debug("List of sensors : nb = " + sensorList.size());
