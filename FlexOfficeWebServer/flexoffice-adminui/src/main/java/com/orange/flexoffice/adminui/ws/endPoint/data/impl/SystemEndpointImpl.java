@@ -188,11 +188,11 @@ public class SystemEndpointImpl implements SystemEndpoint {
 				TeachinSensor sensor = factory.createTeachinSensor();
 				sensor.setIdentifier(sensorDto.getSensorIdentifier());
 				if (sensorDto.getSensorStatus().equals(E_SensorTeachinStatus.NOT_PAIRED.toString())) {
-					sensor.setTeachinSensorStatus(ETeachinSensorStatus.NOT_PAIRED);
+					sensor.setStatus(ETeachinSensorStatus.NOT_PAIRED);
 				} else if (sensorDto.getSensorStatus().equals(E_SensorTeachinStatus.PAIRED_KO.toString())) {
-					sensor.setTeachinSensorStatus(ETeachinSensorStatus.PAIRED_KO);
+					sensor.setStatus(ETeachinSensorStatus.PAIRED_KO);
 				} else if (sensorDto.getSensorStatus().equals(E_SensorTeachinStatus.PAIRED_OK.toString())) {
-					sensor.setTeachinSensorStatus(ETeachinSensorStatus.PAIRED_OK);
+					sensor.setStatus(ETeachinSensorStatus.PAIRED_OK);
 				}
 				teachin.getSensors().add(sensor);
 			}

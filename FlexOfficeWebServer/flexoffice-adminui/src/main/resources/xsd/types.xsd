@@ -300,7 +300,7 @@
 	<xsd:complexType name="TeachinSensor">
 		<xsd:sequence>
 			<xsd:element name="identifier" type="xsd:string"/>
- 			<xsd:element name="teachinSensorStatus" type="e-teachinSensorStatus" />	    
+ 			<xsd:element name="status" type="e-teachinSensorStatus" />	    
 		</xsd:sequence>
 	</xsd:complexType>
 	
