@@ -437,10 +437,12 @@ public class GatewayManagerImpl implements GatewayManager {
 		if (gatewayStatus.equals(E_GatewayStatus.ONLINE.toString())) {
 			if (commandGateway != null && commandGateway.equals(E_CommandModel.RESET.toString())) {
 				commandStateProcess.setCommand(EnumCommandModel.RESET);
+				LOGGER.debug("RESET command has sent to gateway id #: " + gatewayId);
 				// update Command colon for this Gateway "Delete REST state"
 				GatewayDao gateway = new GatewayDao();
 				gateway.setId(gatewayId);
 				gatewayRepository.updateGatewayCommand(gateway);
+				LOGGER.debug("The RESET state has deleted from gateway id #: " + gatewayId);
 			} else {
 				commandStateProcess.setCommand(EnumCommandModel.NONE);
 			}

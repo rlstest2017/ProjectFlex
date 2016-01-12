@@ -22,4 +22,7 @@
 	<task:annotation-driven />
     <bean id="processDailyStats" class="com.orange.flexoffice.adminui.ws.task.ProcessDailyStats"></bean>
 		
+	<task:annotation-driven />
+    <bean id="checkTeachinTimeout" class="com.orange.flexoffice.adminui.ws.task.CheckTeachinTimeout"></bean>
+    	
 </beans>

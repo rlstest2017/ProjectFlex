@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,11 +14,14 @@ import com.orange.flexoffice.business.common.utils.DateTools;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDailyOccupancyDao;
 import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
+import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
+import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDailyOccupancyDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomStatDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.TeachinSensorsDaoRepository;
 
 /**
  * TaskManagerImpl
@@ -33,6 +37,9 @@ public class TaskManagerImpl implements TaskManager {
 	private ConfigurationDaoRepository configRepository;
 	@Autowired
 	private RoomDailyOccupancyDaoRepository roomDailyRepository;
+	@Autowired
+	private TeachinSensorsDaoRepository teachinRepository;
+	
 	@Autowired
 	DateTools dateTools;
 
@@ -57,6 +64,33 @@ public class TaskManagerImpl implements TaskManager {
 				roomStatsRepository.updateRoomStatById(roomstat);
 			}
 		}
+	}
+	
+	@Override
+	public void checkTeachinTimeOut() {
+		try {
+		TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
+
+		if ( (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString())) || (teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString())) )  {
+			// - Calculate Date with TEACHIN_TIMEOUT parameter
+			ConfigurationDao teachinTimeOut = configRepository.findByKey(E_ConfigurationKey.TEACHIN_TIMEOUT.toString());
+			int teachinTimeoutValue = Integer.valueOf(teachinTimeOut.getValue()); // in minutes	
+			
+			Date teachinMaxDate = dateTools.teachinDateDelayBeforeTimeOut(teachin.getTeachinDate(), teachinTimeoutValue);
+			
+			if (teachinMaxDate.before(new Date())) {
+				// set ENDED
+				teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
+				teachinRepository.updateTeachinStatus(teachin);
+			}
+		}
+
+		
+		
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			// Table teachin_sensors is empty
+	    }
+		
 	}
 
 	@Override

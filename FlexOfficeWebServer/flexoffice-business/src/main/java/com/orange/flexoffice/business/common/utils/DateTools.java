@@ -50,6 +50,20 @@ public class DateTools {
 	}
 	
 	/**
+	 * calculate the max authorized date since last teachinDate + 15 minutes
+	 * @param teachinDate
+	 * @param teachinTimeoutValue
+	 * @return
+	 */
+	public Date teachinDateDelayBeforeTimeOut(Date teachinDate, int teachinTimeoutValue) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(teachinDate);
+		cal.add(Calendar.MINUTE, teachinTimeoutValue); // <-- 15 minutes -->
+		Date teachinMaxDate = cal.getTime();
+		return teachinMaxDate; 
+	}
+	
+	/**
 	 * dateBeginDay
 	 * @param beginDayValue
 	 * @return

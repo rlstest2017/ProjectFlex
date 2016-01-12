@@ -14,6 +14,12 @@ public interface TaskManager {
 	void checkReservationTimeOut();
 	
 	/**
+	 * checkTeachinTimeOut every 5 seconds
+	 * If teachin is non activate since 15 minutes, it's set to ENDED  
+	 */
+	void checkTeachinTimeOut();
+	
+	/**
 	 * generateDailyStats
 	 * Every day at night one cumulate line is calculated from RoomStats to RoomDailyOccupancy 
 	 */

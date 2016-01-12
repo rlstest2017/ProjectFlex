@@ -1,5 +1,7 @@
 package com.orange.flexoffice.dao.common.model.data;
 
+import java.util.Date;
+
 /**
  * TeachinSensorDao
  * @author oab
@@ -13,7 +15,7 @@ public class TeachinSensorDao extends AbstractData {
 	private String sensorIdentifier; // sensor back id on hexa 4 octets
 	private String sensorStatus;
 	private String teachinStatus;
-	
+	private Date teachinDate;
 	/**
 	 * @return the roomId
 	 */
@@ -96,6 +98,21 @@ public class TeachinSensorDao extends AbstractData {
 	 */
 	public void setTeachinStatus(String teachinStatus) {
 		this.teachinStatus = teachinStatus;
+	}
+	
+
+	/**
+	 * @return the teachinDate
+	 */
+	public Date getTeachinDate() {
+		return teachinDate;
+	}
+
+	/**
+	 * @param teachinDate the teachinDate to set
+	 */
+	public void setTeachinDate(Date teachinDate) {
+		this.teachinDate = teachinDate;
 	}
 
 	@Override
