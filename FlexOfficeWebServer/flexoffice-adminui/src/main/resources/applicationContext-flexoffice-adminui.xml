@@ -20,8 +20,6 @@
 	</bean>
 	
 	<task:annotation-driven />
-    <bean id="processDailyStats" class="com.orange.flexoffice.adminui.ws.task.ProcessDailyStats"></bean>
-	
-<!--      <bean id="checkTeachinTimeout" class="com.orange.flexoffice.adminui.ws.task.CheckTeachinTimeout"></bean> -->
+    <bean id="adminUiTasks" class="com.orange.flexoffice.adminui.ws.task.AdminUiTasks"></bean>
     	
 </beans>

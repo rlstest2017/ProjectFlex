@@ -31,8 +31,7 @@
 	<bean id="errorMessageHandler" class="com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler">
 	</bean>
 	
-	<bean id="processDailyStats" class="com.orange.flexoffice.adminui.ws.task.ProcessDailyStats"></bean>
+	<bean id="adminUiTasks" class="com.orange.flexoffice.adminui.ws.task.AdminUiTasks"></bean>
 	
-	<bean id="checkTeachinTimeout" class="com.orange.flexoffice.adminui.ws.task.CheckTeachinTimeout"></bean>
 		
 </beans>

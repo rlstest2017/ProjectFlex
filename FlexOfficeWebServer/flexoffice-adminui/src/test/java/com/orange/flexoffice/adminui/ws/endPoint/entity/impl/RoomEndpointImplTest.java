@@ -27,7 +27,7 @@ import com.orange.flexoffice.adminui.ws.model.Room;
 import com.orange.flexoffice.adminui.ws.model.RoomInput1;
 import com.orange.flexoffice.adminui.ws.model.RoomOutput;
 import com.orange.flexoffice.adminui.ws.model.RoomSummary;
-import com.orange.flexoffice.adminui.ws.task.ProcessDailyStats;
+import com.orange.flexoffice.adminui.ws.task.AdminUiTasks;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 
@@ -49,7 +49,7 @@ public class RoomEndpointImplTest {
 
 	private static GatewayEndpoint gatewayEndpoint;
 
-	private static ProcessDailyStats processDailyStats;
+	private static AdminUiTasks adminUiTasks;
 
 	@Context
 	private UriInfo uriInfo;
@@ -62,7 +62,7 @@ public class RoomEndpointImplTest {
 		context = new ClassPathXmlApplicationContext("applicationContext-flexoffice-adminui-test.xml");
 		roomEndpoint = (RoomEndpointImpl)context.getBean("roomEndpoint");
 		gatewayEndpoint = (GatewayEndpointImpl)context.getBean("gatewayEndpoint");
-		processDailyStats = (ProcessDailyStats)context.getBean("processDailyStats");
+		adminUiTasks = (AdminUiTasks)context.getBean("adminUiTasks");
 	}
 
 
@@ -354,7 +354,7 @@ public class RoomEndpointImplTest {
 	@Test
 	public void TestO_processDailyStatsTask() {
 		// SetUp
-		boolean state = processDailyStats.processDailyStatsTestMethod();
+		boolean state = adminUiTasks.processDailyStatsTestMethod();
 
 		// Asserts
 		assertEquals(true, state);

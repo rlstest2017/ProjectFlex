@@ -9,9 +9,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import com.orange.flexoffice.business.common.service.data.TaskManager;
 
  
-public class ProcessDailyStats {
+public class AdminUiTasks {
 	
-	private static final Logger LOGGER = Logger.getLogger(ProcessDailyStats.class);
+	private static final Logger LOGGER = Logger.getLogger(AdminUiTasks.class);
 	@Autowired
 	TaskManager taskManager;
 	
@@ -24,11 +24,27 @@ public class ProcessDailyStats {
 		LOGGER.debug("After Method executed every day at 23:00. Current time is :: "+ new Date());
     }
 	
+	// Every 5 seconds
+	@Scheduled(cron="*/5 * * * * ?")
+    public void checkTeachinTimeOutMethod()  {
+		LOGGER.debug("Before checkTeachinTimeoutMethod. Current time is : "+ new Date());
+		taskManager.checkTeachinTimeOut();
+		LOGGER.debug("After checkTeachinTimeoutMethod. Current time is : "+ new Date());
+    }
+	
 	// for tests
 	public boolean processDailyStatsTestMethod()  {
 		LOGGER.debug("Before Method executed every day at 23:00. Current time is :: "+ new Date());
 		taskManager.processDailyStats();
 		LOGGER.debug("After Method executed every day at 23:00. Current time is :: "+ new Date());
+		return true;
+    }
+	
+	// for tests
+	public boolean checkTeachinTimeOutTestMethod()  {
+		LOGGER.debug("Before checkTeachinTimeOutTestMethod. Current time is : "+ new Date());
+		taskManager.checkTeachinTimeOut();
+		LOGGER.debug("After checkTeachinTimeOutTestMethod. Current time is : "+ new Date());
 		return true;
     }
 	

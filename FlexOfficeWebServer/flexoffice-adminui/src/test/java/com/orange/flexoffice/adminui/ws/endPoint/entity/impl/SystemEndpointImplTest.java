@@ -21,7 +21,7 @@ import com.orange.flexoffice.adminui.ws.endPoint.data.SystemEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.data.impl.SystemEndpointImpl;
 import com.orange.flexoffice.adminui.ws.model.ETeachinStatus;
 import com.orange.flexoffice.adminui.ws.model.Teachin;
-import com.orange.flexoffice.adminui.ws.task.CheckTeachinTimeout;
+import com.orange.flexoffice.adminui.ws.task.AdminUiTasks;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SystemEndpointImplTest {
@@ -39,7 +39,7 @@ public class SystemEndpointImplTest {
 
 	private static SystemEndpoint systemEndpoint;
 	
-	private static CheckTeachinTimeout checkTeachinTimeout;
+	private static AdminUiTasks adminUiTasks;
 	
 	/**
 	 * @throws java.lang.Exception
@@ -48,7 +48,7 @@ public class SystemEndpointImplTest {
 	public static void initSpringContextAndDatabase() throws Exception {
 		context = new ClassPathXmlApplicationContext("applicationContext-flexoffice-adminui-test.xml");
 		systemEndpoint = (SystemEndpointImpl)context.getBean("systemEndpoint");
-		checkTeachinTimeout = (CheckTeachinTimeout)context.getBean("checkTeachinTimeout");
+		adminUiTasks = (AdminUiTasks)context.getBean("adminUiTasks");
 	}
 
 
@@ -207,7 +207,7 @@ public class SystemEndpointImplTest {
 	@Test
 	public void TestL_timeOutTeachin() {
 		
-		boolean state = checkTeachinTimeout.checkTeachinTimeOutTestMethod();
+		boolean state = adminUiTasks.checkTeachinTimeOutTestMethod();
 		 
 		// Asserts
 		assertEquals(true, state);
