@@ -25,4 +25,10 @@ public interface TaskManager {
 	 */
 	void processDailyStats();
 	
+	/**
+	 * purgeStatsData
+	 * Every day at night purge DATA Stat 
+	 */
+	void purgeStatsDataMethod();
+	
 }

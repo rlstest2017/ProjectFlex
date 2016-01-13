@@ -22,6 +22,7 @@ public class DateTools {
 
 	/**
 	 * lastConnexionDate
+	 * @param lastConnexionDuration
 	 * @return
 	 */
 	public Date lastConnexionDate(String lastConnexionDuration) {
@@ -33,6 +34,22 @@ public class DateTools {
 		Date lastConnexionDate = cal.getTime();
 		LOGGER.debug("last accepted Date " +lastConnexionDuration +" days later: " + lastConnexionDate);
 		return lastConnexionDate;
+	}
+	
+	/**
+	 * lastAcceptedStatDate
+	 * @param keepStatDataInDaysValue
+	 * @return
+	 */
+	public Date lastAcceptedStatDate(String keepStatDataInDaysValue) {
+		Date now = new Date();
+		LOGGER.debug("Date now :" + now);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.add(Calendar.DAY_OF_YEAR, -Integer.valueOf(keepStatDataInDaysValue)); // <--365 jour -->
+		Date lastAcceptedStatDate = cal.getTime();
+		LOGGER.debug("last accepted Date " +keepStatDataInDaysValue +" days later: " + lastAcceptedStatDate);
+		return lastAcceptedStatDate;
 	}
 	
 	/**

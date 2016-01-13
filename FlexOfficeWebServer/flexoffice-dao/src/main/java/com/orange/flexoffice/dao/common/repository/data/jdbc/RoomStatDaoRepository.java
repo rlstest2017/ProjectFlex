@@ -1,5 +1,6 @@
 package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -129,7 +130,6 @@ public class RoomStatDaoRepository extends DataRepository<RoomStatDao> implement
 		return data;	
 	}
 
-
 	@Override
 	public RoomStatDao updateEndOccupancyDate(RoomStatDao data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -142,6 +142,12 @@ public class RoomStatDaoRepository extends DataRepository<RoomStatDao> implement
 	}
 	
 	@Override
+	public void deleteByBeginOccupancyDate(Date date) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("date", date);
+		jdbcTemplate.update(deleteByBeginOccupancyDateQuery, paramMap);
+	}
+	
+	@Override
 	protected String getTableName() {
 		return RoomStatDaoMetadata.ROOM_STAT_TABLE_NAME;
 	}
@@ -151,5 +157,5 @@ public class RoomStatDaoRepository extends DataRepository<RoomStatDao> implement
 		return RoomStatDaoMetadata.ROOM_STAT_ID_COL;
 		
 	}
-
+	
 }

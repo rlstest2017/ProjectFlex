@@ -32,6 +32,15 @@ public class AdminUiTasks {
 		LOGGER.debug("After checkTeachinTimeoutMethod. Current time is : "+ new Date());
     }
 	
+	// Every every day at 22:00
+	//second, minute, hour, day of month, month, day(s) of week
+	@Scheduled(cron="0 0 22 * * ?")
+    public void purgeStatsDataMethod()  {
+		LOGGER.debug("Before Method purgeStatsDataMethod execute every day at 22:00. Current time is :: "+ new Date());
+		taskManager.purgeStatsDataMethod();
+		LOGGER.debug("After Method purgeStatsDataMethod executed every day at 22:00. Current time is :: "+ new Date());
+    }
+	
 	// for tests
 	public boolean processDailyStatsTestMethod()  {
 		LOGGER.debug("Before Method executed every day at 23:00. Current time is :: "+ new Date());
@@ -47,5 +56,13 @@ public class AdminUiTasks {
 		LOGGER.debug("After checkTeachinTimeOutTestMethod. Current time is : "+ new Date());
 		return true;
     }
+	
+	// for tests
+	public boolean purgeStatsDataTestMethod()  {
+		LOGGER.debug("Before purgeStatsDataTestMethod. Current time is : "+ new Date());
+		taskManager.purgeStatsDataMethod();
+		LOGGER.debug("After purgeStatsDataTestMethod. Current time is : "+ new Date());
+		return true;
+	}
 	
 }

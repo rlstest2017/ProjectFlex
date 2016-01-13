@@ -100,9 +100,6 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {4, 1, 4, "2015-12-04 11:35:44.704504", "RESERVED"});
 		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {5, 1, 4, "now()", "RESERVED" });
 		
-		String sqlSerialRoomStatsInit = "ALTER TABLE room_stats ALTER COLUMN id SET DEFAULT 6";
-		jdbcTemplateForTest.execute(sqlSerialRoomStatsInit);
-		
 		return true;
 	}
 
@@ -116,9 +113,6 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {3, 2, "2015-12-10 11:30:00.704504", "2015-12-10 12:30:00.704504", "UNOCCUPIED"});
 		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {4, 2, "2015-12-10 14:00:00.704504", "2015-12-10 14:15:00.704504", "UNOCCUPIED" });
 		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {5, 3, "2015-12-09 11:35:44.704504", "now()", "UNOCCUPIED" });
-		
-		String sqlSerialRoomStatsInit = "ALTER TABLE room_stats ALTER COLUMN id SET DEFAULT 6";
-		jdbcTemplateForTest.execute(sqlSerialRoomStatsInit);
 		
 		return true;
 	}
@@ -140,10 +134,7 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {10, 3, "2015-12-15 23:00:00.210389", 23275 });
 		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {11, 4, "2015-12-15 23:00:00.210389", 28750 });
 		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {12, 5, "2015-12-15 23:00:00.210389", 7531 });
-		
-		String sqlSerialRoomDailysInit = "ALTER TABLE room_daily_occupancy ALTER COLUMN id SET DEFAULT 13";
-		jdbcTemplateForTest.execute(sqlSerialRoomDailysInit);
-		
+						
 		return true;
 	}
 	
@@ -165,9 +156,6 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {11, 4, "2015-11-12 23:00:00.210389", 28750 });
 		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {12, 5, "2015-11-13 23:00:00.210389", 7531 });
 		
-		String sqlSerialRoomDailysInit = "ALTER TABLE room_daily_occupancy ALTER COLUMN id SET DEFAULT 13";
-		jdbcTemplateForTest.execute(sqlSerialRoomDailysInit);
-		
 		return true;
 	}
 	
@@ -178,9 +166,6 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		String sqlRoomStats = "INSERT INTO teachin_sensors " +
 				"(id, room_id, gateway_id, teachin_status, user_id) VALUES (?, ?, ?, CAST(? AS teachinStatus), ?)";
 		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {1, 1, 1, "INITIALIZING", 3 });
-		
-		String sqlSerialTeachinInit = "ALTER TABLE teachin_sensors ALTER COLUMN id SET DEFAULT 2";
-		jdbcTemplateForTest.execute(sqlSerialTeachinInit);
 		
 		return true;
 	}
@@ -194,9 +179,6 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {2, null, null, "test1", "NOT_PAIRED", null, null });
 		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {3, null, null, "test2", "PAIRED_OK", null, null });
 		jdbcTemplateForTest.update(sqlRoomStats, new Object[] {4, null, null, "test3", "PAIRED_KO", null, null });
-		
-		String sqlSerialTeachinInit = "ALTER TABLE teachin_sensors ALTER COLUMN id SET DEFAULT 5";
-		jdbcTemplateForTest.execute(sqlSerialTeachinInit);
 		
 		return true;
 	}

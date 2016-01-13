@@ -1,5 +1,6 @@
 package com.orange.flexoffice.dao.common.repository.data;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -34,5 +35,7 @@ public interface RoomStatDaoOperations {
 	RoomStatDao updateBeginOccupancyDate(RoomStatDao data);
 	
 	RoomStatDao updateEndOccupancyDate(RoomStatDao data);
+	
+	void deleteByBeginOccupancyDate(Date date);
 		
 }

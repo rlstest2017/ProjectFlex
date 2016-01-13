@@ -3,6 +3,7 @@ package com.orange.flexoffice.dao.common.repository.data.jdbc;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_ACTIVE_USERS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_ROOM_BY_TYPE_TEMPLATE;
+
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_REQUESTED_ROOM_DAILY_AND_TYPE_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_TEACHIN_STATUS_TEMPLATE;
@@ -26,17 +27,20 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ROOMSTAT_BY_ROOMID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ROOMSTAT_BY_ROOMINFO_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ONE_TEMPLATE;
+
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_ALL_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_MAC_ADDRESS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_GATEWAY_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_SENSOR_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_IDENTIFIER_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_DAY_ROOM_DAILY_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_DATE_ROOM_STATS_TEMPLATE;
+
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_RESERVED_ROOMSTAT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOMSTAT_BY_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_OCCUPIED_ROOMSTAT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_UNOCCUPIED_ROOMSTAT_TEMPLATE;
-
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_ACCESS_TOKEN_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_BY_MAIL_TEMPLATE;
@@ -51,6 +55,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_SENSOR_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_SENSOR_STATUS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_SENSOR_ROOM_ID_TEMPLATE;
+
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_USER_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_USER_FROM_USERUI_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_GATEWAY_TEMPLATE;
@@ -144,6 +149,8 @@ public abstract class DataRepository<T extends Data>
 	protected final String deleteByGatewayIdQuery;
 	protected final String deleteBySensorIdQuery;
 	protected final String deleteByIdentifier;
+	protected final String deleteByDayQuery;
+	protected final String deleteByBeginOccupancyDateQuery;
 	private   final String deleteQuery;
 	protected   final String deleteAllQuery;
 	// COUNT QUERIES --------------
@@ -224,6 +231,8 @@ public abstract class DataRepository<T extends Data>
 		deleteByGatewayIdQuery = String.format(REMOVE_BY_GATEWAY_ID_TEMPLATE, getTableName());
 		deleteBySensorIdQuery = String.format(REMOVE_BY_SENSOR_ID_TEMPLATE, getTableName());
 		deleteByIdentifier = String.format(REMOVE_BY_IDENTIFIER_TEMPLATE, getTableName());
+		deleteByDayQuery = String.format(REMOVE_BY_DAY_ROOM_DAILY_TEMPLATE, getTableName());
+		deleteByBeginOccupancyDateQuery  = String.format(REMOVE_BY_DATE_ROOM_STATS_TEMPLATE, getTableName());
 		
 		// COUNT QUERIES ----------------------------------------------------------------------
 		countQuery = String.format(COUNT_TEMPLATE, getTableName());
@@ -256,7 +265,6 @@ public abstract class DataRepository<T extends Data>
 	public void delete(Long id) {
 		SqlParameterSource paramMap = new MapSqlParameterSource("id", id);
 		jdbcTemplate.update(deleteQuery, paramMap);
-		
 	}
 	
 	@Override

@@ -67,6 +67,21 @@ public class TaskManagerImpl implements TaskManager {
 	}
 	
 	@Override
+	public void purgeStatsDataMethod() {
+		// - Calculate Date with KEEP_STAT_DATA_IN_DAYS parameter
+		ConfigurationDao keepStatDataInDays = configRepository.findByKey(E_ConfigurationKey.KEEP_STAT_DATA_IN_DAYS.toString());
+		int keepStatDataInDaysValue = Integer.valueOf(keepStatDataInDays.getValue()); // in days	
+					
+		Date lastAcceptedStatDate = dateTools.lastAcceptedStatDate(String.valueOf(keepStatDataInDaysValue));
+		
+		// Delete all lines before lastAcceptedStatDate in room_stats & room_daily_occupancy
+		roomDailyRepository.deleteByDay(lastAcceptedStatDate);
+		roomStatsRepository.deleteByBeginOccupancyDate(lastAcceptedStatDate);
+		
+	}
+	
+	
+	@Override
 	public void checkTeachinTimeOut() {
 		try {
 		TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
@@ -170,6 +185,6 @@ public class TaskManagerImpl implements TaskManager {
 		
 		return index;
 	}
-	
+
 		
 }

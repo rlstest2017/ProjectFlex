@@ -1,5 +1,6 @@
 package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -63,6 +64,12 @@ public class RoomDailyOccupancyDaoRepository extends DataRepository<RoomDailyOcc
 		data.setId(id.longValue());
 		return data;
 	}
+
+	@Override
+	public void deleteByDay(Date day) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("day", day);
+		jdbcTemplate.update(deleteByDayQuery, paramMap);
+	}
 	
 	@Override
 	protected String getTableName() {
@@ -74,5 +81,6 @@ public class RoomDailyOccupancyDaoRepository extends DataRepository<RoomDailyOcc
 		return RoomDailyOccupancyDaoMetadata.ROOM_DAILY_OCCUPANCY_ROOM_ID_COL;
 		
 	}
+
 
 }

@@ -56,6 +56,10 @@ public final class DataSqlTemplate {
 			"delete from %s where sensor_id=:sensorId";
 	public static final String REMOVE_BY_IDENTIFIER_TEMPLATE = 
 			"delete from %s where identifier=:identifier";
+	public static final String REMOVE_BY_DAY_ROOM_DAILY_TEMPLATE = 
+			"delete from %s where day<:day";
+	public static final String REMOVE_BY_DATE_ROOM_STATS_TEMPLATE = 
+			"delete from %s where begin_occupancy_date<:date";
 	public static final String REMOVE_TEMPLATE = 
 			"delete from %s where id=:id";
 	public static final String REMOVE_ALL_TEMPLATE = 

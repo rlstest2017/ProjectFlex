@@ -359,4 +359,14 @@ public class RoomEndpointImplTest {
 		// Asserts
 		assertEquals(true, state);
 	}
+	
+	@Test
+	public void TestP_purgeStatsTask() {
+		// SetUp
+		boolean state = adminUiTasks.purgeStatsDataTestMethod();
+
+		// Asserts
+		assertEquals(true, state);
+	}
+	
 }
