@@ -113,15 +113,6 @@ CREATE TABLE configuration (
     description text
 );
 
-INSERT INTO configuration ("key", "value", description) VALUES
-    ('LAST_CONNECTION_DURATION', '15', 'This data is in days'),
-    ('OCCUPANCY_TIMEOUT', '3', 'This data is in minutes'),
-    ('BOOKING_DURATION', '300', 'This data is in secondes'),
-    ('LAST_RESERVED_COUNT', '0', 'This data is number of rooms to return, 0 means all rooms'),
-    ('DATE_BEGIN_DAY', '07:30', 'This data is in format hour:minutes'),
-    ('DATE_END_DAY', '20:00', 'This data is in format hour:minutes'),
-    ('TEACHIN_TIMEOUT', '15', 'This data is in minutes');
-
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
@@ -171,3 +162,15 @@ CREATE INDEX room_stats_room_id_idx ON room_stats USING btree (room_id);
 CREATE INDEX room_daily_occupancy_room_id_idx ON room_daily_occupancy USING btree (room_id);
 CREATE INDEX room_daily_occupancy_day_idx ON room_daily_occupancy USING btree (day);
 
+INSERT INTO configuration ("key", "value", description) VALUES
+    ('LAST_CONNECTION_DURATION', '15', 'This data is in days'),
+    ('OCCUPANCY_TIMEOUT', '3', 'This data is in minutes'),
+    ('BOOKING_DURATION', '300', 'This data is in secondes'),
+    ('LAST_RESERVED_COUNT', '0', 'This data is number of rooms to return, 0 means all rooms'),
+    ('DATE_BEGIN_DAY', '07:30', 'This data is in format hour:minutes'),
+    ('DATE_END_DAY', '20:00', 'This data is in format hour:minutes'),
+    ('TEACHIN_TIMEOUT', '15', 'This data is in minutes'),
+    ('KEEP_STAT_DATA_IN_DAYS', '365', 'This data is in days');
+
+INSERT INTO users (first_name, last_name, email, password, role) VALUES ('admin', 'admin', 'admin@oab.com', 'flexoffice', 'ADMIN');
+			
