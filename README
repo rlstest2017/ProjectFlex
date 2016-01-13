@@ -8,8 +8,10 @@ Install  & Configure Tomcat:
 ----------------------------
 # sudo apt-get install tomcat7 tomcat7-admin
 # tar xzvf WinDrive/TAR/config.tar.gz
-# cd /home/oab/Config
-# sudo chown -vR tomcat7: tomcat7 *
+# mkdir /home/flexoffice/flexoffice-webserver/Config
+# mkdir /home/flexoffice/flexoffice-webserver/Config/logs
+# cd /home/flexoffice/flexoffice-webserver/Config
+# sudo chown -vR tomcat7:tomcat7 *
 # cd /var/lib/tomcat7/conf
 # sudo nano tomcat-users.xml 
   add :
@@ -75,10 +77,10 @@ Pour sortir :
      (http://docs.postgresql.fr/8.0/sql-alteruser.html)
   #psql> ALTER ROLE flexoffice WITH LOGIN;
   Pour modifier le mot de passe :
-  #psql> ALTER USER flexoffice WITH PASSWORD 'oab'; 
+  #psql> ALTER USER flexoffice WITH PASSWORD 'flexoffice'; 
    
   Créer un mot de passe pour le compte PostGres :
-  #psql> ALTER USER postgres WITH PASSWORD 'oab';
+  #psql> ALTER USER postgres WITH PASSWORD 'flexoffice';
 
   lancer la cmd en dehors de psql    
   > createdb FlexOffice_Test
