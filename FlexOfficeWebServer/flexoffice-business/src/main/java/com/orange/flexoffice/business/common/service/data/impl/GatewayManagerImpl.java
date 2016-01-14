@@ -370,7 +370,7 @@ public class GatewayManagerImpl implements GatewayManager {
 							commandToSendToGateway.setCommand(EnumCommandModel.NONE);
 							LOGGER.debug( "setted command in ONLINE => RUNNING case, is :" + commandToSendToGateway.getCommand().toString() );
 						} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString()))  {
-							commandToSendToGateway.setCommand(EnumCommandModel.NONE);
+							commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
 							LOGGER.debug( "setted command in ONLINE => ENDED case, is :" + commandToSendToGateway.getCommand().toString() );
 						} 		
 					} else { // OFFLINE or ERRORs
