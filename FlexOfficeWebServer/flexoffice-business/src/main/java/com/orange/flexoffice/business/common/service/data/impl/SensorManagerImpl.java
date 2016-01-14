@@ -261,27 +261,33 @@ public class SensorManagerImpl implements SensorManager {
 		// process teachin
 		try {
 			TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
+			
 			// Save teachin_sensors
 			if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()) || teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()))  {
-				SensorDao sensor = sensorRepository.findBySensorId(identifier);
-				
+				//SensorDao sensor = sensorRepository.findBySensorId(identifier);
 				TeachinSensorDao teachinSensor = new TeachinSensorDao();
 				teachinSensor.setSensorIdentifier(identifier);
-				
-				if (sensor.getRoomId() == 0) {
-					teachinSensor.setSensorStatus(E_SensorTeachinStatus.NOT_PAIRED.toString());
-				} else {
-					RoomDao room = roomRepository.findByRoomId(Long.valueOf(sensor.getRoomId()));
-					GatewayDao gateway = gatewayRepository.findByGatewayId(room.getGatewayId());
-					if (gateway.getMacAddress().equals(gatewayMacAdress)) {
-						teachinSensor.setSensorStatus(E_SensorTeachinStatus.PAIRED_OK.toString());
-					} else {
-						teachinSensor.setSensorStatus(E_SensorTeachinStatus.PAIRED_KO.toString());
-					}
-				}
+				//if (sensor.getRoomId() == 0) {
+				//	teachinSensor.setSensorStatus(E_SensorTeachinStatus.NOT_PAIRED.toString());
+				//} else {
+					//RoomDao room = roomRepository.findByRoomId(Long.valueOf(sensor.getRoomId()));
+					//GatewayDao gateway = gatewayRepository.findByGatewayId(room.getGatewayId());
+					//if (gateway.getMacAddress().equals(gatewayMacAdress)) {
+					//	teachinSensor.setSensorStatus(E_SensorTeachinStatus.PAIRED_OK.toString());
+					//} else {
+				teachinSensor.setSensorStatus(E_SensorTeachinStatus.PAIRED_KO.toString());
+					//}
+				//}
 				
 				teachinRepository.saveTechinSensor(teachinSensor);
 				teachinRepository.updateTeachinDate(teachin);
+				
+				// Set Gateway to RESET 
+				GatewayDao gateway = gatewayRepository.findByMacAddress(gatewayMacAdress);
+				gateway.setId(gateway.getId());
+				gateway.setCommand(E_CommandModel.RESET.toString());
+				gatewayRepository.updateGatewayCommand(gateway);
+				LOGGER.debug("RESET command has set in table for gateway id #: " + gateway.getId());
 			}
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.error("SensorManager.processTeachinSensor : There is no activate teachin", e);

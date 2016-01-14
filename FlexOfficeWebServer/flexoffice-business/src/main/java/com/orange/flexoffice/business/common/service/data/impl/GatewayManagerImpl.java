@@ -347,11 +347,9 @@ public class GatewayManagerImpl implements GatewayManager {
 						commandToSendToGateway.setCommand(EnumCommandModel.TEACHIN);
 						LOGGER.debug( "setted command in ONTEACHIN => INITIALIZING case, is :" + commandToSendToGateway.getCommand().toString() );
 					} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString())) { // status RUNNING
-						commandToSendToGateway.setRoomId(teachin.getRoomId());
-						commandToSendToGateway.setCommand(EnumCommandModel.NONE);
+						commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
 						LOGGER.debug( "setted command in ONTEACHIN => RUNNING case, is :" + commandToSendToGateway.getCommand().toString() );
 					} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
-						commandToSendToGateway.setRoomId(teachin.getRoomId());
 						commandToSendToGateway.setCommand(EnumCommandModel.STOPTEACHIN);
 						LOGGER.debug( "setted command in ONTEACHIN => ENDED case, is :" + commandToSendToGateway.getCommand().toString() );
 					}
@@ -359,9 +357,14 @@ public class GatewayManagerImpl implements GatewayManager {
 					if (gatewayStatus.equals(E_GatewayStatus.ONLINE.toString())) {
 						// the teachin is founded (teachin_status not null)
 						if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()))  {
-							LOGGER.debug( "In ONLINE => INITIALIZING state teachin will be send TEACHIN Command " );
-							commandToSendToGateway.setRoomId(teachin.getRoomId());
-							commandToSendToGateway.setCommand(EnumCommandModel.TEACHIN);
+							if (commandGateway != null && commandGateway.equals(E_CommandModel.RESET.toString())) {
+								LOGGER.debug( "In ONLINE => INITIALIZING + RESET Command None" );
+								commandToSendToGateway.setCommand(EnumCommandModel.NONE);
+							} else {
+								LOGGER.debug( "In ONLINE => INITIALIZING state teachin will be send TEACHIN Command " );
+								commandToSendToGateway.setRoomId(teachin.getRoomId());
+								commandToSendToGateway.setCommand(EnumCommandModel.TEACHIN);
+							}
 							LOGGER.debug( "setted command in ONLINE => INITIALIZING case, is :" + commandToSendToGateway.getCommand().toString() );
 						} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()))  {
 							// update status to ended
@@ -434,7 +437,7 @@ public class GatewayManagerImpl implements GatewayManager {
 	private GatewayCommand setCommandToSend(String gatewayStatus, Long gatewayId, String commandGateway) {
 		GatewayCommand commandStateProcess = new GatewayCommand();
 		
-		if (gatewayStatus.equals(E_GatewayStatus.ONLINE.toString())) {
+		if (gatewayStatus.equals(E_GatewayStatus.ONLINE.toString()) || gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
 			if (commandGateway != null && commandGateway.equals(E_CommandModel.RESET.toString())) {
 				commandStateProcess.setCommand(EnumCommandModel.RESET);
 				LOGGER.debug("RESET command has sent to gateway id #: " + gatewayId);

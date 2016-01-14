@@ -21,6 +21,7 @@ import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_CommandModel;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
@@ -126,10 +127,19 @@ public class RoomManagerImpl implements RoomManager {
 
 	@Override
 	public RoomDao save(RoomDao roomDao) throws DataAlreadyExistsException {
-
 		try {
 			// Save RoomDao
-			return roomRepository.saveRoom(roomDao);
+			RoomDao room = roomRepository.saveRoom(roomDao);
+
+			// Set Gateway to RESET 
+			GatewayDao gateway = new GatewayDao();
+			gateway.setId(room.getGatewayId());
+			gateway.setCommand(E_CommandModel.RESET.toString());
+			gatewayRepository.updateGatewayCommand(gateway);
+			LOGGER.debug("RESET command has set in table for gateway id #: " + room.getGatewayId());
+			
+			return room;
+			
 		} catch (DataIntegrityViolationException e) {
 			LOGGER.error("RoomManager.save : Room already exists", e);
 			throw new DataAlreadyExistsException("RoomManager.save : Room already exists");
@@ -203,6 +213,14 @@ public class RoomManagerImpl implements RoomManager {
 				} else {
 					// Delete Room
 					roomRepository.delete(id);
+					
+					// Set Gateway to RESET 
+					GatewayDao gateway = new GatewayDao();
+					gateway.setId(room.getGatewayId());
+					gateway.setCommand(E_CommandModel.RESET.toString());
+					gatewayRepository.updateGatewayCommand(gateway);
+					LOGGER.debug("RESET command has set in table for gateway id #: " + room.getGatewayId());
+					
 				}
 			} else {
 				LOGGER.error("RoomManager.delete : Room #" + id + " is reserved by userId:" + room.getUserId());

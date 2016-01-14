@@ -273,6 +273,7 @@ public class SensorApiEndpointImplTest {
 			expectedResult = true;
 
 		} catch(WebApplicationException e ) {
+			
 		}
 
 		// Assert
