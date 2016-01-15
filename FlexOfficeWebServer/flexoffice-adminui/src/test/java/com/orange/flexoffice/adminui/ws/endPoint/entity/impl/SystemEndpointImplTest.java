@@ -163,9 +163,10 @@ public class SystemEndpointImplTest {
 		try {
 			// Test
 			systemEndpoint.cancelTeachin();
+			expectedResult = true;
 			
 		} catch (WebApplicationException e) {
-			expectedResult = true;
+			
 		}
 		
 		// Asserts
