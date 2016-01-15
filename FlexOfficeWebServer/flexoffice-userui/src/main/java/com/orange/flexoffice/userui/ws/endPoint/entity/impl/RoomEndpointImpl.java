@@ -312,13 +312,21 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				try {
 					// Get user object from DB
 					UserDao userDao = userManager.find(userId);
-					// Compute tenant name
-					tenant = userDao.getFirstName() + " " + userDao.getLastName();
-					if (tenant.isEmpty()) {
-						tenant = userDao.getEmail();
-					}	
 					
-
+					// Compute tenant name
+					if (userDao.getFirstName() == null) {
+						userDao.setFirstName("");
+					}
+					
+					if (userDao.getLastName() == null) {
+						userDao.setLastName("");
+					} 
+					
+					tenant = userDao.getFirstName() + " " + userDao.getLastName();
+					if (tenant.trim().isEmpty()) {
+						tenant = userDao.getEmail();
+					}
+	
 				} catch(DataNotExistsException e ) {
 					LOGGER.info("UserUi Get rooms / Get room id : user not found on room " + roomName, e);
 				}
@@ -351,11 +359,28 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			} else {
 				tenant = factory.createUserSummary();
 				tenant.setId(userDao.getId().toString());
-				// Compute label
-				tenant.setLabel(userDao.getFirstName() + " " + userDao.getLastName());
-				tenant.setFirstName(userDao.getFirstName());
-				tenant.setLastName(userDao.getLastName());
-				tenant.setEmail(userDao.getEmail());
+				
+				// Compute tenant
+				if (userDao.getFirstName() != null) {
+					tenant.setFirstName(userDao.getFirstName());
+				} else {
+					tenant.setFirstName("");
+				}
+				
+				if (userDao.getLastName() != null) {
+					tenant.setLastName(userDao.getLastName());
+				} else {
+					tenant.setLastName("");
+				}
+				
+				// label field
+				String label = userDao.getFirstName() + " " + userDao.getLastName();
+				if (label.trim().isEmpty()) {
+					label = userDao.getEmail();
+				}
+				
+				tenant.setLabel(label.trim());
+				
 			}
 		}
 
