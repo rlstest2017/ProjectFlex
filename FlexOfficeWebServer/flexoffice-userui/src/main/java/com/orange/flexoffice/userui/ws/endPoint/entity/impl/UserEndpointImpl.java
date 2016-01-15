@@ -61,14 +61,32 @@ public class UserEndpointImpl implements UserEndpoint {
 
 			UserSummary userSummary = factory.createUserSummary();
 			userSummary.setId(data.getId().toString());
-			userSummary.setLabel(data.getFirstName() + " " + data.getLastName());
-			userSummary.setFirstName(data.getFirstName());
-			userSummary.setLastName(data.getLastName());
 			userSummary.setEmail(data.getEmail());
+			
+			if (data.getFirstName() != null) {
+				userSummary.setFirstName(data.getFirstName());
+			} else {
+				data.setFirstName("");
+			}
+			
+			if (data.getLastName() != null) {
+				userSummary.setLastName(data.getLastName());
+			} else {
+				data.setLastName("");
+			}
+			
 			if (data.getRoomId() != null) {
 				userSummary.setRoomId(data.getRoomId());
 			}
 
+			// label field
+			String label = data.getFirstName() + " " + data.getLastName();
+			if (label.trim().isEmpty()) {
+				label = data.getEmail();
+			}
+			
+			userSummary.setLabel(label.trim());
+			
 			LOGGER.info( "End call UserEndpoint.getUser at: " + new Date() );
 
 			return factory.createUserSummary(userSummary).getValue();
