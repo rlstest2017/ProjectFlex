@@ -48,6 +48,9 @@ public class TaskManagerImpl implements TaskManager {
 
 	@Override
 	public void checkReservationTimeOut() {
+		
+		LOGGER.debug(" Begin TaskManager.checkReservationTimeOut method : " + new Date());
+		
 		RoomStatDao roomStat = new RoomStatDao();
 		roomStat.setRoomInfo(E_RoomInfo.RESERVED.toString());
 		// 1 - Get RoomStats with room_info='RESERVED'
@@ -67,10 +70,15 @@ public class TaskManagerImpl implements TaskManager {
 				roomStatsRepository.updateRoomStatById(roomstat);
 			}
 		}
+		
+		LOGGER.debug(" End TaskManager.checkReservationTimeOut method : " + new Date());
 	}
 	
 	@Override
 	public void purgeStatsDataMethod() {
+		
+		LOGGER.debug(" Begin TaskManager.purgeStatsDataMethod method : " + new Date());
+		
 		// - Calculate Date with KEEP_STAT_DATA_IN_DAYS parameter
 		ConfigurationDao keepStatDataInDays = configRepository.findByKey(E_ConfigurationKey.KEEP_STAT_DATA_IN_DAYS.toString());
 		int keepStatDataInDaysValue = Integer.valueOf(keepStatDataInDays.getValue()); // in days	
@@ -81,11 +89,15 @@ public class TaskManagerImpl implements TaskManager {
 		roomDailyRepository.deleteByDay(lastAcceptedStatDate);
 		roomStatsRepository.deleteByBeginOccupancyDate(lastAcceptedStatDate);
 		
+		LOGGER.debug(" End TaskManager.purgeStatsDataMethod method : " + new Date());
 	}
 	
 	
 	@Override
 	public void checkTeachinTimeOut() {
+		
+		LOGGER.debug(" Begin TaskManager.checkTeachinTimeOut method : " + new Date());
+		
 		try {
 		TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
 
@@ -102,12 +114,12 @@ public class TaskManagerImpl implements TaskManager {
 				teachinRepository.updateTeachinStatus(teachin);
 			}
 		}
-
-		
 		
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			// Table teachin_sensors is empty
 	    }
+		
+		LOGGER.debug(" End TaskManager.checkTeachinTimeOut method : " + new Date());
 		
 	}
 
