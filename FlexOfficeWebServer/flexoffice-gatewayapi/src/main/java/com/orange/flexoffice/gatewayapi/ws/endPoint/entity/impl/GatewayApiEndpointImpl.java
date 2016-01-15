@@ -115,8 +115,6 @@ public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 			
 			GatewayReturn returnCommand = factory.createGatewayReturn();
 			
-			LOGGER.debug( "command roomId is : " + command.getRoomId());
-			
 			if (command.getRoomId() > 0) {
 				returnCommand.setRoomId(BigInteger.valueOf(command.getRoomId()));
 				LOGGER.debug( "roomId is send to Gateway : " + BigInteger.valueOf(command.getRoomId()));

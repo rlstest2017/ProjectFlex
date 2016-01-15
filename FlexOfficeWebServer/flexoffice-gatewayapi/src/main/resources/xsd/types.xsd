@@ -8,6 +8,7 @@
 	 	<xsd:enumeration value="UNSTABLE"/>
 	 	<xsd:enumeration value="UNSTABLE_VOLTAGE"/>
 	 	<xsd:enumeration value="UNSTABLE_RSSI"/>
+	 	<xsd:enumeration value="TEACHIN_ERROR"/>
 	 	<xsd:enumeration value="OFFLINE"/>
 	 </xsd:restriction>
 	</xsd:simpleType>

@@ -69,7 +69,8 @@ public interface SensorManager {
 	 * processTeachinSensor
 	 * @param identifier
 	 * @param gatewayMacAdress
+	 * @param isFromAddSensor
 	 */
-	void processTeachinSensor(String identifier, String gatewayMacAdress);
+	void processTeachinSensor(String identifier, String gatewayMacAdress, Boolean isFromAddSensor);
 
 }

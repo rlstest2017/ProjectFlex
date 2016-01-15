@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.gatewayapi.ws.endPoint.entity.SensorApiEndpoint;
+import com.orange.flexoffice.gatewayapi.ws.model.ESensorStatus;
 import com.orange.flexoffice.gatewayapi.ws.model.SensorInput;
 import com.orange.flexoffice.gatewayapi.ws.model.SensorNewSummary;
 import com.orange.flexoffice.gatewayapi.ws.utils.ErrorMessageHandler;
@@ -73,7 +74,7 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 		} catch (DataAlreadyExistsException e) {
 			LOGGER.debug("DataAlreadyExistsException in SensorApiEndpoint.addSensor with message :", e);
 			// process Sensor Teachin if Teachin exist & actif
-			sensorManager.processTeachinSensor(sensorInput.getId(), sensorInput.getGatewayId());
+			sensorManager.processTeachinSensor(sensorInput.getId(), sensorInput.getGatewayId(), true);
 		} catch (WrongProfileException ex1) {
 			LOGGER.debug("WrongProfileException in SensorApiEndpoint.addSensor with message :", ex1);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_38, Response.Status.METHOD_NOT_ALLOWED));
@@ -94,41 +95,46 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 		
 		try {
 			
-			SensorDao sensorDao = sensorManager.find(identifier);
-			sensorDao.setStatus(sensor.getSensorStatus().toString());
-			if (sensor.getOccupancyInfo() != null) {
-				sensorDao.setOccupancyInfo(sensor.getOccupancyInfo().toString());
-			}
-			
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("updateSensor with room parameters :");
-				final StringBuilder message = new StringBuilder( 1000 );
-				message.append( "room Id :" );
-				message.append( sensorDao.getRoomId() );
-				message.append( "\n" );
-				message.append( "sensor room Temperature Info :" );
-				message.append( sensor.getTemperature() );
-				message.append( "\n" );
-				message.append( "sensor room Humidity Info :" );
-				message.append( sensor.getHumidity() );
-				message.append( "\n" );
-				message.append( "sensor Occupancy Info :" );
-				message.append( sensor.getOccupancyInfo() );
-				message.append( "\n" );
-				LOGGER.debug( message.toString() );
-			}
-			
-			RoomDao roomDao = null;
-			if ((sensorDao.getRoomId() != null) && (sensorDao.getRoomId() != 0)) {
-				roomDao = new RoomDao();
-				roomDao.setId(Long.valueOf(sensorDao.getRoomId()));
-				roomDao.setTemperature(sensor.getTemperature());
-				roomDao.setHumidity(sensor.getHumidity());
-				LOGGER.debug("RoomDao is instanciated");
-			}
+			if (ESensorStatus.TEACHIN_ERROR.toString().equals(sensor.getSensorStatus().toString())) { // process teachin error
 	
-			sensorManager.updateStatus(sensorDao, roomDao);
-
+				sensorManager.processTeachinSensor(identifier, null, false);
+					
+			} else { // process updateSensor
+				SensorDao sensorDao = sensorManager.find(identifier);
+				sensorDao.setStatus(sensor.getSensorStatus().toString());
+				if (sensor.getOccupancyInfo() != null) {
+					sensorDao.setOccupancyInfo(sensor.getOccupancyInfo().toString());
+				}
+				
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("updateSensor with room parameters :");
+					final StringBuilder message = new StringBuilder( 1000 );
+					message.append( "room Id :" );
+					message.append( sensorDao.getRoomId() );
+					message.append( "\n" );
+					message.append( "sensor room Temperature Info :" );
+					message.append( sensor.getTemperature() );
+					message.append( "\n" );
+					message.append( "sensor room Humidity Info :" );
+					message.append( sensor.getHumidity() );
+					message.append( "\n" );
+					message.append( "sensor Occupancy Info :" );
+					message.append( sensor.getOccupancyInfo() );
+					message.append( "\n" );
+					LOGGER.debug( message.toString() );
+				}
+				
+				RoomDao roomDao = null;
+				if ((sensorDao.getRoomId() != null) && (sensorDao.getRoomId() != 0)) {
+					roomDao = new RoomDao();
+					roomDao.setId(Long.valueOf(sensorDao.getRoomId()));
+					roomDao.setTemperature(sensor.getTemperature());
+					roomDao.setHumidity(sensor.getHumidity());
+					LOGGER.debug("RoomDao is instanciated");
+				}
+		
+				sensorManager.updateStatus(sensorDao, roomDao);
+			}
 		} catch (DataNotExistsException e){
 
 			LOGGER.debug("DataNotExistsException in SensorEndpoint.updateSensor with message :", e);

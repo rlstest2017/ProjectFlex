@@ -22,11 +22,13 @@ import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
+import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_CommandModel;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_SensorStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
@@ -36,6 +38,7 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomStatDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.TeachinSensorsDaoRepository;
 
@@ -54,6 +57,8 @@ public class GatewayManagerImpl implements GatewayManager {
 	private GatewayDaoRepository gatewayRepository;
 	@Autowired
 	private RoomDaoRepository roomRepository;
+	@Autowired
+	private RoomStatDaoRepository roomStatRepository;
 	@Autowired
 	private SensorDaoRepository sensorRepository;
 	@Autowired
@@ -226,16 +231,44 @@ public class GatewayManagerImpl implements GatewayManager {
 			gatewayDao.setId(gateway.getId());
 			
 			// update Gateway Status
-			gatewayDao.setCommand(gateway.getCommand()); // ne pas changer l'état courant de la colon Command !!!
+			gatewayDao.setCommand(gateway.getCommand()); // Don't change the present state in DB on column Command !!!
 			gatewayRepository.updateGatewayStatus(gatewayDao);
 			
 			// update Gateway Alert
 			Long gatewayId =gateway.getId();
 			alertManager.updateGatewayAlert(gatewayId, status);
 			
-			// process commandGateway
+
+			// check room & room_stats states
+			if ( status.equals(E_GatewayStatus.OFFLINE.toString()) || status.equals(E_GatewayStatus.ERROR_NO_USB_DEVICE.toString()) || status.equals(E_GatewayStatus.ERROR_FIFO_FILE.toString()) ) {
+				// set all rooms of the Gateway at UNKNOWN Status & RoomStat room_info to UNOCCUPIED
+				List<RoomDao> rooms = roomRepository.findByGatewayId(gatewayId);
+				for (RoomDao roomDao : rooms) {
+					// set Room Status to UNKNOWN
+					LOGGER.debug("RoomDao in gatewayManager updateStatus() is going to set RoomStatus to UNKNOWN");
+					roomDao.setStatus(E_RoomStatus.UNKNOWN.toString());
+					roomRepository.updateRoomStatus(roomDao); // update Room Status to UNKNOWN
+					
+					// set RoomStatus room_info UNOCCUPIED if there was OCCUPIED !!!
+					try {
+						// if roomId & room_info=OCCUPIED in roomStats
+						RoomStatDao data = new RoomStatDao();
+						data.setRoomId(roomDao.getId().intValue());
+						data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
+						RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
+						if (roomStat != null) {
+							// update by end_occupancy_date=now() & room_info=UNOCCUPIED
+							roomStatRepository.updateEndOccupancyDate(roomStat);
+						} 
+					} catch(IncorrectResultSizeDataAccessException e ) {
+						LOGGER.debug("GatewayManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId(), e);
+					}
+				}
+			} 
+			
+			// process commandGateway & teachin state
 			String commandGateway = gateway.getCommand();
-			return processCommand(status, gatewayId, commandGateway);
+			return	processCommand(status, gatewayId, commandGateway);
 			
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("gateway is not found", e);

@@ -23,6 +23,7 @@ import com.orange.flexoffice.dao.common.model.enumeration.E_CommandModel;
 import com.orange.flexoffice.dao.common.model.enumeration.E_OccupancyInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_SensorStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_SensorTeachinStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
@@ -80,7 +81,6 @@ public class SensorManagerImpl implements SensorManager {
 
 	@Override
 	public SensorDao save(SensorDao sensorDao, String gatewayMacAdress) throws DataAlreadyExistsException {
-
 		try {
 			if (sensorDao.getRoomId() == null) {
 				// Set 0 as room id
@@ -117,7 +117,6 @@ public class SensorManagerImpl implements SensorManager {
 
 	@Override
 	public SensorDao update(SensorDao sensorDao) throws DataNotExistsException {
-
 		try {
 			if (sensorDao.getRoomId() == null) {
 				// Set 0 as room id
@@ -137,7 +136,6 @@ public class SensorManagerImpl implements SensorManager {
 	@Override
 	public void updateStatus(SensorDao sensorDao, RoomDao roomDao) throws DataNotExistsException {
 		try {
-			
 			// update SensorDao status & occupancyInfo
 			sensorRepository.updateSensorStatus(sensorDao); 
 						
@@ -147,59 +145,53 @@ public class SensorManagerImpl implements SensorManager {
 			alertManager.updateSensorAlert(sensorId, status);
 			
 			if (roomDao != null) {
-				if (sensorDao.getOccupancyInfo() != null) {
-					if (sensorDao.getOccupancyInfo().equals(E_OccupancyInfo.OCCUPIED.toString())) { // L'info room OCCUPIED
-						LOGGER.debug("RoomDao in updateStatus() is going to set RoomStatus to OCCUPIED");
-						roomDao.setStatus(E_RoomStatus.OCCUPIED.toString());
-						//-------------------------------------------------------------------------
-						roomRepository.updateRoomStatus(roomDao); // update Room Status to OCCUPIED
-						//-------------------------------------------------------------------------
-						RoomStatDao data = new RoomStatDao();
-						data.setRoomId(roomDao.getId().intValue());
-						data.setRoomInfo(E_RoomInfo.RESERVED.toString());	
-							try {
-								// if roomId & room_info=RESERVED in roomStats
-								RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
-								if (roomStat != null) {
-									// update begin_occupancy_date=now() & isReservationHonored=true & room_info=OCCUPIED
-									roomStatRepository.updateBeginOccupancyDate(roomStat);
-								} else {
-									// create a new line with roomId, begin_occupancy_date=now() & room_info=OCCUPIED if not created yet !!!
-									data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
-									processOccupiedRoom(data);
-								}
-							} catch(IncorrectResultSizeDataAccessException e ) {
-								LOGGER.debug("SensorManager.updateStatus : There is no RESERVED roomStat with roomId #" + roomDao.getId(), e);
-								// create a new line with roomId, begin_occupancy_date=now() & room_info=OCCUPIED if not created yet !!!
-								data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
-								processOccupiedRoom(data);
-							}
-					} else if (sensorDao.getOccupancyInfo().equals(E_OccupancyInfo.UNOCCUPIED.toString())) {  // L'info room UNOCCUPIED
-						// search in DB if another sensor has said thar the room is OCCUPIED 
-						List<SensorDao> sensors = sensorRepository.findByRoomIdAndOccupiedInfo(roomDao.getId());
-						if ((sensors == null) || (sensors.isEmpty())) {  // L'info room UNOCCUPIED est prise en compte
-							LOGGER.debug("RoomDao in updateStatus() is going to set RoomStatus to FREE");
-							roomDao.setStatus(E_RoomStatus.FREE.toString());
-							//---------------------------------------------------------------------
-							roomRepository.updateRoomStatus(roomDao); // update Room Status to FREE
-							//---------------------------------------------------------------------
-							try {
-								// if roomId & room_info=OCCUPIED in roomStats
-								RoomStatDao data = new RoomStatDao();
-								data.setRoomId(roomDao.getId().intValue());
-								data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
-								RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
-								if (roomStat != null) {
-									// update by end_occupancy_date=now() & room_info=UNOCCUPIED
-									roomStatRepository.updateEndOccupancyDate(roomStat);
-								} 
-							} catch(IncorrectResultSizeDataAccessException e ) {
-								LOGGER.debug("SensorManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId(), e);
+				
+				// if Status is OFFLINE
+				if (status.equals(E_SensorStatus.OFFLINE.toString())) {
+					
+					// check if there is another sensor in room not OFFLINE
+					boolean isThereAnotherNotOfflineSensor = false;
+					List<SensorDao> sensors = sensorRepository.findByRoomId(roomDao.getId());
+					for (SensorDao sens : sensors) {
+						if (sens.getId() != sensorId) {
+							if (!sens.getStatus().equals(E_SensorStatus.OFFLINE.toString())) {
+								isThereAnotherNotOfflineSensor = true;
+								break;
 							}
 						}
 					}
+					
+					if (!isThereAnotherNotOfflineSensor) { // No other sensor with status other than OFFLINE :(  
+						// set Room Status to UNKNOWN
+						LOGGER.debug("RoomDao in updateStatus() is going to set RoomStatus to UNKNOWN");
+						roomDao.setStatus(E_RoomStatus.UNKNOWN.toString());
+						roomRepository.updateRoomStatus(roomDao); // update Room Status to UNKNOWN
+						
+						// set RoomStatus room_info UNOCCUPIED if there was OCCUPIED !!!
+						try {
+							// if roomId & room_info=OCCUPIED in roomStats
+							RoomStatDao data = new RoomStatDao();
+							data.setRoomId(roomDao.getId().intValue());
+							data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
+							RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
+							if (roomStat != null) {
+								// update by end_occupancy_date=now() & room_info=UNOCCUPIED
+								roomStatRepository.updateEndOccupancyDate(roomStat);
+							} 
+						} catch(IncorrectResultSizeDataAccessException e ) {
+							LOGGER.debug("SensorManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId(), e);
+						}
+					}
+					
+					
 				} else {
-					LOGGER.debug("SensorDao occupancyInfo propertie in updateStatus() method is null");
+					if (sensorDao.getOccupancyInfo() != null) {
+						//--------------------------------------
+						processOccupancyInfo(sensorDao, roomDao);
+						//--------------------------------------
+					} else {
+						LOGGER.debug("SensorDao occupancyInfo propertie in updateStatus() method is null");
+					}
 				}
 			} else {
 				LOGGER.debug("RoomDao in updateStatus() method is null");
@@ -254,7 +246,7 @@ public class SensorManagerImpl implements SensorManager {
 	 * @param gatewayMacAdress
 	 */
 	@Override
-	public void processTeachinSensor(String identifier, String gatewayMacAdress) {
+	public void processTeachinSensor(String identifier, String gatewayMacAdress, Boolean isFromAddSensor) {
 		// compute status PAIRED_OK or PAIRED_KO & save data in techin_sensors 
 		LOGGER.debug("identifier is :" + identifier);
 		
@@ -264,30 +256,25 @@ public class SensorManagerImpl implements SensorManager {
 			
 			// Save teachin_sensors
 			if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()) || teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()))  {
-				//SensorDao sensor = sensorRepository.findBySensorId(identifier);
 				TeachinSensorDao teachinSensor = new TeachinSensorDao();
 				teachinSensor.setSensorIdentifier(identifier);
-				//if (sensor.getRoomId() == 0) {
-				//	teachinSensor.setSensorStatus(E_SensorTeachinStatus.NOT_PAIRED.toString());
-				//} else {
-					//RoomDao room = roomRepository.findByRoomId(Long.valueOf(sensor.getRoomId()));
-					//GatewayDao gateway = gatewayRepository.findByGatewayId(room.getGatewayId());
-					//if (gateway.getMacAddress().equals(gatewayMacAdress)) {
-					//	teachinSensor.setSensorStatus(E_SensorTeachinStatus.PAIRED_OK.toString());
-					//} else {
-				teachinSensor.setSensorStatus(E_SensorTeachinStatus.PAIRED_KO.toString());
-					//}
-				//}
+				if (isFromAddSensor) {
+					teachinSensor.setSensorStatus(E_SensorTeachinStatus.PAIRED_KO.toString());
+				} else {
+					teachinSensor.setSensorStatus(E_SensorTeachinStatus.PAIRED_OK.toString());
+				}
 				
 				teachinRepository.saveTechinSensor(teachinSensor);
 				teachinRepository.updateTeachinDate(teachin);
 				
-				// Set Gateway to RESET 
-				GatewayDao gateway = gatewayRepository.findByMacAddress(gatewayMacAdress);
-				gateway.setId(gateway.getId());
-				gateway.setCommand(E_CommandModel.RESET.toString());
-				gatewayRepository.updateGatewayCommand(gateway);
-				LOGGER.debug("RESET command has set in table for gateway id #: " + gateway.getId());
+				if (isFromAddSensor) {
+					// Set Gateway to RESET 
+					GatewayDao gateway = gatewayRepository.findByMacAddress(gatewayMacAdress);
+					gateway.setId(gateway.getId());
+					gateway.setCommand(E_CommandModel.RESET.toString());
+					gatewayRepository.updateGatewayCommand(gateway);
+					LOGGER.debug("RESET command has set in table for gateway id #: " + gateway.getId());
+				}
 			}
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.error("SensorManager.processTeachinSensor : There is no activate teachin", e);
@@ -296,6 +283,10 @@ public class SensorManagerImpl implements SensorManager {
 			
 	}
 
+	/**
+	 * processOccupiedRoom
+	 * @param data
+	 */
 	private void processOccupiedRoom(RoomStatDao data) {
 		try {
 			// if roomId & room_info=OCCUPIED in roomStats
@@ -309,8 +300,66 @@ public class SensorManagerImpl implements SensorManager {
 			// create a new line with roomId, begin_occupancy_date=now() & room_info=OCCUPIED
 			roomStatRepository.saveOccupiedRoomStat(data);
 		}
-
 	}
 	
+	/**
+	 * processOccupancyInfo
+	 * @param sensorDao
+	 * @param roomDao
+	 */
+	private void processOccupancyInfo(SensorDao sensorDao, RoomDao roomDao) {
+		
+		if (sensorDao.getOccupancyInfo().equals(E_OccupancyInfo.OCCUPIED.toString())) { // L'info room OCCUPIED
+			LOGGER.debug("RoomDao in updateStatus() is going to set RoomStatus to OCCUPIED");
+			roomDao.setStatus(E_RoomStatus.OCCUPIED.toString());
+			//-------------------------------------------------------------------------
+			roomRepository.updateRoomStatus(roomDao); // update Room Status to OCCUPIED
+			//-------------------------------------------------------------------------
+			RoomStatDao data = new RoomStatDao();
+			data.setRoomId(roomDao.getId().intValue());
+			data.setRoomInfo(E_RoomInfo.RESERVED.toString());	
+				try {
+					// if roomId & room_info=RESERVED in roomStats
+					RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
+					if (roomStat != null) {
+						// update begin_occupancy_date=now() & isReservationHonored=true & room_info=OCCUPIED
+						roomStatRepository.updateBeginOccupancyDate(roomStat);
+					} else {
+						// create a new line with roomId, begin_occupancy_date=now() & room_info=OCCUPIED if not created yet !!!
+						data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
+						processOccupiedRoom(data);
+					}
+				} catch(IncorrectResultSizeDataAccessException e ) {
+					LOGGER.debug("SensorManager.updateStatus : There is no RESERVED roomStat with roomId #" + roomDao.getId(), e);
+					// create a new line with roomId, begin_occupancy_date=now() & room_info=OCCUPIED if not created yet !!!
+					data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
+					processOccupiedRoom(data);
+				}
+		} else if (sensorDao.getOccupancyInfo().equals(E_OccupancyInfo.UNOCCUPIED.toString())) {  // L'info room UNOCCUPIED
+			// search in DB if another sensor has said that the room is OCCUPIED 
+			List<SensorDao> sensors = sensorRepository.findByRoomIdAndOccupiedInfo(roomDao.getId());
+			if ((sensors == null) || (sensors.isEmpty())) {  // L'info room UNOCCUPIED est prise en compte
+				LOGGER.debug("RoomDao in updateStatus() is going to set RoomStatus to FREE");
+				roomDao.setStatus(E_RoomStatus.FREE.toString());
+				//---------------------------------------------------------------------
+				roomRepository.updateRoomStatus(roomDao); // update Room Status to FREE
+				//---------------------------------------------------------------------
+				try {
+					// if roomId & room_info=OCCUPIED in roomStats
+					RoomStatDao data = new RoomStatDao();
+					data.setRoomId(roomDao.getId().intValue());
+					data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
+					RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
+					if (roomStat != null) {
+						// update by end_occupancy_date=now() & room_info=UNOCCUPIED
+						roomStatRepository.updateEndOccupancyDate(roomStat);
+					} 
+				} catch(IncorrectResultSizeDataAccessException e ) {
+					LOGGER.debug("SensorManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId(), e);
+				}
+			}
+		}
+		
+	}
 	
 }
