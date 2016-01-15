@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,8 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.TeachinSensorsDaoRe
 @Service("TaskManager")
 @Transactional
 public class TaskManagerImpl implements TaskManager {
+	
+	private static final Logger LOGGER = Logger.getLogger(TaskManagerImpl.class);
 	
 	@Autowired
 	private RoomStatDaoRepository roomStatsRepository;
@@ -111,6 +114,8 @@ public class TaskManagerImpl implements TaskManager {
 	@Override
 	public void processDailyStats() {
 		
+		LOGGER.debug(" Begin TaskManager.processDailyStats method : " + new Date());
+		
 		List<RoomDailyOccupancyDao> roomDailyList = new ArrayList<RoomDailyOccupancyDao>();
 			
 		// 1 - Get Date with DATE_BEGIN_DAY & DATE_END_DAY parameters
@@ -157,6 +162,7 @@ public class TaskManagerImpl implements TaskManager {
 			roomDailyRepository.saveRoomDaily(roomDailyOccupancyDao);	
 		}
 		
+		LOGGER.debug(" end TaskManager.processDailyStats method : " + new Date());
 		
 	}
 	

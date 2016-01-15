@@ -364,13 +364,13 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				if (userDao.getFirstName() != null) {
 					tenant.setFirstName(userDao.getFirstName());
 				} else {
-					tenant.setFirstName("");
+					userDao.setFirstName("");
 				}
 				
 				if (userDao.getLastName() != null) {
 					tenant.setLastName(userDao.getLastName());
 				} else {
-					tenant.setLastName("");
+					userDao.setLastName("");
 				}
 				
 				// label field
