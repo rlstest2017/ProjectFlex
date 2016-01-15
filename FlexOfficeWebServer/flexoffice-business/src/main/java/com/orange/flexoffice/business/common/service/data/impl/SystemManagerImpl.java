@@ -258,9 +258,7 @@ public class SystemManagerImpl implements SystemManager {
 			if ( teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()) || teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()) ) {
 				teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
 				teachinRepository.updateTeachinStatus(teachin);	
-			} else {
-				throw new DataNotExistsException("SystemManager.updateTeachinStatus : Teachin not active");
-			}
+			} 
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.error("SystemManager.updateTeachinStatus : Teachin not found", e);
 			throw new DataNotExistsException("SystemManager.updateTeachinStatus : Teachin not found");
