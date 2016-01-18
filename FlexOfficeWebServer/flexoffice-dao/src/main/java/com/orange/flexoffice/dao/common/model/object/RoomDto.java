@@ -32,6 +32,8 @@ public class RoomDto {
 	private List<SensorDao> sensors;
 	private Long occupancyTimeOut;
 	private Date lastMeasureDate; // the last time since the status has been modified
+	private Double temperature;
+	private Double humidity;
 	
 	public String getName() {
 		return name;
@@ -114,6 +116,30 @@ public class RoomDto {
 	 */
 	public void setLastMeasureDate(Date lastMeasureDate) {
 		this.lastMeasureDate = lastMeasureDate;
+	}
+	/**
+	 * @return the temperature
+	 */
+	public Double getTemperature() {
+		return temperature;
+	}
+	/**
+	 * @param temperature the temperature to set
+	 */
+	public void setTemperature(Double temperature) {
+		this.temperature = temperature;
+	}
+	/**
+	 * @return the humidity
+	 */
+	public Double getHumidity() {
+		return humidity;
+	}
+	/**
+	 * @param humidity the humidity to set
+	 */
+	public void setHumidity(Double humidity) {
+		this.humidity = humidity;
 	}
 
 }

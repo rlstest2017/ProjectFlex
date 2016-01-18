@@ -1,6 +1,7 @@
 package com.orange.flexoffice.adminui.ws.endPoint.entity.impl;
 
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -115,7 +116,8 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setName(roomDto.getName());
 			room.setType(ERoomType.valueOf(roomDto.getType().toString()));
 			room.setGateway(getGatewayFromId(Long.valueOf(roomDto.getGateway().getId()), roomDto.getName()));
-			room.setDesc(roomDto.getDescription());
+			String description = computeDescription(roomDto.getDescription(), roomDto.getTemperature(), roomDto.getHumidity());
+			room.setDesc(description);
 
 			// Set Sensor list to room
 			List<SensorDao> sensors = roomDto.getSensors();
@@ -409,5 +411,19 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		return tenant;
 	}
 
+	private String computeDescription(String desc, Double temperature, Double humidity) {
+		
+		String description = desc; 
+		DecimalFormat df = new DecimalFormat("0.00"); 
+		
+		if (temperature != null && temperature > 0) {
+			description = description + " Température : " + df.format(temperature) + "°";
+		}
+		if (humidity != null && humidity > 0) {
+			description = description + " Hygrométrie : " + df.format(humidity) + "%";
+		}
+		
+		return description;
+	}
 
 }

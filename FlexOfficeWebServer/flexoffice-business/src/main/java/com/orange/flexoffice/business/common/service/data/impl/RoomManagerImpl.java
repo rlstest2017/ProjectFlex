@@ -88,7 +88,9 @@ public class RoomManagerImpl implements RoomManager {
 		dto.setStatus(E_RoomStatus.valueOf(roomDao.getStatus()));
 		dto.setType(E_RoomType.valueOf(roomDao.getType()));
 		dto.setLastMeasureDate(roomDao.getLastMeasureDate());
-
+		dto.setTemperature(roomDao.getTemperature());
+		dto.setHumidity(roomDao.getHumidity());
+		
 		if (roomDao.getUserId() != null) {
 			try {
 				UserDao userDao = userRepository.findOne(roomDao.getUserId());
