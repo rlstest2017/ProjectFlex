@@ -37,7 +37,7 @@ public final class DataSqlTemplate {
 	public static final String FIND_BY_IDENTIFIER_TEMPLATE = 
 			"select * from %s where identifier=:identifier";
 	public static final String FIND_ALL_TEMPLATE = 
-			"select * from %s";
+			"select * from %s order by %s";
 	public static final String FIND_ALL_ROOM_DAILY_TEMPLATE = 
 			"select * from %s order by room_id";
 	public static final String FIND_REQUESTED_ROOM_DAILY_AND_TYPE_TEMPLATE = 
