@@ -168,7 +168,7 @@ public abstract class DataRepository<T extends Data>
 		
 		// FIND QUERIES ------------------------------------------------------------------------------
 		findOneQuery = String.format(FIND_ONE_TEMPLATE, getTableName());
-		findAllQuery = String.format(FIND_ALL_TEMPLATE, getTableName(), getColName());
+		findAllQuery = String.format(FIND_ALL_TEMPLATE, getTableName());
 		findAllRoomDailyQuery = String.format(FIND_ALL_ROOM_DAILY_TEMPLATE, getTableName());
 		findAllDailyQuery = String.format(FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE, getTableName());
 		findRequestedDailyAndTypesQuery = String.format(FIND_REQUESTED_ROOM_DAILY_AND_TYPE_TEMPLATE);
