@@ -247,6 +247,7 @@ public class GatewayManagerImpl implements GatewayManager {
 					// set Room Status to UNKNOWN
 					LOGGER.debug("RoomDao in gatewayManager updateStatus() is going to set RoomStatus to UNKNOWN");
 					roomDao.setStatus(E_RoomStatus.UNKNOWN.toString());
+					roomDao.setUserId(null);
 					roomRepository.updateRoomStatus(roomDao); // update Room Status to UNKNOWN
 					
 					// set RoomStatus room_info UNOCCUPIED if there was OCCUPIED !!!
@@ -489,6 +490,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			List<RoomDao> rooms = roomRepository.findByGatewayId(gatewayId);
 			for (RoomDao room : rooms) {
 				room.setStatus(E_RoomStatus.UNKNOWN.toString());
+				room.setUserId(null);
 				roomRepository.updateRoomStatus(room);
 				// Set status associated Sensors to OFFLINE
 				List<SensorDao> sensors = sensorRepository.findByRoomId(room.getId());

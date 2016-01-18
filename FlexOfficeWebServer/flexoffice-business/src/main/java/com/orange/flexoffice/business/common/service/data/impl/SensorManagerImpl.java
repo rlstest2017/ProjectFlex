@@ -165,6 +165,7 @@ public class SensorManagerImpl implements SensorManager {
 						// set Room Status to UNKNOWN
 						LOGGER.debug("RoomDao in updateStatus() is going to set RoomStatus to UNKNOWN");
 						roomDao.setStatus(E_RoomStatus.UNKNOWN.toString());
+						roomDao.setUserId(null);
 						roomRepository.updateRoomStatus(roomDao); // update Room Status to UNKNOWN
 						
 						// set RoomStatus room_info UNOCCUPIED if there was OCCUPIED !!!
@@ -340,6 +341,7 @@ public class SensorManagerImpl implements SensorManager {
 			List<SensorDao> sensors = sensorRepository.findByRoomIdAndOccupiedInfo(roomDao.getId());
 			if ((sensors == null) || (sensors.isEmpty())) {  // L'info room UNOCCUPIED est prise en compte
 				LOGGER.debug("RoomDao in updateStatus() is going to set RoomStatus to FREE");
+				roomDao.setUserId(null);
 				roomDao.setStatus(E_RoomStatus.FREE.toString());
 				//---------------------------------------------------------------------
 				roomRepository.updateRoomStatus(roomDao); // update Room Status to FREE

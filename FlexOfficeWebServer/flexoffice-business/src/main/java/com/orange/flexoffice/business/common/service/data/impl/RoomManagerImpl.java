@@ -222,9 +222,12 @@ public class RoomManagerImpl implements RoomManager {
 					LOGGER.debug("RESET command has set in table for gateway id #: " + room.getGatewayId());
 					
 				}
-			} else {
+			} else if (E_RoomStatus.RESERVED.toString().equals(room.getStatus())) { 
 				LOGGER.error("RoomManager.delete : Room #" + id + " is reserved by userId:" + room.getUserId());
 				throw new IntegrityViolationException("RoomManager.delete : Room #" + id + " is reserved");
+			} else {
+				LOGGER.error("RoomManager.delete : Room #" + id + " is occupied");
+				throw new IntegrityViolationException("RoomManager.delete : Room #" + id + " is occupied");
 			}
 		} catch (IncorrectResultSizeDataAccessException e) {
 			LOGGER.error("RoomManager.delete : Room #" + id + " not found", e);
