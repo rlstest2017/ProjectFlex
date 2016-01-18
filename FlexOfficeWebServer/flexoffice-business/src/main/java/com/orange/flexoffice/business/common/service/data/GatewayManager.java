@@ -83,4 +83,11 @@ public interface GatewayManager {
 	 */
 	void delete(String macAddress) throws DataNotExistsException, IntegrityViolationException;
 	
+	/**
+	 * When the web-server is restarted, I check if all OFFLINE Gateways have an alert
+	 * OtherWise I create one
+	 */
+	void updateOFFLINEGatewaysAlerts();
+	
+	
 }

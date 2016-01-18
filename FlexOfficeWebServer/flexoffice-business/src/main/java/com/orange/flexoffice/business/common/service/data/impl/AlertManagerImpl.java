@@ -145,7 +145,7 @@ public class AlertManagerImpl implements AlertManager {
 					alertRepository.saveAlert(alert);
 				}
 			} catch(IncorrectResultSizeDataAccessException e ) {
-				LOGGER.debug("gateway by id " + gatewayId + " has not rooms", e);
+				LOGGER.debug("gateway by id " + gatewayId + " has not alert", e);
 				// save alert
 				alert = new AlertDao();
 				alert.setName(status);
@@ -171,7 +171,7 @@ public class AlertManagerImpl implements AlertManager {
 						alertRepository.saveAlert(alert);
 					}
 				} catch(IncorrectResultSizeDataAccessException e ) {
-					LOGGER.debug("gateway by id " + gatewayId + " has not rooms", e);
+					LOGGER.debug("sensorId by id " + sensorId + " has not alert", e);
 					// save alert
 					alert = new AlertDao();
 					alert.setName(status);
