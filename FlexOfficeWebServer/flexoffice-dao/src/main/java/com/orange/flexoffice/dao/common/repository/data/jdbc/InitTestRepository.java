@@ -188,9 +188,13 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		return null;
 	}
 
-
 	@Override
 	protected String getColumnColName() {
+		return null;
+	}
+
+	@Override
+	protected String getColName() {
 		return null;
 	}
 

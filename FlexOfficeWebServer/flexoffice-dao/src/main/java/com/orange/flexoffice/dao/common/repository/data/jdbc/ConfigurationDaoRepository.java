@@ -39,4 +39,9 @@ public class ConfigurationDaoRepository extends DataRepository<ConfigurationDao>
 		return null;
 	}
 
+	@Override
+	protected String getColName() {
+		return null;
+	}
+
 }

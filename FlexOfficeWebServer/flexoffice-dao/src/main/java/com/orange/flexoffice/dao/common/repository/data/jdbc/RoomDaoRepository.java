@@ -132,7 +132,11 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 	@Override
 	protected String getColumnColName() {
 		return RoomDaoMetadata.ROOM_ID_COL;
-		
+	}
+
+	@Override
+	protected String getColName() {
+		return RoomDaoMetadata.ROOM_NAME_COL;
 	}
 
 }

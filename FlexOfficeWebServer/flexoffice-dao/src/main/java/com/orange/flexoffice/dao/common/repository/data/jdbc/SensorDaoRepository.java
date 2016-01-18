@@ -136,7 +136,11 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 	@Override
 	protected String getColumnColName() {
 		return SensorDaoMetadata.SENSOR_ID_COL;
-		
+	}
+
+	@Override
+	protected String getColName() {
+		return SensorDaoMetadata.SENSOR_NAME_COL;
 	}
 
 }

@@ -155,7 +155,11 @@ public class RoomStatDaoRepository extends DataRepository<RoomStatDao> implement
 	@Override
 	protected String getColumnColName() {
 		return RoomStatDaoMetadata.ROOM_STAT_ID_COL;
-		
+	}
+
+	@Override
+	protected String getColName() {
+		return RoomStatDaoMetadata.ROOM_STAT_ID_COL;
 	}
 	
 }

@@ -165,7 +165,11 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 	@Override
 	protected String getColumnColName() {
 		return UserDaoMetadata.USER_ID_COL;
-		
+	}
+
+	@Override
+	protected String getColName() {
+		return UserDaoMetadata.USER_LASTNAME_COL;
 	}
 	
 }

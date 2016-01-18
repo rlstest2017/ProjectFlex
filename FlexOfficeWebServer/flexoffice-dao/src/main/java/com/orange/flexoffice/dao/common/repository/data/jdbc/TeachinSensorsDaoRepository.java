@@ -124,7 +124,11 @@ public class TeachinSensorsDaoRepository extends DataRepository<TeachinSensorDao
 	@Override
 	protected String getColumnColName() {
 		return TeachinSensorsDaoMetadata.TEACHIN_SENSORS_ID_COL;
-		
+	}
+
+	@Override
+	protected String getColName() {
+		return TeachinSensorsDaoMetadata.TEACHIN_SENSORS_ID_COL;
 	}
 
 }

@@ -107,4 +107,9 @@ public class AlertDaoRepository extends DataRepository<AlertDao> implements Aler
 		
 	}
 
+	@Override
+	protected String getColName() {
+		return AlertDaoMetadata.ALERT_NAME_COL;
+	}
+
 }

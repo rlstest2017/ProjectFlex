@@ -419,6 +419,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		if (temperature != null && temperature > 0) {
 			description = description + " Température : " + df.format(temperature) + "°";
 		}
+		
 		if (humidity != null && humidity > 0) {
 			description = description + " Hygrométrie : " + df.format(humidity) + "%";
 		}

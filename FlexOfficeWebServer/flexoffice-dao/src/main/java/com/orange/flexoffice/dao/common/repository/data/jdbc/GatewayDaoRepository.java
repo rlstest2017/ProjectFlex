@@ -143,4 +143,9 @@ public class GatewayDaoRepository extends DataRepository<GatewayDao> implements 
 		
 	}
 
+	@Override
+	protected String getColName() {
+		return GatewayDaoMetadata.GATEWAY_NAME_COL;
+	}
+
 }

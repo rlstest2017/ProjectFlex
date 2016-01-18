@@ -82,5 +82,10 @@ public class RoomDailyOccupancyDaoRepository extends DataRepository<RoomDailyOcc
 		
 	}
 
+	@Override
+	protected String getColName() {
+		return null;
+	}
+
 
 }

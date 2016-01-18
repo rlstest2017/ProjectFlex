@@ -102,17 +102,22 @@ public class TaskManagerImpl implements TaskManager {
 		TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
 
 		if ( (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString())) || (teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString())) )  {
+			LOGGER.debug(" There is teachin in state : " + teachin.getTeachinStatus());
 			// - Calculate Date with TEACHIN_TIMEOUT parameter
 			ConfigurationDao teachinTimeOut = configRepository.findByKey(E_ConfigurationKey.TEACHIN_TIMEOUT.toString());
 			int teachinTimeoutValue = Integer.valueOf(teachinTimeOut.getValue()); // in minutes	
+			LOGGER.debug(" TeachinTimeoutValue is : " + teachinTimeoutValue);
 			
 			Date teachinMaxDate = dateTools.teachinDateDelayBeforeTimeOut(teachin.getTeachinDate(), teachinTimeoutValue);
+			LOGGER.debug(" teachinMaxDate is : " + teachinMaxDate);
 			
 			if (teachinMaxDate.before(new Date())) {
+				LOGGER.debug(" teachinMaxDate is befor actuelle date : " + new Date());
 				// set ENDED
 				teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
 				teachinRepository.updateTeachinStatus(teachin);
-			}
+				LOGGER.debug(" teachin status is updated ");
+			} 
 		}
 		
 		} catch(IncorrectResultSizeDataAccessException e ) {
