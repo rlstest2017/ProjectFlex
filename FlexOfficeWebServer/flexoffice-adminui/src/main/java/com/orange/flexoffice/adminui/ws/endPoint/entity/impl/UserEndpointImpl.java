@@ -60,10 +60,24 @@ public class UserEndpointImpl implements UserEndpoint {
 		for (UserDao userDao : dataList) {
 			UserSummary user = factory.createUserSummary();
 			user.setId(userDao.getColumnId());
-			user.setLabel(userDao.getFirstName() + " " + userDao.getLastName());
-			user.setFirstName(userDao.getFirstName());
-			user.setLastName(userDao.getLastName());
 			user.setEmail(userDao.getEmail());
+			
+			if (userDao.getFirstName() == null) {
+				userDao.setFirstName("");
+			} else {
+				user.setFirstName(userDao.getFirstName());
+			}
+			if (userDao.getLastName() == null) {
+				userDao.setLastName("");
+			} else {
+				user.setLastName(userDao.getLastName());
+			}
+			
+			String label = userDao.getFirstName() + " " + userDao.getLastName();
+			if (label.trim().isEmpty()) {
+				label = userDao.getEmail();
+			} 
+			user.setLabel(label);
 
 			userList.add(user);
 		}
