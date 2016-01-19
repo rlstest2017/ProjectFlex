@@ -72,6 +72,12 @@ public class RoomDailyOccupancyDaoRepository extends DataRepository<RoomDailyOcc
 	}
 	
 	@Override
+	public void deleteByRoomId(Long roomId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("roomId", roomId);
+		jdbcTemplate.update(deleteByRoomId, paramMap);
+	}
+	
+	@Override
 	protected String getTableName() {
 		return RoomDailyOccupancyDaoMetadata.ROOM_DAILY_OCCUPANCY_TABLE_NAME;
 	}

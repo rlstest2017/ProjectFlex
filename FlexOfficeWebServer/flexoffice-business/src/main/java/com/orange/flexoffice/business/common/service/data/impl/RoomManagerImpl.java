@@ -29,6 +29,7 @@ import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDailyOccupancyDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomStatDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
@@ -55,6 +56,8 @@ public class RoomManagerImpl implements RoomManager {
 	private UserDaoRepository userRepository;
 	@Autowired
 	private RoomStatDaoRepository roomStatRepository;
+	@Autowired
+	private RoomDailyOccupancyDaoRepository roomDailyRepository;
 	@Autowired
 	private ConfigurationDaoRepository configRepository;
 
@@ -213,8 +216,10 @@ public class RoomManagerImpl implements RoomManager {
 					LOGGER.error("RoomManager.delete : Room #" + id + " has a sensors");
 					throw new IntegrityViolationException("RoomManager.delete : Room #" + id + " has a sensors");
 				} else {
-					// Delete Room
+					// Delete the room & associated stats (room_stats, room_daily_occupancy)
 					roomRepository.delete(id);
+					roomStatRepository.deleteByRoomId(room.getId());
+					roomDailyRepository.deleteByRoomId(room.getId());
 					
 					// Set Gateway to RESET 
 					GatewayDao gateway = new GatewayDao();

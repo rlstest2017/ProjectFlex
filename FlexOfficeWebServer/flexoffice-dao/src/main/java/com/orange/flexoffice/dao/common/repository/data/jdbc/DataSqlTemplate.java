@@ -60,6 +60,8 @@ public final class DataSqlTemplate {
 			"delete from %s where day<:day";
 	public static final String REMOVE_BY_DATE_ROOM_STATS_TEMPLATE = 
 			"delete from %s where begin_occupancy_date<:date";
+	public static final String REMOVE_STAT_BY_ROOM_ID_TEMPLATE = 
+			"delete from %s where room_id =:roomId";
 	public static final String REMOVE_TEMPLATE = 
 			"delete from %s where id=:id";
 	public static final String REMOVE_ALL_TEMPLATE = 

@@ -148,6 +148,12 @@ public class RoomStatDaoRepository extends DataRepository<RoomStatDao> implement
 	}
 	
 	@Override
+	public void deleteByRoomId(Long roomId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("roomId", roomId);
+		jdbcTemplate.update(deleteByRoomId, paramMap);
+	}
+	
+	@Override
 	protected String getTableName() {
 		return RoomStatDaoMetadata.ROOM_STAT_TABLE_NAME;
 	}

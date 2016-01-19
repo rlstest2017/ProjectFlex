@@ -37,5 +37,7 @@ public interface RoomStatDaoOperations {
 	RoomStatDao updateEndOccupancyDate(RoomStatDao data);
 	
 	void deleteByBeginOccupancyDate(Date date);
+	
+	void deleteByRoomId(Long roomId);
 		
 }

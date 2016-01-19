@@ -23,5 +23,7 @@ public interface RoomDailyOccupancyDaoOperations {
 	List<RoomDailyTypeDto> findRoomsDailyAndType(RoomDailyOccupancyDto data);
 	
 	void deleteByDay(Date day); 
+	
+	void deleteByRoomId(Long roomId);
 			
 }
