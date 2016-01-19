@@ -18,6 +18,10 @@
 	
 	<bean id="errorMessageHandler" class="com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler">
 	</bean>
+
+	<bean id="initOfflineGatewaysAlerts" class="com.orange.flexoffice.adminui.ws.utils.InitOfflineGatewaysAlerts"
+	init-method="updateOFFLINEGatewaysAlerts">
+	</bean>
 	
 	<task:annotation-driven />
     <bean id="adminUiTasks" class="com.orange.flexoffice.adminui.ws.task.AdminUiTasks"></bean>

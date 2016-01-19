@@ -303,6 +303,24 @@ public class GatewayManagerImpl implements GatewayManager {
 		}
 	}
 	
+	@Override
+	public void updateOFFLINEGatewaysAlerts() {
+		LOGGER.debug("Begin GatewayManager.updateOFFLINEGatewaysAlerts method.");
+		List<GatewayDao> gateways = gatewayRepository.findAllGateways();
+		for (GatewayDao gateway : gateways) {
+			if ( E_GatewayStatus.OFFLINE.toString().equals(gateway.getStatus()) ||
+					E_GatewayStatus.ERROR_FIFO_FILE.toString().equals(gateway.getStatus()) ||
+							(E_GatewayStatus.ERROR_NO_USB_DEVICE.toString().equals(gateway.getStatus())))  {
+				
+				// update Gateway Alert
+				Long gatewayId =gateway.getId();
+				alertManager.updateGatewayAlert(gatewayId, gateway.getStatus());
+				LOGGER.debug("alertManager.updateGatewayAlert is process for gateway :" + gatewayId);
+			}
+		}
+		LOGGER.debug("End GatewayManager.updateOFFLINEGatewaysAlerts method.");
+	}
+	
 	/**
 	 * getRooms
 	 * @param gatewayId
@@ -503,21 +521,5 @@ public class GatewayManagerImpl implements GatewayManager {
 		
 		return commandStateProcess;
 	}
-
-	@Override
-	public void updateOFFLINEGatewaysAlerts() {
-		List<GatewayDao> gateways = gatewayRepository.findAllGateways();
-		for (GatewayDao gateway : gateways) {
-			if ( E_GatewayStatus.OFFLINE.toString().equals(gateway.getStatus()) ||
-					E_GatewayStatus.ERROR_FIFO_FILE.toString().equals(gateway.getStatus()) ||
-							(E_GatewayStatus.ERROR_NO_USB_DEVICE.toString().equals(gateway.getStatus())))  {
-				
-				// update Gateway Alert
-				Long gatewayId =gateway.getId();
-				alertManager.updateGatewayAlert(gatewayId, gateway.getStatus());
-				
-			}
-		}
-		
-	}
+	
 }
