@@ -160,12 +160,11 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		
 		LOGGER.info( "Begin call UserUi.RoomEndpoint.reserveRoom at: " + new Date() );
 		LOGGER.debug("Room id in reserveRoom.RoomEndpoint metod is : " + roomId);
-		
-		RoomDao roomDao = new RoomDao();
-		roomDao.setId(Long.valueOf(roomId));
-		roomDao.setStatus(E_RoomStatus.RESERVED.toString());
-
 		try {
+			
+			RoomDao roomDao = roomManager.findByRoomId(Long.valueOf(roomId));
+			roomDao.setStatus(E_RoomStatus.RESERVED.toString());
+	
 			// get UserDto
 			UserDto data = userManager.findByUserAccessToken(auth);
 			// set userId in roomDao
@@ -176,7 +175,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			
 			// get Room
 			RoomDto roomDto = roomManager.find(Long.valueOf(roomId));
-
+	
 			Room room = factory.createRoom();
 			room.setId(String.valueOf(roomDto.getId()));
 			room.setName(roomDto.getName());
@@ -186,7 +185,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));			
 			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
 			room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
-
+	
 			if (roomDto.getLastMeasureDate() != null) {
 				room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
 			}
@@ -226,12 +225,12 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		
 		LOGGER.info( "Begin call UserUi.RoomEndpoint.cancelRoom at: " + new Date() );
 
-		RoomDao roomDao = new RoomDao();
-		roomDao.setId(Long.valueOf(roomId));
-		roomDao.setStatus(E_RoomStatus.FREE.toString());
-
 		try {
-			// get UserDto
+			// get room
+			RoomDao roomDao = roomManager.findByRoomId(Long.valueOf(roomId));
+			roomDao.setStatus(E_RoomStatus.FREE.toString());
+
+			// get user
 			UserDto data = userManager.findByUserAccessToken(auth);
 			// set userId in roomDao
 			roomDao.setUserId(Long.valueOf(data.getId()));

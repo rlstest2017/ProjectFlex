@@ -19,12 +19,17 @@ import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.WrongProfileException;
+import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.business.common.service.data.SensorManager;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_SensorStatus;
 
-
+/**
+ * SensorApiEndpointImpl
+ * @author oab
+ *
+ */
 public class SensorApiEndpointImpl implements SensorApiEndpoint {
 
 	private static final Logger LOGGER = Logger.getLogger(SensorApiEndpointImpl.class);
@@ -32,6 +37,8 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 	
 	@Autowired
 	private SensorManager sensorManager;
+	@Autowired
+	private RoomManager roomManager;
 
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
@@ -126,10 +133,15 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 				
 				RoomDao roomDao = null;
 				if ((sensorDao.getRoomId() != null) && (sensorDao.getRoomId() != 0)) {
-					roomDao = new RoomDao();
-					roomDao.setId(Long.valueOf(sensorDao.getRoomId()));
-					roomDao.setTemperature(sensor.getTemperature());
-					roomDao.setHumidity(sensor.getHumidity());
+					// get room 
+					roomDao = roomManager.findByRoomId(Long.valueOf(sensorDao.getRoomId()));
+					if (sensor.getTemperature() != null) {
+						roomDao.setTemperature(sensor.getTemperature());
+					} 
+					if (sensor.getHumidity() != null) {
+						roomDao.setHumidity(sensor.getHumidity());
+					} 
+					
 					LOGGER.debug("RoomDao is instanciated");
 				}
 		

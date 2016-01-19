@@ -88,4 +88,13 @@ public interface RoomManager {
 	 * @return
 	 */
 	public Long countRoomsByType(String type);
+	
+	/**
+	 * findByRoomId
+	 * @param roomId
+	 * @return
+	 * @throws DataNotExistsException
+	 */
+	RoomDao findByRoomId(Long roomId) throws DataNotExistsException;
+	
 }
