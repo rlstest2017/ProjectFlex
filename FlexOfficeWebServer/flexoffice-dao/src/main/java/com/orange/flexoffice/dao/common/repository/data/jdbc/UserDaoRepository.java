@@ -169,7 +169,7 @@ public class UserDaoRepository extends DataRepository<UserDao> implements UserDa
 
 	@Override
 	protected String getColName() {
-		return UserDaoMetadata.USER_LASTNAME_COL;
+		return UserDaoMetadata.USER_MAIL_COL;
 	}
 	
 }
