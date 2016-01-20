@@ -1,5 +1,6 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -316,6 +317,8 @@ public class SensorManagerImpl implements SensorManager {
 			//-------------------------------------------------------------------------
 			roomRepository.updateRoomStatus(roomDao); // update Room Status to OCCUPIED
 			//-------------------------------------------------------------------------
+			LOGGER.info("RoomStatus is set to " + roomDao.getStatus() + " for room : " + roomDao.getName() + " at : " + new Date());
+			
 			RoomStatDao data = new RoomStatDao();
 			data.setRoomId(roomDao.getId().intValue());
 			data.setRoomInfo(E_RoomInfo.RESERVED.toString());// Pour voir est-ce il y avait une réservation ou pas avant ce status OCCUPIED !!!	

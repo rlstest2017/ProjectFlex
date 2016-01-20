@@ -1,6 +1,7 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -171,6 +172,9 @@ public class RoomManagerImpl implements RoomManager {
 			// Use in case of RESERVED Room in UserUI
 			if  (roomDao.getStatus().equals(E_RoomStatus.RESERVED.toString())) { // from UserUi.RoomEndpoint.reserveRoom
 				RoomDao foundRoom = roomRepository.findByRoomId(roomDao.getId());
+				
+				LOGGER.info("foundRoomStatus is " + foundRoom.getStatus() + " for room : " + foundRoom.getName() + " at : " + new Date());
+				
 				if (!foundRoom.getStatus().equals(E_RoomStatus.FREE.toString())) {
 					LOGGER.debug("Room status is not FREE !!!");
 					throw new RoomAlreadyUsedException("RoomManager.updateStatus : Room is not in FREE status");
@@ -181,6 +185,7 @@ public class RoomManagerImpl implements RoomManager {
 					roomStat.setUserId(roomDao.getUserId().intValue());
 					roomStat.setRoomInfo(E_RoomInfo.RESERVED.toString());
 					roomStatRepository.saveReservedRoomStat(roomStat);
+					LOGGER.info("roomStat created for " + foundRoom.getName() + " which status is : " + foundRoom.getStatus() + " at : " + new Date());
 				}
 			} else if  (roomDao.getStatus().equals(E_RoomStatus.FREE.toString())) { // from UserUi.RoomEndpoint.cancelRoom
 				RoomDao foundRoom = roomRepository.findByRoomId(roomDao.getId());
