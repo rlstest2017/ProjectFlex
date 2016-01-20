@@ -76,6 +76,7 @@ public class TaskManagerImpl implements TaskManager {
 				// update roomStatus='FREE'
 				RoomDao room = roomRepository.findByRoomId(Long.valueOf(roomst.getRoomId()));
 				room.setStatus(E_RoomStatus.FREE.toString());
+				room.setUserId(null);
 				roomRepository.updateRoomStatus(room);
 			}
 		}
