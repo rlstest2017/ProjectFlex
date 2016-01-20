@@ -28,6 +28,7 @@ import com.orange.flexoffice.adminui.ws.model.RoomInput1;
 import com.orange.flexoffice.adminui.ws.model.RoomOutput;
 import com.orange.flexoffice.adminui.ws.model.RoomSummary;
 import com.orange.flexoffice.adminui.ws.task.AdminUiTasks;
+import com.orange.flexoffice.adminui.ws.utils.InitOfflineGatewaysAlerts;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 
@@ -50,6 +51,8 @@ public class RoomEndpointImplTest {
 	private static GatewayEndpoint gatewayEndpoint;
 
 	private static AdminUiTasks adminUiTasks;
+	
+	private static InitOfflineGatewaysAlerts initOfflineGatewaysAlerts;
 
 	@Context
 	private UriInfo uriInfo;
@@ -63,6 +66,7 @@ public class RoomEndpointImplTest {
 		roomEndpoint = (RoomEndpointImpl)context.getBean("roomEndpoint");
 		gatewayEndpoint = (GatewayEndpointImpl)context.getBean("gatewayEndpoint");
 		adminUiTasks = (AdminUiTasks)context.getBean("adminUiTasks");
+		initOfflineGatewaysAlerts = (InitOfflineGatewaysAlerts)context.getBean("initOfflineGatewaysAlerts");
 	}
 
 
@@ -364,6 +368,15 @@ public class RoomEndpointImplTest {
 	public void TestP_purgeStatsTask() {
 		// SetUp
 		boolean state = adminUiTasks.purgeStatsDataTestMethod();
+
+		// Asserts
+		assertEquals(true, state);
+	}
+	
+	@Test
+	public void TestQ_updateOFFLINEGatewaysAlerts() {
+		// SetUp
+		boolean state = initOfflineGatewaysAlerts.updateOFFLINEGatewaysAlertsForTest();
 
 		// Asserts
 		assertEquals(true, state);

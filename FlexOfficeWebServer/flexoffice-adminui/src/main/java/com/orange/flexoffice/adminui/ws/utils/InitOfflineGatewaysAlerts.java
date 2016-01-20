@@ -20,10 +20,21 @@ public class InitOfflineGatewaysAlerts {
 	@Autowired
 	private GatewayManager gatewayManager;
 	
+	/**
+	 * updateOFFLINEGatewaysAlerts
+	 */
 	public void updateOFFLINEGatewaysAlerts() {
 		LOGGER.debug("Begin InitOfflineGatewaysAlerts.updateOFFLINEGatewaysAlerts method :" + new Date());
 		gatewayManager.updateOFFLINEGatewaysAlerts();
 		LOGGER.debug("End InitOfflineGatewaysAlerts.updateOFFLINEGatewaysAlerts method :" + new Date());
 	}
-	
+
+	// for Test
+	public Boolean updateOFFLINEGatewaysAlertsForTest() {
+		LOGGER.debug("Begin updateOFFLINEGatewaysAlertsForTest.updateOFFLINEGatewaysAlerts method :" + new Date());
+		gatewayManager.updateOFFLINEGatewaysAlerts();
+		LOGGER.debug("End updateOFFLINEGatewaysAlertsForTest.updateOFFLINEGatewaysAlerts method :" + new Date());
+		return true;
+	}
+
 }

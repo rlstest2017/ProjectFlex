@@ -33,5 +33,6 @@
 	
 	<bean id="adminUiTasks" class="com.orange.flexoffice.adminui.ws.task.AdminUiTasks"></bean>
 	
+	<bean id="initOfflineGatewaysAlerts" class="com.orange.flexoffice.adminui.ws.utils.InitOfflineGatewaysAlerts"></bean>
 		
 </beans>
