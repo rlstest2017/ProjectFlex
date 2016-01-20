@@ -14,13 +14,16 @@ import com.orange.flexoffice.business.common.service.data.TaskManager;
 import com.orange.flexoffice.business.common.utils.DateTools;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDailyOccupancyDao;
+import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
 import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
+import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDailyOccupancyDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomStatDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.TeachinSensorsDaoRepository;
 
@@ -36,6 +39,8 @@ public class TaskManagerImpl implements TaskManager {
 	
 	@Autowired
 	private RoomStatDaoRepository roomStatsRepository;
+	@Autowired
+	private RoomDaoRepository roomRepository;
 	@Autowired
 	private ConfigurationDaoRepository configRepository;
 	@Autowired
@@ -63,11 +68,15 @@ public class TaskManagerImpl implements TaskManager {
 		// 3 - check booking duration
 		for (RoomStatDao roomst : roomStats) {
 			if (dateTools.reservationDateDelayBeforeTimeOut(roomst.getReservationDate(), bookingDurationValue).before(new Date())) { // expired delay !!!
-				// update roomInfo='TIMEOUT
+				// update roomInfo='TIMEOUT'
 				RoomStatDao roomstat = new RoomStatDao();
 				roomstat.setId(roomst.getId());
 				roomstat.setRoomInfo(E_RoomInfo.TIMEOUT.toString());
 				roomStatsRepository.updateRoomStatById(roomstat);
+				// update roomStatus='FREE'
+				RoomDao room = roomRepository.findByRoomId(Long.valueOf(roomst.getRoomId()));
+				room.setStatus(E_RoomStatus.FREE.toString());
+				roomRepository.updateRoomStatus(room);
 			}
 		}
 		

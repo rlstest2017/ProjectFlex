@@ -318,7 +318,7 @@ public class SensorManagerImpl implements SensorManager {
 			//-------------------------------------------------------------------------
 			RoomStatDao data = new RoomStatDao();
 			data.setRoomId(roomDao.getId().intValue());
-			data.setRoomInfo(E_RoomInfo.RESERVED.toString());	
+			data.setRoomInfo(E_RoomInfo.RESERVED.toString());// Pour voir est-ce il y avait une réservation ou pas avant ce status OCCUPIED !!!	
 				try {
 					// if roomId & room_info=RESERVED in roomStats
 					RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
