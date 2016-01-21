@@ -189,13 +189,19 @@ public class RoomManagerImpl implements RoomManager {
 				}
 			} else if  (roomDao.getStatus().equals(E_RoomStatus.FREE.toString())) { // from UserUi.RoomEndpoint.cancelRoom
 				RoomDao foundRoom = roomRepository.findByRoomId(roomDao.getId());
-				if (foundRoom.getStatus().equals(E_RoomStatus.RESERVED.toString())) { // cancel is operate only if room is in RESERVED status
+				if (foundRoom.getStatus().equals(E_RoomStatus.RESERVED.toString())) { // cancel from "Je n'y vais plus " room is in RESERVED status
 					LOGGER.debug("RoomStat to update !!!");
 					RoomStatDao roomStat = new RoomStatDao();
 					roomStat.setRoomId(roomDao.getId().intValue());
 					roomStat.setUserId(roomDao.getUserId().intValue());
 					roomStat.setRoomInfo(E_RoomInfo.CANCELED.toString());
 					roomStatRepository.updateReservedRoomStat(roomStat); // PS : there is only one line in room_stats with the same room_id, user_id and room_info=RESERVED !!!
+					roomDao.setUserId(null);
+				} else if (foundRoom.getStatus().equals(E_RoomStatus.OCCUPIED.toString())) { // cancel from "J'ai fini " room is in OCCUPIED status
+					LOGGER.debug("RoomStat to update !!!");
+					RoomStatDao roomStat = new RoomStatDao();
+					roomStat.setRoomId(roomDao.getId().intValue());
+					roomStatRepository.updateEndOccupancyDate(roomStat); 
 					roomDao.setUserId(null);
 				}
 			}
