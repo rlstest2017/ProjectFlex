@@ -16,6 +16,20 @@ import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
 import com.orange.flexoffice.dao.common.repository.data.RoomStatDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.RoomStatDaoMetadata;
 
+/*---------------------------------------------------------------------------------------
+Manage room_stats table
+
+Si réservation via userUI "j y vais" alors le champ reservation_date=now() & room_info=RESERVED
+Si annulation via userUIvia "je n y vais pas" alors room_info=CANCELED et les autres champs restent vides !!! 
+
+Si room occupé grâce à une détection gatewayApi alors le champ begin_occupancy_date=now() & room_info="OCCUPIED"
+Au bout de OCCUPANCY_TIMEOUT parameter in configuration table, si détection d'aucune présence alors
+end_occupancy_date=now() & room_info="UNOCCUPIED"
+
+Si la salle est occupée après une réservation alors le champ is_reservation_honored=true
+
+------------------------------------------------------------------------------------------*/
+
 @Repository
 public class RoomStatDaoRepository extends DataRepository<RoomStatDao> implements RoomStatDaoOperations {
 

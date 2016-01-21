@@ -256,7 +256,8 @@ public class GatewayManagerImpl implements GatewayManager {
 						RoomStatDao data = new RoomStatDao();
 						data.setRoomId(roomDao.getId().intValue());
 						data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
-						RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
+						RoomStatDao roomStat = findByRoomId(data); // Synchronised method to avoid concurrent access  !!!
+						//RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
 						if (roomStat != null) {
 							// update by end_occupancy_date=now() & room_info=UNOCCUPIED
 							roomStatRepository.updateEndOccupancyDate(roomStat);
@@ -519,6 +520,15 @@ public class GatewayManagerImpl implements GatewayManager {
 		}
 		
 		return commandStateProcess;
+	}
+	
+	/**
+	 * findByRoomId synchronized method
+	 * @param data
+	 * @return
+	 */
+	private synchronized RoomStatDao findByRoomId(RoomStatDao data) { 
+	 return roomStatRepository.findbyRoomId(data);
 	}
 	
 }

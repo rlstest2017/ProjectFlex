@@ -174,7 +174,8 @@ public class SensorManagerImpl implements SensorManager {
 							RoomStatDao data = new RoomStatDao();
 							data.setRoomId(roomDao.getId().intValue());
 							data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
-							RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
+							RoomStatDao roomStat = findByRoomId(data); // Synchronised method to avoid concurrent access  !!!
+							//RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
 							if (roomStat != null) {
 								// update by end_occupancy_date=now() & room_info=UNOCCUPIED
 								roomStatRepository.updateEndOccupancyDate(roomStat);
@@ -291,7 +292,8 @@ public class SensorManagerImpl implements SensorManager {
 	private void processOccupiedRoom(RoomStatDao data) {
 		try {
 			// if roomId & room_info=OCCUPIED in roomStats
-			RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
+			RoomStatDao roomStat = findByRoomId(data); // Synchronised method to avoid concurrent access  !!!
+			//RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
 			if (roomStat == null) {
 				// create a new line with roomId, begin_occupancy_date=now() & room_info=OCCUPIED
 				roomStatRepository.saveOccupiedRoomStat(data);
@@ -323,7 +325,8 @@ public class SensorManagerImpl implements SensorManager {
 			data.setRoomInfo(E_RoomInfo.RESERVED.toString());// Pour voir est-ce il y avait une réservation ou pas avant ce status OCCUPIED !!!	
 				try {
 					// if roomId & room_info=RESERVED in roomStats
-					RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
+					RoomStatDao roomStat = findByRoomId(data); // Synchronised method to avoid concurrent access  !!!
+					//RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
 					if (roomStat != null) {
 						// update begin_occupancy_date=now() & isReservationHonored=true & room_info=OCCUPIED
 						roomStatRepository.updateBeginOccupancyDate(roomStat);
@@ -353,7 +356,8 @@ public class SensorManagerImpl implements SensorManager {
 					RoomStatDao data = new RoomStatDao();
 					data.setRoomId(roomDao.getId().intValue());
 					data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
-					RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
+					RoomStatDao roomStat = findByRoomId(data); // Synchronised method to avoid concurrent access  !!!
+					//RoomStatDao roomStat = roomStatRepository.findbyRoomId(data);
 					if (roomStat != null) {
 						// update by end_occupancy_date=now() & room_info=UNOCCUPIED
 						roomStatRepository.updateEndOccupancyDate(roomStat);
@@ -364,6 +368,15 @@ public class SensorManagerImpl implements SensorManager {
 			}
 		}
 		
+	}
+	
+	/**
+	 * findByRoomId synchronized method
+	 * @param data
+	 * @return
+	 */
+	private synchronized RoomStatDao findByRoomId(RoomStatDao data) { 
+	 return roomStatRepository.findbyRoomId(data);
 	}
 	
 }
