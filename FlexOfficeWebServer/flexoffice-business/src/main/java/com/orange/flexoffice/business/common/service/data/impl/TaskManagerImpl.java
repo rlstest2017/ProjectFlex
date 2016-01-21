@@ -159,41 +159,45 @@ public class TaskManagerImpl implements TaskManager {
 		Date beginDayDate = dateTools.dateBeginDay(beginDayValue);
 		Date endDayDate = dateTools.dateEndDay(endDayValue);
 		
-		// 3 - find used RoomStats in the current day
-		RoomStatDao roomStat = new RoomStatDao();
-		roomStat.setBeginOccupancyDate(beginDayDate);
-		roomStat.setEndOccupancyDate(endDayDate);
-		roomStat.setRoomInfo(E_RoomInfo.UNOCCUPIED.toString());
-		List<RoomStatDao> roomSt = roomStatsRepository.findAllOccupiedDailyRoomStats(roomStat);
-		
-		// 4 - cumulate the stats by roomId
-		for (RoomStatDao rstat : roomSt) { // the roomStats are order by roomId 1,2,3,....
-			Integer index = getRoomInList(rstat.getRoomId(), roomDailyList);
-			if (index != -1) {
-				// calculate occupancyDuration
-				Long duration = dateTools.calculateDuration(rstat.getBeginOccupancyDate(), rstat.getEndOccupancyDate());
-				RoomDailyOccupancyDao roomGet = roomDailyList.get(index);
-				// ------ update Occupancy Duration for existing Room (cumulate) ------
-				roomGet.setOccupancyDuration(roomGet.getOccupancyDuration() + duration);
-				//
-			} else {
-				// add entry
-				RoomDailyOccupancyDao roomEntry = new RoomDailyOccupancyDao();
-				// calculate occupancyDuration
-				Long duration = dateTools.calculateDuration(rstat.getBeginOccupancyDate(), rstat.getEndOccupancyDate());
-				roomEntry.setRoomId(rstat.getRoomId());
-				roomEntry.setOccupancyDuration(duration);
-				// ------ Add new room in the list ----
-				roomDailyList.add(roomEntry);
+		if (dateTools.isWorkingDay(beginDayDate)) { // process only dates in working days
+			
+			// 3 - find used RoomStats in the current day
+			RoomStatDao roomStat = new RoomStatDao();
+			roomStat.setBeginOccupancyDate(beginDayDate);
+			roomStat.setEndOccupancyDate(endDayDate);
+			roomStat.setRoomInfo(E_RoomInfo.UNOCCUPIED.toString());
+			List<RoomStatDao> roomSt = roomStatsRepository.findAllOccupiedDailyRoomStats(roomStat);
+			
+			// 4 - cumulate the stats by roomId
+			for (RoomStatDao rstat : roomSt) { // the roomStats are order by roomId 1,2,3,....
+					Integer index = getRoomInList(rstat.getRoomId(), roomDailyList);
+					if (index != -1) {
+						// calculate occupancyDuration
+						Long duration = dateTools.calculateDuration(rstat.getBeginOccupancyDate(), rstat.getEndOccupancyDate());
+						RoomDailyOccupancyDao roomGet = roomDailyList.get(index);
+						// ------ update Occupancy Duration for existing Room (cumulate) ------
+						roomGet.setOccupancyDuration(roomGet.getOccupancyDuration() + duration);
+						//
+					} else {
+						// add entry
+						RoomDailyOccupancyDao roomEntry = new RoomDailyOccupancyDao();
+						// calculate occupancyDuration
+						Long duration = dateTools.calculateDuration(rstat.getBeginOccupancyDate(), rstat.getEndOccupancyDate());
+						roomEntry.setRoomId(rstat.getRoomId());
+						roomEntry.setOccupancyDuration(duration);
+						// ------ Add new room in the list ----
+						roomDailyList.add(roomEntry);
+					}
 			}
+			
+			// 5 - save in Table room_daily_occupancy
+			for (RoomDailyOccupancyDao roomDailyOccupancyDao : roomDailyList) {
+				roomDailyRepository.saveRoomDaily(roomDailyOccupancyDao);	
+			}
+			
+			LOGGER.info("TaskManager.processDailyStats is executed & saveRoomDaily in table. The day is a working one !!!");
+			
 		}
-		
-		// 5 - save in Table room_daily_occupancy
-		for (RoomDailyOccupancyDao roomDailyOccupancyDao : roomDailyList) {
-			roomDailyRepository.saveRoomDaily(roomDailyOccupancyDao);	
-		}
-		
-		LOGGER.info("TaskManager.processDailyStats is executed");
 		
 		LOGGER.debug(" end TaskManager.processDailyStats method : " + new Date());
 		
@@ -224,6 +228,5 @@ public class TaskManagerImpl implements TaskManager {
 		
 		return index;
 	}
-
 		
 }

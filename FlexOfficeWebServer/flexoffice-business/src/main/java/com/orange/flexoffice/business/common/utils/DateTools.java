@@ -21,6 +21,21 @@ public class DateTools {
 	private static final Logger LOGGER = Logger.getLogger(DateTools.class);
 
 	/**
+	 * isWorkingDay
+	 * @return
+	 */
+	public Boolean isWorkingDay(Date day) {
+		Boolean state = true;
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(day);
+		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+		if (dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY) {
+			state = false;
+		}
+		return state;
+	}
+	
+	/**
 	 * lastConnexionDate
 	 * @param lastConnexionDuration
 	 * @return
