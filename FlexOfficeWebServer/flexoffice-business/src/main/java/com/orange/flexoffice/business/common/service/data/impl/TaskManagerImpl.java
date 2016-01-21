@@ -78,6 +78,8 @@ public class TaskManagerImpl implements TaskManager {
 				room.setStatus(E_RoomStatus.FREE.toString());
 				room.setUserId(null);
 				roomRepository.updateRoomStatus(room);
+				
+				LOGGER.info("TaskManager.checkReservationTimeOut roomStat#"+roomstat.getId() + " status is set to TIMEOUT & room#" +room.getName()+ " status to FREE");
 			}
 		}
 		
@@ -98,6 +100,8 @@ public class TaskManagerImpl implements TaskManager {
 		// Delete all lines before lastAcceptedStatDate in room_stats & room_daily_occupancy
 		roomDailyRepository.deleteByDay(lastAcceptedStatDate);
 		roomStatsRepository.deleteByBeginOccupancyDate(lastAcceptedStatDate);
+		
+		LOGGER.info("TaskManager.purgeStatsDataMethod is executed");
 		
 		LOGGER.debug(" End TaskManager.purgeStatsDataMethod method : " + new Date());
 	}
@@ -122,11 +126,11 @@ public class TaskManagerImpl implements TaskManager {
 			LOGGER.debug(" teachinMaxDate is : " + teachinMaxDate);
 			
 			if (teachinMaxDate.before(new Date())) {
-				LOGGER.debug(" teachinMaxDate is befor actuelle date : " + new Date());
+				LOGGER.info(" teachinMaxDate is befor actuelle date : " + new Date());
 				// set ENDED
 				teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
 				teachinRepository.updateTeachinStatus(teachin);
-				LOGGER.debug(" teachin status is updated ");
+				LOGGER.info("TaskManager.checkTeachinTimeOut teachin status is set to ENDED ");
 			} 
 		}
 		
@@ -188,6 +192,8 @@ public class TaskManagerImpl implements TaskManager {
 		for (RoomDailyOccupancyDao roomDailyOccupancyDao : roomDailyList) {
 			roomDailyRepository.saveRoomDaily(roomDailyOccupancyDao);	
 		}
+		
+		LOGGER.info("TaskManager.processDailyStats is executed");
 		
 		LOGGER.debug(" end TaskManager.processDailyStats method : " + new Date());
 		

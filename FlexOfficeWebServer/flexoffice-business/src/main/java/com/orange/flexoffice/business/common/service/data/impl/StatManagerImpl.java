@@ -114,12 +114,12 @@ public class StatManagerImpl implements StatManager {
 	@Override
 	public MultiStatSetDto getOccupancyStats(String from, String to, String viewtype) {
 		
-		LOGGER.debug("Begin method StatManager.getOccupancyStats");
+		LOGGER.info("Begin method StatManager.getOccupancyStats ");
 		MultiStatSetDto multiStatSet = new MultiStatSetDto();
 		
-		LOGGER.debug("from value is : " + from);
-		LOGGER.debug("to value is : " + to);
-		LOGGER.debug("viewtype value is : " + viewtype);
+		LOGGER.info(" from value#" + from);
+		LOGGER.info(" to value#" + to);
+		LOGGER.info(" viewtype value#" + viewtype);
 		
 		// 0 - Get nb Rooms by type => used for calculate the average of rates (la moyenne des taux !!!)
 		// The values are saved in nbRoomsByType HashMap()
@@ -180,7 +180,7 @@ public class StatManagerImpl implements StatManager {
 			multiStatSet.setData(multiStat);
 			
 		} else {
-			LOGGER.debug("dailyRoomsList is null or empty !!!");
+			LOGGER.info("dailyRoomsList is null or empty !!!");
 			multiStatSet.setStartdate(fromDate.getTime());  // set startdate fromDate
 			multiStatSet.setEnddate(toDate.getTime());  // set enddate toDate
 		}
@@ -203,7 +203,7 @@ public class StatManagerImpl implements StatManager {
 		
 		// Calculate day duration between beginDayDate & endDayDate in seconds
 		Long duration = calculateDayDuration();
-		LOGGER.debug("duration betwwen beginDayDate and endDayDate : " + duration);
+		LOGGER.debug("duration between beginDayDate and endDayDate : " + duration);
 				
 		if (viewtype.equals(EnumViewType.DAY.toString())) {
 			// Make distinct daily List

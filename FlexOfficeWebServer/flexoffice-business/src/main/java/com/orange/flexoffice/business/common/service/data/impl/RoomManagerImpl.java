@@ -1,7 +1,6 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -100,7 +99,7 @@ public class RoomManagerImpl implements RoomManager {
 				UserDao userDao = userRepository.findOne(roomDao.getUserId());
 				dto.setUser(userDao);
 			} catch(IncorrectResultSizeDataAccessException e ) {
-				LOGGER.debug("RoomManager.find : User by id #" + roomDao.getUserId() + " for current Room is not found", e);
+				LOGGER.error("RoomManager.find : User by id #" + roomDao.getUserId() + " for current Room is not found", e);
 			}
 		}
 
@@ -173,10 +172,10 @@ public class RoomManagerImpl implements RoomManager {
 			if  (roomDao.getStatus().equals(E_RoomStatus.RESERVED.toString())) { // from UserUi.RoomEndpoint.reserveRoom
 				RoomDao foundRoom = roomRepository.findByRoomId(roomDao.getId());
 				
-				LOGGER.info("foundRoomStatus is " + foundRoom.getStatus() + " for room : " + foundRoom.getName() + " at : " + new Date());
+				LOGGER.info("foundRoomStatus is " + foundRoom.getStatus() + " for room#" + foundRoom.getName());
 				
 				if (!foundRoom.getStatus().equals(E_RoomStatus.FREE.toString())) {
-					LOGGER.debug("Room status is not FREE !!!");
+					LOGGER.error("Room status is not FREE !!!");
 					throw new RoomAlreadyUsedException("RoomManager.updateStatus : Room is not in FREE status");
 				} else {
 					LOGGER.debug("RoomStat to create !!!");
@@ -185,7 +184,7 @@ public class RoomManagerImpl implements RoomManager {
 					roomStat.setUserId(roomDao.getUserId().intValue());
 					roomStat.setRoomInfo(E_RoomInfo.RESERVED.toString());
 					roomStatRepository.saveReservedRoomStat(roomStat);
-					LOGGER.info("roomStat created for " + foundRoom.getName() + " which status is : " + foundRoom.getStatus() + " at : " + new Date());
+					LOGGER.info("roomStat created for room#" + foundRoom.getName() + " which status is : " + foundRoom.getStatus());
 				}
 			} else if  (roomDao.getStatus().equals(E_RoomStatus.FREE.toString())) { // from UserUi.RoomEndpoint.cancelRoom
 				RoomDao foundRoom = roomRepository.findByRoomId(roomDao.getId());
@@ -196,12 +195,14 @@ public class RoomManagerImpl implements RoomManager {
 					roomStat.setUserId(roomDao.getUserId().intValue());
 					roomStat.setRoomInfo(E_RoomInfo.CANCELED.toString());
 					roomStatRepository.updateReservedRoomStat(roomStat); // PS : there is only one line in room_stats with the same room_id, user_id and room_info=RESERVED !!!
+					LOGGER.info("roomStat updateReservedRoomStat for room#" + foundRoom.getName() + " which status is : " + foundRoom.getStatus());
 					roomDao.setUserId(null);
 				} else if (foundRoom.getStatus().equals(E_RoomStatus.OCCUPIED.toString())) { // cancel from "J'ai fini " room is in OCCUPIED status
 					LOGGER.debug("RoomStat to update !!!");
 					RoomStatDao roomStat = new RoomStatDao();
 					roomStat.setRoomId(roomDao.getId().intValue());
-					roomStatRepository.updateEndOccupancyDate(roomStat); 
+					roomStatRepository.updateEndOccupancyDate(roomStat);
+					LOGGER.info("roomStat updateEndOccupancyDate for room#" + foundRoom.getName() + " which status is : " + foundRoom.getStatus());
 					roomDao.setUserId(null);
 				}
 			}
@@ -237,7 +238,7 @@ public class RoomManagerImpl implements RoomManager {
 					gateway.setId(room.getGatewayId());
 					gateway.setCommand(E_CommandModel.RESET.toString());
 					gatewayRepository.updateGatewayCommand(gateway);
-					LOGGER.debug("RESET command has set in table for gateway id #: " + room.getGatewayId());
+					LOGGER.info("RESET command has set in table for gateway id #: " + room.getGatewayId());
 					
 				}
 			} else if (E_RoomStatus.RESERVED.toString().equals(room.getStatus())) { 
@@ -264,7 +265,7 @@ public class RoomManagerImpl implements RoomManager {
 		try {
 			return roomRepository.findByName(name);
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("RoomManager.findByName : Room by name #" + name + " is not found", e);
+			LOGGER.error("RoomManager.findByName : room#" + name + " is not found", e);
 			throw new DataNotExistsException("RoomManager.findByName : Room by name #" + name + " is not found");
 		}
 	}
@@ -298,7 +299,7 @@ public class RoomManagerImpl implements RoomManager {
 				}
 			}
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("user by id " + userId + " has not roomStats", e);
+			LOGGER.error("user by id " + userId + " has not roomStats", e);
 		
 		}
 		return dataList;
@@ -310,6 +311,16 @@ public class RoomManagerImpl implements RoomManager {
 		return roomRepository.countRoomsByType(type);
 	}
 	
+	@Override
+	public RoomDao findByRoomId(Long roomId) throws DataNotExistsException {
+		try {
+			return roomRepository.findByRoomId(roomId);
+		}	
+		catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.error("RoomManager.findByRoomId : Room by Id #" + roomId + " is not found", e);
+			throw new DataNotExistsException("RoomManager.findByRoomId : Room by Id #" + roomId + " is not found");
+		}
+	}
 	
 	/**
 	 * removeDuplicateFromList
@@ -335,17 +346,6 @@ public class RoomManagerImpl implements RoomManager {
 		}
 		
 		return dataList;
-	}
-
-	@Override
-	public RoomDao findByRoomId(Long roomId) throws DataNotExistsException {
-		try {
-			return roomRepository.findByRoomId(roomId);
-		}	
-		catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("RoomManager.findByRoomId : Room by Id #" + roomId + " is not found", e);
-			throw new DataNotExistsException("RoomManager.findByRoomId : Room by Id #" + roomId + " is not found");
-		}
 	}
 	
 }

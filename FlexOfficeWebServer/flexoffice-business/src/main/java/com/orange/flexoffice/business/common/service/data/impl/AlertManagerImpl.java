@@ -46,25 +46,25 @@ public class AlertManagerImpl implements AlertManager {
 		LOGGER.debug ("Begin updateGatewayAlert with parameters : gatewayId "+gatewayId+" status: "+ status);
 		
 		if ((status.equals(E_GatewayStatus.ONLINE.toString())) || (status.equals(E_GatewayStatus.ONTEACHIN.toString()))) {
-			LOGGER.debug ("updateGatewayAlert ONLINE/TEACHIN condition");
+			LOGGER.info ("updateGatewayAlert ONLINE/TEACHIN condition, for Gateway#" + gatewayId);
 			alertRepository.deleteAlertByGatewayId(gatewayId);
 		} else if (status.equals(E_GatewayStatus.OFFLINE.toString())) {  
-			LOGGER.debug ("updateGatewayAlert OFFLINE condition");
+			LOGGER.info ("updateGatewayAlert OFFLINE condition, for Gateway#" + gatewayId);
 			// if Gateway is appeared then declare error
 				try {
 					List<RoomDao> rooms = roomRepository.findByGatewayId(gatewayId);
 					if ((rooms != null)&&(!rooms.isEmpty())) {
-						LOGGER.debug ("updateGatewayAlert Gateway is associated to " + rooms.size() + " rooms.");
+						LOGGER.info ("updateGatewayAlert Gateway is associated to " + rooms.size() + " rooms.");
 						setAlert(gatewayId, null, status);
 					} else {
 						alertRepository.deleteAlertByGatewayId(gatewayId);
 					}
 				} catch(IncorrectResultSizeDataAccessException e ) {
-					LOGGER.debug("gateway by id " + gatewayId + " has not rooms", e);
+					LOGGER.error("gateway by id " + gatewayId + " has not rooms", e);
 					alertRepository.deleteAlertByGatewayId(gatewayId);
 				}
 		} else {
-			LOGGER.debug ("updateGatewayAlert OTHER condition");
+			LOGGER.info ("updateGatewayAlert OTHER condition, for Gateway#" + gatewayId);
 			setAlert(gatewayId, null, status);
 		}
 		
@@ -77,10 +77,10 @@ public class AlertManagerImpl implements AlertManager {
 		LOGGER.debug ("Begin updateSensorAlert with parameters : sensorId "+sensorId+" status: "+ status);
 		
 		if (status.equals(E_SensorStatus.ONLINE.toString())) { 
-			LOGGER.debug ("updateSensorAlert ONLINE condition");
+			LOGGER.info ("updateSensorAlert ONLINE condition, for Sensor#" + sensorId);
 			alertRepository.deleteAlertBySensorId(sensorId); 
 		} else if (status.equals(E_SensorStatus.OFFLINE.toString())) {
-			LOGGER.debug ("updateSensorAlert OFFLINE condition");
+			LOGGER.info ("updateSensorAlert OFFLINE condition, for Sensor#" + sensorId);
 			// if Sensor is appeared then declare error
 			try {
 				SensorDao sensor = sensorRepository.findOne(sensorId);
@@ -99,18 +99,18 @@ public class AlertManagerImpl implements AlertManager {
 					LOGGER.debug( message.toString() );
 				}
 				if ((sensor!= null)&&(sensor.getRoomId()!= null)&&(sensor.getRoomId()!=0)) {
-					LOGGER.debug ("updateSensorAlert Sensor appared to room");
+					LOGGER.info ("updateSensorAlert Sensor appared to room");
 					setAlert(null, sensorId, status);
 				} else {
-					LOGGER.debug ("updateSensorAlert Sensor not appared to room");
+					LOGGER.info ("updateSensorAlert Sensor not appared to room");
 					alertRepository.deleteAlertBySensorId(sensorId);
 				}
 			} catch(IncorrectResultSizeDataAccessException e ) {
-				LOGGER.debug("sensor by id " + sensorId + " is not appared", e);
+				LOGGER.error("sensor by id " + sensorId + " is not appared", e);
 				alertRepository.deleteAlertBySensorId(sensorId);
 			}
 		} else {
-			LOGGER.debug ("updateSensorAlert OTHER condition");
+			LOGGER.info ("updateSensorAlert OTHER condition, for Sensor#" + sensorId);
 			setAlert(null, sensorId, status);
 		}
 		

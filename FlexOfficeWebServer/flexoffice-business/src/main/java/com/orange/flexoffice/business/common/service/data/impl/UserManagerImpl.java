@@ -95,10 +95,10 @@ public class UserManagerImpl implements UserManager {
 			
 			UserDao userDao = userRepository.findByAccessToken(accessToken);
 			if (userDao == null)  {
-				LOGGER.debug("checkToken return : accessToken not found in DB.");
+				LOGGER.error("checkToken return : accessToken not found in DB.");
 				throw new AuthenticationException("UserManager.findByUserAccessToken : User by accessToken #" + accessToken + " is not found in DB");
 			}else if (userDao.getExpiredTokenDate().before(new Date())) {
-				LOGGER.debug("checkToken return : The accessToken is expired at :" + user.getExpiredTokenDate());
+				LOGGER.error("checkToken return : The accessToken is expired at :" + user.getExpiredTokenDate());
 				throw new AuthenticationException("UserManager.findByUserAccessToken : User by accessToken #" + accessToken + " is expired");
 			} else {
 				user.setId(userDao.getColumnId());
@@ -133,7 +133,7 @@ public class UserManagerImpl implements UserManager {
 	@Override
 	public UserDao save(UserDao userDao) throws DataAlreadyExistsException {
 		try {		
-			// Saves UserDao
+			// save userDao
 			return userRepository.saveUser(userDao);
 
 		} catch(DataIntegrityViolationException e ) {
@@ -152,7 +152,7 @@ public class UserManagerImpl implements UserManager {
 	@Override
 	public UserDao update(UserDao userDao) throws DataNotExistsException {
 		try {
-			// Update RoomDao
+			// update RoomDao
 			return userRepository.updateUser(userDao);
 			
 		} catch (RuntimeException e) {

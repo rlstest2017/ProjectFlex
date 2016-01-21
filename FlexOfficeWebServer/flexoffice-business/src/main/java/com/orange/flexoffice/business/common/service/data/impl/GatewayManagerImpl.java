@@ -86,7 +86,7 @@ public class GatewayManagerImpl implements GatewayManager {
 		
 		List<RoomDao> roomsDao = roomRepository.findByGatewayId(gateway.getId());
 		
-		LOGGER.debug("There is: " + roomsDao.size() + " rooms for gateway (macAddress) :" + gatewayMacAddress );
+		LOGGER.info("There is: " + roomsDao.size() + " rooms for gateway (macAddress) :" + gatewayMacAddress );
 		
 		for (RoomDao roomDao : roomsDao) {
 			RoomDto roomDto = new RoomDto();
@@ -95,7 +95,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			roomDto.setOccupancyTimeOut(getOccupancyTimeOut());
 			List<SensorDao> sonsensDao = getSensors(roomDao.getId());
 			
-			LOGGER.debug("There is: " + sonsensDao.size() + " sensors for room :" + roomDao.getColumnId());
+			LOGGER.info("There is: " + sonsensDao.size() + " sensors for room :" + roomDao.getColumnId());
 			
 			if ((sonsensDao != null)&&(!sonsensDao.isEmpty())) {
 				roomDto.setSensors(sonsensDao);					
@@ -115,7 +115,7 @@ public class GatewayManagerImpl implements GatewayManager {
 		GatewayDao gatewayDao = gatewayRepository.findOne(gatewayId);
 		
 		if (gatewayDao == null) {
-			LOGGER.debug("gateway by id " + gatewayId + " is not found");
+			LOGGER.error("gateway by id " + gatewayId + " is not found");
 			throw new DataNotExistsException("Gateway not exist");
 		}
 		
@@ -193,7 +193,7 @@ public class GatewayManagerImpl implements GatewayManager {
 				return dto;
 	
 			} catch(IncorrectResultSizeDataAccessException e ) {
-				LOGGER.debug("gateway by macAddress " + macAddress + " is not found", e);
+				LOGGER.error("gateway by macAddress " + macAddress + " is not found", e);
 				throw new DataNotExistsException("Gateway not exist");
 			}
 	}
@@ -204,7 +204,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			// Save GatewayDao
 			return gatewayRepository.saveGateway(gatewayDao);
 		} catch (DataIntegrityViolationException e) {
-			LOGGER.debug("DataIntegrityViolationException in save() GatewayManagerImpl with message :" + e.getMessage(), e);
+			LOGGER.error("DataIntegrityViolationException in save() GatewayManagerImpl with message :" + e.getMessage(), e);
 			throw new DataAlreadyExistsException("gateway already exist.");
 		}
 	}
@@ -216,7 +216,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			// update GatewayDao
 			return gatewayRepository.updateGateway(gatewayDao);
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("DataAccessException in update() GatewayManagerImpl with message :" + e.getMessage(), e);
+			LOGGER.error("DataAccessException in update() GatewayManagerImpl with message :" + e.getMessage(), e);
 			throw new DataNotExistsException("Gateway not exist");
 		}
 	}
@@ -245,7 +245,7 @@ public class GatewayManagerImpl implements GatewayManager {
 				List<RoomDao> rooms = roomRepository.findByGatewayId(gatewayId);
 				for (RoomDao roomDao : rooms) {
 					// set Room Status to UNKNOWN
-					LOGGER.debug("RoomDao in gatewayManager updateStatus() is going to set RoomStatus to UNKNOWN");
+					LOGGER.info("RoomDao in gatewayManager updateStatus() is going to set RoomStatus to UNKNOWN, for room#" + roomDao.getName());
 					roomDao.setStatus(E_RoomStatus.UNKNOWN.toString());
 					roomDao.setUserId(null);
 					roomRepository.updateRoomStatus(roomDao); // update Room Status to UNKNOWN
@@ -262,7 +262,7 @@ public class GatewayManagerImpl implements GatewayManager {
 							roomStatRepository.updateEndOccupancyDate(roomStat);
 						} 
 					} catch(IncorrectResultSizeDataAccessException e ) {
-						LOGGER.debug("GatewayManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId(), e);
+						LOGGER.error("GatewayManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId(), e);
 					}
 				}
 			} 
@@ -272,7 +272,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			return	processCommand(status, gatewayId, commandGateway);
 			
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("gateway is not found", e);
+			LOGGER.error("gateway is not found", e);
 			throw new DataNotExistsException("Gateway not exist");
 		}
 	}
@@ -290,12 +290,12 @@ public class GatewayManagerImpl implements GatewayManager {
 					gatewayRepository.deleteByMacAddress(macAddress);
 				}
 			} catch(IncorrectResultSizeDataAccessException e ) {
-				LOGGER.debug("gateway by macAddress " + macAddress + " has not alert", e);
+				LOGGER.error("gateway by macAddress " + macAddress + " has not alert", e);
 				// delete gateway
 				gatewayRepository.deleteByMacAddress(macAddress);	
 			}
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("gateway by macAddress " + macAddress + " is not found", e);
+			LOGGER.error("gateway by macAddress " + macAddress + " is not found", e);
 			throw new DataNotExistsException("Gateway not exist");
 		} catch(DataIntegrityViolationException e ) {
 			LOGGER.error("GatewayManager.delete : Gateway associated to a room", e);
@@ -363,7 +363,7 @@ public class GatewayManagerImpl implements GatewayManager {
 	@Transactional
 	private GatewayCommand processCommand(String gatewayStatus, Long gatewayId, String commandGateway) {
 		
-		LOGGER.info( "Begin call processCommand method for GatewayEndpoint at: " + new Date() );
+		LOGGER.debug( "Begin call processCommand method for GatewayEndpoint at: " + new Date() );
 		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Call processCommand(String gatewayStatus, Long gatewayId, String commandGateway) method of GatewayEndpoint, with parameters :");
@@ -473,8 +473,7 @@ public class GatewayManagerImpl implements GatewayManager {
 
 	    }
 		
-		//LOGGER.debug( "returned command is :" + commandToSendToGateway.getCommand().toString() );
-		LOGGER.info( "End call processCommand method for GatewayEndpoint at: " + new Date() );
+		LOGGER.debug( "End call processCommand method for GatewayEndpoint at: " + new Date() );
 		
 		return commandToSendToGateway;
 	}

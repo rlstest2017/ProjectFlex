@@ -118,17 +118,16 @@ public class SystemManagerImpl implements SystemManager {
 		        final String[] values = credentials.split(":",2);
 		        email = values[0].trim();
 		        password = values[1].trim();
-		        LOGGER.debug("email in processLogin() method is :" + email);
-		        LOGGER.debug("password in processLogin() method is :" + password);
+		        LOGGER.info("in processLogin() email#"+email+ " password#"+password);
 		        accessToken = tokenTools.createAccessToken(email, password);
 	        } else {
 	        	// credentials = email
 	        	email =credentials;
 	        	if (email.length() > infosDBLength) {
-	        		LOGGER.debug("Invalid email length in processLogin() method is : " + email);
+	        		LOGGER.error("Invalid email length in processLogin() method is : " + email);
 	        		throw new InvalidParameterException("Invalid email length : " + email);
 	        	}
-	        	LOGGER.debug("email in processLogin() method is :" + email);
+	        	LOGGER.info("in processLogin() email#" + email);
 		        accessToken = tokenTools.createAccessToken(email, null);
 	        }
 	        
@@ -195,13 +194,13 @@ public class SystemManagerImpl implements SystemManager {
 			UserDao user = userRepository.findByAccessToken(token);
 			
 			if (user == null)  {
-				LOGGER.debug("checkToken return : accessToken not found in DB.");
+				LOGGER.info("checkToken return : accessToken not found in DB.");
 				return false;
 			}else if (user.getExpiredTokenDate().before(new Date())) {
-				LOGGER.debug("checkToken return : The accessToken is expired at :" + user.getExpiredTokenDate());
+				LOGGER.info("checkToken return : The accessToken is expired at :" + user.getExpiredTokenDate());
 				return false;
 			} else {
-				LOGGER.debug("checkToken return : accessToken is valid.");
+				LOGGER.info("checkToken return : accessToken is valid.");
 				return true;
 			}
 		} catch(IncorrectResultSizeDataAccessException e ) {
@@ -362,6 +361,12 @@ public class SystemManagerImpl implements SystemManager {
 		return count;
 	}
 
+	/**
+	 * processInitTeachin
+	 * @param auth
+	 * @param roomId
+	 * @throws DataNotExistsException
+	 */
 	private void processInitTeachin(String auth, Long roomId) throws DataNotExistsException {
 		
 		teachinRepository.deleteAllTeachinSensors();
