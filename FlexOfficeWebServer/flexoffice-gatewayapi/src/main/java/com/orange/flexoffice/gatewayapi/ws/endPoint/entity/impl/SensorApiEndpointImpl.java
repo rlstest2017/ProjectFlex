@@ -51,7 +51,7 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 	@Override
 	public Response addSensor(SensorNewSummary sensorInput) {
 
-		LOGGER.info( "Begin call SensorApiEndpoint.addSensor at: " + new Date() );
+		LOGGER.debug( "Begin call SensorApiEndpoint.addSensor at: " + new Date() );
 		try {
 			
 		SensorDao sensorDao = new SensorDao();
@@ -90,7 +90,7 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
-		LOGGER.info( "End call SensorApiEndpoint.addSensor at: " + new Date() );
+		LOGGER.debug( "End call SensorApiEndpoint.addSensor at: " + new Date() );
 
 		return Response.status(Status.ACCEPTED).build();
 	}
@@ -98,7 +98,7 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 	@Override
 	public Response updateSensor(String identifier, SensorInput sensor)  {
 		
-		LOGGER.info( "Begin call SensorEndpoint.updateSensor at: " + new Date() );
+		LOGGER.debug( "Begin call SensorEndpoint.updateSensor at: " + new Date() );
 		
 		try {
 			
@@ -158,7 +158,7 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
-		LOGGER.info( "End call SensorEndpoint.updateSensor at: " + new Date() );
+		LOGGER.debug( "End call SensorEndpoint.updateSensor at: " + new Date() );
 
 		return Response.status(Status.ACCEPTED).build();
 	}

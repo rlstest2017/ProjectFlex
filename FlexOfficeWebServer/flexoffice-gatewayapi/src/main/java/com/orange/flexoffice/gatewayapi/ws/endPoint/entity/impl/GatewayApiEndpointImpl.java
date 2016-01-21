@@ -106,7 +106,7 @@ public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 	@Override
 	public GatewayReturn updateGateway(String macAddress, GatewayInput gateway) {
 		try {
-		LOGGER.info( "Begin call doPut method for GatewayEndpoint at: " + new Date() );
+		LOGGER.debug( "Begin call doPut method for GatewayEndpoint at: " + new Date() );
 		GatewayDao gatewayDao = new GatewayDao();
 		gatewayDao.setMacAddress(macAddress);
 		gatewayDao.setStatus(gateway.getGatewayStatus().toString());
@@ -121,7 +121,7 @@ public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 			}
 			returnCommand.setCommand(ECommandModel.valueOf(command.getCommand().toString()));
 			
-			LOGGER.info( "End call doPut method for GatewayEndpoint at: " + new Date() );
+			LOGGER.debug( "End call doPut method for GatewayEndpoint at: " + new Date() );
 			return returnCommand;
 			
 		} catch (DataNotExistsException e){
