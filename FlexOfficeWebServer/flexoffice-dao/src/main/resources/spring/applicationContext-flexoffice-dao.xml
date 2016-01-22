@@ -7,16 +7,26 @@
 	
 	<!-- Scan base package -->
 	<context:component-scan base-package="com.orange.flexoffice.dao.common.repository, com.orange.flexoffice.dao.common.model" />
-	
+
+    <context:property-placeholder  ignore-resource-not-found="true" location="file:/home/flexoffice/flexoffice-webserver/Config/flexoffice.properties"/>
+
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="org.postgresql.Driver"/>
-		<property name="url" value="jdbc:postgresql://192.168.129.80:5432/FlexOffice"/>         
+		<property name="url" value="${postgres.jdbc.url}"/>
+		<property name="username" value="${postgres.jdbc.username}"/>
+		<property name="password" value="${postgres.jdbc.password}"/>
+		<property name="maxActive" value="${postgres.jdbc.maxActive}"/>
+		<property name="maxIdle" value="${postgres.jdbc.maxIdle}"/>
+		<property name="maxWait" value="${postgres.jdbc.maxWait}"/>
+		
+<!--	<property name="url" value="jdbc:postgresql://192.168.129.80:5432/FlexOffice"/> -->             
 <!-- 	<property name="url" value="jdbc:postgresql://localhost:5432/FlexOffice"/> -->  
-		<property name="username" value="flexoffice"/> 
-		<property name="password" value="oab"/>  
+<!--	<property name="username" value="flexoffice"/> -->
+<!--	<property name="password" value="oab"/>  -->
 <!--	<property name="password" value="flexoffice"/> -->    		
-		<property name="maxActive" value="10"/>
-		<property name="maxIdle" value="5"/>
+<!--	<property name="maxActive" value="10"/> -->
+<!--	<property name="maxIdle" value="5"/> -->
+
 	</bean>
 	
 	<bean id="transactionManager" 
