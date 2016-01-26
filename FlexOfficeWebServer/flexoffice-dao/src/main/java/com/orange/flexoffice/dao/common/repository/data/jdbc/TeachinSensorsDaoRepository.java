@@ -16,6 +16,14 @@ import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
 import com.orange.flexoffice.dao.common.repository.data.TeachinSensorDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.TeachinSensorsDaoMetadata;
 
+/*---------------------------------------------------------------------------------------
+Manage sensors table
+
+
+
+/*---------------------------------------------------------------------------------------*/
+
+
 @Repository
 public class TeachinSensorsDaoRepository extends DataRepository<TeachinSensorDao> implements TeachinSensorDaoOperations {
 
