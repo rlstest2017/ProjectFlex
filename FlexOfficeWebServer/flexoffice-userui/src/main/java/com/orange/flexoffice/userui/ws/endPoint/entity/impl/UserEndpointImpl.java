@@ -102,12 +102,19 @@ public class UserEndpointImpl implements UserEndpoint {
 
 	//security="none", not filtered by spring-security, then I must to check origin header parameter
 	@Override
-	public Response login(String auth, String origin, UserInput user) {
+	public Response login(/*String auth,*/String origin, UserInput user) {
 		try {
 			// Optional firstName, lastName defined in Body for create a new user
 			UserDao userToCreate = null;
 			if (user != null) {
 				userToCreate = new UserDao();
+				String email = user.getEmail();
+				if  (email != null) {
+					userToCreate.setEmail(email.trim());
+				} else {
+					LOGGER.error("email in UserEndpoint.login() method is null.");
+					throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_91, Response.Status.METHOD_NOT_ALLOWED));
+				}
 				String firstName = user.getFirstName();
 				if (firstName != null) {
 					if (firstName.trim().length() > LOGIN_INFOS_LENGTH) {
@@ -126,7 +133,7 @@ public class UserEndpointImpl implements UserEndpoint {
 				}
 			}
 			
-			UserDao userToken = systemManager.processLogin(auth, false, userToCreate, LOGIN_INFOS_LENGTH);
+			UserDao userToken = systemManager.processLogin(null, false, userToCreate, LOGIN_INFOS_LENGTH);
 			Token token = factory.createToken();
 			token.setAccessToken(userToken.getAccessToken());
 			token.setExpiredDate(userToken.getExpiredTokenDate().getTime());

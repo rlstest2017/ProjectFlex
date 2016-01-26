@@ -120,10 +120,12 @@ public class UserEndpointImplTest {
 	@Test
 	public void TestF_login() {
 		// Setup
-		String authorization = "Basic Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdA==";
+		//String authorization = "Basic Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdA==";
+		UserInput user = new UserInput();
+		user.setEmail("first.last5@test.com:test");
 		
 		// Test
-		Response response = userEndpoint.login(authorization, null, null);
+		Response response = userEndpoint.login(null, user);
 
 		// Asserts
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -133,11 +135,12 @@ public class UserEndpointImplTest {
 	public void TestG_loginNotExistWithoutUserInput() {
 		// Setup
 		// first.last10@test.com:pass
-		String authorization = "Basic Zmlyc3QubGFzdDEwQHRlc3QuY29tOnBhc3M=";
-		
+		//String authorization = "Basic Zmlyc3QubGFzdDEwQHRlc3QuY29tOnBhc3M=";
+		UserInput user = new UserInput();
+		user.setEmail("first.last10@test.com:pass");
 		
 		// Test
-		Response response = userEndpoint.login(authorization, null, null);
+		Response response = userEndpoint.login(null, user);
 
 		// Asserts
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -147,13 +150,14 @@ public class UserEndpointImplTest {
 	public void TestH_loginNotExistWithUserInput() {
 		// Setup
 		// first.last15@test.com:pass
-		String authorization = "Basic Zmlyc3QubGFzdDE1QHRlc3QuY29tOnBhc3M=";
+		// String authorization = "Basic Zmlyc3QubGFzdDE1QHRlc3QuY29tOnBhc3M=";
 		UserInput user = new UserInput();
+		user.setEmail("first.last15@test.com:pass");
 		user.setFirstName("firstTest");
 		user.setLastName("LastTest");
 		
 		// Test
-		Response response = userEndpoint.login(authorization, null, user);
+		Response response = userEndpoint.login(null, user);
 
 		// Asserts
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -163,12 +167,13 @@ public class UserEndpointImplTest {
 	public void TestI_loginNotExistWithLastName() {
 		// Setup
 		// first.last20@test.com:pass
-		String authorization = "Basic Zmlyc3QubGFzdDIwQHRlc3QuY29tOnBhc3M=";
+		//String authorization = "Basic Zmlyc3QubGFzdDIwQHRlc3QuY29tOnBhc3M=";
 		UserInput user = new UserInput();
+		user.setEmail("first.last20@test.com:pass");
 		user.setLastName("LastTest");
 		
 		// Test
-		Response response = userEndpoint.login(authorization, null, user);
+		Response response = userEndpoint.login(null, user);
 
 		// Asserts
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -178,14 +183,15 @@ public class UserEndpointImplTest {
 	public void TestJ_loginBadFirstNameLength() {
 		// Setup
 		boolean expectedResult = false;
-		String authorization = "Basic Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdA==";
+		//String authorization = "Basic Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdA==";
 		UserInput user = new UserInput();
+		user.setEmail("first.last5@test.com:test");
 		// 101 caractères
 		user.setFirstName("A1531236541235874123569874154236mfpesndealoszmape124531236541235874123569874154236mfpesndealoszmapeza");		
 		// Test
 		try {
 			// Test
-			userEndpoint.login(authorization, null, user);
+			userEndpoint.login(null, user);
 
 		} catch (WebApplicationException e) {
 			expectedResult = true;
@@ -199,15 +205,16 @@ public class UserEndpointImplTest {
 	public void TestK_loginBadLastNameLength() {
 		// Setup
 		boolean expectedResult = false;
-		String authorization = "Basic Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdA==";
+		//String authorization = "Basic Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdA==";
 		UserInput user = new UserInput();
+		user.setEmail("first.last5@test.com:test");
 		// 101 caractères
 		user.setLastName("A1531236541235874123569874154236mfpesndealoszmape124531236541235874123569874154236mfpesndealoszmapeza");
 		
 		// Test
 		try {
 			// Test
-			userEndpoint.login(authorization, null, user);
+			userEndpoint.login(null, user);
 
 		} catch (WebApplicationException e) {
 			expectedResult = true;
@@ -222,12 +229,13 @@ public class UserEndpointImplTest {
 		// Setup
 		boolean expectedResult = false;
 		// user 101 caractères : test@gmail.comaldeosmzpaodenslezaqlpmasleomapeznsltesttiogmail.comaldeosmzpaodenslezaqlpmasleomapeznsl 
-		String authorization = "Basic dGVzdEBnbWFpbC5jb21hbGRlb3NtenBhb2RlbnNsZXphcWxwbWFzbGVvbWFwZXpuc2x0ZXN0dGlvZ21haWwuY29tYWxkZW9zbXpwYW9kZW5zbGV6YXFscG1hc2xlb21hcGV6bnNs";
-		
+		//String authorization = "Basic dGVzdEBnbWFpbC5jb21hbGRlb3NtenBhb2RlbnNsZXphcWxwbWFzbGVvbWFwZXpuc2x0ZXN0dGlvZ21haWwuY29tYWxkZW9zbXpwYW9kZW5zbGV6YXFscG1hc2xlb21hcGV6bnNs";
+		UserInput user = new UserInput();
+		user.setEmail("test@gmail.comaldeosmzpaodenslezaqlpmasleomapeznsltesttiogmail.comaldeosmzpaodenslezaqlpmasleomapeznsl");
 		// Test
 		try {
 			// Test
-			userEndpoint.login(authorization, null, null);
+			userEndpoint.login(null, user);
 		} catch (WebApplicationException e) {
 			expectedResult = true;
 		}

@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 
 import static com.orange.flexoffice.userui.ws.PathConst.SYSTEM_PATH;
 import static com.orange.flexoffice.userui.ws.PathConst.USER_PATH;
-import static com.orange.flexoffice.userui.ws.ParamsConst.AUTHORIZATION_HEADER_PARAM;
+//import static com.orange.flexoffice.userui.ws.ParamsConst.AUTHORIZATION_HEADER_PARAM;
 import static com.orange.flexoffice.userui.ws.ParamsConst.ORIGIN_HEADER_PARAM;
 import static com.orange.flexoffice.userui.ws.ParamsConst.TOKEN_HEADER_PARAM;
 import static com.orange.flexoffice.userui.ws.PathConst.LOGIN_PATH;
@@ -52,7 +52,7 @@ public interface UserEndpoint {
 	@Path(LOGIN_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response login(@HeaderParam(AUTHORIZATION_HEADER_PARAM) String auth, @HeaderParam(ORIGIN_HEADER_PARAM) String origin, UserInput user); 
+	Response login(/*@HeaderParam(AUTHORIZATION_HEADER_PARAM) String auth,*/ @HeaderParam(ORIGIN_HEADER_PARAM) String origin, UserInput user); 
 	
 	/**
 	 * Delete Token from DB

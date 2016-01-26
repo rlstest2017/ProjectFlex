@@ -77,7 +77,7 @@ public final class DataSqlTemplate {
 	public static final String CREATE_USER_TEMPLATE = 
 			"insert into %s (first_name, last_name, email) values (:firstName, :lastName, :email)";
 	public static final String CREATE_USER_FROM_USERUI_TEMPLATE = 
-			"insert into %s (first_name, last_name, email, is_created_from_userui) values (:firstName, :lastName, :email, :isCreatedFromUserui)";
+			"insert into %s (first_name, last_name, email, is_created_from_userui, access_token, expired_token_date) values (:firstName, :lastName, :email, :isCreatedFromUserui, :accessToken, :expiredTokenDate)";
 	public static final String CREATE_GATEWAY_TEMPLATE = 
 			"insert into %s (mac_address, name, description) values (:macAddress, :name, :description)";
 	public static final String CREATE_ROOM_TEMPLATE = 
@@ -109,7 +109,7 @@ public final class DataSqlTemplate {
 	public static final String UPDATE_USER_ACCESS_TOKEN_TEMPLATE =
 			"update %s set access_token=NULL  WHERE access_token=:accessToken";
 	public static final String UPDATE_USER_BY_MAIL_TEMPLATE =
-			"update %s set access_token=:accessToken, expired_token_date=:expiredTokenDate, last_connection_date=now() WHERE email=:email";
+			"update %s set access_token=:accessToken, expired_token_date=:expiredTokenDate, first_name=:firstName, last_name=:lastName, last_connection_date=now() WHERE email=:email";
 	public static final String UPDATE_GATEWAY_STATUS_TEMPLATE =
 			"update %s set status=CAST(:status AS gatewayStatus), last_polling_date=now() where id=:id";
 	public static final String UPDATE_GATEWAY_COMMAND_TEMPLATE =

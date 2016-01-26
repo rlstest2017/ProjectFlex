@@ -103,15 +103,17 @@ public class SystemManagerImpl implements SystemManager {
 	    LOGGER.debug("authorization parameter is :" + authorization);
     	UserDao user = new UserDao();
     	
+    	String base64Credentials = null;
+    	String credentials = null;
+        String email = null;
+        String password = null;
+        String accessToken = null;
+    	
 		if (authorization != null && authorization.startsWith("Basic")) {
 	        // Authorization: Basic base64credentials
-	        String base64Credentials = authorization.substring("Basic".length()).trim();
-	        String credentials = new String(Base64Utils.decodeFromString(base64Credentials),
+	        base64Credentials = authorization.substring("Basic".length()).trim();
+	        credentials = new String(Base64Utils.decodeFromString(base64Credentials),
 	                Charset.forName("UTF-8"));
-	        
-	        String email = null;
-	        String password = null;
-	        String accessToken = null;
 	        
 	        if (isFromAdminUi) {
 	        	// credentials = email:password
@@ -120,16 +122,19 @@ public class SystemManagerImpl implements SystemManager {
 		        password = values[1].trim();
 		        LOGGER.info("in processLogin() email#"+email+ " password#"+password);
 		        accessToken = tokenTools.createAccessToken(email, password);
-	        } else {
-	        	// credentials = email
-	        	email =credentials;
-	        	if (email.length() > infosDBLength) {
-	        		LOGGER.error("Invalid email length in processLogin() method is : " + email);
-	        		throw new InvalidParameterException("Invalid email length : " + email);
-	        	}
-	        	LOGGER.info("in processLogin() email#" + email);
-		        accessToken = tokenTools.createAccessToken(email, null);
 	        }
+		 } 
+	        
+         if (!isFromAdminUi) {
+        	// credentials = email
+        	email =((String)((UserDao) object).getEmail());
+        	if (email.length() > infosDBLength) {
+        		LOGGER.error("Invalid email length in processLogin() method is : " + email);
+        		throw new InvalidParameterException("Invalid email length : " + email);
+        	}
+        	LOGGER.info("in processLogin() email#" + email);
+	        accessToken = tokenTools.createAccessToken(email, null);
+         }
 	        
 	        Date expiredTokenDate = tokenTools.createExpiredDate();
 	        
@@ -145,14 +150,25 @@ public class SystemManagerImpl implements SystemManager {
 		        	UserDao returnedUser = userRepository.findByUserEmailAndPassword(user);
 		        	// user id is used for clear teachin !!!
 		        	user.setId(returnedUser.getId());
+		        	user.setFirstName(returnedUser.getFirstName());
+		        	user.setLastName(returnedUser.getLastName());
+		        	user.setIsCreatedFromUserui(returnedUser.getIsCreatedFromUserui());
 	        	} else {
-	        		userRepository.findByUserEmail(email);
+	        		if ((String)((UserDao) object).getFirstName() != null) {
+	        			user.setFirstName((String)((UserDao) object).getFirstName());
+	        		}
+	        		if ((String)((UserDao) object).getLastName() != null) {
+	        			user.setLastName((String)((UserDao) object).getLastName());
+	        		}
+	        		
+	        		UserDao returnedUser = userRepository.findByUserEmail(email);
+	        		user.setIsCreatedFromUserui(returnedUser.getIsCreatedFromUserui());
 	        	}
 	        	
 	    		// Update UserDao
 				userRepository.updateUserByEmail(user);
 				
-				user.setIsCreatedFromUserui(false);
+				
 
 			} catch(IncorrectResultSizeDataAccessException e ) {
 				LOGGER.error("SystemManager.findByUserMail : User by email #" + email + " is not found", e);
@@ -168,10 +184,7 @@ public class SystemManagerImpl implements SystemManager {
 					userRepository.saveUserFromUserUI(user);
 				}
 			}
-		} else {
-			LOGGER.error("SystemManager.processLogin : Authorization parameter is null or wrong format");
-			throw new AuthenticationException("SystemManager.processLogin : Authorization parameter is null or wrong format");
-		}
+		
 			
 		
 		return user;

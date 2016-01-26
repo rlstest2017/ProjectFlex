@@ -19,6 +19,7 @@ public enum EnumErrorModel {
 	ERROR_7("U004", "impossible de supprimer cet utilisateur"),
 	ERROR_8("U005", "impossible de charger cet utilisateur"),
 	ERROR_9("U100", "cet email existe déjà"),
+	ERROR_91("U101", "email non fourni"),
 	ERROR_10("S001","impossible de charger la liste des capteurs"),
 	ERROR_11("S002","impossible de créer ce capteur"),
 	ERROR_12("S003","impossible de mettre à jour ce capteur"),
