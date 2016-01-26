@@ -17,10 +17,16 @@ import com.orange.flexoffice.dao.common.repository.data.TeachinSensorDaoOperatio
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.TeachinSensorsDaoMetadata;
 
 /*---------------------------------------------------------------------------------------
-Manage sensors table
+Manage teachin_sensors table
+when teachin is init(), one line is created with room_id, gateway_id & user_id renseigned with status INITIALIZING 
+when GATEWAY (gateway_id) is in TEACHIN mode the status become RUNNING
+when a sensors are detected, other lines ares created in table with only informations :
+sensor_identifier, sensor_status (PAIRED_OK, PAIRED_KO, UNPAIRED)
 
-
-
+The table is cleaned in two actions :
+	- login by the same user_id 
+	- init() another teachin (if actual teachin is in ENDED state)
+	
 /*---------------------------------------------------------------------------------------*/
 
 
