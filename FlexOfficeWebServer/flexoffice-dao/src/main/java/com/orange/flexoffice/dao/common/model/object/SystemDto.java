@@ -15,7 +15,10 @@ public class SystemDto {
 	private Integer userCount;
 	private Integer activeUserCount;
 	private Integer gatewayCount;
+	private Integer activeGatewayCount;
 	private Integer roomCount;
+	private Integer freeRoomCount;
+	private Integer occupiedRoomCount;
 	private List<AlertDao> deviceAlerts;
 	
 	public Integer getUserCount() {
@@ -55,5 +58,42 @@ public class SystemDto {
 	public void setDeviceAlerts(List<AlertDao> deviceAlerts) {
 		this.deviceAlerts = deviceAlerts;
 	}
+	/**
+	 * @return the activeGatewayCount
+	 */
+	public Integer getActiveGatewayCount() {
+		return activeGatewayCount;
+	}
+	/**
+	 * @param activeGatewayCount the activeGatewayCount to set
+	 */
+	public void setActiveGatewayCount(Integer activeGatewayCount) {
+		this.activeGatewayCount = activeGatewayCount;
+	}
+	/**
+	 * @return the freeRoomCount
+	 */
+	public Integer getFreeRoomCount() {
+		return freeRoomCount;
+	}
+	/**
+	 * @param freeRoomCount the freeRoomCount to set
+	 */
+	public void setFreeRoomCount(Integer freeRoomCount) {
+		this.freeRoomCount = freeRoomCount;
+	}
+	/**
+	 * @return the occupiedRoomCount
+	 */
+	public Integer getOccupiedRoomCount() {
+		return occupiedRoomCount;
+	}
+	/**
+	 * @param occupiedRoomCount the occupiedRoomCount to set
+	 */
+	public void setOccupiedRoomCount(Integer occupiedRoomCount) {
+		this.occupiedRoomCount = occupiedRoomCount;
+	}
+	
 	
  }

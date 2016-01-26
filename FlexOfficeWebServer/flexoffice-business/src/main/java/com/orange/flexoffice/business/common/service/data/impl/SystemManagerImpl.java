@@ -26,6 +26,8 @@ import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
+import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_UserRole;
 import com.orange.flexoffice.dao.common.model.object.SensorDto;
@@ -78,6 +80,7 @@ public class SystemManagerImpl implements SystemManager {
 		Long usersActiveCount = countActiveUsers();
 		Long usersCount = countUsers();
 		Long gatewaysCount = countGateways();
+		Long activeGatewaysCount = countActiveGateways();
 		Long roomsCount = countRooms();
 		List<AlertDao> deviceAlerts = findAllAlerts();
 		
@@ -89,12 +92,27 @@ public class SystemManagerImpl implements SystemManager {
 			LOGGER.debug("deviceAlerts size  : " + deviceAlerts.size());
 		}
 		
+		Long freeRoomsCount = 0l;
+		Long occupiedRoomsCount = 0l;
+		
+		List<RoomDao> rooms = roomRepository.findAllRooms();
+		for (RoomDao room : rooms) {
+			if (E_RoomStatus.FREE.toString().equals(room.getStatus())) {
+				freeRoomsCount++;
+			} else if (E_RoomStatus.OCCUPIED.toString().equals(room.getStatus())) {
+				occupiedRoomsCount++;
+			} 
+		}		
+		
 		system.setActiveUserCount(usersActiveCount.intValue());
 		system.setUserCount(usersCount.intValue());
 		system.setGatewayCount(gatewaysCount.intValue());
 		system.setRoomCount(roomsCount.intValue());
 		system.setDeviceAlerts(deviceAlerts);
-			
+		system.setActiveGatewayCount(activeGatewaysCount.intValue());
+		system.setFreeRoomCount(freeRoomsCount.intValue());
+		system.setOccupiedRoomCount(occupiedRoomsCount.intValue());
+		
 		return system;
 	}
 
@@ -376,6 +394,21 @@ public class SystemManagerImpl implements SystemManager {
 		return count;
 	}
 
+	@Transactional(readOnly=true)
+	private Long countActiveGateways() {
+		// get activeGateways
+		Long count = 0l;
+		List<GatewayDao> gateways = gatewayRepository.findAllGateways();
+		
+		for (GatewayDao gateway : gateways) {
+			if (E_GatewayStatus.ONLINE.toString().equals(gateway.getStatus())) {
+				count++;
+			}
+		}
+		
+		return count;
+	}
+	
 	/**
 	 * processInitTeachin
 	 * @param auth

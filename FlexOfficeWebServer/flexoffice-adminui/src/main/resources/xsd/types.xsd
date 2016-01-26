@@ -71,7 +71,10 @@
  		   <xsd:element name="userCount" type="xsd:integer"/>
 			<xsd:element name="activeUserCount" type="xsd:integer"/>
 			<xsd:element name="gatewayCount" type="xsd:integer"/>
+			<xsd:element name="activeGatewayCount" type="xsd:integer"/>
 			<xsd:element name="roomCount" type="xsd:integer"/>
+			<xsd:element name="freeRoomCount" type="xsd:integer"/>
+			<xsd:element name="occupiedRoomCount" type="xsd:integer"/>
 			<xsd:element name="deviceStatuses" type="e-deviceStatus" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="sensorTypes" type="e-sensorType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="roomTypes" type="e-roomType" minOccurs="0" maxOccurs="unbounded"/>

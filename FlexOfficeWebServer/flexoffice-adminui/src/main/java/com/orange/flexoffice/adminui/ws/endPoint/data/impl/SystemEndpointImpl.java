@@ -73,7 +73,10 @@ public class SystemEndpointImpl implements SystemEndpoint {
 			system.setActiveUserCount(BigInteger.valueOf(data.getActiveUserCount()));
 			system.setUserCount(BigInteger.valueOf(data.getUserCount()));
 			system.setGatewayCount(BigInteger.valueOf(data.getGatewayCount()));
+			system.setActiveGatewayCount(BigInteger.valueOf(data.getActiveGatewayCount()));
 			system.setRoomCount(BigInteger.valueOf(data.getRoomCount()));
+			system.setFreeRoomCount(BigInteger.valueOf(data.getFreeRoomCount()));
+			system.setOccupiedRoomCount(BigInteger.valueOf(data.getOccupiedRoomCount()));
 			
 			List<EDeviceStatus> deviceStatuses = constructDeviceStatuses();
 			List<EDeviceStatus> deviceStatusesToRet = system.getDeviceStatuses();
