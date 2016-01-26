@@ -162,6 +162,8 @@ public class SystemManagerImpl implements SystemManager {
 	        		}
 	        		
 	        		UserDao returnedUser = userRepository.findByUserEmail(email);
+	        		user.setFirstName(returnedUser.getFirstName());
+	        		user.setLastName(returnedUser.getLastName());
 	        		user.setIsCreatedFromUserui(returnedUser.getIsCreatedFromUserui());
 	        	}
 	        	
