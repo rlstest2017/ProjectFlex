@@ -172,16 +172,18 @@ public class SystemManagerImpl implements SystemManager {
 		        	user.setLastName(returnedUser.getLastName());
 		        	user.setIsCreatedFromUserui(returnedUser.getIsCreatedFromUserui());
 	        	} else {
+	        		UserDao returnedUser = userRepository.findByUserEmail(email);
 	        		if ((String)((UserDao) object).getFirstName() != null) {
 	        			user.setFirstName((String)((UserDao) object).getFirstName());
+	        		} else {
+	        			user.setFirstName(returnedUser.getFirstName());	
 	        		}
 	        		if ((String)((UserDao) object).getLastName() != null) {
 	        			user.setLastName((String)((UserDao) object).getLastName());
+	        		} else {
+	        			user.setLastName(returnedUser.getLastName());	
 	        		}
-	        		
-	        		UserDao returnedUser = userRepository.findByUserEmail(email);
-	        		user.setFirstName(returnedUser.getFirstName());
-	        		user.setLastName(returnedUser.getLastName());
+
 	        		user.setIsCreatedFromUserui(returnedUser.getIsCreatedFromUserui());
 	        	}
 	        	
