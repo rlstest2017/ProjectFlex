@@ -20,12 +20,7 @@ public class AuthenticationToken extends AbstractAuthenticationToken {
     }
     
     public Boolean checkToken(String token) {
-        Boolean isValidToken = systemManager.checkToken(token);
-        if (isValidToken) {
-        	return true;
-        } else {
-        	return false;
-        }
+    	return systemManager.checkToken(token);
     }
  
     @Override

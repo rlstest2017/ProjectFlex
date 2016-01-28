@@ -124,10 +124,10 @@ public class StatManagerImpl implements StatManager {
 		// 0 - Get nb Rooms by type => used for calculate the average of rates (la moyenne des taux !!!)
 		// The values are saved in nbRoomsByType HashMap()
 		E_RoomType[] types = E_RoomType.values();
-		for (E_RoomType e_RoomType : types) {
-			long nb = roomRepository.countRoomsByType(e_RoomType.toString());
-			nbRoomsByType.put(e_RoomType.toString(), nb);
-			LOGGER.debug("There is " + nb + " rooms of type " + e_RoomType.toString());
+		for (E_RoomType eRoomType : types) {
+			long nb = roomRepository.countRoomsByType(eRoomType.toString());
+			nbRoomsByType.put(eRoomType.toString(), nb);
+			LOGGER.debug("There is " + nb + " rooms of type " + eRoomType.toString());
 		}
 
 		// 1 - Get Room Daily Data requested by From & To parameters
@@ -402,8 +402,7 @@ public class StatManagerImpl implements StatManager {
 	 */
 	private List<RoomDailyOccupancyDao> dailyRoomsList(RoomDailyOccupancyDto parameters ) {
 		// 1 - Get Room Daily Data requested by From & To parameters
-		List<RoomDailyOccupancyDao> dailyRoomsList = roomDailyRepository.findRequestedRoomsDailyOccupancy(parameters);
-		return dailyRoomsList;
+		return roomDailyRepository.findRequestedRoomsDailyOccupancy(parameters);
 	}
 	
 	/**

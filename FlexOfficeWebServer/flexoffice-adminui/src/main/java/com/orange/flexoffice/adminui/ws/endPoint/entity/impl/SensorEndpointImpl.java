@@ -324,7 +324,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 
 	
 	private String computeProfile(final String currentProfile, final ESensorType eSensorType) {
-		String profile = new String("");
+		String profile;
 		
 		if ((currentProfile == null) || (currentProfile.isEmpty())) {
 			// Profile depends on type.
@@ -337,6 +337,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 		} else {
 			profile = currentProfile;
 		}
+		
 		return profile;
 	}
 	

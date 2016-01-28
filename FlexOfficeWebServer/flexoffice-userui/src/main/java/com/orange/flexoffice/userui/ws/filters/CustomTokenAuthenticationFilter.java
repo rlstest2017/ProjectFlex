@@ -53,7 +53,7 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
             response.addHeader("Access-Control-Allow-Headers",
                     request.getHeader("Access-Control-Request-Headers"));
         }
-    	if (request.getMethod().equals("OPTIONS")) {
+    	if ("OPTIONS".equals(request.getMethod())) {
             response.getWriter().print("OK");
             response.getWriter().flush();
             response.setStatus(response.SC_OK);
@@ -62,7 +62,9 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
     	String token = request.getHeader(HEADER_SECURITY_TOKEN);
         logger.info("token found:"+token);
         AbstractAuthenticationToken userAuthenticationToken = authUserByToken(token);
-        if(userAuthenticationToken == null) throw new AuthenticationServiceException(MessageFormat.format("Error | {0}", "Bad Token"));
+        if(userAuthenticationToken == null) { 
+        	throw new AuthenticationServiceException(MessageFormat.format("Error | {0}", "Bad Token"));
+        }	
         return userAuthenticationToken;
     }
  

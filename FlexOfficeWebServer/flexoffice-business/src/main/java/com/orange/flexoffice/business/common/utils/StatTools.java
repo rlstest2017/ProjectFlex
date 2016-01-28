@@ -33,8 +33,8 @@ public class StatTools {
 		List<String> list = new ArrayList<String>();
 		
 		E_RoomType[] types = E_RoomType.values();
-		for (E_RoomType e_RoomType : types) {
-			list.add(e_RoomType.toString());
+		for (E_RoomType eRoomType : types) {
+			list.add(eRoomType.toString());
 		}
 		
 		return list;
@@ -250,8 +250,8 @@ public class StatTools {
 		Map<String, Long> nbRoomsByType = new HashMap<String, Long>();
 	
 		E_RoomType[] types = E_RoomType.values();
-		for (E_RoomType e_RoomType : types) {
-			nbRoomsByType.put(e_RoomType.toString(), 5l);
+		for (E_RoomType eRoomType : types) {
+			nbRoomsByType.put(eRoomType.toString(), 5L);
 		}
 		
 		System.out.println("Box nb salles :" + nbRoomsByType.get(E_RoomType.BOX.toString()));

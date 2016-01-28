@@ -92,8 +92,8 @@ public class SystemManagerImpl implements SystemManager {
 			LOGGER.debug("deviceAlerts size  : " + deviceAlerts.size());
 		}
 		
-		Long freeRoomsCount = 0l;
-		Long occupiedRoomsCount = 0l;
+		Long freeRoomsCount = 0L;
+		Long occupiedRoomsCount = 0L;
 		
 		List<RoomDao> rooms = roomRepository.findAllRooms();
 		for (RoomDao room : rooms) {
@@ -392,14 +392,13 @@ public class SystemManagerImpl implements SystemManager {
 		ConfigurationDao lastConnectionDuration = configRepository.findByKey(E_ConfigurationKey.LAST_CONNECTION_DURATION.toString());
 		String lastConnectionDurationValue = lastConnectionDuration.getValue();
 		Date date = dateTools.lastConnexionDate(lastConnectionDurationValue);
-		Long count = userRepository.countActiveUsers(date);
-		return count;
+		return userRepository.countActiveUsers(date);
 	}
 
 	@Transactional(readOnly=true)
 	private Long countActiveGateways() {
 		// get activeGateways
-		Long count = 0l;
+		Long count = 0L;
 		List<GatewayDao> gateways = gatewayRepository.findAllGateways();
 		
 		for (GatewayDao gateway : gateways) {

@@ -21,8 +21,8 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException ) throws IOException, ServletException {
         String contentType = request.getContentType();
-        LOGGER.info(contentType);
-        if (request.getMethod().equals("OPTIONS")) {
+        LOGGER.debug(contentType);
+        if ("OPTIONS".equals(request.getMethod())) {
             response.getWriter().print("OK");
             response.getWriter().flush();
             response.setStatus(response.SC_OK);

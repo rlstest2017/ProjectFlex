@@ -117,11 +117,11 @@ public class TeachinSensorDao extends AbstractData {
 
 	@Override
 	public void setColumnId(String columnId) {
+		setId(Long.valueOf(columnId));
 	}
-
 	@Override
 	public String getColumnId() {
-		return null;
+		return getId().toString();
 	}
 	
 

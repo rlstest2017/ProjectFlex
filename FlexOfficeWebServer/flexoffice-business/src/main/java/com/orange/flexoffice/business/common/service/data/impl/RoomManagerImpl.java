@@ -315,8 +315,7 @@ public class RoomManagerImpl implements RoomManager {
 	public RoomDao findByRoomId(Long roomId) throws DataNotExistsException {
 		try {
 			return roomRepository.findByRoomId(roomId);
-		}	
-		catch(IncorrectResultSizeDataAccessException e ) {
+		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.error("RoomManager.findByRoomId : Room by Id #" + roomId + " is not found", e);
 			throw new DataNotExistsException("RoomManager.findByRoomId : Room by Id #" + roomId + " is not found");
 		}

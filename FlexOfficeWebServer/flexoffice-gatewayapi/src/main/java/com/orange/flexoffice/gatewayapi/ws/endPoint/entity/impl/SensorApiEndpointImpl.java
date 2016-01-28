@@ -33,7 +33,7 @@ import com.orange.flexoffice.dao.common.model.enumeration.E_SensorStatus;
 public class SensorApiEndpointImpl implements SensorApiEndpoint {
 
 	private static final Logger LOGGER = Logger.getLogger(SensorApiEndpointImpl.class);
-	private static final String defaultProfile = "UNKNOWN";
+	private static final String DEFAULT_PROFILE = "UNKNOWN";
 	
 	@Autowired
 	private SensorManager sensorManager;
@@ -171,7 +171,7 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 	 * @throws WrongProfileException
 	 */
 	private String computeType(final String currentProfile) throws WrongProfileException {
-		String type = defaultProfile;
+		String type = DEFAULT_PROFILE;
 		EnumAcceptedProfile[] values = EnumAcceptedProfile.values();
 		for (EnumAcceptedProfile profile : values) {
 			if (profile.code().equalsIgnoreCase(currentProfile)) {
@@ -180,7 +180,7 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 			}
 		}
 		 
-		if (type.equals(defaultProfile)) {
+		if (type.equals(DEFAULT_PROFILE)) {
 			throw new WrongProfileException("wrong profile is detected !!!");
 		} 
 

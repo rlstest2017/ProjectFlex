@@ -77,8 +77,7 @@ public class DateTools {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(reservationDate);
 		cal.add(Calendar.SECOND, bookingDurationValue); // <-- 300 secondes -->
-		Date bookingDate = cal.getTime();
-		return bookingDate; 
+		return cal.getTime();
 	}
 	
 	/**
@@ -91,8 +90,7 @@ public class DateTools {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(teachinDate);
 		cal.add(Calendar.MINUTE, teachinTimeoutValue); // <-- 15 minutes -->
-		Date teachinMaxDate = cal.getTime();
-		return teachinMaxDate; 
+		return cal.getTime();
 	}
 	
 	/**
@@ -111,8 +109,7 @@ public class DateTools {
 		cal.set(Calendar.MINUTE, Integer.valueOf(minutes));
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MILLISECOND,0);
-		Date beginDayDate = cal.getTime();
-		return beginDayDate;
+		return cal.getTime();
 	}
 	
 	/**
@@ -131,8 +128,7 @@ public class DateTools {
 		cal.set(Calendar.MINUTE, Integer.valueOf(minutes));
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MILLISECOND,0);
-		Date endDayDate = cal.getTime();
-		return endDayDate;
+		return cal.getTime();
 	}
 	
 	// hh:00; mm:00; ss:00
@@ -148,8 +144,7 @@ public class DateTools {
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MILLISECOND,0);
-		Date dayDate = cal.getTime();
-		return dayDate;
+		return cal.getTime();
 	}
 	
 	// hh:23; mm:59; ss:59
@@ -165,8 +160,7 @@ public class DateTools {
 		cal.set(Calendar.MINUTE, 59);
 		cal.set(Calendar.SECOND,59);
 		cal.set(Calendar.MILLISECOND,0);
-		Date dayDate = cal.getTime();
-		return dayDate;
+		return cal.getTime();
 	}
 		
 	/**
@@ -261,8 +255,8 @@ public class DateTools {
 	public Date getDateFromString(String dateInString) {
 		try {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-		Date date = null;;
-		if (dateInString.equals("0")) { // default value
+		Date date = null;
+		if ("0".equals(dateInString)) { // default value
 			date = new Date(0L);
 		} else {
 		date = formatter.parse(dateInString);
@@ -542,6 +536,7 @@ public class DateTools {
 		return date;
 	}
 	
+	/*
 	public static void main(String[] args) throws ParseException {
 		DateTools date = new DateTools();
 		System.out.println("stardate is:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(1449702000000L)));
@@ -558,6 +553,5 @@ public class DateTools {
 		int num = date.getNumberOfWeek(new Date(1451602799000L));
 		System.out.println("num : " + num);
 
-	}
-	
+	}*/
 }
