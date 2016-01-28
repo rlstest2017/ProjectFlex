@@ -35,7 +35,7 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.TeachinSensorsDaoRe
 
 /**
  * Manage Sensors
- * 
+ * For PROD LOG LEVEL is info then we say info & error logs.
  * @author oab
  */
 @Service("SensorManager")
@@ -73,7 +73,8 @@ public class SensorManagerImpl implements SensorManager {
 			return sensorRepository.findBySensorId(sensorIdentifier);
 
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("SensorManager.find : Sensor by identifier #" + sensorIdentifier + " is not found", e);
+			LOGGER.debug("SensorManager.find : Sensor by identifier #" + sensorIdentifier + " is not found", e);
+			LOGGER.error("SensorManager.find : Sensor by identifier #" + sensorIdentifier + " is not found");
 			throw new DataNotExistsException("SensorManager.find : Sensor by identifier #" + sensorIdentifier + " is not found");
 		}
 
@@ -103,14 +104,16 @@ public class SensorManagerImpl implements SensorManager {
 						teachinRepository.updateTeachinDate(teachin);
 					}
 				} catch(IncorrectResultSizeDataAccessException e ) {
-					LOGGER.error("SensorManager.save : There is no activate teachin", e);
+					LOGGER.debug("SensorManager.save : There is no activate teachin", e);
+					LOGGER.info("SensorManager.save : There is no activate teachin");
 			    }
 			}
 			
 			return returnedSensor; 
 			
 		} catch (DataIntegrityViolationException e) {
-			LOGGER.error("SensorManager.save : Sensor already exists", e);
+			LOGGER.debug("SensorManager.save : Sensor already exists", e);
+			LOGGER.error("SensorManager.save : Sensor already exists");
 			throw new DataAlreadyExistsException("SensorManager.save : Sensor already exists");
 		}
 	}
@@ -127,7 +130,8 @@ public class SensorManagerImpl implements SensorManager {
 			return sensorRepository.updateSensor(sensorDao);
 			
 		} catch (RuntimeException e) {
-			LOGGER.error("SensorManager.update : Sensor to update not found", e);
+			LOGGER.debug("SensorManager.update : Sensor to update not found", e);
+			LOGGER.error("SensorManager.update : Sensor to update not found");
 			throw new DataNotExistsException("SensorManager.update : Sensor to update not found");
 		}
 	}
@@ -180,7 +184,8 @@ public class SensorManagerImpl implements SensorManager {
 								roomStatRepository.updateEndOccupancyDate(roomStat);
 							} 
 						} catch(IncorrectResultSizeDataAccessException e ) {
-							LOGGER.error("SensorManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId(), e);
+							LOGGER.debug("SensorManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId(), e);
+							LOGGER.info("SensorManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId());
 						}
 					}
 					
@@ -201,7 +206,8 @@ public class SensorManagerImpl implements SensorManager {
 				
 						
 		} catch (RuntimeException e) {
-			LOGGER.error("SensorManager.updateStatus : Sensor to update Status not found", e);
+			LOGGER.debug("SensorManager.updateStatus : Sensor to update Status not found", e);
+			LOGGER.error("SensorManager.updateStatus : Sensor to update Status not found");
 			throw new DataNotExistsException("SensorManager.updateStatus : Sensor to update Status not found");
 		}
 	}
@@ -231,12 +237,14 @@ public class SensorManagerImpl implements SensorManager {
 					sensorRepository.deleteByIdentifier(sensorIdentifier);
 				}
 			} catch(IncorrectResultSizeDataAccessException e ) {
-				LOGGER.error("sensor by identifer " + sensorIdentifier + " has not alert", e);
+				LOGGER.debug("sensor by identifer " + sensorIdentifier + " has not alert", e);
+				LOGGER.info("sensor by identifer " + sensorIdentifier + " has not alert");
 				// Delete Sensor
 				sensorRepository.deleteByIdentifier(sensorIdentifier);	
 			}
 		} catch (IncorrectResultSizeDataAccessException e) {
-			LOGGER.error("SensorManager.delete : Sensor #" + sensorIdentifier + " not found", e);
+			LOGGER.debug("SensorManager.delete : Sensor #" + sensorIdentifier + " not found", e);
+			LOGGER.error("SensorManager.delete : Sensor #" + sensorIdentifier + " not found");
 			throw new DataNotExistsException("SensorManager.delete : Sensor #" + sensorIdentifier + " not found");
 		}
 	}
@@ -278,7 +286,8 @@ public class SensorManagerImpl implements SensorManager {
 				}
 			}
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("SensorManager.processTeachinSensor : There is no activate teachin", e);
+			LOGGER.debug("SensorManager.processTeachinSensor : There is no activate teachin", e);
+			LOGGER.info("SensorManager.processTeachinSensor : There is no activate teachin");
 	    }
 		
 			
@@ -297,7 +306,8 @@ public class SensorManagerImpl implements SensorManager {
 				roomStatRepository.saveOccupiedRoomStat(data);
 			} 
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("SensorManager.updateStatus.processOccupiedRoom : There is no OCCUPIED roomStat with roomId #" + data.getRoomId(), e);
+			LOGGER.debug("SensorManager.updateStatus.processOccupiedRoom : There is no OCCUPIED roomStat with roomId #" + data.getRoomId(), e);
+			LOGGER.info("SensorManager.updateStatus.processOccupiedRoom : There is no OCCUPIED roomStat with roomId #" + data.getRoomId());
 			// create a new line with roomId, begin_occupancy_date=now() & room_info=OCCUPIED
 			roomStatRepository.saveOccupiedRoomStat(data);
 		}
@@ -333,7 +343,8 @@ public class SensorManagerImpl implements SensorManager {
 						processOccupiedRoom(data);
 					}
 				} catch(IncorrectResultSizeDataAccessException e ) {
-					LOGGER.error("SensorManager.updateStatus : There is no RESERVED roomStat with roomId #" + roomDao.getId(), e);
+					LOGGER.debug("SensorManager.updateStatus : There is no RESERVED roomStat with roomId #" + roomDao.getId(), e);
+					LOGGER.info("SensorManager.updateStatus : There is no RESERVED roomStat with roomId #" + roomDao.getId());
 					// create a new line with roomId, begin_occupancy_date=now() & room_info=OCCUPIED if not created yet !!!
 					data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
 					processOccupiedRoom(data);
@@ -359,7 +370,8 @@ public class SensorManagerImpl implements SensorManager {
 						roomStatRepository.updateEndOccupancyDate(roomStat);
 					} 
 				} catch(IncorrectResultSizeDataAccessException e ) {
-					LOGGER.error("SensorManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId(), e);
+					LOGGER.debug("SensorManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId(), e);
+					LOGGER.info("SensorManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId());
 				}
 			}
 		}

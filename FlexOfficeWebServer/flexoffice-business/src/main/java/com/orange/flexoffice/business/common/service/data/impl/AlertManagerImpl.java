@@ -21,7 +21,8 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
 
 /**
- * Manages 
+ * Manages
+ * For PROD LOG LEVEL is info then we say info & error logs. 
  * 
  * @author oab
  */
@@ -60,7 +61,8 @@ public class AlertManagerImpl implements AlertManager {
 						alertRepository.deleteAlertByGatewayId(gatewayId);
 					}
 				} catch(IncorrectResultSizeDataAccessException e ) {
-					LOGGER.error("gateway by id " + gatewayId + " has not rooms", e);
+					LOGGER.debug("gateway by id " + gatewayId + " has not rooms", e);
+					LOGGER.info("gateway by id " + gatewayId + " has not rooms");
 					alertRepository.deleteAlertByGatewayId(gatewayId);
 				}
 		} else {
@@ -106,7 +108,8 @@ public class AlertManagerImpl implements AlertManager {
 					alertRepository.deleteAlertBySensorId(sensorId);
 				}
 			} catch(IncorrectResultSizeDataAccessException e ) {
-				LOGGER.error("sensor by id " + sensorId + " is not appared", e);
+				LOGGER.debug("sensor by id " + sensorId + " is not appared", e);
+				LOGGER.info("sensor by id " + sensorId + " is not appared");
 				alertRepository.deleteAlertBySensorId(sensorId);
 			}
 		} else {

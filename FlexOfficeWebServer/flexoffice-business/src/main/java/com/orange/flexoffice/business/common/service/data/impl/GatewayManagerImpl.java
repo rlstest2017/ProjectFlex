@@ -44,6 +44,7 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.TeachinSensorsDaoRe
 
 /**
  * Manages {@link GatewayDto}.
+ * For PROD LOG LEVEL is info then we say info & error logs.
  * 
  * @author oab
  */
@@ -193,7 +194,8 @@ public class GatewayManagerImpl implements GatewayManager {
 				return dto;
 	
 			} catch(IncorrectResultSizeDataAccessException e ) {
-				LOGGER.error("gateway by macAddress " + macAddress + " is not found", e);
+				LOGGER.debug("gateway by macAddress " + macAddress + " is not found", e);
+				LOGGER.error("gateway by macAddress " + macAddress + " is not found");
 				throw new DataNotExistsException("Gateway not exist");
 			}
 	}
@@ -204,7 +206,8 @@ public class GatewayManagerImpl implements GatewayManager {
 			// Save GatewayDao
 			return gatewayRepository.saveGateway(gatewayDao);
 		} catch (DataIntegrityViolationException e) {
-			LOGGER.error("DataIntegrityViolationException in save() GatewayManagerImpl with message :" + e.getMessage(), e);
+			LOGGER.debug("DataIntegrityViolationException in save() GatewayManagerImpl with message :" + e.getMessage(), e);
+			LOGGER.error("DataIntegrityViolationException in save() GatewayManagerImpl with message :" + e.getMessage());
 			throw new DataAlreadyExistsException("gateway already exist.");
 		}
 	}
@@ -216,7 +219,8 @@ public class GatewayManagerImpl implements GatewayManager {
 			// update GatewayDao
 			return gatewayRepository.updateGateway(gatewayDao);
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("DataAccessException in update() GatewayManagerImpl with message :" + e.getMessage(), e);
+			LOGGER.debug("DataAccessException in update() GatewayManagerImpl with message :" + e.getMessage(), e);
+			LOGGER.error("DataAccessException in update() GatewayManagerImpl with message :" + e.getMessage());
 			throw new DataNotExistsException("Gateway not exist");
 		}
 	}
@@ -262,7 +266,8 @@ public class GatewayManagerImpl implements GatewayManager {
 							roomStatRepository.updateEndOccupancyDate(roomStat);
 						} 
 					} catch(IncorrectResultSizeDataAccessException e ) {
-						LOGGER.error("GatewayManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId(), e);
+						LOGGER.debug("GatewayManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId(), e);
+						LOGGER.info("GatewayManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId());
 					}
 				}
 			} 
@@ -272,7 +277,8 @@ public class GatewayManagerImpl implements GatewayManager {
 			return	processCommand(status, gatewayId, commandGateway);
 			
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("gateway is not found", e);
+			LOGGER.debug("gateway is not found", e);
+			LOGGER.error("gateway is not found");
 			throw new DataNotExistsException("Gateway not exist");
 		}
 	}
@@ -290,15 +296,18 @@ public class GatewayManagerImpl implements GatewayManager {
 					gatewayRepository.deleteByMacAddress(macAddress);
 				}
 			} catch(IncorrectResultSizeDataAccessException e ) {
-				LOGGER.error("gateway by macAddress " + macAddress + " has not alert", e);
+				LOGGER.debug("gateway by macAddress " + macAddress + " has not alert", e);
+				LOGGER.info("gateway by macAddress " + macAddress + " has not alert");
 				// delete gateway
 				gatewayRepository.deleteByMacAddress(macAddress);	
 			}
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("gateway by macAddress " + macAddress + " is not found", e);
+			LOGGER.debug("gateway by macAddress " + macAddress + " is not found", e);
+			LOGGER.error("gateway by macAddress " + macAddress + " is not found");
 			throw new DataNotExistsException("Gateway not exist");
 		} catch(DataIntegrityViolationException e ) {
-			LOGGER.error("GatewayManager.delete : Gateway associated to a room", e);
+			LOGGER.debug("GatewayManager.delete : Gateway associated to a room", e);
+			LOGGER.error("GatewayManager.delete : Gateway associated to a room");
 			throw new IntegrityViolationException("GatewayManager.delete : Gateway associated to a room");
 		}
 	}
@@ -387,7 +396,7 @@ public class GatewayManagerImpl implements GatewayManager {
 			TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
 			
 			if (teachin.getGatewayId().intValue() == gatewayId) {
-				LOGGER.debug( "teachin.getGatewayId() is the same as gatewayId" );
+				LOGGER.info( "teachin.getGatewayId() is the same as gatewayId" );
 				if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
 					// the teachin is founded (teachin_status not null)
 					if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()))  {
@@ -397,36 +406,36 @@ public class GatewayManagerImpl implements GatewayManager {
 						teachinRepository.updateTeachinDate(teachin);
 						commandToSendToGateway.setRoomId(teachin.getRoomId());
 						commandToSendToGateway.setCommand(EnumCommandModel.TEACHIN);
-						LOGGER.debug( "setted command in ONTEACHIN => INITIALIZING case, is :" + commandToSendToGateway.getCommand().toString() );
+						LOGGER.info( "setted command in ONTEACHIN => INITIALIZING case, is :" + commandToSendToGateway.getCommand().toString() );
 					} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString())) { // status RUNNING
 						commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
-						LOGGER.debug( "setted command in ONTEACHIN => RUNNING case, is :" + commandToSendToGateway.getCommand().toString() );
+						LOGGER.info( "setted command in ONTEACHIN => RUNNING case, is :" + commandToSendToGateway.getCommand().toString() );
 					} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
 						commandToSendToGateway.setCommand(EnumCommandModel.STOPTEACHIN);
-						LOGGER.debug( "setted command in ONTEACHIN => ENDED case, is :" + commandToSendToGateway.getCommand().toString() );
+						LOGGER.info( "setted command in ONTEACHIN => ENDED case, is :" + commandToSendToGateway.getCommand().toString() );
 					}
 				} else {
 					if (gatewayStatus.equals(E_GatewayStatus.ONLINE.toString())) {
 						// the teachin is founded (teachin_status not null)
 						if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()))  {
 							if (commandGateway != null && commandGateway.equals(E_CommandModel.RESET.toString())) {
-								LOGGER.debug( "In ONLINE => INITIALIZING + RESET Command None" );
+								LOGGER.info( "In ONLINE => INITIALIZING + RESET Command None" );
 								commandToSendToGateway.setCommand(EnumCommandModel.NONE);
 							} else {
-								LOGGER.debug( "In ONLINE => INITIALIZING state teachin will be send TEACHIN Command " );
+								LOGGER.info( "In ONLINE => INITIALIZING state teachin will be send TEACHIN Command " );
 								commandToSendToGateway.setRoomId(teachin.getRoomId());
 								commandToSendToGateway.setCommand(EnumCommandModel.TEACHIN);
 							}
-							LOGGER.debug( "setted command in ONLINE => INITIALIZING case, is :" + commandToSendToGateway.getCommand().toString() );
+							LOGGER.info( "setted command in ONLINE => INITIALIZING case, is :" + commandToSendToGateway.getCommand().toString() );
 						} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()))  {
 							// update status to ended
 							teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
 							teachinRepository.updateTeachinStatus(teachin);
 							commandToSendToGateway.setCommand(EnumCommandModel.NONE);
-							LOGGER.debug( "setted command in ONLINE => RUNNING case, is :" + commandToSendToGateway.getCommand().toString() );
+							LOGGER.info( "setted command in ONLINE => RUNNING case, is :" + commandToSendToGateway.getCommand().toString() );
 						} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString()))  {
 							commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
-							LOGGER.debug( "setted command in ONLINE => ENDED case, is :" + commandToSendToGateway.getCommand().toString() );
+							LOGGER.info( "setted command in ONLINE => ENDED case, is :" + commandToSendToGateway.getCommand().toString() );
 						} 		
 					} else { // OFFLINE or ERRORs
 						// the teachin is founded (teachin_status not null)
@@ -436,13 +445,13 @@ public class GatewayManagerImpl implements GatewayManager {
 							teachinRepository.updateTeachinStatus(teachin);
 							// -----------------------------------------------------------------------------------------
 							commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
-							LOGGER.debug( "setted command in OFFLINE or ERRORs => INITIALIZING or RUNNING case, is :" + commandToSendToGateway.getCommand().toString() );
+							LOGGER.info( "setted command in OFFLINE or ERRORs => INITIALIZING or RUNNING case, is :" + commandToSendToGateway.getCommand().toString() );
 							// -----------------------------------------------------------------------------------------
 						} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
 							// -----------------------------------------------------------------------------------------
 							commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);	
 							// -----------------------------------------------------------------------------------------
-							LOGGER.debug( "setted command in OFFLINE or ERRORs => ENDED case, is :" + commandToSendToGateway.getCommand().toString() );
+							LOGGER.info( "setted command in OFFLINE or ERRORs => ENDED case, is :" + commandToSendToGateway.getCommand().toString() );
 						}
 					}
 				}
@@ -450,12 +459,12 @@ public class GatewayManagerImpl implements GatewayManager {
 				LOGGER.debug( "teachin.getGatewayId() is not same as gatewayId" );
 				if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
 					commandToSendToGateway.setCommand(EnumCommandModel.STOPTEACHIN);
-					LOGGER.debug( "setted command in ONTEACHIN => teachin founded but not same gateway case, is :" + commandToSendToGateway.getCommand().toString() );
+					LOGGER.info( "setted command in ONTEACHIN => teachin founded but not same gateway case, is :" + commandToSendToGateway.getCommand().toString() );
 				} else {
 					// -----------------------------------------------------------------------------------------
 					commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
 					// -----------------------------------------------------------------------------------------
-					LOGGER.debug( "setted command in other then ONTEACHIN => teachin founded but not same gateway case, is :" + commandToSendToGateway.getCommand().toString() );
+					LOGGER.info( "setted command in other then ONTEACHIN => teachin founded but not same gateway case, is :" + commandToSendToGateway.getCommand().toString() );
 				}	
 			}
 			
@@ -463,12 +472,12 @@ public class GatewayManagerImpl implements GatewayManager {
 			// Table teachin_sensors is empty
 			if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
 				commandToSendToGateway.setCommand(EnumCommandModel.STOPTEACHIN);
-				LOGGER.debug( "setted command in ONTEACHIN => no teachin founded case, is :" + commandToSendToGateway.getCommand().toString() );
+				LOGGER.info( "setted command in ONTEACHIN => no teachin founded case, is :" + commandToSendToGateway.getCommand().toString() );
 			} else {
 				// -----------------------------------------------------------------------------------------
 				commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
 				// -----------------------------------------------------------------------------------------
-				LOGGER.debug( "setted command in other then ONTEACHIN => no teachin founded case, is :" + commandToSendToGateway.getCommand().toString() );
+				LOGGER.info( "setted command in other then ONTEACHIN => no teachin founded case, is :" + commandToSendToGateway.getCommand().toString() );
 			}
 
 	    }

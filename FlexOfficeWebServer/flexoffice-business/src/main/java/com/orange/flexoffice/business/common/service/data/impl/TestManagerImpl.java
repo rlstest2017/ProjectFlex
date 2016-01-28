@@ -9,6 +9,7 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.InitTestRepository;
 
 /**
  * Manages {@link GatewayDto}.
+ * For PROD LOG LEVEL is info then we say info & error logs.
  * 
  * @author oab
  */

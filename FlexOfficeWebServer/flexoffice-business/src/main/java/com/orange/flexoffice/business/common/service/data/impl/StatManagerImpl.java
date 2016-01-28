@@ -32,6 +32,7 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 
 /**
  * StatManagerImpl
+ * For PROD LOG LEVEL is info then we say info & error logs.
  * @author oab
  */
 @Service("StatManager")

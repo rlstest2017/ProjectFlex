@@ -54,7 +54,7 @@ public class UserEndpointImpl implements UserEndpoint {
 	
 	@Override
 	public UserSummary getUserCurrent(String auth) {
-		LOGGER.info( "Begin call UserUi.UserEndpoint.getUserCurrent at: " + new Date() );
+		LOGGER.debug( "Begin call UserUi.UserEndpoint.getUserCurrent at: " + new Date() );
 
 		try {
 			UserDto data = userManager.findByUserAccessToken(auth);
@@ -87,7 +87,7 @@ public class UserEndpointImpl implements UserEndpoint {
 			
 			userSummary.setLabel(label.trim());
 			
-			LOGGER.info( "End call UserEndpoint.getUser at: " + new Date() );
+			LOGGER.debug( "End call UserEndpoint.getUser at: " + new Date() );
 
 			return factory.createUserSummary(userSummary).getValue();
 

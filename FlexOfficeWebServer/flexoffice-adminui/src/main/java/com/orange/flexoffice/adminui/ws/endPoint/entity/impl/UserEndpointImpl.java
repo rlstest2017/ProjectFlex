@@ -42,7 +42,7 @@ public class UserEndpointImpl implements UserEndpoint {
 	@Override
 	public List<UserSummary> getUsers() {
 
-		LOGGER.info( "Begin call UserEndpoint.getUsers  at: " + new Date() );
+		LOGGER.debug( "Begin call UserEndpoint.getUsers  at: " + new Date() );
 
 		List<UserDao> dataList = userManager.findAllUsers();
 
@@ -82,7 +82,7 @@ public class UserEndpointImpl implements UserEndpoint {
 			userList.add(user);
 		}
 
-		LOGGER.info( "End call UserEndpoint.getUsers at: " + new Date() );
+		LOGGER.debug( "End call UserEndpoint.getUsers at: " + new Date() );
 
 		return userList;
 	}
@@ -90,7 +90,7 @@ public class UserEndpointImpl implements UserEndpoint {
 	@Override
 	public User getUser(String userId) {
 
-		LOGGER.info( "Begin call UserEndpoint.getUser at: " + new Date() );
+		LOGGER.debug( "Begin call UserEndpoint.getUser at: " + new Date() );
 
 		try {
 			UserDao data = userManager.find(Long.valueOf(userId));
@@ -101,7 +101,7 @@ public class UserEndpointImpl implements UserEndpoint {
 			user.setLastName(data.getLastName());
 			user.setEmail(data.getEmail());
 
-			LOGGER.info( "End call UserEndpoint.getUser at: " + new Date() );
+			LOGGER.debug( "End call UserEndpoint.getUser at: " + new Date() );
 
 			return factory.createUser(user).getValue();
 
@@ -118,7 +118,7 @@ public class UserEndpointImpl implements UserEndpoint {
 	@Override
 	public User addUser(UserInput userInput) {
 
-		LOGGER.info( "Begin call UserEndpoint.addUser at: " + new Date() );
+		LOGGER.debug( "Begin call UserEndpoint.addUser at: " + new Date() );
 
 		UserDao user = new UserDao();
 		user.setEmail(userInput.getEmail());
@@ -155,7 +155,7 @@ public class UserEndpointImpl implements UserEndpoint {
 		User returnedUser = factory.createUser();
 		returnedUser.setId(user.getColumnId());
 
-		LOGGER.info( "End call UserEndpoint.addUser at: " + new Date() );
+		LOGGER.debug( "End call UserEndpoint.addUser at: " + new Date() );
 
 		return factory.createUser(returnedUser).getValue();
 	}
@@ -163,7 +163,7 @@ public class UserEndpointImpl implements UserEndpoint {
 	@Override
 	public Response updateUser(String id, UserInput userInput) {
 		
-		LOGGER.info( "Begin call UserEndpoint.updateUser at: " + new Date() );
+		LOGGER.debug( "Begin call UserEndpoint.updateUser at: " + new Date() );
 
 		UserDao user = new UserDao();
 		user.setId(Long.valueOf(id));
@@ -182,7 +182,7 @@ public class UserEndpointImpl implements UserEndpoint {
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
-		LOGGER.info( "End call UserEndpoint.updateUser at: " + new Date() );
+		LOGGER.debug( "End call UserEndpoint.updateUser at: " + new Date() );
 
 		return Response.status(Status.ACCEPTED).build();
 	}
@@ -190,7 +190,7 @@ public class UserEndpointImpl implements UserEndpoint {
 	@Override
 	public Response removeUser(String id) {
 
-		LOGGER.info( "Begin call UserEndpoint.removeUser at: " + new Date() );
+		LOGGER.debug( "Begin call UserEndpoint.removeUser at: " + new Date() );
 
 		try {
 
@@ -207,7 +207,7 @@ public class UserEndpointImpl implements UserEndpoint {
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
-		LOGGER.info( "End call removeUser method for UserEndpoint at: " + new Date() );
+		LOGGER.debug( "End call removeUser method for UserEndpoint at: " + new Date() );
 
 		return Response.noContent().build();
 	}

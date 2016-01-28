@@ -61,7 +61,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	public com.orange.flexoffice.adminui.ws.model.System getSystem() {
 		try {
 			
-			LOGGER.info( "Begin call doGet method for SystemEndpoint at: " + new Date() );
+			LOGGER.debug( "Begin call doGet method for SystemEndpoint at: " + new Date() );
 			
 			SystemDto data = systemManager.getSystem();
 			
@@ -108,7 +108,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
 				alertsSummary.add(alert);
 			}
 			
-			LOGGER.info( "End call doGet method for SystemEndpoint at: " + new Date() );
+			LOGGER.debug( "End call doGet method for SystemEndpoint at: " + new Date() );
 			
 			return factory.createSystem(system).getValue();
 			

@@ -50,7 +50,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 	@Override
 	public List<SensorSummary> getSensors() {
 
-		LOGGER.info( "Begin call SensorEndpoint.getSensors at: " + new Date() );
+		LOGGER.debug( "Begin call SensorEndpoint.getSensors at: " + new Date() );
 
 		List<SensorDao> dataList = sensorManager.findAllSensors();
 
@@ -83,7 +83,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 
 		LOGGER.debug("List of sensors : nb = " + sensorList.size());
 
-		LOGGER.info( "End call SensorEndpoint.getSensors at: " + new Date() );
+		LOGGER.debug( "End call SensorEndpoint.getSensors at: " + new Date() );
 
 		return sensorList;
 	}
@@ -91,7 +91,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 	@Override
 	public List<SensorSummary> getUnpairedSensors() {
 
-		LOGGER.info( "Begin call SensorEndpoint.getUnpairedSensors at: " + new Date() );
+		LOGGER.debug( "Begin call SensorEndpoint.getUnpairedSensors at: " + new Date() );
 
 		List<SensorDao> dataList = sensorManager.findAllSensors();
 
@@ -123,7 +123,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 
 		LOGGER.debug("List of unpaired sensors : nb = " + sensorList.size());
 
-		LOGGER.info( "End call SensorEndpoint.getUnpairedSensors  at: " + new Date() );
+		LOGGER.debug( "End call SensorEndpoint.getUnpairedSensors  at: " + new Date() );
 
 		return sensorList;
 	}
@@ -134,7 +134,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 	@Override
 	public Sensor getSensor(String sensorIdentifier) {
 
-		LOGGER.info( "Begin call SensorEndpoint.getSensor at: " + new Date() );
+		LOGGER.debug( "Begin call SensorEndpoint.getSensor at: " + new Date() );
 
 		try {
 			SensorDao sensorDao = sensorManager.find(sensorIdentifier);
@@ -151,7 +151,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 				sensor.setStatus(EDeviceStatus.valueOf(sensorDao.getStatus().toString()));
 			}
 
-			LOGGER.info( "End call SensorEndpoint.getSensor at: " + new Date() );
+			LOGGER.debug( "End call SensorEndpoint.getSensor at: " + new Date() );
 
 			return sensor;
 
@@ -177,7 +177,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 	@Override
 	public SensorOutput addSensor(SensorInput1 sensorInput) {
 
-		LOGGER.info( "Begin call SensorEndpoint.addSensor at: " + new Date() );
+		LOGGER.debug( "Begin call SensorEndpoint.addSensor at: " + new Date() );
 
 		SensorDao sensorDao = new SensorDao();
 		sensorDao.setIdentifier(sensorInput.getIdentifier());
@@ -221,7 +221,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 		returnedSensor.setIdentifier(sensorDao.getIdentifier());
 		returnedSensor.setName(sensorDao.getName());
 
-		LOGGER.info( "End call SensorEndpoint.addSensor at: " + new Date() );
+		LOGGER.debug( "End call SensorEndpoint.addSensor at: " + new Date() );
 
 		return factory.createSensorOutput(returnedSensor).getValue();
 	}
@@ -233,7 +233,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 	@Override
 	public Response updateSensor(String id, SensorInput2 sensorInput) {
 		
-		LOGGER.info( "Begin call SensorEndpoint.updateSensor at: " + new Date() );
+		LOGGER.debug( "Begin call SensorEndpoint.updateSensor at: " + new Date() );
 
 		SensorDao sensorDao = new SensorDao();
 		sensorDao.setIdentifier(id);
@@ -260,7 +260,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
-		LOGGER.info( "End call SensorEndpoint.updateSensor at: " + new Date() );
+		LOGGER.debug( "End call SensorEndpoint.updateSensor at: " + new Date() );
 
 		return Response.status(Status.ACCEPTED).build();
 	}
@@ -272,7 +272,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 	@Override
 	public Response removeSensor(String id) {
 		
-		LOGGER.info( "Begin call SensorEndpoint.removeSensor at: " + new Date() );
+		LOGGER.debug( "Begin call SensorEndpoint.removeSensor at: " + new Date() );
 
 		try {
 
@@ -289,7 +289,7 @@ public class SensorEndpointImpl implements SensorEndpoint {
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
-		LOGGER.info( "End call SensorEndpoint.removeSensor at: " + new Date() );
+		LOGGER.debug( "End call SensorEndpoint.removeSensor at: " + new Date() );
 
 		return Response.noContent().build();
 	}

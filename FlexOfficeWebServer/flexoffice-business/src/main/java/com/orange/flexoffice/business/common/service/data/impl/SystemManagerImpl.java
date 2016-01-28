@@ -44,6 +44,7 @@ import com.orange.flexoffice.dao.common.utils.TokenTools;
 
 /**
  * Manages {@link SystemDto}.
+ * For PROD LOG LEVEL is info then we say info & error logs.
  * 
  * @author oab
  */
@@ -193,7 +194,8 @@ public class SystemManagerImpl implements SystemManager {
 				
 
 			} catch(IncorrectResultSizeDataAccessException e ) {
-				LOGGER.error("SystemManager.findByUserMail : User by email #" + email + " is not found", e);
+				LOGGER.debug("SystemManager.findByUserMail : User by email #" + email + " is not found", e);
+				LOGGER.info("SystemManager.findByUserMail : User by email #" + email + " is not found");
 				if (isFromAdminUi) {
 					throw new DataNotExistsException("SystemManager.findByUserMail : User by email #" + email + " is not found");
 				} else {
@@ -239,7 +241,8 @@ public class SystemManagerImpl implements SystemManager {
 				return true;
 			}
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("SystemManager.findByAccessToken : User by token #" + token + " DataAccessException", e);
+			LOGGER.debug("SystemManager.findByAccessToken : User by token #" + token + " DataAccessException", e);
+			LOGGER.info("SystemManager.findByAccessToken : User by token #" + token + " DataAccessException");
 			return false;
 		}
 	}
@@ -251,7 +254,8 @@ public class SystemManagerImpl implements SystemManager {
 			// the teachin is founded and matches to user Id
 			teachinRepository.deleteAllTeachinSensors();	
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("SystemManager.deleteAllTeachinSensorsByUserId : Teachin for user by id #" + userId + " is not found", e);
+			LOGGER.debug("SystemManager.deleteAllTeachinSensorsByUserId : Teachin for user by id #" + userId + " is not found", e);
+			LOGGER.info("SystemManager.deleteAllTeachinSensorsByUserId : Teachin for user by id #" + userId + " is not found");
 		}	
 	}
 	
@@ -279,7 +283,8 @@ public class SystemManagerImpl implements SystemManager {
 			teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
 			teachinRepository.updateTeachinStatus(teachin);	
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("SystemManager.updateTeachinStatusByUser : Teachin for user by id #" + userId + " is not found", e);
+			LOGGER.debug("SystemManager.updateTeachinStatusByUser : Teachin for user by id #" + userId + " is not found", e);
+			LOGGER.info("SystemManager.updateTeachinStatusByUser : Teachin for user by id #" + userId + " is not found");
 		}	
 		
 	}
@@ -294,7 +299,8 @@ public class SystemManagerImpl implements SystemManager {
 				teachinRepository.updateTeachinStatus(teachin);	
 			} 
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("SystemManager.updateTeachinStatus : Teachin not found", e);
+			LOGGER.debug("SystemManager.updateTeachinStatus : Teachin not found", e);
+			LOGGER.error("SystemManager.updateTeachinStatus : Teachin not found");
 			throw new DataNotExistsException("SystemManager.updateTeachinStatus : Teachin not found");
 		}	
 		
@@ -330,7 +336,8 @@ public class SystemManagerImpl implements SystemManager {
 			return teachinDto;
 			
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("SystemManager.getTeachin : Teachin not found", e);
+			LOGGER.debug("SystemManager.getTeachin : Teachin not found", e);
+			LOGGER.error("SystemManager.getTeachin : Teachin not found");
 			throw new DataNotExistsException("SystemManager.getTeachin : Teachin not found");
 		}
 	}
@@ -350,7 +357,8 @@ public class SystemManagerImpl implements SystemManager {
 			
 			
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("SystemManager.submitTeachin : Teachin not found", e);
+			LOGGER.debug("SystemManager.submitTeachin : Teachin not found", e);
+			LOGGER.error("SystemManager.submitTeachin : Teachin not found");
 			throw new DataNotExistsException("SystemManager.submitTeachin : Teachin not found");
 		}
 		
@@ -434,6 +442,7 @@ public class SystemManagerImpl implements SystemManager {
 			teachinRepository.saveTechinStatus(newTeachin);
 			
 		} catch(IncorrectResultSizeDataAccessException ex ) {
+			LOGGER.debug("SystemManager.initTeachin : roomId# : " + roomId + "not found", ex);
 			LOGGER.error("SystemManager.initTeachin : roomId# : " + roomId + "not found");
 			throw new DataNotExistsException("SystemManager.initTeachin : RoomId not found");
 			

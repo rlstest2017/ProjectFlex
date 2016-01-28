@@ -63,7 +63,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	@Override
 	public List<RoomSummary> getRooms() {
 
-		LOGGER.info( "Begin call RoomEndpoint.getRooms at: " + new Date() );
+		LOGGER.debug( "Begin call RoomEndpoint.getRooms at: " + new Date() );
 
 		List<RoomDao> dataList = roomManager.findAllRooms();
 
@@ -95,7 +95,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		LOGGER.debug("List of rooms : nb = " + roomList.size());
 
-		LOGGER.info( "End call RoomEndpoint.getRooms  at: " + new Date() );
+		LOGGER.debug( "End call RoomEndpoint.getRooms  at: " + new Date() );
 
 		return roomList;
 	}
@@ -106,7 +106,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	@Override
 	public Room getRoom(String roomId) {
 
-		LOGGER.info( "Begin call RoomEndpoint.getRoom at: " + new Date() );
+		LOGGER.debug( "Begin call RoomEndpoint.getRoom at: " + new Date() );
 
 		try {
 			RoomDto roomDto = roomManager.find(Long.valueOf(roomId));
@@ -134,7 +134,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
 			room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
 
-			LOGGER.info( "End call RoomEndpoint.getRoom  at: " + new Date() );
+			LOGGER.debug( "End call RoomEndpoint.getRoom  at: " + new Date() );
 
 			return room;
 
@@ -160,7 +160,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	@Override
 	public RoomOutput addRoom(RoomInput1 roomInput) {
 
-		LOGGER.info( "Begin call RoomEndpoint.addRoom  at: " + new Date() );
+		LOGGER.debug( "Begin call RoomEndpoint.addRoom  at: " + new Date() );
 		
 		try {
 			
@@ -204,7 +204,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			returnedRoom.setId(roomDao.getColumnId());
 			returnedRoom.setName(roomDao.getName());
 
-			LOGGER.info( "End call RoomEndpoint.addRoom at: " + new Date() );
+			LOGGER.debug( "End call RoomEndpoint.addRoom at: " + new Date() );
 
 			return factory.createRoomOutput(returnedRoom).getValue();
 
@@ -233,7 +233,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	@Override
 	public Response updateRoom(String id, RoomInput1 roomInput) {
 		
-		LOGGER.info( "Begin call RoomEndpoint.updateRoom at: " + new Date() );
+		LOGGER.debug( "Begin call RoomEndpoint.updateRoom at: " + new Date() );
 
 		try {
 			
@@ -260,7 +260,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		
 			roomDao = roomManager.update(roomDao);
 
-		LOGGER.info( "End call RoomEndpoint.updateRoom at: " + new Date() );
+		LOGGER.debug( "End call RoomEndpoint.updateRoom at: " + new Date() );
 		return Response.status(Status.ACCEPTED).build();
 
 		} catch (DataNotExistsException e){
@@ -280,7 +280,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	@Override
 	public Response removeRoom(String id) {
 		
-		LOGGER.info( "Begin call RoomEndpoint.removeRoom at: " + new Date() );
+		LOGGER.debug( "Begin call RoomEndpoint.removeRoom at: " + new Date() );
 
 		try {
 
@@ -300,7 +300,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 
-		LOGGER.info( "End call RoomEndpoint.removeRoom at: " + new Date() );
+		LOGGER.debug( "End call RoomEndpoint.removeRoom at: " + new Date() );
 
 		return Response.noContent().build();
 	}
@@ -368,7 +368,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 					}
 
 				} catch(DataNotExistsException e ) {
-					LOGGER.info("Get rooms / Get room id : user not found on room " + roomName, e);
+					LOGGER.debug("Get rooms / Get room id : user not found on room " + roomName, e);
 				}
 			}
 		}

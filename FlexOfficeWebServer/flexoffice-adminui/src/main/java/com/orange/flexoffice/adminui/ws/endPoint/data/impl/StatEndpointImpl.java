@@ -43,7 +43,7 @@ public class StatEndpointImpl implements StatEndpoint {
 	@Override
 	public List<SimpleStat> getPopularStats() {
 		try {
-		LOGGER.info( "Begin call StatEndpoint.getPopularStats at: " + new Date() );
+		LOGGER.debug( "Begin call StatEndpoint.getPopularStats at: " + new Date() );
 		List<SimpleStat> simpleStatsList = new ArrayList<SimpleStat>();
 
 		List<SimpleStatDto> statsList = statManager.getPopularStats();
@@ -54,7 +54,7 @@ public class StatEndpointImpl implements StatEndpoint {
 			simpleStatsList.add(simpleStat);
 		}
 		
-		LOGGER.info( "End call StatEndpoint.getPopularStats at: " + new Date() );
+		LOGGER.debug( "End call StatEndpoint.getPopularStats at: " + new Date() );
 		return simpleStatsList;
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in getPopularStats() StatEndpointImpl with message :" + ex.getMessage(), ex);
@@ -65,7 +65,7 @@ public class StatEndpointImpl implements StatEndpoint {
 	@Override
 	public MultiStatSet getOccupancyStats(String from, String to, String viewtype) {
 		try {
-		LOGGER.info( "Begin call StatEndpoint.getOccupancyStats at: " + new Date() );
+		LOGGER.debug( "Begin call StatEndpoint.getOccupancyStats at: " + new Date() );
 		
 		MultiStatSet set = factory.createMultiStatSet();
 		
@@ -92,7 +92,7 @@ public class StatEndpointImpl implements StatEndpoint {
 			set.getData().add(mstat);
 		}
 		
-		LOGGER.info( "End call StatEndpoint.getOccupancyStats at: " + new Date() );
+		LOGGER.debug( "End call StatEndpoint.getOccupancyStats at: " + new Date() );
 		
 		return factory.createMultiStatSet(set).getValue();
 		

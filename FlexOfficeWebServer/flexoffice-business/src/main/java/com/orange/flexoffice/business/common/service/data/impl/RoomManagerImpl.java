@@ -37,6 +37,7 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.UserDaoRepository;
 
 /**
  * Manages {@link RoomDto}.
+ * For PROD LOG LEVEL is info then we say info & error logs.
  * 
  * @author oab
  */
@@ -76,7 +77,8 @@ public class RoomManagerImpl implements RoomManager {
 			roomDao = roomRepository.findOne(roomId);
 
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("RoomManager.find : Room by id #" + roomId + " is not found", e);
+			LOGGER.debug("RoomManager.find : Room by id #" + roomId + " is not found", e);
+			LOGGER.error("RoomManager.find : Room by id #" + roomId + " is not found");
 			throw new DataNotExistsException("RoomManager.find : Room by id #" + roomId + " is not found");
 		}
 
@@ -99,7 +101,8 @@ public class RoomManagerImpl implements RoomManager {
 				UserDao userDao = userRepository.findOne(roomDao.getUserId());
 				dto.setUser(userDao);
 			} catch(IncorrectResultSizeDataAccessException e ) {
-				LOGGER.error("RoomManager.find : User by id #" + roomDao.getUserId() + " for current Room is not found", e);
+				LOGGER.debug("RoomManager.find : User by id #" + roomDao.getUserId() + " for current Room is not found", e);
+				LOGGER.info("RoomManager.find : User by id #" + roomDao.getUserId() + " for current Room is not found");
 			}
 		}
 
@@ -146,7 +149,8 @@ public class RoomManagerImpl implements RoomManager {
 			return room;
 			
 		} catch (DataIntegrityViolationException e) {
-			LOGGER.error("RoomManager.save : Room already exists", e);
+			LOGGER.debug("RoomManager.save : Room already exists", e);
+			LOGGER.error("RoomManager.save : Room already exists");
 			throw new DataAlreadyExistsException("RoomManager.save : Room already exists");
 		}
 	}
@@ -157,7 +161,8 @@ public class RoomManagerImpl implements RoomManager {
 			// Update RoomDao
 			return roomRepository.updateRoom(roomDao);
 		} catch (RuntimeException e) {
-			LOGGER.error("RoomManager.update : Room to update not found", e);
+			LOGGER.debug("RoomManager.update : Room to update not found", e);
+			LOGGER.error("RoomManager.update : Room to update not found");
 			throw new DataNotExistsException("RoomManager.update : Room to update not found");
 		}
 	}
@@ -210,7 +215,8 @@ public class RoomManagerImpl implements RoomManager {
 			
 			return roomRepository.updateRoomStatus(roomDao);
 		} catch (RuntimeException e) {
-			LOGGER.error("RoomManager.updateStatus : Room to update Status not found", e);
+			LOGGER.debug("RoomManager.updateStatus : Room to update Status not found", e);
+			LOGGER.error("RoomManager.updateStatus : Room to update Status not found");
 			throw new DataNotExistsException("RoomManager.updateStatus : Room to update Status not found");
 		}
 	}
@@ -249,7 +255,8 @@ public class RoomManagerImpl implements RoomManager {
 				throw new IntegrityViolationException("RoomManager.delete : Room #" + id + " is occupied");
 			}
 		} catch (IncorrectResultSizeDataAccessException e) {
-			LOGGER.error("RoomManager.delete : Room #" + id + " not found", e);
+			LOGGER.debug("RoomManager.delete : Room #" + id + " not found", e);
+			LOGGER.error("RoomManager.delete : Room #" + id + " not found");
 			throw new DataNotExistsException("RoomManager.delete : Room #" + id + " not found");
 		}
 	}
@@ -265,7 +272,8 @@ public class RoomManagerImpl implements RoomManager {
 		try {
 			return roomRepository.findByName(name);
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("RoomManager.findByName : room#" + name + " is not found", e);
+			LOGGER.debug("RoomManager.findByName : room#" + name + " is not found", e);
+			LOGGER.error("RoomManager.findByName : room#" + name + " is not found");
 			throw new DataNotExistsException("RoomManager.findByName : Room by name #" + name + " is not found");
 		}
 	}
@@ -299,7 +307,8 @@ public class RoomManagerImpl implements RoomManager {
 				}
 			}
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("user by id " + userId + " has not roomStats", e);
+			LOGGER.debug("user by id " + userId + " has not roomStats", e);
+			LOGGER.info("user by id " + userId + " has not roomStats");
 		
 		}
 		return dataList;
@@ -316,7 +325,8 @@ public class RoomManagerImpl implements RoomManager {
 		try {
 			return roomRepository.findByRoomId(roomId);
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("RoomManager.findByRoomId : Room by Id #" + roomId + " is not found", e);
+			LOGGER.debug("RoomManager.findByRoomId : Room by Id #" + roomId + " is not found", e);
+			LOGGER.error("RoomManager.findByRoomId : Room by Id #" + roomId + " is not found");
 			throw new DataNotExistsException("RoomManager.findByRoomId : Room by Id #" + roomId + " is not found");
 		}
 	}

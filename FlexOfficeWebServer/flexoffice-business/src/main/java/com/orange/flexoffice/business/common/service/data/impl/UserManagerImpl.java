@@ -24,6 +24,7 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.UserDaoRepository;
 
 /**
  * Manages {@link UserDao}.
+ * For PROD LOG LEVEL is info then we say info & error logs.
  * 
  * @author oab
  */
@@ -59,7 +60,8 @@ public class UserManagerImpl implements UserManager {
 			return userRepository.findOne(userDaoId);
 
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("UserManager.find : User by id #" + userDaoId + " is not found", e);
+			LOGGER.debug("UserManager.find : User by id #" + userDaoId + " is not found", e);
+			LOGGER.error("UserManager.find : User by id #" + userDaoId + " is not found");
 			throw new DataNotExistsException("UserManager.find : User by id #" + userDaoId + " is not found");
 		}
 
@@ -77,7 +79,8 @@ public class UserManagerImpl implements UserManager {
 			return userRepository.findByUserEmail(userEmail);
 
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("UserManager.findByUserMail : User by email #" + userEmail + " is not found", e);
+			LOGGER.debug("UserManager.findByUserMail : User by email #" + userEmail + " is not found", e);
+			LOGGER.error("UserManager.findByUserMail : User by email #" + userEmail + " is not found");
 			throw new DataNotExistsException("UserManager.findByUserMail : User by email #" + userEmail + " is not found");
 		}
 	}
@@ -109,7 +112,8 @@ public class UserManagerImpl implements UserManager {
 					RoomDao room = roomRepository.findByUserId(userDao.getId());
 					user.setRoomId(room.getColumnId());
 				} catch(IncorrectResultSizeDataAccessException e ) {
-					LOGGER.error("UserManager.findByUserId ROOM : User by iD #" + userDao.getColumnId() + " is not found", e);
+					LOGGER.debug("UserManager.findByUserId ROOM : User by iD #" + userDao.getColumnId() + " is not found", e);
+					LOGGER.info("UserManager.findByUserId ROOM : User by iD #" + userDao.getColumnId() + " is not found");
 					user.setRoomId(null);
 				}	
 			}
@@ -117,7 +121,8 @@ public class UserManagerImpl implements UserManager {
 			return user;
 
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.error("UserManager.findByUserAccessToken : User by accessToken #" + accessToken + " is not found", e);
+			LOGGER.debug("UserManager.findByUserAccessToken : User by accessToken #" + accessToken + " is not found", e);
+			LOGGER.error("UserManager.findByUserAccessToken : User by accessToken #" + accessToken + " is not found");
 			throw new AuthenticationException("UserManager.findByUserAccessToken : User by accessToken #" + accessToken + " is not found");
 		}
 	}
@@ -137,7 +142,8 @@ public class UserManagerImpl implements UserManager {
 			return userRepository.saveUser(userDao);
 
 		} catch(DataIntegrityViolationException e ) {
-			LOGGER.error("UserManager.save : User already exists", e);
+			LOGGER.debug("UserManager.save : User already exists", e);
+			LOGGER.error("UserManager.save : User already exists");
 			throw new DataAlreadyExistsException("UserManager.save : User already exists");
 		}
 	}
@@ -156,7 +162,8 @@ public class UserManagerImpl implements UserManager {
 			return userRepository.updateUser(userDao);
 			
 		} catch (RuntimeException e) {
-			LOGGER.error("UserManager.update : User to update not found", e);
+			LOGGER.debug("UserManager.update : User to update not found", e);
+			LOGGER.error("UserManager.update : User to update not found");
 			throw new DataNotExistsException("UserManager.update : User to update not found");
 		}
 	}
@@ -176,10 +183,12 @@ public class UserManagerImpl implements UserManager {
 			// Delete Room
 			userRepository.delete(id);	
 		} catch (IncorrectResultSizeDataAccessException e) {
-			LOGGER.error("UserManager.delete : User #" + id + " not found", e);
+			LOGGER.debug("UserManager.delete : User #" + id + " not found", e);
+			LOGGER.error("UserManager.delete : User #" + id + " not found");
 			throw new DataNotExistsException("UserManager.delete : User #" + id + " not found");
 		} catch(DataIntegrityViolationException e ) {
-			LOGGER.error("UserManager.delete : User associated to a room", e);
+			LOGGER.debug("UserManager.delete : User associated to a room", e);
+			LOGGER.error("UserManager.delete : User associated to a room");
 			throw new IntegrityViolationException("UserManager.delete : User associated to a room");
 		}
 	}

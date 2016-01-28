@@ -125,7 +125,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 
 	@Override
 	public GatewayOutput addGateway(GatewayInput3 gateway) {
-		LOGGER.info( "Begin call doPost method for GatewayEndpoint at: " + new Date() );
+		LOGGER.debug( "Begin call doPost method for GatewayEndpoint at: " + new Date() );
 
 		GatewayDao gatewayDao = new GatewayDao();
 		gatewayDao.setMacAddress(gateway.getMacAddress());
@@ -163,7 +163,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 		GatewayOutput returnedGateway = factory.createGatewayOutput();
 		returnedGateway.setMacAddress(gatewayDao.getMacAddress());
 
-		LOGGER.info( "End call doPost method for GatewayEndpoint at: " + new Date() );
+		LOGGER.debug( "End call doPost method for GatewayEndpoint at: " + new Date() );
 
 		return factory.createGatewayOutput(returnedGateway).getValue();
 
@@ -171,7 +171,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 
 	@Override
 	public Response updateGateway(String macAddress, GatewayInput gateway) {
-		LOGGER.info( "Begin call doPut method for GatewayEndpoint at: " + new Date() );
+		LOGGER.debug( "Begin call doPut method for GatewayEndpoint at: " + new Date() );
 
 		GatewayDao gatewayDao = new GatewayDao();
 		gatewayDao.setMacAddress(macAddress);
@@ -209,7 +209,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 		GatewayOutput returnedGateway = factory.createGatewayOutput();
 		returnedGateway.setMacAddress(gatewayDao.getMacAddress());
 
-		LOGGER.info( "End call doPut method for GatewayEndpoint at: " + new Date() );
+		LOGGER.debug( "End call doPut method for GatewayEndpoint at: " + new Date() );
 
 		return Response.status(Status.ACCEPTED).build();
 	}

@@ -62,7 +62,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 */
 	@Override
 	public List<RoomSummary> getRooms(String auth, Boolean latest) {
-		LOGGER.info( "Begin call UserUi.RoomEndpoint.getRooms at: " + new Date() );
+		LOGGER.debug( "Begin call UserUi.RoomEndpoint.getRooms at: " + new Date() );
 		List<RoomDao> dataList = null;
 		
 		if (latest) { // get latest reserved rooms
@@ -96,7 +96,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		}
 
 		LOGGER.debug("UserUi.RoomEndpoint.getRooms List of rooms : nb = " + roomList.size());
-		LOGGER.info( "End call UserUi.RoomEndpoint.getRooms  at: " + new Date() );
+		LOGGER.debug( "End call UserUi.RoomEndpoint.getRooms  at: " + new Date() );
 		return roomList;
 	}
 
@@ -113,7 +113,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	@Override
 	public Room getRoom(String roomId) {
 		
-		LOGGER.info( "Begin call UserUi.RoomEndpoint.getRoom at: " + new Date() );
+		LOGGER.debug( "Begin call UserUi.RoomEndpoint.getRoom at: " + new Date() );
 
 		try {
 			RoomDto roomDto = roomManager.find(Long.valueOf(roomId));
@@ -132,7 +132,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
 			}
 			
-			LOGGER.info( "End call UserUi.RoomEndpoint.getRoom  at: " + new Date() );
+			LOGGER.debug( "End call UserUi.RoomEndpoint.getRoom  at: " + new Date() );
 
 			return room;
 
@@ -158,7 +158,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	@Override
 	public Room reserveRoom(String auth, String roomId) {
 		
-		LOGGER.info( "Begin call UserUi.RoomEndpoint.reserveRoom at: " + new Date() );
+		LOGGER.debug( "Begin call UserUi.RoomEndpoint.reserveRoom at: " + new Date() );
 		LOGGER.debug("Room id in reserveRoom.RoomEndpoint metod is : " + roomId);
 		try {
 			
@@ -190,7 +190,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
 			}
 			
-			LOGGER.info( "End call UserUi.RoomEndpoint.reserveRoom at: " + new Date() );
+			LOGGER.debug( "End call UserUi.RoomEndpoint.reserveRoom at: " + new Date() );
 			
 			return room;
 
@@ -223,7 +223,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	@Override
 	public Room cancelRoom(String auth, String roomId) {
 		
-		LOGGER.info( "Begin call UserUi.RoomEndpoint.cancelRoom at: " + new Date() );
+		LOGGER.debug( "Begin call UserUi.RoomEndpoint.cancelRoom at: " + new Date() );
 
 		try {
 			// get room
@@ -254,7 +254,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
 			}
 			
-			LOGGER.info( "End call UserUi.RoomEndpoint.cancelRoom at: " + new Date() );
+			LOGGER.debug( "End call UserUi.RoomEndpoint.cancelRoom at: " + new Date() );
 			
 			return room;
 
@@ -327,7 +327,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 					}
 	
 				} catch(DataNotExistsException e ) {
-					LOGGER.info("UserUi Get rooms / Get room id : user not found on room " + roomName, e);
+					LOGGER.debug("UserUi Get rooms / Get room id : user not found on room " + roomName, e);
 				}
 			}
 		}
