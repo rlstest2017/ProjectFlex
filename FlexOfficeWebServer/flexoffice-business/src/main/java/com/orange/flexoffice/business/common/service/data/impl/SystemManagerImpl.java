@@ -237,7 +237,7 @@ public class SystemManagerImpl implements SystemManager {
 				LOGGER.info("checkToken return : The accessToken is expired at :" + user.getExpiredTokenDate());
 				return false;
 			} else {
-				LOGGER.info("checkToken return : accessToken is valid.");
+				LOGGER.debug("checkToken return : accessToken is valid.");
 				return true;
 			}
 		} catch(IncorrectResultSizeDataAccessException e ) {

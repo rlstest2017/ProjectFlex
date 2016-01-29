@@ -47,7 +47,7 @@ public class AlertManagerImpl implements AlertManager {
 		LOGGER.debug ("Begin updateGatewayAlert with parameters : gatewayId "+gatewayId+" status: "+ status);
 		
 		if ((status.equals(E_GatewayStatus.ONLINE.toString())) || (status.equals(E_GatewayStatus.ONTEACHIN.toString()))) {
-			LOGGER.info ("updateGatewayAlert ONLINE/TEACHIN condition, for Gateway#" + gatewayId);
+			LOGGER.debug ("updateGatewayAlert ONLINE/TEACHIN condition, for Gateway#" + gatewayId);
 			alertRepository.deleteAlertByGatewayId(gatewayId);
 		} else if (status.equals(E_GatewayStatus.OFFLINE.toString())) {  
 			LOGGER.info ("updateGatewayAlert OFFLINE condition, for Gateway#" + gatewayId);

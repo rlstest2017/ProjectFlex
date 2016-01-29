@@ -477,7 +477,7 @@ public class GatewayManagerImpl implements GatewayManager {
 				// -----------------------------------------------------------------------------------------
 				commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
 				// -----------------------------------------------------------------------------------------
-				LOGGER.info( "setted command in other then ONTEACHIN => no teachin founded case, is :" + commandToSendToGateway.getCommand().toString() );
+				LOGGER.debug( "setted command in other then ONTEACHIN => no teachin founded case, is :" + commandToSendToGateway.getCommand().toString() );
 			}
 
 	    }
