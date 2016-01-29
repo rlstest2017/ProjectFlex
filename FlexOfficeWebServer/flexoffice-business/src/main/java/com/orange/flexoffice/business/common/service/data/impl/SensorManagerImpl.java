@@ -353,25 +353,29 @@ public class SensorManagerImpl implements SensorManager {
 			// search in DB if another sensor has said that the room is OCCUPIED 
 			List<SensorDao> sensors = sensorRepository.findByRoomIdAndOccupiedInfo(roomDao.getId());
 			if ((sensors == null) || (sensors.isEmpty())) {  // L'info room UNOCCUPIED est prise en compte
-				LOGGER.info("RoomDao in updateStatus() is going to set RoomStatus to FREE");
-				roomDao.setUserId(null);
-				roomDao.setStatus(E_RoomStatus.FREE.toString());
-				//---------------------------------------------------------------------
-				roomRepository.updateRoomStatus(roomDao); // update Room Status to FREE
-				//---------------------------------------------------------------------
-				try {
-					// if roomId & room_info=OCCUPIED in roomStats
-					RoomStatDao data = new RoomStatDao();
-					data.setRoomId(roomDao.getId().intValue());
-					data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
-					RoomStatDao roomStat = findByRoomId(data); // Synchronised method to avoid concurrent access  !!!
-					if (roomStat != null) {
-						// update by end_occupancy_date=now() & room_info=UNOCCUPIED
-						roomStatRepository.updateEndOccupancyDate(roomStat);
-					} 
-				} catch(IncorrectResultSizeDataAccessException e ) {
-					LOGGER.debug("SensorManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId(), e);
-					LOGGER.info("SensorManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId());
+				// check if the room is not reserved !!!
+				RoomDao room = roomRepository.findOne(roomDao.getId());
+				if (!E_RoomStatus.RESERVED.toString().equals(room.getStatus())) {
+					LOGGER.info("RoomDao in updateStatus() is going to set RoomStatus to FREE");
+					roomDao.setUserId(null);
+					roomDao.setStatus(E_RoomStatus.FREE.toString());
+					//---------------------------------------------------------------------
+					roomRepository.updateRoomStatus(roomDao); // update Room Status to FREE
+					//---------------------------------------------------------------------
+					try {
+						// if roomId & room_info=OCCUPIED in roomStats
+						RoomStatDao data = new RoomStatDao();
+						data.setRoomId(roomDao.getId().intValue());
+						data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
+						RoomStatDao roomStat = findByRoomId(data); // Synchronised method to avoid concurrent access  !!!
+						if (roomStat != null) {
+							// update by end_occupancy_date=now() & room_info=UNOCCUPIED
+							roomStatRepository.updateEndOccupancyDate(roomStat);
+						} 
+					} catch(IncorrectResultSizeDataAccessException e ) {
+						LOGGER.debug("SensorManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId(), e);
+						LOGGER.info("SensorManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId());
+					}
 				}
 			}
 		}
