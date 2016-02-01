@@ -30,6 +30,7 @@ public class TokenTools {
 		}
 		LOGGER.debug("Original keySource is " + keySource);
 		String token = Base64Utils.encodeToString(keySource.getBytes());
+		token = token.replaceAll("(\\r|\\n)", "");
 		LOGGER.debug("Generated keySource is " + token);
 		return token;
 	}
