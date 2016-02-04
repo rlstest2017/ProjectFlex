@@ -17,6 +17,18 @@ import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.repository.data.GatewayDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.GatewayDaoMetadata;
 
+/*---------------------------------------------------------------------------------------
+Manage gateways table
+
+The column "command" is for saved the RESET command.
+
+When a sensor or gateway are deleted in AdminUI => I put RESET in the column
+
+When gatewayAPI sent me the gatewayStatus in PUT /gateways/{gatewayId} method
+ 
+I return command=RESET in response & I delete RESET from the table
+---------------------------------------------------------------------------------------*/
+
 @Repository
 public class GatewayDaoRepository extends DataRepository<GatewayDao> implements GatewayDaoOperations {
 
