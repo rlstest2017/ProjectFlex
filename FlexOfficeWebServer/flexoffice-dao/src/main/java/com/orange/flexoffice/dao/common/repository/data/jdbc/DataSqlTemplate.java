@@ -127,7 +127,7 @@ public final class DataSqlTemplate {
 	public static final String UPDATE_SENSOR_TEMPLATE =
 			"update %s set name=:name, type=CAST(:type AS sensortype), profile=:profile, description=:description, room_id=:roomId WHERE identifier=:identifier";
 	public static final String UPDATE_SENSOR_STATUS_TEMPLATE =
-			"update %s set status=CAST(:status AS sensorstatus), occupancy_info=CAST(:occupancyInfo AS sensorOccupancyInfo) WHERE identifier=:identifier";
+			"update %s set status=CAST(:status AS sensorstatus), occupancy_info=CAST(:occupancyInfo AS sensorOccupancyInfo), last_measure_date=now() WHERE identifier=:identifier";
 	public static final String UPDATE_SENSOR_ROOM_ID_TEMPLATE =
 			"update %s set room_id=:roomId WHERE identifier=:identifier";
 

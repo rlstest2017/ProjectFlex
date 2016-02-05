@@ -69,7 +69,10 @@ public class SensorEndpointImpl implements SensorEndpoint {
 				SensorSummary sensor = factory.createSensorSummary();
 				sensor.setIdentifier(sensorDao.getIdentifier());
 				sensor.setName(sensorDao.getName());
-				sensor.setType(ESensorType.valueOf(sensorDao.getType().toString()));		
+				sensor.setType(ESensorType.valueOf(sensorDao.getType().toString()));
+				if (sensorDao.getLastMeasureDate() != null) {
+					sensor.setLastMeasureDate(sensorDao.getLastMeasureDate().getTime());
+				}
 				sensor.setRoom(getRoomFromId(sensorDao.getRoomId(), sensorDao.getIdentifier()));
 				if ((sensorDao.getStatus().equals(E_SensorStatus.UNSTABLE_RSSI.toString())) || (sensorDao.getStatus().equals(E_SensorStatus.UNSTABLE_VOLTAGE.toString()))) {
 					sensor.setStatus(EDeviceStatus.UNSTABLE);
