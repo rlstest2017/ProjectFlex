@@ -42,7 +42,7 @@ public enum EnumErrorModel {
 	ERROR_29("R003","impossible de mettre à jour cette salle"),
 	ERROR_30("R004","impossible de supprimer cette salle"),
 	ERROR_31("R005","impossible de charger cette salle"),
-	ERROR_32("500","une erreur métier c'est produite"),
+	ERROR_32("500","une erreur métier s'est produite"),
 	ERROR_33("U101","erreur dans le paramètre authorization"),
 	ERROR_34("L001", "authentification impossible"),
 	ERROR_35("T001", "impossible de démarrer une détection de capteurs"),
