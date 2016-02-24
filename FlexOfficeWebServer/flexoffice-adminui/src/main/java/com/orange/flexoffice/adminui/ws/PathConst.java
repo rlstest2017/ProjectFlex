@@ -4,7 +4,7 @@ public final class PathConst {
 	
 	// Resources 1st level
 	public static final String SYSTEM_PATH = "/system";  // 7 requests
-	public static final String STATS_PATH = "/stats";    // 2 requests
+	public static final String STATS_PATH = "/stats";    // 3 requests
 	public static final String USERS_PATH = "/users";    // 5 requests
 	public static final String SENSORS_PATH = "/sensors";    // 6 requests
 	public static final String GATEWAYS_PATH = "/gateways";    // 5 requests
@@ -22,6 +22,7 @@ public final class PathConst {
 	public static final String LOGOUT_PATH = "/logout";
 	public static final String TEACHIN_PATH = "/teachin";
 	public static final String UNPAIRED_PATH = "/unpaired";
+	public static final String EXPORT_PATH = "/export";
 	
 	// Resources 3rd level
 	public static final String INIT_PATH = "/init";

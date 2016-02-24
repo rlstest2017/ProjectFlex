@@ -6,6 +6,9 @@
 	<!-- Enable Spring Security -->
  	<http pattern="/v1/system/login" security="none"/>
  	
+ 	<!-- Only for Test export -->
+ 	<!-- <http pattern="/v1/stats/export" security="none"/> -->
+ 	
     <http  pattern="/v1/**" entry-point-ref="restAuthenticationEntryPoint" use-expressions="true" auto-config="false" create-session="stateless" >
 	     <!-- Adds the custom login filter to the Spring Security filter chain -->
 	    <custom-filter ref="authenticationTokenProcessingFilter" position="FORM_LOGIN_FILTER"   />

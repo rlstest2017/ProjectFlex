@@ -1,14 +1,17 @@
 package com.orange.flexoffice.adminui.ws.endPoint.data.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.orange.flexoffice.adminui.ws.endPoint.data.StatEndpoint;
 import com.orange.flexoffice.adminui.ws.model.MultiStat;
@@ -40,6 +43,11 @@ public class StatEndpointImpl implements StatEndpoint {
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
 
+	@Value("/home/flexoffice/flexoffice-webserver/Config/export_stats.csv")
+	// TODO @Value("${export.file.location}")
+    private String exportFileLocation;
+    
+    
 	@Override
 	public List<SimpleStat> getPopularStats() {
 		try {
@@ -102,6 +110,15 @@ public class StatEndpointImpl implements StatEndpoint {
 		}
 	}
 	
+	@Override
+	public Response getFile() {
+		File file = new File(exportFileLocation);
+        ResponseBuilder response = Response.ok((Object) file);
+        response.header("Content-Disposition",
+            "attachment; filename=\"export_stats.csv\"");
+        return response.build();
+	}
+	
 	
 	@Override
 	public boolean executeInitTestFile() {
@@ -117,5 +134,6 @@ public class StatEndpointImpl implements StatEndpoint {
 	public boolean initRoomMonthlyOccupancyTable() {
 		return testManager.initRoomMonthlyOccupancyTable();
 	}
+
 	
 }
