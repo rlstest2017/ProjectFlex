@@ -113,6 +113,9 @@ public class StatEndpointImpl implements StatEndpoint {
 	
 	@Override
 	public Response getFile() {
+		
+		statManager.exportStatJob();
+		
 		File file = new File(exportFileLocation);
         ResponseBuilder response = Response.ok((Object) file);
         response.header("Content-Disposition",
