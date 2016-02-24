@@ -18,15 +18,6 @@
 		<property name="maxActive" value="${postgres.jdbc.maxActive}"/>
 		<property name="maxIdle" value="${postgres.jdbc.maxIdle}"/>
 		<property name="maxWait" value="${postgres.jdbc.maxWait}"/>
-		
-<!--	<property name="url" value="jdbc:postgresql://192.168.129.80:5432/FlexOffice"/> -->             
-<!-- 	<property name="url" value="jdbc:postgresql://localhost:5432/FlexOffice"/> -->  
-<!--	<property name="username" value="flexoffice"/> -->
-<!--	<property name="password" value="oab"/>  -->
-<!--	<property name="password" value="flexoffice"/> -->    		
-<!--	<property name="maxActive" value="10"/> -->
-<!--	<property name="maxIdle" value="5"/> -->
-
 	</bean>
 	
 	<bean id="transactionManager" 

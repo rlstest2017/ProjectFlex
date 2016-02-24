@@ -45,6 +45,7 @@ public class StatEndpointImpl implements StatEndpoint {
 
 	@Value("/home/flexoffice/flexoffice-webserver/Config/export_stats.csv")
 	// TODO @Value("${export.file.location}")
+	// see http://stackoverflow.com/questions/11415711/programmatic-access-to-properties-created-by-property-placeholder
     private String exportFileLocation;
     
     

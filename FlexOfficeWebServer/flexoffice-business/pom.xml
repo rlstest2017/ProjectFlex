@@ -61,6 +61,16 @@
 			<artifactId>spring-tx</artifactId>
 	</dependency>
 	
+	<!-- Spring batch -->
+    <dependency>
+			<groupId>org.springframework.batch</groupId>
+			<artifactId>spring-batch-core</artifactId>
+	</dependency>
+	<dependency>
+			<groupId>org.springframework.batch</groupId>
+			<artifactId>spring-batch-infrastructure</artifactId>
+	</dependency>
+	
 	<!-- spring AOP -->
 	<dependency>
 			<groupId>org.springframework</groupId>
