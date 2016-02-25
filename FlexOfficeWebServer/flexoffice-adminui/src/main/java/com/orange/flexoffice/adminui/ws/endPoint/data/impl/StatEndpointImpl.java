@@ -151,6 +151,27 @@ public class StatEndpointImpl implements StatEndpoint {
 		
 	}
 	
+	@Override
+	public boolean getTestFile() {
+		
+		context = new ClassPathXmlApplicationContext("classpath:spring/spring-batch-context-test.xml");
+		
+		JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
+		Job job = (Job) context.getBean("exportStatJob");
+	 
+		try {
+			jobLauncher.run(job, new JobParameters());
+			return true;
+			
+		} catch (JobExecutionException e) {
+			LOGGER.info("Job ExportStat failed");
+			return false;
+		} finally {
+			if (context != null)
+                	context.close();  
+		}
+		
+	}
 	
 	@Override
 	public boolean executeInitTestFile() {

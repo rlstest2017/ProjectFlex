@@ -59,6 +59,9 @@ public interface StatEndpoint {
     Response getFile();
 	
 	// used for tests
+	boolean getTestFile();
+	
+	// used for tests
 	boolean executeInitTestFile();
 	
 	// used for tests
