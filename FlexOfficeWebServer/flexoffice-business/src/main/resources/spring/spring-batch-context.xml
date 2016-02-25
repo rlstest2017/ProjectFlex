@@ -15,9 +15,6 @@
 		<property name="jobRepository" ref="jobRepository" />
 	</bean>
 
-<!-- 	<bean id="exportStatFileItemWriter" -->
-<!-- 		class="com.orange.flexoffice.business.adminui.stat.ExportStatFileItemWriter" /> -->
-
 	<!-- ItemReader which reads from database and returns the row mapped by 
 		rowMapper -->
 	<bean id="databaseItemReader"
@@ -42,15 +39,11 @@
 		<property name="resource" value="file:${export.file.location}" />
 		<property name="shouldDeleteIfExists" value="true"/>
 		<property name="lineAggregator">
-
 			<!-- An Aggregator which converts an object into delimited list of strings -->
 			<bean
 				class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
-
 				<property name="delimiter" value="," />
-				
 				<property name="fieldExtractor">
-
 					<!-- Extractor which returns the value of beans property through reflection -->
 					<bean
 						class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
@@ -59,7 +52,12 @@
 				</property>
 			</bean>
 		</property>
+		 <property name="headerCallback" ref="exportStatFlatFileWriter" />
 	</bean>
+
+	<bean id="exportStatFlatFileWriter"
+		class="com.orange.flexoffice.business.adminui.stat.ExportStatFlatFileWriter" >
+	</bean>	
 
 
 	<!-- Optional JobExecutionListener to perform business logic before and after the job -->
