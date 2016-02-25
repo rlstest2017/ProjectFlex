@@ -15,6 +15,8 @@
 		<property name="jobRepository" ref="jobRepository" />
 	</bean>
 
+<!-- 	<bean id="exportStatFileItemWriter" -->
+<!-- 		class="com.orange.flexoffice.business.adminui.stat.ExportStatFileItemWriter" /> -->
 
 	<!-- ItemReader which reads from database and returns the row mapped by 
 		rowMapper -->
@@ -24,7 +26,7 @@
 		<property name="dataSource" ref="dataSource" />
 
 		<property name="sql"
-			value="select rooms.name as room_name, rooms.type as room_type, room_stats.begin_occupancy_date, room_stats.end_occupancy_date from rooms, room_stats where rooms.id=room_stats.room_id" />
+			value="select rooms.name as room_name, rooms.type as room_type, room_stats.begin_occupancy_date, room_stats.end_occupancy_date from rooms, room_stats where rooms.id=room_stats.room_id order by room_stats.begin_occupancy_date" />
 
 		<property name="rowMapper">
 			<bean class="com.orange.flexoffice.business.adminui.stat.ExportStatRowMapper" />
@@ -37,8 +39,8 @@
 	<bean id="flatFileItemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter"
 		scope="step">
 
-		<property name="resource" value="file:/home/flexoffice/flexoffice-webserver/Config/export_stats.csv" />
-
+		<property name="resource" value="file:${export.file.location}" />
+		<property name="shouldDeleteIfExists" value="true"/>
 		<property name="lineAggregator">
 
 			<!-- An Aggregator which converts an object into delimited list of strings -->
@@ -46,7 +48,7 @@
 				class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
 
 				<property name="delimiter" value="," />
-
+				
 				<property name="fieldExtractor">
 
 					<!-- Extractor which returns the value of beans property through reflection -->
@@ -71,7 +73,7 @@
 		<batch:step id="step1">
 			<batch:tasklet transaction-manager="transactionManager">
 				<batch:chunk reader="databaseItemReader" writer="flatFileItemWriter"
-					processor="itemProcessor" commit-interval="10" />
+					processor="itemProcessor" commit-interval="100" />
 			</batch:tasklet>
 		</batch:step>
 		<batch:listeners>

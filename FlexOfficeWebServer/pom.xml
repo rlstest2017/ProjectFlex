@@ -37,7 +37,7 @@
     <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version> 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spring.version>4.1.1.RELEASE</spring.version>
-    <springbatch.version>3.0.1.RELEASE</springbatch.version>
+    <springbatch.version>3.0.6.RELEASE</springbatch.version>
     <spring-security.version>4.0.0.RELEASE</spring-security.version>
     <javax.annotation.version>1.0</javax.annotation.version>
     

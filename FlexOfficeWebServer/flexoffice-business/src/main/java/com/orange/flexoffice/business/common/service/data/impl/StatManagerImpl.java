@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.batch.runtime.BatchStatus;
-
 import org.apache.log4j.Logger;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -198,36 +196,6 @@ public class StatManagerImpl implements StatManager {
 
 		LOGGER.debug("End method StatManager.getOccupancyStats");
 		return multiStatSet;
-	}
-	
-	@SuppressWarnings("finally")
-	@Override
-	public Boolean exportStatJob() {
-		
-		Boolean status = false;
-		
-		context = new ClassPathXmlApplicationContext("classpath:spring/spring-batch-context.xml");
-		
-		JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
-		Job job = (Job) context.getBean("exportStatJob");
-	 
-		try {
-			JobExecution execution = jobLauncher.run(job, new JobParameters());
-			System.out.println("Job Exit Status : "+ execution.getStatus());
-			
-			if (BatchStatus.COMPLETED.equals(execution.getStatus())) {
-				status = true;
-			}
-			
-		} catch (JobExecutionException e) {
-			System.out.println("Job ExportStat failed");
-			e.printStackTrace();
-		} finally {
-			if (context != null)
-                	context.close();  
-			
-			return status;
-		}
 	}
 	
 	/**

@@ -10,8 +10,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.log4j.Logger;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecutionException;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.orange.flexoffice.adminui.ws.endPoint.data.StatEndpoint;
 import com.orange.flexoffice.adminui.ws.model.MultiStat;
@@ -43,10 +48,14 @@ public class StatEndpointImpl implements StatEndpoint {
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
 
-	@Value("/home/flexoffice/flexoffice-webserver/Config/export_stats.csv")
+	private static ClassPathXmlApplicationContext context;
+	
+	
 	// TODO @Value("${export.file.location}")
 	// see http://stackoverflow.com/questions/11415711/programmatic-access-to-properties-created-by-property-placeholder
-    private String exportFileLocation;
+	@Value("/home/flexoffice/flexoffice-webserver/Config/export_stats.csv")
+
+	private String exportFileLocation;
     
     
 	@Override
@@ -113,14 +122,29 @@ public class StatEndpointImpl implements StatEndpoint {
 	
 	@Override
 	public Response getFile() {
+		 
+		context = new ClassPathXmlApplicationContext("classpath:spring/spring-batch-context.xml");
 		
-		statManager.exportStatJob();
+		JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
+		Job job = (Job) context.getBean("exportStatJob");
+	 
+		try {
+			jobLauncher.run(job, new JobParameters());
+			File file = new File(exportFileLocation);
+			ResponseBuilder response = Response.ok((Object) file);
+		    response.header("Content-Disposition",
+		           "attachment; filename=\"export_stats.csv\"");
+		    
+			return response.build();
+			
+		} catch (JobExecutionException e) {
+			LOGGER.info("Job ExportStat failed");
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		} finally {
+			if (context != null)
+                	context.close();  
+		}
 		
-		File file = new File(exportFileLocation);
-        ResponseBuilder response = Response.ok((Object) file);
-        response.header("Content-Disposition",
-            "attachment; filename=\"export_stats.csv\"");
-        return response.build();
 	}
 	
 	

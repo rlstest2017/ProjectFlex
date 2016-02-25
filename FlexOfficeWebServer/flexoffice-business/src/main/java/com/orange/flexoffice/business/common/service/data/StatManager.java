@@ -27,6 +27,4 @@ public interface StatManager {
 	 */
 	MultiStatSetDto getOccupancyStats(String from, String to, String viewtype);
 	
-	Boolean exportStatJob();
-	
 }
