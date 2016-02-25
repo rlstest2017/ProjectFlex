@@ -22,9 +22,12 @@
 
 		<property name="dataSource" ref="dataSource" />
 
+		<!--  value="select rooms.name as room_name, rooms.type as room_type, room_stats.begin_occupancy_date, room_stats.end_occupancy_date 
+				from rooms, room_stats where rooms.id=room_stats.room_id order by room_stats.begin_occupancy_date" />-->
 		<property name="sql"
-			value="select rooms.name as room_name, rooms.type as room_type, room_stats.begin_occupancy_date, room_stats.end_occupancy_date from rooms, room_stats where rooms.id=room_stats.room_id order by room_stats.begin_occupancy_date" />
-
+			value="select rooms.name as room_name, rooms.type as room_type, room_stats.begin_occupancy_date, room_stats.end_occupancy_date 
+				from rooms, room_stats where rooms.id=room_stats.room_id and room_stats.begin_occupancy_date is not null and room_stats.end_occupancy_date is not null order by room_stats.begin_occupancy_date" />
+		
 		<property name="rowMapper">
 			<bean class="com.orange.flexoffice.business.adminui.stat.ExportStatRowMapper" />
 		</property>
@@ -70,8 +73,11 @@
 	<batch:job id="exportStatJob">
 		<batch:step id="step1">
 			<batch:tasklet transaction-manager="transactionManager">
+				<!--  <batch:chunk reader="databaseItemReader" writer="flatFileItemWriter"
+					processor="itemProcessor" commit-interval="500" />-->
 				<batch:chunk reader="databaseItemReader" writer="flatFileItemWriter"
-					processor="itemProcessor" commit-interval="100" />
+					commit-interval="500"/>
+				<!-- 500 => 832ms for 7000 lines, 10 => 2200ms for 7000 lines -->	
 			</batch:tasklet>
 		</batch:step>
 		<batch:listeners>

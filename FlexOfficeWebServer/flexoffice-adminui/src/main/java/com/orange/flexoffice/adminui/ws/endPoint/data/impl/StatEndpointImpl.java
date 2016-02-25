@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -15,7 +16,7 @@ import org.springframework.batch.core.JobExecutionException;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.orange.flexoffice.adminui.ws.endPoint.data.StatEndpoint;
@@ -50,13 +51,16 @@ public class StatEndpointImpl implements StatEndpoint {
 
 	private static ClassPathXmlApplicationContext context;
 	
-	
-	// TODO @Value("${export.file.location}")
-	// see http://stackoverflow.com/questions/11415711/programmatic-access-to-properties-created-by-property-placeholder
-	@Value("/home/flexoffice/flexoffice-webserver/Config/export_stats.csv")
+	/**
+	 * properties for get export file location
+	 */
+	private Properties properties;
 
-	private String exportFileLocation;
-    
+    @Autowired
+    @Qualifier("appProperties")
+    public void setProperties(Properties properties) {
+        this.properties = properties;
+    }
     
 	@Override
 	public List<SimpleStat> getPopularStats() {
@@ -130,7 +134,7 @@ public class StatEndpointImpl implements StatEndpoint {
 	 
 		try {
 			jobLauncher.run(job, new JobParameters());
-			File file = new File(exportFileLocation);
+			File file = new File(properties.getProperty("export.file.location"));
 			ResponseBuilder response = Response.ok((Object) file);
 		    response.header("Content-Disposition",
 		           "attachment; filename=\"export_stats.csv\"");
