@@ -18,7 +18,34 @@
 	 </xsd:restriction>
 	</xsd:simpleType>
 	
+	<!-- Location -->
+	<xsd:complexType name="LocationItem">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="name" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Building -->
+	<xsd:complexType name="BuildingItem">
+		<xsd:sequence>
+			<xsd:element name="buildingId" type="xsd:string"/>
+			<xsd:element name="buildingName" type="xsd:string"/>
+			<xsd:element name="nbFloors" type="xsd:integer"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
 	<!-- User -->
+	<xsd:complexType name="User">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+ 		    <xsd:element name="firstName" type="xsd:string"/>
+			<xsd:element name="lastName" type="xsd:string"/>
+			<xsd:element name="email" type="xsd:string"/>
+			<xsd:element name="roomId" type="xsd:string"/>
+			<xsd:element name="context" type="UserContext"/>
+		</xsd:sequence>
+	</xsd:complexType>
 	<xsd:complexType name="UserSummary">
 		<xsd:sequence>
 			<xsd:element name="id" type="xsd:string"/>
@@ -29,12 +56,26 @@
 			<xsd:element name="roomId" type="xsd:string"/>
 		</xsd:sequence>
 	</xsd:complexType>
-	
 	<xsd:complexType name="UserInput">
 		<xsd:sequence>
 			<xsd:element name="firstName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="lastName" type="xsd:string"  minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="email" type="xsd:string"  minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="UserPreferences">
+		<xsd:sequence>
+			<xsd:element name="country" type="LocationItem" />
+			<xsd:element name="region" type="LocationItem" />
+			<xsd:element name="city" type="LocationItem" />
+			<xsd:element name="buildig" type="LocationItem" />
+			<xsd:element name="floor" type="xsd:integer" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="UserContext">
+		<xsd:sequence>
+			<xsd:element name="useLocationExplorer" type="xsd:boolean" />
+			<xsd:element name="userPreferences" type="UserPreferences" />
 		</xsd:sequence>
 	</xsd:complexType>
 
@@ -63,6 +104,8 @@
 			<xsd:element name="lastMeasureDate" type="xsd:integer"/>
 			<xsd:element name="status" type="e-roomStatus"/>
 			<xsd:element name="tenant" type="UserSummary"/>
+			<xsd:element name="temperature" type="xsd:float"/>
+			<xsd:element name="humidity" type="xsd:float"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	
