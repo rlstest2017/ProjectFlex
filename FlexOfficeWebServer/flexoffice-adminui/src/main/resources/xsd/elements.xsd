@@ -27,7 +27,20 @@
 	<xsd:element name="roomInput1" type="RoomInput1"/>
 	<xsd:element name="roomInput2" type="RoomInput2"/>
 	<xsd:element name="roomOutput" type="RoomOutput"/>
-	
+	<xsd:element name="location" type="Location"/>
+	<xsd:element name="locationInput" type="LocationInput"/>
+	<xsd:element name="locationItem" type="LocationItem"/>
+	<xsd:element name="building" type="Building"/>
+	<xsd:element name="buildingSummary" type="BuildingSummary"/>
+	<xsd:element name="buildingInput" type="BuildingInput"/>
+	<xsd:element name="buildingItem" type="BuildingItem"/>
+	<xsd:element name="city" type="City"/>
+	<xsd:element name="citySummary" type="CitySummary"/>
+	<xsd:element name="cityInput" type="CityInput"/>
+	<xsd:element name="region" type="Region"/>
+	<xsd:element name="regionSummary" type="RegionSummary"/>
+	<xsd:element name="regionInput" type="RegionInput"/>
+		
 	<xsd:element name="token" type="Token"/>
 	
 	<xsd:element name="error" type="ErrorModel"/>

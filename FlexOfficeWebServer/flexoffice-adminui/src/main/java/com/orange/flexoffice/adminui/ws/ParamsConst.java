@@ -12,6 +12,10 @@ public final class ParamsConst {
 	public static final String FROM_PARAM = "from";
 	public static final String TO_PARAM = "to";
 	public static final String VIEW_TYPE_PARAM = "viewtype";
+	public static final String BUILDING_ID_PARAM = "buildingId";
+	public static final String CITY_ID_PARAM = "cityId";
+	public static final String REGION_ID_PARAM = "regionId";
+	public static final String COUNTRY_ID_PARAM = "countryId";
 	
 	private ParamsConst() {
 		
