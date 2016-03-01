@@ -1,9 +1,16 @@
 package com.orange.flexoffice.adminui.ws.endPoint.data;
 
 import static com.orange.flexoffice.adminui.ws.ParamsConst.COUNTRY_ID_PARAM;
+import static com.orange.flexoffice.adminui.ws.ParamsConst.REGION_ID_PARAM;
+import static com.orange.flexoffice.adminui.ws.ParamsConst.CITY_ID_PARAM;
+
 import static com.orange.flexoffice.adminui.ws.PathConst.COUNTRY_ID_PATH;
+import static com.orange.flexoffice.adminui.ws.PathConst.REGION_ID_PATH;
+import static com.orange.flexoffice.adminui.ws.PathConst.CITY_ID_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.COUNTRY_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.REGION_PATH;
+import static com.orange.flexoffice.adminui.ws.PathConst.CITY_PATH;
+import static com.orange.flexoffice.adminui.ws.PathConst.BUILDING_PATH;
 import static com.orange.flexoffice.adminui.ws.PathConst.LOCATION_PATH;
 
 import java.util.List;
@@ -15,6 +22,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.orange.flexoffice.adminui.ws.model.BuildingItem;
 import com.orange.flexoffice.adminui.ws.model.LocationItem;
 
 /**
@@ -54,7 +62,38 @@ public interface LocationEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	List<LocationItem> getRegions(@PathParam(COUNTRY_ID_PARAM) String countryId);
 
-	
+	/**
+	 * Get cities for specific region.
+	 * 
+	 * @param regionId
+	 *            the region ID
+	 * 
+	 * @return information about a specific region.
+	 * 
+	 * @see Region
+	 */
+	@GET
+	@Path(REGION_PATH + REGION_ID_PATH + CITY_PATH)
+	@Consumes (MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	List<LocationItem> getCities(@PathParam(REGION_ID_PARAM) String regionId);
+
+	/**
+	 * Get buildings for specific city.
+	 * 
+	 * @param cityId
+	 *            the city ID
+	 * 
+	 * @return information about a specific city.
+	 * 
+	 * @see City
+	 */
+	@GET
+	@Path(CITY_PATH + CITY_ID_PATH + BUILDING_PATH)
+	@Consumes (MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	List<BuildingItem> getBuildings(@PathParam(CITY_ID_PARAM) String cityId);
+
 }
 
 
