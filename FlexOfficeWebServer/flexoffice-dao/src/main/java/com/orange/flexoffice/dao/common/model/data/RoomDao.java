@@ -19,6 +19,8 @@ public class RoomDao extends AbstractData {
 	private String type;
 	private Long gatewayId;
 	private Long userId;
+	private Long buildingId;
+	private Long floor;
 	private Date lastMeasureDate; // the last time since the status has been modified 
 	
 	public String getName() {
@@ -84,6 +86,30 @@ public class RoomDao extends AbstractData {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	/**
+	 * @return the buildingId
+	 */
+	public Long getBuildingId() {
+		return buildingId;
+	}
+	/**
+	 * @param buildingId the buildingId to set
+	 */
+	public void setBuildingId(Long buildingId) {
+		this.buildingId = buildingId;
+	}
+	/**
+	 * @return the floor
+	 */
+	public Long getFloor() {
+		return floor;
+	}
+	/**
+	 * @param floor the floor to set
+	 */
+	public void setFloor(Long floor) {
+		this.floor = floor;
 	}
 
 	@Override
