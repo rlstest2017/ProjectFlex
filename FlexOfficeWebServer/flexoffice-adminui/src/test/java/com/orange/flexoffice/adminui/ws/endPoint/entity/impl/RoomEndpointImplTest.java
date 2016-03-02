@@ -138,6 +138,7 @@ public class RoomEndpointImplTest {
 		roomInput.setCapacity(BigInteger.valueOf(4));
 		roomInput.setDesc("RoomDescription1");
 		roomInput.setType(ERoomType.BOX);
+		roomInput.setBuildingId("1");
 		final GatewayInput2 gateway = new GatewayInput2();
 		gateway.setMacAddress("FF:EE:ZZ:AA:GG:PP");
 		roomInput.setGateway(gateway);
@@ -166,6 +167,7 @@ public class RoomEndpointImplTest {
 		roomInput.setCapacity(BigInteger.valueOf(4));
 		roomInput.setDesc("RoomDescription1");
 		roomInput.setType(ERoomType.BOX);
+		roomInput.setBuildingId("1");
 		final GatewayInput2 gateway = new GatewayInput2();
 		gateway.setMacAddress("FF:EE:ZZ:AA:GG:PP");
 		roomInput.setGateway(gateway);

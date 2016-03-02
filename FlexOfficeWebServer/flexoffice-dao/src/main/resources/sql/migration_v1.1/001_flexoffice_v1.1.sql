@@ -61,7 +61,8 @@ ALTER TABLE rooms
 	ADD COLUMN building_id integer,
 	ADD COLUMN floor integer,
 	ADD  FOREIGN KEY(building_id) REFERENCES buildings(id),
-	DROP CONSTRAINT rooms_name_key;
+	DROP CONSTRAINT rooms_name_key,
+	ADD CONSTRAINT rooms_unique_key UNIQUE (name, building_id);
 
 
 

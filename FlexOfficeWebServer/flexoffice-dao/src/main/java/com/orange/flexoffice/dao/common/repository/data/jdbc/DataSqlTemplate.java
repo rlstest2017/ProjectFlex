@@ -81,7 +81,7 @@ public final class DataSqlTemplate {
 	public static final String CREATE_GATEWAY_TEMPLATE = 
 			"insert into %s (mac_address, name, description) values (:macAddress, :name, :description)";
 	public static final String CREATE_ROOM_TEMPLATE = 
-			"insert into %s (name, gateway_id, address, capacity, description, type, status) values (:name, :gatewayId, :address, :capacity, :description, CAST(:type AS roomtype), CAST(:status AS roomstatus))";
+			"insert into %s (name, gateway_id, address, capacity, description, type, status, building_id) values (:name, :gatewayId, :address, :capacity, :description, CAST(:type AS roomtype), CAST(:status AS roomstatus), :buildingId)";
 	public static final String CREATE_TEACHIN_SENSOR_TEMPLATE = 
 			"insert into %s (sensor_identifier, sensor_status) values (:sensorIdentifier, CAST(:sensorStatus AS sensorTeachinStatus))";
 	public static final String CREATE_TEACHIN_STATUS_TEMPLATE = 

@@ -167,6 +167,8 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		RoomDao roomDao = new RoomDao();
 		roomDao.setName(roomInput.getName());
 		roomDao.setType(roomInput.getType().toString());
+		roomDao.setBuildingId(Long.valueOf(roomInput.getBuildingId()));
+		
 		if (roomInput.getGateway() !=null) {
 			GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress());
 			roomDao.setGatewayId(Long.valueOf(gateway.getId()));
