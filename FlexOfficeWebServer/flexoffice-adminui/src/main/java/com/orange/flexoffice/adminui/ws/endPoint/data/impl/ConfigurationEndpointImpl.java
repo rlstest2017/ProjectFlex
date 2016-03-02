@@ -132,9 +132,9 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 	//-------------------------------------------------------------------------
 	@Override
 	public List<CitySummary> getCities() {
-		// TODO Auto-generated method stub
-		return null;
+		return cityHandler.getCities();
 	}
+	
 	@Override
 	public City getCity(String cityId) {
 		// TODO Auto-generated method stub
