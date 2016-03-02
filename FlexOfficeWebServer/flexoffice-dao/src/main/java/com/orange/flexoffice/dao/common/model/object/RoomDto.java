@@ -18,7 +18,7 @@ import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
 public class RoomDto {
 	
 	/**
-	 * A serial Gateway ID.
+	 * A serial Room ID.
 	 */
 	private Long id;
 	private String name;

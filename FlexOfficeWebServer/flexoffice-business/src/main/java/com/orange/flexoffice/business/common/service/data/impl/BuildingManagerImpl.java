@@ -12,10 +12,12 @@ import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.common.service.data.BuildingManager;
 import com.orange.flexoffice.dao.common.model.data.BuildingDao;
+import com.orange.flexoffice.dao.common.model.object.BuildingDto;
+import com.orange.flexoffice.dao.common.model.object.BuildingSummaryDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.BuildingDaoRepository;
 
 /**
- * Manages {@link BuildingDao}.
+ * Manages {@link BuildingSummaryDto}.
  * For PROD LOG LEVEL is info then we say info & error logs.
  * 
  * @author oab
@@ -30,13 +32,15 @@ public class BuildingManagerImpl implements BuildingManager {
 	private BuildingDaoRepository buildingRepository;
 
 	@Override
-	public List<BuildingDao> findAllBuildings() {
-		// TODO Auto-generated method stub
+	public List<BuildingSummaryDto> findAllBuildings() {
+		
+		List<BuildingDao> buildings =buildingRepository.findAllBuildings();
+		// TODO another sql request getAllBuildingsSummary() 
 		return null;
 	}
 
 	@Override
-	public BuildingDao find(long buildingId) throws DataNotExistsException {
+	public BuildingDto find(long buildingId) throws DataNotExistsException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -60,7 +64,7 @@ public class BuildingManagerImpl implements BuildingManager {
 	}
 
 	@Override
-	public BuildingDao findByName(String name) throws DataNotExistsException {
+	public BuildingSummaryDto findByName(String name) throws DataNotExistsException {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -70,7 +70,7 @@ public class RoomManagerImpl implements RoomManager {
 
 	@Override
 	@Transactional(readOnly=true)
-	public RoomDto find(long roomId)  throws DataNotExistsException {
+	public RoomDto find(long roomId) throws DataNotExistsException {
 
 		RoomDao roomDao;
 		try {

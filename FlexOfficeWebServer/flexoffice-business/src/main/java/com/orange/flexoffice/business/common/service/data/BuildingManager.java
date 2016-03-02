@@ -6,6 +6,8 @@ import com.orange.flexoffice.business.common.exception.DataAlreadyExistsExceptio
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.dao.common.model.data.BuildingDao;
+import com.orange.flexoffice.dao.common.model.object.BuildingDto;
+import com.orange.flexoffice.dao.common.model.object.BuildingSummaryDto;
 
 /**
  * BuildingManager
@@ -17,16 +19,16 @@ public interface BuildingManager {
 	 * findAllBuildings method used by adminui
 	 * @return
 	 */
-	List<BuildingDao> findAllBuildings();
+	List<BuildingSummaryDto> findAllBuildings();
 
 	/**
 	 * Finds a building by its ID.
 	 * method used by adminui
 	 * @param buildingId
 	 * 		  the {@link buildingId} ID
-	 * @return a {@link BuildingDao}
+	 * @return a {@link BuildingDto}
 	 */
-	BuildingDao find(long buildingId)  throws DataNotExistsException;
+	BuildingDto find(long buildingId)  throws DataNotExistsException;
 
 	/**
 	 * Saves a {@link BuildingDao}
@@ -61,7 +63,7 @@ public interface BuildingManager {
 	 * 
 	 * @return BuildingDao object if found
 	 */
-	BuildingDao findByName(String name) throws DataNotExistsException;
+	BuildingSummaryDto findByName(String name) throws DataNotExistsException;
 	
 	
 }

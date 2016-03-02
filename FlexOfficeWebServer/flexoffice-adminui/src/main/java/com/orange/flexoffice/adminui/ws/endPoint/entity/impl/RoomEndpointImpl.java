@@ -67,14 +67,6 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		List<RoomDao> dataList = roomManager.findAllRooms();
 
-		if (dataList == null) {
-
-			LOGGER.error("RoomEndpoint.getRooms : Rooms not found");
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_27, Response.Status.NOT_FOUND));
-
-		}
-
-
 		List<RoomSummary> roomList = new ArrayList<RoomSummary>();
 
 		for (RoomDao roomDao : dataList) {

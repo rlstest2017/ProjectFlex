@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 
 import com.orange.flexoffice.adminui.ws.model.Building;
 import com.orange.flexoffice.adminui.ws.model.BuildingInput;
+import com.orange.flexoffice.adminui.ws.model.BuildingItem;
 import com.orange.flexoffice.adminui.ws.model.BuildingSummary;
 import com.orange.flexoffice.adminui.ws.model.City;
 import com.orange.flexoffice.adminui.ws.model.CityInput;
@@ -89,7 +90,7 @@ public interface ConfigurationEndpoint {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response addBuilding(BuildingInput building);
+	BuildingItem addBuilding(BuildingInput building);
 
 	/**
 	 * Put information on a specific building.
