@@ -16,8 +16,11 @@
 	
 	<import resource="classpath*:security.xml"/>
 	
-	<bean id="errorMessageHandler" class="com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler">
-	</bean>
+	<bean id="errorMessageHandler" class="com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler"/>
+	<bean id="buildingHandler" class="com.orange.flexoffice.adminui.ws.utils.BuildingHandler"/>
+	<bean id="cityHandler" class="com.orange.flexoffice.adminui.ws.utils.CityHandler"/>
+	<bean id="regionHandler" class="com.orange.flexoffice.adminui.ws.utils.RegionHandler"/>
+	<bean id="countryHandler" class="com.orange.flexoffice.adminui.ws.utils.CountryHandler"/>
 
 	<bean id="initOfflineGatewaysAlerts" class="com.orange.flexoffice.adminui.ws.utils.InitOfflineGatewaysAlerts"
 	init-method="updateOFFLINEGatewaysAlerts">

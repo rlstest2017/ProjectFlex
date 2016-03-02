@@ -6,6 +6,8 @@ import com.orange.flexoffice.business.common.exception.DataAlreadyExistsExceptio
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.dao.common.model.data.CityDao;
+import com.orange.flexoffice.dao.common.model.object.CityDto;
+import com.orange.flexoffice.dao.common.model.object.CitySummaryDto;
 
 /**
  * CityManager
@@ -17,16 +19,16 @@ public interface CityManager {
 	 * findAllCities method used by adminui
 	 * @return
 	 */
-	List<CityDao> findAllCities();
+	List<CitySummaryDto> findAllCities();
 
 	/**
 	 * Finds a city by its ID.
 	 * method used by adminui
 	 * @param cityId
 	 * 		  the {@link cityId} ID
-	 * @return a {@link CityDao}
+	 * @return a {@link CityDto}
 	 */
-	CityDao find(long cityId)  throws DataNotExistsException;
+	CityDto find(long cityId)  throws DataNotExistsException;
 
 	/**
 	 * Saves a {@link CityDao}

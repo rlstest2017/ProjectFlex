@@ -12,6 +12,8 @@ import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.common.service.data.CityManager;
 import com.orange.flexoffice.dao.common.model.data.CityDao;
+import com.orange.flexoffice.dao.common.model.object.CityDto;
+import com.orange.flexoffice.dao.common.model.object.CitySummaryDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.CityDaoRepository;
 
 /**
@@ -30,13 +32,13 @@ public class CityManagerImpl implements CityManager {
 	private CityDaoRepository cityRepository;
 
 	@Override
-	public List<CityDao> findAllCities() {
+	public List<CitySummaryDto> findAllCities() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public CityDao find(long cityId) throws DataNotExistsException {
+	public CityDto find(long cityId) throws DataNotExistsException {
 		// TODO Auto-generated method stub
 		return null;
 	}
