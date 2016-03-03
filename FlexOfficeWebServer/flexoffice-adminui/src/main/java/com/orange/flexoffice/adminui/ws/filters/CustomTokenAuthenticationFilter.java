@@ -49,7 +49,7 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
             response.addHeader("Access-Control-Allow-Origin", origin);
             response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
             response.addHeader("Access-Control-Allow-Credentials", "true");
-            response.addHeader("Access-Control-Allow-Headers",
+              response.addHeader("Access-Control-Allow-Headers",
                     request.getHeader("Access-Control-Request-Headers"));
         }
     	if ("OPTIONS".equals(request.getMethod())) {

@@ -27,12 +27,21 @@ public class ErrorMessageHandler {
 		errorModel.setCode(error.code());
 		errorModel.setMessage(error.value());
 
+		/**
+		 * Les requêtes en erreurs (GET, DELETE, PUT, POST) ont un paramètre "Origin". 
+		 * Donc, elles passent par le filtre CustomTokenAuthenticationFilter.java
+		 * qui ajoute dans leurs réponses les paramètres :
+		 * response.addHeader("Access-Control-Allow-Origin", origin);
+            response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+            response.addHeader("Access-Control-Allow-Credentials", "true");
+              response.addHeader("Access-Control-Allow-Headers",
+                    request.getHeader("Access-Control-Request-Headers"));
+         *  Dans request.getHeader("Access-Control-Request-Headers") il n y a rien donc
+         *  le paramètres "Access-Control-Allow-Headers" n'est pas ajouté
+         *  C'est pour cela on l'ajoute ici ;)           
+		 */
 		return Response.ok(errorModel).status(status)
-		        .header("Access-Control-Allow-Origin", "*")
 		        .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-		        .header("Access-Control-Allow-Credentials", "true")
-		        .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-		        .header("Access-Control-Max-Age", "1209600")
 		        .build();
 	}
 	
