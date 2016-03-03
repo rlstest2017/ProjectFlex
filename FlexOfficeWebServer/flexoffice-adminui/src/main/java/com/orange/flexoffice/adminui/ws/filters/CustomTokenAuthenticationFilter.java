@@ -45,10 +45,10 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
     @SuppressWarnings("static-access")
 	@Override public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
     	if (request.getHeader(ORIGIN) != null) {
-//            String origin = request.getHeader(ORIGIN);
-//            response.addHeader("Access-Control-Allow-Origin", origin);
-//            response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-//            response.addHeader("Access-Control-Allow-Credentials", "true");
+            String origin = request.getHeader(ORIGIN);
+            response.addHeader("Access-Control-Allow-Origin", origin);
+            response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+            response.addHeader("Access-Control-Allow-Credentials", "true");
               response.addHeader("Access-Control-Allow-Headers",
                     request.getHeader("Access-Control-Request-Headers"));
         }
