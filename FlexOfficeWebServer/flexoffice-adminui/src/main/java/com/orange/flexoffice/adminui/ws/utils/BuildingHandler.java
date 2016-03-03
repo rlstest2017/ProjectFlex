@@ -33,6 +33,7 @@ public class BuildingHandler {
 	
 	@Autowired
 	private BuildingManager buildingManager;
+	
 	private final ObjectFactory factory = new ObjectFactory();
 	private static final Logger LOGGER = Logger.getLogger(BuildingHandler.class);
 	
@@ -60,6 +61,29 @@ public class BuildingHandler {
 		return buildingList;
 	}
     
+	/**
+	 * getBuildingsHaveRooms
+	 * @return
+	 */
+	public List<BuildingItem> getBuildingsByCity(String cityId) {
+		LOGGER.debug( "Begin call ConfigurationEndpoint.getBuildingsHaveRooms at: " + new Date() );
+		//List<BuildingSummaryDto> dataList = buildingManager.findAllBuildings();
+		List<BuildingItem> buildingList = new ArrayList<BuildingItem>();
+//		for (BuildingSummaryDto buildingDto : dataList) {
+//			BuildingSummary building = factory.createBuildingSummary();
+//			building.setId(buildingDto.getId().toString());
+//			building.setName(buildingDto.getName());
+//			building.setAddress(buildingDto.getAddress());
+//			building.setCountryName(buildingDto.getCountryName());
+//			building.setRegionName(buildingDto.getRegionName());
+//			building.setCityName(buildingDto.getCityName());
+//			building.setNbFloors(BigInteger.valueOf(buildingDto.getNbFloors()));
+//			buildingList.add(building);
+//		}
+		LOGGER.debug("List of buildings have rooms: nb = " + buildingList.size());
+		LOGGER.debug( "End call ConfigurationEndpoint.getBuildingsHaveRooms  at: " + new Date() );
+		return buildingList;
+	}
 	
 	/**
 	 * getBuilding
@@ -94,6 +118,13 @@ public class BuildingHandler {
 		return factory.createBuildingItem(returnedBuilding).getValue();
 	}
 	
+	/**
+	 * updateBuilding
+	 * @param id
+	 * @param building
+	 * @return
+	 * @throws DataNotExistsException
+	 */
 	public Response updateBuilding(String id, BuildingInput building) throws DataNotExistsException {
 		BuildingDao buildingDao = new BuildingDao();
 		buildingDao.setName(building.getName());

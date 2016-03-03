@@ -12,6 +12,8 @@ import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.common.service.data.RegionManager;
 import com.orange.flexoffice.dao.common.model.data.RegionDao;
+import com.orange.flexoffice.dao.common.model.object.RegionDto;
+import com.orange.flexoffice.dao.common.model.object.RegionSummaryDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RegionDaoRepository;
 
 /**
@@ -30,13 +32,13 @@ public class RegionManagerImpl implements RegionManager {
 	private RegionDaoRepository regionRepository;
 
 	@Override
-	public List<RegionDao> findAllRegions() {
+	public List<RegionSummaryDto> findAllRegions() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public RegionDao find(long regionId) throws DataNotExistsException {
+	public RegionDto find(long regionId) throws DataNotExistsException {
 		// TODO Auto-generated method stub
 		return null;
 	}

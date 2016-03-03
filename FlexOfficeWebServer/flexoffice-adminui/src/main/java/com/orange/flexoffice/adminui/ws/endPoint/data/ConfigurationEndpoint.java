@@ -168,7 +168,7 @@ public interface ConfigurationEndpoint {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response addCity(CityInput building);
+	City addCity(CityInput building);
 
 	/**
 	 * Put information on a specific city.
@@ -246,7 +246,7 @@ public interface ConfigurationEndpoint {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response addRegion(RegionInput region);
+	Region addRegion(RegionInput region);
 
 	/**
 	 * Put information on a specific region.
@@ -324,7 +324,7 @@ public interface ConfigurationEndpoint {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response addCountry(LocationItem country);
+	LocationItem addCountry(LocationInput country);
 
 	/**
 	 * Put information on a specific country.

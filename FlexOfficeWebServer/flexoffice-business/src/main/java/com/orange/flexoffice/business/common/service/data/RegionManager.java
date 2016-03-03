@@ -6,6 +6,8 @@ import com.orange.flexoffice.business.common.exception.DataAlreadyExistsExceptio
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.dao.common.model.data.RegionDao;
+import com.orange.flexoffice.dao.common.model.object.RegionDto;
+import com.orange.flexoffice.dao.common.model.object.RegionSummaryDto;
 
 /**
  * RegionManager
@@ -17,7 +19,7 @@ public interface RegionManager {
 	 * findAllRegions method used by adminui
 	 * @return
 	 */
-	List<RegionDao> findAllRegions();
+	List<RegionSummaryDto> findAllRegions();
 
 	/**
 	 * Finds a region by its ID.
@@ -26,7 +28,7 @@ public interface RegionManager {
 	 * 		  the {@link regionId} ID
 	 * @return a {@link RegionDao}
 	 */
-	RegionDao find(long regionId)  throws DataNotExistsException;
+	RegionDto find(long regionId)  throws DataNotExistsException;
 
 	/**
 	 * Saves a {@link RegionDao}

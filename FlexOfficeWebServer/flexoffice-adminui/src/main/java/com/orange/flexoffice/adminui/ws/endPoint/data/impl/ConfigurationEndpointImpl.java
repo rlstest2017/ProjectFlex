@@ -137,18 +137,50 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 	
 	@Override
 	public City getCity(String cityId) {
-		// TODO Auto-generated method stub
-		return null;
+		LOGGER.debug( "Begin call ConfigurationEndpoint.getCity at: " + new Date() );
+		try {
+			return cityHandler.getCity(cityId);
+		} catch (DataNotExistsException e){
+			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.getCity with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_31, Response.Status.NOT_FOUND));
+		} catch (RuntimeException ex){
+			LOGGER.debug("RuntimeException in ConfigurationEndpoint.getCity with message :", ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		} finally {
+			LOGGER.debug( "End call ConfigurationEndpoint.getCity  at: " + new Date() );
+		}
 	}
+	
 	@Override
-	public Response addCity(CityInput building) {
-		// TODO Auto-generated method stub
-		return null;
+	public City addCity(CityInput city) {
+		LOGGER.debug( "Begin call ConfigurationEndpoint.addCity at: " + new Date() );
+		try {
+			return cityHandler.addCity(city);
+		} catch (DataAlreadyExistsException e) {
+			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.addCity with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_28, Response.Status.METHOD_NOT_ALLOWED));
+		} catch (RuntimeException ex) {
+			LOGGER.debug("RuntimeException in ConfigurationEndpoint.addCity with message :", ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		} finally {
+			LOGGER.debug( "End call ConfigurationEndpoint.addCity at: " + new Date() );
+		}
 	}
+	
 	@Override
 	public Response updateCity(String id, CityInput city) {
-		// TODO Auto-generated method stub
-		return null;
+		LOGGER.debug( "Begin call ConfigurationEndpoint.updateCity at: " + new Date() );
+		try {
+			return cityHandler.updateCity(id, city);
+		} catch (DataNotExistsException e){
+			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.updateCity with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));
+		} catch (RuntimeException ex){
+			LOGGER.debug("RuntimeException in ConfigurationEndpoint.updateCity with message :", ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		} finally {
+			LOGGER.debug( "End call ConfigurationEndpoint.updateCity at: " + new Date() );
+		}
 	}
 	@Override
 	public Response removeCity(String id) {
@@ -175,24 +207,57 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 	//-------------------------------------------------------------------------
 	@Override
 	public List<RegionSummary> getRegions() {
-		// TODO Auto-generated method stub
-		return null;
+		return regionHandler.getRegions();
 	}
+	
 	@Override
 	public Region getRegion(String regionId) {
-		// TODO Auto-generated method stub
-		return null;
+		LOGGER.debug( "Begin call ConfigurationEndpoint.getRegion at: " + new Date() );
+		try {
+			return regionHandler.getRegion(regionId);
+		} catch (DataNotExistsException e){
+			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.getRegion with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_31, Response.Status.NOT_FOUND));
+		} catch (RuntimeException ex){
+			LOGGER.debug("RuntimeException in ConfigurationEndpoint.getRegion with message :", ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		} finally {
+			LOGGER.debug( "End call ConfigurationEndpoint.getRegion  at: " + new Date() );
+		}
 	}
+	
 	@Override
-	public Response addRegion(RegionInput region) {
-		// TODO Auto-generated method stub
-		return null;
+	public Region addRegion(RegionInput region) {
+		LOGGER.debug( "Begin call ConfigurationEndpoint.addRegion at: " + new Date() );
+		try {
+			return regionHandler.addRegion(region);
+		} catch (DataAlreadyExistsException e) {
+			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.addRegion with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_28, Response.Status.METHOD_NOT_ALLOWED));
+		} catch (RuntimeException ex) {
+			LOGGER.debug("RuntimeException in ConfigurationEndpoint.addRegion with message :", ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		} finally {
+			LOGGER.debug( "End call ConfigurationEndpoint.addRegion at: " + new Date() );
+		}
 	}
+	
 	@Override
 	public Response updateRegion(String id, RegionInput region) {
-		// TODO Auto-generated method stub
-		return null;
+		LOGGER.debug( "Begin call ConfigurationEndpoint.updateRegion at: " + new Date() );
+		try {
+			return regionHandler.updateRegion(id, region);
+		} catch (DataNotExistsException e){
+			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.updateRegion with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));
+		} catch (RuntimeException ex){
+			LOGGER.debug("RuntimeException in ConfigurationEndpoint.updateRegion with message :", ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		} finally {
+			LOGGER.debug( "End call ConfigurationEndpoint.updateRegion at: " + new Date() );
+		}
 	}
+	
 	@Override
 	public Response removeRegion(String id) {
 		LOGGER.debug( "Begin call ConfigurationEndpoint.removeRegion at: " + new Date() );
@@ -217,23 +282,55 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 	//-------------------------------------------------------------------------
 	@Override
 	public List<LocationItem> getCountries() {
-		// TODO Auto-generated method stub
-		return null;
+		return countryHandler.getCountries();
 	}
+	
 	@Override
 	public LocationItem getCountry(String countryId) {
-		// TODO Auto-generated method stub
-		return null;
+		LOGGER.debug( "Begin call ConfigurationEndpoint.getCountry at: " + new Date() );
+		try {
+			return countryHandler.getCountry(countryId);
+		} catch (DataNotExistsException e){
+			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.getCountry with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_31, Response.Status.NOT_FOUND));
+		} catch (RuntimeException ex){
+			LOGGER.debug("RuntimeException in ConfigurationEndpoint.getCountry with message :", ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		} finally {
+			LOGGER.debug( "End call ConfigurationEndpoint.getCountry  at: " + new Date() );
+		}
 	}
+	
 	@Override
-	public Response addCountry(LocationItem country) {
-		// TODO Auto-generated method stub
-		return null;
+	public LocationItem addCountry(LocationInput country) {
+		LOGGER.debug( "Begin call ConfigurationEndpoint.addCountry at: " + new Date() );
+		try {
+			return countryHandler.addCountry(country);
+		} catch (DataAlreadyExistsException e) {
+			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.addCountry with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_28, Response.Status.METHOD_NOT_ALLOWED));
+		} catch (RuntimeException ex) {
+			LOGGER.debug("RuntimeException in ConfigurationEndpoint.addCountry with message :", ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		} finally {
+			LOGGER.debug( "End call ConfigurationEndpoint.addCountry at: " + new Date() );
+		}
 	}
+	
 	@Override
-	public Response updateCountry(String id, LocationInput region) {
-		// TODO Auto-generated method stub
-		return null;
+	public Response updateCountry(String id, LocationInput country) {
+		LOGGER.debug( "Begin call ConfigurationEndpoint.updateCountry at: " + new Date() );
+		try {
+			return countryHandler.updateCountry(id, country);
+		} catch (DataNotExistsException e){
+			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.updateCountry with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));
+		} catch (RuntimeException ex){
+			LOGGER.debug("RuntimeException in ConfigurationEndpoint.updateCountry with message :", ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		} finally {
+			LOGGER.debug( "End call ConfigurationEndpoint.updateCountry at: " + new Date() );
+		}
 	}
 	
 	@Override
