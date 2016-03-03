@@ -46,15 +46,11 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
 	@Override public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
     	if (request.getHeader(ORIGIN) != null) {
             String origin = request.getHeader(ORIGIN);
-            response.addHeader("Access-Control-Allow-Origin", origin);
+//          response.addHeader("Access-Control-Allow-Origin", origin);
             response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
             response.addHeader("Access-Control-Allow-Credentials", "true");
               response.addHeader("Access-Control-Allow-Headers",
                     request.getHeader("Access-Control-Request-Headers"));
-//            response.addHeader("Access-Control-Allow-Headers", "origin, content-type, accept, authorization, x-auth-token");
-//            response.addHeader("Access-Control-Allow-Credentials", "true");
-//            response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
-//            response.addHeader("Access-Control-Max-Age", "1209600");
             
         }
     	if ("OPTIONS".equals(request.getMethod())) {
