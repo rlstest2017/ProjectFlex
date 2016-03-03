@@ -104,8 +104,8 @@
 			<xsd:element name="lastMeasureDate" type="xsd:integer"/>
 			<xsd:element name="status" type="e-roomStatus"/>
 			<xsd:element name="tenant" type="UserSummary"/>
-			<xsd:element name="temperature" type="xsd:float"/>
-			<xsd:element name="humidity" type="xsd:float"/>
+			<xsd:element name="temperature" type="xsd:double"/>
+			<xsd:element name="humidity" type="xsd:double"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	

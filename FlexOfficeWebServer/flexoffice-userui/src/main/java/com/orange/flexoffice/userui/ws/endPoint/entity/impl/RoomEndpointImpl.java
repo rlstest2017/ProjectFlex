@@ -127,7 +127,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));			
 			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
 			room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
-
+			room.setTemperature(roomDto.getTemperature());
+			room.setHumidity(roomDto.getHumidity());
+			
 			if (roomDto.getLastMeasureDate() != null) {
 				room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
 			}
@@ -185,7 +187,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));			
 			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
 			room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
-	
+			room.setTemperature(roomDto.getTemperature());
+			room.setHumidity(roomDto.getHumidity());
+			
 			if (roomDto.getLastMeasureDate() != null) {
 				room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
 			}
@@ -249,7 +253,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setAddress(roomDto.getAddress());
 			room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));			
 			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
-
+			room.setTemperature(roomDto.getTemperature());
+			room.setHumidity(roomDto.getHumidity());
+			
 			if (roomDto.getLastMeasureDate() != null) {
 				room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
 			}
