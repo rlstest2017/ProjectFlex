@@ -31,8 +31,7 @@ public class CountryManagerImpl implements CountryManager {
 
 	@Override
 	public List<CountryDao> findAllCountries() {
-		// TODO Auto-generated method stub
-		return null;
+		return countryRepository.findAllCountries();
 	}
 
 	@Override

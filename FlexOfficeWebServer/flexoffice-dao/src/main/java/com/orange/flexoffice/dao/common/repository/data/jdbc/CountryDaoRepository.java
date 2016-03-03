@@ -5,10 +5,14 @@ import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.CountryDao;
 import com.orange.flexoffice.dao.common.repository.data.CountryDaoOperations;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.CountryDaoMetadata;
 
 @Repository
 public class CountryDaoRepository extends DataRepository<CountryDao> implements CountryDaoOperations {
@@ -20,8 +24,12 @@ public class CountryDaoRepository extends DataRepository<CountryDao> implements 
 
 	@Override
 	public List<CountryDao> findAllCountries() {
-		// TODO Auto-generated method stub
-		return null;
+		SqlParameterSource paramMap = new MapSqlParameterSource();
+		return jdbcTemplate.query(
+				findAllQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<CountryDao>(CountryDao.class)
+			);
 	}
 
 	@Override
@@ -50,20 +58,17 @@ public class CountryDaoRepository extends DataRepository<CountryDao> implements 
 
 	@Override
 	protected String getTableName() {
-		// TODO Auto-generated method stub
-		return null;
+		return CountryDaoMetadata.COUNTRY_TABLE_NAME;
 	}
 
 	@Override
 	protected String getColumnColName() {
-		// TODO Auto-generated method stub
-		return null;
+		return CountryDaoMetadata.COUNTRY_ID_COL;
 	}
 
 	@Override
 	protected String getColName() {
-		// TODO Auto-generated method stub
-		return null;
+		return CountryDaoMetadata.COUNTRY_NAME_COL;
 	}
 	
 	

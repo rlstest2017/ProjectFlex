@@ -8,8 +8,11 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
     <!-- Import related to Flex Office Web Sever Business -->
+ 
 	<import resource="classpath*:spring/applicationContext-flexoffice-business-test.xml" />
-	
+
+	<bean id="configurationEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.ConfigurationEndpointImpl"/>
+		
 	<bean id="userEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.UserEndpointImpl">
 	</bean>
 	

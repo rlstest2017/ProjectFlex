@@ -31,6 +31,7 @@ import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
+import com.orange.flexoffice.business.common.service.data.TestManager;
 
 /**
  * ConfigurationEndpointImpl
@@ -43,6 +44,8 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 	
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
+	@Autowired
+	private TestManager testManager;
 	@Autowired
 	private BuildingHandler buildingHandler;
 	@Autowired
@@ -351,6 +354,11 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 		} finally {
 			LOGGER.debug( "End call ConfigurationEndpoint.removeCountry at: " + new Date() );
 		}
+	}
+
+	@Override
+	public boolean executeInitTestFile() {
+		return testManager.executeInitTestFile();
 	}
 	
 }

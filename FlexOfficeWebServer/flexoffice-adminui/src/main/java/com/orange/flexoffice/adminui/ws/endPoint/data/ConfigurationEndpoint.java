@@ -360,7 +360,9 @@ public interface ConfigurationEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	Response removeCountry(@PathParam(COUNTRY_ID_PARAM)String id);
 
-	
+	// used for tests
+	boolean executeInitTestFile();
+
 }
 
 
