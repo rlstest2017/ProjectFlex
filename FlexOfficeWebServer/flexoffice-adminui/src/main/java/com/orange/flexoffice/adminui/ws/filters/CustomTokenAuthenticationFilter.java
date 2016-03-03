@@ -51,7 +51,6 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
             response.addHeader("Access-Control-Allow-Credentials", "true");
               response.addHeader("Access-Control-Allow-Headers",
                     request.getHeader("Access-Control-Request-Headers"));
-            
         }
     	if ("OPTIONS".equals(request.getMethod())) {
             response.getWriter().print("OK");
