@@ -3,6 +3,7 @@ package com.orange.flexoffice.adminui.ws.endPoint.entity.impl;
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -16,6 +17,7 @@ import org.springframework.util.Log4jConfigurer;
 
 import com.orange.flexoffice.adminui.ws.endPoint.data.ConfigurationEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.data.impl.ConfigurationEndpointImpl;
+import com.orange.flexoffice.adminui.ws.model.LocationItem;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -54,6 +56,15 @@ public class ConfigurationEndpointImplTest {
 
 		// Asserts
 		assertEquals(true, state);
+	}
+
+	@Test
+	public void TestB_getCountries() {
+		// Test
+		List<LocationItem> rooms = configurationEndpoint.getCountries();
+
+		// Asserts
+		assertEquals(3, rooms.size());
 	}
 
 

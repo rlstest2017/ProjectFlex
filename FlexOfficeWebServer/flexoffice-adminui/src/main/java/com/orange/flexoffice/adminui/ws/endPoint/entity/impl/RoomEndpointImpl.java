@@ -123,8 +123,12 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));			
 			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
 			room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
-			room.setTemperature(roomDto.getTemperature());
-			room.setHumidity(roomDto.getHumidity());
+			if (roomDto.getTemperature() != null) {
+				room.setTemperature(roomDto.getTemperature());
+			}
+			if (roomDto.getHumidity() != null) {
+				room.setHumidity(roomDto.getHumidity());
+			}
 			
 			LOGGER.debug( "End call RoomEndpoint.getRoom  at: " + new Date() );
 
