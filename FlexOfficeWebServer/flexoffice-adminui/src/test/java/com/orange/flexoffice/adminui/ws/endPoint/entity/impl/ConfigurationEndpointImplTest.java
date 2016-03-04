@@ -189,4 +189,12 @@ public class ConfigurationEndpointImplTest {
 		// Asserts
 		assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
 	}
+	
+	@Test
+	public void TestP_removeRegion() throws WebApplicationException {
+		// Test
+		Response response = configurationEndpoint.removeRegion("3");
+		// Assert
+		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+	}
 }

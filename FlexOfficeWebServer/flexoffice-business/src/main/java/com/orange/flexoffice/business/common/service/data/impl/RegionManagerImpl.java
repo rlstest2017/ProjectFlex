@@ -70,8 +70,8 @@ public class RegionManagerImpl implements RegionManager {
 
 	@Override
 	public void delete(long regionId) throws DataNotExistsException, IntegrityViolationException {
-		// TODO Auto-generated method stub
-		
+		// TODO delete only if there is no cities associated to the region !!!
+		regionRepository.delete(regionId);		
 	}
 
 	@Override
