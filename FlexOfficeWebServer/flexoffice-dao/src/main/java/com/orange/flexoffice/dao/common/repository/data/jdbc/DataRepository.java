@@ -62,6 +62,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_GATEWAY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_ALERT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_ROOM_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_COUNTRY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_ROOMDAILY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_RESERVED_ROOMSTAT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_OCCUPIED_ROOMSTAT_TEMPLATE;
@@ -119,6 +120,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String saveUserFromUserUIQuery;	
 	protected final String saveGatewayQuery;
 	protected final String saveRoomQuery;
+	protected final String saveCountryQuery;
 	protected final String saveTeachinSensorQuery;
 	protected final String saveTeachinStatusQuery;
 	protected final String saveRoomDailyQuery;
@@ -198,6 +200,7 @@ public abstract class DataRepository<T extends Data>
 		saveUserFromUserUIQuery = String.format(CREATE_USER_FROM_USERUI_TEMPLATE, getTableName());
 		saveGatewayQuery = String.format(CREATE_GATEWAY_TEMPLATE, getTableName());
 		saveRoomQuery = String.format(CREATE_ROOM_TEMPLATE, getTableName());
+		saveCountryQuery = String.format(CREATE_COUNTRY_TEMPLATE, getTableName());
 		saveTeachinSensorQuery = String.format(CREATE_TEACHIN_SENSOR_TEMPLATE, getTableName());
 		saveTeachinStatusQuery = String.format(CREATE_TEACHIN_STATUS_TEMPLATE, getTableName());
 		saveRoomDailyQuery = String.format(CREATE_ROOMDAILY_TEMPLATE, getTableName());

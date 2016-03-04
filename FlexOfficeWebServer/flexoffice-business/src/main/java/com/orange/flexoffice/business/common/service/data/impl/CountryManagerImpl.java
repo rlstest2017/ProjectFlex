@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,8 +43,15 @@ public class CountryManagerImpl implements CountryManager {
 
 	@Override
 	public CountryDao save(CountryDao countryDao) throws DataAlreadyExistsException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+		// save CountryDao
+		CountryDao country = countryRepository.saveCountry(countryDao);
+		return country;
+		} catch (DataIntegrityViolationException e) {
+			LOGGER.debug("CountryManager.save : Country already exists", e);
+			LOGGER.error("CountryManager.save : Country already exists");
+			throw new DataAlreadyExistsException("CountryManager.save : Country already exists");
+		}
 	}
 
 	@Override

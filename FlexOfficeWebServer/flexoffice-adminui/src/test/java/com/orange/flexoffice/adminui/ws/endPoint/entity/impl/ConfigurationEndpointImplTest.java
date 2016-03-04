@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
@@ -17,8 +18,8 @@ import org.springframework.util.Log4jConfigurer;
 
 import com.orange.flexoffice.adminui.ws.endPoint.data.ConfigurationEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.data.impl.ConfigurationEndpointImpl;
+import com.orange.flexoffice.adminui.ws.model.LocationInput;
 import com.orange.flexoffice.adminui.ws.model.LocationItem;
-
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ConfigurationEndpointImplTest {
@@ -67,6 +68,20 @@ public class ConfigurationEndpointImplTest {
 		assertEquals(3, rooms.size());
 	}
 
+	@Test
+	public void TestC_addCountry() throws WebApplicationException {
+		// Setup
+		final LocationInput country = new LocationInput();
+		country.setName("country 4");
+		// Test
+		final LocationItem response = configurationEndpoint.addCountry(country);
+		// Asserts
+		assertNotNull(response.getId());
+		// Test
+		List<LocationItem> countries = configurationEndpoint.getCountries();
+		// Asserts
+		assertEquals(4, countries.size());
+	}
 
 	
 }
