@@ -169,4 +169,13 @@ public class ConfigurationEndpointImplTest {
 		// Asserts
 		assertNotNull(response.getId());
 	}
+	
+	@Test
+	public void TestN_getRegionByRegionId() {
+		// Test
+		Region region = configurationEndpoint.getRegion("1");
+		// Asserts
+		assertEquals("region 1", region.getName());
+	}
+		
 }

@@ -7,19 +7,37 @@ package com.orange.flexoffice.dao.common.model.object;
  */
 public class RegionDto extends LocationDto {
 	
-	private LocationDto country;
-		
+	private Long countryId;
+	private String countryName;
+
+	
 	/**
-	 * @return the country
+	 * @return the countryId
 	 */
-	public LocationDto getCountry() {
-		return country;
+	public Long getCountryId() {
+		return countryId;
 	}
+
 	/**
-	 * @param country the country to set
+	 * @param countryId the countryId to set
 	 */
-	public void setCountry(LocationDto country) {
-		this.country = country;
+	public void setCountryId(Long countryId) {
+		this.countryId = countryId;
 	}
+
+	/**
+	 * @return the countryName
+	 */
+	public String getCountryName() {
+		return countryName;
+	}
+
+	/**
+	 * @param countryName the countryName to set
+	 */
+	public void setCountryName(String countryName) {
+		this.countryName = countryName;
+	} 
+
 
 }

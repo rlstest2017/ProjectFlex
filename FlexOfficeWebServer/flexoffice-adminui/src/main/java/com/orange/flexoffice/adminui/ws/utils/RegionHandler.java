@@ -88,7 +88,10 @@ public class RegionHandler {
 		Region region = factory.createRegion();
 		region.setId(String.valueOf(regionDto.getId()));
 		region.setName(regionDto.getName());
-		// TODO to complete ...
+		LocationItem location = factory.createLocationItem();
+		location.setId(regionDto.getCountryId().toString());
+		location.setName(regionDto.getCountryName());
+		region.setCountry(location);
 		return region;
 	}
 	

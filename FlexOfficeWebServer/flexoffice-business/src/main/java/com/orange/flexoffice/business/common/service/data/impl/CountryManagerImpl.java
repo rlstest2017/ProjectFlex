@@ -44,7 +44,7 @@ public class CountryManagerImpl implements CountryManager {
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("CountryManager.find : Country by id #" + countryId + " is not found", e);
 			LOGGER.error("CountryManager.find : Country by id #" + countryId + " is not found");
-			throw new DataNotExistsException("RoomManager.find : Country by id #" + countryId + " is not found");
+			throw new DataNotExistsException("CountryManager.find : Country by id #" + countryId + " is not found");
 		}
 	}
 

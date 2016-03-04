@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +40,14 @@ public class RegionManagerImpl implements RegionManager {
 
 	@Override
 	public RegionDto find(long regionId) throws DataNotExistsException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			RegionDto region = regionRepository.findByRegionId(regionId);
+			return region;
+			} catch(IncorrectResultSizeDataAccessException e ) {
+				LOGGER.debug("RegionManager.find : Country by id #" + regionId + " is not found", e);
+				LOGGER.error("RegionManager.find : Country by id #" + regionId + " is not found");
+				throw new DataNotExistsException("RegionManager.find : Region by id #" + regionId + " is not found");
+			}
 	}
 
 	@Override

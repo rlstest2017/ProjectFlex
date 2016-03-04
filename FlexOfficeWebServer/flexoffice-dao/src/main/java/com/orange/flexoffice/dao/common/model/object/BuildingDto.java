@@ -7,10 +7,36 @@ package com.orange.flexoffice.dao.common.model.object;
  */
 public class BuildingDto extends CityDto {
 	
+	private Long cityId;
+	private String cityName;
 	private String address;
-	private LocationDto city; 
 	private Long nbFloors;
+
 	
+	/**
+	 * @return the cityId
+	 */
+	public Long getCityId() {
+		return cityId;
+	}
+	/**
+	 * @param cityId the cityId to set
+	 */
+	public void setCityId(Long cityId) {
+		this.cityId = cityId;
+	}
+	/**
+	 * @return the cityName
+	 */
+	public String getCityName() {
+		return cityName;
+	}
+	/**
+	 * @param cityName the cityName to set
+	 */
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
 	/**
 	 * @return the address
 	 */
@@ -22,19 +48,6 @@ public class BuildingDto extends CityDto {
 	 */
 	public void setAddress(String address) {
 		this.address = address;
-	}
-	
-	/**
-	 * @return the city
-	 */
-	public LocationDto getCity() {
-		return city;
-	}
-	/**
-	 * @param city the city to set
-	 */
-	public void setCity(LocationDto city) {
-		this.city = city;
 	}
 	/**
 	 * @return the nbFloors

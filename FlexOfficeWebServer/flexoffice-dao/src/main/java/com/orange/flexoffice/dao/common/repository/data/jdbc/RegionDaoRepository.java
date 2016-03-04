@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.RegionDao;
+import com.orange.flexoffice.dao.common.model.object.RegionDto;
 import com.orange.flexoffice.dao.common.model.object.RegionSummaryDto;
 import com.orange.flexoffice.dao.common.repository.data.RegionDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.RegionDaoMetadata;
@@ -43,9 +44,13 @@ public class RegionDaoRepository extends DataRepository<RegionDao> implements Re
 	}
 
 	@Override
-	public RegionDao findByRegionId(Long regionId) throws IncorrectResultSizeDataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+	public RegionDto findByRegionId(Long regionId) throws IncorrectResultSizeDataAccessException {
+		SqlParameterSource paramMap = new MapSqlParameterSource("columnId", regionId);
+		return jdbcTemplate.queryForObject(
+				findByRegionIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<RegionDto>(RegionDto.class)
+			);
 	}
 
 	@Override
