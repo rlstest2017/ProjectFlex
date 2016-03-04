@@ -177,5 +177,16 @@ public class ConfigurationEndpointImplTest {
 		// Asserts
 		assertEquals("region 1", region.getName());
 	}
-		
+	
+	@Test
+	public void TestO_updateRegion() throws WebApplicationException {
+		// Setup
+		final RegionInput region = new RegionInput();
+		region.setName("region 3 update");
+		region.setCountryId("1");
+		// Test
+		final Response response = configurationEndpoint.updateRegion("3", region);
+		// Asserts
+		assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+	}
 }

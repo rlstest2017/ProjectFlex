@@ -64,9 +64,8 @@ public class RegionManagerImpl implements RegionManager {
 	}
 
 	@Override
-	public RegionDao update(RegionDao RegionDao) throws DataNotExistsException {
-		// TODO Auto-generated method stub
-		return null;
+	public RegionDao update(RegionDao regionDao) throws DataNotExistsException {
+		return regionRepository.updateRegion(regionDao);
 	}
 
 	@Override

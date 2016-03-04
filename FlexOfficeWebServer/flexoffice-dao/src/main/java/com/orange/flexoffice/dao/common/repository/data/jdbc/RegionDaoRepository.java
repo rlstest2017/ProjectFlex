@@ -72,8 +72,13 @@ public class RegionDaoRepository extends DataRepository<RegionDao> implements Re
 
 	@Override
 	public RegionDao updateRegion(RegionDao data) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateRegionQuery, paramBean, keyHolder);
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());	
+		return data;
 	}
 
 	@Override
