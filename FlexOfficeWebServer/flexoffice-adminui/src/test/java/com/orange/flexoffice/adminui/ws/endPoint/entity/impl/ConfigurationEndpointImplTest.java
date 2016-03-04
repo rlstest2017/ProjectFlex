@@ -83,5 +83,28 @@ public class ConfigurationEndpointImplTest {
 		assertEquals(4, countries.size());
 	}
 
+	@Test
+	public void TestC_getCountryByCountryId() {
+
+		// Test
+		LocationItem country = configurationEndpoint.getCountry("1");
+
+		// Asserts
+		assertEquals("country 1", country.getName());
+	}
 	
+	@Test
+	public void TestE_getWrongCountryDataNotExistsException() {
+		// Setup
+		boolean expectedResult = false;
+		// Test
+		try {
+			// Test
+			configurationEndpoint.getCountry("125");
+		} catch (WebApplicationException e) {
+			expectedResult = true;
+		}
+		// Asserts
+		assertEquals(true, expectedResult);	
+	}
 }

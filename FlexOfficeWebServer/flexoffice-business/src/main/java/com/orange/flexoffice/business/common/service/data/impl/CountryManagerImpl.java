@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,8 +38,14 @@ public class CountryManagerImpl implements CountryManager {
 
 	@Override
 	public CountryDao find(long countryId) throws DataNotExistsException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+		CountryDao country = countryRepository.findOne(countryId);
+		return country;
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.debug("CountryManager.find : Country by id #" + countryId + " is not found", e);
+			LOGGER.error("CountryManager.find : Country by id #" + countryId + " is not found");
+			throw new DataNotExistsException("RoomManager.find : Country by id #" + countryId + " is not found");
+		}
 	}
 
 	@Override
