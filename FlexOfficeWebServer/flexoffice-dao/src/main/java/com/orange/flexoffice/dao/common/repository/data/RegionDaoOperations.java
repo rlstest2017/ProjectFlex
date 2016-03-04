@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import com.orange.flexoffice.dao.common.model.data.RegionDao;
+import com.orange.flexoffice.dao.common.model.object.RegionSummaryDto;
 
 /**
  * RegionDaoOperations
@@ -15,7 +16,7 @@ import com.orange.flexoffice.dao.common.model.data.RegionDao;
  */
 public interface RegionDaoOperations {
 	
-	List<RegionDao> findAllRegions();
+	List<RegionSummaryDto> findAllRegionsSummary();
 	
 	List<RegionDao> findByCountryId(Long countryId) throws IncorrectResultSizeDataAccessException;
 	

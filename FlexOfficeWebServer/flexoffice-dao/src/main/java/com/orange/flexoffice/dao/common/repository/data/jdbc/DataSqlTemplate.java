@@ -44,6 +44,8 @@ public final class DataSqlTemplate {
 			"select room_daily_occupancy.day, room_daily_occupancy.occupancy_duration, rooms.type From room_daily_occupancy, rooms where rooms.id=room_daily_occupancy.room_id and room_daily_occupancy.day >:fromDate and room_daily_occupancy.day <:toDate order by room_daily_occupancy.day";
 	public static final String FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE = 
 			"select * from %s where room_info=CAST(:roomInfo AS roomInfo) and begin_occupancy_date >:beginOccupancyDate and end_occupancy_date <:endOccupancyDate order by room_id";
+	public static final String FIND_ALL_REGIONS_SUMMARY_TEMPLATE = 
+	"select regions.id, regions.name, countries.name as country_name From regions, countries where regions.country_id=countries.id";
 	public static final String FIND_REQUESTED_ROOM_DAILY_TEMPLATE = 
 			"select * from %s where day >:fromDate and day <:toDate order by day";
 	public static final String FIND_LATEST_RESERVED_ROOM_TEMPLATE = 

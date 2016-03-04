@@ -33,8 +33,7 @@ public class RegionManagerImpl implements RegionManager {
 
 	@Override
 	public List<RegionSummaryDto> findAllRegions() {
-		// TODO Auto-generated method stub
-		return null;
+		return regionRepository.findAllRegionsSummary();
 	}
 
 	@Override

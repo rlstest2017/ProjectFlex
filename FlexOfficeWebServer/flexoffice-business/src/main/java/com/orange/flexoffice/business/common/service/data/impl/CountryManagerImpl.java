@@ -68,8 +68,8 @@ public class CountryManagerImpl implements CountryManager {
 
 	@Override
 	public void delete(long countryId) throws DataNotExistsException, IntegrityViolationException {
-		// TODO Auto-generated method stub
-		
+		// TODO delete only if there is no regions associated to the country !!!
+		countryRepository.delete(countryId);
 	}
 
 	@Override

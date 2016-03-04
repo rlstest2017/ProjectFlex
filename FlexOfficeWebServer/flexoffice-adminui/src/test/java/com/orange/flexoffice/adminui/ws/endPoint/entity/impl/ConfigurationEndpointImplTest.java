@@ -22,10 +22,10 @@ import com.orange.flexoffice.adminui.ws.endPoint.data.ConfigurationEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.data.impl.ConfigurationEndpointImpl;
 import com.orange.flexoffice.adminui.ws.model.LocationInput;
 import com.orange.flexoffice.adminui.ws.model.LocationItem;
+import com.orange.flexoffice.adminui.ws.model.RegionSummary;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ConfigurationEndpointImplTest {
-
 	static {
 	    try {
 	      Log4jConfigurer.initLogging( "classpath:log4j-flexoffice-adminui-test.xml" );
@@ -61,13 +61,15 @@ public class ConfigurationEndpointImplTest {
 		assertEquals(true, state);
 	}
 
+	//-----------------------------------------------------------------
+	//							COUNTRY TESTS
+	//-----------------------------------------------------------------
 	@Test
 	public void TestB_getCountries() {
 		// Test
-		List<LocationItem> rooms = configurationEndpoint.getCountries();
-
+		List<LocationItem> countries = configurationEndpoint.getCountries();
 		// Asserts
-		assertEquals(3, rooms.size());
+		assertEquals(3, countries.size());
 	}
 
 	@Test
@@ -91,11 +93,9 @@ public class ConfigurationEndpointImplTest {
 		boolean expectedResult = false;
 		final LocationInput country = new LocationInput();
 		country.setName("country 1");
-		
 		try {
 			// Test
 			configurationEndpoint.addCountry(country);
-
 		} catch (WebApplicationException e) {
 			expectedResult = true;
 		}
@@ -105,10 +105,8 @@ public class ConfigurationEndpointImplTest {
 
 	@Test
 	public void TestE_getCountryByCountryId() {
-
 		// Test
 		LocationItem country = configurationEndpoint.getCountry("1");
-
 		// Asserts
 		assertEquals("country 1", country.getName());
 	}
@@ -139,5 +137,23 @@ public class ConfigurationEndpointImplTest {
 		assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
 	}
 	
+	@Test
+	public void TestK_removeCountry() throws WebApplicationException {
+		// Test
+		Response response = configurationEndpoint.removeCountry("3");
+		// Assert
+		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+	}
+	
+	//-----------------------------------------------------------------
+	//							REGION TESTS
+	//-----------------------------------------------------------------
+	@Test
+	public void TestL_getRegions() {
+		// Test
+		List<RegionSummary> regions = configurationEndpoint.getRegions();
+		// Asserts
+		assertEquals(3, regions.size());
+	}
 	
 }
