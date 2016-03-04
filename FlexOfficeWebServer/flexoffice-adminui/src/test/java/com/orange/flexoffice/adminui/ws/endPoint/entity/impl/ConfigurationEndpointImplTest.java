@@ -7,7 +7,9 @@ import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -84,7 +86,25 @@ public class ConfigurationEndpointImplTest {
 	}
 
 	@Test
-	public void TestC_getCountryByCountryId() {
+	public void TestD_addCountryAlreadyExists() {
+		// Setup
+		boolean expectedResult = false;
+		final LocationInput country = new LocationInput();
+		country.setName("country 1");
+		
+		try {
+			// Test
+			configurationEndpoint.addCountry(country);
+
+		} catch (WebApplicationException e) {
+			expectedResult = true;
+		}
+		// Asserts
+		assertEquals(true, expectedResult);	
+	}
+
+	@Test
+	public void TestE_getCountryByCountryId() {
 
 		// Test
 		LocationItem country = configurationEndpoint.getCountry("1");
@@ -94,7 +114,7 @@ public class ConfigurationEndpointImplTest {
 	}
 	
 	@Test
-	public void TestE_getWrongCountryDataNotExistsException() {
+	public void TestF_getWrongCountryDataNotExistsException() {
 		// Setup
 		boolean expectedResult = false;
 		// Test
@@ -107,4 +127,17 @@ public class ConfigurationEndpointImplTest {
 		// Asserts
 		assertEquals(true, expectedResult);	
 	}
+	
+	@Test
+	public void TestG_updateCountry() throws WebApplicationException {
+		// Setup
+		final LocationInput country = new LocationInput();
+		country.setName("country 3 update");
+		// Test
+		final Response response = configurationEndpoint.updateCountry("3", country);
+		// Asserts
+		assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+	}
+	
+	
 }

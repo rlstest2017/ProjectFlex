@@ -62,9 +62,8 @@ public class CountryManagerImpl implements CountryManager {
 	}
 
 	@Override
-	public CountryDao update(CountryDao CountryDao) throws DataNotExistsException {
-		// TODO Auto-generated method stub
-		return null;
+	public CountryDao update(CountryDao countryDao) throws DataNotExistsException {
+		return countryRepository.updateCountry(countryDao);
 	}
 
 	@Override

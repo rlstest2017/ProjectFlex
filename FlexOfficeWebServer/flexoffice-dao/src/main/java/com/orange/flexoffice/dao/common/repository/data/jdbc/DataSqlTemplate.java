@@ -118,6 +118,8 @@ public final class DataSqlTemplate {
 			"update %s set command=CAST(:command AS commandModel) where id=:id";
 	public static final String UPDATE_ROOM_TEMPLATE =
 			"update %s set name=:name, gateway_id=:gatewayId, address=:address, capacity=:capacity, description=:description, type=CAST(:type AS roomtype) WHERE id=:id";
+	public static final String UPDATE_COUNTRY_TEMPLATE =
+			"update %s set name=:name WHERE id=:id";
 	public static final String UPDATE_TEACHIN_STATUS_TEMPLATE =
 			"update %s set teachin_status=CAST(:teachinStatus AS teachinStatus) WHERE id=:id";
 	public static final String UPDATE_TEACHIN_DATE_TEMPLATE =

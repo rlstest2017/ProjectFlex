@@ -109,6 +109,7 @@ public class CountryHandler {
 	 */
 	public Response updateCountry(String id, LocationInput country) throws DataNotExistsException {
 		CountryDao countryDao = new CountryDao();
+		countryDao.setId(Long.valueOf(id));
 		countryDao.setName(country.getName());
 		countryManager.update(countryDao);
 		return Response.status(Status.ACCEPTED).build();

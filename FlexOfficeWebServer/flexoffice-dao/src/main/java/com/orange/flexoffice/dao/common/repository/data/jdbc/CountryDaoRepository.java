@@ -60,8 +60,13 @@ public class CountryDaoRepository extends DataRepository<CountryDao> implements 
 
 	@Override
 	public CountryDao updateCountry(CountryDao data) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateCountryQuery, paramBean, keyHolder);
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());	
+		return data;
 	}
 
 	@Override
