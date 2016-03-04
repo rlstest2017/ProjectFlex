@@ -1,7 +1,7 @@
 package com.orange.flexoffice.dao.common.repository.data.jdbc.metadata;
 
 /**
- * RoomDaoMetadata
+ * CountryDaoMetadata
  * @author oab
  *
  */

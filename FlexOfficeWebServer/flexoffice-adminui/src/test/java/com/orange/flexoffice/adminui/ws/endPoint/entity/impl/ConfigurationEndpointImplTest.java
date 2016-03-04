@@ -22,6 +22,8 @@ import com.orange.flexoffice.adminui.ws.endPoint.data.ConfigurationEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.data.impl.ConfigurationEndpointImpl;
 import com.orange.flexoffice.adminui.ws.model.LocationInput;
 import com.orange.flexoffice.adminui.ws.model.LocationItem;
+import com.orange.flexoffice.adminui.ws.model.Region;
+import com.orange.flexoffice.adminui.ws.model.RegionInput;
 import com.orange.flexoffice.adminui.ws.model.RegionSummary;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -156,4 +158,15 @@ public class ConfigurationEndpointImplTest {
 		assertEquals(3, regions.size());
 	}
 	
+	@Test
+	public void TestM_addRegion() throws WebApplicationException {
+		// Setup
+		final RegionInput region = new RegionInput();
+		region.setName("region 4");
+		region.setCountryId("2");
+		// Test
+		final Region response = configurationEndpoint.addRegion(region);
+		// Asserts
+		assertNotNull(response.getId());
+	}
 }

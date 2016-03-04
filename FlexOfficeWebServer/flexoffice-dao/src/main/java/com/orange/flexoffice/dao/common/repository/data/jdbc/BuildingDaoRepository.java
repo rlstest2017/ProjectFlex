@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.BuildingDao;
 import com.orange.flexoffice.dao.common.repository.data.BuildingDaoOperations;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.BuildingDaoMetadata;
 
 @Repository
 public class BuildingDaoRepository extends DataRepository<BuildingDao> implements BuildingDaoOperations {
@@ -66,20 +67,17 @@ public class BuildingDaoRepository extends DataRepository<BuildingDao> implement
 
 	@Override
 	protected String getTableName() {
-		// TODO Auto-generated method stub
-		return null;
+		return BuildingDaoMetadata.BUILDING_TABLE_NAME;
 	}
 
 	@Override
 	protected String getColumnColName() {
-		// TODO Auto-generated method stub
-		return null;
+		return BuildingDaoMetadata.BUILDING_ID_COL;
 	}
 
 	@Override
 	protected String getColName() {
-		// TODO Auto-generated method stub
-		return null;
+		return BuildingDaoMetadata.BUILDING_NAME_COL;
 	}
 
 		

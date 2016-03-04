@@ -117,6 +117,7 @@ public class RegionHandler {
 	 */
 	public Response updateRegion(String id, RegionInput region) throws DataNotExistsException {
 		RegionDao regionDao = new RegionDao();
+		regionDao.setColumnId(id);
 		regionDao.setName(region.getName());
 		regionDao.setCountryId(Long.valueOf(region.getCountryId()));
 		regionManager.update(regionDao);

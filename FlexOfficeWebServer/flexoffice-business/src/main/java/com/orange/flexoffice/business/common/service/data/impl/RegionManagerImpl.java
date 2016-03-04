@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,9 +44,16 @@ public class RegionManagerImpl implements RegionManager {
 	}
 
 	@Override
-	public RegionDao save(RegionDao RegionDao) throws DataAlreadyExistsException {
-		// TODO Auto-generated method stub
-		return null;
+	public RegionDao save(RegionDao regionDao) throws DataAlreadyExistsException {
+		try {
+			// save RegionDao
+			RegionDao region = regionRepository.saveRegion(regionDao);
+			return region;
+			} catch (DataIntegrityViolationException e) {
+				LOGGER.debug("RegionManager.save : Region already exists", e);
+				LOGGER.error("RegionManager.save : Region already exists");
+				throw new DataAlreadyExistsException("RegionManager.save : Region already exists");
+			}
 	}
 
 	@Override
