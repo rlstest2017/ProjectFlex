@@ -31,7 +31,7 @@ public class RegionDaoRepository extends DataRepository<RegionDao> implements Re
 	public List<RegionSummaryDto> findAllRegionsSummary() {
 		SqlParameterSource paramMap = new MapSqlParameterSource();
 		return jdbcTemplate.query(
-				findAllRegionsSummaryQuery, 
+				findAllCitiesSummaryQuery, 
 				paramMap, 
 				new BeanPropertyRowMapper<RegionSummaryDto>(RegionSummaryDto.class)
 			);

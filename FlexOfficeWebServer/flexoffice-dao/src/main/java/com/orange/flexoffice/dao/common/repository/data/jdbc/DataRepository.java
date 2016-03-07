@@ -10,6 +10,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_ROOM_DAILY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_REGIONS_SUMMARY_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_CITIES_SUMMARY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_REQUESTED_ROOM_DAILY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_LATEST_RESERVED_ROOM_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_ID_TEMPLATE;
@@ -100,6 +101,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String findAllQuery;
 	protected final String findAllRoomDailyQuery;
 	protected final String findAllRegionsSummaryQuery;
+	protected final String findAllCitiesSummaryQuery;
 	protected final String findAllDailyQuery;
 	protected final String findRequestedDailyAndTypesQuery;
 	protected final String findRequestedDailyQuery;
@@ -186,6 +188,7 @@ public abstract class DataRepository<T extends Data>
 		findAllRoomDailyQuery = String.format(FIND_ALL_ROOM_DAILY_TEMPLATE, getTableName());
 		findAllDailyQuery = String.format(FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE, getTableName());
 		findAllRegionsSummaryQuery = String.format(FIND_ALL_REGIONS_SUMMARY_TEMPLATE);
+		findAllCitiesSummaryQuery = String.format(FIND_ALL_CITIES_SUMMARY_TEMPLATE);
 		findRequestedDailyAndTypesQuery = String.format(FIND_REQUESTED_ROOM_DAILY_AND_TYPE_TEMPLATE);
 		findRequestedDailyQuery = String.format(FIND_REQUESTED_ROOM_DAILY_TEMPLATE, getTableName());
 		findLatestReservedRoomsQuery = String.format(FIND_LATEST_RESERVED_ROOM_TEMPLATE, getTableName());

@@ -33,8 +33,7 @@ public class CityManagerImpl implements CityManager {
 
 	@Override
 	public List<CitySummaryDto> findAllCities() {
-		// TODO Auto-generated method stub
-		return null;
+		return cityRepository.findAllCitiesSummary();
 	}
 
 	@Override

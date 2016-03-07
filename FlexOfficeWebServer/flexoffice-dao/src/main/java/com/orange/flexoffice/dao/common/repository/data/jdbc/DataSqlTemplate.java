@@ -48,6 +48,8 @@ public final class DataSqlTemplate {
 			"select * from %s where room_info=CAST(:roomInfo AS roomInfo) and begin_occupancy_date >:beginOccupancyDate and end_occupancy_date <:endOccupancyDate order by room_id";
 	public static final String FIND_ALL_REGIONS_SUMMARY_TEMPLATE = 
 	"select regions.id, regions.name, countries.name as country_name From regions, countries where regions.country_id=countries.id";
+	public static final String FIND_ALL_CITIES_SUMMARY_TEMPLATE = 
+	"select cities.id, cities.name, regions.name as region_name, countries.name as country_name From cities, regions, countries where cities.region_id=regions.id and regions.country_id=countries.id";
 	public static final String FIND_REQUESTED_ROOM_DAILY_TEMPLATE = 
 			"select * from %s where day >:fromDate and day <:toDate order by day";
 	public static final String FIND_LATEST_RESERVED_ROOM_TEMPLATE = 
