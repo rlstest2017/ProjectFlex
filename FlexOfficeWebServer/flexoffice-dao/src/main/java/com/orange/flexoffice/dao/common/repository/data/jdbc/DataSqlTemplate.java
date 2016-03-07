@@ -92,6 +92,8 @@ public final class DataSqlTemplate {
 			"insert into %s (name) values (:name)";
 	public static final String CREATE_REGION_TEMPLATE = 
 			"insert into %s (name, country_id) values (:name, :countryId)";
+	public static final String CREATE_CITY_TEMPLATE = 
+			"insert into %s (name, region_id) values (:name, :regionId)";
 	public static final String CREATE_TEACHIN_SENSOR_TEMPLATE = 
 			"insert into %s (sensor_identifier, sensor_status) values (:sensorIdentifier, CAST(:sensorStatus AS sensorTeachinStatus))";
 	public static final String CREATE_TEACHIN_STATUS_TEMPLATE = 

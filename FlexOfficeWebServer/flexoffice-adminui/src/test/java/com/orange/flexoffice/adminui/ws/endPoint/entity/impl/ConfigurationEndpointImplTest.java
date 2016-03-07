@@ -20,6 +20,8 @@ import org.springframework.util.Log4jConfigurer;
 
 import com.orange.flexoffice.adminui.ws.endPoint.data.ConfigurationEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.data.impl.ConfigurationEndpointImpl;
+import com.orange.flexoffice.adminui.ws.model.City;
+import com.orange.flexoffice.adminui.ws.model.CityInput;
 import com.orange.flexoffice.adminui.ws.model.CitySummary;
 import com.orange.flexoffice.adminui.ws.model.LocationInput;
 import com.orange.flexoffice.adminui.ws.model.LocationItem;
@@ -209,4 +211,17 @@ public class ConfigurationEndpointImplTest {
 		// Asserts
 		assertEquals(3, cities.size());
 	}
+	
+	@Test
+	public void TestR_addCity() throws WebApplicationException {
+		// Setup
+		final CityInput city = new CityInput();
+		city.setName("city 4");
+		city.setRegionId("2");
+		// Test
+		final City response = configurationEndpoint.addCity(city);
+		// Asserts
+		assertNotNull(response.getId());
+	}
+
 }

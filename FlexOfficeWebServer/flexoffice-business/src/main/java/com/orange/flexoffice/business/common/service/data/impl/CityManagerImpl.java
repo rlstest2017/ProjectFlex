@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,9 +44,16 @@ public class CityManagerImpl implements CityManager {
 	}
 
 	@Override
-	public CityDao save(CityDao city) throws DataAlreadyExistsException {
-		// TODO Auto-generated method stub
-		return null;
+	public CityDao save(CityDao cityDao) throws DataAlreadyExistsException {
+		try {
+			// save CityDao
+			CityDao city = cityRepository.saveCity(cityDao);
+			return city;
+			} catch (DataIntegrityViolationException e) {
+				LOGGER.debug("CityManager.save : City already exists", e);
+				LOGGER.error("CityManager.save : City already exists");
+				throw new DataAlreadyExistsException("CityManager.save : City already exists");
+			}
 	}
 
 	@Override
