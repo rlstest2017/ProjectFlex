@@ -243,5 +243,13 @@ public class ConfigurationEndpointImplTest {
 		// Asserts
 		assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
 	}
+	
+	@Test
+	public void TestU_removeCity() throws WebApplicationException {
+		// Test
+		Response response = configurationEndpoint.removeCity("3");
+		// Assert
+		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+	}
 
 }

@@ -70,8 +70,8 @@ public class CityManagerImpl implements CityManager {
 
 	@Override
 	public void delete(long cityId) throws DataNotExistsException, IntegrityViolationException {
-		// TODO Auto-generated method stub
-		
+		// TODO delete only if there is no buildings associated to the city !!!
+		cityRepository.delete(cityId);		
 	}
 
 	@Override
