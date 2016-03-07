@@ -15,6 +15,7 @@ import com.orange.flexoffice.adminui.ws.model.Building;
 import com.orange.flexoffice.adminui.ws.model.BuildingInput;
 import com.orange.flexoffice.adminui.ws.model.BuildingItem;
 import com.orange.flexoffice.adminui.ws.model.BuildingSummary;
+import com.orange.flexoffice.adminui.ws.model.LocationItem;
 import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
@@ -96,7 +97,20 @@ public class BuildingHandler {
 		Building building = factory.createBuilding();
 		building.setId(String.valueOf(buidingDto.getId()));
 		building.setName(buidingDto.getName());
-		// TODO to complete ...
+		building.setAddress(buidingDto.getAddress());
+		LocationItem locationCountry = factory.createLocationItem();
+		locationCountry.setId(buidingDto.getCountryId().toString());
+		locationCountry.setName(buidingDto.getCountryName());
+		building.setCountry(locationCountry);
+		LocationItem locationRegion = factory.createLocationItem();
+		locationRegion.setId(buidingDto.getRegionId().toString());
+		locationRegion.setName(buidingDto.getRegionName());
+		building.setRegion(locationRegion);
+		LocationItem locationCity = factory.createLocationItem();
+		locationCity.setId(buidingDto.getCityId().toString());
+		locationCity.setName(buidingDto.getCityName());
+		building.setCity(locationCity);
+		building.setNbFloors(BigInteger.valueOf(buidingDto.getNbFloors()));
 		return building;
 	}
 	

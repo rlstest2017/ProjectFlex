@@ -44,8 +44,8 @@ public class CityManagerImpl implements CityManager {
 			CityDto city = cityRepository.findByCityId(cityId);
 			return city;
 			} catch(IncorrectResultSizeDataAccessException e ) {
-				LOGGER.debug("CityManager.find : Country by id #" + cityId + " is not found", e);
-				LOGGER.error("CityManager.find : Country by id #" + cityId + " is not found");
+				LOGGER.debug("CityManager.find : City by id #" + cityId + " is not found", e);
+				LOGGER.error("CityManager.find : City by id #" + cityId + " is not found");
 				throw new DataNotExistsException("CityManager.find : City by id #" + cityId + " is not found");
 			}
 	}

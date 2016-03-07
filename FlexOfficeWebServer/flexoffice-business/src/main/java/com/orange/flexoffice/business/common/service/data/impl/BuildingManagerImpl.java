@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,6 @@ import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.common.service.data.BuildingManager;
 import com.orange.flexoffice.dao.common.model.data.BuildingDao;
-import com.orange.flexoffice.dao.common.model.data.CityDao;
 import com.orange.flexoffice.dao.common.model.object.BuildingDto;
 import com.orange.flexoffice.dao.common.model.object.BuildingSummaryDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.BuildingDaoRepository;
@@ -40,8 +40,14 @@ public class BuildingManagerImpl implements BuildingManager {
 
 	@Override
 	public BuildingDto find(long buildingId) throws DataNotExistsException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			BuildingDto building = buildingRepository.findByBuildingId(buildingId);
+			return building;
+			} catch(IncorrectResultSizeDataAccessException e ) {
+				LOGGER.debug("BuildingManager.find : Building by id #" + buildingId + " is not found", e);
+				LOGGER.error("BuildingManager.find : Building by id #" + buildingId + " is not found");
+				throw new DataNotExistsException("BuildingManager.find : Building by id #" + buildingId + " is not found");
+			}
 	}
 
 	@Override

@@ -44,8 +44,8 @@ public class RegionManagerImpl implements RegionManager {
 			RegionDto region = regionRepository.findByRegionId(regionId);
 			return region;
 			} catch(IncorrectResultSizeDataAccessException e ) {
-				LOGGER.debug("RegionManager.find : Country by id #" + regionId + " is not found", e);
-				LOGGER.error("RegionManager.find : Country by id #" + regionId + " is not found");
+				LOGGER.debug("RegionManager.find : Region by id #" + regionId + " is not found", e);
+				LOGGER.error("RegionManager.find : Region by id #" + regionId + " is not found");
 				throw new DataNotExistsException("RegionManager.find : Region by id #" + regionId + " is not found");
 			}
 	}

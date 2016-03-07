@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.BuildingDao;
+import com.orange.flexoffice.dao.common.model.object.BuildingDto;
 import com.orange.flexoffice.dao.common.model.object.BuildingSummaryDto;
 import com.orange.flexoffice.dao.common.repository.data.BuildingDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.BuildingDaoMetadata;
@@ -44,9 +45,13 @@ public class BuildingDaoRepository extends DataRepository<BuildingDao> implement
 
 
 	@Override
-	public BuildingDao findByBuildingId(Long buildingId) throws IncorrectResultSizeDataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+	public BuildingDto findByBuildingId(Long buildingId) throws IncorrectResultSizeDataAccessException {
+		SqlParameterSource paramMap = new MapSqlParameterSource("columnId", buildingId);
+		return jdbcTemplate.queryForObject(
+				findByBuildingIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<BuildingDto>(BuildingDto.class)
+			);
 	}
 
 

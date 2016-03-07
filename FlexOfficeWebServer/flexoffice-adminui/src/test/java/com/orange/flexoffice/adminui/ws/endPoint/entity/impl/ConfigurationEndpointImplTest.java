@@ -21,6 +21,7 @@ import org.springframework.util.Log4jConfigurer;
 
 import com.orange.flexoffice.adminui.ws.endPoint.data.ConfigurationEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.data.impl.ConfigurationEndpointImpl;
+import com.orange.flexoffice.adminui.ws.model.Building;
 import com.orange.flexoffice.adminui.ws.model.BuildingInput;
 import com.orange.flexoffice.adminui.ws.model.BuildingItem;
 import com.orange.flexoffice.adminui.ws.model.BuildingSummary;
@@ -279,6 +280,14 @@ public class ConfigurationEndpointImplTest {
 		final BuildingItem response = configurationEndpoint.addBuilding(building);
 		// Asserts
 		assertNotNull(response.getBuildingId());
+	}
+
+	@Test
+	public void TestX_getBuildingByBuildingId() {
+		// Test
+		Building building = configurationEndpoint.getBuilding("1");
+		// Asserts
+		assertEquals("building 1", building.getName());
 	}
 
 
