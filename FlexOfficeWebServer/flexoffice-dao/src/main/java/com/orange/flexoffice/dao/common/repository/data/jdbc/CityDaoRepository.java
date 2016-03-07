@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.CityDao;
+import com.orange.flexoffice.dao.common.model.object.CityDto;
 import com.orange.flexoffice.dao.common.model.object.CitySummaryDto;
 import com.orange.flexoffice.dao.common.repository.data.CityDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.CityDaoMetadata;
@@ -45,9 +46,13 @@ public class CityDaoRepository extends DataRepository<CityDao> implements CityDa
 
 
 	@Override
-	public CityDao findByCityId(Long cityId) throws IncorrectResultSizeDataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+	public CityDto findByCityId(Long cityId) throws IncorrectResultSizeDataAccessException {
+		SqlParameterSource paramMap = new MapSqlParameterSource("columnId", cityId);
+		return jdbcTemplate.queryForObject(
+				findByCityIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<CityDto>(CityDto.class)
+			);
 	}
 
 

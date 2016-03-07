@@ -223,5 +223,13 @@ public class ConfigurationEndpointImplTest {
 		// Asserts
 		assertNotNull(response.getId());
 	}
+	
+	@Test
+	public void TestS_getCityByCityId() {
+		// Test
+		City city = configurationEndpoint.getCity("1");
+		// Asserts
+		assertEquals("city 1", city.getName());
+	}
 
 }

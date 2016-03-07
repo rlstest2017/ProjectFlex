@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +40,14 @@ public class CityManagerImpl implements CityManager {
 
 	@Override
 	public CityDto find(long cityId) throws DataNotExistsException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			CityDto city = cityRepository.findByCityId(cityId);
+			return city;
+			} catch(IncorrectResultSizeDataAccessException e ) {
+				LOGGER.debug("CityManager.find : Country by id #" + cityId + " is not found", e);
+				LOGGER.error("CityManager.find : Country by id #" + cityId + " is not found");
+				throw new DataNotExistsException("CityManager.find : City by id #" + cityId + " is not found");
+			}
 	}
 
 	@Override

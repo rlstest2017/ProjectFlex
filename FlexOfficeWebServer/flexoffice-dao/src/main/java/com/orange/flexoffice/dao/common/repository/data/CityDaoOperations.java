@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import com.orange.flexoffice.dao.common.model.data.CityDao;
+import com.orange.flexoffice.dao.common.model.object.CityDto;
 import com.orange.flexoffice.dao.common.model.object.CitySummaryDto;
 
 /**
@@ -20,7 +21,7 @@ public interface CityDaoOperations {
 	
 	List<CityDao> findByRegionId(Long regionId) throws IncorrectResultSizeDataAccessException;
 	
-	CityDao findByCityId(Long cityId) throws IncorrectResultSizeDataAccessException;
+	CityDto findByCityId(Long cityId) throws IncorrectResultSizeDataAccessException;
 	
 	CityDao findByName(String name) throws IncorrectResultSizeDataAccessException;
 	

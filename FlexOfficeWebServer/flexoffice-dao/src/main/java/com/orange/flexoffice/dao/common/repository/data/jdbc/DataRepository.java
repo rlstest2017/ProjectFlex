@@ -15,6 +15,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_LATEST_RESERVED_ROOM_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_REGION_DTO_BY_COL_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_CITY_DTO_BY_COL_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_KEY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_IDENTIFIER_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_MAC_ADDRESS_TEMPLATE;
@@ -109,6 +110,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String findLatestReservedRoomsQuery;
 	protected final String findByColumnIdQuery;
 	protected final String findByRegionIdQuery;
+	protected final String findByCityIdQuery;
 	protected final String findByTeachinStatusQuery;
 	protected final String findByKeyQuery;
 	protected final String findRoomStatByRoomIdQuery;
@@ -196,6 +198,7 @@ public abstract class DataRepository<T extends Data>
 		findLatestReservedRoomsQuery = String.format(FIND_LATEST_RESERVED_ROOM_TEMPLATE, getTableName());
 		findByColumnIdQuery = String.format(FIND_BY_COL_ID_TEMPLATE, getTableName(), getColumnColName());
 		findByRegionIdQuery = String.format(FIND_REGION_DTO_BY_COL_ID_TEMPLATE, getTableName());
+		findByCityIdQuery = String.format(FIND_CITY_DTO_BY_COL_ID_TEMPLATE, getTableName());
 		findByTeachinStatusQuery = String.format(FIND_BY_TEACHIN_STATUS_TEMPLATE, getTableName());
 		findByKeyQuery = String.format(FIND_BY_COL_KEY_TEMPLATE, getTableName());
 		findRoomStatByRoomIdQuery = String.format(FIND_ROOMSTAT_BY_ROOMID_TEMPLATE, getTableName());

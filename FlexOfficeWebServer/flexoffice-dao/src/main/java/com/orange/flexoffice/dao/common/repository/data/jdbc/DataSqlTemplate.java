@@ -8,6 +8,8 @@ public final class DataSqlTemplate {
 			"select * from %s where %s=:columnId";
 	public static final String FIND_REGION_DTO_BY_COL_ID_TEMPLATE = 
 			"select regions.id, regions.name, countries.id as country_id, countries.name as country_name From regions, countries where regions.country_id=countries.id and regions.id=:columnId";
+	public static final String FIND_CITY_DTO_BY_COL_ID_TEMPLATE = 
+			"select cities.id, cities.name, regions.id as region_id, regions.name as region_name, countries.id as country_id, countries.name as country_name From cities, regions, countries where cities.region_id=regions.id and regions.country_id=countries.id and cities.id=:columnId";
 	public static final String FIND_BY_TEACHIN_STATUS_TEMPLATE = 
 			"select * from %s where teachin_status is not null";
 	public static final String FIND_BY_COL_KEY_TEMPLATE = 

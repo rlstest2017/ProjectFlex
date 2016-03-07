@@ -89,7 +89,14 @@ public class CityHandler {
 		City city = factory.createCity();
 		city.setId(String.valueOf(cityDto.getId()));
 		city.setName(cityDto.getName());
-		// TODO to complete ...
+		LocationItem locationCountry = factory.createLocationItem();
+		locationCountry.setId(cityDto.getCountryId().toString());
+		locationCountry.setName(cityDto.getCountryName());
+		city.setCountry(locationCountry);
+		LocationItem locationRegion = factory.createLocationItem();
+		locationRegion.setId(cityDto.getRegionId().toString());
+		locationRegion.setName(cityDto.getRegionName());
+		city.setRegion(locationRegion);
 		return city;
 	}
 
