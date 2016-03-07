@@ -37,13 +37,11 @@ public class CityDaoRepository extends DataRepository<CityDao> implements CityDa
 			);
 	}
 
-
 	@Override
 	public List<CityDao> findByRegionId(Long regionId) throws IncorrectResultSizeDataAccessException {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	@Override
 	public CityDto findByCityId(Long cityId) throws IncorrectResultSizeDataAccessException {

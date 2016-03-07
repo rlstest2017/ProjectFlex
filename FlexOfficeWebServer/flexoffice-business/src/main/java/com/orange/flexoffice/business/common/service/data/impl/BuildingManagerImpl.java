@@ -33,10 +33,7 @@ public class BuildingManagerImpl implements BuildingManager {
 
 	@Override
 	public List<BuildingSummaryDto> findAllBuildings() {
-		
-		List<BuildingDao> buildings =buildingRepository.findAllBuildings();
-		// TODO another sql request getAllBuildingsSummary() 
-		return null;
+		return buildingRepository.findAllBuildingsSummary();
 	}
 
 	@Override

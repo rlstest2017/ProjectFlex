@@ -5,9 +5,13 @@ import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.BuildingDao;
+import com.orange.flexoffice.dao.common.model.object.BuildingSummaryDto;
 import com.orange.flexoffice.dao.common.repository.data.BuildingDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.BuildingDaoMetadata;
 
@@ -20,19 +24,20 @@ public class BuildingDaoRepository extends DataRepository<BuildingDao> implement
 	}
 
 	@Override
-	public List<BuildingDao> findAllBuildings() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<BuildingSummaryDto> findAllBuildingsSummary() {
+		SqlParameterSource paramMap = new MapSqlParameterSource();
+		return jdbcTemplate.query(
+				findAllBuildingsSummaryQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<BuildingSummaryDto>(BuildingSummaryDto.class)
+			);
 	}
-
-
 
 	@Override
 	public List<BuildingDao> findByCityId(Long cityId) throws IncorrectResultSizeDataAccessException {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 
 	@Override

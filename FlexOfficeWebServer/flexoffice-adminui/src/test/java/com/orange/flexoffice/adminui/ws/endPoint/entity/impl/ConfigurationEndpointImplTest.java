@@ -20,6 +20,7 @@ import org.springframework.util.Log4jConfigurer;
 
 import com.orange.flexoffice.adminui.ws.endPoint.data.ConfigurationEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.data.impl.ConfigurationEndpointImpl;
+import com.orange.flexoffice.adminui.ws.model.BuildingSummary;
 import com.orange.flexoffice.adminui.ws.model.City;
 import com.orange.flexoffice.adminui.ws.model.CityInput;
 import com.orange.flexoffice.adminui.ws.model.CitySummary;
@@ -202,7 +203,7 @@ public class ConfigurationEndpointImplTest {
 	}
 	
 	//-----------------------------------------------------------------
-	//							REGION TESTS
+	//							CITIES TESTS
 	//-----------------------------------------------------------------
 	@Test
 	public void TestQ_getCities() {
@@ -250,6 +251,17 @@ public class ConfigurationEndpointImplTest {
 		Response response = configurationEndpoint.removeCity("3");
 		// Assert
 		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+	}
+	
+	//-----------------------------------------------------------------
+	//							BUILDINGS TESTS
+	//-----------------------------------------------------------------
+	@Test
+	public void TestV_getBuildings() {
+		// Test
+		List<BuildingSummary> buildings = configurationEndpoint.getBuildings();
+		// Asserts
+		assertEquals(3, buildings.size());
 	}
 
 }
