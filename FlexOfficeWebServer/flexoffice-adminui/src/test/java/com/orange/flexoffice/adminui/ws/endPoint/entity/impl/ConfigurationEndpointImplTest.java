@@ -303,6 +303,14 @@ public class ConfigurationEndpointImplTest {
 		// Asserts
 		assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
 	}
+	
+	@Test
+	public void TestZ_removeBuilding() throws WebApplicationException {
+		// Test
+		Response response = configurationEndpoint.removeBuilding("3");
+		// Assert
+		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+	}
 
 
 }

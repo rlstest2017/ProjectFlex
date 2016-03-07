@@ -70,8 +70,8 @@ public class BuildingManagerImpl implements BuildingManager {
 
 	@Override
 	public void delete(long buildingId) throws DataNotExistsException, IntegrityViolationException {
-		// TODO Auto-generated method stub
-		
+		// TODO delete only if there is no rooms associated to the building !!!
+		buildingRepository.delete(buildingId);		
 	}
 
 	@Override
