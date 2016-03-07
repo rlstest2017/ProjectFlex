@@ -231,5 +231,17 @@ public class ConfigurationEndpointImplTest {
 		// Asserts
 		assertEquals("city 1", city.getName());
 	}
+	
+	@Test
+	public void TestT_updateCity() throws WebApplicationException {
+		// Setup
+		final CityInput city = new CityInput();
+		city.setName("city 3 update");
+		city.setRegionId("1");
+		// Test
+		final Response response = configurationEndpoint.updateCity("3", city);
+		// Asserts
+		assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+	}
 
 }

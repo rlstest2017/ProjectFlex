@@ -124,6 +124,7 @@ public class CityHandler {
 	 */
 	public Response updateCity(String id, CityInput city) throws DataNotExistsException {
 		CityDao cityDao = new CityDao();
+		cityDao.setColumnId(id);
 		cityDao.setName(city.getName());
 		cityDao.setRegionId(Long.valueOf(city.getRegionId()));
 		cityManager.update(cityDao);

@@ -65,8 +65,7 @@ public class CityManagerImpl implements CityManager {
 
 	@Override
 	public CityDao update(CityDao city) throws DataNotExistsException {
-		// TODO Auto-generated method stub
-		return null;
+		return cityRepository.updateCity(city);
 	}
 
 	@Override

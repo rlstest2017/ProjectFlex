@@ -76,8 +76,13 @@ public class CityDaoRepository extends DataRepository<CityDao> implements CityDa
 
 	@Override
 	public CityDao updateCity(CityDao data) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateCityQuery, paramBean, keyHolder);
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());	
+		return data;
 	}
 		
 	@Override
