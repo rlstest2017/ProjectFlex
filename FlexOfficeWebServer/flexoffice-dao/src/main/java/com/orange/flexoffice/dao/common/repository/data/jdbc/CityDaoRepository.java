@@ -69,8 +69,8 @@ public class CityDaoRepository extends DataRepository<CityDao> implements CityDa
 		// Retrieves generated id of saved data.
 		Integer id = (Integer)keyHolder.getKeys().get("id");
 		data.setId(id.longValue());
-		return data;	}
-
+		return data;	
+	}
 
 	@Override
 	public CityDao updateCity(CityDao data) throws DataAccessException {

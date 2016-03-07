@@ -3,6 +3,7 @@ package com.orange.flexoffice.adminui.ws.endPoint.entity.impl;
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
@@ -20,6 +21,8 @@ import org.springframework.util.Log4jConfigurer;
 
 import com.orange.flexoffice.adminui.ws.endPoint.data.ConfigurationEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.data.impl.ConfigurationEndpointImpl;
+import com.orange.flexoffice.adminui.ws.model.BuildingInput;
+import com.orange.flexoffice.adminui.ws.model.BuildingItem;
 import com.orange.flexoffice.adminui.ws.model.BuildingSummary;
 import com.orange.flexoffice.adminui.ws.model.City;
 import com.orange.flexoffice.adminui.ws.model.CityInput;
@@ -263,5 +266,20 @@ public class ConfigurationEndpointImplTest {
 		// Asserts
 		assertEquals(3, buildings.size());
 	}
+	
+	@Test
+	public void TestW_addBuilding() throws WebApplicationException {
+		// Setup
+		final BuildingInput building = new BuildingInput();
+		building.setName("building 4");
+		building.setCityId("2");
+		building.setAddress("05 rue de la gloire 35980 Rennes");
+		building.setNbFloors(BigInteger.valueOf(20l));
+		// Test
+		final BuildingItem response = configurationEndpoint.addBuilding(building);
+		// Asserts
+		assertNotNull(response.getBuildingId());
+	}
+
 
 }
