@@ -142,6 +142,8 @@ public final class DataSqlTemplate {
 			"update %s set name=:name, country_id=:countryId WHERE id=:id";
 	public static final String UPDATE_CITY_TEMPLATE =
 			"update %s set name=:name, region_id=:regionId WHERE id=:id";
+	public static final String UPDATE_BUILDING_TEMPLATE =
+			"update %s set name=:name, city_id=:cityId, address=:address, nb_floors=:nbFloors WHERE id=:id";
 	public static final String UPDATE_TEACHIN_STATUS_TEMPLATE =
 			"update %s set teachin_status=CAST(:teachinStatus AS teachinStatus) WHERE id=:id";
 	public static final String UPDATE_TEACHIN_DATE_TEMPLATE =

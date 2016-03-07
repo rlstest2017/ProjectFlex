@@ -141,6 +141,7 @@ public class BuildingHandler {
 	 */
 	public Response updateBuilding(String id, BuildingInput building) throws DataNotExistsException {
 		BuildingDao buildingDao = new BuildingDao();
+		buildingDao.setColumnId(id);
 		buildingDao.setName(building.getName());
 		buildingDao.setAddress(building.getAddress());
 		buildingDao.setCityId(Long.valueOf(building.getCityId()));

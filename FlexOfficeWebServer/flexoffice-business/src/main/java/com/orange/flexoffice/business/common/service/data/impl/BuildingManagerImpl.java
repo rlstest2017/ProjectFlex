@@ -65,8 +65,7 @@ public class BuildingManagerImpl implements BuildingManager {
 
 	@Override
 	public BuildingDao update(BuildingDao building) throws DataNotExistsException {
-		// TODO Auto-generated method stub
-		return null;
+		return buildingRepository.updateBuilding(building);
 	}
 
 	@Override

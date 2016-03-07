@@ -59,6 +59,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_COUNTRY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_REGION_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_CITY_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_BUILDING_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_GATEWAY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ALERT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOM_STATUS_TEMPLATE;
@@ -164,6 +165,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String updateCountryQuery;
 	protected final String updateRegionQuery;
 	protected final String updateCityQuery;
+	protected final String updateBuildingQuery;
 	protected final String updateTeachinStatusQuery;
 	protected final String updateTeachinDateQuery;
 	protected final String updateAlertQuery;
@@ -256,6 +258,7 @@ public abstract class DataRepository<T extends Data>
 		updateCountryQuery = String.format(UPDATE_COUNTRY_TEMPLATE, getTableName(), getColumnColName());
 		updateRegionQuery = String.format(UPDATE_REGION_TEMPLATE, getTableName(), getColumnColName());
 		updateCityQuery = String.format(UPDATE_CITY_TEMPLATE, getTableName(), getColumnColName());
+		updateBuildingQuery = String.format(UPDATE_BUILDING_TEMPLATE, getTableName(), getColumnColName());
 		updateTeachinStatusQuery = String.format(UPDATE_TEACHIN_STATUS_TEMPLATE, getTableName());
 		updateTeachinDateQuery = String.format(UPDATE_TEACHIN_DATE_TEMPLATE, getTableName());
 		updateAlertQuery = String.format(UPDATE_ALERT_TEMPLATE, getTableName());

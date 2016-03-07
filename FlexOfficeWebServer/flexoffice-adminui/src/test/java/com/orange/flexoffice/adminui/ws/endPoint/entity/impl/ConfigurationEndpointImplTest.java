@@ -290,5 +290,19 @@ public class ConfigurationEndpointImplTest {
 		assertEquals("building 1", building.getName());
 	}
 
+	@Test
+	public void TestY_updateBuilding() throws WebApplicationException {
+		// Setup
+		final BuildingInput building = new BuildingInput();
+		building.setName("building 3 update");
+		building.setCityId("1");
+		building.setAddress("05 rue de la gloire 35000 Rennes");
+		building.setNbFloors(BigInteger.valueOf(15l));
+		// Test
+		final Response response = configurationEndpoint.updateBuilding("3", building);
+		// Asserts
+		assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+	}
+
 
 }
