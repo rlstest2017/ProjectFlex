@@ -70,8 +70,18 @@ public class BuildingManagerImpl implements BuildingManager {
 
 	@Override
 	public void delete(long buildingId) throws DataNotExistsException, IntegrityViolationException {
-		// TODO delete only if there is no rooms associated to the building !!!
-		buildingRepository.delete(buildingId);		
+		try {
+			buildingRepository.findOne(buildingId);
+			buildingRepository.delete(buildingId);
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.debug("Building by id " + buildingId + " is not found", e);
+			LOGGER.error("Building by id " + buildingId + " is not found");
+			throw new DataNotExistsException("Building not exist");
+		} catch(DataIntegrityViolationException e ) {
+			LOGGER.debug("BuildingManager.delete : Building associated to rooms", e);
+			LOGGER.error("BuildingManager.delete : Building associated to rooms");
+			throw new IntegrityViolationException("BuildingManager.delete : Building associated to rooms");
+		}	
 	}
 
 	@Override

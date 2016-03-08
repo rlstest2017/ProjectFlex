@@ -405,5 +405,35 @@ public class ConfigurationEndpointImplTest {
 		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 	}
 
+	@Test
+	public void TestZA_removeBuildingDataNotExistsException() {
+		// Setup
+		boolean expectedResult = false;
+		// Test
+		try {
+			// Test
+			configurationEndpoint.removeBuilding("-1");
+		} catch (WebApplicationException e) {
+			expectedResult = true;	
+		}
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+	
+	@Test
+	public void TestZB_removeBuildingIntegrityViolationException() {
+		// Setup
+		boolean expectedResult = false;
+		// Test
+		try {
+			// Test
+			configurationEndpoint.removeBuilding("1");
+		} catch (WebApplicationException e) {
+			expectedResult = true;	
+		}
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+
 
 }
