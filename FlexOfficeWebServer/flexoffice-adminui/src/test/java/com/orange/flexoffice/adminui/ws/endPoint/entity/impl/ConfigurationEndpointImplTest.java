@@ -247,11 +247,9 @@ public class ConfigurationEndpointImplTest {
 		try {
 			// Test
 			configurationEndpoint.removeRegion("-1");
-			
 		} catch (WebApplicationException e) {
 			expectedResult = true;	
 		}
-
 		// Assert
 		assertEquals(true, expectedResult);	
 	}
@@ -264,11 +262,9 @@ public class ConfigurationEndpointImplTest {
 		try {
 			// Test
 			configurationEndpoint.removeRegion("1");
-			
 		} catch (WebApplicationException e) {
 			expectedResult = true;	
 		}
-
 		// Assert
 		assertEquals(true, expectedResult);	
 	}
@@ -324,6 +320,36 @@ public class ConfigurationEndpointImplTest {
 		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 	}
 	
+	@Test
+	public void TestUA_removeCityDataNotExistsException() {
+		// Setup
+		boolean expectedResult = false;
+		// Test
+		try {
+			// Test
+			configurationEndpoint.removeCity("-1");
+		} catch (WebApplicationException e) {
+			expectedResult = true;	
+		}
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+	
+	@Test
+	public void TestUB_removeCityIntegrityViolationException() {
+		// Setup
+		boolean expectedResult = false;
+		// Test
+		try {
+			// Test
+			configurationEndpoint.removeCity("1");
+		} catch (WebApplicationException e) {
+			expectedResult = true;	
+		}
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+
 	//-----------------------------------------------------------------
 	//							BUILDINGS TESTS
 	//-----------------------------------------------------------------

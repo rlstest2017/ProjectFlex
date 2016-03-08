@@ -70,8 +70,18 @@ public class CityManagerImpl implements CityManager {
 
 	@Override
 	public void delete(long cityId) throws DataNotExistsException, IntegrityViolationException {
-		// TODO delete only if there is no buildings associated to the city !!!
-		cityRepository.delete(cityId);		
+		try {
+			cityRepository.findOne(cityId);
+			cityRepository.delete(cityId);
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.debug("city by id " + cityId + " is not found", e);
+			LOGGER.error("city by id " + cityId + " is not found");
+			throw new DataNotExistsException("City not exist");
+		} catch(DataIntegrityViolationException e ) {
+			LOGGER.debug("CityManager.delete : City associated to buildings", e);
+			LOGGER.error("CityManager.delete : City associated to buildings");
+			throw new IntegrityViolationException("CityManager.delete : City associated to buildings");
+		}	
 	}
 
 	@Override
