@@ -68,8 +68,18 @@ public class CountryManagerImpl implements CountryManager {
 
 	@Override
 	public void delete(long countryId) throws DataNotExistsException, IntegrityViolationException {
-		// TODO delete only if there is no regions associated to the country !!!
-		countryRepository.delete(countryId);
+		try {
+			countryRepository.findOne(countryId);
+			countryRepository.delete(countryId);
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.debug("country by id " + countryId + " is not found", e);
+			LOGGER.error("country by id " + countryId + " is not found");
+			throw new DataNotExistsException("Gateway not exist");
+		} catch(DataIntegrityViolationException e ) {
+			LOGGER.debug("CountryManager.delete : Country associated to regions", e);
+			LOGGER.error("CountryManager.delete : Country associated to regions");
+			throw new IntegrityViolationException("CountryManager.delete : Country associated to regions");
+		}
 	}
 
 	@Override

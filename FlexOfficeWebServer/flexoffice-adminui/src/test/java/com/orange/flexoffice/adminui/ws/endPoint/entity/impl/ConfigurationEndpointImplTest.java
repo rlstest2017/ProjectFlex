@@ -155,6 +155,39 @@ public class ConfigurationEndpointImplTest {
 		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 	}
 	
+	@Test
+	public void TestKA_removeCountryDataNotExistsException() {
+		// Setup
+		boolean expectedResult = false;
+		// Test
+		try {
+			// Test
+			configurationEndpoint.removeCountry("-1");
+			
+		} catch (WebApplicationException e) {
+			expectedResult = true;	
+		}
+
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+	
+	@Test
+	public void TestKB_removeCountryIntegrityViolationException() {
+		// Setup
+		boolean expectedResult = false;
+		// Test
+		try {
+			// Test
+			configurationEndpoint.removeCountry("1");
+			
+		} catch (WebApplicationException e) {
+			expectedResult = true;	
+		}
+
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
 	//-----------------------------------------------------------------
 	//							REGION TESTS
 	//-----------------------------------------------------------------

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -33,18 +32,6 @@ public class CountryDaoRepository extends DataRepository<CountryDao> implements 
 				paramMap, 
 				new BeanPropertyRowMapper<CountryDao>(CountryDao.class)
 			);
-	}
-
-	@Override
-	public CountryDao findByCountryId(Long countryId) throws IncorrectResultSizeDataAccessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public CountryDao findByName(String name) throws IncorrectResultSizeDataAccessException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

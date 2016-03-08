@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
-
 import com.orange.flexoffice.dao.common.model.data.CountryDao;
 
 /**
@@ -16,10 +14,6 @@ import com.orange.flexoffice.dao.common.model.data.CountryDao;
 public interface CountryDaoOperations {
 	
 	List<CountryDao> findAllCountries();
-	
-	CountryDao findByCountryId(Long countryId) throws IncorrectResultSizeDataAccessException;
-	
-	CountryDao findByName(String name) throws IncorrectResultSizeDataAccessException;
 	
 	CountryDao saveCountry(CountryDao data) throws DataIntegrityViolationException;
 	
