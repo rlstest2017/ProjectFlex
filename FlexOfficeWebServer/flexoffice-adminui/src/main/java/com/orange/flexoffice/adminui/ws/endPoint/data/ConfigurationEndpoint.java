@@ -59,6 +59,7 @@ public interface ConfigurationEndpoint {
 	 * @see BuildingSummary
 	 */
 	@GET
+	@Path(BUILDING_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
 	List<BuildingSummary> getBuildings();
 
@@ -88,6 +89,7 @@ public interface ConfigurationEndpoint {
 	 * @see BuildingInput
 	 */
 	@POST
+	@Path(BUILDING_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	BuildingItem addBuilding(BuildingInput building);
@@ -137,6 +139,7 @@ public interface ConfigurationEndpoint {
 	 * @see CitySummary
 	 */
 	@GET
+	@Path(CITY_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
 	List<CitySummary> getCities();
 
@@ -166,9 +169,10 @@ public interface ConfigurationEndpoint {
 	 * @see CityInput
 	 */
 	@POST
+	@Path(CITY_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	City addCity(CityInput building);
+	City addCity(CityInput city);
 
 	/**
 	 * Put information on a specific city.
@@ -215,6 +219,7 @@ public interface ConfigurationEndpoint {
 	 * @see RegionSummary
 	 */
 	@GET
+	@Path(REGION_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
 	List<RegionSummary> getRegions();
 
@@ -244,6 +249,7 @@ public interface ConfigurationEndpoint {
 	 * @see RegionInput
 	 */
 	@POST
+	@Path(REGION_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	Region addRegion(RegionInput region);
@@ -293,6 +299,7 @@ public interface ConfigurationEndpoint {
 	 * @see LocationItem
 	 */
 	@GET
+	@Path(COUNTRY_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
 	List<LocationItem> getCountries();
 	
@@ -322,6 +329,7 @@ public interface ConfigurationEndpoint {
 	 * @see LocationItem
 	 */
 	@POST
+	@Path(COUNTRY_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	LocationItem addCountry(LocationInput country);
@@ -342,7 +350,7 @@ public interface ConfigurationEndpoint {
 	@Path(COUNTRY_PATH + COUNTRY_ID_PATH)
 	@Consumes (MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response updateCountry(@PathParam(COUNTRY_ID_PARAM) String id, LocationInput region);
+	Response updateCountry(@PathParam(COUNTRY_ID_PARAM) String id, LocationInput country);
 
 	/**
 	 * Deletes a specific country.

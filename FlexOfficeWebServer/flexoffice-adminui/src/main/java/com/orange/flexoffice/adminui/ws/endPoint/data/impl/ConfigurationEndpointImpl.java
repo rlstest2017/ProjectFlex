@@ -70,7 +70,7 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			return buildingHandler.getBuilding(buildingId);
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.getBuilding with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_31, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_58, Response.Status.NOT_FOUND));
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.getBuilding with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -86,7 +86,7 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			return buildingHandler.addBuilding(building);
 		} catch (DataAlreadyExistsException e) {
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.addBuilding with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_28, Response.Status.METHOD_NOT_ALLOWED));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_55, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex) {
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.addBuilding with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -102,7 +102,7 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			return buildingHandler.updateBuilding(id, building);
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.updateBuilding with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_56, Response.Status.NOT_FOUND));
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.updateBuilding with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -118,10 +118,10 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			return buildingHandler.removeBuilding(id);
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.removeBuilding with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_30, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_57, Response.Status.NOT_FOUND));
 		} catch (IntegrityViolationException e){
 			LOGGER.debug("IntegrityViolationException in ConfigurationEndpoint.removeBuilding with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_30, Response.Status.METHOD_NOT_ALLOWED));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_57, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.removeBuilding with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -145,7 +145,7 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			return cityHandler.getCity(cityId);
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.getCity with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_31, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_53, Response.Status.NOT_FOUND));
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.getCity with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -161,7 +161,7 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			return cityHandler.addCity(city);
 		} catch (DataAlreadyExistsException e) {
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.addCity with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_28, Response.Status.METHOD_NOT_ALLOWED));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_50, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex) {
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.addCity with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -177,7 +177,7 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			return cityHandler.updateCity(id, city);
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.updateCity with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_51, Response.Status.NOT_FOUND));
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.updateCity with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -192,10 +192,10 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			return cityHandler.removeCity(id);
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.removeCity with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_30, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_52, Response.Status.NOT_FOUND));
 		} catch (IntegrityViolationException e){
 			LOGGER.debug("IntegrityViolationException in ConfigurationEndpoint.removeCity with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_30, Response.Status.METHOD_NOT_ALLOWED));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_52, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.removeCity with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -220,7 +220,7 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			return regionHandler.getRegion(regionId);
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.getRegion with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_31, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_48, Response.Status.NOT_FOUND));
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.getRegion with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -236,7 +236,7 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			return regionHandler.addRegion(region);
 		} catch (DataAlreadyExistsException e) {
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.addRegion with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_28, Response.Status.METHOD_NOT_ALLOWED));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_45, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex) {
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.addRegion with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -252,7 +252,7 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			return regionHandler.updateRegion(id, region);
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.updateRegion with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_46, Response.Status.NOT_FOUND));
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.updateRegion with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -268,10 +268,10 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			return regionHandler.removeRegion(id);
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.removeRegion with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_30, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_47, Response.Status.NOT_FOUND));
 		} catch (IntegrityViolationException e){
 			LOGGER.debug("IntegrityViolationException in ConfigurationEndpoint.removeRegion with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_30, Response.Status.METHOD_NOT_ALLOWED));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_47, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.removeRegion with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -295,7 +295,7 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			return countryHandler.getCountry(countryId);
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.getCountry with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_31, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_43, Response.Status.NOT_FOUND));
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.getCountry with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -311,7 +311,7 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			return countryHandler.addCountry(country);
 		} catch (DataAlreadyExistsException e) {
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.addCountry with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_28, Response.Status.METHOD_NOT_ALLOWED));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_40, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex) {
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.addCountry with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -327,7 +327,7 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			return countryHandler.updateCountry(id, country);
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.updateCountry with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_29, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_41, Response.Status.NOT_FOUND));
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.updateCountry with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -344,10 +344,10 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.removeCountry with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_30, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_42, Response.Status.NOT_FOUND));
 		} catch (IntegrityViolationException e){
 			LOGGER.debug("IntegrityViolationException in ConfigurationEndpoint.removeCountry with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_30, Response.Status.METHOD_NOT_ALLOWED));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_42, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.removeCountry with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
