@@ -70,8 +70,18 @@ public class RegionManagerImpl implements RegionManager {
 
 	@Override
 	public void delete(long regionId) throws DataNotExistsException, IntegrityViolationException {
-		// TODO delete only if there is no cities associated to the region !!!
-		regionRepository.delete(regionId);		
+		try {
+			regionRepository.findOne(regionId);
+			regionRepository.delete(regionId);
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.debug("region by id " + regionId + " is not found", e);
+			LOGGER.error("region by id " + regionId + " is not found");
+			throw new DataNotExistsException("Region not exist");
+		} catch(DataIntegrityViolationException e ) {
+			LOGGER.debug("RegionManager.delete : Region associated to cities", e);
+			LOGGER.error("RegionManager.delete : Region associated to cities");
+			throw new IntegrityViolationException("RegionManager.delete : Region associated to cities");
+		}	
 	}
 
 	@Override

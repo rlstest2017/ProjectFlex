@@ -19,11 +19,7 @@ public interface RegionDaoOperations {
 	
 	List<RegionSummaryDto> findAllRegionsSummary();
 	
-	List<RegionDao> findByCountryId(Long countryId) throws IncorrectResultSizeDataAccessException;
-	
 	RegionDto findByRegionId(Long regionId) throws IncorrectResultSizeDataAccessException;
-	
-	RegionDao findByName(String name) throws IncorrectResultSizeDataAccessException;
 	
 	RegionDao saveRegion(RegionDao data) throws DataIntegrityViolationException;
 	

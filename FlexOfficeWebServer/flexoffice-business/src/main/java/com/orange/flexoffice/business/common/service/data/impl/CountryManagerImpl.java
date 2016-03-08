@@ -74,7 +74,7 @@ public class CountryManagerImpl implements CountryManager {
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("country by id " + countryId + " is not found", e);
 			LOGGER.error("country by id " + countryId + " is not found");
-			throw new DataNotExistsException("Gateway not exist");
+			throw new DataNotExistsException("Country not exist");
 		} catch(DataIntegrityViolationException e ) {
 			LOGGER.debug("CountryManager.delete : Country associated to regions", e);
 			LOGGER.error("CountryManager.delete : Country associated to regions");

@@ -238,7 +238,41 @@ public class ConfigurationEndpointImplTest {
 		// Assert
 		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 	}
+
+	@Test
+	public void TestPA_removeRegionDataNotExistsException() {
+		// Setup
+		boolean expectedResult = false;
+		// Test
+		try {
+			// Test
+			configurationEndpoint.removeRegion("-1");
+			
+		} catch (WebApplicationException e) {
+			expectedResult = true;	
+		}
+
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
 	
+	@Test
+	public void TestPB_removeRegionIntegrityViolationException() {
+		// Setup
+		boolean expectedResult = false;
+		// Test
+		try {
+			// Test
+			configurationEndpoint.removeRegion("1");
+			
+		} catch (WebApplicationException e) {
+			expectedResult = true;	
+		}
+
+		// Assert
+		assertEquals(true, expectedResult);	
+	}
+
 	//-----------------------------------------------------------------
 	//							CITIES TESTS
 	//-----------------------------------------------------------------

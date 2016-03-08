@@ -37,12 +37,7 @@ public class RegionDaoRepository extends DataRepository<RegionDao> implements Re
 			);
 	}
 
-	@Override
-	public List<RegionDao> findByCountryId(Long countryId) throws IncorrectResultSizeDataAccessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	// return a Dto not Dao !!!
 	@Override
 	public RegionDto findByRegionId(Long regionId) throws IncorrectResultSizeDataAccessException {
 		SqlParameterSource paramMap = new MapSqlParameterSource("columnId", regionId);
@@ -51,12 +46,6 @@ public class RegionDaoRepository extends DataRepository<RegionDao> implements Re
 				paramMap, 
 				new BeanPropertyRowMapper<RegionDto>(RegionDto.class)
 			);
-	}
-
-	@Override
-	public RegionDao findByName(String name) throws IncorrectResultSizeDataAccessException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
