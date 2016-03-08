@@ -31,6 +31,7 @@ import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
+import com.orange.flexoffice.business.common.exception.InvalidParametersException;
 import com.orange.flexoffice.business.common.service.data.TestManager;
 
 /**
@@ -83,9 +84,16 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 	public BuildingItem addBuilding(BuildingInput building) {
 		LOGGER.debug( "Begin call ConfigurationEndpoint.addBuilding at: " + new Date() );
 		try {
+			if (building.getAddress() == null || building.getNbFloors() == null) { // cityId & name are checked by postgresDB engine
+				LOGGER.debug("Parameters address or nbFloors are null ");
+				throw new InvalidParametersException("Parameters address or nbFloors are null");
+			}
 			return buildingHandler.addBuilding(building);
 		} catch (DataAlreadyExistsException e) {
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.addBuilding with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_55, Response.Status.METHOD_NOT_ALLOWED));
+		} catch (InvalidParametersException ex1){
+			LOGGER.debug("InvalidParametersException in ConfigurationEndpoint.updateBuilding with message :", ex1);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_55, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex) {
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.addBuilding with message :", ex);
@@ -99,10 +107,17 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 	public Response updateBuilding(String id, BuildingInput building) {
 		LOGGER.debug( "Begin call ConfigurationEndpoint.updateBuilding at: " + new Date() );
 		try {
+			if (building.getAddress() == null || building.getNbFloors() == null) { // cityId & name are checked by postgresDB engine
+				LOGGER.debug("Parameters address or nbFloors are null");
+				throw new InvalidParametersException("Parameters address or nbFloors are null");
+			}
 			return buildingHandler.updateBuilding(id, building);
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.updateBuilding with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_56, Response.Status.NOT_FOUND));
+		} catch (InvalidParametersException ex1){
+			LOGGER.debug("InvalidParametersException in ConfigurationEndpoint.updateBuilding with message :", ex1);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_56, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.updateBuilding with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
