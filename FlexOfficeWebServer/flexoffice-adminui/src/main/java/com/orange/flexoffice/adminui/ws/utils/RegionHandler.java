@@ -42,7 +42,7 @@ public class RegionHandler {
 	 * @return
 	 */
 	public List<RegionSummary> getRegions() {
-		LOGGER.debug( "Begin call ConfigurationEndpoint.getRegions at: " + new Date() );
+		LOGGER.debug( "Begin call RegionHandler.getRegions at: " + new Date() );
 		List<RegionSummaryDto> dataList = regionManager.findAllRegions();
 		List<RegionSummary> regionList = new ArrayList<RegionSummary>();
 		for (RegionSummaryDto regionDto : dataList) {
@@ -53,27 +53,26 @@ public class RegionHandler {
 			regionList.add(region);
 		}
 		LOGGER.debug("List of regions : nb = " + regionList.size());
-		LOGGER.debug( "End call ConfigurationEndpoint.getRegions  at: " + new Date() );
+		LOGGER.debug( "End call RegionHandler.getRegions  at: " + new Date() );
 		return regionList;
 	}
 	
 	/**
-	 * getRegionsHaveRooms
+	 * getRegionsByCountry
 	 * @return
 	 */
-	public List<LocationItem> getRegionsByCountry(String countryId) {
-		LOGGER.debug( "Begin call ConfigurationEndpoint.getRegionsHaveRooms at: " + new Date() );
-		//List<RegionSummaryDto> dataList = regionManager.findAllRegions();
+	public List<LocationItem> getRegionsByCountry(String countryId, boolean isFromAdminUI) {
+		LOGGER.debug( "Begin call RegionHandler.getRegionsByCountry at: " + new Date() );
+		List<RegionDao> dataList = regionManager.findRegionsByCountryId(countryId, true);
 		List<LocationItem> regionList = new ArrayList<LocationItem>();
-//		for (RegionSummaryDto regionDto : dataList) {
-//			RegionSummary region = factory.createRegionSummary();
-//			region.setId(regionDto.getId().toString());
-//			region.setName(regionDto.getName());
-//			region.setCountryName(regionDto.getCountryName());
-//			regionList.add(region);
-//		}
+		for (RegionDao regionDao : dataList) {
+			LocationItem region = factory.createLocationItem();
+			region.setId(regionDao.getId().toString());
+			region.setName(regionDao.getName());
+			regionList.add(region);
+		}
 		LOGGER.debug("List of regions have rooms : nb = " + regionList.size());
-		LOGGER.debug( "End call ConfigurationEndpoint.getRegionsHaveRooms  at: " + new Date() );
+		LOGGER.debug( "End call RegionHandler.getRegionsByCountry  at: " + new Date() );
 		return regionList;
 	}
 

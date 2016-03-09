@@ -22,6 +22,12 @@ public interface BuildingManager {
 	List<BuildingSummaryDto> findAllBuildings();
 
 	/**
+	 * findBuildingsByCityId method used by adminui & userui
+	 * @return
+	 */
+	List<BuildingDao> findBuildingsByCityId(String cityId, boolean isFromAdminUI);
+
+	/**
 	 * Finds a building by its ID.
 	 * method used by adminui
 	 * @param buildingId
@@ -56,14 +62,5 @@ public interface BuildingManager {
 	 * 		  a building ID
 	 */
 	void delete(long buildingId) throws DataNotExistsException, IntegrityViolationException;
-
-	
-	/**
-	 * @param name
-	 * 
-	 * @return BuildingDao object if found
-	 */
-	BuildingSummaryDto findByName(String name) throws DataNotExistsException;
-	
 	
 }

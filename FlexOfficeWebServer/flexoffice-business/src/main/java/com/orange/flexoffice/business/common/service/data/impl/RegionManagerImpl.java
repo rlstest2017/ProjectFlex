@@ -85,11 +85,13 @@ public class RegionManagerImpl implements RegionManager {
 	}
 
 	@Override
-	public RegionDao findByName(String name) throws DataNotExistsException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<RegionDao> findRegionsByCountryId(String countryId, boolean isFromAdminUI) {
+		if (isFromAdminUI) {
+			return regionRepository.findByCountryId(Long.valueOf(countryId));
+		} else {
+			// TODO get only regions have rooms
+			return null;
+		}
 	}
-		
-
 		
 }

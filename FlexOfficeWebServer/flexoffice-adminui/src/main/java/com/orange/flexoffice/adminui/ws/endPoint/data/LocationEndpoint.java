@@ -94,6 +94,9 @@ public interface LocationEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	List<BuildingItem> getBuildings(@PathParam(CITY_ID_PARAM) String cityId);
 
+	// used for tests
+	boolean executeInitTestFile();
+	
 }
 
 

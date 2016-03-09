@@ -39,6 +39,16 @@ public class CityManagerImpl implements CityManager {
 	}
 
 	@Override
+	public List<CityDao> findCitiesByRegionId(String regionId, boolean isFromAdminUI) {
+		if (isFromAdminUI) {
+			return cityRepository.findByRegionId(Long.valueOf(regionId));
+		} else {
+			// TODO get only cities have rooms
+			return null;
+		}
+	}
+	
+	@Override
 	public CityDto find(long cityId) throws DataNotExistsException {
 		try {
 			CityDto city = cityRepository.findByCityId(cityId);
@@ -83,14 +93,5 @@ public class CityManagerImpl implements CityManager {
 			throw new IntegrityViolationException("CityManager.delete : City associated to buildings");
 		}	
 	}
-
-	@Override
-	public CityDao findByName(String name) throws DataNotExistsException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-		
-
 		
 }

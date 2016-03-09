@@ -19,6 +19,8 @@ public interface RegionDaoOperations {
 	
 	List<RegionSummaryDto> findAllRegionsSummary();
 	
+	List<RegionDao> findByCountryId(long countryId);
+	
 	RegionDto findByRegionId(Long regionId) throws IncorrectResultSizeDataAccessException;
 	
 	RegionDao saveRegion(RegionDao data) throws DataIntegrityViolationException;

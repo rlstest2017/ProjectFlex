@@ -23,8 +23,6 @@ public interface BuildingDaoOperations {
 	
 	BuildingDto findByBuildingId(Long buildingId) throws IncorrectResultSizeDataAccessException;
 	
-	BuildingDao findByName(String name) throws IncorrectResultSizeDataAccessException;
-	
 	BuildingDao saveBuilding(BuildingDao data) throws DataIntegrityViolationException;
 	
 	BuildingDao updateBuilding(BuildingDao data) throws DataAccessException; 

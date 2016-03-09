@@ -37,6 +37,16 @@ public class CountryManagerImpl implements CountryManager {
 	}
 
 	@Override
+	public List<CountryDao> findCountries(Boolean isFromAdminUI) {
+		if (isFromAdminUI) {
+			return countryRepository.findAllCountries();
+		} else {
+			// TODO get only countries have rooms
+			return countryRepository.findAllCountries();
+		}
+	}
+	
+	@Override
 	public CountryDao find(long countryId) throws DataNotExistsException {
 		try {
 		CountryDao country = countryRepository.findOne(countryId);
@@ -81,14 +91,6 @@ public class CountryManagerImpl implements CountryManager {
 			throw new IntegrityViolationException("CountryManager.delete : Country associated to regions");
 		}
 	}
-
-	@Override
-	public CountryDao findByName(String name) throws DataNotExistsException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
 
 		
 }

@@ -22,6 +22,12 @@ public interface CityManager {
 	List<CitySummaryDto> findAllCities();
 
 	/**
+	 * findCitiesByRegionId method used by adminui & userui
+	 * @return
+	 */
+	List<CityDao> findCitiesByRegionId(String regionId, boolean isFromAdminUI);
+
+	/**
 	 * Finds a city by its ID.
 	 * method used by adminui
 	 * @param cityId
@@ -56,14 +62,6 @@ public interface CityManager {
 	 * 		  a city ID
 	 */
 	void delete(long cityId) throws DataNotExistsException, IntegrityViolationException;
-
-	
-	/**
-	 * @param name
-	 * 
-	 * @return CityDao object if found
-	 */
-	CityDao findByName(String name) throws DataNotExistsException;
 	
 	
 }

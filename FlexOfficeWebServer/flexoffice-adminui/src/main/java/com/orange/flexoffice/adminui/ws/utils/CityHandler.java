@@ -41,7 +41,7 @@ public class CityHandler {
 	 * @return
 	 */
 	public List<CitySummary> getCities() {
-		LOGGER.debug( "Begin call ConfigurationEndpoint.getCities at: " + new Date() );
+		LOGGER.debug( "Begin call CityHandler.getCities at: " + new Date() );
 		List<CitySummaryDto> dataList = cityManager.findAllCities();
 		List<CitySummary> cityList = new ArrayList<CitySummary>();
 		for (CitySummaryDto cityDto : dataList) {
@@ -53,28 +53,26 @@ public class CityHandler {
 			cityList.add(city);
 		}
 		LOGGER.debug("List of cities : nb = " + cityList.size());
-		LOGGER.debug( "End call ConfigurationEndpoint.getCities  at: " + new Date() );
+		LOGGER.debug( "End call CityHandler.getCities  at: " + new Date() );
 		return cityList;
 	}
 	
 	/**
-	 * getCitiesHaveRooms
+	 * getCitiesByRegion
 	 * @return
 	 */
-	public List<LocationItem> getCitiesByRegion(String regionId) {
-		LOGGER.debug( "Begin call ConfigurationEndpoint.getCitiesHaveRooms at: " + new Date() );
-		//List<CitySummaryDto> dataList = cityManager.findAllCities();
+	public List<LocationItem> getCitiesByRegion(String regionId, boolean isFromAdminUI) {
+		LOGGER.debug( "Begin call CityHandler.getCitiesByRegion at: " + new Date() );
+		List<CityDao> dataList = cityManager.findCitiesByRegionId(regionId, true);
 		List<LocationItem> cityList = new ArrayList<LocationItem>();
-//		for (CitySummaryDto cityDto : dataList) {
-//			CitySummary city = factory.createCitySummary();
-//			city.setId(cityDto.getId().toString());
-//			city.setName(cityDto.getName());
-//			city.setCountryName(cityDto.getCountryName());
-//			city.setRegionName(cityDto.getRegionName());
-//			cityList.add(city);
-//		}
+		for (CityDao cityDao : dataList) {
+			LocationItem city = factory.createLocationItem();
+			city.setId(cityDao.getId().toString());
+			city.setName(cityDao.getName());
+			cityList.add(city);
+		}
 		LOGGER.debug("List of cities have rooms : nb = " + cityList.size());
-		LOGGER.debug( "End call ConfigurationEndpoint.getCitiesHaveRooms  at: " + new Date() );
+		LOGGER.debug( "End call CityHandler.getCitiesByRegion  at: " + new Date() );
 		return cityList;
 	}
 	

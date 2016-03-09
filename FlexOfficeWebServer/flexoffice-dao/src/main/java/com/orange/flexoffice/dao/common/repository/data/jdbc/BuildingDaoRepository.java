@@ -39,8 +39,12 @@ public class BuildingDaoRepository extends DataRepository<BuildingDao> implement
 
 	@Override
 	public List<BuildingDao> findByCityId(Long cityId) throws IncorrectResultSizeDataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		SqlParameterSource paramMap = new MapSqlParameterSource("cityId", cityId);
+		return jdbcTemplate.query(
+				findByColumnCityIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<BuildingDao>(BuildingDao.class)
+			);
 	}
 
 
@@ -53,16 +57,6 @@ public class BuildingDaoRepository extends DataRepository<BuildingDao> implement
 				new BeanPropertyRowMapper<BuildingDto>(BuildingDto.class)
 			);
 	}
-
-
-
-	@Override
-	public BuildingDao findByName(String name) throws IncorrectResultSizeDataAccessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
 
 	@Override
 	public BuildingDao saveBuilding(BuildingDao data) throws DataIntegrityViolationException {

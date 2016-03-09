@@ -39,6 +39,16 @@ public class BuildingManagerImpl implements BuildingManager {
 	}
 
 	@Override
+	public List<BuildingDao> findBuildingsByCityId(String cityId, boolean isFromAdminUI) {
+		if (isFromAdminUI) {
+			return buildingRepository.findByCityId(Long.valueOf(cityId));
+		} else {
+			// TODO get only cities have rooms
+			return null;
+		}
+	}
+
+	@Override
 	public BuildingDto find(long buildingId) throws DataNotExistsException {
 		try {
 			BuildingDto building = buildingRepository.findByBuildingId(buildingId);
@@ -83,13 +93,5 @@ public class BuildingManagerImpl implements BuildingManager {
 			throw new IntegrityViolationException("BuildingManager.delete : Building associated to rooms");
 		}	
 	}
-
-	@Override
-	public BuildingSummaryDto findByName(String name) throws DataNotExistsException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
 		
 }

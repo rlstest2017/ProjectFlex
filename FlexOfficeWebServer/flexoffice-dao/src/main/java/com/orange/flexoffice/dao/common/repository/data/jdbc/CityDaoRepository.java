@@ -39,8 +39,12 @@ public class CityDaoRepository extends DataRepository<CityDao> implements CityDa
 
 	@Override
 	public List<CityDao> findByRegionId(Long regionId) throws IncorrectResultSizeDataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		SqlParameterSource paramMap = new MapSqlParameterSource("regionId", regionId);
+		return jdbcTemplate.query(
+				findByColumnRegionIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<CityDao>(CityDao.class)
+			);
 	}
 
 	@Override
@@ -52,14 +56,6 @@ public class CityDaoRepository extends DataRepository<CityDao> implements CityDa
 				new BeanPropertyRowMapper<CityDto>(CityDto.class)
 			);
 	}
-
-
-	@Override
-	public CityDao findByName(String name) throws IncorrectResultSizeDataAccessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 	@Override
 	public CityDao saveCity(CityDao data) throws DataIntegrityViolationException {

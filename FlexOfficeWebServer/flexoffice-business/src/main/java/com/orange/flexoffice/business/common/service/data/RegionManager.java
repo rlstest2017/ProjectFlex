@@ -22,6 +22,12 @@ public interface RegionManager {
 	List<RegionSummaryDto> findAllRegions();
 
 	/**
+	 * findRegionsByCountryId method used by adminui & userui
+	 * @return
+	 */
+	List<RegionDao> findRegionsByCountryId(String coutryId, boolean isFromAdminUI);
+
+	/**
 	 * Finds a region by its ID.
 	 * method used by adminui
 	 * @param regionId
@@ -56,14 +62,5 @@ public interface RegionManager {
 	 * 		  a region ID
 	 */
 	void delete(long regionId) throws DataNotExistsException, IntegrityViolationException;
-
-	
-	/**
-	 * @param name
-	 * 
-	 * @return RegionDao object if found
-	 */
-	RegionDao findByName(String name) throws DataNotExistsException;
-	
 	
 }

@@ -38,7 +38,7 @@ public class CountryHandler {
 	 * @return
 	 */
 	public List<LocationItem> getCountries() {
-		LOGGER.debug( "Begin call ConfigurationEndpoint.getCountries at: " + new Date() );
+		LOGGER.debug( "Begin call CountryHandler.getCountries at: " + new Date() );
 		List<CountryDao> dataList = countryManager.findAllCountries();
 		List<LocationItem> countryList = new ArrayList<LocationItem>();
 		for (CountryDao countryDao : dataList) {
@@ -48,17 +48,18 @@ public class CountryHandler {
 			countryList.add(country);
 		}
 		LOGGER.debug("List of countries : nb = " + countryList.size());
-		LOGGER.debug( "End call ConfigurationEndpoint.getCountries  at: " + new Date() );
+		LOGGER.debug( "End call CountryHandler.getCountries  at: " + new Date() );
 		return countryList;
 	}
 	
 	/**
-	 * getCountriesHaveRooms
+	 * getCountriesLocation
+	 * @param isFromAdminUI
 	 * @return
 	 */
-	public List<LocationItem> getCountriesLocation() {
-		LOGGER.debug( "Begin call ConfigurationEndpoint.getCountriesHaveRooms at: " + new Date() );
-		List<CountryDao> dataList = countryManager.findAllCountries();
+	public List<LocationItem> getCountriesLocation(boolean isFromAdminUI) {
+		LOGGER.debug( "Begin call CountryHandler.getCountriesLocation at: " + new Date() );
+		List<CountryDao> dataList = countryManager.findCountries(isFromAdminUI);
 		List<LocationItem> countryList = new ArrayList<LocationItem>();
 		for (CountryDao countryDao : dataList) {
 			LocationItem country = factory.createLocationItem();
@@ -67,7 +68,7 @@ public class CountryHandler {
 			countryList.add(country);
 		}
 		LOGGER.debug("List of countries have rooms : nb = " + countryList.size());
-		LOGGER.debug( "End call ConfigurationEndpoint.getCountriesHaveRooms  at: " + new Date() );
+		LOGGER.debug( "End call CountryHandler.getCountriesLocation  at: " + new Date() );
 		return countryList;
 	}
 	

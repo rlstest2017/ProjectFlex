@@ -20,6 +20,12 @@ public interface CountryManager {
 	List<CountryDao> findAllCountries();
 
 	/**
+	 * findCountries method used by adminui & userui
+	 * @return
+	 */
+	List<CountryDao> findCountries(Boolean isFromAdminUI);
+
+	/**
 	 * Finds a country by its ID.
 	 * method used by adminui
 	 * @param countryId
@@ -54,14 +60,5 @@ public interface CountryManager {
 	 * 		  a country ID
 	 */
 	void delete(long countryId) throws DataNotExistsException, IntegrityViolationException;
-
-	
-	/**
-	 * @param name
-	 * 
-	 * @return CountryDao object if found
-	 */
-	CountryDao findByName(String name) throws DataNotExistsException;
-	
 	
 }

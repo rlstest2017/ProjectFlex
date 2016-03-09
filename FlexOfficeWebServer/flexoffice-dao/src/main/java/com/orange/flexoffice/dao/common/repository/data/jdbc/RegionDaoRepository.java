@@ -47,6 +47,17 @@ public class RegionDaoRepository extends DataRepository<RegionDao> implements Re
 				new BeanPropertyRowMapper<RegionDto>(RegionDto.class)
 			);
 	}
+	
+	@Override
+	public List<RegionDao> findByCountryId(long countryId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("countryId", countryId);
+		return jdbcTemplate.query(
+				findByColumnCountryIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<RegionDao>(RegionDao.class)
+			);
+	}
+
 
 	@Override
 	public RegionDao saveRegion(RegionDao data) throws DataIntegrityViolationException {
@@ -84,6 +95,5 @@ public class RegionDaoRepository extends DataRepository<RegionDao> implements Re
 	protected String getColName() {
 		return RegionDaoMetadata.REGION_NAME_COL;
 	}
-		
 	
 }

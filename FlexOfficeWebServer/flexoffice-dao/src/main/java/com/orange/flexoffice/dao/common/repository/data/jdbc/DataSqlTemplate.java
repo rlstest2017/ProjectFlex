@@ -24,6 +24,12 @@ public final class DataSqlTemplate {
 			"select * from %s where mac_address=:macAddress";
 	public static final String FIND_BY_COL_GATEWAY_ID_TEMPLATE = 
 			"select * from %s where gateway_id=:gatewayId";
+	public static final String FIND_BY_COL_COUNTRY_ID_TEMPLATE = 
+			"select * from %s where country_id=:countryId";
+	public static final String FIND_BY_COL_REGION_ID_TEMPLATE = 
+			"select * from %s where region_id=:regionId";
+	public static final String FIND_BY_COL_CITY_ID_TEMPLATE = 
+			"select * from %s where city_id=:cityId";
 	public static final String FIND_BY_COL_SENSOR_ID_TEMPLATE = 
 			"select * from %s where sensor_id=:sensorId";
 	public static final String FIND_BY_COL_NAME_TEMPLATE = 

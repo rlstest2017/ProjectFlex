@@ -28,6 +28,9 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_ROOM_ID_OCCUPIED_INFO_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_USER_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_GATEWAY_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_COUNTRY_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_REGION_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_CITY_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_SENSOR_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_NAME_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ROOMSTAT_BY_ROOMID_TEMPLATE;
@@ -131,6 +134,9 @@ public abstract class DataRepository<T extends Data>
 	protected final String findByColumnRoomIdQuery;
 	protected final String findByColumnRoomIdAndOccupancyInfoQuery;
 	protected final String findByColumnGatewayIdQuery;
+	protected final String findByColumnCountryIdQuery;
+	protected final String findByColumnRegionIdQuery;
+	protected final String findByColumnCityIdQuery;
 	protected final String findByColumnSensorIdQuery;
 	protected final String findByColumnNameQuery;
 	
@@ -224,6 +230,9 @@ public abstract class DataRepository<T extends Data>
 		findByColumnRoomIdAndOccupancyInfoQuery = String.format(FIND_BY_COL_ROOM_ID_OCCUPIED_INFO_TEMPLATE, getTableName());
 		findByUserIdQuery = String.format(FIND_BY_COL_USER_ID_TEMPLATE, getTableName());
 		findByColumnGatewayIdQuery = String.format(FIND_BY_COL_GATEWAY_ID_TEMPLATE, getTableName());
+		findByColumnCountryIdQuery = String.format(FIND_BY_COL_COUNTRY_ID_TEMPLATE, getTableName());
+		findByColumnRegionIdQuery = String.format(FIND_BY_COL_REGION_ID_TEMPLATE, getTableName());
+		findByColumnCityIdQuery = String.format(FIND_BY_COL_CITY_ID_TEMPLATE, getTableName());
 		findByColumnSensorIdQuery = String.format(FIND_BY_COL_SENSOR_ID_TEMPLATE, getTableName());
 		findByColumnNameQuery = String.format(FIND_BY_COL_NAME_TEMPLATE, getTableName());
 				

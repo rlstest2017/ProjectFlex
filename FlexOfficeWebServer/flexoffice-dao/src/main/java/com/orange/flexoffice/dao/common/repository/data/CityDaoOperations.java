@@ -19,11 +19,9 @@ public interface CityDaoOperations {
 	
 	List<CitySummaryDto> findAllCitiesSummary();
 	
-	List<CityDao> findByRegionId(Long regionId) throws IncorrectResultSizeDataAccessException;
+	List<CityDao> findByRegionId(Long regionId);
 	
 	CityDto findByCityId(Long cityId) throws IncorrectResultSizeDataAccessException;
-	
-	CityDao findByName(String name) throws IncorrectResultSizeDataAccessException;
 	
 	CityDao saveCity(CityDao data) throws DataIntegrityViolationException;
 	

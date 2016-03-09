@@ -43,7 +43,7 @@ public class BuildingHandler {
 	 * @return
 	 */
 	public List<BuildingSummary> getBuildings() {
-		LOGGER.debug( "Begin call ConfigurationEndpoint.getBuildings at: " + new Date() );
+		LOGGER.debug( "Begin call BuildingHandler.getBuildings at: " + new Date() );
 		List<BuildingSummaryDto> dataList = buildingManager.findAllBuildings();
 		List<BuildingSummary> buildingList = new ArrayList<BuildingSummary>();
 		for (BuildingSummaryDto buildingDto : dataList) {
@@ -58,31 +58,27 @@ public class BuildingHandler {
 			buildingList.add(building);
 		}
 		LOGGER.debug("List of buildings : nb = " + buildingList.size());
-		LOGGER.debug( "End call ConfigurationEndpoint.getBuildings  at: " + new Date() );
+		LOGGER.debug( "End call BuildingHandler.getBuildings  at: " + new Date() );
 		return buildingList;
 	}
     
 	/**
-	 * getBuildingsHaveRooms
+	 * getBuildingsByCity
 	 * @return
 	 */
 	public List<BuildingItem> getBuildingsByCity(String cityId) {
-		LOGGER.debug( "Begin call ConfigurationEndpoint.getBuildingsHaveRooms at: " + new Date() );
-		//List<BuildingSummaryDto> dataList = buildingManager.findAllBuildings();
+		LOGGER.debug( "Begin call BuildingHandler.getBuildingsByCity at: " + new Date() );
+		List<BuildingDao> dataList = buildingManager.findBuildingsByCityId(cityId, true);
 		List<BuildingItem> buildingList = new ArrayList<BuildingItem>();
-//		for (BuildingSummaryDto buildingDto : dataList) {
-//			BuildingSummary building = factory.createBuildingSummary();
-//			building.setId(buildingDto.getId().toString());
-//			building.setName(buildingDto.getName());
-//			building.setAddress(buildingDto.getAddress());
-//			building.setCountryName(buildingDto.getCountryName());
-//			building.setRegionName(buildingDto.getRegionName());
-//			building.setCityName(buildingDto.getCityName());
-//			building.setNbFloors(BigInteger.valueOf(buildingDto.getNbFloors()));
-//			buildingList.add(building);
-//		}
+		for (BuildingDao buildingDao : dataList) {
+			BuildingItem building = factory.createBuildingItem();
+			building.setBuildingId(buildingDao.getId().toString());
+			building.setBuildingName(buildingDao.getName());
+			building.setNbFloors(BigInteger.valueOf(buildingDao.getNbFloors()));
+			buildingList.add(building);
+		}
 		LOGGER.debug("List of buildings have rooms: nb = " + buildingList.size());
-		LOGGER.debug( "End call ConfigurationEndpoint.getBuildingsHaveRooms  at: " + new Date() );
+		LOGGER.debug( "End call BuildingHandler.getBuildingsByCity  at: " + new Date() );
 		return buildingList;
 	}
 	
