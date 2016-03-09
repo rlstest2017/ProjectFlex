@@ -85,7 +85,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				room.setId(roomDao.getColumnId());
 				room.setName(roomDao.getName());
 				room.setType(ERoomType.valueOf(roomDao.getType()));
-				room.setCapacity(BigInteger.valueOf(roomDao.getCapacity()));
+				if (roomDao.getCapacity() != null) {
+					room.setCapacity(BigInteger.valueOf(roomDao.getCapacity()));
+				}
 				room.setStatus(ERoomStatus.valueOf(roomDao.getStatus().toString()));
 				room.setTenantName(computeTenant(room.getStatus(), roomDao.getUserId(), roomDao.getName()));
 				roomList.add(room);
@@ -121,7 +123,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setType(ERoomType.valueOf(roomDto.getType().toString()));
 			room.setDesc(roomDto.getDescription());
 			room.setAddress(roomDto.getAddress());
-			room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));			
+			if (roomDto.getCapacity() != null) {
+				room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));
+			}
 			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
 			room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
 			if (roomDto.getTemperature() != null) {

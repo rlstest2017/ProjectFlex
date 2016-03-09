@@ -79,7 +79,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			} catch (DataNotExistsException e) {
 				LOGGER.debug("Building with id#" + roomDao.getBuildingId() + " does not exist");
 			}
-			room.setCapacity(BigInteger.valueOf(roomDao.getCapacity()));
+			if (roomDao.getCapacity() != null) {
+				room.setCapacity(BigInteger.valueOf(roomDao.getCapacity()));
+			}
 			if (roomDao.getStatus() != null) {
 				room.setStatus(ERoomStatus.valueOf(roomDao.getStatus().toString()));
 			}
@@ -123,7 +125,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				room.getSensors().add(sensorOutput);
 			}
 
-			room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));			
+			if (roomDto.getCapacity() != null) {
+				room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));
+			}			
 			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
 			room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
 			if (roomDto.getTemperature() != null) {
