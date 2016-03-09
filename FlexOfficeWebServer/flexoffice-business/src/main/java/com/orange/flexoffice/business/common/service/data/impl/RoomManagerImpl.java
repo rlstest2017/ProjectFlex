@@ -14,6 +14,7 @@ import com.orange.flexoffice.business.common.exception.DataAlreadyExistsExceptio
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.common.exception.RoomAlreadyUsedException;
+import com.orange.flexoffice.business.common.service.data.BuildingManager;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
@@ -26,6 +27,7 @@ import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
+import com.orange.flexoffice.dao.common.model.object.BuildingDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
@@ -61,6 +63,8 @@ public class RoomManagerImpl implements RoomManager {
 	private RoomDailyOccupancyDaoRepository roomDailyRepository;
 	@Autowired
 	private ConfigurationDaoRepository configRepository;
+	@Autowired
+	private BuildingManager buildingManager;
 
 	@Override
 	@Transactional(readOnly=true)
@@ -88,13 +92,18 @@ public class RoomManagerImpl implements RoomManager {
 		dto.setDescription(roomDao.getDescription());
 		dto.setName(roomDao.getName());
 		dto.setType(E_RoomType.valueOf(roomDao.getType()));
-		dto.setAddress(roomDao.getAddress());
 		dto.setCapacity(roomDao.getCapacity());
 		dto.setStatus(E_RoomStatus.valueOf(roomDao.getStatus()));
 		dto.setType(E_RoomType.valueOf(roomDao.getType()));
 		dto.setLastMeasureDate(roomDao.getLastMeasureDate());
 		dto.setTemperature(roomDao.getTemperature());
 		dto.setHumidity(roomDao.getHumidity());
+		try {
+			dto.setAddress(getAddressFromBuilding(roomDao.getBuildingId()));
+		} catch (DataNotExistsException e) {
+			LOGGER.debug("Building with id#" + roomDao.getBuildingId() + " does not exist");
+		}
+
 		
 		if (roomDao.getUserId() != null) {
 			try {
@@ -357,4 +366,14 @@ public class RoomManagerImpl implements RoomManager {
 		return dataList;
 	}
 	
+	/**
+	 * getAddressFromBuilding
+	 * @param buildingId
+	 * @return
+	 * @throws DataNotExistsException
+	 */
+	private String getAddressFromBuilding(final Long buildingId) throws DataNotExistsException {
+			final BuildingDto buiding = buildingManager.find(Long.valueOf(buildingId));
+			return buiding.getAddress();	
+	}
 }

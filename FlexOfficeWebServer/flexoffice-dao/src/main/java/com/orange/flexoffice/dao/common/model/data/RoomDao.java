@@ -10,7 +10,6 @@ import java.util.Date;
 public class RoomDao extends AbstractData {
 	
 	private String name;
-	private String address;
 	private Integer capacity;
 	private Double temperature;
 	private Double humidity;
@@ -30,12 +29,6 @@ public class RoomDao extends AbstractData {
 		this.name = name;
 	}
 	
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
 	public Integer getCapacity() {
 		return capacity;
 	}

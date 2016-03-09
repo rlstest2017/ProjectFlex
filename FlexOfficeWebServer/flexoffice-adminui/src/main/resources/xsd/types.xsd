@@ -353,7 +353,6 @@
  		    <xsd:element name="type" type="e-roomType" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="gateway" type="GatewayInput2" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="desc" type="xsd:string"/>
-			<xsd:element name="address" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="capacity" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="buildingId" type="xsd:string"/>
 			<xsd:element name="floor" type="xsd:integer"/>
@@ -392,7 +391,6 @@
 			<xsd:element name="gateway" type="GatewayOutput"/>
 			<xsd:element name="desc" type="xsd:string"/>
 			<xsd:element name="sensors" type="SensorOutput" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="address" type="xsd:string"/>
 			<xsd:element name="capacity" type="xsd:integer"/>
 			<xsd:element name="status" type="e-roomStatus"/>
 			<xsd:element name="tenant" type="UserSummary"/>

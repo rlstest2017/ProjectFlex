@@ -134,7 +134,8 @@ public class RoomEndpointImplTest {
 		// Setup
 		final RoomInput1 roomInput = new RoomInput1();
 		roomInput.setName("RoomTest1");
-		roomInput.setAddress("RoomAddress1");
+		roomInput.setBuildingId("1");
+		roomInput.setFloor(BigInteger.valueOf(5));
 		roomInput.setCapacity(BigInteger.valueOf(4));
 		roomInput.setDesc("RoomDescription1");
 		roomInput.setType(ERoomType.BOX);
@@ -163,7 +164,7 @@ public class RoomEndpointImplTest {
 		boolean expectedResult = false;
 		final RoomInput1 roomInput = new RoomInput1();
 		roomInput.setName("RoomTest1");
-		roomInput.setAddress("RoomAddress1");
+		roomInput.setBuildingId("1");
 		roomInput.setCapacity(BigInteger.valueOf(4));
 		roomInput.setDesc("RoomDescription1");
 		roomInput.setType(ERoomType.BOX);
@@ -195,7 +196,8 @@ public class RoomEndpointImplTest {
 			// Setup
 			final RoomInput1 roomInput = new RoomInput1();
 			roomInput.setName("RoomTest1");
-			roomInput.setAddress("RoomAddress-modified");
+			roomInput.setBuildingId("2");
+			roomInput.setFloor(BigInteger.valueOf(15));
 			roomInput.setCapacity(BigInteger.valueOf(4));
 			roomInput.setDesc("RoomDescription-modified");
 			roomInput.setType(ERoomType.BOX);
@@ -239,7 +241,8 @@ public class RoomEndpointImplTest {
 				// Setup
 				final RoomInput1 roomInput = new RoomInput1();
 				roomInput.setName("RoomTest1");
-				roomInput.setAddress("RoomAddress-modified");
+				roomInput.setBuildingId("2");
+				roomInput.setFloor(BigInteger.valueOf(15));
 				roomInput.setCapacity(BigInteger.valueOf(4));
 				roomInput.setDesc("RoomDescription1");
 				roomInput.setType(ERoomType.BOX);

@@ -43,10 +43,8 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	
 	@Autowired
 	private RoomManager roomManager;
-
 	@Autowired
 	private UserManager userManager;
-
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
 	
@@ -87,7 +85,6 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				room.setId(roomDao.getColumnId());
 				room.setName(roomDao.getName());
 				room.setType(ERoomType.valueOf(roomDao.getType()));
-				room.setAddress(roomDao.getAddress());
 				room.setCapacity(BigInteger.valueOf(roomDao.getCapacity()));
 				room.setStatus(ERoomStatus.valueOf(roomDao.getStatus().toString()));
 				room.setTenantName(computeTenant(room.getStatus(), roomDao.getUserId(), roomDao.getName()));

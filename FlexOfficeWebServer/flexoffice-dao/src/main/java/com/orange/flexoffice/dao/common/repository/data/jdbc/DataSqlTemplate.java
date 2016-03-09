@@ -99,7 +99,7 @@ public final class DataSqlTemplate {
 	public static final String CREATE_GATEWAY_TEMPLATE = 
 			"insert into %s (mac_address, name, description) values (:macAddress, :name, :description)";
 	public static final String CREATE_ROOM_TEMPLATE = 
-			"insert into %s (name, gateway_id, address, capacity, description, type, status, building_id) values (:name, :gatewayId, :address, :capacity, :description, CAST(:type AS roomtype), CAST(:status AS roomstatus), :buildingId)";
+			"insert into %s (name, gateway_id, capacity, description, type, status, building_id, floor) values (:name, :gatewayId, :capacity, :description, CAST(:type AS roomtype), CAST(:status AS roomstatus), :buildingId, :floor)";
 	public static final String CREATE_COUNTRY_TEMPLATE = 
 			"insert into %s (name) values (:name)";
 	public static final String CREATE_REGION_TEMPLATE = 
@@ -141,7 +141,7 @@ public final class DataSqlTemplate {
 	public static final String UPDATE_GATEWAY_COMMAND_TEMPLATE =
 			"update %s set command=CAST(:command AS commandModel) where id=:id";
 	public static final String UPDATE_ROOM_TEMPLATE =
-			"update %s set name=:name, gateway_id=:gatewayId, address=:address, capacity=:capacity, description=:description, type=CAST(:type AS roomtype) WHERE id=:id";
+			"update %s set name=:name, gateway_id=:gatewayId, building_id=:buildingId, floor=:floor, capacity=:capacity, description=:description, type=CAST(:type AS roomtype) WHERE id=:id";
 	public static final String UPDATE_COUNTRY_TEMPLATE =
 			"update %s set name=:name WHERE id=:id";
 	public static final String UPDATE_REGION_TEMPLATE =

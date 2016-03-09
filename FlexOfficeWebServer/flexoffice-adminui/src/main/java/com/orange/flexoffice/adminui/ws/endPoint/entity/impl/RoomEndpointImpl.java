@@ -28,6 +28,7 @@ import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
+import com.orange.flexoffice.business.common.service.data.BuildingManager;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
@@ -35,6 +36,7 @@ import com.orange.flexoffice.business.common.service.data.UserManager;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
+import com.orange.flexoffice.dao.common.model.object.BuildingDto;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 
@@ -46,16 +48,14 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 	@Autowired
 	private RoomManager roomManager;
-
+	@Autowired
+	private BuildingManager buildingManager;
 	@Autowired
 	private GatewayManager gatewayManager;
-
 	@Autowired
 	private UserManager userManager;
-
 	@Autowired
 	private TestManager testManager;
-	
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
 
@@ -74,7 +74,11 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setName(roomDao.getName());
 			room.setType(ERoomType.valueOf(roomDao.getType().toString()));
 			room.setGateway(getGatewayFromId(Long.valueOf(roomDao.getGatewayId()), roomDao.getName()));
-			room.setAddress(roomDao.getAddress());
+			try {
+				room.setAddress(getAddressFromBuilding(roomDao.getBuildingId()));
+			} catch (DataNotExistsException e) {
+				LOGGER.debug("Building with id#" + roomDao.getBuildingId() + " does not exist");
+			}
 			room.setCapacity(BigInteger.valueOf(roomDao.getCapacity()));
 			if (roomDao.getStatus() != null) {
 				room.setStatus(ERoomStatus.valueOf(roomDao.getStatus().toString()));
@@ -119,7 +123,6 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				room.getSensors().add(sensorOutput);
 			}
 
-			room.setAddress(roomDto.getAddress());
 			room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));			
 			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
 			room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
@@ -164,6 +167,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		roomDao.setName(roomInput.getName());
 		roomDao.setType(roomInput.getType().toString());
 		roomDao.setBuildingId(Long.valueOf(roomInput.getBuildingId()));
+		roomDao.setFloor(roomInput.getFloor().longValue());
 		
 		if (roomInput.getGateway() !=null) {
 			GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress());
@@ -175,10 +179,6 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		String desc = roomInput.getDesc(); 
 		if ( desc != null) { 
 			roomDao.setDescription(roomInput.getDesc());
-		}
-		String address = roomInput.getAddress();
-		if (address != null) {
-			roomDao.setAddress(roomInput.getAddress());
 		}
 		
 		roomDao.setCapacity(roomInput.getCapacity().intValue());
@@ -239,6 +239,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		roomDao.setId(Long.valueOf(id));
 		roomDao.setName(roomInput.getName());
 		roomDao.setType(roomInput.getType().toString());
+		roomDao.setBuildingId(Long.valueOf(roomInput.getBuildingId()));
+		roomDao.setFloor(roomInput.getFloor().longValue());
+
 		if (roomInput.getGateway() !=null) {
 			GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress());
 			roomDao.setGatewayId(Long.valueOf(gateway.getId()));
@@ -250,13 +253,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		if ( desc != null) { 
 			roomDao.setDescription(roomInput.getDesc());
 		}
-		String address = roomInput.getAddress();
-		if (address != null) {
-			roomDao.setAddress(roomInput.getAddress());
-		}
 		roomDao.setCapacity(roomInput.getCapacity().intValue());
 		
-			roomDao = roomManager.update(roomDao);
+		roomDao = roomManager.update(roomDao);
 
 		LOGGER.debug( "End call RoomEndpoint.updateRoom at: " + new Date() );
 		return Response.status(Status.ACCEPTED).build();
@@ -338,7 +337,17 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		return gateway;		
 	}
 
-
+	/**
+	 * getAddressFromBuilding
+	 * @param buildingId
+	 * @return
+	 * @throws DataNotExistsException
+	 */
+	private String getAddressFromBuilding(final Long buildingId) throws DataNotExistsException {
+			final BuildingDto buiding = buildingManager.find(Long.valueOf(buildingId));
+			return buiding.getAddress();	
+	}
+	
 	/** Create tenant if room status is not free 
 	 * 
 	 * @param status

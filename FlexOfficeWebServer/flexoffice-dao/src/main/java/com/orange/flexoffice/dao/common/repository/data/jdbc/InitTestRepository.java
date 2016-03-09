@@ -82,16 +82,16 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 			String sqlBuildings = "INSERT INTO buildings " +
 					"(id, name, address, city_id, nb_floors) VALUES (?, ?, ?, ?, ?)";
 			jdbcTemplateForTest.update(sqlBuildings, new Object[] {1, "building 1", "04 rue de la Chategneraire 35000 Rennes", 1, 5});
-			jdbcTemplateForTest.update(sqlBuildings, new Object[] {2, "building 2", "04 rue de la Chategneraire 35000 Rennes", 1, 10});
-			jdbcTemplateForTest.update(sqlBuildings, new Object[] {3, "building 3", "04 rue de la Chategneraire 35000 Rennes", 2, 3});
+			jdbcTemplateForTest.update(sqlBuildings, new Object[] {2, "building 2", "05 rue de la medina 35000 Rennes", 1, 10});
+			jdbcTemplateForTest.update(sqlBuildings, new Object[] {3, "building 3", "03 rue de l'amour 35000 Rennes", 2, 3});
 			
 			String sqlRooms = "INSERT INTO rooms " +
-					"(id, name, address, capacity, description, status, type, gateway_id, user_id, building_id, floor) VALUES (?, ?, ?, ?, ?, CAST(? AS roomStatus), CAST(? AS roomType), ?, ?, ?, ?)";
-			jdbcTemplateForTest.update(sqlRooms, new Object[] {1, "room 1", "04 rue de la chategneraie", 5, "room 1 desc", "FREE", "BOX", 1, null, 1, 3});
-			jdbcTemplateForTest.update(sqlRooms, new Object[] {2, "room 2", "05 rue de la medina", 25, "room 2 desc", "RESERVED", "VIDEO_CONF", 1, 1, 1, 0});
-			jdbcTemplateForTest.update(sqlRooms, new Object[] {3, "room 3", "03 rue de l'amour", 5, "room 3 desc", "FREE", "BOX", 2, 4, 2, 7});
-			jdbcTemplateForTest.update(sqlRooms, new Object[] {4, "room 4", "43 rue de l'amour", 35, "room 4 desc", "FREE", "BOX", 2, null, 1, 2});
-			jdbcTemplateForTest.update(sqlRooms, new Object[] {5, "room 5", "41 rue de l'amour", 20, "room 5 desc", "FREE", "BOX", 2, null, 2, 3});
+					"(id, name, capacity, description, status, type, gateway_id, user_id, building_id, floor) VALUES (?, ?, ?, ?, CAST(? AS roomStatus), CAST(? AS roomType), ?, ?, ?, ?)";
+			jdbcTemplateForTest.update(sqlRooms, new Object[] {1, "room 1", 5, "room 1 desc", "FREE", "BOX", 1, null, 1, 3});
+			jdbcTemplateForTest.update(sqlRooms, new Object[] {2, "room 2", 25, "room 2 desc", "RESERVED", "VIDEO_CONF", 1, 1, 1, 0});
+			jdbcTemplateForTest.update(sqlRooms, new Object[] {3, "room 3", 5, "room 3 desc", "FREE", "BOX", 2, 4, 2, 7});
+			jdbcTemplateForTest.update(sqlRooms, new Object[] {4, "room 4", 35, "room 4 desc", "FREE", "BOX", 2, null, 1, 2});
+			jdbcTemplateForTest.update(sqlRooms, new Object[] {5, "room 5", 20, "room 5 desc", "FREE", "BOX", 2, null, 2, 3});
 			
 			String sqlRoomStats = "INSERT INTO room_stats " +
 					"(id, room_id, user_id, begin_occupancy_date, end_occupancy_date, reservation_date, room_info) VALUES (?, ?, ?, CAST(? AS timestamp), CAST(? AS timestamp), CAST(? AS timestamp), CAST(? AS roomInfo))";

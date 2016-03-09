@@ -11,7 +11,7 @@ import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
 
 /**
- * RoomDao
+ * RoomDto
  * @author oab
  *
  */
@@ -22,7 +22,7 @@ public class RoomDto {
 	 */
 	private Long id;
 	private String name;
-	private String address;
+	private String address; // address from buildings table "building_address !!!
 	private Integer capacity;
 	private String description;
 	private E_RoomStatus status;
