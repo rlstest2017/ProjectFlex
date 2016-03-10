@@ -89,8 +89,8 @@ public class RegionManagerImpl implements RegionManager {
 		if (isFromAdminUI) {
 			return regionRepository.findByCountryId(Long.valueOf(countryId));
 		} else {
-			// TODO get only regions have rooms
-			return null;
+			// get only regions have rooms
+			return regionRepository.findRegionsHaveRoomsByCountryId(Long.valueOf(countryId));
 		}
 	}
 		

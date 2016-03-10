@@ -5,6 +5,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_ROOM_BY_TYPE_TEMPLATE;
 
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_COUNTRIES_HAVE_ROOMS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_REQUESTED_ROOM_DAILY_AND_TYPE_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_TEACHIN_STATUS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_ROOM_DAILY_TEMPLATE;
@@ -33,6 +34,9 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_CITY_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_SENSOR_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_NAME_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_REGIONS_HAVE_ROOMS_BY_COUNTRY_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_CITIES_HAVE_ROOMS_BY_REGION_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BUILDINGS_HAVE_ROOMS_BY_CITY_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ROOMSTAT_BY_ROOMID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ROOMSTAT_BY_ROOMINFO_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ONE_TEMPLATE;
@@ -109,6 +113,7 @@ public abstract class DataRepository<T extends Data>
 	// FIND QUERIES ------------------
 	private   final String findOneQuery;
 	protected final String findAllQuery;
+	protected final String findCountriesHaveRoomsQuery;
 	protected final String findAllRoomDailyQuery;
 	protected final String findAllRegionsSummaryQuery;
 	protected final String findAllCitiesSummaryQuery;
@@ -135,6 +140,9 @@ public abstract class DataRepository<T extends Data>
 	protected final String findByColumnRoomIdAndOccupancyInfoQuery;
 	protected final String findByColumnGatewayIdQuery;
 	protected final String findByColumnCountryIdQuery;
+	protected final String findRegionsHaveRoomsByCountryIdQuery;
+	protected final String findCitiesHaveRoomsByRegionIdQuery;
+	protected final String findBuildingsHaveRoomsByCityIdQuery;
 	protected final String findByColumnRegionIdQuery;
 	protected final String findByColumnCityIdQuery;
 	protected final String findByColumnSensorIdQuery;
@@ -205,6 +213,7 @@ public abstract class DataRepository<T extends Data>
 		// FIND QUERIES ------------------------------------------------------------------------------
 		findOneQuery = String.format(FIND_ONE_TEMPLATE, getTableName());
 		findAllQuery = String.format(FIND_ALL_TEMPLATE, getTableName(), getColName());
+		findCountriesHaveRoomsQuery = String.format(FIND_COUNTRIES_HAVE_ROOMS_TEMPLATE, getTableName(), getColName());
 		findAllRoomDailyQuery = String.format(FIND_ALL_ROOM_DAILY_TEMPLATE, getTableName());
 		findAllDailyQuery = String.format(FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE, getTableName());
 		findAllRegionsSummaryQuery = String.format(FIND_ALL_REGIONS_SUMMARY_TEMPLATE);
@@ -231,6 +240,9 @@ public abstract class DataRepository<T extends Data>
 		findByUserIdQuery = String.format(FIND_BY_COL_USER_ID_TEMPLATE, getTableName());
 		findByColumnGatewayIdQuery = String.format(FIND_BY_COL_GATEWAY_ID_TEMPLATE, getTableName());
 		findByColumnCountryIdQuery = String.format(FIND_BY_COL_COUNTRY_ID_TEMPLATE, getTableName());
+		findRegionsHaveRoomsByCountryIdQuery = String.format(FIND_REGIONS_HAVE_ROOMS_BY_COUNTRY_ID_TEMPLATE, getTableName());
+		findCitiesHaveRoomsByRegionIdQuery = String.format(FIND_CITIES_HAVE_ROOMS_BY_REGION_ID_TEMPLATE, getTableName());
+		findBuildingsHaveRoomsByCityIdQuery = String.format(FIND_BUILDINGS_HAVE_ROOMS_BY_CITY_ID_TEMPLATE, getTableName());
 		findByColumnRegionIdQuery = String.format(FIND_BY_COL_REGION_ID_TEMPLATE, getTableName());
 		findByColumnCityIdQuery = String.format(FIND_BY_COL_CITY_ID_TEMPLATE, getTableName());
 		findByColumnSensorIdQuery = String.format(FIND_BY_COL_SENSOR_ID_TEMPLATE, getTableName());

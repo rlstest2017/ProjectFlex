@@ -21,6 +21,8 @@ public interface RegionDaoOperations {
 	
 	List<RegionDao> findByCountryId(long countryId);
 	
+	List<RegionDao> findRegionsHaveRoomsByCountryId(long countryId);
+
 	RegionDto findByRegionId(Long regionId) throws IncorrectResultSizeDataAccessException;
 	
 	RegionDao saveRegion(RegionDao data) throws DataIntegrityViolationException;

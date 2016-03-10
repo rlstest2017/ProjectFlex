@@ -35,6 +35,16 @@ public class CountryDaoRepository extends DataRepository<CountryDao> implements 
 	}
 
 	@Override
+	public List<CountryDao> findCountriesHaveRooms() {
+		SqlParameterSource paramMap = new MapSqlParameterSource();
+		return jdbcTemplate.query(
+				findCountriesHaveRoomsQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<CountryDao>(CountryDao.class)
+			);
+	}
+	
+	@Override
 	public CountryDao saveCountry(CountryDao data) throws DataIntegrityViolationException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);

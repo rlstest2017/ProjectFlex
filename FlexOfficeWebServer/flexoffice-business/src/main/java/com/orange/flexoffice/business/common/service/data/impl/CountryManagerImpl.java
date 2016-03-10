@@ -41,8 +41,8 @@ public class CountryManagerImpl implements CountryManager {
 		if (isFromAdminUI) {
 			return countryRepository.findAllCountries();
 		} else {
-			// TODO get only countries have rooms
-			return countryRepository.findAllCountries();
+			// get only countries have rooms
+			return countryRepository.findCountriesHaveRooms();
 		}
 	}
 	

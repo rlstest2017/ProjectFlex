@@ -19,6 +19,8 @@ public interface CityDaoOperations {
 	
 	List<CitySummaryDto> findAllCitiesSummary();
 	
+	List<CityDao> findCitiesHaveRoomsByRegionId(long regionId);
+	
 	List<CityDao> findByRegionId(Long regionId);
 	
 	CityDto findByCityId(Long cityId) throws IncorrectResultSizeDataAccessException;

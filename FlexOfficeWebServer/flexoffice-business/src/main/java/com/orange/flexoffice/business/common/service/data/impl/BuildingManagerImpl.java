@@ -43,8 +43,8 @@ public class BuildingManagerImpl implements BuildingManager {
 		if (isFromAdminUI) {
 			return buildingRepository.findByCityId(Long.valueOf(cityId));
 		} else {
-			// TODO get only cities have rooms
-			return null;
+			// get only cities have rooms
+			return buildingRepository.findBuildingsHaveRoomsByCityId(Long.valueOf(cityId));
 		}
 	}
 

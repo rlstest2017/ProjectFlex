@@ -46,7 +46,7 @@ public class LocationEndpointImpl implements LocationEndpoint {
 	@Override
 	public List<LocationItem> getCountries() { // only have rooms !!
 		LOGGER.debug( "Begin call LocationEndpointImpl.getCountries at: " + new Date() );
-		List<CountryDao> dataList = countryManager.findCountries(true); // TODO request from UserUI isFromAdminUI=false
+		List<CountryDao> dataList = countryManager.findCountries(false); // request from UserUI isFromAdminUI=false
 		List<LocationItem> countryList = new ArrayList<LocationItem>();
 		for (CountryDao countryDao : dataList) {
 			LocationItem country = factory.createLocationItem();
@@ -62,7 +62,7 @@ public class LocationEndpointImpl implements LocationEndpoint {
 	@Override
 	public List<LocationItem> getRegions(String countryId) { // only have rooms !!
 		LOGGER.debug( "Begin call LocationEndpointImpl.getRegions at: " + new Date() );
-		List<RegionDao> dataList = regionManager.findRegionsByCountryId(countryId, true); // TODO request from UserUI isFromAdminUI=false
+		List<RegionDao> dataList = regionManager.findRegionsByCountryId(countryId, false); // request from UserUI isFromAdminUI=false
 		List<LocationItem> regionList = new ArrayList<LocationItem>();
 		for (RegionDao regionDao : dataList) {
 			LocationItem region = factory.createLocationItem();
@@ -78,7 +78,7 @@ public class LocationEndpointImpl implements LocationEndpoint {
 	@Override
 	public List<LocationItem> getCities(String regionId) { // only have rooms !!
 		LOGGER.debug( "Begin call LocationEndpointImpl.getCities at: " + new Date() );
-		List<CityDao> dataList = cityManager.findCitiesByRegionId(regionId, true); // TODO request from UserUI isFromAdminUI=false
+		List<CityDao> dataList = cityManager.findCitiesByRegionId(regionId, false); // request from UserUI isFromAdminUI=false
 		List<LocationItem> cityList = new ArrayList<LocationItem>();
 		for (CityDao cityDto : dataList) {
 			LocationItem city = factory.createLocationItem();
@@ -94,7 +94,7 @@ public class LocationEndpointImpl implements LocationEndpoint {
 	@Override
 	public List<BuildingItem> getBuildings(String cityId) { // only have rooms !!
 		LOGGER.debug( "Begin call LocationEndpointImpl.getBuildings at: " + new Date() );
-		List<BuildingDao> dataList = buildingManager.findBuildingsByCityId(cityId, true); // TODO request from UserUI isFromAdminUI=false
+		List<BuildingDao> dataList = buildingManager.findBuildingsByCityId(cityId, false); // request from UserUI isFromAdminUI=false
 		List<BuildingItem> buildingList = new ArrayList<BuildingItem>();
 		for (BuildingDao buildingDto : dataList) {
 			BuildingItem building = factory.createBuildingItem();

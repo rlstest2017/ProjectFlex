@@ -15,6 +15,8 @@ public interface CountryDaoOperations {
 	
 	List<CountryDao> findAllCountries();
 	
+	List<CountryDao> findCountriesHaveRooms();
+	
 	CountryDao saveCountry(CountryDao data) throws DataIntegrityViolationException;
 	
 	CountryDao updateCountry(CountryDao data) throws DataAccessException; 

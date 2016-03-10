@@ -43,8 +43,8 @@ public class CityManagerImpl implements CityManager {
 		if (isFromAdminUI) {
 			return cityRepository.findByRegionId(Long.valueOf(regionId));
 		} else {
-			// TODO get only cities have rooms
-			return null;
+			// get only cities have rooms
+			return cityRepository.findCitiesHaveRoomsByRegionId(Long.valueOf(regionId));
 		}
 	}
 	
