@@ -98,6 +98,9 @@ public class RoomManagerImpl implements RoomManager {
 		dto.setLastMeasureDate(roomDao.getLastMeasureDate());
 		dto.setTemperature(roomDao.getTemperature());
 		dto.setHumidity(roomDao.getHumidity());
+		dto.setBuildingId(roomDao.getBuildingId());
+		dto.setFloor(roomDao.getFloor());
+		
 		try {
 			dto.setAddress(getAddressFromBuilding(roomDao.getBuildingId()));
 		} catch (DataNotExistsException e) {

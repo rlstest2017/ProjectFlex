@@ -13,9 +13,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.adminui.ws.endPoint.entity.RoomEndpoint;
+import com.orange.flexoffice.adminui.ws.model.BuildingOutput;
 import com.orange.flexoffice.adminui.ws.model.ERoomStatus;
 import com.orange.flexoffice.adminui.ws.model.ERoomType;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput;
+import com.orange.flexoffice.adminui.ws.model.Location;
+import com.orange.flexoffice.adminui.ws.model.LocationItem;
 import com.orange.flexoffice.adminui.ws.model.RoomSummary;
 import com.orange.flexoffice.adminui.ws.model.SensorOutput;
 import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
@@ -136,6 +139,30 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			if (roomDto.getHumidity() != null) {
 				room.setHumidity(roomDto.getHumidity());
 			}
+			
+			BuildingDto buidingDto = buildingManager.find(Long.valueOf(roomDto.getBuildingId()));
+			Location location = factory.createLocation();
+				BuildingOutput building = factory.createBuildingOutput();
+					building.setId(String.valueOf(buidingDto.getId()));
+					building.setName(buidingDto.getName());
+					building.setAddress(buidingDto.getAddress());
+					building.setNbFloors(BigInteger.valueOf(buidingDto.getNbFloors()));
+			location.setBuilding(building);
+				LocationItem locationCountry = factory.createLocationItem();
+					locationCountry.setId(buidingDto.getCountryId().toString());
+					locationCountry.setName(buidingDto.getCountryName());
+			location.setCountry(locationCountry);
+				LocationItem locationRegion = factory.createLocationItem();
+					locationRegion.setId(buidingDto.getRegionId().toString());
+					locationRegion.setName(buidingDto.getRegionName());
+			location.setRegion(locationRegion);
+				LocationItem locationCity = factory.createLocationItem();
+					locationCity.setId(buidingDto.getCityId().toString());
+					locationCity.setName(buidingDto.getCityName());
+			location.setCity(locationCity);
+			location.setFloor(BigInteger.valueOf(roomDto.getFloor()));
+			
+			room.setLocation(location);
 			
 			LOGGER.debug( "End call RoomEndpoint.getRoom  at: " + new Date() );
 

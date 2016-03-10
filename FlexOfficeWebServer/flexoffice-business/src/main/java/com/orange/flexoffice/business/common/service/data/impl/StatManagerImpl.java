@@ -455,7 +455,6 @@ public class StatManagerImpl implements StatManager {
 			
 		} catch (JobExecutionException e) {
 			System.out.println("Job ExportStat failed");
-			e.printStackTrace();
 		} finally {
 			if (context != null)
                 	context.close();  

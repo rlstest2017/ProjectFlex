@@ -34,6 +34,8 @@ public class RoomDto {
 	private Date lastMeasureDate; // the last time since the status has been modified
 	private Double temperature;
 	private Double humidity;
+	private Long buildingId;
+	private Long floor;
 	
 	public String getName() {
 		return name;
@@ -141,5 +143,30 @@ public class RoomDto {
 	public void setHumidity(Double humidity) {
 		this.humidity = humidity;
 	}
+	/**
+	 * @return the buildingId
+	 */
+	public Long getBuildingId() {
+		return buildingId;
+	}
+	/**
+	 * @param buildingId the buildingId to set
+	 */
+	public void setBuildingId(Long buildingId) {
+		this.buildingId = buildingId;
+	}
+	/**
+	 * @return the floor
+	 */
+	public Long getFloor() {
+		return floor;
+	}
+	/**
+	 * @param floor the floor to set
+	 */
+	public void setFloor(Long floor) {
+		this.floor = floor;
+	}
+	
 
 }
