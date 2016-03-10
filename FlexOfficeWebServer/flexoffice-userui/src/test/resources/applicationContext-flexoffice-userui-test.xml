@@ -10,16 +10,10 @@
     <!-- Import related to Flex Office Web Sever Business -->
 	<import resource="classpath*:spring/applicationContext-flexoffice-business-test.xml" />
 	
-	<bean id="roomEndpoint" class="com.orange.flexoffice.userui.ws.endPoint.entity.impl.RoomEndpointImpl">
-	</bean>
-	
-	<bean id="userEndpoint" class="com.orange.flexoffice.userui.ws.endPoint.entity.impl.UserEndpointImpl">
-	</bean>
-	
-	<bean id="errorMessageHandler" class="com.orange.flexoffice.userui.ws.utils.ErrorMessageHandler">
-	</bean>
-	
-	<bean id="checkReservationTimeOutTask" class="com.orange.flexoffice.userui.ws.task.CheckReservationTimeOutTask">
-	</bean>
-		
+	<bean id="locationEndpoint" class="com.orange.flexoffice.userui.ws.endPoint.data.impl.LocationEndpointImpl"/>
+	<bean id="roomEndpoint" class="com.orange.flexoffice.userui.ws.endPoint.entity.impl.RoomEndpointImpl"/>
+	<bean id="userEndpoint" class="com.orange.flexoffice.userui.ws.endPoint.entity.impl.UserEndpointImpl"/>
+	<bean id="errorMessageHandler" class="com.orange.flexoffice.userui.ws.utils.ErrorMessageHandler"/>
+	<bean id="checkReservationTimeOutTask" class="com.orange.flexoffice.userui.ws.task.CheckReservationTimeOutTask"/>
+
 </beans>
