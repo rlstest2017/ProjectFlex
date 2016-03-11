@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
+import com.orange.flexoffice.dao.common.model.object.RoomBuildingInfosDto;
 
 /**
  * RoomDaoOperations
@@ -24,6 +25,8 @@ public interface RoomDaoOperations {
 	List<RoomDao> findRoomsByCityId(Long cityId);
 	
 	List<RoomDao> findRoomsByBuildingId(Long buildingId);
+
+	List<RoomDao> findRoomsByBuildingIdAndFloor(RoomBuildingInfosDto data);
 	
 	RoomDao findByRoomId(Long roomId) throws IncorrectResultSizeDataAccessException;
 	

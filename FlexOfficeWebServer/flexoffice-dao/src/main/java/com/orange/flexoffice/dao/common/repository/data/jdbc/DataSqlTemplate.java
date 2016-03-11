@@ -26,6 +26,16 @@ public final class DataSqlTemplate {
 			"select * from %s where gateway_id=:gatewayId";
 	public static final String FIND_BY_COL_COUNTRY_ID_TEMPLATE = 
 			"select * from %s where country_id=:countryId";
+	public static final String FIND_ROOMS_BY_COUNTRY_ID_TEMPLATE = 
+			"select distinct rooms.* From rooms, buildings, cities, regions, countries where rooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=regions.id and regions.country_id=:countryId order by rooms.name";
+	public static final String FIND_ROOMS_BY_REGION_ID_TEMPLATE = 
+			"select distinct rooms.* From rooms, buildings, cities where rooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=:regionId order by rooms.name";
+	public static final String FIND_ROOMS_BY_CITY_ID_TEMPLATE = 
+			"select distinct rooms.* From rooms, buildings where rooms.building_id=buildings.id and buildings.city_id=:cityId order by rooms.name";
+	public static final String FIND_ROOMS_BY_BUILDING_ID_TEMPLATE = 
+			"select distinct rooms.* From rooms where rooms.building_id=:buildingId order by rooms.name";
+	public static final String FIND_ROOMS_BY_BUILDING_ID_AND_FLOOR_TEMPLATE = 
+			"select distinct rooms.* From rooms where rooms.building_id=:buildingId and rooms.floor=:floor order by rooms.name";
 	public static final String FIND_REGIONS_HAVE_ROOMS_BY_COUNTRY_ID_TEMPLATE = 
 			"select distinct regions.id, regions.name From rooms, buildings, cities, regions, countries where rooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=regions.id and regions.country_id=countries.id and country_id=:countryId";
 	public static final String FIND_CITIES_HAVE_ROOMS_BY_REGION_ID_TEMPLATE = 
