@@ -59,7 +59,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 * @see RoomSummary
 	 */
 	@Override
-	public List<RoomSummary> getRooms(String auth, Boolean latest) {
+	public List<RoomSummary> getRooms(String auth, Boolean latest, String countryId, String regionId, String cityId, String buildingId, String floor) {
 		LOGGER.debug( "Begin call UserUi.RoomEndpoint.getRooms at: " + new Date() );
 		List<RoomDao> dataList = null;
 		
@@ -74,6 +74,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_34, Response.Status.UNAUTHORIZED));
 			}	
 		} else { // get all rooms
+			// TODO dataList = roomManager.findRoomsByCriteria(countryId, regionId, cityId, buildingId, floor);
 			dataList = roomManager.findAllRooms();
 		}
 

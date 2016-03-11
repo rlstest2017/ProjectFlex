@@ -17,6 +17,14 @@ public interface RoomDaoOperations {
 	
 	List<RoomDao> findAllRooms();
 	
+	List<RoomDao> findRoomsByCountryId(Long countryId);
+	
+	List<RoomDao> findRoomsByRegionId(Long regionId);
+	
+	List<RoomDao> findRoomsByCityId(Long cityId);
+	
+	List<RoomDao> findRoomsByBuildingId(Long buildingId);
+	
 	RoomDao findByRoomId(Long roomId) throws IncorrectResultSizeDataAccessException;
 	
 	List<RoomDao> findByGatewayId(Long gatewayId) throws IncorrectResultSizeDataAccessException;

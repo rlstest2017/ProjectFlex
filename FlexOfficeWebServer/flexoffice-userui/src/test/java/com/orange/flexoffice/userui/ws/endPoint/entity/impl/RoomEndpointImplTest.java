@@ -70,7 +70,7 @@ public class RoomEndpointImplTest {
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		
 		// Test
-		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false);
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, null, null, null, null);
 
 		// Asserts
 		assertEquals(5, rooms.size());
@@ -82,7 +82,7 @@ public class RoomEndpointImplTest {
 		String token = "Zmlyc3QubGFzdDFAdGVzdC5jb206cGFzczoxNDQ4NjEzNjU2MDk4";
 		
 		// Test
-		List<RoomSummary> rooms = roomEndpoint.getRooms(token, true);
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, true, null, null, null, null, null);
 
 		// Asserts
 		assertEquals(3, rooms.size());

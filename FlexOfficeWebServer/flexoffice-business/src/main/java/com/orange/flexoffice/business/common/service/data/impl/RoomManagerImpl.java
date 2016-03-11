@@ -73,6 +73,17 @@ public class RoomManagerImpl implements RoomManager {
 	}
 
 	@Override
+	public List<RoomDao> findRoomsByCriteria(String countryId, String regionId, String cityId, String buildingId,
+			String floor) {
+		//  Attention : fonctionnellement si par exemple on veut les rooms de la city cityId, soit :
+			// on envoi dans la requête les paramètres countryId, regionId et cityId
+			// ou uniquement cityId (countryId=null et regionId=null)
+			// mais pas cityId avec	(countryId=null et regionId != null) ou (countryId != null et regionId=null) cette incohérence ne sera pas gérée ci-dessous !!!
+				
+		return null;
+	}
+	
+	@Override
 	@Transactional(readOnly=true)
 	public RoomDto find(long roomId) throws DataNotExistsException {
 
@@ -379,4 +390,5 @@ public class RoomManagerImpl implements RoomManager {
 			final BuildingDto buiding = buildingManager.find(Long.valueOf(buildingId));
 			return buiding.getAddress();	
 	}
+	
 }

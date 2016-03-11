@@ -36,6 +36,34 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 	}
 
 	@Override
+	public List<RoomDao> findRoomsByCountryId(Long countryId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("countryId", countryId);
+		return jdbcTemplate.query(
+				findByColumnGatewayIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<RoomDao>(RoomDao.class)
+			);
+	}
+
+	@Override
+	public List<RoomDao> findRoomsByRegionId(Long regionId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<RoomDao> findRoomsByCityId(Long cityId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<RoomDao> findRoomsByBuildingId(Long buildingId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public RoomDao findByRoomId(Long roomId) throws IncorrectResultSizeDataAccessException{
 		SqlParameterSource paramMap = new MapSqlParameterSource("columnId", roomId);
 		return jdbcTemplate.queryForObject(
@@ -138,5 +166,5 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 	protected String getColName() {
 		return RoomDaoMetadata.ROOM_NAME_COL;
 	}
-
+	
 }

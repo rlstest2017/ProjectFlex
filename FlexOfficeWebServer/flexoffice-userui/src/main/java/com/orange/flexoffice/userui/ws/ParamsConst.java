@@ -11,7 +11,8 @@ public final class ParamsConst {
 	public static final String CITY_ID_PARAM = "cityId";
 	public static final String REGION_ID_PARAM = "regionId";
 	public static final String COUNTRY_ID_PARAM = "countryId";
-
+	public static final String BUILDING_ID_PARAM = "buildingId";
+	public static final String FLOOR_PARAM = "floor";
 	
 	private ParamsConst() {		
 	}

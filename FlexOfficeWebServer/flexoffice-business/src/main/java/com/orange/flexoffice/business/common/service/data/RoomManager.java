@@ -22,6 +22,17 @@ public interface RoomManager {
 	List<RoomDao> findAllRooms();
 
 	/**
+	 * findRoomsByCriteria
+	 * @param countryId
+	 * @param regionId
+	 * @param cityId
+	 * @param buildingId
+	 * @param floor
+	 * @return
+	 */
+	List<RoomDao> findRoomsByCriteria(String countryId, String regionId, String cityId, String buildingId, String floor);
+	
+	/**
 	 * findLatestReservedRoomsByUserId
 	 * @param userId
 	 * @return
