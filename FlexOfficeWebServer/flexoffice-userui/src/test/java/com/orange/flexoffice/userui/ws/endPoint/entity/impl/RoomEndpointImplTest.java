@@ -77,6 +77,73 @@ public class RoomEndpointImplTest {
 	}
 
 	@Test
+	public void TestBA_getRoomsByBuildingIdAndFloor() {
+		// SetUp
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
+		
+		// Test
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, null, null, "1", "3");
+
+		// Asserts
+		assertEquals(2, rooms.size());
+	}
+
+	@Test
+	public void TestBB_getRoomsByBuildingIdAndFloor() {
+		// SetUp
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
+		// Test
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, "1", null, null, "1", "3");
+
+		// Asserts
+		assertEquals(2, rooms.size());
+	}
+
+	@Test
+	public void TestBC_getRoomsByBuildingId() {
+		// SetUp
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
+		// Test
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, null, null, "1", null);
+
+		// Asserts
+		assertEquals(3, rooms.size());
+	}
+
+	@Test
+	public void TestBD_getRoomsByCityId() {
+		// SetUp
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
+		// Test
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, null, "1", null, null);
+
+		// Asserts
+		assertEquals(5, rooms.size());
+	}
+
+	@Test
+	public void TestBD_getRoomsByRegionId() {
+		// SetUp
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
+		// Test
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, "3", null, null, null);
+
+		// Asserts
+		assertEquals(0, rooms.size());
+	}
+
+	@Test
+	public void TestBD_getRoomsByCountryId() {
+		// SetUp
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
+		// Test
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, "1", null, null, null, null);
+
+		// Asserts
+		assertEquals(5, rooms.size());
+	}
+
+	@Test
 	public void TestC_getLatestRooms() {
 		// SetUp
 		String token = "Zmlyc3QubGFzdDFAdGVzdC5jb206cGFzczoxNDQ4NjEzNjU2MDk4";

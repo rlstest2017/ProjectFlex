@@ -73,9 +73,8 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.getRooms with message :", e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_34, Response.Status.UNAUTHORIZED));
 			}	
-		} else { // get all rooms
-			// TODO dataList = roomManager.findRoomsByCriteria(countryId, regionId, cityId, buildingId, floor);
-			dataList = roomManager.findAllRooms();
+		} else { // get rooms by criteria
+			dataList = roomManager.findRoomsByCriteria(countryId, regionId, cityId, buildingId, floor);
 		}
 
 		List<RoomSummary> roomList = new ArrayList<RoomSummary>();

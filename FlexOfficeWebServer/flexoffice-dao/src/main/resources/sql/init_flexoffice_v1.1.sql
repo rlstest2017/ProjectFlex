@@ -37,7 +37,7 @@ CREATE TABLE preferences (
 INSERT INTO countries (name) VALUES ('France');
 INSERT INTO regions (name) VALUES ('Bretagne');
 INSERT INTO cities (name) VALUES ('Rennes');
-INSERT INTO buildings (name) VALUES ('Châtegneraie');
+INSERT INTO buildings (name, nb_floors) VALUES ('Châtegneraie', 2); 
 
 ALTER TABLE ONLY countries
     ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
@@ -67,7 +67,7 @@ ALTER TABLE ONLY preferences
 
 ALTER TABLE rooms
 	ADD COLUMN building_id integer NOT NULL DEFAULT 1,
-	ADD COLUMN floor integer,
+	ADD COLUMN floor integer NOT NULL DEFAULT 1,
 	DROP COLUMN address,
 	ADD  FOREIGN KEY(building_id) REFERENCES buildings(id),
 	DROP CONSTRAINT rooms_name_key,

@@ -28,6 +28,7 @@ import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
 import com.orange.flexoffice.dao.common.model.object.BuildingDto;
+import com.orange.flexoffice.dao.common.model.object.RoomBuildingInfosDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
@@ -73,14 +74,30 @@ public class RoomManagerImpl implements RoomManager {
 	}
 
 	@Override
-	public List<RoomDao> findRoomsByCriteria(String countryId, String regionId, String cityId, String buildingId,
-			String floor) {
-		//  Attention : fonctionnellement si par exemple on veut les rooms de la city cityId, soit :
-			// on envoi dans la requête les paramètres countryId, regionId et cityId
-			// ou uniquement cityId (countryId=null et regionId=null)
-			// mais pas cityId avec	(countryId=null et regionId != null) ou (countryId != null et regionId=null) cette incohérence ne sera pas gérée ci-dessous !!!
+	public List<RoomDao> findRoomsByCriteria(String countryId, String regionId, String cityId, String buildingId, String floor) {
+		
+		List<RoomDao> rooms;
+		
+		if (buildingId != null) {
+			if (floor != null) {
+				RoomBuildingInfosDto buildingInfo = new RoomBuildingInfosDto();
+				buildingInfo.setBuildingId(Long.valueOf(buildingId));
+				buildingInfo.setFloor(Long.valueOf(floor));
+				rooms = roomRepository.findRoomsByBuildingIdAndFloor(buildingInfo);
+			} else {
+				rooms = roomRepository.findRoomsByBuildingId(Long.valueOf(buildingId));
+			}
+		} else if (cityId != null) {
+			rooms = roomRepository.findRoomsByCityId(Long.valueOf(cityId));
+		} else if (regionId != null) {
+			rooms = roomRepository.findRoomsByRegionId(Long.valueOf(regionId));
+		} else if (countryId != null) {
+			rooms = roomRepository.findRoomsByCountryId(Long.valueOf(countryId));
+		} else {
+			rooms = roomRepository.findAllRooms();
+		}
 				
-		return null;
+		return rooms;
 	}
 	
 	@Override
