@@ -6,6 +6,8 @@ public final class DataSqlTemplate {
 			"select * from %s where id=:id";
 	public static final String FIND_BY_COL_ID_TEMPLATE = 
 			"select * from %s where %s=:columnId";
+	public static final String FIND_PREFERENCE_BY_USER_ID_TEMPLATE = 
+			"select * from %s where %s=:columnId";
 	public static final String FIND_REGION_DTO_BY_COL_ID_TEMPLATE = 
 			"select regions.id, regions.name, countries.id as country_id, countries.name as country_name From regions, countries where regions.country_id=countries.id and regions.id=:columnId";
 	public static final String FIND_CITY_DTO_BY_COL_ID_TEMPLATE = 
@@ -126,6 +128,8 @@ public final class DataSqlTemplate {
 			"insert into %s (name, region_id) values (:name, :regionId)";
 	public static final String CREATE_BUILDING_TEMPLATE = 
 			"insert into %s (name, address, nb_floors, city_id) values (:name, :address, :nbFloors, :cityId)";
+	public static final String CREATE_PREFERENCE_TEMPLATE = 
+			"insert into %s (user_id, country_id, region_id, city_id, building_id, floor) values (:userId, :countryId, :regionId, :cityId, :buildingId, :floor)";
 	public static final String CREATE_TEACHIN_SENSOR_TEMPLATE = 
 			"insert into %s (sensor_identifier, sensor_status) values (:sensorIdentifier, CAST(:sensorStatus AS sensorTeachinStatus))";
 	public static final String CREATE_TEACHIN_STATUS_TEMPLATE = 
@@ -168,6 +172,8 @@ public final class DataSqlTemplate {
 			"update %s set name=:name, region_id=:regionId WHERE id=:id";
 	public static final String UPDATE_BUILDING_TEMPLATE =
 			"update %s set name=:name, city_id=:cityId, address=:address, nb_floors=:nbFloors WHERE id=:id";
+	public static final String UPDATE_PREFERENCE_TEMPLATE =
+			"update %s set country_id=:countryId, region_id=:regionId, city_id=:cityId, building_id=:buildingId, floor=:floor WHERE id=:id";
 	public static final String UPDATE_TEACHIN_STATUS_TEMPLATE =
 			"update %s set teachin_status=CAST(:teachinStatus AS teachinStatus) WHERE id=:id";
 	public static final String UPDATE_TEACHIN_DATE_TEMPLATE =

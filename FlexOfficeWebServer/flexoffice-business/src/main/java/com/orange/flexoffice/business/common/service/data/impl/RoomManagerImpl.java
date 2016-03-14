@@ -74,7 +74,7 @@ public class RoomManagerImpl implements RoomManager {
 	}
 
 	@Override
-	public List<RoomDao> findRoomsByCriteria(String countryId, String regionId, String cityId, String buildingId, String floor) {
+	public List<RoomDao> findRoomsByCriteria(String countryId, String regionId, String cityId, String buildingId, Integer floor) {
 		
 		List<RoomDao> rooms;
 		

@@ -65,7 +65,7 @@ public class RoomEndpointImplTest {
 
 
 	@Test
-	public void TestB_getRooms() {
+	public void TestBA_getRooms() {
 		// SetUp
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		
@@ -77,30 +77,30 @@ public class RoomEndpointImplTest {
 	}
 
 	@Test
-	public void TestBA_getRoomsByBuildingIdAndFloor() {
+	public void TestBB_getRoomsByBuildingIdAndFloor() {
 		// SetUp
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		
 		// Test
-		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, null, null, "1", "3");
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, null, null, "1", 3);
 
 		// Asserts
 		assertEquals(2, rooms.size());
 	}
 
 	@Test
-	public void TestBB_getRoomsByBuildingIdAndFloor() {
+	public void TestBC_getRoomsByBuildingIdAndFloor() {
 		// SetUp
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		// Test
-		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, "1", null, null, "1", "3");
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, "1", null, null, "1", 3);
 
 		// Asserts
 		assertEquals(2, rooms.size());
 	}
 
 	@Test
-	public void TestBC_getRoomsByBuildingId() {
+	public void TestBD_getRoomsByBuildingId() {
 		// SetUp
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		// Test
@@ -111,7 +111,7 @@ public class RoomEndpointImplTest {
 	}
 
 	@Test
-	public void TestBD_getRoomsByCityId() {
+	public void TestBE_getRoomsByCityId() {
 		// SetUp
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		// Test
@@ -122,7 +122,7 @@ public class RoomEndpointImplTest {
 	}
 
 	@Test
-	public void TestBD_getRoomsByRegionId() {
+	public void TestBF_getRoomsByRegionId() {
 		// SetUp
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		// Test
@@ -133,7 +133,7 @@ public class RoomEndpointImplTest {
 	}
 
 	@Test
-	public void TestBD_getRoomsByCountryId() {
+	public void TestBG_getRoomsByCountryId() {
 		// SetUp
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		// Test

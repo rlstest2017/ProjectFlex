@@ -32,6 +32,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_COUNTRY_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_REGION_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_CITY_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_PREFERENCE_BY_USER_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_SENSOR_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_NAME_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ROOMS_BY_COUNTRY_ID_TEMPLATE;
@@ -73,6 +74,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_CITY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_BUILDING_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_GATEWAY_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_PREFERENCE_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ALERT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOM_STATUS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_SENSOR_TEMPLATE;
@@ -88,6 +90,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_REGION_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_CITY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_BUILDING_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_PREFERENCE_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_ROOMDAILY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_RESERVED_ROOMSTAT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_OCCUPIED_ROOMSTAT_TEMPLATE;
@@ -131,6 +134,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String findByRegionIdQuery;
 	protected final String findByCityIdQuery;
 	protected final String findByBuildingIdQuery;
+	protected final String findPreferenceByUserIdQuery;
 	protected final String findByTeachinStatusQuery;
 	protected final String findByKeyQuery;
 	protected final String findRoomStatByRoomIdQuery;
@@ -167,6 +171,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String saveRegionQuery;
 	protected final String saveCityQuery;
 	protected final String saveBuildingQuery;
+	protected final String savePreferenceQuery;
 	protected final String saveTeachinSensorQuery;
 	protected final String saveTeachinStatusQuery;
 	protected final String saveRoomDailyQuery;
@@ -190,6 +195,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String updateRegionQuery;
 	protected final String updateCityQuery;
 	protected final String updateBuildingQuery;
+	protected final String updatePreferenceQuery;
 	protected final String updateTeachinStatusQuery;
 	protected final String updateTeachinDateQuery;
 	protected final String updateAlertQuery;
@@ -236,6 +242,7 @@ public abstract class DataRepository<T extends Data>
 		findByRegionIdQuery = String.format(FIND_REGION_DTO_BY_COL_ID_TEMPLATE, getTableName());
 		findByCityIdQuery = String.format(FIND_CITY_DTO_BY_COL_ID_TEMPLATE, getTableName());
 		findByBuildingIdQuery = String.format(FIND_BUILDING_DTO_BY_COL_ID_TEMPLATE, getTableName());
+		findPreferenceByUserIdQuery = String.format(FIND_PREFERENCE_BY_USER_ID_TEMPLATE, getTableName(), getColName());
 		findByTeachinStatusQuery = String.format(FIND_BY_TEACHIN_STATUS_TEMPLATE, getTableName());
 		findByKeyQuery = String.format(FIND_BY_COL_KEY_TEMPLATE, getTableName());
 		findRoomStatByRoomIdQuery = String.format(FIND_ROOMSTAT_BY_ROOMID_TEMPLATE, getTableName());
@@ -272,6 +279,7 @@ public abstract class DataRepository<T extends Data>
 		saveRegionQuery = String.format(CREATE_REGION_TEMPLATE, getTableName());
 		saveCityQuery = String.format(CREATE_CITY_TEMPLATE, getTableName());
 		saveBuildingQuery = String.format(CREATE_BUILDING_TEMPLATE, getTableName());
+		savePreferenceQuery = String.format(CREATE_PREFERENCE_TEMPLATE, getTableName());
 		saveTeachinSensorQuery = String.format(CREATE_TEACHIN_SENSOR_TEMPLATE, getTableName());
 		saveTeachinStatusQuery = String.format(CREATE_TEACHIN_STATUS_TEMPLATE, getTableName());
 		saveRoomDailyQuery = String.format(CREATE_ROOMDAILY_TEMPLATE, getTableName());
@@ -295,6 +303,7 @@ public abstract class DataRepository<T extends Data>
 		updateRegionQuery = String.format(UPDATE_REGION_TEMPLATE, getTableName(), getColumnColName());
 		updateCityQuery = String.format(UPDATE_CITY_TEMPLATE, getTableName(), getColumnColName());
 		updateBuildingQuery = String.format(UPDATE_BUILDING_TEMPLATE, getTableName(), getColumnColName());
+		updatePreferenceQuery = String.format(UPDATE_PREFERENCE_TEMPLATE, getTableName(), getColumnColName());
 		updateTeachinStatusQuery = String.format(UPDATE_TEACHIN_STATUS_TEMPLATE, getTableName());
 		updateTeachinDateQuery = String.format(UPDATE_TEACHIN_DATE_TEMPLATE, getTableName());
 		updateAlertQuery = String.format(UPDATE_ALERT_TEMPLATE, getTableName());

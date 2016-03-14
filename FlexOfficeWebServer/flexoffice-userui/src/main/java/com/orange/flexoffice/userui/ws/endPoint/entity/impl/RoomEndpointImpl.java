@@ -19,9 +19,11 @@ import com.orange.flexoffice.userui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.RoomAlreadyUsedException;
+import com.orange.flexoffice.business.common.service.data.PreferenceUserManager;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.business.common.service.data.UserManager;
+import com.orange.flexoffice.dao.common.model.data.PreferencesDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
@@ -46,6 +48,8 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	@Autowired
 	private UserManager userManager;
 	@Autowired
+	private PreferenceUserManager preferencesManager;
+	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
 	
 	@Autowired
@@ -59,7 +63,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 * @see RoomSummary
 	 */
 	@Override
-	public List<RoomSummary> getRooms(String auth, Boolean latest, String countryId, String regionId, String cityId, String buildingId, String floor) {
+	public List<RoomSummary> getRooms(String auth, Boolean latest, String countryId, String regionId, String cityId, String buildingId, Integer floor) {
 		LOGGER.debug( "Begin call UserUi.RoomEndpoint.getRooms at: " + new Date() );
 		List<RoomDao> dataList = null;
 		
@@ -74,7 +78,30 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_34, Response.Status.UNAUTHORIZED));
 			}	
 		} else { // get rooms by criteria
-			dataList = roomManager.findRoomsByCriteria(countryId, regionId, cityId, buildingId, floor);
+				Long userId = null; // for save preferences of current user
+			try {
+				// get UserDto
+				UserDto data = userManager.findByUserAccessToken(auth);
+				userId = Long.valueOf(data.getId());
+				// find user preferences
+				PreferencesDao preferences = preferencesManager.findByUserId(userId);
+				if (countryId != null) { preferences.setCountryId(Long.valueOf(countryId)); } else { preferences.setCountryId(null);}
+				if (regionId != null) { preferences.setRegionId(Long.valueOf(regionId)); } else { preferences.setRegionId(null);}
+				if (cityId != null) { preferences.setCityId(Long.valueOf(cityId)); } else { preferences.setCityId(null);}
+				if (buildingId != null) { preferences.setBuildingId(Long.valueOf(buildingId)); } else { preferences.setBuildingId(null);}
+				if (floor != null) { preferences.setFloor(Long.valueOf(floor)); } else { preferences.setFloor(null);}
+				// update user preferences
+				preferencesManager.update(preferences);
+			} catch (AuthenticationException e){
+				LOGGER.debug("AuthenticationException in UserUi.RoomEndpoint.getRooms with message :", e);
+			} catch (DataNotExistsException ex) {
+				LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.getRooms with message :", ex);
+				// save user preferences
+				preferencesManager.save(countryId, regionId, cityId, buildingId, floor, userId);
+			} finally {
+				// get rooms by criteria
+				dataList = roomManager.findRoomsByCriteria(countryId, regionId, cityId, buildingId, floor);
+			}
 		}
 
 		List<RoomSummary> roomList = new ArrayList<RoomSummary>();

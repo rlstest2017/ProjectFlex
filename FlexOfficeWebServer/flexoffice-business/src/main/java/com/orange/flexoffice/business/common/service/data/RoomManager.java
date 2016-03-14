@@ -30,7 +30,7 @@ public interface RoomManager {
 	 * @param floor
 	 * @return
 	 */
-	List<RoomDao> findRoomsByCriteria(String countryId, String regionId, String cityId, String buildingId, String floor);
+	List<RoomDao> findRoomsByCriteria(String countryId, String regionId, String cityId, String buildingId, Integer floor);
 	
 	/**
 	 * findLatestReservedRoomsByUserId

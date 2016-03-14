@@ -46,7 +46,7 @@ public interface RoomEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	List<RoomSummary> getRooms(@HeaderParam(TOKEN_HEADER_PARAM) String auth, @QueryParam(LATEST_PARAM) Boolean latest, @QueryParam(COUNTRY_ID_PARAM) String countryId
-			, @QueryParam(REGION_ID_PARAM) String regionId, @QueryParam(CITY_ID_PARAM) String cityId, @QueryParam(BUILDING_ID_PARAM) String buildingId, @QueryParam(FLOOR_PARAM) String floor);
+			, @QueryParam(REGION_ID_PARAM) String regionId, @QueryParam(CITY_ID_PARAM) String cityId, @QueryParam(BUILDING_ID_PARAM) String buildingId, @QueryParam(FLOOR_PARAM) Integer floor);
 
 	/**
 	 * Gets information on a specific room.
