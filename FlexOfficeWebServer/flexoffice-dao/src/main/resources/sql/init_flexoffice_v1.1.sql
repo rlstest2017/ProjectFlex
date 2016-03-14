@@ -34,10 +34,10 @@ CREATE TABLE preferences (
     floor integer
 );
 
-INSERT INTO countries (name) VALUES ('France');
-INSERT INTO regions (name) VALUES ('Bretagne');
-INSERT INTO cities (name) VALUES ('Rennes');
-INSERT INTO buildings (name, nb_floors) VALUES ('Châtegneraie', 2); 
+INSERT INTO countries (name) VALUES ('Country 1');
+INSERT INTO regions (name) VALUES ('Region 1');
+INSERT INTO cities (name) VALUES ('City 1');
+INSERT INTO buildings (name, nb_floors) VALUES ('building 1', 1); 
 
 ALTER TABLE ONLY countries
     ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
