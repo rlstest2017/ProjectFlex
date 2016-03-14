@@ -85,11 +85,9 @@
 			<xsd:element name="id" type="xsd:string"/>
 			<xsd:element name="name" type="xsd:string"/>
 			<xsd:element name="type" type="e-roomType"/>
-			<xsd:element name="address" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="capacity" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="status" type="e-roomStatus" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="tenantName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-
 		</xsd:sequence>
 	</xsd:complexType>
 	
