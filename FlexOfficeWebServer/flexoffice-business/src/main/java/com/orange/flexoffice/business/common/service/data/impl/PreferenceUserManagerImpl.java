@@ -1,7 +1,5 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -13,7 +11,6 @@ import com.orange.flexoffice.business.common.exception.IntegrityViolationExcepti
 import com.orange.flexoffice.business.common.service.data.PreferenceUserManager;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.PreferencesDao;
-import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.PreferencesDaoRepository;
@@ -78,8 +75,8 @@ public class PreferenceUserManagerImpl implements PreferenceUserManager {
 		boolean isExplorerEnabled = false;
 		ConfigurationDao nbRooms = configRepository.findByKey(E_ConfigurationKey.THRESHOLD_ENABLED_ADVANCEDRESEARCH_OF_ROOMS.toString());
 		String nbRoomsValue = nbRooms.getValue();
-		List<RoomDao> rooms = roomRepository.findAllRooms();
-		if (rooms.size() > Long.valueOf(nbRoomsValue)) {
+		Long rooms = roomRepository.count();
+		if (rooms > Long.valueOf(nbRoomsValue)) {
 			isExplorerEnabled = true;
 		}
 		return isExplorerEnabled;
