@@ -49,4 +49,6 @@ public interface PreferenceUserManager {
 	 */
 	void delete(long id) throws DataNotExistsException, IntegrityViolationException;
 
+	boolean useLocationExplorer();
+	
 }

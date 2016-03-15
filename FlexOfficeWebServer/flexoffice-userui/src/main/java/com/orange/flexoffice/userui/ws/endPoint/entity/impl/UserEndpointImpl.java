@@ -218,6 +218,7 @@ public class UserEndpointImpl implements UserEndpoint {
 	 */
 	private UserContext getUserContext(long userId) {
 		UserContext userContext = factory.createUserContext();
+		userContext.setUseLocationExplorer(preferenceManager.useLocationExplorer());
 		try {
 		PreferencesDao preferences =preferenceManager.findByUserId(userId);
 		UserPreferences userPref = factory.createUserPreferences();

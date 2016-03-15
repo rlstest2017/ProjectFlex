@@ -73,6 +73,8 @@ ALTER TABLE rooms
 	DROP CONSTRAINT rooms_name_key,
 	ADD CONSTRAINT rooms_unique_key UNIQUE (name, building_id);
 
+INSERT INTO configuration ("key", "value", description) VALUES
+    ('THRESHOLD_ENABLED_ADVANCEDRESEARCH_OF_ROOMS', '20', 'more than this parameter value, the advanced research of rooms is activated');
 
 
 
