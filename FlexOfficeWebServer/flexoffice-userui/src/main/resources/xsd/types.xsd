@@ -68,7 +68,7 @@
 			<xsd:element name="country" type="LocationItem" />
 			<xsd:element name="region" type="LocationItem" />
 			<xsd:element name="city" type="LocationItem" />
-			<xsd:element name="buildig" type="LocationItem" />
+			<xsd:element name="building" type="LocationItem" />
 			<xsd:element name="floor" type="xsd:integer" />
 		</xsd:sequence>
 	</xsd:complexType>

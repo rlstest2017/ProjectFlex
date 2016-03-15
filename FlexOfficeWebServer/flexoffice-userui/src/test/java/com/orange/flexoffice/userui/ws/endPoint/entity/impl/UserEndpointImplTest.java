@@ -18,8 +18,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Log4jConfigurer;
 
 import com.orange.flexoffice.userui.ws.endPoint.entity.UserEndpoint;
+import com.orange.flexoffice.userui.ws.model.User;
 import com.orange.flexoffice.userui.ws.model.UserInput;
-import com.orange.flexoffice.userui.ws.model.UserSummary;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserEndpointImplTest {
@@ -67,7 +67,7 @@ public class UserEndpointImplTest {
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		
 		// Test
-		UserSummary user = userEndpoint.getUserCurrent(token);
+		User user = userEndpoint.getUserCurrent(token);
 
 		// Asserts
 		assertEquals("first.last5@test.com:test", user.getEmail());
@@ -80,7 +80,7 @@ public class UserEndpointImplTest {
 		String token = "Zmlyc3QubGFzdDFAdGVzdC5jb206cGFzczoxNDQ4NjEzNjU2MDk4";
 		
 		// Test
-		UserSummary user = userEndpoint.getUserCurrent(token);
+		User user = userEndpoint.getUserCurrent(token);
 
 		// Asserts
 		assertEquals("first.last1@test.com:pass", user.getEmail());

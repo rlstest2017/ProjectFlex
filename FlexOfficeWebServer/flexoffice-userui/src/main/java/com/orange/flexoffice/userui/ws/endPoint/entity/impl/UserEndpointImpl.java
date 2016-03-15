@@ -1,5 +1,6 @@
 package com.orange.flexoffice.userui.ws.endPoint.entity.impl;
 
+import java.math.BigInteger;
 import java.security.InvalidParameterException;
 import java.util.Date;
 
@@ -12,18 +13,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.userui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.userui.ws.model.Token;
+import com.orange.flexoffice.userui.ws.model.User;
+import com.orange.flexoffice.userui.ws.model.UserContext;
 import com.orange.flexoffice.userui.ws.model.UserInput;
+import com.orange.flexoffice.userui.ws.model.UserPreferences;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.business.common.service.data.BuildingManager;
+import com.orange.flexoffice.business.common.service.data.CityManager;
+import com.orange.flexoffice.business.common.service.data.CountryManager;
+import com.orange.flexoffice.business.common.service.data.PreferenceUserManager;
+import com.orange.flexoffice.business.common.service.data.RegionManager;
 import com.orange.flexoffice.business.common.service.data.SystemManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.business.common.service.data.UserManager;
+import com.orange.flexoffice.dao.common.model.data.CountryDao;
+import com.orange.flexoffice.dao.common.model.data.PreferencesDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
+import com.orange.flexoffice.dao.common.model.object.BuildingDto;
+import com.orange.flexoffice.dao.common.model.object.CityDto;
+import com.orange.flexoffice.dao.common.model.object.RegionDto;
 import com.orange.flexoffice.dao.common.model.object.UserDto;
 import com.orange.flexoffice.userui.ws.endPoint.entity.UserEndpoint;
+import com.orange.flexoffice.userui.ws.model.LocationItem;
 import com.orange.flexoffice.userui.ws.model.ObjectFactory;
-import com.orange.flexoffice.userui.ws.model.UserSummary;
-
 
 /**
  * UserEndpointImpl
@@ -42,54 +55,57 @@ public class UserEndpointImpl implements UserEndpoint {
 	
 	@Autowired
 	private UserManager userManager;
-
+	@Autowired
+	private PreferenceUserManager preferenceManager;
+	@Autowired
+	private CountryManager countryManager;
+	@Autowired
+	private RegionManager regionManager;
+	@Autowired
+	private CityManager cityManager;
+	@Autowired
+	private BuildingManager buildingManager;
 	@Autowired
 	private SystemManager systemManager;
-	
 	@Autowired
 	private TestManager testManager;
-
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
 	
 	@Override
-	public UserSummary getUserCurrent(String auth) {
+	public User getUserCurrent(String auth) {
 		LOGGER.debug( "Begin call UserUi.UserEndpoint.getUserCurrent at: " + new Date() );
 
 		try {
 			UserDto data = userManager.findByUserAccessToken(auth);
 
-			UserSummary userSummary = factory.createUserSummary();
-			userSummary.setId(data.getId().toString());
-			userSummary.setEmail(data.getEmail());
+			User user = factory.createUser();
+			user.setId(data.getId());
+			user.setEmail(data.getEmail());
 			
 			if (data.getFirstName() != null) {
-				userSummary.setFirstName(data.getFirstName());
+				user.setFirstName(data.getFirstName());
 			} else {
 				data.setFirstName("");
 			}
 			
 			if (data.getLastName() != null) {
-				userSummary.setLastName(data.getLastName());
+				user.setLastName(data.getLastName());
 			} else {
 				data.setLastName("");
 			}
 			
 			if (data.getRoomId() != null) {
-				userSummary.setRoomId(data.getRoomId());
-			}
-
-			// label field
-			String label = data.getFirstName() + " " + data.getLastName();
-			if (label.trim().isEmpty()) {
-				label = data.getEmail();
+				user.setRoomId(data.getRoomId());
 			}
 			
-			userSummary.setLabel(label.trim());
+			// add context
+			user.setContext(getUserContext(Long.valueOf(data.getId())));
+			
 			
 			LOGGER.debug( "End call UserEndpoint.getUser at: " + new Date() );
 
-			return factory.createUserSummary(userSummary).getValue();
+			return factory.createUser(user).getValue();
 
 		} catch (AuthenticationException e){
 			LOGGER.debug("DataNotExistsException in UserUi.UserEndpoint.getUserCurrent with message :", e);
@@ -169,15 +185,10 @@ public class UserEndpointImpl implements UserEndpoint {
 		}
 	}
 
-
-
 	@Override
 	public Response logout(String token) {
-		
 		systemManager.processLogout(token);
-		
 		return Response.status(200).build();
-        
 	}
 
 	@Override
@@ -200,4 +211,51 @@ public class UserEndpointImpl implements UserEndpoint {
 		return testManager.executeInitTestFile();
 	}
 
+	/**
+	 * getUserContext
+	 * @param userId
+	 * @return
+	 */
+	private UserContext getUserContext(long userId) {
+		UserContext userContext = factory.createUserContext();
+		try {
+		PreferencesDao preferences =preferenceManager.findByUserId(userId);
+		UserPreferences userPref = factory.createUserPreferences();
+			if (preferences.getCountryId()!=null) {
+				LocationItem countryItem = factory.createLocationItem();
+				CountryDao country = countryManager.find(preferences.getCountryId());
+				countryItem.setId(country.getColumnId());
+				countryItem.setName(country.getName());
+				userPref.setCountry(countryItem);
+			}
+			if (preferences.getRegionId()!=null) {
+				LocationItem regionItem = factory.createLocationItem();
+				RegionDto region = regionManager.find(preferences.getRegionId());
+				regionItem.setId(region.getId().toString());
+				regionItem.setName(region.getName());
+				userPref.setRegion(regionItem);
+			}
+			if (preferences.getCityId()!=null) {
+				LocationItem cityItem = factory.createLocationItem();
+				CityDto city = cityManager.find(preferences.getCityId());
+				cityItem.setId(city.getId().toString());
+				cityItem.setName(city.getName());
+				userPref.setCity(cityItem);
+			}
+			if (preferences.getBuildingId()!=null) {
+				LocationItem buildingItem = factory.createLocationItem();
+				BuildingDto building = buildingManager.find(preferences.getBuildingId());
+				buildingItem.setId(building.getId().toString());
+				buildingItem.setName(building.getName());
+				userPref.setBuilding(buildingItem);
+				userPref.setFloor(BigInteger.valueOf(preferences.getFloor()));
+			}
+			userContext.setUserPreferences(userPref);
+		} catch (DataNotExistsException e) {
+			LOGGER.debug("DataNotExistsException in getUserContext().");	
+		}
+		
+		return userContext;
+	}
+	
 }

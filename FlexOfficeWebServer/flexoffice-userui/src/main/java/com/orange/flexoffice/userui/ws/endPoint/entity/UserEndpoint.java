@@ -20,8 +20,8 @@ import static com.orange.flexoffice.userui.ws.PathConst.LOGIN_PATH;
 import static com.orange.flexoffice.userui.ws.PathConst.LOGOUT_PATH;
 import static com.orange.flexoffice.userui.ws.PathConst.CURRENT_PATH;
 
+import com.orange.flexoffice.userui.ws.model.User;
 import com.orange.flexoffice.userui.ws.model.UserInput;
-import com.orange.flexoffice.userui.ws.model.UserSummary;
 
 /**
  * Defines all operations available for a resource "user".
@@ -39,7 +39,7 @@ public interface UserEndpoint {
 	@GET
 	@Path(USER_PATH + CURRENT_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
-	UserSummary getUserCurrent(@HeaderParam(TOKEN_HEADER_PARAM) String auth);
+	User getUserCurrent(@HeaderParam(TOKEN_HEADER_PARAM) String auth);
 	
 	/**
 	 * Get accessToken.

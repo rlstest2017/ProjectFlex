@@ -97,7 +97,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			} catch (DataNotExistsException ex) {
 				LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.getRooms with message :", ex);
 				// save user preferences
-				preferencesManager.save(countryId, regionId, cityId, buildingId, floor, userId);
+				if (countryId != null || regionId != null || cityId != null || buildingId != null) {
+					preferencesManager.save(countryId, regionId, cityId, buildingId, floor, userId);
+				}
 			} finally {
 				// get rooms by criteria
 				dataList = roomManager.findRoomsByCriteria(countryId, regionId, cityId, buildingId, floor);
