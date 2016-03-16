@@ -35,6 +35,7 @@ import com.orange.flexoffice.dao.common.model.object.CityDto;
 import com.orange.flexoffice.dao.common.model.object.RegionDto;
 import com.orange.flexoffice.dao.common.model.object.UserDto;
 import com.orange.flexoffice.userui.ws.endPoint.entity.UserEndpoint;
+import com.orange.flexoffice.userui.ws.model.ELocationItemType;
 import com.orange.flexoffice.userui.ws.model.LocationItem;
 import com.orange.flexoffice.userui.ws.model.ObjectFactory;
 
@@ -227,6 +228,7 @@ public class UserEndpointImpl implements UserEndpoint {
 				CountryDao country = countryManager.find(preferences.getCountryId());
 				countryItem.setId(country.getColumnId());
 				countryItem.setName(country.getName());
+				countryItem.setType(ELocationItemType.COUNTRY);
 				userPref.setCountry(countryItem);
 			}
 			if (preferences.getRegionId()!=null) {
@@ -234,6 +236,7 @@ public class UserEndpointImpl implements UserEndpoint {
 				RegionDto region = regionManager.find(preferences.getRegionId());
 				regionItem.setId(region.getId().toString());
 				regionItem.setName(region.getName());
+				regionItem.setType(ELocationItemType.REGION);
 				userPref.setRegion(regionItem);
 			}
 			if (preferences.getCityId()!=null) {
@@ -241,6 +244,7 @@ public class UserEndpointImpl implements UserEndpoint {
 				CityDto city = cityManager.find(preferences.getCityId());
 				cityItem.setId(city.getId().toString());
 				cityItem.setName(city.getName());
+				cityItem.setType(ELocationItemType.CITY);
 				userPref.setCity(cityItem);
 			}
 			if (preferences.getBuildingId()!=null) {

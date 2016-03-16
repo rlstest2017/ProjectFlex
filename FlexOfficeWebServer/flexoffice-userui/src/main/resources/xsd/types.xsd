@@ -8,7 +8,6 @@
 	 	<xsd:enumeration value="VIDEO_CONF"/>
 	 </xsd:restriction>
 	</xsd:simpleType>
-	
 	<xsd:simpleType name="e-roomStatus">
 	 <xsd:restriction base="xsd:string">
 	 	<xsd:enumeration value="UNKNOWN"/>
@@ -17,15 +16,23 @@
 	 	<xsd:enumeration value="OCCUPIED"/>
 	 </xsd:restriction>
 	</xsd:simpleType>
+	<xsd:simpleType name="e-locationItemType">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="COUNTRY"/>
+	 	<xsd:enumeration value="REGION"/>
+	 	<xsd:enumeration value="CITY"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
 	
 	<!-- Location -->
 	<xsd:complexType name="LocationItem">
 		<xsd:sequence>
 			<xsd:element name="id" type="xsd:string"/>
 			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="type" type="e-locationItemType"/>
 		</xsd:sequence>
 	</xsd:complexType>
-
+	
 	<!-- Building -->
 	<xsd:complexType name="BuildingItem">
 		<xsd:sequence>

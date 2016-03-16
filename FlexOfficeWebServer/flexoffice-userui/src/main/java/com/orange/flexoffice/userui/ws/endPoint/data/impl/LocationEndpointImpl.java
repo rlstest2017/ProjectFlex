@@ -19,6 +19,7 @@ import com.orange.flexoffice.dao.common.model.data.CountryDao;
 import com.orange.flexoffice.dao.common.model.data.RegionDao;
 import com.orange.flexoffice.userui.ws.endPoint.data.LocationEndpoint;
 import com.orange.flexoffice.userui.ws.model.BuildingItem;
+import com.orange.flexoffice.userui.ws.model.ELocationItemType;
 import com.orange.flexoffice.userui.ws.model.LocationItem;
 import com.orange.flexoffice.userui.ws.model.ObjectFactory;
 
@@ -52,6 +53,7 @@ public class LocationEndpointImpl implements LocationEndpoint {
 			LocationItem country = factory.createLocationItem();
 			country.setId(countryDao.getId().toString());
 			country.setName(countryDao.getName());
+			country.setType(ELocationItemType.COUNTRY);
 			countryList.add(country);
 		}
 		LOGGER.debug("List of countries have rooms : nb = " + countryList.size());
@@ -68,6 +70,7 @@ public class LocationEndpointImpl implements LocationEndpoint {
 			LocationItem region = factory.createLocationItem();
 			region.setId(regionDao.getId().toString());
 			region.setName(regionDao.getName());
+			region.setType(ELocationItemType.REGION);
 			regionList.add(region);
 		}
 		LOGGER.debug("List of regions have rooms : nb = " + regionList.size());
@@ -84,6 +87,7 @@ public class LocationEndpointImpl implements LocationEndpoint {
 			LocationItem city = factory.createLocationItem();
 			city.setId(cityDto.getId().toString());
 			city.setName(cityDto.getName());
+			city.setType(ELocationItemType.CITY);
 			cityList.add(city);
 		}
 		LOGGER.debug("List of cities have rooms : nb = " + cityList.size());
