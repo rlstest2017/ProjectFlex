@@ -17,6 +17,7 @@ import com.orange.flexoffice.dao.common.model.data.BuildingDao;
 import com.orange.flexoffice.dao.common.model.object.BuildingDto;
 import com.orange.flexoffice.dao.common.model.object.BuildingSummaryDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.BuildingDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.PreferencesDaoRepository;
 
 /**
  * Manages {@link BuildingSummaryDto}.
@@ -32,6 +33,8 @@ public class BuildingManagerImpl implements BuildingManager {
 
 	@Autowired
 	private BuildingDaoRepository buildingRepository;
+	@Autowired
+	private PreferencesDaoRepository preferenceRepository;
 
 	@Override
 	public List<BuildingSummaryDto> findAllBuildings() {
@@ -83,6 +86,7 @@ public class BuildingManagerImpl implements BuildingManager {
 		try {
 			buildingRepository.findOne(buildingId);
 			buildingRepository.delete(buildingId);
+			preferenceRepository.deleteByBuildingId(buildingId);
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("Building by id " + buildingId + " is not found", e);
 			LOGGER.error("Building by id " + buildingId + " is not found");

@@ -19,7 +19,6 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.Preference
 @Repository
 public class PreferencesDaoRepository extends DataRepository<PreferencesDao> implements PreferencesDaoOperations {
 
-	
 	public PreferencesDaoRepository() {
 		super(PreferencesDao.class);
 	}
@@ -34,7 +33,6 @@ public class PreferencesDaoRepository extends DataRepository<PreferencesDao> imp
 			);
 	}
 
-
 	@Override
 	public PreferencesDao savePreferences(PreferencesDao data) throws DataIntegrityViolationException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -46,7 +44,6 @@ public class PreferencesDaoRepository extends DataRepository<PreferencesDao> imp
 		return data;
 	}
 
-
 	@Override
 	public PreferencesDao updatePreferences(PreferencesDao data) throws DataAccessException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -57,7 +54,31 @@ public class PreferencesDaoRepository extends DataRepository<PreferencesDao> imp
 		data.setId(id.longValue());	
 		return data;
 	}
-	
+
+	@Override
+	public void deleteByCountryId(long countryId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("countryId", countryId);
+		jdbcTemplate.update(deletePrefByCountryIdQuery, paramMap);
+	}
+
+	@Override
+	public void deleteByRegionId(long regionId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("regionId", regionId);
+		jdbcTemplate.update(deletePrefByRegionIdQuery, paramMap);
+	}
+
+	@Override
+	public void deleteByCityId(long cityId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("cityId", cityId);
+		jdbcTemplate.update(deletePrefByCityIdQuery, paramMap);
+	}
+
+	@Override
+	public void deleteByBuildingId(long buildingId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("buildingId", buildingId);
+		jdbcTemplate.update(deletePrefByBuildingIdQuery, paramMap);
+	}
+
 	@Override
 	protected String getTableName() {
 		return PreferenceDaoMetadata.PREFERENCE_TABLE_NAME;
@@ -72,6 +93,5 @@ public class PreferencesDaoRepository extends DataRepository<PreferencesDao> imp
 	protected String getColName() {
 		return PreferenceDaoMetadata.PREFERENCE_USER_ID_COL;
 	}
-
 	
 }

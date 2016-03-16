@@ -16,6 +16,7 @@ import com.orange.flexoffice.business.common.service.data.RegionManager;
 import com.orange.flexoffice.dao.common.model.data.RegionDao;
 import com.orange.flexoffice.dao.common.model.object.RegionDto;
 import com.orange.flexoffice.dao.common.model.object.RegionSummaryDto;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.PreferencesDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RegionDaoRepository;
 
 /**
@@ -32,6 +33,8 @@ public class RegionManagerImpl implements RegionManager {
 
 	@Autowired
 	private RegionDaoRepository regionRepository;
+	@Autowired
+	private PreferencesDaoRepository preferenceRepository;
 
 	@Override
 	public List<RegionSummaryDto> findAllRegions() {
@@ -73,6 +76,7 @@ public class RegionManagerImpl implements RegionManager {
 		try {
 			regionRepository.findOne(regionId);
 			regionRepository.delete(regionId);
+			preferenceRepository.deleteByRegionId(regionId);
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("region by id " + regionId + " is not found", e);
 			LOGGER.error("region by id " + regionId + " is not found");

@@ -19,4 +19,12 @@ public interface PreferencesDaoOperations {
 	
 	PreferencesDao updatePreferences(PreferencesDao data) throws DataAccessException; 
 	
+	void deleteByCountryId(long countryId);
+	
+	void deleteByRegionId(long regionId);
+	
+	void deleteByCityId(long cityId);
+	
+	void deleteByBuildingId(long buildingId);
+	
 }

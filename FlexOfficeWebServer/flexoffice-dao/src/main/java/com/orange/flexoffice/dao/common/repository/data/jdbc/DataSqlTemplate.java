@@ -100,6 +100,14 @@ public final class DataSqlTemplate {
 			"delete from %s where begin_occupancy_date<:date";
 	public static final String REMOVE_STAT_BY_ROOM_ID_TEMPLATE = 
 			"delete from %s where room_id =:roomId";
+	public static final String REMOVE_PREFERENCES_BY_COUNTRY_ID_TEMPLATE = 
+			"delete from %s where country_id =:countryId";
+	public static final String REMOVE_PREFERENCES_BY_REGION_ID_TEMPLATE = 
+			"delete from %s where region_id =:regionId";
+	public static final String REMOVE_PREFERENCES_BY_CITY_ID_TEMPLATE = 
+			"delete from %s where city_id =:cityId";
+	public static final String REMOVE_PREFERENCES_BY_BUILDING_ID_TEMPLATE = 
+			"delete from %s where building_id =:buildingId";
 	public static final String REMOVE_TEMPLATE = 
 			"delete from %s where id=:id";
 	public static final String REMOVE_ALL_TEMPLATE = 

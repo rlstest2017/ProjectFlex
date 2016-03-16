@@ -56,6 +56,10 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_DAY_ROOM_DAILY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_DATE_ROOM_STATS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_STAT_BY_ROOM_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_PREFERENCES_BY_COUNTRY_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_PREFERENCES_BY_REGION_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_PREFERENCES_BY_CITY_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_PREFERENCES_BY_BUILDING_ID_TEMPLATE;
 
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_RESERVED_ROOMSTAT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOMSTAT_BY_ID_TEMPLATE;
@@ -211,6 +215,10 @@ public abstract class DataRepository<T extends Data>
 	protected final String deleteByDayQuery;
 	protected final String deleteByBeginOccupancyDateQuery;
 	protected final String deleteByRoomId;
+	protected final String deletePrefByCountryIdQuery;
+	protected final String deletePrefByRegionIdQuery;
+	protected final String deletePrefByCityIdQuery;
+	protected final String deletePrefByBuildingIdQuery;
 	private   final String deleteQuery;
 	protected   final String deleteAllQuery;
 	// COUNT QUERIES --------------
@@ -323,6 +331,10 @@ public abstract class DataRepository<T extends Data>
 		deleteByDayQuery = String.format(REMOVE_BY_DAY_ROOM_DAILY_TEMPLATE, getTableName());
 		deleteByBeginOccupancyDateQuery = String.format(REMOVE_BY_DATE_ROOM_STATS_TEMPLATE, getTableName());
 		deleteByRoomId = String.format(REMOVE_STAT_BY_ROOM_ID_TEMPLATE, getTableName());
+		deletePrefByCountryIdQuery = String.format(REMOVE_PREFERENCES_BY_COUNTRY_ID_TEMPLATE, getTableName());
+		deletePrefByRegionIdQuery = String.format(REMOVE_PREFERENCES_BY_REGION_ID_TEMPLATE, getTableName());
+		deletePrefByCityIdQuery = String.format(REMOVE_PREFERENCES_BY_CITY_ID_TEMPLATE, getTableName());
+		deletePrefByBuildingIdQuery = String.format(REMOVE_PREFERENCES_BY_BUILDING_ID_TEMPLATE, getTableName());
 		
 		// COUNT QUERIES ----------------------------------------------------------------------
 		countQuery = String.format(COUNT_TEMPLATE, getTableName());

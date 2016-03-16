@@ -15,6 +15,7 @@ import com.orange.flexoffice.business.common.exception.IntegrityViolationExcepti
 import com.orange.flexoffice.business.common.service.data.CountryManager;
 import com.orange.flexoffice.dao.common.model.data.CountryDao;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.CountryDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.PreferencesDaoRepository;
 
 /**
  * Manages {@link CountryDao}.
@@ -30,7 +31,9 @@ public class CountryManagerImpl implements CountryManager {
 
 	@Autowired
 	private CountryDaoRepository countryRepository;
-
+	@Autowired
+	private PreferencesDaoRepository preferenceRepository;
+	
 	@Override
 	public List<CountryDao> findAllCountries() {
 		return countryRepository.findAllCountries();
@@ -81,6 +84,7 @@ public class CountryManagerImpl implements CountryManager {
 		try {
 			countryRepository.findOne(countryId);
 			countryRepository.delete(countryId);
+			preferenceRepository.deleteByCountryId(countryId);
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("country by id " + countryId + " is not found", e);
 			LOGGER.error("country by id " + countryId + " is not found");

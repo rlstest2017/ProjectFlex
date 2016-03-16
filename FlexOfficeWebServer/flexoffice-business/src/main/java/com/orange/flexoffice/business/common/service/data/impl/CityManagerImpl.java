@@ -17,6 +17,7 @@ import com.orange.flexoffice.dao.common.model.data.CityDao;
 import com.orange.flexoffice.dao.common.model.object.CityDto;
 import com.orange.flexoffice.dao.common.model.object.CitySummaryDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.CityDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.PreferencesDaoRepository;
 
 /**
  * Manages {@link CityDao}.
@@ -32,6 +33,8 @@ public class CityManagerImpl implements CityManager {
 
 	@Autowired
 	private CityDaoRepository cityRepository;
+	@Autowired
+	private PreferencesDaoRepository preferenceRepository;
 
 	@Override
 	public List<CitySummaryDto> findAllCities() {
@@ -83,6 +86,7 @@ public class CityManagerImpl implements CityManager {
 		try {
 			cityRepository.findOne(cityId);
 			cityRepository.delete(cityId);
+			preferenceRepository.deleteByCityId(cityId);
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("city by id " + cityId + " is not found", e);
 			LOGGER.error("city by id " + cityId + " is not found");
