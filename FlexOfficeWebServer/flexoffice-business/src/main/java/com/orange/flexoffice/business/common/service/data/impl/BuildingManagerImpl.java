@@ -85,8 +85,8 @@ public class BuildingManagerImpl implements BuildingManager {
 	public void delete(long buildingId) throws DataNotExistsException, IntegrityViolationException {
 		try {
 			buildingRepository.findOne(buildingId);
-			buildingRepository.delete(buildingId);
 			preferenceRepository.deleteByBuildingId(buildingId);
+			buildingRepository.delete(buildingId);
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("Building by id " + buildingId + " is not found", e);
 			LOGGER.error("Building by id " + buildingId + " is not found");

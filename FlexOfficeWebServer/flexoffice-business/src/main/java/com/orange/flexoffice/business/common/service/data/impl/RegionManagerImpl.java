@@ -75,8 +75,8 @@ public class RegionManagerImpl implements RegionManager {
 	public void delete(long regionId) throws DataNotExistsException, IntegrityViolationException {
 		try {
 			regionRepository.findOne(regionId);
-			regionRepository.delete(regionId);
 			preferenceRepository.deleteByRegionId(regionId);
+			regionRepository.delete(regionId);
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("region by id " + regionId + " is not found", e);
 			LOGGER.error("region by id " + regionId + " is not found");

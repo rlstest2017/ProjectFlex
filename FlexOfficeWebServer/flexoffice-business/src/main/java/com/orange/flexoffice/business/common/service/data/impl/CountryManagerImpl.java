@@ -83,8 +83,8 @@ public class CountryManagerImpl implements CountryManager {
 	public void delete(long countryId) throws DataNotExistsException, IntegrityViolationException {
 		try {
 			countryRepository.findOne(countryId);
-			countryRepository.delete(countryId);
 			preferenceRepository.deleteByCountryId(countryId);
+			countryRepository.delete(countryId);
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("country by id " + countryId + " is not found", e);
 			LOGGER.error("country by id " + countryId + " is not found");

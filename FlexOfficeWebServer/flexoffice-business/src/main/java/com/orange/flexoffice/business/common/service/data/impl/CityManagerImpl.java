@@ -85,8 +85,8 @@ public class CityManagerImpl implements CityManager {
 	public void delete(long cityId) throws DataNotExistsException, IntegrityViolationException {
 		try {
 			cityRepository.findOne(cityId);
-			cityRepository.delete(cityId);
 			preferenceRepository.deleteByCityId(cityId);
+			cityRepository.delete(cityId);
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("city by id " + cityId + " is not found", e);
 			LOGGER.error("city by id " + cityId + " is not found");
