@@ -84,9 +84,9 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 	public BuildingItem addBuilding(BuildingInput building) {
 		LOGGER.debug( "Begin call ConfigurationEndpoint.addBuilding at: " + new Date() );
 		try {
-			if (building.getAddress() == null || building.getNbFloors() == null) { // cityId & name are checked by postgresDB engine
-				LOGGER.debug("Parameters address or nbFloors are null ");
-				throw new InvalidParametersException("Parameters address or nbFloors are null");
+			if (building.getNbFloors() == null) { // cityId & name are checked by postgresDB engine
+				LOGGER.debug("Parameter nbFloors is null");
+				throw new InvalidParametersException("Parameter nbFloors is null");
 			}
 			return buildingHandler.addBuilding(building);
 		} catch (DataAlreadyExistsException e) {
@@ -107,9 +107,9 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 	public Response updateBuilding(String id, BuildingInput building) {
 		LOGGER.debug( "Begin call ConfigurationEndpoint.updateBuilding at: " + new Date() );
 		try {
-			if (building.getAddress() == null || building.getNbFloors() == null) { // cityId & name are checked by postgresDB engine
-				LOGGER.debug("Parameters address or nbFloors are null");
-				throw new InvalidParametersException("Parameters address or nbFloors are null");
+			if (building.getNbFloors() == null) { // cityId & name are checked by postgresDB engine
+				LOGGER.debug("Parameter nbFloors is null");
+				throw new InvalidParametersException("Parameter nbFloors is null");
 			}
 			return buildingHandler.updateBuilding(id, building);
 		} catch (DataNotExistsException e){

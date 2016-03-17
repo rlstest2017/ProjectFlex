@@ -7,21 +7,21 @@ CREATE TABLE countries (
 CREATE TABLE regions (
     id serial NOT NULL,
     name character varying(100) NOT NULL,
-    country_id integer
+    country_id integer NOT NULL
 );
 
 CREATE TABLE cities (
     id serial NOT NULL,
     name character varying(100) NOT NULL,
-    region_id integer
+    region_id integer NOT NULL
 );
 
 CREATE TABLE buildings (
     id serial NOT NULL,
     name character varying(100) NOT NULL,
     address character varying(255),
-    city_id integer,
-    nb_floors integer
+    city_id integer NOT NULL,
+    nb_floors integer NOT NULL
 );
 
 CREATE TABLE preferences (
@@ -35,9 +35,9 @@ CREATE TABLE preferences (
 );
 
 INSERT INTO countries (name) VALUES ('Country 1');
-INSERT INTO regions (name) VALUES ('Region 1');
-INSERT INTO cities (name) VALUES ('City 1');
-INSERT INTO buildings (name, nb_floors) VALUES ('building 1', 1); 
+INSERT INTO regions (name, country_id) VALUES ('Region 1', 1);
+INSERT INTO cities (name, region_id) VALUES ('City 1', 1);
+INSERT INTO buildings (name, city_id, nb_floors) VALUES ('Building 1', 1, 10); 
 
 ALTER TABLE ONLY countries
     ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
