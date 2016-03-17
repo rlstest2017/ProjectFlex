@@ -252,6 +252,7 @@ public class UserEndpointImpl implements UserEndpoint {
 				BuildingDto building = buildingManager.find(preferences.getBuildingId());
 				buildingItem.setId(building.getId().toString());
 				buildingItem.setName(building.getName());
+				buildingItem.setType(ELocationItemType.BUILDING);
 				userPref.setBuilding(buildingItem);
 				userPref.setFloor(BigInteger.valueOf(preferences.getFloor()));
 			}

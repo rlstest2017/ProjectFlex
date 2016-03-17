@@ -403,8 +403,8 @@
 			<xsd:element name="status" type="e-roomStatus"/>
 			<xsd:element name="tenant" type="UserSummary"/>
 			<xsd:element name="location" type="Location"/>
-			<xsd:element name="temperature" type="xsd:double"/>
-			<xsd:element name="humidity" type="xsd:double"/>
+			<xsd:element name="temperature" type="xsd:string"/>
+			<xsd:element name="humidity" type="xsd:string"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	

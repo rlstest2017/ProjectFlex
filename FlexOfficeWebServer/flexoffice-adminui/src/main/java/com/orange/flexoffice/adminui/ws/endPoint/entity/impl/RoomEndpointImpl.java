@@ -1,6 +1,7 @@
 package com.orange.flexoffice.adminui.ws.endPoint.entity.impl;
 
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -134,10 +135,10 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
 			room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
 			if (roomDto.getTemperature() != null) {
-				room.setTemperature(roomDto.getTemperature());
+				room.setTemperature(formatDisplay(roomDto.getTemperature()));
 			}
 			if (roomDto.getHumidity() != null) {
-				room.setHumidity(roomDto.getHumidity());
+				room.setHumidity(formatDisplay(roomDto.getHumidity()));
 			}
 			
 			BuildingDto buidingDto = buildingManager.find(Long.valueOf(roomDto.getBuildingId()));
@@ -449,5 +450,14 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		return tenant;
 	}
 	
+	/**
+	 * formatDisplay
+	 * @param param
+	 * @return
+	 */
+	private String formatDisplay(Double param) {
+		DecimalFormat df = new DecimalFormat("0.00"); 
+		return df.format(param);
+	}
 
 }
