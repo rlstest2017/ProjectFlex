@@ -56,7 +56,8 @@ public interface StatEndpoint {
 	@GET
     @Path(EXPORT_PATH)
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    Response getFile();
+	//Response[] getFile();
+	Response getFile();
 	
 	// used for tests
 	boolean getTestFile();

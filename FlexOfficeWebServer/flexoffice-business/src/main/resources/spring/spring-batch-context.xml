@@ -45,7 +45,7 @@
 			<!-- An Aggregator which converts an object into delimited list of strings -->
 			<bean
 				class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
-				<property name="delimiter" value="," />
+				<property name="delimiter" value=";" />
 				<property name="fieldExtractor">
 					<!-- Extractor which returns the value of beans property through reflection -->
 					<bean

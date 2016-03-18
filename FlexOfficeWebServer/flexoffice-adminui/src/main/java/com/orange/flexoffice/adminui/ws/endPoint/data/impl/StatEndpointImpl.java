@@ -140,6 +140,8 @@ public class StatEndpointImpl implements StatEndpoint {
 		           "attachment; filename=\"export_stats.csv\"");
 		    
 			return response.build();
+		    //Response[] table = {response.build()};
+		   //return table; 
 			
 		} catch (JobExecutionException e) {
 			LOGGER.info("Job ExportStat failed");

@@ -14,7 +14,6 @@ public class ExportStatFlatFileWriter implements FlatFileHeaderCallback {
 
 	@Override
 	public void writeHeader(Writer writer) throws IOException {
-        writer.write("Room name, Room type, Date begin occupancy, Date end occupancy");
-		
+        writer.write("Room name; Room type; Date begin occupancy; Date end occupancy");
 	}
 }
