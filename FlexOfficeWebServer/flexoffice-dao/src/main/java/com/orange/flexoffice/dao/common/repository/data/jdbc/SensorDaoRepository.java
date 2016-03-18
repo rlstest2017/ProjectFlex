@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
+import com.orange.flexoffice.dao.common.model.object.SensorTypeAndRoomDto;
 import com.orange.flexoffice.dao.common.repository.data.SensorDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.SensorDaoMetadata;
 
@@ -137,6 +138,16 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 		jdbcTemplate.update(deleteByIdentifier, paramMap);	
 	}
 
+	@Override
+	public Long countByTypeAndRoomId(SensorTypeAndRoomDto data) {
+		SqlParameterSource paramMap = new BeanPropertySqlParameterSource(data);
+		return jdbcTemplate.queryForObject(
+				countSensorsByTypeAndRoomIdQuery, 
+				paramMap, 
+				Long.class
+			);
+	}
+	
 	@Override
 	protected String getTableName() {
 		return SensorDaoMetadata.SENSOR_TABLE_NAME;

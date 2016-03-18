@@ -1,4 +1,4 @@
-Room name, Room type, Date begin occupancy, Date end occupancy
+Room name; Room type; Date begin occupancy; Date end occupancy
 room 3,BOX,2015-12-08 18:56:25.620506,2015-12-08 18:59:35.164569
 room 2,VIDEO_CONF,2015-12-09 09:20:32.676828,2015-12-09 09:34:26.852377
 room 1,BOX,2016-01-19 07:04:35.051909,2016-01-19 07:07:43.4994

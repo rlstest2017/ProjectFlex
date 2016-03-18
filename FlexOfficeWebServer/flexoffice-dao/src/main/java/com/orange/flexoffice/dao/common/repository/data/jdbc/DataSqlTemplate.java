@@ -114,6 +114,8 @@ public final class DataSqlTemplate {
 			"delete from %s";
 	public static final String COUNT_TEMPLATE =
 			"select count(id) from %s";
+	public static final String COUNT_SENSORS_BY_TYPE_AND_ROOM_ID_TEMPLATE =
+			"select count(id) from %s where type=CAST(:type AS sensortype) and room_id=:roomId";
 	public static final String COUNT_ACTIVE_USERS_TEMPLATE =
 			"select count(id) from %s where last_connection_date >:lastConnexionDate";
 	public static final String COUNT_ROOM_BY_TYPE_TEMPLATE =

@@ -1,6 +1,7 @@
 package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_SENSORS_BY_TYPE_AND_ROOM_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_ACTIVE_USERS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_ROOM_BY_TYPE_TEMPLATE;
 
@@ -223,6 +224,7 @@ public abstract class DataRepository<T extends Data>
 	protected   final String deleteAllQuery;
 	// COUNT QUERIES --------------
 	private   final String countQuery;
+	protected   final String countSensorsByTypeAndRoomIdQuery;
 	protected final String countActiveUsersQuery;
 	protected final String countNbRoomsByTypeQuery;
 		
@@ -338,6 +340,7 @@ public abstract class DataRepository<T extends Data>
 		
 		// COUNT QUERIES ----------------------------------------------------------------------
 		countQuery = String.format(COUNT_TEMPLATE, getTableName());
+		countSensorsByTypeAndRoomIdQuery = String.format(COUNT_SENSORS_BY_TYPE_AND_ROOM_ID_TEMPLATE, getTableName());
 		countActiveUsersQuery = String.format(COUNT_ACTIVE_USERS_TEMPLATE, getTableName());
 		countNbRoomsByTypeQuery = String.format(COUNT_ROOM_BY_TYPE_TEMPLATE, getTableName());
 		

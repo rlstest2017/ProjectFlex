@@ -25,7 +25,9 @@ import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_SensorStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_SensorTeachinStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_SensorType;
 import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
+import com.orange.flexoffice.dao.common.model.object.SensorTypeAndRoomDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
@@ -221,7 +223,10 @@ public class SensorManagerImpl implements SensorManager {
 			// Add REST command to Gateways Table
 			if (sensor.getRoomId() != null && sensor.getRoomId() != 0) {
 				RoomDao room = roomRepository.findByRoomId(sensor.getRoomId().longValue());
-				//
+				// update room informations 
+				updateRoomInfos(room.getId(), sensor.getType());
+				
+				// ADD REST command
 				GatewayDao gateway = new GatewayDao();
 				gateway.setId(room.getGatewayId());
 				gateway.setCommand(E_CommandModel.RESET.toString());
@@ -380,6 +385,28 @@ public class SensorManagerImpl implements SensorManager {
 			}
 		}
 		
+	}
+	/**
+	 * updateRoomInfos
+	 * @param roomId
+	 * @param sensorType
+	 */
+	private void updateRoomInfos(long roomId, String sensorType) {
+		// Delete sensor => si type detection et si le seul type detection dans la room => mettre à jour status room à indisponible
+		//        => si type temperature et si le seul type temperature dans la room => mettre à null les champ temperature & humidity
+		// TODO 
+		SensorTypeAndRoomDto data = new SensorTypeAndRoomDto();
+		data.setType(sensorType);
+		data.setRoomId(Long.valueOf(roomId).intValue());
+		Long count = sensorRepository.countByTypeAndRoomId(data);
+		if (count == 1) {
+			if (E_SensorType.MOTION_DETECTION.toString().equals(sensorType)) {
+				// update room status to UNKNOWN
+			} else if (E_SensorType.TEMPERATURE_HUMIDITY.toString().equals(sensorType)) {
+				// update temperature & humidity to null
+			} 
+		}
+	
 	}
 	
 	/**
