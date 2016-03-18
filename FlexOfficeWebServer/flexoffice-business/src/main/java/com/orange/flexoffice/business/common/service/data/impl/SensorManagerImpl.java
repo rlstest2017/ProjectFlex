@@ -127,6 +127,11 @@ public class SensorManagerImpl implements SensorManager {
 				// Set 0 as room id
 				sensorDao.setRoomId(0);				
 			} 
+			// update old associated roomInfos (status, temperature & humidity)
+			SensorDao oldSensorInfos = sensorRepository.findBySensorId(sensorDao.getIdentifier());
+			if (oldSensorInfos.getRoomId() != sensorDao.getRoomId()) {
+				updateRoomInfos(oldSensorInfos.getRoomId(), sensorDao.getType());
+			}
 			
 			// Update SensorDao
 			return sensorRepository.updateSensor(sensorDao);
@@ -400,13 +405,18 @@ public class SensorManagerImpl implements SensorManager {
 		data.setRoomId(Long.valueOf(roomId).intValue());
 		Long count = sensorRepository.countByTypeAndRoomId(data);
 		if (count == 1) {
+			RoomDao room = roomRepository.findOne(roomId);
 			if (E_SensorType.MOTION_DETECTION.toString().equals(sensorType)) {
 				// update room status to UNKNOWN
+				room.setStatus(E_RoomStatus.UNKNOWN.toString());
+				room.setUserId(null);
 			} else if (E_SensorType.TEMPERATURE_HUMIDITY.toString().equals(sensorType)) {
 				// update temperature & humidity to null
+				room.setTemperature(null);
+				room.setHumidity(null);
 			} 
+			roomRepository.updateRoomStatus(room);
 		}
-	
 	}
 	
 	/**

@@ -18,6 +18,15 @@ import com.orange.flexoffice.dao.common.model.object.RoomBuildingInfosDto;
 import com.orange.flexoffice.dao.common.repository.data.RoomDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.RoomDaoMetadata;
 
+/*---------------------------------------------------------------------------------------
+Manage rooms table
+
+last_measure_date is updated to now() for each access to method :
+RoomDao updateRoomStatus(RoomDao data) throws DataAccessException
+"update %s set status=CAST(:status AS roomstatus), temperature=:temperature, humidity=:humidity, last_measure_date=now(), user_id=:userId where id=:id"
+
+/*---------------------------------------------------------------------------------------*/
+
 @Repository
 public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDaoOperations {
 
