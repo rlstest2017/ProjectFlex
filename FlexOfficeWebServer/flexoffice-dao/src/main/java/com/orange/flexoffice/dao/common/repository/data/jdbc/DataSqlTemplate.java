@@ -64,6 +64,8 @@ public final class DataSqlTemplate {
 			"select * from %s where room_id=:roomId and occupancy_info='OCCUPIED'";
 	public static final String FIND_BY_COL_USER_ID_TEMPLATE = 
 			"select * from %s where user_id=:userId";
+	public static final String FIND_BY_SENSOR_IDENTIFIER_TEMPLATE = 
+			"select * from %s where sensor_identifier=:identifier";
 	public static final String FIND_BY_IDENTIFIER_TEMPLATE = 
 			"select * from %s where identifier=:identifier";
 	public static final String FIND_ALL_TEMPLATE = 

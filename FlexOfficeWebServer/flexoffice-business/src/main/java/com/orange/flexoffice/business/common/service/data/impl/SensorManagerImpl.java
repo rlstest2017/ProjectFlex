@@ -282,9 +282,14 @@ public class SensorManagerImpl implements SensorManager {
 				} else {
 					teachinSensor.setSensorStatus(E_SensorTeachinStatus.PAIRED_OK.toString());
 				}
-				
-				teachinRepository.saveTechinSensor(teachinSensor);
-				teachinRepository.updateTeachinDate(teachin);
+					try {
+						teachinRepository.findBySensorIdentifier(identifier);
+					} catch(IncorrectResultSizeDataAccessException e ) {
+						LOGGER.debug("SensorManager.processTeachinSensor : sensorIdentifier #" +identifier+" will be added in teachin_sensors table", e);
+						LOGGER.info("SensorManager.processTeachinSensor : sensorIdentifier #" +identifier+" will be added in teachin_sensors table");
+						teachinRepository.saveTechinSensor(teachinSensor);
+						teachinRepository.updateTeachinDate(teachin);
+				    }
 				
 				if (isFromAddSensor) {
 					// Set Gateway to RESET 

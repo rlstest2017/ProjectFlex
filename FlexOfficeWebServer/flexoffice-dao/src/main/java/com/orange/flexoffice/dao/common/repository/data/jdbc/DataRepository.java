@@ -9,6 +9,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_COUNTRIES_HAVE_ROOMS_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_REQUESTED_ROOM_DAILY_AND_TYPE_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_TEACHIN_STATUS_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_SENSOR_IDENTIFIER_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_ROOM_DAILY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_REGIONS_SUMMARY_TEMPLATE;
@@ -148,6 +149,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String findByMacAddressQuery;
 	protected final String findByColumnMailQuery;
 	protected final String findByUserIdQuery;
+	protected final String findBySensorIdentifierQuery;
 	protected final String findByColumnMailAndPasswordQuery;
 	protected final String findByColumnAccessTokenQuery;
 	protected final String findByColumnRoomIdQuery;
@@ -265,6 +267,7 @@ public abstract class DataRepository<T extends Data>
 		findByColumnRoomIdQuery = String.format(FIND_BY_COL_ROOM_ID_TEMPLATE, getTableName());
 		findByColumnRoomIdAndOccupancyInfoQuery = String.format(FIND_BY_COL_ROOM_ID_OCCUPIED_INFO_TEMPLATE, getTableName());
 		findByUserIdQuery = String.format(FIND_BY_COL_USER_ID_TEMPLATE, getTableName());
+		findBySensorIdentifierQuery = String.format(FIND_BY_SENSOR_IDENTIFIER_TEMPLATE, getTableName());
 		findByColumnGatewayIdQuery = String.format(FIND_BY_COL_GATEWAY_ID_TEMPLATE, getTableName());
 		findRoomsByCountryIdQuery = String.format(FIND_ROOMS_BY_COUNTRY_ID_TEMPLATE, getTableName());
 		findRoomsByRegionIdQuery = String.format(FIND_ROOMS_BY_REGION_ID_TEMPLATE, getTableName());
