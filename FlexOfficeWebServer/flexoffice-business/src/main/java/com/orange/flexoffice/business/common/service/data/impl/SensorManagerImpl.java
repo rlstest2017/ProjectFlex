@@ -163,11 +163,13 @@ public class SensorManagerImpl implements SensorManager {
 			String status = sensorDao.getStatus();
 			alertManager.updateSensorAlert(sensorId, status);
 			
+			LOGGER.debug("SensorManager.updateStatus : after alert process");
+			
 			if (roomDao != null) {
-				
+				LOGGER.debug("SensorManager.updateStatus : roomDao is not null");
 				// if Status is OFFLINE
 				if (status.equals(E_SensorStatus.OFFLINE.toString())) {
-					
+					LOGGER.debug("SensorManager.updateStatus : status sensor is OFFLINE");
 					// check if there is another sensor in room not OFFLINE
 					boolean isThereAnotherNotOfflineSensor = false;
 					List<SensorDao> sensors = sensorRepository.findByRoomId(roomDao.getId());
@@ -206,7 +208,9 @@ public class SensorManagerImpl implements SensorManager {
 					
 					
 				} else {
+					LOGGER.debug("SensorManager.updateStatus : status sensor is not OFFLINE");
 					if (sensorDao.getOccupancyInfo() != null) {
+						LOGGER.debug("SensorManager.updateStatus : OccupancyInfo is not null");
 						//--------------------------------------
 						processOccupancyInfo(sensorDao, roomDao);
 						//--------------------------------------
