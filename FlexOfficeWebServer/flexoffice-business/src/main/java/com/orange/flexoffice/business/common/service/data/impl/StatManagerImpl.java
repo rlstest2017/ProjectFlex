@@ -72,7 +72,7 @@ public class StatManagerImpl implements StatManager {
 				
 		// 1 - Calculate day duration between beginDayDate & endDayDate in seconds. Ex : [7:30 ; 20:00]=> 45000 seconds 
 		Long duration = calculateDayDuration();
-		LOGGER.debug("duration betwwen beginDayDate and endDayDate :" + duration);
+		LOGGER.debug("duration between beginDayDate and endDayDate :" + duration);
 		
 		// 2 - Find All RoomDailOccupancy DATA order by roomId
 		List<RoomDailyOccupancyDao> roomDailyList = roomDailyRepository.findAllRoomsDailyOccupancy();

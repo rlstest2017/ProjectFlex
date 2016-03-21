@@ -102,8 +102,16 @@ public class SensorManagerImpl implements SensorManager {
 						TeachinSensorDao teachinSensor = new TeachinSensorDao();
 						teachinSensor.setSensorIdentifier(sensorDao.getIdentifier());
 						teachinSensor.setSensorStatus(E_SensorTeachinStatus.NOT_PAIRED.toString());
-						teachinRepository.saveTechinSensor(teachinSensor);
-						teachinRepository.updateTeachinDate(teachin);
+						
+						try {
+							teachinRepository.findBySensorIdentifier(sensorDao.getIdentifier());
+						} catch(IncorrectResultSizeDataAccessException e ) {
+							LOGGER.debug("SensorManager.save : sensorIdentifier #" +sensorDao.getIdentifier()+" will be added in teachin_sensors table", e);
+							LOGGER.info("SensorManager.save : sensorIdentifier #" +sensorDao.getIdentifier()+" will be added in teachin_sensors table");
+							teachinRepository.saveTechinSensor(teachinSensor);
+							teachinRepository.updateTeachinDate(teachin);
+					    }
+						
 					}
 				} catch(IncorrectResultSizeDataAccessException e ) {
 					LOGGER.debug("SensorManager.save : There is no activate teachin", e);
