@@ -62,6 +62,7 @@ import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTempl
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_PREFERENCES_BY_REGION_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_PREFERENCES_BY_CITY_ID_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_PREFERENCES_BY_BUILDING_ID_TEMPLATE;
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_PREFERENCES_BY_USER_ID_TEMPLATE;
 
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_RESERVED_ROOMSTAT_TEMPLATE;
 import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOMSTAT_BY_ID_TEMPLATE;
@@ -222,6 +223,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String deletePrefByRegionIdQuery;
 	protected final String deletePrefByCityIdQuery;
 	protected final String deletePrefByBuildingIdQuery;
+	protected final String deletePrefByUserIdQuery;
 	private   final String deleteQuery;
 	protected   final String deleteAllQuery;
 	// COUNT QUERIES --------------
@@ -340,6 +342,7 @@ public abstract class DataRepository<T extends Data>
 		deletePrefByRegionIdQuery = String.format(REMOVE_PREFERENCES_BY_REGION_ID_TEMPLATE, getTableName());
 		deletePrefByCityIdQuery = String.format(REMOVE_PREFERENCES_BY_CITY_ID_TEMPLATE, getTableName());
 		deletePrefByBuildingIdQuery = String.format(REMOVE_PREFERENCES_BY_BUILDING_ID_TEMPLATE, getTableName());
+		deletePrefByUserIdQuery = String.format(REMOVE_PREFERENCES_BY_USER_ID_TEMPLATE, getTableName());
 		
 		// COUNT QUERIES ----------------------------------------------------------------------
 		countQuery = String.format(COUNT_TEMPLATE, getTableName());

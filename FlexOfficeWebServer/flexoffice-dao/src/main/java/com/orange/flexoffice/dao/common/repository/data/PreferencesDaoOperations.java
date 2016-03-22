@@ -25,6 +25,8 @@ public interface PreferencesDaoOperations {
 	
 	void deleteByCityId(long cityId);
 	
+	void deleteByUserId(long userId);
+	
 	void deleteByBuildingId(long buildingId);
 	
 }

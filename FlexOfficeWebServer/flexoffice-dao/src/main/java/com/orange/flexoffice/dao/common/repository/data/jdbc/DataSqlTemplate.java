@@ -110,6 +110,8 @@ public final class DataSqlTemplate {
 			"delete from %s where city_id =:cityId";
 	public static final String REMOVE_PREFERENCES_BY_BUILDING_ID_TEMPLATE = 
 			"delete from %s where building_id =:buildingId";
+	public static final String REMOVE_PREFERENCES_BY_USER_ID_TEMPLATE = 
+			"delete from %s where user_id =:userId";
 	public static final String REMOVE_TEMPLATE = 
 			"delete from %s where id=:id";
 	public static final String REMOVE_ALL_TEMPLATE = 

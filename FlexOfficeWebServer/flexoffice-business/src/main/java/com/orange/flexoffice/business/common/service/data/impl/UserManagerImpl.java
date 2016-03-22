@@ -178,12 +178,10 @@ public class UserManagerImpl implements UserManager {
 	 */
 	@Override
 	public void delete(long id) throws DataNotExistsException, IntegrityViolationException {
-	
 		try {
 			// To generate exception if wrong id
 			userRepository.findOne(id);
-			// TODO
-			//preferenceRepository.deleteByUserId(id);
+			preferenceRepository.deleteByUserId(id);
 			// Delete Room
 			userRepository.delete(id);	
 		} catch (IncorrectResultSizeDataAccessException e) {

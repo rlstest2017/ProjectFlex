@@ -80,6 +80,12 @@ public class PreferencesDaoRepository extends DataRepository<PreferencesDao> imp
 	}
 
 	@Override
+	public void deleteByUserId(long userId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("userId", userId);
+		jdbcTemplate.update(deletePrefByUserIdQuery, paramMap);
+	}
+
+	@Override
 	protected String getTableName() {
 		return PreferenceDaoMetadata.PREFERENCE_TABLE_NAME;
 	}
