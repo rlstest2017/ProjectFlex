@@ -132,7 +132,7 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 					message.append( sensor.getSensorStatus() );
 					message.append( "\n" );
 					message.append( "sensor Identifier :" );
-					message.append( identifier );
+					message.append( identifier  );
 					LOGGER.debug( message.toString() );
 				}
 				

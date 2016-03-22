@@ -209,13 +209,15 @@ public class SensorManagerImpl implements SensorManager {
 					
 				} else {
 					LOGGER.debug("SensorManager.updateStatus : status sensor is not OFFLINE");
-					if (sensorDao.getOccupancyInfo() != null) {
-						LOGGER.debug("SensorManager.updateStatus : OccupancyInfo is not null");
-						//--------------------------------------
-						processOccupancyInfo(sensorDao, roomDao);
-						//--------------------------------------
-					} else {
-						LOGGER.info("SensorDao occupancyInfo propertie in updateStatus() method is null");
+					if (E_SensorType.TEMPERATURE_HUMIDITY.toString().equals(sensorDao.getType())) {
+						LOGGER.debug("SensorManager.updateStatus : sensor is TEMPERATURE_HUMIDITY type");
+						roomRepository.updateRoomStatus(roomDao); 
+					}
+					else  { // occupancy_info is never null, because a default value in DB when the sensor is created
+							LOGGER.debug("SensorManager.updateStatus : OccupancyInfo is process");
+							//--------------------------------------
+							processOccupancyInfo(sensorDao, roomDao);
+							//--------------------------------------
 					}
 				}
 			} else {
