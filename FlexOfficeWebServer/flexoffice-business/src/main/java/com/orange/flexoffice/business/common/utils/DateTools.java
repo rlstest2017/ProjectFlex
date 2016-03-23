@@ -425,12 +425,10 @@ public class DateTools {
 				priseCompteJeudi, priseCompteVendredi, priseCompteSamedi };
 
 		GregorianCalendar date1 = new GregorianCalendar();
-		date1.setTime(d1);
-		date1.get(GregorianCalendar.DAY_OF_MONTH);
+		date1.setTime(beginOfDay(d1));
 		GregorianCalendar date2 = new GregorianCalendar();
-		date2.setTime(d2);
-		date2.get(GregorianCalendar.DAY_OF_MONTH);
-
+		date2.setTime(endOfDay(d2));
+	
 		LOGGER.debug("date1 in nbJoursOuvrable() is :" + date1.getTime());
 		LOGGER.debug("date2 in nbJoursOuvrable() is :" + date2.getTime());
 		
