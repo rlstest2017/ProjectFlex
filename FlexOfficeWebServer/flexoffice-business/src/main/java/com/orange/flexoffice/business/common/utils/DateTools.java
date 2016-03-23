@@ -426,8 +426,10 @@ public class DateTools {
 
 		GregorianCalendar date1 = new GregorianCalendar();
 		date1.setTime(d1);
+		date1.get(GregorianCalendar.DAY_OF_MONTH);
 		GregorianCalendar date2 = new GregorianCalendar();
 		date2.setTime(d2);
+		date2.get(GregorianCalendar.DAY_OF_MONTH);
 
 		LOGGER.debug("date1 in nbJoursOuvrable() is :" + date1.getTime());
 		LOGGER.debug("date2 in nbJoursOuvrable() is :" + date2.getTime());
