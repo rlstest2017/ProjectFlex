@@ -25,8 +25,11 @@
 		<!--  value="select rooms.name as room_name, rooms.type as room_type, room_stats.begin_occupancy_date, room_stats.end_occupancy_date 
 				from rooms, room_stats where rooms.id=room_stats.room_id order by room_stats.begin_occupancy_date" />-->
 		<property name="sql"
-			value="select rooms.name as room_name, rooms.type as room_type, room_stats.begin_occupancy_date, room_stats.end_occupancy_date 
-				from rooms, room_stats where rooms.id=room_stats.room_id and room_stats.begin_occupancy_date is not null and room_stats.end_occupancy_date is not null order by room_stats.begin_occupancy_date" />
+			value="select countries.name as country_name, regions.name as region_name, cities.name as city_name, buildings.name as building_name, rooms.name as room_name, rooms.floor as room_floor, 
+			rooms.type as room_type, room_stats.begin_occupancy_date, room_stats.end_occupancy_date 
+			from rooms, room_stats, buildings, cities, regions, countries 
+			where rooms.id=room_stats.room_id and rooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=regions.id and regions.country_id=countries.id 
+			and room_stats.begin_occupancy_date is not null and room_stats.end_occupancy_date is not null order by room_stats.begin_occupancy_date" />
 		
 		<property name="rowMapper">
 			<bean class="com.orange.flexoffice.business.adminui.stat.ExportStatRowMapper" />
@@ -50,7 +53,7 @@
 					<!-- Extractor which returns the value of beans property through reflection -->
 					<bean
 						class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
-						<property name="names" value="roomName, roomType, beginOccupancyDate, endOccupancyDate" />
+						<property name="names" value="countryName, regionName, cityName, buildingName, roomName, roomFloor, roomType, beginOccupancyDate, endOccupancyDate" />
 					</bean>
 				</property>
 			</bean>
