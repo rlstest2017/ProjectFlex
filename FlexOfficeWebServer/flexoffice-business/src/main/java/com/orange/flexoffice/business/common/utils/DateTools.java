@@ -429,8 +429,8 @@ public class DateTools {
 		GregorianCalendar date2 = new GregorianCalendar();
 		date2.setTime(d2);
 
-		LOGGER.debug("date1 in nbJoursOuvrable() is :" + date1);
-		LOGGER.debug("date2 in nbJoursOuvrable() is :" + date2);
+		LOGGER.debug("date1 in nbJoursOuvrable() is :" + date1.getTime());
+		LOGGER.debug("date2 in nbJoursOuvrable() is :" + date2.getTime());
 		
 		// Récupération des jours fériés
 		List<Date> joursFeries = new ArrayList<Date>();
@@ -446,11 +446,12 @@ public class DateTools {
 				if (joursPrisEncompte[date1.get(GregorianCalendar.DAY_OF_WEEK) - 1]) {
 					nbJour++;
 					LOGGER.debug("nbjour incremented is :" + nbJour);
+					LOGGER.debug("date1 incremented is :" + date1.getTime());
 				}
 			}
 
 			date1.add(GregorianCalendar.DAY_OF_MONTH, 1);
-			LOGGER.debug("date1 after add calendar is :" + date1);
+			LOGGER.debug("date1 after add calendar is :" + date1.getTime());
 		}
 
 		return nbJour;
