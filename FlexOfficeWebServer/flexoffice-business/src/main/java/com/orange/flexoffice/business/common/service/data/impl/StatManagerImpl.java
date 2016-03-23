@@ -429,9 +429,11 @@ public class StatManagerImpl implements StatManager {
 				// - Get startdate & enddate
 				RoomDailyOccupancyDao firstEntry = dailyRoomsList.get(0);
 				Date startdate = firstEntry.getDay();
-								
+				LOGGER.debug("startdate in nbJoursOuvrableForPopular() is :" + startdate);				
+				
 				RoomDailyOccupancyDao endEntry = dailyRoomsList.get(dailyRoomsList.size()-1);
 				Date enddate = endEntry.getDay();
+				LOGGER.debug("endEntry in nbJoursOuvrableForPopular() is :" + endEntry);
 				
 				returnedValue = dateTools.nbJoursOuvrable(startdate, enddate, true, true, true, true, true, true, false, false);
 				
