@@ -33,7 +33,7 @@
     <jackson-mapper.version>1.8.5</jackson-mapper.version>
     <jsp.version>2.1</jsp.version>
     <junit.version>4.11</junit.version>
-    <log4j.version>1.2.14</log4j.version>
+    <log4j.version>1.2.17</log4j.version>
     <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version> 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spring.version>4.1.1.RELEASE</spring.version>
@@ -110,11 +110,13 @@
 			<version>${javassist.version}</version>
 		</dependency>
  	    <dependency>
+            <!--  <artifactId>log4j</artifactId> -->
+            <!--  <version>${log4j.version}</version>-->
             <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
+            <artifactId>log4j-customized</artifactId>
+            <version>1.2.17</version>
         </dependency>   
-			
+
  		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
