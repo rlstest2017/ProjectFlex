@@ -1,10 +1,11 @@
 package com.orange.meetingroom.connector.php.utils;
 
 import java.text.ParseException;
-import com.orange.meetingroom.connector.php.model.GetAgentBookingsParameters;
-import com.orange.meetingroom.connector.php.model.GetDashboardBookingsParameters;
-import com.orange.meetingroom.connector.php.model.SetBookingParameters;
-import com.orange.meetingroom.connector.php.model.UpdateBookingParameters;
+
+import com.orange.meetingroom.connector.php.model.request.GetAgentBookingsParameters;
+import com.orange.meetingroom.connector.php.model.request.GetDashboardBookingsParameters;
+import com.orange.meetingroom.connector.php.model.request.SetBookingParameters;
+import com.orange.meetingroom.connector.php.model.request.UpdateBookingParameters;
 
 /**
  * DataTools

@@ -15,10 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.orange.meetingroom.connector.php.model.GetAgentBookingsParameters;
-import com.orange.meetingroom.connector.php.model.GetDashboardBookingsParameters;
-import com.orange.meetingroom.connector.php.model.SetBookingParameters;
-import com.orange.meetingroom.connector.php.model.UpdateBookingParameters;
+import com.orange.meetingroom.connector.php.exception.PhpServerException;
+import com.orange.meetingroom.connector.php.model.request.GetAgentBookingsParameters;
+import com.orange.meetingroom.connector.php.model.request.GetDashboardBookingsParameters;
+import com.orange.meetingroom.connector.php.model.request.SetBookingParameters;
+import com.orange.meetingroom.connector.php.model.request.UpdateBookingParameters;
+import com.orange.meetingroom.connector.php.model.response.BookingSummary;
 import com.orange.meetingroom.connector.php.utils.DataTools;
 
 /**
@@ -195,7 +197,9 @@ public class PhpConnectorClient {
 	 * @param SetBookingParameters params
 	 * @throws Exception
 	 */
-	public void setBooking(SetBookingParameters params) throws Exception {
+	public BookingSummary setBooking(SetBookingParameters params) throws Exception {
+		
+		BookingSummary bookingSummary = new BookingSummary();
 		
 		// construct writer using SetBookingParameters
 		// String writer = "RoomID=brehat.rennes@microsoft.cad.aql.fr&OrganizerFullName=&Subject=&format=json&StartDate=1461060000&EndDate=1461060600&Acknowledged=1";
@@ -218,10 +222,34 @@ public class PhpConnectorClient {
 			
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode != 200) 
-			{
+			if (statusCode != 200) {
 				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
 			}
+			
+			//Now pull back the response object
+			HttpEntity httpEntity = response.getEntity();
+			String apiOutput = EntityUtils.toString(httpEntity);
+			
+			// Lets see what we got from API
+			// System.out.println(apiOutput); 
+						
+			// parse the JSON response
+			ObjectMapper mapper = new ObjectMapper();
+			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
+			Boolean errorFlag = (Boolean)mp.get("ErrorFlag");
+			if (errorFlag) {
+				String errorMessage = (String)mp.get("Message");
+				throw new PhpServerException(errorMessage);
+			} else {
+				String idReservation = (String)mp.get("IDReservation");
+				String revisionReservation = (String)mp.get("RevisionReservation");
+				bookingSummary.setIdReservation(idReservation);
+				bookingSummary.setRevisionReservation(revisionReservation);
+			}
+			
+			
+			return bookingSummary;
+			
 		}
 		finally	{
 			//Important: Close the connect

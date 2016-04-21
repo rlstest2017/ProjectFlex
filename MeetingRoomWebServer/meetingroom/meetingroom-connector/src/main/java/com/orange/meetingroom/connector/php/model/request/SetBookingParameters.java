@@ -1,4 +1,4 @@
-package com.orange.meetingroom.connector.php.model;
+package com.orange.meetingroom.connector.php.model.request;
 
 public class SetBookingParameters {
 	
