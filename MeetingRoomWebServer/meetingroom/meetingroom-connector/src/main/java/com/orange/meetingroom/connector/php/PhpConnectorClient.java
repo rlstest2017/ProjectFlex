@@ -20,7 +20,10 @@ import com.orange.meetingroom.connector.php.model.request.GetAgentBookingsParame
 import com.orange.meetingroom.connector.php.model.request.GetDashboardBookingsParameters;
 import com.orange.meetingroom.connector.php.model.request.SetBookingParameters;
 import com.orange.meetingroom.connector.php.model.request.UpdateBookingParameters;
+import com.orange.meetingroom.connector.php.model.response.Booking;
 import com.orange.meetingroom.connector.php.model.response.BookingSummary;
+import com.orange.meetingroom.connector.php.model.response.MeetingRoomBookings;
+import com.orange.meetingroom.connector.php.model.response.MeetingRoomDetails;
 import com.orange.meetingroom.connector.php.utils.DataTools;
 
 /**
@@ -54,8 +57,9 @@ public class PhpConnectorClient {
 	 * @param GetAgentBookingsParameters params
 	 * @throws Exception
 	 */
-	public void getBookingsFromAgent(GetAgentBookingsParameters params) throws Exception {
+	public MeetingRoomBookings getBookingsFromAgent(GetAgentBookingsParameters params) throws Exception {
 		
+		MeetingRoomBookings meetingRoomBookings = new MeetingRoomBookings();
 		try	{
 			//HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&RoomID=brehat.rennes@microsoft.cad.aql.fr&ForceUpdateCache=false&_=1461057699231");
 			String request = phpGetBookingsURL + "?" + dataTools.getAgentBookingsParametersToUrlEncode(params);
@@ -69,49 +73,79 @@ public class PhpConnectorClient {
 			
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode != 200) 
-			{
+			if (statusCode != 200) {
 				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
 			}
 			
 			//Now pull back the response object
 			HttpEntity httpEntity = response.getEntity();
 			String apiOutput = EntityUtils.toString(httpEntity);
-			
-			//Lets see what we got from API
-			//System.out.println(apiOutput); 
 						
 			// parse the JSON response
 			ObjectMapper mapper = new ObjectMapper();
 			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
 			
-			// TODO get currentDate
+			// get currentDate
+			Integer currentDate = (Integer)((Map<String, Object>)mp.get("Infos")).get("CurrentDate");
+			meetingRoomBookings.setCurrentDate(currentDate);
 			
-			Map<String, Map<String, Map<String, Map<String, Object>>>> roomsMap = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get("Rooms");
+			Map<String, Map<String, Map<String, Object>>> roomMap = (Map<String, Map<String, Map<String, Object>>>)mp.get("Rooms");
 			
-			for (Entry<String, Map<String, Map<String, Map<String, Object>>>> element : roomsMap.entrySet()) {
-				//System.out.println("key is :" + element.getKey());
-				System.out.println("RoomName is :" + element.getValue().get("RoomDetails").get("RoomName"));
-				System.out.println("RoomID is :" + element.getValue().get("RoomDetails").get("RoomID"));
-				System.out.println("RoomLocation is :" + element.getValue().get("RoomDetails").get("RoomLocation"));
+			for (Entry<String, Map<String, Map<String, Object>>> element : roomMap.entrySet()) {
 				
-				Map<String, Map<String, Object>> bookings =  (Map<String, Map<String, Object>>)element.getValue().get("Bookings");
+				MeetingRoomDetails details = new MeetingRoomDetails(); 
+				String meetingRoomExternalId = (String)element.getValue().get("RoomDetails").get("RoomID");
+				String meetingRoomExternalName = (String)element.getValue().get("RoomDetails").get("RoomName");
+				String meetingRoomExternalLocation = (String)element.getValue().get("RoomDetails").get("RoomLocation");
 				
-				for (Entry<String, Map<String, Object>> book : bookings.entrySet()) {
-					System.out.println("*** IDReservation is :" + book.getValue().get("IDReservation"));
-					System.out.println("*** RevisionReservation is :" + book.getValue().get("RevisionReservation"));
-					System.out.println("*** Organizer is :" + book.getValue().get("Organizer"));
-					System.out.println("*** OrganizerFullName is :" + book.getValue().get("OrganizerFullName"));
-					System.out.println("*** OrganizerEmail is :" + book.getValue().get("OrganizerEmail"));
-					System.out.println("*** Creator is :" + book.getValue().get("Creator"));
-					System.out.println("*** CreatorFullName is :" + book.getValue().get("CreatorFullName"));
-					System.out.println("*** CreatorEmail is :" + book.getValue().get("CreatorEmail"));
-					System.out.println("*** Subject is :" + book.getValue().get("Subject"));
-					System.out.println("*** StartDate is :" + book.getValue().get("StartDate"));
-					System.out.println("*** EndDate is :" + book.getValue().get("EndDate"));
+				details.setMeetingRoomExternalId(meetingRoomExternalId);
+				details.setMeetingRoomExternalName(meetingRoomExternalName);
+				details.setMeetingRoomExternalLocation(meetingRoomExternalLocation);
+				
+				meetingRoomBookings.setMeetingRoomDetails(details);
+			}
+			
+			Map<String, Map<String, Map<String, Map<String, Object>>>> roomMapBookings = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get("Rooms");
+			
+			for (Entry<String, Map<String, Map<String, Map<String, Object>>>> elementBooking : roomMapBookings.entrySet()) {
+				
+				try {
+					Map<String, Map<String, Object>> bookings =  (Map<String, Map<String, Object>>)elementBooking.getValue().get("Bookings");
+				
+					for (Entry<String, Map<String, Object>> book : bookings.entrySet()) {
+						Booking booking = new Booking();
+						String idReservation = (String)book.getValue().get("IDReservation");
+						String revisionReservation = (String)book.getValue().get("RevisionReservation");
+						String organizer = (String)book.getValue().get("Organizer");
+						String organizeFullName = (String)book.getValue().get("OrganizerFullName");
+						String organizerMail = (String)book.getValue().get("OrganizerEmail");
+						String creator = (String)book.getValue().get("Creator");
+						String creatorFullName = (String)book.getValue().get("CreatorFullName");
+						String creatorEmail = (String)book.getValue().get("CreatorEmail");
+						String subject = (String)book.getValue().get("Subject");
+						Integer startDate = (Integer)book.getValue().get("StartDate");
+						Integer endDate = (Integer)book.getValue().get("EndDate");
+						Boolean acknowledged = (Boolean)book.getValue().get("Acknowledged");
+					
+						booking.setIdReservation(idReservation);
+						booking.setRevisionReservation(revisionReservation);
+						booking.setSubject(subject);
+						booking.setStartDate(startDate);
+						booking.setEndDate(endDate);
+						booking.setAcknowledged(acknowledged);
+						
+						String constructedOrganizer = dataTools.constructOrganizerFullName(organizer, organizeFullName, organizerMail, creator, creatorFullName, creatorEmail);
+						booking.setOrganizerFullName(constructedOrganizer);		
+					
+						meetingRoomBookings.getBookings().add(booking);
+					}
+				} catch (java.lang.ClassCastException e) {
+					// if not bookings, PHP returns ( "Bookings": []) witch produce this exception
 				}
 				
-			}
+			}			
+			
+			return meetingRoomBookings;
 		}
 		finally	{
 			//Important: Close the connect
@@ -140,8 +174,7 @@ public class PhpConnectorClient {
 			
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode != 200) 
-			{
+			if (statusCode != 200) {
 				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
 			}
 			
@@ -149,9 +182,6 @@ public class PhpConnectorClient {
 			HttpEntity httpEntity = response.getEntity();
 			String apiOutput = EntityUtils.toString(httpEntity);
 			
-			// Lets see what we got from API
-			// System.out.println(apiOutput); 
-						
 			// parse the JSON response
 			ObjectMapper mapper = new ObjectMapper();
 			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
@@ -229,9 +259,6 @@ public class PhpConnectorClient {
 			//Now pull back the response object
 			HttpEntity httpEntity = response.getEntity();
 			String apiOutput = EntityUtils.toString(httpEntity);
-			
-			// Lets see what we got from API
-			// System.out.println(apiOutput); 
 						
 			// parse the JSON response
 			ObjectMapper mapper = new ObjectMapper();
@@ -262,7 +289,9 @@ public class PhpConnectorClient {
 	 * @param UpdateBookingParameters params
 	 * @throws Exception
 	 */
-	public void updateBooking(UpdateBookingParameters params) throws Exception {
+	public BookingSummary updateBooking(UpdateBookingParameters params) throws Exception {
+		
+		BookingSummary bookingSummary = new BookingSummary();
 		
 		// construct the writer from UpdateBookingParameters
 		// String writer = "RoomID=brehat.rennes@microsoft.cad.aql.fr&IDReservation=AAAiAGJyZWhhdC5yZW5uZXNAbWljcm9zb2Z0LmNhZC5hcWwuZnIARgAAAAAAJjiq1ulLK0Kj6vNsTnRuywcAQopQvd4yGUaRbVXWgALbzwAAAAfOdQAAQopQvd4yGUaRbVXWgALbzwAAkZg7ggAA&RevisionReservation=DwAAABYAAABCilC93jIZRpFtVdaAAtvPAACRmK21&EndDate=1461060745&format=json";
@@ -286,10 +315,29 @@ public class PhpConnectorClient {
 			
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode != 200) 
-			{
+			if (statusCode != 200) {
 				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
 			}
+			
+			//Now pull back the response object
+			HttpEntity httpEntity = response.getEntity();
+			String apiOutput = EntityUtils.toString(httpEntity);
+						
+			// parse the JSON response
+			ObjectMapper mapper = new ObjectMapper();
+			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
+			Boolean errorFlag = (Boolean)mp.get("ErrorFlag");
+			if (errorFlag) {
+				String errorMessage = (String)mp.get("Message");
+				throw new PhpServerException(errorMessage);
+			} else {
+				String idReservation = (String)mp.get("IDReservation");
+				String revisionReservation = (String)mp.get("RevisionReservation");
+				bookingSummary.setIdReservation(idReservation);
+				bookingSummary.setRevisionReservation(revisionReservation);
+			}
+			
+			return bookingSummary;
 		}
 		finally	{
 			//Important: Close the connect

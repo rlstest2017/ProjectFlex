@@ -1,7 +1,13 @@
 package com.orange.meetingroom.connector.php.model.response;
 
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * MeetingRoomBookings
+ * @author oab
+ *
+ */
 public class MeetingRoomBookings {
 
 	Integer currentDate;
@@ -36,6 +42,8 @@ public class MeetingRoomBookings {
 	 * @return the bookings
 	 */
 	public List<Booking> getBookings() {
+		if (bookings == null)
+			bookings = new ArrayList<Booking>();
 		return bookings;
 	}
 	/**
