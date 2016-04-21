@@ -15,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.orange.meetingroom.connector.php.model.GetAgentBookingsParameters;
+import com.orange.meetingroom.connector.php.model.GetDashboardBookingsParameters;
 import com.orange.meetingroom.connector.php.model.SetBookingParameters;
+import com.orange.meetingroom.connector.php.model.UpdateBookingParameters;
 import com.orange.meetingroom.connector.php.utils.DataTools;
 
 /**
@@ -44,13 +47,13 @@ public class PhpConnectorClient {
     //**************************************************************************
 	
 	@SuppressWarnings("unchecked")
-	public void getBookingsFromAgent() throws Exception 
+	public void getBookingsFromAgent(GetAgentBookingsParameters params) throws Exception 
 	{
 		try
 		{
-			//Define a HttpGet request; You can choose between HttpPost, HttpDelete or HttpPut also.
-			//Choice depends on type of method you will be invoking.
-			HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&RoomID=brehat.rennes@microsoft.cad.aql.fr&ForceUpdateCache=false&_=1461057699231");
+			//HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&RoomID=brehat.rennes@microsoft.cad.aql.fr&ForceUpdateCache=false&_=1461057699231");
+			String request = phpGetBookingsURL + "?" + dataTools.getAgentBookingsParametersToUrlEncode(params);
+			HttpGet getRequest = new HttpGet(request);
 			
 			//Set the API media type in http accept header
 			getRequest.addHeader("accept", "application/json");
@@ -112,13 +115,13 @@ public class PhpConnectorClient {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void getBookingsFromDashboard() throws Exception 
+	public void getBookingsFromDashboard(GetDashboardBookingsParameters params) throws Exception 
 	{
 		try
 		{
-			//Define a HttpGet request; You can choose between HttpPost, HttpDelete or HttpPut also.
-			//Choice depends on type of method you will be invoking.
-			HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&MaxBookings=2&StartDate=0&RoomGroupID=rg_oab_full&_=1461061105469");
+			//HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&MaxBookings=2&StartDate=0&RoomGroupID=rg_oab_full&_=1461061105469");
+			String request = phpGetBookingsURL + "?" + dataTools.getDashboardBookingsParametersToUrlEncode(params);
+			HttpGet getRequest = new HttpGet(request);
 			
 			//Set the API media type in http accept header
 			getRequest.addHeader("accept", "application/json");
@@ -184,23 +187,18 @@ public class PhpConnectorClient {
 		}
 	}
 
-	public void setBooking() throws Exception 
+	public void setBooking(SetBookingParameters params) throws Exception 
 	{
 		
-		// to write Entity value as String when you wish
-		//ObjectMapper mapper = new ObjectMapper();
-		//String text = mapper.writeValueAsString(params); // TODO do this for flexoffice-meetingRoomApi.war
-		//System.out.println("text is :" + text);
-		
-		// to write Entity child's value as String when you wish (let's data contain data part)
-		//String data = mapper.writeValueAsString(object.getData());
-		// TODO construct writer using SetBookingParameters
-		String writer = "RoomID=brehat.rennes@microsoft.cad.aql.fr&OrganizerFullName=&Subject=&format=json&StartDate=1461060000&EndDate=1461060600&Acknowledged=1";
-		
+		// construct writer using SetBookingParameters
+		// String writer = "RoomID=brehat.rennes@microsoft.cad.aql.fr&OrganizerFullName=&Subject=&format=json&StartDate=1461060000&EndDate=1461060600&Acknowledged=1";
+		String writer = dataTools.setBookingParametersToUrlEncode(params); 
+				
 		try
 		{
 			//Define a postRequest request
-			HttpPost postRequest = new HttpPost("http://192.168.103.193/services/SetBooking.php");
+			//HttpPost postRequest = new HttpPost("http://192.168.103.193/services/SetBooking.php");
+			HttpPost postRequest = new HttpPost(phpSetBookingsURL);
 			
 			//Set the API media type in http content-type header
 			postRequest.addHeader("content-type", "application/x-www-form-urlencoded");
@@ -226,15 +224,18 @@ public class PhpConnectorClient {
 		}
 	}
 	
-	public void updateBooking() throws Exception  
+	public void updateBooking(UpdateBookingParameters params) throws Exception  
 	{
-		// TODO add java class from witch construct the writer
-		String writer = "RoomID=brehat.rennes@microsoft.cad.aql.fr&IDReservation=AAAiAGJyZWhhdC5yZW5uZXNAbWljcm9zb2Z0LmNhZC5hcWwuZnIARgAAAAAAJjiq1ulLK0Kj6vNsTnRuywcAQopQvd4yGUaRbVXWgALbzwAAAAfOdQAAQopQvd4yGUaRbVXWgALbzwAAkZg7ggAA&RevisionReservation=DwAAABYAAABCilC93jIZRpFtVdaAAtvPAACRmK21&EndDate=1461060745&format=json";
-		
+		// construct the writer from UpdateBookingParameters
+		// String writer = "RoomID=brehat.rennes@microsoft.cad.aql.fr&IDReservation=AAAiAGJyZWhhdC5yZW5uZXNAbWljcm9zb2Z0LmNhZC5hcWwuZnIARgAAAAAAJjiq1ulLK0Kj6vNsTnRuywcAQopQvd4yGUaRbVXWgALbzwAAAAfOdQAAQopQvd4yGUaRbVXWgALbzwAAkZg7ggAA&RevisionReservation=DwAAABYAAABCilC93jIZRpFtVdaAAtvPAACRmK21&EndDate=1461060745&format=json";
+		String writer = dataTools.updateBookingParametersToUrlEncode(params);
+				
 		try
 		{
-			//Define a postRequest request
-			HttpPost postRequest = new HttpPost("http://192.168.103.193/services/UpdateBooking.php");
+			// Define a postRequest request
+			// HttpPost postRequest = new HttpPost("http://192.168.103.193/services/UpdateBooking.php");
+			HttpPost postRequest = new HttpPost(phpUpdateBookingsURL);
+			
 			
 			//Set the API media type in http content-type header
 			postRequest.addHeader("content-type", "application/x-www-form-urlencoded");
