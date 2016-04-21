@@ -47,10 +47,14 @@ public class PhpConnectorClient {
     //**************************************************************************
 	
 	@SuppressWarnings("unchecked")
-	public void getBookingsFromAgent(GetAgentBookingsParameters params) throws Exception 
-	{
-		try
-		{
+	/**
+	 * getBookingsFromAgent
+	 * @param GetAgentBookingsParameters params
+	 * @throws Exception
+	 */
+	public void getBookingsFromAgent(GetAgentBookingsParameters params) throws Exception {
+		
+		try	{
 			//HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&RoomID=brehat.rennes@microsoft.cad.aql.fr&ForceUpdateCache=false&_=1461057699231");
 			String request = phpGetBookingsURL + "?" + dataTools.getAgentBookingsParametersToUrlEncode(params);
 			HttpGet getRequest = new HttpGet(request);
@@ -107,18 +111,21 @@ public class PhpConnectorClient {
 				
 			}
 		}
-		finally
-		{
+		finally	{
 			//Important: Close the connect
 			httpClient.getConnectionManager().shutdown();
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public void getBookingsFromDashboard(GetDashboardBookingsParameters params) throws Exception 
-	{
-		try
-		{
+	/**
+	 * getBookingsFromDashboard
+	 * @param GetDashboardBookingsParameters params
+	 * @throws Exception
+	 */
+	public void getBookingsFromDashboard(GetDashboardBookingsParameters params) throws Exception {
+	
+		try	{
 			//HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&MaxBookings=2&StartDate=0&RoomGroupID=rg_oab_full&_=1461061105469");
 			String request = phpGetBookingsURL + "?" + dataTools.getDashboardBookingsParametersToUrlEncode(params);
 			HttpGet getRequest = new HttpGet(request);
@@ -176,26 +183,25 @@ public class PhpConnectorClient {
 				} catch (java.lang.ClassCastException e) {
 					// if not bookings, PHP returns ( "Bookings": []) witch produce this exception
 				}
-				
 			}
-
-		}
-		finally
-		{
+		} finally {
 			//Important: Close the connect
 			httpClient.getConnectionManager().shutdown();
 		}
 	}
 
-	public void setBooking(SetBookingParameters params) throws Exception 
-	{
+	/**
+	 * setBooking
+	 * @param SetBookingParameters params
+	 * @throws Exception
+	 */
+	public void setBooking(SetBookingParameters params) throws Exception {
 		
 		// construct writer using SetBookingParameters
 		// String writer = "RoomID=brehat.rennes@microsoft.cad.aql.fr&OrganizerFullName=&Subject=&format=json&StartDate=1461060000&EndDate=1461060600&Acknowledged=1";
 		String writer = dataTools.setBookingParametersToUrlEncode(params); 
 				
-		try
-		{
+		try	{
 			//Define a postRequest request
 			//HttpPost postRequest = new HttpPost("http://192.168.103.193/services/SetBooking.php");
 			HttpPost postRequest = new HttpPost(phpSetBookingsURL);
@@ -217,21 +223,24 @@ public class PhpConnectorClient {
 				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
 			}
 		}
-		finally
-		{
+		finally	{
 			//Important: Close the connect
 			httpClient.getConnectionManager().shutdown();
 		}
 	}
 	
-	public void updateBooking(UpdateBookingParameters params) throws Exception  
-	{
+	/**
+	 * updateBooking
+	 * @param UpdateBookingParameters params
+	 * @throws Exception
+	 */
+	public void updateBooking(UpdateBookingParameters params) throws Exception {
+		
 		// construct the writer from UpdateBookingParameters
 		// String writer = "RoomID=brehat.rennes@microsoft.cad.aql.fr&IDReservation=AAAiAGJyZWhhdC5yZW5uZXNAbWljcm9zb2Z0LmNhZC5hcWwuZnIARgAAAAAAJjiq1ulLK0Kj6vNsTnRuywcAQopQvd4yGUaRbVXWgALbzwAAAAfOdQAAQopQvd4yGUaRbVXWgALbzwAAkZg7ggAA&RevisionReservation=DwAAABYAAABCilC93jIZRpFtVdaAAtvPAACRmK21&EndDate=1461060745&format=json";
 		String writer = dataTools.updateBookingParametersToUrlEncode(params);
 				
-		try
-		{
+		try	{
 			// Define a postRequest request
 			// HttpPost postRequest = new HttpPost("http://192.168.103.193/services/UpdateBooking.php");
 			HttpPost postRequest = new HttpPost(phpUpdateBookingsURL);
@@ -254,8 +263,7 @@ public class PhpConnectorClient {
 				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
 			}
 		}
-		finally
-		{
+		finally	{
 			//Important: Close the connect
 			httpClient.getConnectionManager().shutdown();
 		}
