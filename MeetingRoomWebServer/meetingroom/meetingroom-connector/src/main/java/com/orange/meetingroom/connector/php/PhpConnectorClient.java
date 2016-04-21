@@ -1,5 +1,7 @@
 package com.orange.meetingroom.connector.php;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -55,6 +57,7 @@ public class PhpConnectorClient {
 	/**
 	 * getBookingsFromAgent
 	 * @param GetAgentBookingsParameters params
+	 * @return MeetingRoomBookings
 	 * @throws Exception
 	 */
 	public MeetingRoomBookings getBookingsFromAgent(GetAgentBookingsParameters params) throws Exception {
@@ -159,8 +162,10 @@ public class PhpConnectorClient {
 	 * @param GetDashboardBookingsParameters params
 	 * @throws Exception
 	 */
-	public void getBookingsFromDashboard(GetDashboardBookingsParameters params) throws Exception {
+	public List<MeetingRoomBookings> getBookingsFromDashboard(GetDashboardBookingsParameters params) throws Exception {
 	
+		List<MeetingRoomBookings> meetingRoomBookingsList = new ArrayList<MeetingRoomBookings>(); 
+		
 		try	{
 			//HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&MaxBookings=2&StartDate=0&RoomGroupID=rg_oab_full&_=1461061105469");
 			String request = phpGetBookingsURL + "?" + dataTools.getDashboardBookingsParametersToUrlEncode(params);
@@ -186,36 +191,59 @@ public class PhpConnectorClient {
 			ObjectMapper mapper = new ObjectMapper();
 			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
 			
-			// TODO get currentDate
+			// get currentDate
+			Integer currentDate = (Integer)((Map<String, Object>)mp.get("Infos")).get("CurrentDate");
+			// TODO add currentDate in meetingRoomBookingsList
 			
-			Map<String, Map<String, Map<String, Map<String, Object>>>> roomsMap = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get("Rooms");
+			Map<String, Map<String, Map<String, Object>>> roomMap = (Map<String, Map<String, Map<String, Object>>>)mp.get("Rooms");
+			for (Entry<String, Map<String, Map<String, Object>>> element : roomMap.entrySet()) {
+				MeetingRoomBookings meetingRoomBookings = new MeetingRoomBookings();
+				MeetingRoomDetails details = new MeetingRoomDetails(); 
+				String meetingRoomExternalId = (String)element.getValue().get("RoomDetails").get("RoomID");
+				String meetingRoomExternalName = (String)element.getValue().get("RoomDetails").get("RoomName");
+				String meetingRoomExternalLocation = (String)element.getValue().get("RoomDetails").get("RoomLocation");
+				details.setMeetingRoomExternalId(meetingRoomExternalId);
+				details.setMeetingRoomExternalName(meetingRoomExternalName);
+				details.setMeetingRoomExternalLocation(meetingRoomExternalLocation);
+				meetingRoomBookings.setMeetingRoomDetails(details);
+				meetingRoomBookingsList.add(meetingRoomBookings);
+			}
 			
-			for (Entry<String, Map<String, Map<String, Map<String, Object>>>> element : roomsMap.entrySet()) {
-				//System.out.println("key is :" + element.getKey());
-				System.out.println("RoomName is :" + element.getValue().get("RoomDetails").get("RoomName"));
-				System.out.println("RoomID is :" + element.getValue().get("RoomDetails").get("RoomID"));
-				System.out.println("RoomLocation is :" + element.getValue().get("RoomDetails").get("RoomLocation"));
+			Map<String, Map<String, Map<String, Map<String, Object>>>> roomMapBookings = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get("Rooms");
+			for (Entry<String, Map<String, Map<String, Map<String, Object>>>> elementBooking : roomMapBookings.entrySet()) {
 				try {
-				Map<String, Map<String, Object>> bookings =  (Map<String, Map<String, Object>>)element.getValue().get("Bookings");
-				
-				
-				for (Entry<String, Map<String, Object>> book : bookings.entrySet()) {
-					System.out.println("*** IDReservation is :" + book.getValue().get("IDReservation"));
-					System.out.println("*** RevisionReservation is :" + book.getValue().get("RevisionReservation"));
-					System.out.println("*** Organizer is :" + book.getValue().get("Organizer"));
-					System.out.println("*** OrganizerFullName is :" + book.getValue().get("OrganizerFullName"));
-					System.out.println("*** OrganizerEmail is :" + book.getValue().get("OrganizerEmail"));
-					System.out.println("*** Creator is :" + book.getValue().get("Creator"));
-					System.out.println("*** CreatorFullName is :" + book.getValue().get("CreatorFullName"));
-					System.out.println("*** CreatorEmail is :" + book.getValue().get("CreatorEmail"));
-					System.out.println("*** Subject is :" + book.getValue().get("Subject"));
-					System.out.println("*** StartDate is :" + book.getValue().get("StartDate"));
-					System.out.println("*** EndDate is :" + book.getValue().get("EndDate"));
-				}
+					Map<String, Map<String, Object>> bookings =  (Map<String, Map<String, Object>>)elementBooking.getValue().get("Bookings");
+					for (Entry<String, Map<String, Object>> book : bookings.entrySet()) {
+						Booking booking = new Booking();
+						String idReservation = (String)book.getValue().get("IDReservation");
+						String revisionReservation = (String)book.getValue().get("RevisionReservation");
+						String organizer = (String)book.getValue().get("Organizer");
+						String organizeFullName = (String)book.getValue().get("OrganizerFullName");
+						String organizerMail = (String)book.getValue().get("OrganizerEmail");
+						String creator = (String)book.getValue().get("Creator");
+						String creatorFullName = (String)book.getValue().get("CreatorFullName");
+						String creatorEmail = (String)book.getValue().get("CreatorEmail");
+						String subject = (String)book.getValue().get("Subject");
+						Integer startDate = (Integer)book.getValue().get("StartDate");
+						Integer endDate = (Integer)book.getValue().get("EndDate");
+						Boolean acknowledged = (Boolean)book.getValue().get("Acknowledged");
+						booking.setIdReservation(idReservation);
+						booking.setRevisionReservation(revisionReservation);
+						booking.setSubject(subject);
+						booking.setStartDate(startDate);
+						booking.setEndDate(endDate);
+						booking.setAcknowledged(acknowledged);
+						String constructedOrganizer = dataTools.constructOrganizerFullName(organizer, organizeFullName, organizerMail, creator, creatorFullName, creatorEmail);
+						booking.setOrganizerFullName(constructedOrganizer);		
+						// TODO add bookings in List<Bookings>
+					}
 				} catch (java.lang.ClassCastException e) {
 					// if not bookings, PHP returns ( "Bookings": []) witch produce this exception
 				}
 			}
+			
+			return meetingRoomBookingsList;
+			
 		} finally {
 			//Important: Close the connect
 			httpClient.getConnectionManager().shutdown();
