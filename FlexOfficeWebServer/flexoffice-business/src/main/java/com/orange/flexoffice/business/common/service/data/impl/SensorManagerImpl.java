@@ -137,7 +137,7 @@ public class SensorManagerImpl implements SensorManager {
 			} 
 			// update old associated roomInfos (status, temperature & humidity)
 			SensorDao oldSensorInfos = sensorRepository.findBySensorId(sensorDao.getIdentifier());
-			if (oldSensorInfos.getRoomId() != sensorDao.getRoomId()) {
+			if (oldSensorInfos.getRoomId() != sensorDao.getRoomId() && oldSensorInfos.getRoomId() != 0) {
 				updateRoomInfos(oldSensorInfos.getRoomId(), sensorDao.getType());
 			}
 			
