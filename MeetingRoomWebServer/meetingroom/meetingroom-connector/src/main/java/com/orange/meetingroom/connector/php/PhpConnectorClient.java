@@ -193,8 +193,7 @@ public class PhpConnectorClient {
 			
 			// get currentDate
 			Integer currentDate = (Integer)((Map<String, Object>)mp.get("Infos")).get("CurrentDate");
-			// TODO add currentDate in meetingRoomBookingsList
-			
+						
 			Map<String, Map<String, Map<String, Object>>> roomMap = (Map<String, Map<String, Map<String, Object>>>)mp.get("Rooms");
 			for (Entry<String, Map<String, Map<String, Object>>> element : roomMap.entrySet()) {
 				MeetingRoomBookings meetingRoomBookings = new MeetingRoomBookings();
@@ -206,11 +205,15 @@ public class PhpConnectorClient {
 				details.setMeetingRoomExternalName(meetingRoomExternalName);
 				details.setMeetingRoomExternalLocation(meetingRoomExternalLocation);
 				meetingRoomBookings.setMeetingRoomDetails(details);
+				meetingRoomBookings.setCurrentDate(currentDate); // add currentDate foreach meetingRoomBookings
 				meetingRoomBookingsList.add(meetingRoomBookings);
 			}
 			
 			Map<String, Map<String, Map<String, Map<String, Object>>>> roomMapBookings = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get("Rooms");
+			int incr = 0; // get data from meetingRoomBookingsList for update bookings in the correct meetingRoomBookings object
 			for (Entry<String, Map<String, Map<String, Map<String, Object>>>> elementBooking : roomMapBookings.entrySet()) {
+				MeetingRoomBookings meetingRoomBookings = meetingRoomBookingsList.get(incr);
+				incr = incr + 1;
 				try {
 					Map<String, Map<String, Object>> bookings =  (Map<String, Map<String, Object>>)elementBooking.getValue().get("Bookings");
 					for (Entry<String, Map<String, Object>> book : bookings.entrySet()) {
@@ -235,7 +238,7 @@ public class PhpConnectorClient {
 						booking.setAcknowledged(acknowledged);
 						String constructedOrganizer = dataTools.constructOrganizerFullName(organizer, organizeFullName, organizerMail, creator, creatorFullName, creatorEmail);
 						booking.setOrganizerFullName(constructedOrganizer);		
-						// TODO add bookings in List<Bookings>
+						meetingRoomBookings.getBookings().add(booking);
 					}
 				} catch (java.lang.ClassCastException e) {
 					// if not bookings, PHP returns ( "Bookings": []) witch produce this exception
@@ -302,9 +305,7 @@ public class PhpConnectorClient {
 				bookingSummary.setRevisionReservation(revisionReservation);
 			}
 			
-			
 			return bookingSummary;
-			
 		}
 		finally	{
 			//Important: Close the connect
@@ -329,7 +330,6 @@ public class PhpConnectorClient {
 			// Define a postRequest request
 			// HttpPost postRequest = new HttpPost("http://192.168.103.193/services/UpdateBooking.php");
 			HttpPost postRequest = new HttpPost(phpUpdateBookingsURL);
-			
 			
 			//Set the API media type in http content-type header
 			postRequest.addHeader("content-type", "application/x-www-form-urlencoded");
