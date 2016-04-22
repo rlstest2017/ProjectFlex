@@ -10,10 +10,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
+//import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,14 +41,14 @@ public class PhpConnectorClient {
 	
 	//Create a new instance of http client which will connect to REST api over network
 	@Autowired
-	private DefaultHttpClient httpClient;
+	private CloseableHttpClient httpClient;
 	@Autowired
 	private DataTools dataTools;
-	@Autowired
+	@Value("${php.get.bookings}")
 	private String phpGetBookingsURL;
-	@Autowired
+	@Value("${php.set.bookings}")
 	private String phpSetBookingsURL;
-	@Autowired
+	@Value("${php.update.bookings}")
 	private String phpUpdateBookingsURL;
 	
 	//**************************************************************************
@@ -63,7 +65,11 @@ public class PhpConnectorClient {
 	public MeetingRoomBookings getBookingsFromAgent(GetAgentBookingsParameters params) throws Exception {
 		
 		MeetingRoomBookings meetingRoomBookings = new MeetingRoomBookings();
-		try	{
+		
+//		HttpClientBuilder builder = HttpClientBuilder.create();
+//	    CloseableHttpClient httpClient = builder.build(); 
+		
+	    try	{
 			//HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&RoomID=brehat.rennes@microsoft.cad.aql.fr&ForceUpdateCache=false&_=1461057699231");
 			String request = phpGetBookingsURL + "?" + dataTools.getAgentBookingsParametersToUrlEncode(params);
 			HttpGet getRequest = new HttpGet(request);
@@ -152,7 +158,7 @@ public class PhpConnectorClient {
 		}
 		finally	{
 			//Important: Close the connect
-			httpClient.getConnectionManager().shutdown();
+			httpClient.close();
 		}
 	}
 
@@ -166,6 +172,9 @@ public class PhpConnectorClient {
 	
 		List<MeetingRoomBookings> meetingRoomBookingsList = new ArrayList<MeetingRoomBookings>(); 
 		
+//		HttpClientBuilder builder = HttpClientBuilder.create();
+//	    CloseableHttpClient httpClient = builder.build();
+	    
 		try	{
 			//HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&MaxBookings=2&StartDate=0&RoomGroupID=rg_oab_full&_=1461061105469");
 			String request = phpGetBookingsURL + "?" + dataTools.getDashboardBookingsParametersToUrlEncode(params);
@@ -249,7 +258,7 @@ public class PhpConnectorClient {
 			
 		} finally {
 			//Important: Close the connect
-			httpClient.getConnectionManager().shutdown();
+			httpClient.close();
 		}
 	}
 
@@ -262,6 +271,9 @@ public class PhpConnectorClient {
 		
 		BookingSummary bookingSummary = new BookingSummary();
 		
+//		HttpClientBuilder builder = HttpClientBuilder.create();
+//	    CloseableHttpClient httpClient = builder.build();
+	    
 		// construct writer using SetBookingParameters
 		// String writer = "RoomID=brehat.rennes@microsoft.cad.aql.fr&OrganizerFullName=&Subject=&format=json&StartDate=1461060000&EndDate=1461060600&Acknowledged=1";
 		String writer = dataTools.setBookingParametersToUrlEncode(params); 
@@ -309,7 +321,7 @@ public class PhpConnectorClient {
 		}
 		finally	{
 			//Important: Close the connect
-			httpClient.getConnectionManager().shutdown();
+			httpClient.close();
 		}
 	}
 	
@@ -322,6 +334,9 @@ public class PhpConnectorClient {
 		
 		BookingSummary bookingSummary = new BookingSummary();
 		
+//		HttpClientBuilder builder = HttpClientBuilder.create();
+//	    CloseableHttpClient httpClient = builder.build();
+	    
 		// construct the writer from UpdateBookingParameters
 		// String writer = "RoomID=brehat.rennes@microsoft.cad.aql.fr&IDReservation=AAAiAGJyZWhhdC5yZW5uZXNAbWljcm9zb2Z0LmNhZC5hcWwuZnIARgAAAAAAJjiq1ulLK0Kj6vNsTnRuywcAQopQvd4yGUaRbVXWgALbzwAAAAfOdQAAQopQvd4yGUaRbVXWgALbzwAAkZg7ggAA&RevisionReservation=DwAAABYAAABCilC93jIZRpFtVdaAAtvPAACRmK21&EndDate=1461060745&format=json";
 		String writer = dataTools.updateBookingParametersToUrlEncode(params);
@@ -369,7 +384,7 @@ public class PhpConnectorClient {
 		}
 		finally	{
 			//Important: Close the connect
-			httpClient.getConnectionManager().shutdown();
+			httpClient.close();
 		}
 	}
 	

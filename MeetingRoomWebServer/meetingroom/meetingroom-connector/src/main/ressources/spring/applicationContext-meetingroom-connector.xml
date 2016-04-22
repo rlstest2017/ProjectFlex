@@ -12,17 +12,10 @@
     <util:properties id="appProperties" location="file:/home/flexoffice/flexoffice-webserver/Config/meetingroom.properties" />
     <context:property-placeholder  ignore-resource-not-found="true" properties-ref="appProperties"/>
     
-    <bean name="httpClient" class="org.apache.http.impl.client.HttpClients" factory-method="createDefault" >
-	</bean>
-	<bean name="dataTools" class="com.orange.meetingroom.connector.php.utils.DataTools" >
+    <bean id="httpClient" class="org.apache.http.impl.client.HttpClients" factory-method="createDefault" >
 	</bean>
 
-    <bean id="phpConnectorClient" class="com.orange.meetingroom.connector.php.PhpConnectorClient" >
-        <property name="httpClient" ref="httpClient"/>
-        <property name="dataTools" ref="dataTools"/>
-		<property name="phpGetBookingsURL" value="${php.get.bookings}"/>
-		<property name="phpSetBookingsURL" value="${php.set.bookings}"/>
-		<property name="phpUpdateBookingsURL" value="${php.update.bookings}"/>
+	<bean id="dataTools" class="com.orange.meetingroom.connector.php.utils.DataTools" >
 	</bean>
     
     <!-- Scan base package -->

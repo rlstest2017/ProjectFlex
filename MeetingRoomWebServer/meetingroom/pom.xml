@@ -25,7 +25,7 @@
 	<cglib.version>2.2</cglib.version>
 	<cxf.version>3.0.3</cxf.version>
 	<ehcache.version>1.6.0</ehcache.version>
-    <httpclient.version>4.1.1</httpclient.version>
+    <httpclient.version>4.3.3</httpclient.version>
     <java.compile.version>1.7</java.compile.version>
     <javax.annotation.version>1.0</javax.annotation.version>
     <javax-servlet.version>3.0.1</javax-servlet.version>
