@@ -10,7 +10,7 @@
 	
 	<!-- Scan base package -->
 	<context:component-scan base-package="com.orange.meetingroom.business" />
-    
+	
     <bean id="phpConnector" class="com.orange.meetingroom.connector.php.PhpConnectorClient"/>
     
 </beans>

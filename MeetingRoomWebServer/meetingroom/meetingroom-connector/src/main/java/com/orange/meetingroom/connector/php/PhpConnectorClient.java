@@ -163,7 +163,7 @@ public class PhpConnectorClient {
 		}
 		finally	{
 			//Important: Close the connect
-			httpClient.close();
+			//httpClient.close();
 		}
 	}
 
@@ -265,7 +265,7 @@ public class PhpConnectorClient {
 			
 		} finally {
 			//Important: Close the connect
-			httpClient.close();
+			//httpClient.close();
 		}
 	}
 
@@ -328,7 +328,7 @@ public class PhpConnectorClient {
 		}
 		finally	{
 			//Important: Close the connect
-			httpClient.close();
+			//httpClient.close();
 		}
 	}
 	
@@ -391,7 +391,7 @@ public class PhpConnectorClient {
 		}
 		finally	{
 			//Important: Close the connect
-			httpClient.close();
+			//httpClient.close();
 		}
 	}
 	

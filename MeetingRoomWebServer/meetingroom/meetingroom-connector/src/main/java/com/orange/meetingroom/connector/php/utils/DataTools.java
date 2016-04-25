@@ -94,9 +94,13 @@ public class DataTools {
 		urlEncodeParameters.append( "&" );
 		urlEncodeParameters.append( "RevisionReservation="+params.getRevisionReservation());
 		urlEncodeParameters.append( "&" );
-		urlEncodeParameters.append( "EndDate="+params.getEndDate()); 
-		urlEncodeParameters.append( "&" );
-		urlEncodeParameters.append( "format="+params.getFormat()); 
+		urlEncodeParameters.append( "format="+params.getFormat());
+		if (params.getEndDate() != null) { // to close meeting
+			urlEncodeParameters.append( "&" );
+			urlEncodeParameters.append( "EndDate="+params.getEndDate());
+		} else if (params.getStartDate() != null) { // to confirm meeting
+			urlEncodeParameters.append( "StartDate="+params.getStartDate());
+		}
 		
 		return urlEncodeParameters.toString();
 	}
