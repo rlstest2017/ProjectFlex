@@ -1,110 +1,6 @@
 package com.orange.flexoffice.dao.common.repository.data.jdbc;
 
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_SENSORS_BY_TYPE_AND_ROOM_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_ACTIVE_USERS_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.COUNT_ROOM_BY_TYPE_TEMPLATE;
-
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_COUNTRIES_HAVE_ROOMS_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_REQUESTED_ROOM_DAILY_AND_TYPE_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_TEACHIN_STATUS_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_SENSOR_IDENTIFIER_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_ROOM_DAILY_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_REGIONS_SUMMARY_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_CITIES_SUMMARY_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ALL_BUILDINGS_SUMMARY_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_REQUESTED_ROOM_DAILY_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_LATEST_RESERVED_ROOM_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_REGION_DTO_BY_COL_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_CITY_DTO_BY_COL_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BUILDING_DTO_BY_COL_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_KEY_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_IDENTIFIER_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_MAC_ADDRESS_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_MAIL_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_MAIL_PASSWORD_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_ACCESS_TOKEN_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_ROOM_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_ROOM_ID_OCCUPIED_INFO_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_USER_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_GATEWAY_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_COUNTRY_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_REGION_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_CITY_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_PREFERENCE_BY_USER_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_SENSOR_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BY_COL_NAME_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ROOMS_BY_COUNTRY_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ROOMS_BY_REGION_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ROOMS_BY_CITY_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ROOMS_BY_BUILDING_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ROOMS_BY_BUILDING_ID_AND_FLOOR_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_REGIONS_HAVE_ROOMS_BY_COUNTRY_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_CITIES_HAVE_ROOMS_BY_REGION_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_BUILDINGS_HAVE_ROOMS_BY_CITY_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ROOMSTAT_BY_ROOMID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ROOMSTAT_BY_ROOMINFO_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.FIND_ONE_TEMPLATE;
-
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_ALL_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_MAC_ADDRESS_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_GATEWAY_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_SENSOR_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_IDENTIFIER_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_DAY_ROOM_DAILY_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_BY_DATE_ROOM_STATS_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_STAT_BY_ROOM_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_PREFERENCES_BY_COUNTRY_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_PREFERENCES_BY_REGION_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_PREFERENCES_BY_CITY_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_PREFERENCES_BY_BUILDING_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.REMOVE_PREFERENCES_BY_USER_ID_TEMPLATE;
-
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_RESERVED_ROOMSTAT_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOMSTAT_BY_ID_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_OCCUPIED_ROOMSTAT_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_UNOCCUPIED_ROOMSTAT_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_ACCESS_TOKEN_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_USER_BY_MAIL_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_TEACHIN_STATUS_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_TEACHIN_DATE_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_GATEWAY_STATUS_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_GATEWAY_COMMAND_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOM_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_COUNTRY_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_REGION_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_CITY_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_BUILDING_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_GATEWAY_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_PREFERENCE_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ALERT_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_ROOM_STATUS_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_SENSOR_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_SENSOR_STATUS_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.UPDATE_SENSOR_ROOM_ID_TEMPLATE;
-
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_USER_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_USER_FROM_USERUI_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_GATEWAY_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_ALERT_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_ROOM_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_COUNTRY_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_REGION_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_CITY_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_BUILDING_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_PREFERENCE_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_ROOMDAILY_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_RESERVED_ROOMSTAT_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_OCCUPIED_ROOMSTAT_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_SENSOR_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_TEACHIN_SENSOR_TEMPLATE;
-import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.CREATE_TEACHIN_STATUS_TEMPLATE;
-
+import static com.orange.flexoffice.dao.common.repository.data.jdbc.DataSqlTemplate.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,11 +52,18 @@ public abstract class DataRepository<T extends Data>
 	protected final String findByColumnRoomIdQuery;
 	protected final String findByColumnRoomIdAndOccupancyInfoQuery;
 	protected final String findByColumnGatewayIdQuery;
+	protected final String findByColumnAgentIdQuery;
+	protected final String findByColumnDashboardIdQuery;
 	protected final String findRoomsByCountryIdQuery;
 	protected final String findRoomsByRegionIdQuery;
 	protected final String findRoomsByCityIdQuery;
 	protected final String findRoomsByBuildingIdQuery;
 	protected final String findRoomsByBuildingIdAndFloorQuery;
+	protected final String findMeetingRoomsByCountryIdQuery;
+	protected final String findMeetingRoomsByRegionIdQuery;
+	protected final String findMeetingRoomsByCityIdQuery;
+	protected final String findMeetingRoomsByBuildingIdQuery;
+	protected final String findMeetingRoomsByBuildingIdAndFloorQuery;
 	protected final String findByColumnCountryIdQuery;
 	protected final String findRegionsHaveRoomsByCountryIdQuery;
 	protected final String findCitiesHaveRoomsByRegionIdQuery;
@@ -174,7 +77,10 @@ public abstract class DataRepository<T extends Data>
 	protected final String saveUserQuery;
 	protected final String saveUserFromUserUIQuery;	
 	protected final String saveGatewayQuery;
+	protected final String saveAgentQuery;
+	protected final String saveDashboardQuery;
 	protected final String saveRoomQuery;
+	protected final String saveMeetingRoomQuery;
 	protected final String saveCountryQuery;
 	protected final String saveRegionQuery;
 	protected final String saveCityQuery;
@@ -196,9 +102,15 @@ public abstract class DataRepository<T extends Data>
 	protected final String updateAccessTokenQuery;
 	protected final String updateUserByMailQuery;
 	protected final String updateGatewayStatusQuery;
+	protected final String updateAgentStatusQuery;
+	protected final String updateAgentMeetingRoomIdQuery;
+	protected final String updateDashboardStatusQuery;
 	protected final String updateGatewayCommandQuery;
 	protected final String updateGatewayQuery;
+	protected final String updateAgentQuery;
+	protected final String updateDashboardQuery;
 	protected final String updateRoomQuery;
+	protected final String updateMeetingRoomQuery;
 	protected final String updateCountryQuery;
 	protected final String updateRegionQuery;
 	protected final String updateCityQuery;
@@ -208,6 +120,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String updateTeachinDateQuery;
 	protected final String updateAlertQuery;
 	protected final String updateRoomStatusQuery;
+	protected final String updateMeetingRoomStatusQuery;
 	protected final String updateSensorQuery;
 	protected final String updateSensorStatusQuery;
 	protected final String updateSensorRoomIdQuery;
@@ -231,6 +144,7 @@ public abstract class DataRepository<T extends Data>
 	protected   final String countSensorsByTypeAndRoomIdQuery;
 	protected final String countActiveUsersQuery;
 	protected final String countNbRoomsByTypeQuery;
+	protected final String countNbMeetingRoomsByTypeQuery;
 		
 	protected NamedParameterJdbcTemplate jdbcTemplate;
 	protected JdbcTemplate jdbcTemplateForTest;
@@ -271,11 +185,18 @@ public abstract class DataRepository<T extends Data>
 		findByUserIdQuery = String.format(FIND_BY_COL_USER_ID_TEMPLATE, getTableName());
 		findBySensorIdentifierQuery = String.format(FIND_BY_SENSOR_IDENTIFIER_TEMPLATE, getTableName());
 		findByColumnGatewayIdQuery = String.format(FIND_BY_COL_GATEWAY_ID_TEMPLATE, getTableName());
+		findByColumnAgentIdQuery = String.format(FIND_BY_COL_AGENT_ID_TEMPLATE, getTableName());
+		findByColumnDashboardIdQuery = String.format(FIND_BY_COL_DASHBOARD_ID_TEMPLATE, getTableName());
 		findRoomsByCountryIdQuery = String.format(FIND_ROOMS_BY_COUNTRY_ID_TEMPLATE, getTableName());
 		findRoomsByRegionIdQuery = String.format(FIND_ROOMS_BY_REGION_ID_TEMPLATE, getTableName());
 		findRoomsByCityIdQuery = String.format(FIND_ROOMS_BY_CITY_ID_TEMPLATE, getTableName());
 		findRoomsByBuildingIdQuery = String.format(FIND_ROOMS_BY_BUILDING_ID_TEMPLATE, getTableName());
 		findRoomsByBuildingIdAndFloorQuery = String.format(FIND_ROOMS_BY_BUILDING_ID_AND_FLOOR_TEMPLATE, getTableName());
+		findMeetingRoomsByCountryIdQuery = String.format(FIND_MEETINGROOMS_BY_COUNTRY_ID_TEMPLATE, getTableName());
+		findMeetingRoomsByRegionIdQuery = String.format(FIND_MEETINGROOMS_BY_REGION_ID_TEMPLATE, getTableName());
+		findMeetingRoomsByCityIdQuery = String.format(FIND_MEETINGROOMS_BY_CITY_ID_TEMPLATE, getTableName());
+		findMeetingRoomsByBuildingIdQuery = String.format(FIND_MEETINGROOMS_BY_BUILDING_ID_TEMPLATE, getTableName());
+		findMeetingRoomsByBuildingIdAndFloorQuery = String.format(FIND_MEETINGROOMS_BY_BUILDING_ID_AND_FLOOR_TEMPLATE, getTableName());
 		findByColumnCountryIdQuery = String.format(FIND_BY_COL_COUNTRY_ID_TEMPLATE, getTableName());
 		findRegionsHaveRoomsByCountryIdQuery = String.format(FIND_REGIONS_HAVE_ROOMS_BY_COUNTRY_ID_TEMPLATE, getTableName());
 		findCitiesHaveRoomsByRegionIdQuery = String.format(FIND_CITIES_HAVE_ROOMS_BY_REGION_ID_TEMPLATE, getTableName());
@@ -289,7 +210,10 @@ public abstract class DataRepository<T extends Data>
 		saveUserQuery = String.format(CREATE_USER_TEMPLATE, getTableName());
 		saveUserFromUserUIQuery = String.format(CREATE_USER_FROM_USERUI_TEMPLATE, getTableName());
 		saveGatewayQuery = String.format(CREATE_GATEWAY_TEMPLATE, getTableName());
+		saveAgentQuery = String.format(CREATE_AGENT_TEMPLATE, getTableName());
+		saveDashboardQuery = String.format(CREATE_DASHBOARD_TEMPLATE, getTableName());
 		saveRoomQuery = String.format(CREATE_ROOM_TEMPLATE, getTableName());
+		saveMeetingRoomQuery = String.format(CREATE_MEETINGROOM_TEMPLATE, getTableName());
 		saveCountryQuery = String.format(CREATE_COUNTRY_TEMPLATE, getTableName());
 		saveRegionQuery = String.format(CREATE_REGION_TEMPLATE, getTableName());
 		saveCityQuery = String.format(CREATE_CITY_TEMPLATE, getTableName());
@@ -312,8 +236,12 @@ public abstract class DataRepository<T extends Data>
 		updateAccessTokenQuery = String.format(UPDATE_USER_ACCESS_TOKEN_TEMPLATE, getTableName());
 		updateUserByMailQuery = String.format(UPDATE_USER_BY_MAIL_TEMPLATE, getTableName());
 		updateGatewayStatusQuery = String.format(UPDATE_GATEWAY_STATUS_TEMPLATE, getTableName());
+		updateAgentStatusQuery = String.format(UPDATE_AGENT_STATUS_TEMPLATE, getTableName());
+		updateAgentMeetingRoomIdQuery = String.format(UPDATE_AGENT_MEETINGROOM_ID_TEMPLATE, getTableName());
+		updateDashboardStatusQuery = String.format(UPDATE_DASHBOARD_STATUS_TEMPLATE, getTableName());
 		updateGatewayCommandQuery = String.format(UPDATE_GATEWAY_COMMAND_TEMPLATE, getTableName());
 		updateRoomQuery = String.format(UPDATE_ROOM_TEMPLATE, getTableName(), getColumnColName());
+		updateMeetingRoomQuery = String.format(UPDATE_MEETINGROOM_TEMPLATE, getTableName(), getColumnColName());
 		updateCountryQuery = String.format(UPDATE_COUNTRY_TEMPLATE, getTableName(), getColumnColName());
 		updateRegionQuery = String.format(UPDATE_REGION_TEMPLATE, getTableName(), getColumnColName());
 		updateCityQuery = String.format(UPDATE_CITY_TEMPLATE, getTableName(), getColumnColName());
@@ -323,10 +251,13 @@ public abstract class DataRepository<T extends Data>
 		updateTeachinDateQuery = String.format(UPDATE_TEACHIN_DATE_TEMPLATE, getTableName());
 		updateAlertQuery = String.format(UPDATE_ALERT_TEMPLATE, getTableName());
 		updateRoomStatusQuery = String.format(UPDATE_ROOM_STATUS_TEMPLATE, getTableName());// set also humidity, temperature & user_id if filled
+		updateMeetingRoomStatusQuery = String.format(UPDATE_MEETINGROOM_STATUS_TEMPLATE, getTableName()); // set also oragnizzerlabel if filled
 		updateSensorQuery = String.format(UPDATE_SENSOR_TEMPLATE, getTableName(), getColumnColName());
 		updateSensorStatusQuery = String.format(UPDATE_SENSOR_STATUS_TEMPLATE, getTableName(), getColumnColName());
 		updateSensorRoomIdQuery = String.format(UPDATE_SENSOR_ROOM_ID_TEMPLATE, getTableName());
 		updateGatewayQuery = String.format(UPDATE_GATEWAY_TEMPLATE, getTableName());
+		updateAgentQuery = String.format(UPDATE_AGENT_TEMPLATE, getTableName());
+		updateDashboardQuery = String.format(UPDATE_DASHBOARD_TEMPLATE, getTableName());
 		
 		// DELETE QUERIES ----------------------------------------------------------------------
 		deleteQuery = String.format(REMOVE_TEMPLATE, getTableName());
@@ -349,6 +280,7 @@ public abstract class DataRepository<T extends Data>
 		countSensorsByTypeAndRoomIdQuery = String.format(COUNT_SENSORS_BY_TYPE_AND_ROOM_ID_TEMPLATE, getTableName());
 		countActiveUsersQuery = String.format(COUNT_ACTIVE_USERS_TEMPLATE, getTableName());
 		countNbRoomsByTypeQuery = String.format(COUNT_ROOM_BY_TYPE_TEMPLATE, getTableName());
+		countNbMeetingRoomsByTypeQuery = String.format(COUNT_MEETINGROOM_BY_TYPE_TEMPLATE, getTableName());
 		
 	}
 	

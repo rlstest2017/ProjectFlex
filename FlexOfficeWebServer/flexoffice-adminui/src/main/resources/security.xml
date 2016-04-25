@@ -4,15 +4,15 @@
              xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- Enable Spring Security -->
- 	<http pattern="/v1/system/login" security="none"/>
+ 	<http pattern="/v2/system/login" security="none"/>
  	
  	<!-- Only for Test export -->
  	<!-- <http pattern="/v1/stats/export" security="none"/> -->
  	
-    <http  pattern="/v1/**" entry-point-ref="restAuthenticationEntryPoint" use-expressions="true" auto-config="false" create-session="stateless" >
+    <http  pattern="/v2/**" entry-point-ref="restAuthenticationEntryPoint" use-expressions="true" auto-config="false" create-session="stateless" >
 	     <!-- Adds the custom login filter to the Spring Security filter chain -->
 	    <custom-filter ref="authenticationTokenProcessingFilter" position="FORM_LOGIN_FILTER"   />
-	    <intercept-url pattern="/v1/**" access="isAuthenticated()" />
+	    <intercept-url pattern="/v2/**" access="isAuthenticated()" />
 	    <logout />
 	    <csrf disabled="true"/>
 	</http>
@@ -26,7 +26,7 @@
     <!-- Configures a custom authentication success handler that returns the HTTP status code 200 instead of the 301 HTTP status code -->
     <!-- If x-auth-token is OK then redirect to request, else return UNAUTHORIZATION response -->
     <beans:bean class="com.orange.flexoffice.adminui.ws.filters.CustomTokenAuthenticationFilter" id="authenticationTokenProcessingFilter">
-    	<beans:constructor-arg type="java.lang.String"><beans:value>/v1/**</beans:value></beans:constructor-arg>
+    	<beans:constructor-arg type="java.lang.String"><beans:value>/v2/**</beans:value></beans:constructor-arg>
     	
 	</beans:bean>
 	

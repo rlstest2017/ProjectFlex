@@ -22,7 +22,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>FlexOfficeManageServlet</servlet-name>
-    <url-pattern>/v1/*</url-pattern>
+    <url-pattern>/v2/*</url-pattern>
   </servlet-mapping>
   <listener>
     <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>

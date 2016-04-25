@@ -16,6 +16,11 @@ public final class ParamsConst {
 	public static final String CITY_ID_PARAM = "cityId";
 	public static final String REGION_ID_PARAM = "regionId";
 	public static final String COUNTRY_ID_PARAM = "countryId";
+	public static final String AGENT_ID_PARAM = "agentId";
+	public static final String DASHBOARD_ID_PARAM = "dashboardId";
+	public static final String MEETINGROOM_ID_PARAM = "meetingroomId";
+	public static final String AGENT_MAC_ADDRESS_PARAM = "agentMacAddress";
+	public static final String DASHBOARD_MAC_ADDRESS_PARAM = "dashboardMacAddress";
 	
 	private ParamsConst() {
 		

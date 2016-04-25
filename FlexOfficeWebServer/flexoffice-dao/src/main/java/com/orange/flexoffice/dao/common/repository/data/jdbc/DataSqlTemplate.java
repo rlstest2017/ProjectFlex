@@ -26,6 +26,10 @@ public final class DataSqlTemplate {
 			"select * from %s where mac_address=:macAddress";
 	public static final String FIND_BY_COL_GATEWAY_ID_TEMPLATE = 
 			"select * from %s where gateway_id=:gatewayId";
+	public static final String FIND_BY_COL_AGENT_ID_TEMPLATE = 
+			"select * from %s where agent_id=:agentId";
+	public static final String FIND_BY_COL_DASHBOARD_ID_TEMPLATE = 
+			"select * from %s where dashboard_id=:dashboardId";
 	public static final String FIND_BY_COL_COUNTRY_ID_TEMPLATE = 
 			"select * from %s where country_id=:countryId";
 	public static final String FIND_ROOMS_BY_COUNTRY_ID_TEMPLATE = 
@@ -38,6 +42,16 @@ public final class DataSqlTemplate {
 			"select distinct rooms.* From rooms where rooms.building_id=:buildingId order by rooms.name";
 	public static final String FIND_ROOMS_BY_BUILDING_ID_AND_FLOOR_TEMPLATE = 
 			"select distinct rooms.* From rooms where rooms.building_id=:buildingId and rooms.floor=:floor order by rooms.name";
+	public static final String FIND_MEETINGROOMS_BY_COUNTRY_ID_TEMPLATE = 
+			"select distinct meetingrooms.* From meetingrooms, buildings, cities, regions, countries where meetingrooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=regions.id and regions.country_id=:countryId order by meetingrooms.name";
+	public static final String FIND_MEETINGROOMS_BY_REGION_ID_TEMPLATE = 
+			"select distinct meetingrooms.* From meetingrooms, buildings, cities where meetingrooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=:regionId order by meetingrooms.name";
+	public static final String FIND_MEETINGROOMS_BY_CITY_ID_TEMPLATE = 
+			"select distinct meetingrooms.* From meetingrooms, buildings where meetingrooms.building_id=buildings.id and buildings.city_id=:cityId order by meetingrooms.name";
+	public static final String FIND_MEETINGROOMS_BY_BUILDING_ID_TEMPLATE = 
+			"select distinct meetingrooms.* From meetingrooms where meetingrooms.building_id=:buildingId order by meetingrooms.name";
+	public static final String FIND_MEETINGROOMS_BY_BUILDING_ID_AND_FLOOR_TEMPLATE = 
+			"select distinct meetingrooms.* From meetingrooms where meetingrooms.building_id=:buildingId and meetingrooms.floor=:floor order by meetingrooms.name";
 	public static final String FIND_REGIONS_HAVE_ROOMS_BY_COUNTRY_ID_TEMPLATE = 
 			"select distinct regions.id, regions.name From rooms, buildings, cities, regions, countries where rooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=regions.id and regions.country_id=countries.id and country_id=:countryId";
 	public static final String FIND_CITIES_HAVE_ROOMS_BY_REGION_ID_TEMPLATE = 
@@ -124,6 +138,8 @@ public final class DataSqlTemplate {
 			"select count(id) from %s where last_connection_date >:lastConnexionDate";
 	public static final String COUNT_ROOM_BY_TYPE_TEMPLATE =
 			"select count(id) from %s where type=CAST(:type AS roomtype)";
+	public static final String COUNT_MEETINGROOM_BY_TYPE_TEMPLATE =
+			"select count(id) from %s where type=CAST(:type AS meetingroomtype)";
 	public static final String CREATE_ALERT_TEMPLATE = 
 			"insert into %s (name, type, gateway_id, sensor_id) values (:name, CAST(:type AS deviceType), :gatewayId, :sensorId)";
 	public static final String CREATE_USER_TEMPLATE = 
@@ -132,8 +148,14 @@ public final class DataSqlTemplate {
 			"insert into %s (first_name, last_name, email, is_created_from_userui, access_token, expired_token_date) values (:firstName, :lastName, :email, :isCreatedFromUserui, :accessToken, :expiredTokenDate)";
 	public static final String CREATE_GATEWAY_TEMPLATE = 
 			"insert into %s (mac_address, name, description) values (:macAddress, :name, :description)";
+	public static final String CREATE_AGENT_TEMPLATE = 
+			"insert into %s (mac_address, name, description) values (:macAddress, :name, :description)";
+	public static final String CREATE_DASHBOARD_TEMPLATE = 
+			"insert into %s (mac_address, name, description, city_id, building_id, floor) values (:macAddress, :name, :description, :cityId, :buildingId, :floor)";
 	public static final String CREATE_ROOM_TEMPLATE = 
 			"insert into %s (name, gateway_id, capacity, description, type, status, building_id, floor) values (:name, :gatewayId, :capacity, :description, CAST(:type AS roomtype), CAST(:status AS roomstatus), :buildingId, :floor)";
+	public static final String CREATE_MEETINGROOM_TEMPLATE = 
+			"insert into %s (name, agent_id, capacity, description, type, status, external_id, building_id, floor) values (:name, :agentId, :capacity, :description, CAST(:type AS meetingroomtype), CAST(:status AS meetingroomstatus), :externalId, :buildingId, :floor)";
 	public static final String CREATE_COUNTRY_TEMPLATE = 
 			"insert into %s (name) values (:name)";
 	public static final String CREATE_REGION_TEMPLATE = 
@@ -166,6 +188,10 @@ public final class DataSqlTemplate {
 			"update %s set room_info='UNOCCUPIED', end_occupancy_date=now() WHERE room_id=:roomId and room_info='OCCUPIED'";
 	public static final String UPDATE_GATEWAY_TEMPLATE = 
 			"update %s set name=:name, description=:description WHERE mac_address=:macAddress";
+	public static final String UPDATE_AGENT_TEMPLATE = 
+			"update %s set name=:name, description=:description WHERE mac_address=:macAddress";
+	public static final String UPDATE_DASHBOARD_TEMPLATE = 
+			"update %s set name=:name, description=:description, city_id=:cityId, building_id=:buildingId, floor=:floor WHERE mac_address=:macAddress";
 	public static final String UPDATE_USER_TEMPLATE =
 			"update %s set first_name=:firstName, last_name=:lastName, email=:email WHERE id=:id";
 	public static final String UPDATE_USER_ACCESS_TOKEN_TEMPLATE =
@@ -174,10 +200,18 @@ public final class DataSqlTemplate {
 			"update %s set access_token=:accessToken, expired_token_date=:expiredTokenDate, first_name=:firstName, last_name=:lastName, last_connection_date=now() WHERE email=:email";
 	public static final String UPDATE_GATEWAY_STATUS_TEMPLATE =
 			"update %s set status=CAST(:status AS gatewayStatus), last_polling_date=now() where id=:id";
+	public static final String UPDATE_AGENT_STATUS_TEMPLATE =
+			"update %s set status=CAST(:status AS agentStatus), last_measure_date=now() where id=:id";
+	public static final String UPDATE_AGENT_MEETINGROOM_ID_TEMPLATE =
+			"update %s set meetingroom_id=:meetingroomId where id=:id";
+	public static final String UPDATE_DASHBOARD_STATUS_TEMPLATE =
+			"update %s set status=CAST(:status AS dashboardStatus), last_measure_date=now() where id=:id";
 	public static final String UPDATE_GATEWAY_COMMAND_TEMPLATE =
 			"update %s set command=CAST(:command AS commandModel) where id=:id";
 	public static final String UPDATE_ROOM_TEMPLATE =
 			"update %s set name=:name, gateway_id=:gatewayId, building_id=:buildingId, floor=:floor, capacity=:capacity, description=:description, type=CAST(:type AS roomtype) WHERE id=:id";
+	public static final String UPDATE_MEETINGROOM_TEMPLATE =
+			"update %s set name=:name, agent_id=:agentId, external_id=:externalId, building_id=:buildingId, floor=:floor, capacity=:capacity, description=:description, type=CAST(:type AS meetingroomtype) WHERE id=:id";
 	public static final String UPDATE_COUNTRY_TEMPLATE =
 			"update %s set name=:name WHERE id=:id";
 	public static final String UPDATE_REGION_TEMPLATE =
@@ -194,6 +228,8 @@ public final class DataSqlTemplate {
 			"update %s set teachin_date=now() WHERE id=:id";
 	public static final String UPDATE_ROOM_STATUS_TEMPLATE =
 			"update %s set status=CAST(:status AS roomstatus), temperature=:temperature, humidity=:humidity, last_measure_date=now(), user_id=:userId where id=:id";
+	public static final String UPDATE_MEETINGROOM_STATUS_TEMPLATE =
+			"update %s set status=CAST(:status AS meetingroomstatus), last_measure_date=now(), organizerlabel=:organizerLabel where id=:id";
 	public static final String UPDATE_ALERT_TEMPLATE =
 			"update %s set name=:name, last_notification=:lastNotification where id=:id";
 	public static final String UPDATE_SENSOR_TEMPLATE =
