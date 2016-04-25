@@ -4,6 +4,9 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+	<!-- Import Connector -->
+	<import resource="classpath*:spring/applicationContext-meetingroom-connector.xml" />
 	
 	<bean id="phpConnector" class="com.orange.meetingroom.connector.php.PhpConnectorClient"/>
 	<bean id="phpBusinessConnector" class="com.orange.meetingroom.business.connector.impl.PhpConnectorManagerImpl"/> 

@@ -51,6 +51,7 @@ public class PhpConnectorImplTest {
 	@Test
 	public void TestA_phpGetAgentBookings() {
 		// SetUp
+		boolean expectedResult = false;
 		GetAgentBookingsParameters params = new GetAgentBookingsParameters();
 		params.setFormat("json");
 		params.setRoomID("brehat.rennes@microsoft.cad.aql.fr");
@@ -62,13 +63,17 @@ public class PhpConnectorImplTest {
 			assertEquals("brehat.rennes@microsoft.cad.aql.fr", externalId);
 			
 		} catch (Exception e) {
+			expectedResult = true;
 			LOGGER.error(e.getMessage());
-		}	 
+		}	
+		// Asserts
+		assertEquals(false, expectedResult);
 	}
 
 	@Test
 	public void TestB_phpGetDashboardBookings() {
 		// SetUp
+		boolean expectedResult = false;
 		GetDashboardBookingsParameters params = new GetDashboardBookingsParameters();
 		params.setFormat("json");
 		params.setMaxBookings("2");
@@ -81,8 +86,11 @@ public class PhpConnectorImplTest {
 			assertEquals(2, size);
 			
 		} catch (Exception e) {
+			expectedResult = true;
 			LOGGER.error(e.getMessage());		
 		}	 
+		// Asserts
+		assertEquals(false, expectedResult);
 	}
 
 	@Test
@@ -107,6 +115,7 @@ public class PhpConnectorImplTest {
 	//@Test not execute by Jenkins
 	public void TestC_phpSetBooking() {
 		// SetUp
+		boolean expectedResult = false;
 		SetBookingParameters params = new SetBookingParameters();
 		params.setRoomID("brehat.rennes@microsoft.cad.aql.fr");
 		params.setOrganizerFullName("rachid test organisateur java");
@@ -123,14 +132,18 @@ public class PhpConnectorImplTest {
 			assertNotEquals(null , idReservation);
 			
 		} catch (Exception e) {
+			expectedResult = true;
 			LOGGER.error(e.getMessage());		
-		}	 
+		}	
+		// Asserts
+		assertEquals(false, expectedResult);
 	}
 	
 	// Confirmer la réunion en cours
 	//@Test not execute by Jenkins
 	public void TestD_phpUpdateBooking_Confirmer() {
 		// SetUp
+		boolean expectedResult = false;
 		UpdateBookingParameters params = new UpdateBookingParameters();
 		params.setRoomID("brehat.rennes@microsoft.cad.aql.fr");
 		params.setIdReservation("AAAiAGJyZWhhdC5yZW5uZXNAbWljcm9zb2Z0LmNhZC5hcWwuZnIARgAAAAAAJjiq1ulLK0Kj6vNsTnRuywcAQopQvd4yGUaRbVXWgALbzwAAAAfOdQAAQopQvd4yGUaRbVXWgALbzwAAkZg7uQAA");
@@ -145,14 +158,18 @@ public class PhpConnectorImplTest {
 			assertNotEquals(null , idReservation);
 			
 		} catch (Exception e) {
+			expectedResult = true;
 			LOGGER.error(e.getMessage());
-		}	 
+		}	
+		// Asserts
+		assertEquals(false, expectedResult);
 	}
 		
 	// Fermer (annuler) la réunion en cours
 	//@Test not execute by Jenkins
 	public void TestE_phpUpdateBooking_Fermer() {
 		// SetUp
+		boolean expectedResult = false;
 		UpdateBookingParameters params = new UpdateBookingParameters();
 		params.setRoomID("brehat.rennes@microsoft.cad.aql.fr");
 		params.setIdReservation("AAAiAGJyZWhhdC5yZW5uZXNAbWljcm9zb2Z0LmNhZC5hcWwuZnIARgAAAAAAJjiq1ulLK0Kj6vNsTnRuywcAQopQvd4yGUaRbVXWgALbzwAAAAfOdQAAQopQvd4yGUaRbVXWgALbzwAAkZg7uQAA");
@@ -167,7 +184,10 @@ public class PhpConnectorImplTest {
 			assertNotEquals(null , idReservation);
 			
 		} catch (Exception e) {
+			expectedResult = true;
 			LOGGER.error(e.getMessage());
-		}	 
+		}
+		// Asserts
+		assertEquals(false, expectedResult);
 	}
 }
