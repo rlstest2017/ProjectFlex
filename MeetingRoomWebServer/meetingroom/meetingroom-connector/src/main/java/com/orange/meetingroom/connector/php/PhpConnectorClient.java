@@ -26,8 +26,10 @@ import com.orange.meetingroom.connector.php.model.request.SetBookingParameters;
 import com.orange.meetingroom.connector.php.model.request.UpdateBookingParameters;
 import com.orange.meetingroom.connector.php.model.response.Booking;
 import com.orange.meetingroom.connector.php.model.response.BookingSummary;
+import com.orange.meetingroom.connector.php.model.response.MeetingRoom;
 import com.orange.meetingroom.connector.php.model.response.MeetingRoomBookings;
 import com.orange.meetingroom.connector.php.model.response.MeetingRoomDetails;
+import com.orange.meetingroom.connector.php.model.response.MeetingRooms;
 import com.orange.meetingroom.connector.php.utils.DataTools;
 
 /**
@@ -62,8 +64,9 @@ public class PhpConnectorClient {
 	 * @return MeetingRoomBookings
 	 * @throws Exception
 	 */
-	public MeetingRoomBookings getBookingsFromAgent(GetAgentBookingsParameters params) throws Exception {
+	public MeetingRoom getBookingsFromAgent(GetAgentBookingsParameters params) throws Exception {
 		
+		MeetingRoom meetingroom = new MeetingRoom();
 		MeetingRoomBookings meetingRoomBookings = new MeetingRoomBookings();
 		
 //		HttpClientBuilder builder = HttpClientBuilder.create();
@@ -96,7 +99,7 @@ public class PhpConnectorClient {
 			
 			// get currentDate
 			Integer currentDate = (Integer)((Map<String, Object>)mp.get("Infos")).get("CurrentDate");
-			meetingRoomBookings.setCurrentDate(currentDate);
+			meetingroom.setCurrentDate(currentDate);
 			
 			Map<String, Map<String, Map<String, Object>>> roomMap = (Map<String, Map<String, Map<String, Object>>>)mp.get("Rooms");
 			
@@ -112,6 +115,7 @@ public class PhpConnectorClient {
 				details.setMeetingRoomExternalLocation(meetingRoomExternalLocation);
 				
 				meetingRoomBookings.setMeetingRoomDetails(details);
+				meetingroom.setMeetingRoom(meetingRoomBookings);
 			}
 			
 			Map<String, Map<String, Map<String, Map<String, Object>>>> roomMapBookings = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get("Rooms");
@@ -146,7 +150,8 @@ public class PhpConnectorClient {
 						String constructedOrganizer = dataTools.constructOrganizerFullName(organizer, organizeFullName, organizerMail, creator, creatorFullName, creatorEmail);
 						booking.setOrganizerFullName(constructedOrganizer);		
 					
-						meetingRoomBookings.getBookings().add(booking);
+						meetingroom.getMeetingRoom().getBookings().add(booking);
+						
 					}
 				} catch (java.lang.ClassCastException e) {
 					// if not bookings, PHP returns ( "Bookings": []) witch produce this exception
@@ -154,7 +159,7 @@ public class PhpConnectorClient {
 				
 			}			
 			
-			return meetingRoomBookings;
+			return meetingroom;
 		}
 		finally	{
 			//Important: Close the connect
@@ -168,8 +173,9 @@ public class PhpConnectorClient {
 	 * @param GetDashboardBookingsParameters params
 	 * @throws Exception
 	 */
-	public List<MeetingRoomBookings> getBookingsFromDashboard(GetDashboardBookingsParameters params) throws Exception {
-	
+	public MeetingRooms getBookingsFromDashboard(GetDashboardBookingsParameters params) throws Exception {
+		
+		MeetingRooms meetingrooms = new MeetingRooms();
 		List<MeetingRoomBookings> meetingRoomBookingsList = new ArrayList<MeetingRoomBookings>(); 
 		
 //		HttpClientBuilder builder = HttpClientBuilder.create();
@@ -202,7 +208,8 @@ public class PhpConnectorClient {
 			
 			// get currentDate
 			Integer currentDate = (Integer)((Map<String, Object>)mp.get("Infos")).get("CurrentDate");
-						
+			meetingrooms.setCurrentDate(currentDate);
+			
 			Map<String, Map<String, Map<String, Object>>> roomMap = (Map<String, Map<String, Map<String, Object>>>)mp.get("Rooms");
 			for (Entry<String, Map<String, Map<String, Object>>> element : roomMap.entrySet()) {
 				MeetingRoomBookings meetingRoomBookings = new MeetingRoomBookings();
@@ -214,7 +221,6 @@ public class PhpConnectorClient {
 				details.setMeetingRoomExternalName(meetingRoomExternalName);
 				details.setMeetingRoomExternalLocation(meetingRoomExternalLocation);
 				meetingRoomBookings.setMeetingRoomDetails(details);
-				meetingRoomBookings.setCurrentDate(currentDate); // add currentDate foreach meetingRoomBookings
 				meetingRoomBookingsList.add(meetingRoomBookings);
 			}
 			
@@ -254,7 +260,8 @@ public class PhpConnectorClient {
 				}
 			}
 			
-			return meetingRoomBookingsList;
+			meetingrooms.setMeetingRooms(meetingRoomBookingsList);
+			return meetingrooms;
 			
 		} finally {
 			//Important: Close the connect

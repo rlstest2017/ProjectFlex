@@ -10,22 +10,9 @@ import java.util.List;
  */
 public class MeetingRoomBookings {
 
-	Integer currentDate;
 	MeetingRoomDetails meetingRoomDetails;
 	List<Booking> bookings;
 	
-	/**
-	 * @return the currentDate
-	 */
-	public Integer getCurrentDate() {
-		return currentDate;
-	}
-	/**
-	 * @param currentDate the currentDate to set
-	 */
-	public void setCurrentDate(Integer currentDate) {
-		this.currentDate = currentDate;
-	}
 	/**
 	 * @return the meetingRoomDetails
 	 */
