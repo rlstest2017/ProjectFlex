@@ -11,4 +11,7 @@
 	<bean id="phpConnector" class="com.orange.meetingroom.connector.php.PhpConnectorClient"/>
 	<bean id="phpBusinessConnector" class="com.orange.meetingroom.business.connector.impl.PhpConnectorManagerImpl"/> 
     
+    <bean id="flexofficeConnector" class="com.orange.meetingroom.connector.flexoffice.FlexOfficeConnectorClient"/>
+	<bean id="flexofficeBusinessConnector" class="com.orange.meetingroom.business.connector.impl.FlexOfficeConnectorManagerImpl"/>
+	
 </beans>

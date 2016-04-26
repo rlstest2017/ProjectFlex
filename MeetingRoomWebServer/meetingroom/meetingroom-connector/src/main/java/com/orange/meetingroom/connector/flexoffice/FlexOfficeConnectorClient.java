@@ -49,7 +49,7 @@ public class FlexOfficeConnectorClient {
 		SystemReturn systemReturn = new SystemReturn();
 		try	{
 		//HttpGet getRequest = new HttpGet("http://192.168.103.193:8080/flexoffice-meetingroomapi/v2");
-		String request = flexofficeMeetingRoomAPIServerURL;
+		String request = flexofficeMeetingRoomAPIServerURL + "/system";
 		HttpGet getRequest = new HttpGet(request);
 		
 		//Set the API media type in http accept header
