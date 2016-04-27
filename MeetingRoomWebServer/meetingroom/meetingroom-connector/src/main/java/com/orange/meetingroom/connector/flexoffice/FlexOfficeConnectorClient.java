@@ -18,6 +18,7 @@ import com.orange.meetingroom.connector.flexoffice.model.request.MeetingRoomData
 import com.orange.meetingroom.connector.flexoffice.model.response.AgentOutput;
 import com.orange.meetingroom.connector.flexoffice.model.response.DashboardOutput;
 import com.orange.meetingroom.connector.flexoffice.model.response.SystemReturn;
+import com.orange.meetingroom.connector.flexoffice.ws.PathConst;
 
 /**
  * FlexOfficeConnectorClient
@@ -49,7 +50,7 @@ public class FlexOfficeConnectorClient {
 		SystemReturn systemReturn = new SystemReturn();
 		try	{
 		//HttpGet getRequest = new HttpGet("http://192.168.103.193:8080/flexoffice-meetingroomapi/v2");
-		String request = flexofficeMeetingRoomAPIServerURL + "/system";
+		String request = flexofficeMeetingRoomAPIServerURL + PathConst.SYSTEM_PATH;
 		HttpGet getRequest = new HttpGet(request);
 		
 		//Set the API media type in http accept header
@@ -63,6 +64,7 @@ public class FlexOfficeConnectorClient {
 		int statusCode = response.getStatusLine().getStatusCode();
 		if (statusCode != 200) {
 			throw new RuntimeException("Failed with HTTP error code : " + statusCode);
+			// TODO gérer les erreurs 404,405, 500, ...
 		}
 		
 		//Now pull back the response object
