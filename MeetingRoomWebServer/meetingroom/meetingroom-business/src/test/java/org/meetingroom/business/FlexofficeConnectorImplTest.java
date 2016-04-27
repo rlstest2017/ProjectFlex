@@ -95,7 +95,7 @@ public class FlexofficeConnectorImplTest {
 			// Asserts
 			assertEquals(4, listReturn.size());
 			
-			
+			// test 
 		} catch (Exception e) {
 			expectedResult = true;
 			LOGGER.error(e.getMessage());
