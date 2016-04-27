@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orange.meetingroom.connector.flexoffice.model.request.AgentInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.DashboardInput;
@@ -49,7 +50,7 @@ public class FlexOfficeConnectorClient {
 		}
 		SystemReturn systemReturn = new SystemReturn();
 		try	{
-		//HttpGet getRequest = new HttpGet("http://192.168.103.193:8080/flexoffice-meetingroomapi/v2");
+		//HttpGet getRequest = new HttpGet("http://192.168.103.193:8080/flexoffice-meetingroomapi/v2/system");
 		String request = flexofficeMeetingRoomAPIServerURL + PathConst.SYSTEM_PATH;
 		HttpGet getRequest = new HttpGet(request);
 		
@@ -57,7 +58,7 @@ public class FlexOfficeConnectorClient {
 		getRequest.addHeader("accept", "application/json");
 		
 		//Send the request; It will immediately return the response in HttpResponse object
-		LOGGER.info("The getRequest in getBookingsFromAgent(...) method is : " + getRequest);
+		LOGGER.info("The getRequest in getSystem(...) method is : " + getRequest);
 		HttpResponse response = httpClient.execute(getRequest);
 		
 		//verify the valid error code first
@@ -93,9 +94,53 @@ public class FlexOfficeConnectorClient {
 	 * getMeetingRoomsInTimeOut
 	 * @return List<String>
 	 */
-	public List<String>  getMeetingRoomsInTimeOut() {
-		// TODO
-		return null;
+	public List<String>  getMeetingRoomsInTimeOut() throws Exception {
+	
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug( "Begin call getMeetingRoomsInTimeOut() method");
+		}
+		List<String> meetingRoomsExternalIdsList;
+		
+		try	{
+		//HttpGet getRequest = new HttpGet("http://192.168.103.193:8080/flexoffice-meetingroomapi/v2/meetingrooms/timeout");
+		// TODO decoment String request = flexofficeMeetingRoomAPIServerURL + PathConst.MEETINGROOMS_PATH + PathConst.TIMEOUT_PATH;
+		String request = flexofficeMeetingRoomAPIServerURL + PathConst.TIMEOUT_PATH; // TODO delete only for mock !!!
+		HttpGet getRequest = new HttpGet(request);
+		
+		//Set the API media type in http accept header
+		getRequest.addHeader("accept", "application/json");
+		
+		//Send the request; It will immediately return the response in HttpResponse object
+		LOGGER.info("The getRequest in getMeetingRoomsInTimeOut(...) method is : " + getRequest);
+		HttpResponse response = httpClient.execute(getRequest);
+		
+		//verify the valid error code first
+		int statusCode = response.getStatusLine().getStatusCode();
+		if (statusCode != 200) {
+			throw new RuntimeException("Failed with HTTP error code : " + statusCode);
+			// TODO gérer les erreurs 404,405, 500, ...
+		}
+		
+		//Now pull back the response object
+		HttpEntity httpEntity = response.getEntity();
+		String apiOutput = EntityUtils.toString(httpEntity);
+		
+		//Lets see what we got from API
+		//System.out.println(apiOutput); 
+					
+		// parse the JSON response
+		ObjectMapper mapper = new ObjectMapper();
+		meetingRoomsExternalIdsList = mapper.readValue(apiOutput,new TypeReference<List<String>>() {});
+		
+		
+		}
+		finally	{
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug( "End call getMeetingRoomsInTimeOut() method");
+			}
+		}
+	
+		return meetingRoomsExternalIdsList;
 	}
 	
 	/**
@@ -103,9 +148,53 @@ public class FlexOfficeConnectorClient {
 	 * @param params DashboardInput
 	 * @return List<String>
 	 */
-	public List<String> getDashboardXMLConfigFilesName(DashboardInput params) {
-		// TODO
-		return null;
+	public List<String> getDashboardXMLConfigFilesName(DashboardInput params) throws Exception {
+		
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug( "Begin call getDashboardXMLConfigFilesName(DashboardInput params) method");
+		}
+		List<String> xmlFilesNameList;
+		
+		try	{
+		//HttpGet getRequest = new HttpGet("http://192.168.103.193:8080/flexoffice-meetingroomapi/v2/dashboards/{dashboardMacAddress}/config");
+		// TODO decoment String request = flexofficeMeetingRoomAPIServerURL + PathConst.DASHBOARDS_PATH + "/" + params.getDashboardMacAddress() + PathConst.CONFIG_PATH;
+		String request = flexofficeMeetingRoomAPIServerURL + PathConst.CONFIG_PATH; // TODO delete only for mock !!!
+		HttpGet getRequest = new HttpGet(request);
+		
+		//Set the API media type in http accept header
+		getRequest.addHeader("accept", "application/json");
+		
+		//Send the request; It will immediately return the response in HttpResponse object
+		LOGGER.info("The getRequest in getMeetingRoomsInTimeOut(...) method is : " + getRequest);
+		HttpResponse response = httpClient.execute(getRequest);
+		
+		//verify the valid error code first
+		int statusCode = response.getStatusLine().getStatusCode();
+		if (statusCode != 200) {
+			throw new RuntimeException("Failed with HTTP error code : " + statusCode);
+			// TODO gérer les erreurs 404,405, 500, ...
+		}
+		
+		//Now pull back the response object
+		HttpEntity httpEntity = response.getEntity();
+		String apiOutput = EntityUtils.toString(httpEntity);
+		
+		//Lets see what we got from API
+		//System.out.println(apiOutput); 
+					
+		// parse the JSON response
+		ObjectMapper mapper = new ObjectMapper();
+		xmlFilesNameList = mapper.readValue(apiOutput,new TypeReference<List<String>>() {});
+		
+		
+		}
+		finally	{
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug( "End call getDashboardXMLConfigFilesName(DashboardInput params) method");
+			}
+		}
+	
+		return xmlFilesNameList;
 	}
 	
 	/**
@@ -113,7 +202,7 @@ public class FlexOfficeConnectorClient {
 	 * @param params
 	 * @return DashboardOutput
 	 */
-	public DashboardOutput updateDashboardStatus(DashboardInput params) {
+	public DashboardOutput updateDashboardStatus(DashboardInput params) throws Exception {
 		// TODO
 		return null;
 	}
@@ -123,7 +212,7 @@ public class FlexOfficeConnectorClient {
 	 * @param params AgentInput
 	 * @return AgentOutput
 	 */
-	public AgentOutput updateAgentStatus(AgentInput params) {
+	public AgentOutput updateAgentStatus(AgentInput params) throws Exception {
 		// TODO
 		return null;
 	}
@@ -132,7 +221,7 @@ public class FlexOfficeConnectorClient {
 	 * putMeetingRoomData
 	 * @param params MeetingRoomData
 	 */
-	public void putMeetingRoomData(MeetingRoomData params) {
+	public void putMeetingRoomData(MeetingRoomData params) throws Exception {
 		
 	}
 }

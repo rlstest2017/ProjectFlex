@@ -3,6 +3,7 @@ package org.meetingroom.business;
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
@@ -14,6 +15,7 @@ import org.springframework.util.Log4jConfigurer;
 
 import com.orange.meetingroom.business.connector.FlexOfficeConnectorManager;
 import com.orange.meetingroom.business.connector.impl.FlexOfficeConnectorManagerImpl;
+import com.orange.meetingroom.connector.flexoffice.model.request.DashboardInput;
 import com.orange.meetingroom.connector.flexoffice.model.response.SystemReturn;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -61,4 +63,45 @@ public class FlexofficeConnectorImplTest {
 		assertEquals(false, expectedResult);
 	}
 
+	@Test
+	public void TestB_flexofficeGetMeetingRoomsTimeout() {
+		// SetUp
+		boolean expectedResult = false;
+		try {
+			List<String> listReturn = flexofficeBusinessConnector.getMeetingRoomsInTimeOut();
+			
+			// Asserts
+			assertEquals(3, listReturn.size());
+			
+			
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(false, expectedResult);
 	}
+
+	@Test
+	public void TestC_flexofficeGetXmlFilesNameConfig() {
+		// SetUp
+		boolean expectedResult = false;
+		DashboardInput params = new DashboardInput();
+		params.setDashboardMacAddress("FF:RR:EE:SS:DD:AA");
+		
+		try {
+			List<String> listReturn = flexofficeBusinessConnector.getDashboardXMLConfigFilesName(params);
+			
+			// Asserts
+			assertEquals(4, listReturn.size());
+			
+			
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(false, expectedResult);
+	}
+
+}
