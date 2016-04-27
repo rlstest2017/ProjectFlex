@@ -89,6 +89,12 @@ ALTER TABLE ONLY meetingroom_stats
 
 ALTER TABLE ONLY meetingroom_daily_occupancy
     ADD CONSTRAINT meetingroom_daily_occupancy_pkey PRIMARY KEY (id);
+    
+ALTER TABLE ONLY alerts
+	ADD agent_id integer,
+	ADD FOREIGN KEY(agent_id) REFERENCES agents(id),
+	ADD dashboard_id integer,
+	ADD FOREIGN KEY(dashboard_id) REFERENCES dashboards(id);
 
 CREATE INDEX agents_mac_address_idx ON agents USING btree (mac_address);
 CREATE INDEX agents_name_idx ON agents USING btree (name);

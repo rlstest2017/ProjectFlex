@@ -64,7 +64,22 @@ public enum EnumErrorModel {
 	ERROR_55("B002","impossible de créer ce bâtiment"),
 	ERROR_56("B003","impossible de mettre à jour ce bâtiment"),
 	ERROR_57("B004","impossible de supprimer ce bâtiment"),
-	ERROR_58("B005","impossible de charger ce bâtiment");
+	ERROR_58("B005","impossible de charger ce bâtiment"),
+	ERROR_59("A001","impossible de charger la liste des agents"),
+	ERROR_60("A002","impossible de créer cet agent"),
+	ERROR_61("A003","impossible de mettre à jour cet agent"),
+	ERROR_62("A004","impossible de supprimer cet agent"),
+	ERROR_63("A005","impossible de charger cet agent"),
+	ERROR_64("D001","impossible de charger la liste des dashboards"),
+	ERROR_65("D002","impossible de créer ce dashboard"),
+	ERROR_66("D003","impossible de mettre à jour ce dashboard"),
+	ERROR_67("D004","impossible de supprimer ce dashboard"),
+	ERROR_68("D005","impossible de charger ce dashboard"),
+	ERROR_69("MR001","impossible de charger la liste des salles réservables"),
+	ERROR_70("MR002","impossible de créer cette salle réservable"),
+	ERROR_71("MR003","impossible de mettre à jour cette salle réservable"),
+	ERROR_72("MR004","impossible de supprimer cette salle réservable"),
+	ERROR_73("MR005","impossible de charger cette salle réservable");
      /**
      * status code
      */

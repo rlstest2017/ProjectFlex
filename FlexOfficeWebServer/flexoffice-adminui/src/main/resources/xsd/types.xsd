@@ -54,6 +54,48 @@
 	 	<xsd:enumeration value="ENDED"/>
 	 </xsd:restriction>
 	</xsd:simpleType>
+	
+	<xsd:simpleType name="e-agentStatus">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="ONLINE"/>
+	 	<xsd:enumeration value="OFFLINE"/>
+	 	<xsd:enumeration value="ECONOMIC"/>
+	 	<xsd:enumeration value="STANDBY"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="e-dashboardStatus">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="ONLINE"/>
+	 	<xsd:enumeration value="OFFLINE"/>
+	 	<xsd:enumeration value="ECONOMIC"/>
+	 	<xsd:enumeration value="STANDBY"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="e-meetingroomStatus">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="FREE"/>
+	 	<xsd:enumeration value="OCCUPIED"/>
+	 	<xsd:enumeration value="UNKNOWN"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="e-meetingroomType">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="BOX"/>
+	 	<xsd:enumeration value="VIDEO_CONF"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="e-commandModel">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="NONE"/>
+	 	<xsd:enumeration value="ECONOMIC"/>
+	 	<xsd:enumeration value="ONLINE"/>
+	 	<xsd:enumeration value="OFFLINE"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
 	<!-- End Enumeration Type -->
 	
 	<!-- Location -->
@@ -190,6 +232,10 @@
 			<xsd:element name="roomCount" type="xsd:integer"/>
 			<xsd:element name="freeRoomCount" type="xsd:integer"/>
 			<xsd:element name="occupiedRoomCount" type="xsd:integer"/>
+			<xsd:element name="meetingroomCount" type="xsd:integer"/>
+			<xsd:element name="freeMeetingroomCount" type="xsd:integer"/>
+			<xsd:element name="occupiedMeetingroomCount" type="xsd:integer"/>
+			<xsd:element name="agentCount" type="xsd:integer"/>
 			<xsd:element name="deviceStatuses" type="e-deviceStatus" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="sensorTypes" type="e-sensorType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="roomTypes" type="e-roomType" minOccurs="0" maxOccurs="unbounded"/>
@@ -405,6 +451,157 @@
 			<xsd:element name="location" type="Location"/>
 			<xsd:element name="temperature" type="xsd:string"/>
 			<xsd:element name="humidity" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- AGENTS -->
+	<xsd:complexType name="AgentSummary">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="macAddress" type="xsd:string"/>
+			<xsd:element name="status" type="e-agentStatus" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="lastMeasureDate" type="xsd:long"/>
+			<xsd:element name="meetingroomId" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="AgentInput">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+ 		    <xsd:element name="desc" type="xsd:string"/>
+ 		    <xsd:element name="macAddress" type="xsd:string"/>
+ 		    <xsd:element name="command" type="e-commandModel" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="AgentInput2">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+ 		    <xsd:element name="desc" type="xsd:string"/>
+ 		    <xsd:element name="command" type="e-commandModel" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="AgentInput3">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+ 		    <xsd:element name="desc" type="xsd:string"/>
+ 		    <xsd:element name="macAddress" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="AgentOutput">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="macAddress" type="xsd:string"/>
+			<xsd:element name="name" type="xsd:string"/>
+ 		    <xsd:element name="desc" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="Agent">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="name" type="xsd:string"/>
+ 		    <xsd:element name="macAddress" type="xsd:string"/>
+			<xsd:element name="desc" type="xsd:string"/>
+			<xsd:element name="meetingroom" type="MeetingRoomOutput" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="status" type="e-agentStatus"/>
+			<xsd:element name="lastMeasureDate" type="xsd:long"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- DASHBOARDS -->
+	<xsd:complexType name="DashboardSummary">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="macAddress" type="xsd:string"/>
+			<xsd:element name="status" type="e-dashboardStatus" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="lastMeasureDate" type="xsd:long"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="DashboardInput">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+ 		    <xsd:element name="desc" type="xsd:string"/>
+ 		    <xsd:element name="macAddress" type="xsd:string"/>
+ 		    <xsd:element name="cityId" type="xsd:string"/>
+ 		    <xsd:element name="buildingId" type="xsd:string"/>
+			<xsd:element name="floor" type="xsd:integer"/>
+ 		    <xsd:element name="command" type="e-commandModel" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="DashboardInput2">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+ 		    <xsd:element name="desc" type="xsd:string"/>
+ 		    <xsd:element name="cityId" type="xsd:string"/>
+ 		    <xsd:element name="buildingId" type="xsd:string"/>
+			<xsd:element name="floor" type="xsd:integer"/>
+ 		    <xsd:element name="command" type="e-commandModel" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="Dashboard">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="name" type="xsd:string"/>
+ 		    <xsd:element name="macAddress" type="xsd:string"/>
+			<xsd:element name="desc" type="xsd:string"/>
+			<xsd:element name="status" type="e-dashboardStatus"/>
+			<xsd:element name="location" type="Location"/>
+			<xsd:element name="lastMeasureDate" type="xsd:long"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- MEETINGROOMS -->
+	<xsd:complexType name="MeetingRoomSummary">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="externalId" type="xsd:string"/>
+			<xsd:element name="name" type="xsd:string"/>
+ 		    <xsd:element name="type" type="e-meetingroomType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="agent" type="AgentOutput" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="status" type="e-meetingroomStatus" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="MeetingRoomInput">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="externalId" type="xsd:string"/>
+ 		    <xsd:element name="type" type="e-meetingroomType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="agent" type="AgentInput3" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="desc" type="xsd:string"/>
+			<xsd:element name="capacity" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="buildingId" type="xsd:string"/>
+			<xsd:element name="floor" type="xsd:integer"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="MeetingRoomOutput">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>		
+			<xsd:element name="name" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="MeetingRoom">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="externalId" type="xsd:string"/>
+			<xsd:element name="name" type="xsd:string"/>
+ 		    <xsd:element name="type" type="e-meetingroomType"/>
+			<xsd:element name="agent" type="AgentOutput"/>
+			<xsd:element name="desc" type="xsd:string"/>
+			<xsd:element name="capacity" type="xsd:integer"/>
+			<xsd:element name="status" type="e-meetingroomStatus"/>
+			<xsd:element name="organizerLabel" type="xsd:string"/>
+			<xsd:element name="location" type="Location"/>
+			<xsd:element name="startDate" type="xsd:long"/>
+			<xsd:element name="endDate" type="xsd:long"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	

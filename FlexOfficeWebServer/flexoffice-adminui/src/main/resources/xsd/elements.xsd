@@ -40,6 +40,19 @@
 	<xsd:element name="region" type="Region"/>
 	<xsd:element name="regionSummary" type="RegionSummary"/>
 	<xsd:element name="regionInput" type="RegionInput"/>
+	<xsd:element name="agentSummary" type="AgentSummary"/>
+	<xsd:element name="agentInput" type="AgentInput"/>
+	<xsd:element name="agentInput2" type="AgentInput2"/>
+	<xsd:element name="agentOutput" type="AgentOutput"/>
+	<xsd:element name="agent" type="Agent"/>
+	<xsd:element name="dashboardSummary" type="DashboardSummary"/>
+	<xsd:element name="dashboardInput" type="DashboardInput"/>
+	<xsd:element name="dashboardInput2" type="DashboardInput2"/>
+	<xsd:element name="dashboard" type="Dashboard"/>
+	<xsd:element name="meetingRoomSummary" type="MeetingRoomSummary"/>
+	<xsd:element name="meetingRoomInput" type="MeetingRoomInput"/>
+	<xsd:element name="meetingRoomOutput" type="MeetingRoomOutput"/>
+	<xsd:element name="meetingRoom" type="MeetingRoom"/>
 		
 	<xsd:element name="token" type="Token"/>
 	

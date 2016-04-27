@@ -73,6 +73,30 @@ public class AlertDaoRepository extends DataRepository<AlertDao> implements Aler
 	}
 	
 	@Override
+	public AlertDao findByAgentId(Long agentId) throws IncorrectResultSizeDataAccessException {
+		SqlParameterSource paramMap = new MapSqlParameterSource("agentId", agentId);
+		AlertDao data = null;
+		data =  jdbcTemplate.queryForObject(
+				findByColumnAgentIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<AlertDao>(AlertDao.class)
+			);
+		return data;
+	}
+	
+	@Override
+	public AlertDao findByDashboardId(Long dashboardId) throws IncorrectResultSizeDataAccessException {
+		SqlParameterSource paramMap = new MapSqlParameterSource("dashboardId", dashboardId);
+		AlertDao data = null;
+		data =  jdbcTemplate.queryForObject(
+				findByColumnDashboardIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<AlertDao>(AlertDao.class)
+			);
+		return data;
+	}
+	
+	@Override
 	public AlertDao findBySensorId(Long sensorId) throws IncorrectResultSizeDataAccessException {
 		SqlParameterSource paramMap = new MapSqlParameterSource("sensorId", sensorId);
 		AlertDao data = null;
