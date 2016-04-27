@@ -27,8 +27,6 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomStatDaoRepository;
-import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
-import com.orange.flexoffice.dao.common.repository.data.jdbc.TeachinSensorsDaoRepository;
 
 /**
  * Manages {@link AgentDto}.
@@ -49,15 +47,11 @@ public class AgentManagerImpl implements AgentManager {
 	@Autowired
 	private RoomStatDaoRepository roomStatRepository;
 	@Autowired
-	private SensorDaoRepository sensorRepository;
-	@Autowired
 	private AlertDaoRepository alertRepository;
 	@Autowired
 	private AlertManager alertManager;
 	@Autowired
 	private ConfigurationDaoRepository configRepository;
-	@Autowired
-	private TeachinSensorsDaoRepository teachinRepository;
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -167,14 +161,17 @@ public class AgentManagerImpl implements AgentManager {
 	            message.append( "\n" );
 	            LOGGER.debug( message.toString() );
 	        }
-			
-			MeetingRoomDao meetingroom = getMeetingRoom(agentDao.getId());
-			if (meetingroom.getAgentId() != null || meetingroom != null) { 
-				dto.setMeetingRoom(meetingroom);			
+			try {
+				MeetingRoomDao meetingroom = getMeetingRoom(agentDao.getId());
+				if (meetingroom.getAgentId() != null || meetingroom != null) { 
+					dto.setMeetingRoom(meetingroom);			
+				}
+			} catch(IncorrectResultSizeDataAccessException e) {
+				LOGGER.debug("agent " + macAddress + " has none meeting room associated", e);
+				return dto;
 			} 
 			
 			return dto;
-
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("agent by macAddress " + macAddress + " is not found", e);
 			LOGGER.error("agent by macAddress " + macAddress + " is not found");

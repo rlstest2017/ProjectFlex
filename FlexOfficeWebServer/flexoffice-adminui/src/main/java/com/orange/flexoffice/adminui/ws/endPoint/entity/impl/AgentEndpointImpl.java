@@ -62,6 +62,7 @@ public class AgentEndpointImpl implements AgentEndpoint {
 			AgentSummary agent = factory.createAgentSummary();
 			agent.setMacAddress(agentDao.getMacAddress());
 			agent.setName(agentDao.getName());
+			agent.setMeetingroomId(agentDao.getMeetingroomId().toString());
 			if (agentDao.getStatus().equals(E_AgentStatus.ONLINE.toString())) {
 				agent.setStatus(EAgentStatus.ONLINE);
 			} else if (agentDao.getStatus().equals(E_AgentStatus.OFFLINE.toString())) {
@@ -107,11 +108,13 @@ public class AgentEndpointImpl implements AgentEndpoint {
 			
 			MeetingRoomDao meetingroom = data.getMeetingRoom();
 			
-			MeetingRoomOutput rm = new MeetingRoomOutput();
-			rm.setId(meetingroom.getColumnId());
-			rm.setName(meetingroom.getName());
-			agent.setMeetingroom(rm);
-		
+			if (meetingroom != null){
+				MeetingRoomOutput rm = new MeetingRoomOutput();
+				rm.setId(meetingroom.getColumnId());
+				rm.setName(meetingroom.getName());
+				agent.setMeetingroom(rm);
+			}
+			
 			return factory.createAgent(agent).getValue();
 			
 		} catch (DataNotExistsException e){

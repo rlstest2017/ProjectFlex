@@ -114,6 +114,11 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			meetingroom.setOrganizerLabel(computeTenant(meetingroom.getStatus(), meetingroomDto.getOrganizerLabel(), meetingroomDto.getName()));
 			meetingroom.setExternalId(meetingroomDto.getExternalId());
 			
+			if(meetingroomDto.getStartDate() != null)
+			meetingroom.setStartDate(meetingroomDto.getStartDate().getTime());
+			if(meetingroomDto.getEndDate() != null)
+			meetingroom.setEndDate(meetingroomDto.getEndDate().getTime());
+			
 			BuildingDto buidingDto = buildingManager.find(Long.valueOf(meetingroomDto.getBuildingId()));
 			Location location = factory.createLocation();
 			BuildingOutput building = factory.createBuildingOutput();

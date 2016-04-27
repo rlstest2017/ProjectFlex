@@ -29,6 +29,8 @@ public class MeetingRoomDto {
 	private Date lastMeasureDate; // the last time since the status has been modified
 	private Long buildingId;
 	private Long floor;
+	private Date startDate;
+	private Date endDate;
 	
 	public String getName() {
 		return name;
@@ -128,5 +130,17 @@ public class MeetingRoomDto {
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	public Date getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+	public Date getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 }

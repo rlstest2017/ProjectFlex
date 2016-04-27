@@ -58,9 +58,6 @@ public class AgentDto {
 		this.status = status;
 	}
 	public MeetingRoomDao getMeetingRoom() {
-		if (meetingroom == null) {
-			meetingroom = new MeetingRoomDao();
-		}
 		return meetingroom;
 	}
 	public void setMeetingRoom(MeetingRoomDao meeetingroom) {

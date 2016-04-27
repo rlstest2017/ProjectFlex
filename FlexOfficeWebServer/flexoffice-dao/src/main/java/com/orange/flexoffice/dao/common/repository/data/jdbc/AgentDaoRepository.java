@@ -66,6 +66,18 @@ public class AgentDaoRepository extends DataRepository<AgentDao> implements Agen
 	}
 	
 	@Override
+	public AgentDao findByMeetingRoomId(Long meetingRoomId) throws IncorrectResultSizeDataAccessException {
+		SqlParameterSource paramMap = new MapSqlParameterSource("meetingRoomId", meetingRoomId);
+		AgentDao data = null;
+		data = jdbcTemplate.queryForObject(
+				findByMeetingRoomIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<AgentDao>(AgentDao.class)
+			);
+		return data;
+	}
+	
+	@Override
 	public AgentDao saveAgent(AgentDao data) throws DataIntegrityViolationException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		

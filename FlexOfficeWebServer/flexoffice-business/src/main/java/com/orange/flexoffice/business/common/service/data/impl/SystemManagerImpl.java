@@ -21,21 +21,25 @@ import com.orange.flexoffice.business.common.utils.DateTools;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
+import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_MeetingRoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_UserRole;
 import com.orange.flexoffice.dao.common.model.object.SensorDto;
 import com.orange.flexoffice.dao.common.model.object.SystemDto;
 import com.orange.flexoffice.dao.common.model.object.TeachinSensorDto;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.AgentDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.TeachinSensorsDaoRepository;
@@ -61,7 +65,11 @@ public class SystemManagerImpl implements SystemManager {
 	@Autowired
 	private RoomDaoRepository roomRepository;
 	@Autowired
+	private MeetingRoomDaoRepository meetingroomRepository;
+	@Autowired
 	private UserDaoRepository userRepository;
+	@Autowired
+	private AgentDaoRepository agentRepository;
 	@Autowired
 	private AlertDaoRepository alertRepository;
 	@Autowired
@@ -83,6 +91,8 @@ public class SystemManagerImpl implements SystemManager {
 		Long gatewaysCount = countGateways();
 		Long activeGatewaysCount = countActiveGateways();
 		Long roomsCount = countRooms();
+		Long meetingroomsCount = countMeetingrooms();
+		Long agentsCount = countAgents();
 		List<AlertDao> deviceAlerts = findAllAlerts();
 		
 		if (LOGGER.isDebugEnabled()) {
@@ -105,6 +115,18 @@ public class SystemManagerImpl implements SystemManager {
 			} 
 		}		
 		
+		Long freeMeetingroomsCount = 0L;
+		Long occupiedMeetingroomsCount = 0L;
+		
+		List<MeetingRoomDao> meetingrooms = meetingroomRepository.findAllMeetingRooms();
+		for (MeetingRoomDao meetingroom : meetingrooms) {
+			if (E_MeetingRoomStatus.FREE.toString().equals(meetingroom.getStatus())) {
+				freeMeetingroomsCount++;
+			} else if (E_MeetingRoomStatus.OCCUPIED.toString().equals(meetingroom.getStatus())) {
+				occupiedMeetingroomsCount++;
+			} 
+		}	
+		
 		system.setActiveUserCount(usersActiveCount.intValue());
 		system.setUserCount(usersCount.intValue());
 		system.setGatewayCount(gatewaysCount.intValue());
@@ -113,6 +135,10 @@ public class SystemManagerImpl implements SystemManager {
 		system.setActiveGatewayCount(activeGatewaysCount.intValue());
 		system.setFreeRoomCount(freeRoomsCount.intValue());
 		system.setOccupiedRoomCount(occupiedRoomsCount.intValue());
+		system.setAgentCount(agentsCount.intValue());
+		system.setMeetingroomCount(meetingroomsCount.intValue());
+		system.setFreeMeetingroomCount(freeMeetingroomsCount.intValue());
+		system.setOccupiedMeetingroomCount(occupiedMeetingroomsCount.intValue());
 		
 		return system;
 	}
@@ -375,8 +401,18 @@ public class SystemManagerImpl implements SystemManager {
 	}
 	
 	@Transactional(readOnly=true)
+	private Long countMeetingrooms() {
+		return meetingroomRepository.count();
+	}
+	
+	@Transactional(readOnly=true)
 	private Long countUsers() {
 		return userRepository.count();
+	}
+	
+	@Transactional(readOnly=true)
+	private Long countAgents() {
+		return agentRepository.count();
 	}
 	
 	@Transactional(readOnly=true)

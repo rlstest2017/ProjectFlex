@@ -105,6 +105,7 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 
 		MeetingRoomDto dto = new MeetingRoomDto();
 		dto.setId(meetingroomId);
+		dto.setExternalId(meetingroomDao.getExternalId());
 		dto.setDescription(meetingroomDao.getDescription());
 		dto.setName(meetingroomDao.getName());
 		dto.setType(E_MeetingRoomType.valueOf(meetingroomDao.getType()));
@@ -114,6 +115,8 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 		dto.setLastMeasureDate(meetingroomDao.getLastMeasureDate());
 		dto.setBuildingId(meetingroomDao.getBuildingId());
 		dto.setFloor(meetingroomDao.getFloor());
+		dto.setStartDate(meetingroomDao.getStartDate());
+		dto.setEndDate(meetingroomDao.getEndDate());
 		
 		try {
 			dto.setAddress(getAddressFromBuilding(meetingroomDao.getBuildingId()));
@@ -173,13 +176,20 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 	@Override
 	public MeetingRoomDao update(MeetingRoomDao meetingroomDao) throws DataNotExistsException {
 		try {
-			// Update Agent
+			// Update former Agent
+			AgentDao formerAgent = new AgentDao();
+			formerAgent = agentRepository.findByMeetingRoomId(meetingroomDao.getId());
+			formerAgent.setMeetingroomId(0L);
+			agentRepository.updateAgentMeetingRoomId(formerAgent);
+			LOGGER.debug("Agent has set in table for agent id #: " + meetingroomDao.getAgentId());
+			
+			// Update new Agent
 			AgentDao agent = new AgentDao();
 			agent = agentRepository.findByAgentId(meetingroomDao.getAgentId());
 			agent.setMeetingroomId(meetingroomDao.getId());
 			agentRepository.updateAgentMeetingRoomId(agent);
 			LOGGER.debug("Agent has set in table for agent id #: " + meetingroomDao.getAgentId());
-			
+						
 			// Update MeetingRoomDao
 			return meetingroomRepository.updateMeetingRoom(meetingroomDao);
 		} catch (RuntimeException e) {
@@ -227,7 +237,7 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 				// Set meeting room id to 0 for associated Agent 
 				AgentDao agent = new AgentDao();
 				agent = agentRepository.findByAgentId(meetingroom.getAgentId());
-				agent.setMeetingroomId(meetingroom.getId());
+				agent.setMeetingroomId(0L);
 				agentRepository.updateAgentMeetingRoomId(agent);
 				LOGGER.info("Meeting room id set to 0 for agent id #: " + meetingroom.getAgentId());
 				

@@ -24,6 +24,8 @@ public final class DataSqlTemplate {
 			"select * from %s where room_info=CAST(:roomInfo AS roomInfo)";
 	public static final String FIND_BY_MAC_ADDRESS_TEMPLATE = 
 			"select * from %s where mac_address=:macAddress";
+	public static final String FIND_BY_MEETINGROOM_ID_TEMPLATE = 
+			"select * from %s where meetingroom_id=:meetingRoomId";
 	public static final String FIND_BY_COL_GATEWAY_ID_TEMPLATE = 
 			"select * from %s where gateway_id=:gatewayId";
 	public static final String FIND_BY_COL_AGENT_ID_TEMPLATE = 

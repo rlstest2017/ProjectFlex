@@ -20,6 +20,8 @@ public interface AgentDaoOperations {
 	
 	AgentDao findByMacAddress(String macAddress) throws IncorrectResultSizeDataAccessException;
 	
+	AgentDao findByMeetingRoomId(Long meetingRoomId) throws IncorrectResultSizeDataAccessException;
+	
 	AgentDao updateAgentStatus(AgentDao data);
 	
 	AgentDao updateAgentMeetingRoomId(AgentDao data);

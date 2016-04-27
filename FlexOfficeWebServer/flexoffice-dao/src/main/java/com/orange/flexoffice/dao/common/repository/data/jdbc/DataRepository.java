@@ -44,6 +44,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String findRoomStatByRoomInfoQuery;
 	protected final String findByIdentifierQuery;
 	protected final String findByMacAddressQuery;
+	protected final String findByMeetingRoomIdQuery;
 	protected final String findByColumnMailQuery;
 	protected final String findByUserIdQuery;
 	protected final String findBySensorIdentifierQuery;
@@ -177,6 +178,7 @@ public abstract class DataRepository<T extends Data>
 		findRoomStatByRoomInfoQuery = String.format(FIND_ROOMSTAT_BY_ROOMINFO_TEMPLATE, getTableName());
 		findByIdentifierQuery = String.format(FIND_BY_IDENTIFIER_TEMPLATE, getTableName());
 		findByMacAddressQuery = String.format(FIND_BY_MAC_ADDRESS_TEMPLATE, getTableName());
+		findByMeetingRoomIdQuery = String.format(FIND_BY_MEETINGROOM_ID_TEMPLATE, getTableName());
 		findByColumnMailQuery = String.format(FIND_BY_COL_MAIL_TEMPLATE, getTableName());
 		findByColumnMailAndPasswordQuery = String.format(FIND_BY_COL_MAIL_PASSWORD_TEMPLATE, getTableName());
 		findByColumnAccessTokenQuery = String.format(FIND_BY_COL_ACCESS_TOKEN_TEMPLATE, getTableName());
