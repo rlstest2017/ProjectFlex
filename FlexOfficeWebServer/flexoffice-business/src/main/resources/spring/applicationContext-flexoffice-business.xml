@@ -24,6 +24,12 @@
 	
 	<!-- Transactions with annotations -->
 	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<bean id="XMLConverter" class="com.orange.flexoffice.business.meetingroom.config.XMLConverter">
+		<property name="marshaller" ref="castorMarshaller" />
+		<property name="unmarshaller" ref="castorMarshaller" />
+	</bean>
+	<bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller" />
     
     
 </beans>

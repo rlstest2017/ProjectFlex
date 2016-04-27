@@ -40,6 +40,8 @@
     <springbatch.version>3.0.6.RELEASE</springbatch.version>
     <spring-security.version>4.0.0.RELEASE</spring-security.version>
     <javax.annotation.version>1.0</javax.annotation.version>
+    <oxm.version>4.1.5.RELEASE</oxm.version>
+    <castor.version>1.3.3</castor.version>
     
     <!-- Sonar -->
     <sonar.sources>src/main</sonar.sources>
@@ -232,6 +234,20 @@
 			<groupId>cglib</groupId>
 			<artifactId>cglib-nodep</artifactId>
 			<version>${cglib.version}</version>
+		</dependency>
+		
+		<!-- spring oxm -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+			<version>${oxm.version}</version>
+		</dependency>
+	
+		<!-- Uses Castor for XML -->
+		<dependency>
+			<groupId>org.codehaus.castor</groupId>
+			<artifactId>castor-xml</artifactId>
+			<version>${castor.version}</version>
 		</dependency>
 
 		<!--  CXF JAXS-RS -->

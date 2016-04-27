@@ -85,6 +85,18 @@
 		<artifactId>cglib-nodep</artifactId>
 	</dependency>
 	
+	<!-- spring oxm -->
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-oxm</artifactId>
+	</dependency>
+
+	<!-- Uses Castor for XML -->
+	<dependency>
+		<groupId>org.codehaus.castor</groupId>
+		<artifactId>castor-xml</artifactId>
+	</dependency>
+	
   </dependencies>
 
 </project>
