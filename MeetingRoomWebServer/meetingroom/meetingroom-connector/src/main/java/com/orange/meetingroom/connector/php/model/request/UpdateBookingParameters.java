@@ -6,7 +6,8 @@ public class UpdateBookingParameters {
 	String idReservation;
 	String revisionReservation;
 	String format;
-	String endDate;
+	String endDate; // to close meeting
+	String startDate; // to confirm meeting 
 	
 	/**
 	 * @return the roomID
@@ -43,6 +44,18 @@ public class UpdateBookingParameters {
 	 */
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
+	}
+	/**
+	 * @return the startDate
+	 */
+	public String getStartDate() {
+		return startDate;
+	}
+	/**
+	 * @param startDate the startDate to set
+	 */
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
 	}
 	/**
 	 * @return the idReservation
