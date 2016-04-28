@@ -8,6 +8,7 @@ import com.orange.meetingroom.business.connector.FlexOfficeConnectorManager;
 import com.orange.meetingroom.connector.flexoffice.FlexOfficeConnectorClient;
 import com.orange.meetingroom.connector.flexoffice.model.request.AgentInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.DashboardInput;
+import com.orange.meetingroom.connector.flexoffice.model.request.MeetingRoomData;
 import com.orange.meetingroom.connector.flexoffice.model.response.AgentOutput;
 import com.orange.meetingroom.connector.flexoffice.model.response.DashboardOutput;
 import com.orange.meetingroom.connector.flexoffice.model.response.SystemReturn;
@@ -45,6 +46,11 @@ public class FlexOfficeConnectorManagerImpl implements FlexOfficeConnectorManage
 	@Override
 	public AgentOutput updateAgentStatus(AgentInput params) throws Exception {
 		return flexofficeConnector.updateAgentStatus(params);
+	}
+
+	@Override
+	public void updateMeetingRoomData(MeetingRoomData params) throws Exception {
+		flexofficeConnector.updateMeetingRoomData(params);
 	}
 
 }

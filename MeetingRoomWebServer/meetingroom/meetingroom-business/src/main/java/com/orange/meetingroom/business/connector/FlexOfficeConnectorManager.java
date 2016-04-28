@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.orange.meetingroom.connector.flexoffice.model.request.AgentInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.DashboardInput;
+import com.orange.meetingroom.connector.flexoffice.model.request.MeetingRoomData;
 import com.orange.meetingroom.connector.flexoffice.model.response.AgentOutput;
 import com.orange.meetingroom.connector.flexoffice.model.response.DashboardOutput;
 import com.orange.meetingroom.connector.flexoffice.model.response.SystemReturn;
@@ -24,5 +25,7 @@ public interface FlexOfficeConnectorManager {
 	public DashboardOutput updateDashboardStatus(DashboardInput params) throws Exception;
 	
 	public AgentOutput updateAgentStatus(AgentInput params) throws Exception;
+	
+	public void updateMeetingRoomData(MeetingRoomData params) throws Exception;
 	
 }

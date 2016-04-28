@@ -266,7 +266,7 @@ public class FlexOfficeConnectorClient {
 	 */
 	public AgentOutput updateAgentStatus(AgentInput params) throws Exception {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug( "Begin call updateDashboardStatus(AgentInput params) method");
+			LOGGER.debug( "Begin call updateAgentStatus(AgentInput params) method");
 		}
 		AgentOutput agentOutput = new AgentOutput();
 
@@ -317,10 +317,43 @@ public class FlexOfficeConnectorClient {
 	}
 	
 	/**
-	 * putMeetingRoomData
+	 * updateMeetingRoomData
 	 * @param params MeetingRoomData
 	 */
-	public void putMeetingRoomData(MeetingRoomData params) throws Exception {
+	public void updateMeetingRoomData(MeetingRoomData params) throws Exception {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin call updateMeetingRoomData(MeetingRoomData params) method");
+		}
+		// construct the writer from MeetingRoomData
+		String writer = flexofficeDataTools.constructJSONMeetingRoomData(params);
 		
+		try	{
+			// Define a putRequest request
+			String request = flexofficeMeetingRoomAPIServerURL + PathConst.MEETINGROOMS_PATH +"/" + params.getMeetingRoomExternalId();
+			HttpPut putRequest = new HttpPut(request);
+			
+			//Set the API media type in http content-type header
+			putRequest.addHeader("content-type", "application/json");
+			
+			//Set the request post body
+			StringEntity input = new StringEntity(writer);
+			putRequest.setEntity(input);
+			 
+			//Send the request; It will immediately return the response in HttpResponse object if any
+			LOGGER.info("The putRequest in updateMeetingRoomData(...) method is : " + putRequest);
+			HttpResponse response = httpClient.execute(putRequest);
+			
+			//verify the valid error code first
+			int statusCode = response.getStatusLine().getStatusCode();
+			if (statusCode != 200) {
+				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
+			}
+			
+		}
+		finally	{
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug( "End call updateMeetingRoomData(MeetingRoomData params) method");
+			}
+		}
 	}
 }

@@ -17,8 +17,10 @@ import com.orange.meetingroom.business.connector.FlexOfficeConnectorManager;
 import com.orange.meetingroom.business.connector.impl.FlexOfficeConnectorManagerImpl;
 import com.orange.meetingroom.connector.flexoffice.enums.EnumAgentStatus;
 import com.orange.meetingroom.connector.flexoffice.enums.EnumDashboardStatus;
+import com.orange.meetingroom.connector.flexoffice.enums.EnumMeetingRoomStatus;
 import com.orange.meetingroom.connector.flexoffice.model.request.AgentInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.DashboardInput;
+import com.orange.meetingroom.connector.flexoffice.model.request.MeetingRoomData;
 import com.orange.meetingroom.connector.flexoffice.model.response.AgentOutput;
 import com.orange.meetingroom.connector.flexoffice.model.response.DashboardOutput;
 import com.orange.meetingroom.connector.flexoffice.model.response.SystemReturn;
@@ -148,6 +150,27 @@ public class FlexofficeConnectorImplTest {
 			assertEquals("brehat.rennes@microsoft.cad.aql.fr", output.getMeetingRoomExternalId().toString());
 			
 			// test 
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(false, expectedResult);
+	}
+	
+	@Test
+	public void TestF_flexofficePutMeetingRoomData() {
+		// SetUp
+		boolean expectedResult = false;
+		MeetingRoomData params = new MeetingRoomData();
+		params.setMeetingRoomExternalId("brehat.rennes@microsoft.cad.aql.fr");
+		params.setStartDate(123546879);
+		params.setEndDate(214536251);
+		params.setOrganizerLabel("test organizer");
+		params.setMeetingRoomStatus(EnumMeetingRoomStatus.FREE);
+		
+		try {
+			flexofficeBusinessConnector.updateMeetingRoomData(params);
 		} catch (Exception e) {
 			expectedResult = true;
 			LOGGER.error(e.getMessage());
