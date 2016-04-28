@@ -17,6 +17,9 @@
 
 	<bean id="dataTools" class="com.orange.meetingroom.connector.php.utils.DataTools" >
 	</bean>
+	
+	<bean id="flexofficeDataTools" class="com.orange.meetingroom.connector.flexoffice.utils.FlexOfficeDataTools" >
+	</bean>
     
     <!-- Scan base package -->
 	<context:component-scan base-package="com.orange.meetingroom.connector.flexoffice, com.orange.meetingroom.connector.php" />

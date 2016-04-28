@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.meetingroom.business.connector.FlexOfficeConnectorManager;
 import com.orange.meetingroom.connector.flexoffice.FlexOfficeConnectorClient;
+import com.orange.meetingroom.connector.flexoffice.model.request.AgentInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.DashboardInput;
+import com.orange.meetingroom.connector.flexoffice.model.response.AgentOutput;
+import com.orange.meetingroom.connector.flexoffice.model.response.DashboardOutput;
 import com.orange.meetingroom.connector.flexoffice.model.response.SystemReturn;
 
 /**
@@ -32,6 +35,16 @@ public class FlexOfficeConnectorManagerImpl implements FlexOfficeConnectorManage
 	@Override
 	public List<String> getDashboardXMLConfigFilesName(DashboardInput params) throws Exception {
 		return flexofficeConnector.getDashboardXMLConfigFilesName(params);
+	}
+
+	@Override
+	public DashboardOutput updateDashboardStatus(DashboardInput params) throws Exception {
+		return flexofficeConnector.updateDashboardStatus(params);
+	}
+
+	@Override
+	public AgentOutput updateAgentStatus(AgentInput params) throws Exception {
+		return flexofficeConnector.updateAgentStatus(params);
 	}
 
 }

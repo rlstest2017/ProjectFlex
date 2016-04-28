@@ -15,7 +15,12 @@ import org.springframework.util.Log4jConfigurer;
 
 import com.orange.meetingroom.business.connector.FlexOfficeConnectorManager;
 import com.orange.meetingroom.business.connector.impl.FlexOfficeConnectorManagerImpl;
+import com.orange.meetingroom.connector.flexoffice.enums.EnumAgentStatus;
+import com.orange.meetingroom.connector.flexoffice.enums.EnumDashboardStatus;
+import com.orange.meetingroom.connector.flexoffice.model.request.AgentInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.DashboardInput;
+import com.orange.meetingroom.connector.flexoffice.model.response.AgentOutput;
+import com.orange.meetingroom.connector.flexoffice.model.response.DashboardOutput;
 import com.orange.meetingroom.connector.flexoffice.model.response.SystemReturn;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -94,6 +99,53 @@ public class FlexofficeConnectorImplTest {
 			
 			// Asserts
 			assertEquals(4, listReturn.size());
+			
+			// test 
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(false, expectedResult);
+	}
+	
+	@Test
+	public void TestD_flexofficePutDashboardStatus() {
+		// SetUp
+		boolean expectedResult = false;
+		DashboardInput params = new DashboardInput();
+		params.setDashboardMacAddress("FF:RR:EE:SS:DD:AA");
+		params.setDashboardStatus(EnumDashboardStatus.ONLINE);
+		
+		try {
+			DashboardOutput output = flexofficeBusinessConnector.updateDashboardStatus(params);
+			
+			// Asserts
+			assertEquals("ONLINE", output.getCommand().toString());
+			
+			// test 
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(false, expectedResult);
+	}
+	
+	@Test
+	public void TestE_flexofficePutAgentStatus() {
+		// SetUp
+		boolean expectedResult = false;
+		AgentInput params = new AgentInput();
+		params.setAgentMacAddress("FF:RR:EE:SS:DD:AA");
+		params.setAgentStatus(EnumAgentStatus.ONLINE);
+		
+		try {
+			AgentOutput output = flexofficeBusinessConnector.updateAgentStatus(params);
+			
+			// Asserts
+			assertEquals("OFFLINE", output.getCommand().toString());
+			assertEquals("brehat.rennes@microsoft.cad.aql.fr", output.getMeetingRoomExternalId().toString());
 			
 			// test 
 		} catch (Exception e) {

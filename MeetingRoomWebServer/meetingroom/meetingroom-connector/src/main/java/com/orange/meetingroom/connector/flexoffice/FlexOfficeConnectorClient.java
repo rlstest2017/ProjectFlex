@@ -39,7 +39,7 @@ public class FlexOfficeConnectorClient {
 	@Autowired
 	private CloseableHttpClient httpClient;
 	@Autowired
-	private FlexOfficeDataTools dataTools;
+	private FlexOfficeDataTools flexofficeDataTools;
 	@Value("${flexoffice.meetingroomapi.server}")
 	private String flexofficeMeetingRoomAPIServerURL;
 
@@ -216,10 +216,12 @@ public class FlexOfficeConnectorClient {
 		DashboardOutput dashboardOutput = new DashboardOutput();
 
 		// construct the writer from DashboardInput
-		String writer = dataTools.constructJSONDashboardStatus(params);
+		String writer = flexofficeDataTools.constructJSONDashboardStatus(params);
+		
 		try	{
-			// Define a postRequest request
-			HttpPut putRequest = new HttpPut(flexofficeMeetingRoomAPIServerURL);
+			// Define a putRequest request
+			String request = flexofficeMeetingRoomAPIServerURL + PathConst.DASHBOARDS_PATH +"/" + params.getDashboardMacAddress();
+			HttpPut putRequest = new HttpPut(request);
 			
 			//Set the API media type in http content-type header
 			putRequest.addHeader("content-type", "application/json");
@@ -229,7 +231,7 @@ public class FlexOfficeConnectorClient {
 			putRequest.setEntity(input);
 			 
 			//Send the request; It will immediately return the response in HttpResponse object if any
-			LOGGER.info("The postRequest in updateDashboardStatus(...) method is : " + putRequest);
+			LOGGER.info("The putRequest in updateDashboardStatus(...) method is : " + putRequest);
 			HttpResponse response = httpClient.execute(putRequest);
 			
 			//verify the valid error code first
@@ -263,8 +265,55 @@ public class FlexOfficeConnectorClient {
 	 * @return AgentOutput
 	 */
 	public AgentOutput updateAgentStatus(AgentInput params) throws Exception {
-		// TODO
-		return null;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug( "Begin call updateDashboardStatus(AgentInput params) method");
+		}
+		AgentOutput agentOutput = new AgentOutput();
+
+		// construct the writer from AgentInput
+		String writer = flexofficeDataTools.constructJSONAgentStatus(params);
+		
+		try	{
+			// Define a putRequest request
+			String request = flexofficeMeetingRoomAPIServerURL + PathConst.AGENTS_PATH +"/" + params.getAgentMacAddress();
+			HttpPut putRequest = new HttpPut(request);
+			
+			//Set the API media type in http content-type header
+			putRequest.addHeader("content-type", "application/json");
+			
+			//Set the request post body
+			StringEntity input = new StringEntity(writer);
+			putRequest.setEntity(input);
+			 
+			//Send the request; It will immediately return the response in HttpResponse object if any
+			LOGGER.info("The putRequest in updateAgentStatus(...) method is : " + putRequest);
+			HttpResponse response = httpClient.execute(putRequest);
+			
+			//verify the valid error code first
+			int statusCode = response.getStatusLine().getStatusCode();
+			if (statusCode != 200) {
+				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
+			}
+			
+			//Now pull back the response object
+			HttpEntity httpEntity = response.getEntity();
+			String apiOutput = EntityUtils.toString(httpEntity);
+						
+			// parse the JSON response
+			ObjectMapper mapper = new ObjectMapper();
+			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
+			String meetingRoomExternalId = (String)mp.get("meetingRoomExternalId");
+			String command = (String)mp.get("command");
+			agentOutput.setMeetingRoomExternalId(meetingRoomExternalId);
+			agentOutput.setCommand(EnumCommand.valueOf(command));
+			
+			return agentOutput;
+		}
+		finally	{
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug( "End call updateAgentStatus(AgentInput params) method");
+			}
+		}	
 	}
 	
 	/**
