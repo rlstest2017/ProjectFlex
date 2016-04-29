@@ -98,8 +98,7 @@ public class FlexOfficeConnectorClient {
 		} catch (IOException e) {
 			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
-		}
-		finally	{
+		} finally {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call getSystem() method");
 			}
@@ -155,7 +154,7 @@ public class FlexOfficeConnectorClient {
 		} catch (IOException e) {
 			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
-		} finally	{
+		} finally {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call getMeetingRoomsInTimeOut() method");
 			}
@@ -218,7 +217,7 @@ public class FlexOfficeConnectorClient {
 		} catch (IOException e) {
 			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
-		} finally	{
+		} finally {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call getDashboardXMLConfigFilesName(DashboardInput params) method");
 			}
@@ -367,7 +366,7 @@ public class FlexOfficeConnectorClient {
 		} catch (IOException e) {
 			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
-		} finally	{
+		} finally {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call updateAgentStatus(AgentInput params) method");
 			}
