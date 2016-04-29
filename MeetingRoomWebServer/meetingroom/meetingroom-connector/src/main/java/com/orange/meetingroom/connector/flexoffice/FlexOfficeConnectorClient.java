@@ -1,10 +1,12 @@
 package com.orange.meetingroom.connector.flexoffice;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
@@ -17,6 +19,10 @@ import org.springframework.beans.factory.annotation.Value;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orange.meetingroom.connector.flexoffice.enums.EnumCommand;
+import com.orange.meetingroom.connector.flexoffice.exception.DataNotExistsException;
+import com.orange.meetingroom.connector.flexoffice.exception.FlexOfficeInternalServerException;
+import com.orange.meetingroom.connector.flexoffice.exception.MeetingRoomInternalServerException;
+import com.orange.meetingroom.connector.flexoffice.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.flexoffice.model.request.AgentInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.DashboardInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.MeetingRoomData;
@@ -48,9 +54,11 @@ public class FlexOfficeConnectorClient {
     //**************************************************************************
 	/**
 	 * getSystem
-	 * @return System
+	 * @return SystemReturn
+	 * @throws FlexOfficeInternalServerException
+	 * @throws MeetingRoomInternalServerException
 	 */
-	public SystemReturn getSystem() throws Exception {
+	public SystemReturn getSystem() throws FlexOfficeInternalServerException, MeetingRoomInternalServerException {
 		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call getSystem() method");
@@ -71,22 +79,25 @@ public class FlexOfficeConnectorClient {
 		//verify the valid error code first
 		int statusCode = response.getStatusLine().getStatusCode();
 		if (statusCode != 200) {
-			throw new RuntimeException("Failed with HTTP error code : " + statusCode);
-			// TODO gérer les erreurs 404,405, 500, ...
+			LOGGER.error("Internal error produce in FlexOffice, with error code: " + statusCode);
+			throw new FlexOfficeInternalServerException("Internal error produce in FlexOffice, with error code: " + statusCode);
 		}
 		
 		//Now pull back the response object
 		HttpEntity httpEntity = response.getEntity();
 		String apiOutput = EntityUtils.toString(httpEntity);
 		
-		//Lets see what we got from API
-		//System.out.println(apiOutput); 
-					
-		// TODO parse the JSON response
+		// parse the JSON response
 		ObjectMapper mapper = new ObjectMapper();
 		//JSON from URL to Object
 		systemReturn = mapper.readValue(apiOutput, SystemReturn.class);
 		
+		} catch (ClientProtocolException ex) {
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
+		} catch (IOException e) {
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 		}
 		finally	{
 			if (LOGGER.isDebugEnabled()) {
@@ -99,9 +110,11 @@ public class FlexOfficeConnectorClient {
 	
 	/**
 	 * getMeetingRoomsInTimeOut
-	 * @return List<String>
+	 * @return List<String> 
+	 * @throws FlexOfficeInternalServerException
+	 * @throws MeetingRoomInternalServerException
 	 */
-	public List<String>  getMeetingRoomsInTimeOut() throws Exception {
+	public List<String>  getMeetingRoomsInTimeOut() throws FlexOfficeInternalServerException, MeetingRoomInternalServerException {
 	
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call getMeetingRoomsInTimeOut() method");
@@ -110,8 +123,8 @@ public class FlexOfficeConnectorClient {
 		
 		try	{
 		//HttpGet getRequest = new HttpGet("http://192.168.103.193:8080/flexoffice-meetingroomapi/v2/meetingrooms/timeout");
-		// TODO decoment String request = flexofficeMeetingRoomAPIServerURL + PathConst.MEETINGROOMS_PATH + PathConst.TIMEOUT_PATH;
-		String request = flexofficeMeetingRoomAPIServerURL + PathConst.TIMEOUT_PATH; // TODO delete only for mock !!!
+		String request = flexofficeMeetingRoomAPIServerURL + PathConst.MEETINGROOMS_PATH + PathConst.TIMEOUT_PATH;
+		
 		HttpGet getRequest = new HttpGet(request);
 		
 		//Set the API media type in http accept header
@@ -124,24 +137,25 @@ public class FlexOfficeConnectorClient {
 		//verify the valid error code first
 		int statusCode = response.getStatusLine().getStatusCode();
 		if (statusCode != 200) {
-			throw new RuntimeException("Failed with HTTP error code : " + statusCode);
-			// TODO gérer les erreurs 404,405, 500, ...
+			LOGGER.error("Internal error produce in FlexOffice, with error code: " + statusCode);
+			throw new FlexOfficeInternalServerException("Internal error produce in FlexOffice, with error code: " + statusCode);
 		}
 		
 		//Now pull back the response object
 		HttpEntity httpEntity = response.getEntity();
 		String apiOutput = EntityUtils.toString(httpEntity);
 		
-		//Lets see what we got from API
-		//System.out.println(apiOutput); 
-					
 		// parse the JSON response
 		ObjectMapper mapper = new ObjectMapper();
 		meetingRoomsExternalIdsList = mapper.readValue(apiOutput,new TypeReference<List<String>>() {});
 		
-		
-		}
-		finally	{
+		} catch (ClientProtocolException ex) {
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
+		} catch (IOException e) {
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+		} finally	{
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call getMeetingRoomsInTimeOut() method");
 			}
@@ -149,13 +163,16 @@ public class FlexOfficeConnectorClient {
 	
 		return meetingRoomsExternalIdsList;
 	}
-	
+
 	/**
 	 * getDashboardXMLConfigFilesName
 	 * @param params DashboardInput
-	 * @return List<String>
+	 * @return List<String> 
+	 * @throws FlexOfficeInternalServerException
+	 * @throws MeetingRoomInternalServerException
+	 * @throws DataNotExistsException
 	 */
-	public List<String> getDashboardXMLConfigFilesName(DashboardInput params) throws Exception {
+	public List<String> getDashboardXMLConfigFilesName(DashboardInput params) throws FlexOfficeInternalServerException, MeetingRoomInternalServerException, DataNotExistsException {
 		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call getDashboardXMLConfigFilesName(DashboardInput params) method");
@@ -164,8 +181,8 @@ public class FlexOfficeConnectorClient {
 		
 		try	{
 		//HttpGet getRequest = new HttpGet("http://192.168.103.193:8080/flexoffice-meetingroomapi/v2/dashboards/{dashboardMacAddress}/config");
-		// TODO decoment String request = flexofficeMeetingRoomAPIServerURL + PathConst.DASHBOARDS_PATH + "/" + params.getDashboardMacAddress() + PathConst.CONFIG_PATH;
-		String request = flexofficeMeetingRoomAPIServerURL + PathConst.CONFIG_PATH; // TODO delete only for mock !!!
+		String request = flexofficeMeetingRoomAPIServerURL + PathConst.DASHBOARDS_PATH + "/" + params.getDashboardMacAddress() + PathConst.CONFIG_PATH;
+
 		HttpGet getRequest = new HttpGet(request);
 		
 		//Set the API media type in http accept header
@@ -178,24 +195,30 @@ public class FlexOfficeConnectorClient {
 		//verify the valid error code first
 		int statusCode = response.getStatusLine().getStatusCode();
 		if (statusCode != 200) {
-			throw new RuntimeException("Failed with HTTP error code : " + statusCode);
-			// TODO gérer les erreurs 404,405, 500, ...
+			if (statusCode == 404) {
+				LOGGER.error("dashboardMacAddress #: " + params.getDashboardMacAddress() + " is not found in FlexOffice DataBase");
+				throw new DataNotExistsException("dashboardMacAddress #: " + params.getDashboardMacAddress() + " is not found in FlexOffice DataBase");
+			} else {
+				LOGGER.error("Internal error produce in FlexOffice, with error code: " + statusCode);
+				throw new FlexOfficeInternalServerException("Internal error produce in FlexOffice, with error code: " + statusCode);
+			}
 		}
 		
 		//Now pull back the response object
 		HttpEntity httpEntity = response.getEntity();
 		String apiOutput = EntityUtils.toString(httpEntity);
 		
-		//Lets see what we got from API
-		//System.out.println(apiOutput); 
-					
 		// parse the JSON response
 		ObjectMapper mapper = new ObjectMapper();
 		xmlFilesNameList = mapper.readValue(apiOutput,new TypeReference<List<String>>() {});
 		
-		
-		}
-		finally	{
+		} catch (ClientProtocolException ex) {
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
+		} catch (IOException e) {
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+		} finally	{
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call getDashboardXMLConfigFilesName(DashboardInput params) method");
 			}
@@ -203,13 +226,16 @@ public class FlexOfficeConnectorClient {
 	
 		return xmlFilesNameList;
 	}
-	
+
 	/**
 	 * updateDashboardStatus
-	 * @param params
+	 * @param params DashboardInput
 	 * @return DashboardOutput
+	 * @throws FlexOfficeInternalServerException
+	 * @throws MeetingRoomInternalServerException
+	 * @throws DataNotExistsException
 	 */
-	public DashboardOutput updateDashboardStatus(DashboardInput params) throws Exception {
+	public DashboardOutput updateDashboardStatus(DashboardInput params) throws FlexOfficeInternalServerException, MeetingRoomInternalServerException, DataNotExistsException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call updateDashboardStatus(DashboardInput params) method");
 		}
@@ -237,7 +263,13 @@ public class FlexOfficeConnectorClient {
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode != 200) {
-				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
+				if (statusCode == 404) {
+					LOGGER.error("dashboardMacAddress #: " + params.getDashboardMacAddress() + " is not found in FlexOffice DataBase");
+					throw new DataNotExistsException("dashboardMacAddress #: " + params.getDashboardMacAddress() + " is not found in FlexOffice DataBase");
+				} else {
+					LOGGER.error("Internal error produce in FlexOffice, with error code: " + statusCode);
+					throw new FlexOfficeInternalServerException("Internal error produce in FlexOffice, with error code: " + statusCode);
+				}
 			}
 			
 			//Now pull back the response object
@@ -251,8 +283,14 @@ public class FlexOfficeConnectorClient {
 			dashboardOutput.setCommand(EnumCommand.valueOf(command));
 			
 			return dashboardOutput;
-		}
-		finally	{
+			
+		} catch (ClientProtocolException ex) {
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
+		} catch (IOException e) {
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+		} finally {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call updateDashboardStatus(DashboardInput params) method");
 			}
@@ -263,8 +301,13 @@ public class FlexOfficeConnectorClient {
 	 * updateAgentStatus
 	 * @param params AgentInput
 	 * @return AgentOutput
+	 * @throws MethodNotAllowedException 
+	 * @throws DataNotExistsException 
+	 * @throws FlexOfficeInternalServerException 
+	 * @throws MeetingRoomInternalServerException 
+	 * @throws Exception
 	 */
-	public AgentOutput updateAgentStatus(AgentInput params) throws Exception {
+	public AgentOutput updateAgentStatus(AgentInput params) throws MethodNotAllowedException, DataNotExistsException, FlexOfficeInternalServerException, MeetingRoomInternalServerException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call updateAgentStatus(AgentInput params) method");
 		}
@@ -292,7 +335,16 @@ public class FlexOfficeConnectorClient {
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode != 200) {
-				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
+				if (statusCode == 405) {
+					LOGGER.error("agentMacAddress #: " + params.getAgentMacAddress() + " is not not paired to a meetingroom");
+					throw new MethodNotAllowedException("agentMacAddress #: " + params.getAgentMacAddress() + " is not paired to a meetingroom");
+				} else if (statusCode == 404) {
+					LOGGER.error("agentMacAddress #: " + params.getAgentMacAddress() + " is not found in FlexOffice DataBase");
+					throw new DataNotExistsException("agentMacAddress #: " + params.getAgentMacAddress() + " is not found in FlexOffice DataBase");
+				} else {
+					LOGGER.error("Internal error produce in FlexOffice, with error code: " + statusCode);
+					throw new FlexOfficeInternalServerException("Internal error produce in FlexOffice, with error code: " + statusCode);
+				}
 			}
 			
 			//Now pull back the response object
@@ -308,19 +360,28 @@ public class FlexOfficeConnectorClient {
 			agentOutput.setCommand(EnumCommand.valueOf(command));
 			
 			return agentOutput;
-		}
-		finally	{
+			
+		} catch (ClientProtocolException ex) {
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
+		} catch (IOException e) {
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+		} finally	{
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call updateAgentStatus(AgentInput params) method");
 			}
 		}	
 	}
-	
+
 	/**
 	 * updateMeetingRoomData
 	 * @param params MeetingRoomData
+	 * @throws FlexOfficeInternalServerException
+	 * @throws MeetingRoomInternalServerException
+	 * @throws DataNotExistsException
 	 */
-	public void updateMeetingRoomData(MeetingRoomData params) throws Exception {
+	public void updateMeetingRoomData(MeetingRoomData params) throws FlexOfficeInternalServerException, MeetingRoomInternalServerException, DataNotExistsException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin call updateMeetingRoomData(MeetingRoomData params) method");
 		}
@@ -346,11 +407,21 @@ public class FlexOfficeConnectorClient {
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode != 200) {
-				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
+				if (statusCode == 404) {
+					LOGGER.error("meetingRoomExternalId #: " + params.getMeetingRoomExternalId() + " is not found in FlexOffice DataBase");
+					throw new DataNotExistsException("meetingRoomExternalId #: " + params.getMeetingRoomExternalId() + " is not found in FlexOffice DataBase");
+				} else {
+					LOGGER.error("Internal error produce in FlexOffice, with error code: " + statusCode);
+					throw new FlexOfficeInternalServerException("Internal error produce in FlexOffice, with error code: " + statusCode);
+				}
 			}
-			
-		}
-		finally	{
+		} catch (ClientProtocolException ex) {
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
+		} catch (IOException e) {
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+		} finally {	
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call updateMeetingRoomData(MeetingRoomData params) method");
 			}

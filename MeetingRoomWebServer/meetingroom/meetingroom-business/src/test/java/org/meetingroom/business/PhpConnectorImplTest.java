@@ -48,7 +48,7 @@ public class PhpConnectorImplTest {
 	}
 
 
-	@Test
+	//@Test
 	public void TestA_phpGetAgentBookings() {
 		// SetUp
 		boolean expectedResult = false;
@@ -70,7 +70,7 @@ public class PhpConnectorImplTest {
 		assertEquals(false, expectedResult);
 	}
 
-	@Test
+	//@Test
 	public void TestB_phpGetDashboardBookings() {
 		// SetUp
 		boolean expectedResult = false;
@@ -93,7 +93,7 @@ public class PhpConnectorImplTest {
 		assertEquals(false, expectedResult);
 	}
 
-	@Test
+	//@Test
 	public void TestBA_phpGetDashboardBookings_BAD_XML_FILE() {
 		// SetUp
 		boolean expectedResult = false;
@@ -112,7 +112,7 @@ public class PhpConnectorImplTest {
 		assertEquals(true, expectedResult);
 	}
 
-	//@Test not execute by Jenkins
+	//@Test 
 	public void TestC_phpSetBooking() {
 		// SetUp
 		boolean expectedResult = false;
@@ -140,7 +140,7 @@ public class PhpConnectorImplTest {
 	}
 	
 	// Confirmer la réunion en cours
-	//@Test not execute by Jenkins
+	//@Test 
 	public void TestD_phpUpdateBooking_Confirmer() {
 		// SetUp
 		boolean expectedResult = false;
@@ -166,7 +166,7 @@ public class PhpConnectorImplTest {
 	}
 		
 	// Fermer (annuler) la réunion en cours
-	//@Test not execute by Jenkins
+	//@Test 
 	public void TestE_phpUpdateBooking_Fermer() {
 		// SetUp
 		boolean expectedResult = false;
