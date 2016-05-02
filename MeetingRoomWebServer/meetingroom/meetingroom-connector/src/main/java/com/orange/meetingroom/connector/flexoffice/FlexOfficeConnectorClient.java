@@ -18,11 +18,11 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.orange.meetingroom.connector.exception.DataNotExistsException;
+import com.orange.meetingroom.connector.exception.FlexOfficeInternalServerException;
+import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerException;
+import com.orange.meetingroom.connector.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.flexoffice.enums.EnumCommand;
-import com.orange.meetingroom.connector.flexoffice.exception.DataNotExistsException;
-import com.orange.meetingroom.connector.flexoffice.exception.FlexOfficeInternalServerException;
-import com.orange.meetingroom.connector.flexoffice.exception.MeetingRoomInternalServerException;
-import com.orange.meetingroom.connector.flexoffice.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.flexoffice.model.request.AgentInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.DashboardInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.MeetingRoomData;

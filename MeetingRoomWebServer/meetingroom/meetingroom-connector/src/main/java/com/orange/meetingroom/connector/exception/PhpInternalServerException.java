@@ -1,15 +1,15 @@
-package com.orange.meetingroom.connector.php.exception;
+package com.orange.meetingroom.connector.exception;
 
 /**
  * Exception throws when erroFlag = true from PHP response.
  * 
  * @author oab
  */
-public class PhpServerException extends Exception {
+public class PhpInternalServerException extends Exception {
 
 	private static final long serialVersionUID = -3297967487080760934L;
 	
-	public PhpServerException(String message) {
+	public PhpInternalServerException(String message) {
 		super(message);
 	}
 

@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.meetingroom.business.connector.FlexOfficeConnectorManager;
+import com.orange.meetingroom.connector.exception.DataNotExistsException;
+import com.orange.meetingroom.connector.exception.FlexOfficeInternalServerException;
+import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerException;
+import com.orange.meetingroom.connector.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.flexoffice.FlexOfficeConnectorClient;
-import com.orange.meetingroom.connector.flexoffice.exception.DataNotExistsException;
-import com.orange.meetingroom.connector.flexoffice.exception.FlexOfficeInternalServerException;
-import com.orange.meetingroom.connector.flexoffice.exception.MeetingRoomInternalServerException;
-import com.orange.meetingroom.connector.flexoffice.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.flexoffice.model.request.AgentInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.DashboardInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.MeetingRoomData;

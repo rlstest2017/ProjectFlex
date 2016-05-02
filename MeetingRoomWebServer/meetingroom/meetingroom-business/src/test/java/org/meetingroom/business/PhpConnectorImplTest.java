@@ -48,7 +48,7 @@ public class PhpConnectorImplTest {
 	}
 
 
-	//@Test
+	@Test
 	public void TestA_phpGetAgentBookings() {
 		// SetUp
 		boolean expectedResult = false;
@@ -70,7 +70,43 @@ public class PhpConnectorImplTest {
 		assertEquals(false, expectedResult);
 	}
 
-	//@Test
+	@Test
+	public void TestAA_phpGetAgentBookingsDataNotExistException() {
+		// SetUp
+		boolean expectedResult = false;
+		GetAgentBookingsParameters params = new GetAgentBookingsParameters();
+		params.setFormat("json");
+		params.setRoomID("toto");
+		params.setForceUpdateCache("false");
+		try {
+			phpBusinessConnector.getBookingsFromAgent(params);
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(true, expectedResult);
+	}
+
+	@Test
+	public void TestAB_phpGetAgentBookingsMethodNotAllowedException() {
+		// SetUp
+		boolean expectedResult = false;
+		GetAgentBookingsParameters params = new GetAgentBookingsParameters();
+		params.setFormat("json");
+		params.setRoomID("toto");
+		params.setForceUpdateCache("false");
+		try {
+			phpBusinessConnector.getBookingsFromAgent(params);
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(true, expectedResult);
+	}
+	
+	@Test
 	public void TestB_phpGetDashboardBookings() {
 		// SetUp
 		boolean expectedResult = false;
@@ -93,7 +129,7 @@ public class PhpConnectorImplTest {
 		assertEquals(false, expectedResult);
 	}
 
-	//@Test
+	@Test
 	public void TestBA_phpGetDashboardBookings_BAD_XML_FILE() {
 		// SetUp
 		boolean expectedResult = false;
@@ -112,7 +148,7 @@ public class PhpConnectorImplTest {
 		assertEquals(true, expectedResult);
 	}
 
-	//@Test 
+	@Test 
 	public void TestC_phpSetBooking() {
 		// SetUp
 		boolean expectedResult = false;
@@ -140,7 +176,7 @@ public class PhpConnectorImplTest {
 	}
 	
 	// Confirmer la réunion en cours
-	//@Test 
+	@Test 
 	public void TestD_phpUpdateBooking_Confirmer() {
 		// SetUp
 		boolean expectedResult = false;
@@ -166,7 +202,7 @@ public class PhpConnectorImplTest {
 	}
 		
 	// Fermer (annuler) la réunion en cours
-	//@Test 
+	@Test 
 	public void TestE_phpUpdateBooking_Fermer() {
 		// SetUp
 		boolean expectedResult = false;

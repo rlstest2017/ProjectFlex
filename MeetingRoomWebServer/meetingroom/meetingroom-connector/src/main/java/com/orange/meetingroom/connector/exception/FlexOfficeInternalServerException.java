@@ -1,4 +1,4 @@
-package com.orange.meetingroom.connector.flexoffice.exception;
+package com.orange.meetingroom.connector.exception;
 
 /**
  * FlexOfficeInternalServerException

@@ -1,5 +1,6 @@
 package com.orange.meetingroom.connector.php;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map.Entry;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -19,7 +21,11 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.orange.meetingroom.connector.php.exception.PhpServerException;
+import com.orange.meetingroom.connector.exception.DataNotExistsException;
+import com.orange.meetingroom.connector.exception.FlexOfficeInternalServerException;
+import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerException;
+import com.orange.meetingroom.connector.exception.MethodNotAllowedException;
+import com.orange.meetingroom.connector.exception.PhpInternalServerException;
 import com.orange.meetingroom.connector.php.model.request.GetAgentBookingsParameters;
 import com.orange.meetingroom.connector.php.model.request.GetDashboardBookingsParameters;
 import com.orange.meetingroom.connector.php.model.request.SetBookingParameters;
@@ -64,7 +70,7 @@ public class PhpConnectorClient {
 	 * @return MeetingRoomBookings
 	 * @throws Exception
 	 */
-	public MeetingRoom getBookingsFromAgent(GetAgentBookingsParameters params) throws Exception {
+	public MeetingRoom getBookingsFromAgent(GetAgentBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, DataNotExistsException, MethodNotAllowedException {
 		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call getBookingsFromAgent(GetAgentBookingsParameters params) method");
@@ -75,7 +81,10 @@ public class PhpConnectorClient {
 //	    CloseableHttpClient httpClient = builder.build(); 
 	    try	{
 			//HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&RoomID=brehat.rennes@microsoft.cad.aql.fr&ForceUpdateCache=false&_=1461057699231");
-			String request = phpGetBookingsURL + "?" + dataTools.getAgentBookingsParametersToUrlEncode(params);
+			// TODO decoment String request = phpGetBookingsURL + "?" + dataTools.getAgentBookingsParametersToUrlEncode(params);
+			//String request = "http://192.168.103.193:3000/getAgentBookingsKO1"; // TODO delete only for testing
+			String request = "http://192.168.103.193:3000/getAgentBookingsKO3"; // TODO delete only for testing
+			
 			HttpGet getRequest = new HttpGet(request);
 			
 			//Set the API media type in http accept header
@@ -88,7 +97,8 @@ public class PhpConnectorClient {
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode != 200) {
-				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
+				LOGGER.error("Internal error produce in PHP server, with error code: " + statusCode);
+				throw new PhpInternalServerException("Internal error produce in Php server, with error code: " + statusCode);
 			}
 			
 			//Now pull back the response object
@@ -103,21 +113,39 @@ public class PhpConnectorClient {
 			Integer currentDate = (Integer)((Map<String, Object>)mp.get("Infos")).get("CurrentDate");
 			meetingroom.setCurrentDate(currentDate);
 			
+			Map<String, Map<String, Object>> roomLevelOneMap = (Map<String, Map<String, Object>>)mp.get("Rooms");
+			for (Entry<String, Map<String, Object>> element : roomLevelOneMap.entrySet()) {
+				try {
+				Boolean errorFlag = (Boolean)element.getValue().get("ErrorFlag");
+				String message = (String)element.getValue().get("Message");
+				if (errorFlag) { // errorFlag = true
+					LOGGER.error("errorFlag is true in Php Server return with message:" + message);
+					throw new MethodNotAllowedException("errorFlag is true in Php Server return with message:" + message);
+				}
+				} catch (RuntimeException e ) { // {"Infos":{"CurrentDate":1461938475},"Rooms":{"toto":false}}
+					LOGGER.error("meetingRoomExternalId is not exist or Connexion to Exchange Server is impossible");
+					throw new DataNotExistsException("meetingRoomExternalId is not exist or Connexion to Exchange Server is impossible");
+				}
+
+			}
+				
+				
+			
 			Map<String, Map<String, Map<String, Object>>> roomMap = (Map<String, Map<String, Map<String, Object>>>)mp.get("Rooms");
 			
 			for (Entry<String, Map<String, Map<String, Object>>> element : roomMap.entrySet()) {
-				
-				MeetingRoomDetails details = new MeetingRoomDetails(); 
-				String meetingRoomExternalId = (String)element.getValue().get("RoomDetails").get("RoomID");
-				String meetingRoomExternalName = (String)element.getValue().get("RoomDetails").get("RoomName");
-				String meetingRoomExternalLocation = (String)element.getValue().get("RoomDetails").get("RoomLocation");
-				
-				details.setMeetingRoomExternalId(meetingRoomExternalId);
-				details.setMeetingRoomExternalName(meetingRoomExternalName);
-				details.setMeetingRoomExternalLocation(meetingRoomExternalLocation);
-				
-				meetingRoomBookings.setMeetingRoomDetails(details);
-				meetingroom.setMeetingRoom(meetingRoomBookings);
+					
+					MeetingRoomDetails details = new MeetingRoomDetails(); 
+					String meetingRoomExternalId = (String)element.getValue().get("RoomDetails").get("RoomID");
+					String meetingRoomExternalName = (String)element.getValue().get("RoomDetails").get("RoomName");
+					String meetingRoomExternalLocation = (String)element.getValue().get("RoomDetails").get("RoomLocation");
+					
+					details.setMeetingRoomExternalId(meetingRoomExternalId);
+					details.setMeetingRoomExternalName(meetingRoomExternalName);
+					details.setMeetingRoomExternalLocation(meetingRoomExternalLocation);
+					
+					meetingRoomBookings.setMeetingRoomDetails(details);
+					meetingroom.setMeetingRoom(meetingRoomBookings);
 			}
 			
 			Map<String, Map<String, Map<String, Map<String, Object>>>> roomMapBookings = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get("Rooms");
@@ -162,8 +190,15 @@ public class PhpConnectorClient {
 			}			
 			
 			return meetingroom;
-		}
-		finally	{
+			
+		} catch (ClientProtocolException ex) {
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
+		} catch (IOException e) {
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+	
+		} finally	{
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call getBookingsFromAgent(GetAgentBookingsParameters params) method");
 			}
@@ -327,7 +362,7 @@ public class PhpConnectorClient {
 			Boolean errorFlag = (Boolean)mp.get("ErrorFlag");
 			if (errorFlag) {
 				String errorMessage = (String)mp.get("Message");
-				throw new PhpServerException(errorMessage);
+				throw new PhpInternalServerException(errorMessage);
 			} else {
 				String idReservation = (String)mp.get("IDReservation");
 				String revisionReservation = (String)mp.get("RevisionReservation");
@@ -395,7 +430,7 @@ public class PhpConnectorClient {
 			Boolean errorFlag = (Boolean)mp.get("ErrorFlag");
 			if (errorFlag) {
 				String errorMessage = (String)mp.get("Message");
-				throw new PhpServerException(errorMessage);
+				throw new PhpInternalServerException(errorMessage);
 			} else {
 				String idReservation = (String)mp.get("IDReservation");
 				String revisionReservation = (String)mp.get("RevisionReservation");
