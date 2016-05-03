@@ -217,7 +217,7 @@ public class PhpConnectorClient {
 	 * @param GetDashboardBookingsParameters params
 	 * @throws Exception
 	 */
-	public MeetingRooms getBookingsFromDashboard(GetDashboardBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, MethodNotAllowedException  {
+	public MeetingRooms getBookingsFromDashboard(GetDashboardBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, MethodNotAllowedException {
 		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call getBookingsFromDashboard(GetDashboardBookingsParameters params) method");

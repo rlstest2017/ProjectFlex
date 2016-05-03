@@ -29,8 +29,9 @@ public class MeetingRooms {
 	 * @return the rooms
 	 */
 	public List<MeetingRoomBookings> getMeetingRooms() {
-		if (meetingrooms == null)
+		if (meetingrooms == null) {
 			meetingrooms = new ArrayList<MeetingRoomBookings>();
+		}
 		return meetingrooms;
 	}
 	/**

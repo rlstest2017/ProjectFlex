@@ -1,5 +1,9 @@
 package com.orange.meetingroom.business.connector;
 
+import com.orange.meetingroom.connector.exception.DataNotExistsException;
+import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerException;
+import com.orange.meetingroom.connector.exception.MethodNotAllowedException;
+import com.orange.meetingroom.connector.exception.PhpInternalServerException;
 import com.orange.meetingroom.connector.php.model.request.GetAgentBookingsParameters;
 import com.orange.meetingroom.connector.php.model.request.GetDashboardBookingsParameters;
 import com.orange.meetingroom.connector.php.model.request.SetBookingParameters;
@@ -15,12 +19,12 @@ import com.orange.meetingroom.connector.php.model.response.MeetingRooms;
  */
 public interface PhpConnectorManager {
 	
-	public MeetingRoom getBookingsFromAgent(GetAgentBookingsParameters params) throws Exception;
+	public MeetingRoom getBookingsFromAgent(GetAgentBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, DataNotExistsException, MethodNotAllowedException;
 	
-	public MeetingRooms getBookingsFromDashboard(GetDashboardBookingsParameters params) throws Exception;
+	public MeetingRooms getBookingsFromDashboard(GetDashboardBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, MethodNotAllowedException;
 
-	public BookingSummary setBooking(SetBookingParameters params) throws Exception;
+	public BookingSummary setBooking(SetBookingParameters params) throws MeetingRoomInternalServerException, MethodNotAllowedException, PhpInternalServerException;
 	
-	public BookingSummary updateBooking(UpdateBookingParameters params) throws Exception;
+	public BookingSummary updateBooking(UpdateBookingParameters params) throws MeetingRoomInternalServerException, MethodNotAllowedException, PhpInternalServerException;
 	
 }

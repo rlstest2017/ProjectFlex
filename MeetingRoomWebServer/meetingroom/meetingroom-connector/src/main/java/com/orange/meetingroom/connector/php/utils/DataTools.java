@@ -143,21 +143,21 @@ public class DataTools {
 	 * @throws ParseException
 	 */
 	public static void main(String[] args) throws ParseException {
-		DataTools data = new DataTools();
+		//DataTools data = new DataTools();
 		GetAgentBookingsParameters params = new GetAgentBookingsParameters();
 		params.setFormat("json");
 		params.setRoomID("brehat.rennes@microsoft.cad.aql.fr");
 		params.setForceUpdateCache("false");
-		String returnMetho = data.getAgentBookingsParametersToUrlEncode(params);
-		System.out.println("return is :" + returnMetho);
+		//String returnMetho = data.getAgentBookingsParametersToUrlEncode(params);
+		//System.out.println("return is :" + returnMetho);
 		
 		GetDashboardBookingsParameters paramsDash = new GetDashboardBookingsParameters();
 		paramsDash.setFormat("json");
 		paramsDash.setMaxBookings("2");
 		paramsDash.setRoomGroupID("rg_oab_full");
 		paramsDash.setStartDate("0");
-		String returnDashMethod = data.getDashboardBookingsParametersToUrlEncode(paramsDash);
-		System.out.println("return dash is :" + returnDashMethod);
+		//String returnDashMethod = data.getDashboardBookingsParametersToUrlEncode(paramsDash);
+		//System.out.println("return dash is :" + returnDashMethod);
 		
 		SetBookingParameters paramsSet = new SetBookingParameters();
 		paramsSet.setRoomID("brehat.rennes@microsoft.cad.aql.fr");
@@ -167,8 +167,8 @@ public class DataTools {
 		paramsSet.setStartDate("1461060000");
 		paramsSet.setEndDate("1461060600");
 		paramsSet.setAcknowledged("1");
-		String returnSetMethod = data.setBookingParametersToUrlEncode(paramsSet);
-		System.out.println("return set is :" + returnSetMethod);
+		//String returnSetMethod = data.setBookingParametersToUrlEncode(paramsSet);
+		//System.out.println("return set is :" + returnSetMethod);
 		
 		UpdateBookingParameters paramsUpdate = new UpdateBookingParameters();
 		paramsUpdate.setRoomID("brehat.rennes@microsoft.cad.aql.fr");
@@ -176,7 +176,7 @@ public class DataTools {
 		paramsUpdate.setRevisionReservation("DwAAABYAAABCilC93jIZRpFtVdaAAtvPAACRmK21");
 		paramsUpdate.setFormat("json");
 		paramsUpdate.setEndDate("1461060600");
-		String returnUpdateMethod = data.updateBookingParametersToUrlEncode(paramsUpdate);
-		System.out.println("return update is :" + returnUpdateMethod);
+		//String returnUpdateMethod = data.updateBookingParametersToUrlEncode(paramsUpdate);
+		//System.out.println("return update is :" + returnUpdateMethod);
 	}
 }
