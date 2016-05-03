@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Value;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orange.meetingroom.connector.exception.DataNotExistsException;
-import com.orange.meetingroom.connector.exception.FlexOfficeInternalServerException;
 import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerException;
 import com.orange.meetingroom.connector.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.exception.PhpInternalServerException;
@@ -229,7 +228,10 @@ public class PhpConnectorClient {
 //	    CloseableHttpClient httpClient = builder.build();
 		try	{
 			//HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&MaxBookings=2&StartDate=0&RoomGroupID=rg_oab_full&_=1461061105469");
-			String request = phpGetBookingsURL + "?" + dataTools.getDashboardBookingsParametersToUrlEncode(params);
+			// TODO decoment String request = phpGetBookingsURL + "?" + dataTools.getDashboardBookingsParametersToUrlEncode(params);
+			//String request =  "http://192.168.103.193:3000/getDashboardBookingsKO2"; // TODO remove
+			String request =  "http://192.168.103.193:3000/getDashboardBookingsKO1";
+			
 			HttpGet getRequest = new HttpGet(request);
 			
 			//Set the API media type in http accept header
@@ -273,8 +275,9 @@ public class PhpConnectorClient {
 						meetingRoomBookings.setMeetingRoomDetails(details);
 						meetingRoomBookingsList.add(meetingRoomBookings);
 					} catch (RuntimeException e) {
-						LOGGER.error("Error when parsing RoomDetails element, with message: " + e.getMessage());
-						throw new MeetingRoomInternalServerException("Error when parsing RoomDetails element, with message: " + e.getMessage());
+						// if not roomId, PHP returns ( "Rooms": {"toto": false }, {...}) witch produce this exception
+						LOGGER.error("no roomId is found in exchange server");
+						throw new MethodNotAllowedException("no roomId is found in exchange server");
 					}
 				}
 			} catch (java.lang.ClassCastException e) {
@@ -323,10 +326,10 @@ public class PhpConnectorClient {
 						throw new MeetingRoomInternalServerException("Error when parsing Bookings element, with message: " + e.getMessage());
 					}	
 				}
-			} catch (java.lang.ClassCastException e) {
+			} catch (RuntimeException e) {
 				// if not roomId, PHP returns ( "Rooms": {"toto": false }) witch produce this exception
-				LOGGER.error("no roomId is found in exchange server");
-				throw new MethodNotAllowedException("no roomId is found in exchange server");
+				LOGGER.error("error when parsing rooms: " + e.getMessage());
+				throw new MeetingRoomInternalServerException("error when parsing rooms: " + e.getMessage());
 			}
 			
 			meetingrooms.setMeetingRooms(meetingRoomBookingsList);
@@ -350,9 +353,12 @@ public class PhpConnectorClient {
 	/**
 	 * setBooking
 	 * @param SetBookingParameters params
+	 * @throws MeetingRoomInternalServerException 
+	 * @throws MethodNotAllowedException 
+	 * @throws PhpInternalServerException 
 	 * @throws Exception
 	 */
-	public BookingSummary setBooking(SetBookingParameters params) throws Exception {
+	public BookingSummary setBooking(SetBookingParameters params) throws MeetingRoomInternalServerException, MethodNotAllowedException, PhpInternalServerException {
 		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call setBooking(SetBookingParameters params) method");
@@ -366,7 +372,9 @@ public class PhpConnectorClient {
 		try	{
 			//Define a postRequest request
 			//HttpPost postRequest = new HttpPost("http://192.168.103.193/services/SetBooking.php");
-			HttpPost postRequest = new HttpPost(phpSetBookingsURL);
+			String request = "http://192.168.103.193:3000/agents/FF:RR:EE:SS:DD:AA"; //setBookingKO1
+			// TODO decoment HttpPost postRequest = new HttpPost(phpSetBookingsURL);
+			HttpPost postRequest = new HttpPost(request); // TODO coment
 			
 			//Set the API media type in http content-type header
 			postRequest.addHeader("content-type", "application/x-www-form-urlencoded");
@@ -382,7 +390,8 @@ public class PhpConnectorClient {
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode != 200) {
-				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
+				LOGGER.error("Internal error produce in PHP server, with error code: " + statusCode);
+				throw new PhpInternalServerException("Internal error produce in Php server, with error code: " + statusCode);
 			}
 			
 			//Now pull back the response object
@@ -395,7 +404,8 @@ public class PhpConnectorClient {
 			Boolean errorFlag = (Boolean)mp.get("ErrorFlag");
 			if (errorFlag) {
 				String errorMessage = (String)mp.get("Message");
-				throw new PhpInternalServerException(errorMessage);
+				LOGGER.error("error when set booking:" + errorMessage);
+				throw new MethodNotAllowedException("error when set booking:" + errorMessage);
 			} else {
 				String idReservation = (String)mp.get("IDReservation");
 				String revisionReservation = (String)mp.get("RevisionReservation");
@@ -404,8 +414,14 @@ public class PhpConnectorClient {
 			}
 			
 			return bookingSummary;
-		}
-		finally	{
+			
+		} catch (ClientProtocolException ex) {
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
+		} catch (IOException e) {
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+		} finally	{
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call setBooking(SetBookingParameters params) method");
 			}
@@ -417,9 +433,12 @@ public class PhpConnectorClient {
 	/**
 	 * updateBooking
 	 * @param UpdateBookingParameters params
+	 * @throws MeetingRoomInternalServerException 
+	 * @throws MethodNotAllowedException 
+	 * @throws PhpInternalServerException 
 	 * @throws Exception
 	 */
-	public BookingSummary updateBooking(UpdateBookingParameters params) throws Exception {
+	public BookingSummary updateBooking(UpdateBookingParameters params) throws MeetingRoomInternalServerException, MethodNotAllowedException, PhpInternalServerException {
 		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call updateBooking(UpdateBookingParameters params) method");
@@ -450,7 +469,8 @@ public class PhpConnectorClient {
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode != 200) {
-				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
+				LOGGER.error("Internal error produce in PHP server, with error code: " + statusCode);
+				throw new PhpInternalServerException("Internal error produce in Php server, with error code: " + statusCode);
 			}
 			
 			//Now pull back the response object
@@ -463,7 +483,8 @@ public class PhpConnectorClient {
 			Boolean errorFlag = (Boolean)mp.get("ErrorFlag");
 			if (errorFlag) {
 				String errorMessage = (String)mp.get("Message");
-				throw new PhpInternalServerException(errorMessage);
+				LOGGER.error("error when update booking:" + errorMessage);
+				throw new MethodNotAllowedException("error when update booking:" + errorMessage);
 			} else {
 				String idReservation = (String)mp.get("IDReservation");
 				String revisionReservation = (String)mp.get("RevisionReservation");
@@ -472,8 +493,14 @@ public class PhpConnectorClient {
 			}
 			
 			return bookingSummary;
-		}
-		finally	{
+		
+		} catch (ClientProtocolException ex) {
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
+		} catch (IOException e) {
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+		} finally	{
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call updateBooking(UpdateBookingParameters params) method");
 			}

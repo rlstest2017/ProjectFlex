@@ -148,6 +148,25 @@ public class PhpConnectorImplTest {
 		assertEquals(true, expectedResult);
 	}
 
+	@Test
+	public void TestBB_phpGetDashboardBookings_BAD_ROOMID_IN_XML_FILE() {
+		// SetUp
+		boolean expectedResult = false;
+		GetDashboardBookingsParameters params = new GetDashboardBookingsParameters();
+		params.setFormat("json");
+		params.setMaxBookings("2");
+		params.setStartDate("0");
+		params.setRoomGroupID("rg_oab_full_bad");
+		try {
+			phpBusinessConnector.getBookingsFromDashboard(params);
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());		
+		}
+		// Asserts
+		assertEquals(true, expectedResult);
+	}
+
 	@Test 
 	public void TestC_phpSetBooking() {
 		// SetUp
@@ -173,6 +192,29 @@ public class PhpConnectorImplTest {
 		}	
 		// Asserts
 		assertEquals(false, expectedResult);
+	}
+	
+	@Test 
+	public void TestCA_phpSetBooking_TimeSlot_Error() {
+		// SetUp
+		boolean expectedResult = false;
+		SetBookingParameters params = new SetBookingParameters();
+		params.setRoomID("brehat.rennes@microsoft.cad.aql.fr");
+		params.setOrganizerFullName("rachid test organisateur java");
+		params.setSubject("rachid test sujet java");
+		params.setStartDate("1461588300"); // 25/4/2016 à 14:45:00 
+		params.setEndDate("1461591900"); // 25/4/2016 à 15:45:00 
+		params.setFormat("json");
+		params.setAcknowledged("0");
+		
+		try {
+			phpBusinessConnector.setBooking(params);
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());		
+		}	
+		// Asserts
+		assertEquals(true, expectedResult);
 	}
 	
 	// Confirmer la réunion en cours
