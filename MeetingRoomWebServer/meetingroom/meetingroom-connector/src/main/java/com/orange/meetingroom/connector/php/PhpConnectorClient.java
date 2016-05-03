@@ -25,6 +25,9 @@ import com.orange.meetingroom.connector.exception.DataNotExistsException;
 import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerException;
 import com.orange.meetingroom.connector.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.exception.PhpInternalServerException;
+import com.orange.meetingroom.connector.php.enums.EnumBookingDetails;
+import com.orange.meetingroom.connector.php.enums.EnumRoomDetails;
+import com.orange.meetingroom.connector.php.enums.EnumRoomInfos;
 import com.orange.meetingroom.connector.php.model.request.GetAgentBookingsParameters;
 import com.orange.meetingroom.connector.php.model.request.GetDashboardBookingsParameters;
 import com.orange.meetingroom.connector.php.model.request.SetBookingParameters;
@@ -109,14 +112,14 @@ public class PhpConnectorClient {
 			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
 			
 			// get currentDate
-			Integer currentDate = (Integer)((Map<String, Object>)mp.get("Infos")).get("CurrentDate");
+			Integer currentDate = (Integer)((Map<String, Object>)mp.get(EnumRoomInfos.INFOS.value())).get(EnumRoomInfos.CURRENT_DATE.value());
 			meetingroom.setCurrentDate(currentDate);
 			
 			Map<String, Map<String, Object>> roomLevelOneMap = (Map<String, Map<String, Object>>)mp.get("Rooms");
 			for (Entry<String, Map<String, Object>> element : roomLevelOneMap.entrySet()) {
 				try {
-				Boolean errorFlag = (Boolean)element.getValue().get("ErrorFlag");
-				String message = (String)element.getValue().get("Message");
+				Boolean errorFlag = (Boolean)element.getValue().get(EnumRoomInfos.ERROR_FLAG.value());
+				String message = (String)element.getValue().get(EnumRoomInfos.MESSAGE.value());
 				if (errorFlag) { // errorFlag = true
 					LOGGER.error("errorFlag is true in Php Server return with message:" + message);
 					throw new MethodNotAllowedException("errorFlag is true in Php Server return with message:" + message);
@@ -127,17 +130,15 @@ public class PhpConnectorClient {
 				}
 
 			}
-				
-				
 			
-			Map<String, Map<String, Map<String, Object>>> roomMap = (Map<String, Map<String, Map<String, Object>>>)mp.get("Rooms");
+			Map<String, Map<String, Map<String, Object>>> roomMap = (Map<String, Map<String, Map<String, Object>>>)mp.get(EnumRoomInfos.ROOMS.value());
 			
 			for (Entry<String, Map<String, Map<String, Object>>> element : roomMap.entrySet()) {
 				try {	
 					MeetingRoomDetails details = new MeetingRoomDetails(); 
-					String meetingRoomExternalId = (String)element.getValue().get("RoomDetails").get("RoomID");
-					String meetingRoomExternalName = (String)element.getValue().get("RoomDetails").get("RoomName");
-					String meetingRoomExternalLocation = (String)element.getValue().get("RoomDetails").get("RoomLocation");
+					String meetingRoomExternalId = (String)element.getValue().get(EnumRoomInfos.ROOM_DETAILS.value()).get(EnumRoomDetails.ROOM_ID.value());
+					String meetingRoomExternalName = (String)element.getValue().get(EnumRoomInfos.ROOM_DETAILS.value()).get(EnumRoomDetails.ROOM_NAME.value());
+					String meetingRoomExternalLocation = (String)element.getValue().get(EnumRoomInfos.ROOM_DETAILS.value()).get(EnumRoomDetails.ROOM_LOCATION.value());
 					
 					details.setMeetingRoomExternalId(meetingRoomExternalId);
 					details.setMeetingRoomExternalName(meetingRoomExternalName);
@@ -151,27 +152,27 @@ public class PhpConnectorClient {
 				}	
 			}
 			
-			Map<String, Map<String, Map<String, Map<String, Object>>>> roomMapBookings = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get("Rooms");
+			Map<String, Map<String, Map<String, Map<String, Object>>>> roomMapBookings = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get(EnumRoomInfos.ROOMS.value());
 			
 			for (Entry<String, Map<String, Map<String, Map<String, Object>>>> elementBooking : roomMapBookings.entrySet()) {
 				
 				try {
-					Map<String, Map<String, Object>> bookings =  (Map<String, Map<String, Object>>)elementBooking.getValue().get("Bookings");
+					Map<String, Map<String, Object>> bookings =  (Map<String, Map<String, Object>>)elementBooking.getValue().get(EnumRoomInfos.BOOKINGS.value());
 				
 					for (Entry<String, Map<String, Object>> book : bookings.entrySet()) {
 						Booking booking = new Booking();
-						String idReservation = (String)book.getValue().get("IDReservation");
-						String revisionReservation = (String)book.getValue().get("RevisionReservation");
-						String organizer = (String)book.getValue().get("Organizer");
-						String organizeFullName = (String)book.getValue().get("OrganizerFullName");
-						String organizerMail = (String)book.getValue().get("OrganizerEmail");
-						String creator = (String)book.getValue().get("Creator");
-						String creatorFullName = (String)book.getValue().get("CreatorFullName");
-						String creatorEmail = (String)book.getValue().get("CreatorEmail");
-						String subject = (String)book.getValue().get("Subject");
-						Integer startDate = (Integer)book.getValue().get("StartDate");
-						Integer endDate = (Integer)book.getValue().get("EndDate");
-						Boolean acknowledged = (Boolean)book.getValue().get("Acknowledged");
+						String idReservation = (String)book.getValue().get(EnumBookingDetails.ID_RESERVATION.value());
+						String revisionReservation = (String)book.getValue().get(EnumBookingDetails.REVISION_RESERVATION.value());
+						String organizer = (String)book.getValue().get(EnumBookingDetails.ORGANIZER.value());
+						String organizeFullName = (String)book.getValue().get(EnumBookingDetails.ORGANIZER_FULL_NAME.value());
+						String organizerMail = (String)book.getValue().get(EnumBookingDetails.ORGANIZER_EMAIL.value());
+						String creator = (String)book.getValue().get(EnumBookingDetails.CREATOR.value());
+						String creatorFullName = (String)book.getValue().get(EnumBookingDetails.CREATOR_FULL_NAME.value());
+						String creatorEmail = (String)book.getValue().get(EnumBookingDetails.CREATOR_EMAIL.value());
+						String subject = (String)book.getValue().get(EnumBookingDetails.SUBJECT.value());
+						Integer startDate = (Integer)book.getValue().get(EnumBookingDetails.START_DATE.value());
+						Integer endDate = (Integer)book.getValue().get(EnumBookingDetails.END_DATE.value());
+						Boolean acknowledged = (Boolean)book.getValue().get(EnumBookingDetails.ACKNOWLEDGED.value());
 					
 						booking.setIdReservation(idReservation);
 						booking.setRevisionReservation(revisionReservation);
