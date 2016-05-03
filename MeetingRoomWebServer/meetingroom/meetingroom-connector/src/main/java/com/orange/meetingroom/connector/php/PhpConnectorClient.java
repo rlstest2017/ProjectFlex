@@ -134,7 +134,7 @@ public class PhpConnectorClient {
 			Map<String, Map<String, Map<String, Object>>> roomMap = (Map<String, Map<String, Map<String, Object>>>)mp.get("Rooms");
 			
 			for (Entry<String, Map<String, Map<String, Object>>> element : roomMap.entrySet()) {
-					
+				try {	
 					MeetingRoomDetails details = new MeetingRoomDetails(); 
 					String meetingRoomExternalId = (String)element.getValue().get("RoomDetails").get("RoomID");
 					String meetingRoomExternalName = (String)element.getValue().get("RoomDetails").get("RoomName");
@@ -146,6 +146,10 @@ public class PhpConnectorClient {
 					
 					meetingRoomBookings.setMeetingRoomDetails(details);
 					meetingroom.setMeetingRoom(meetingRoomBookings);
+				} catch (RuntimeException e) {
+					LOGGER.error("Error when parsing RoomDetails element, with message: " + e.getMessage());
+					throw new MeetingRoomInternalServerException("Error when parsing RoomDetails element, with message: " + e.getMessage());
+				}	
 			}
 			
 			Map<String, Map<String, Map<String, Map<String, Object>>>> roomMapBookings = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get("Rooms");
@@ -181,12 +185,14 @@ public class PhpConnectorClient {
 						booking.setOrganizerFullName(constructedOrganizer);		
 					
 						meetingroom.getMeetingRoom().getBookings().add(booking);
-						
 					}
 				} catch (java.lang.ClassCastException e) {
 					// if not bookings, PHP returns ( "Bookings": []) witch produce this exception
-				}
-				
+					LOGGER.debug("No bookings found.");
+				} catch (RuntimeException e) {
+					LOGGER.error("Error when parsing Bookings element, with message: " + e.getMessage());
+					throw new MeetingRoomInternalServerException("Error when parsing Bookings element, with message: " + e.getMessage());
+				}	
 			}			
 			
 			return meetingroom;
@@ -197,7 +203,6 @@ public class PhpConnectorClient {
 		} catch (IOException e) {
 			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
-	
 		} finally	{
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call getBookingsFromAgent(GetAgentBookingsParameters params) method");
@@ -213,7 +218,7 @@ public class PhpConnectorClient {
 	 * @param GetDashboardBookingsParameters params
 	 * @throws Exception
 	 */
-	public MeetingRooms getBookingsFromDashboard(GetDashboardBookingsParameters params) throws Exception {
+	public MeetingRooms getBookingsFromDashboard(GetDashboardBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, MethodNotAllowedException  {
 		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call getBookingsFromDashboard(GetDashboardBookingsParameters params) method");
@@ -237,7 +242,8 @@ public class PhpConnectorClient {
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode != 200) {
-				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
+				LOGGER.error("Internal error produce in PHP server, with error code: " + statusCode);
+				throw new PhpInternalServerException("Internal error produce in Php server, with error code: " + statusCode);
 			}
 			
 			//Now pull back the response object
@@ -252,59 +258,86 @@ public class PhpConnectorClient {
 			Integer currentDate = (Integer)((Map<String, Object>)mp.get("Infos")).get("CurrentDate");
 			meetingrooms.setCurrentDate(currentDate);
 			
-			Map<String, Map<String, Map<String, Object>>> roomMap = (Map<String, Map<String, Map<String, Object>>>)mp.get("Rooms");
-			for (Entry<String, Map<String, Map<String, Object>>> element : roomMap.entrySet()) {
-				MeetingRoomBookings meetingRoomBookings = new MeetingRoomBookings();
-				MeetingRoomDetails details = new MeetingRoomDetails(); 
-				String meetingRoomExternalId = (String)element.getValue().get("RoomDetails").get("RoomID");
-				String meetingRoomExternalName = (String)element.getValue().get("RoomDetails").get("RoomName");
-				String meetingRoomExternalLocation = (String)element.getValue().get("RoomDetails").get("RoomLocation");
-				details.setMeetingRoomExternalId(meetingRoomExternalId);
-				details.setMeetingRoomExternalName(meetingRoomExternalName);
-				details.setMeetingRoomExternalLocation(meetingRoomExternalLocation);
-				meetingRoomBookings.setMeetingRoomDetails(details);
-				meetingRoomBookingsList.add(meetingRoomBookings);
+			try {
+				Map<String, Map<String, Map<String, Object>>> roomMap = (Map<String, Map<String, Map<String, Object>>>)mp.get("Rooms");
+				for (Entry<String, Map<String, Map<String, Object>>> element : roomMap.entrySet()) {
+					try {
+						MeetingRoomBookings meetingRoomBookings = new MeetingRoomBookings();
+						MeetingRoomDetails details = new MeetingRoomDetails(); 
+						String meetingRoomExternalId = (String)element.getValue().get("RoomDetails").get("RoomID");
+						String meetingRoomExternalName = (String)element.getValue().get("RoomDetails").get("RoomName");
+						String meetingRoomExternalLocation = (String)element.getValue().get("RoomDetails").get("RoomLocation");
+						details.setMeetingRoomExternalId(meetingRoomExternalId);
+						details.setMeetingRoomExternalName(meetingRoomExternalName);
+						details.setMeetingRoomExternalLocation(meetingRoomExternalLocation);
+						meetingRoomBookings.setMeetingRoomDetails(details);
+						meetingRoomBookingsList.add(meetingRoomBookings);
+					} catch (RuntimeException e) {
+						LOGGER.error("Error when parsing RoomDetails element, with message: " + e.getMessage());
+						throw new MeetingRoomInternalServerException("Error when parsing RoomDetails element, with message: " + e.getMessage());
+					}
+				}
+			} catch (java.lang.ClassCastException e) {
+				// if not rooms, PHP returns ( "Rooms": []) witch produce this exception
+				LOGGER.error("no rooms found. May be the xml file is wrong !!!");
+				throw new MethodNotAllowedException("no rooms found. May be the xml file is wrong !!!");
 			}
 			
 			Map<String, Map<String, Map<String, Map<String, Object>>>> roomMapBookings = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get("Rooms");
 			int incr = 0; // get data from meetingRoomBookingsList for update bookings in the correct meetingRoomBookings object
-			for (Entry<String, Map<String, Map<String, Map<String, Object>>>> elementBooking : roomMapBookings.entrySet()) {
-				MeetingRoomBookings meetingRoomBookings = meetingRoomBookingsList.get(incr);
-				incr = incr + 1;
-				try {
-					Map<String, Map<String, Object>> bookings =  (Map<String, Map<String, Object>>)elementBooking.getValue().get("Bookings");
-					for (Entry<String, Map<String, Object>> book : bookings.entrySet()) {
-						Booking booking = new Booking();
-						String idReservation = (String)book.getValue().get("IDReservation");
-						String revisionReservation = (String)book.getValue().get("RevisionReservation");
-						String organizer = (String)book.getValue().get("Organizer");
-						String organizeFullName = (String)book.getValue().get("OrganizerFullName");
-						String organizerMail = (String)book.getValue().get("OrganizerEmail");
-						String creator = (String)book.getValue().get("Creator");
-						String creatorFullName = (String)book.getValue().get("CreatorFullName");
-						String creatorEmail = (String)book.getValue().get("CreatorEmail");
-						String subject = (String)book.getValue().get("Subject");
-						Integer startDate = (Integer)book.getValue().get("StartDate");
-						Integer endDate = (Integer)book.getValue().get("EndDate");
-						Boolean acknowledged = (Boolean)book.getValue().get("Acknowledged");
-						booking.setIdReservation(idReservation);
-						booking.setRevisionReservation(revisionReservation);
-						booking.setSubject(subject);
-						booking.setStartDate(startDate);
-						booking.setEndDate(endDate);
-						booking.setAcknowledged(acknowledged);
-						String constructedOrganizer = dataTools.constructOrganizerFullName(organizer, organizeFullName, organizerMail, creator, creatorFullName, creatorEmail);
-						booking.setOrganizerFullName(constructedOrganizer);		
-						meetingRoomBookings.getBookings().add(booking);
-					}
-				} catch (java.lang.ClassCastException e) {
-					// if not bookings, PHP returns ( "Bookings": []) witch produce this exception
+			try {
+				for (Entry<String, Map<String, Map<String, Map<String, Object>>>> elementBooking : roomMapBookings.entrySet()) {
+					MeetingRoomBookings meetingRoomBookings = meetingRoomBookingsList.get(incr);
+					incr = incr + 1;
+					try {
+						Map<String, Map<String, Object>> bookings =  (Map<String, Map<String, Object>>)elementBooking.getValue().get("Bookings");
+						for (Entry<String, Map<String, Object>> book : bookings.entrySet()) {
+							Booking booking = new Booking();
+							String idReservation = (String)book.getValue().get("IDReservation");
+							String revisionReservation = (String)book.getValue().get("RevisionReservation");
+							String organizer = (String)book.getValue().get("Organizer");
+							String organizeFullName = (String)book.getValue().get("OrganizerFullName");
+							String organizerMail = (String)book.getValue().get("OrganizerEmail");
+							String creator = (String)book.getValue().get("Creator");
+							String creatorFullName = (String)book.getValue().get("CreatorFullName");
+							String creatorEmail = (String)book.getValue().get("CreatorEmail");
+							String subject = (String)book.getValue().get("Subject");
+							Integer startDate = (Integer)book.getValue().get("StartDate");
+							Integer endDate = (Integer)book.getValue().get("EndDate");
+							Boolean acknowledged = (Boolean)book.getValue().get("Acknowledged");
+							booking.setIdReservation(idReservation);
+							booking.setRevisionReservation(revisionReservation);
+							booking.setSubject(subject);
+							booking.setStartDate(startDate);
+							booking.setEndDate(endDate);
+							booking.setAcknowledged(acknowledged);
+							String constructedOrganizer = dataTools.constructOrganizerFullName(organizer, organizeFullName, organizerMail, creator, creatorFullName, creatorEmail);
+							booking.setOrganizerFullName(constructedOrganizer);		
+							meetingRoomBookings.getBookings().add(booking);
+						}
+					} catch (java.lang.ClassCastException e) {
+						// if not bookings, PHP returns ( "Bookings": []) witch produce this exception
+						LOGGER.debug("No bookings found.");
+					} catch (RuntimeException e) {
+						LOGGER.error("Error when parsing Bookings element, with message: " + e.getMessage());
+						throw new MeetingRoomInternalServerException("Error when parsing Bookings element, with message: " + e.getMessage());
+					}	
 				}
+			} catch (java.lang.ClassCastException e) {
+				// if not roomId, PHP returns ( "Rooms": {"toto": false }) witch produce this exception
+				LOGGER.error("no roomId is found in exchange server");
+				throw new MethodNotAllowedException("no roomId is found in exchange server");
 			}
 			
 			meetingrooms.setMeetingRooms(meetingRoomBookingsList);
 			return meetingrooms;
-			
+
+		} catch (ClientProtocolException ex) {
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
+		} catch (IOException e) {
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 		} finally {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call getBookingsFromDashboard(GetDashboardBookingsParameters params) method");
