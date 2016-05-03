@@ -122,7 +122,7 @@ public class PhpConnectorClient {
 					throw new MethodNotAllowedException("errorFlag is true in Php Server return with message:" + message);
 				}
 				} catch (RuntimeException e ) { // {"Infos":{"CurrentDate":1461938475},"Rooms":{"toto":false}}
-					LOGGER.error("meetingRoomExternalId is not exist or Connexion to Exchange Server is impossible");
+					LOGGER.error("meetingRoomExternalId is not exist or Connexion to Exchange Server is impossible", e);
 					throw new DataNotExistsException("meetingRoomExternalId is not exist or Connexion to Exchange Server is impossible");
 				}
 
@@ -146,7 +146,7 @@ public class PhpConnectorClient {
 					meetingRoomBookings.setMeetingRoomDetails(details);
 					meetingroom.setMeetingRoom(meetingRoomBookings);
 				} catch (RuntimeException e) {
-					LOGGER.error("Error when parsing RoomDetails element, with message: " + e.getMessage());
+					LOGGER.error("Error when parsing RoomDetails element, with message: " + e.getMessage(), e);
 					throw new MeetingRoomInternalServerException("Error when parsing RoomDetails element, with message: " + e.getMessage());
 				}	
 			}
@@ -187,9 +187,9 @@ public class PhpConnectorClient {
 					}
 				} catch (java.lang.ClassCastException e) {
 					// if not bookings, PHP returns ( "Bookings": []) witch produce this exception
-					LOGGER.debug("No bookings found.");
+					LOGGER.debug("No bookings found:" + e.getMessage(), e);
 				} catch (RuntimeException e) {
-					LOGGER.error("Error when parsing Bookings element, with message: " + e.getMessage());
+					LOGGER.error("Error when parsing Bookings element, with message: " + e.getMessage(), e);
 					throw new MeetingRoomInternalServerException("Error when parsing Bookings element, with message: " + e.getMessage());
 				}	
 			}			
@@ -197,10 +197,10 @@ public class PhpConnectorClient {
 			return meetingroom;
 			
 		} catch (ClientProtocolException ex) {
-			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
 			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
 		} catch (IOException e) {
-			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage(), e);
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 		} finally	{
 			if (LOGGER.isDebugEnabled()) {
@@ -282,7 +282,7 @@ public class PhpConnectorClient {
 				}
 			} catch (java.lang.ClassCastException e) {
 				// if not rooms, PHP returns ( "Rooms": []) witch produce this exception
-				LOGGER.error("no rooms found. May be the xml file is wrong !!!");
+				LOGGER.error("no rooms found. May be the xml file is wrong !!!", e);
 				throw new MethodNotAllowedException("no rooms found. May be the xml file is wrong !!!");
 			}
 			
@@ -320,15 +320,15 @@ public class PhpConnectorClient {
 						}
 					} catch (java.lang.ClassCastException e) {
 						// if not bookings, PHP returns ( "Bookings": []) witch produce this exception
-						LOGGER.debug("No bookings found.");
+						LOGGER.debug("No bookings found.", e);
 					} catch (RuntimeException e) {
-						LOGGER.error("Error when parsing Bookings element, with message: " + e.getMessage());
+						LOGGER.error("Error when parsing Bookings element, with message: " + e.getMessage(), e);
 						throw new MeetingRoomInternalServerException("Error when parsing Bookings element, with message: " + e.getMessage());
 					}	
 				}
 			} catch (RuntimeException e) {
 				// if not roomId, PHP returns ( "Rooms": {"toto": false }) witch produce this exception
-				LOGGER.error("error when parsing rooms: " + e.getMessage());
+				LOGGER.error("error when parsing rooms: " + e.getMessage(), e);
 				throw new MeetingRoomInternalServerException("error when parsing rooms: " + e.getMessage());
 			}
 			
@@ -336,10 +336,10 @@ public class PhpConnectorClient {
 			return meetingrooms;
 
 		} catch (ClientProtocolException ex) {
-			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
 			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
 		} catch (IOException e) {
-			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage(), e);
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 		} finally {
 			if (LOGGER.isDebugEnabled()) {
@@ -416,10 +416,10 @@ public class PhpConnectorClient {
 			return bookingSummary;
 			
 		} catch (ClientProtocolException ex) {
-			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
 			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
 		} catch (IOException e) {
-			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage(), e);
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 		} finally	{
 			if (LOGGER.isDebugEnabled()) {
@@ -495,10 +495,10 @@ public class PhpConnectorClient {
 			return bookingSummary;
 		
 		} catch (ClientProtocolException ex) {
-			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
 			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
 		} catch (IOException e) {
-			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage(), e);
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 		} finally	{
 			if (LOGGER.isDebugEnabled()) {

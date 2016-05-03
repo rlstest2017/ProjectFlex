@@ -93,10 +93,10 @@ public class FlexOfficeConnectorClient {
 		systemReturn = mapper.readValue(apiOutput, SystemReturn.class);
 		
 		} catch (ClientProtocolException ex) {
-			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
 			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
 		} catch (IOException e) {
-			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage(), e);
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 		} finally {
 			if (LOGGER.isDebugEnabled()) {
@@ -149,10 +149,10 @@ public class FlexOfficeConnectorClient {
 		meetingRoomsExternalIdsList = mapper.readValue(apiOutput,new TypeReference<List<String>>() {});
 		
 		} catch (ClientProtocolException ex) {
-			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
 			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
 		} catch (IOException e) {
-			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage(), e);
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 		} finally {
 			if (LOGGER.isDebugEnabled()) {
@@ -212,10 +212,10 @@ public class FlexOfficeConnectorClient {
 		xmlFilesNameList = mapper.readValue(apiOutput,new TypeReference<List<String>>() {});
 		
 		} catch (ClientProtocolException ex) {
-			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
 			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
 		} catch (IOException e) {
-			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage(), e);
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 		} finally {
 			if (LOGGER.isDebugEnabled()) {
@@ -284,10 +284,10 @@ public class FlexOfficeConnectorClient {
 			return dashboardOutput;
 			
 		} catch (ClientProtocolException ex) {
-			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
 			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
 		} catch (IOException e) {
-			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage(), e);
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 		} finally {
 			if (LOGGER.isDebugEnabled()) {
@@ -361,10 +361,10 @@ public class FlexOfficeConnectorClient {
 			return agentOutput;
 			
 		} catch (ClientProtocolException ex) {
-			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
 			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
 		} catch (IOException e) {
-			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage(), e);
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 		} finally {
 			if (LOGGER.isDebugEnabled()) {
@@ -415,10 +415,10 @@ public class FlexOfficeConnectorClient {
 				}
 			}
 		} catch (ClientProtocolException ex) {
-			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
 			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
 		} catch (IOException e) {
-			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage(), e);
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
 		} finally {	
 			if (LOGGER.isDebugEnabled()) {
