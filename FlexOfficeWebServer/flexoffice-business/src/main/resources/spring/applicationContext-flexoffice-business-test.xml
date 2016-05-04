@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util-4.1.xsd">
   
+	<util:properties id="appProperties" location="classpath:spring/flexoffice.properties.test" />
+	
 	<bean id="alertManager" class="com.orange.flexoffice.business.common.service.data.impl.AlertManagerImpl">
 	</bean>
 	
@@ -16,11 +21,20 @@
 	<bean id="statTools"
 	class="com.orange.flexoffice.business.common.utils.StatTools" />
 	
+	<bean id="addressTools"
+	class="com.orange.flexoffice.business.common.utils.AddressTools" />
+	
+	<bean id="fileManager"
+	class="com.orange.flexoffice.business.meetingroom.config.FileManager" />
+	
+	<bean id="xmlConverter"
+	class="com.orange.flexoffice.business.meetingroom.config.XMLConverter" />
+	
 	<!-- Import -->
 	<import resource="classpath*:spring/applicationContext-flexoffice-dao-test.xml" />
 
 	<!-- Scan base package -->
-	<context:component-scan base-package="com.orange.flexoffice.business.common" />
+	<context:component-scan base-package="com.orange.flexoffice.business.common, com.orange.flexoffice.business.meetingroom" />
 	
 	<!-- Transactions with annotations -->
 	<tx:annotation-driven transaction-manager="transactionManager" />

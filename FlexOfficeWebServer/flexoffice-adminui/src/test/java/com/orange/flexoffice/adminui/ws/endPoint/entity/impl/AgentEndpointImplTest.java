@@ -56,7 +56,7 @@ public class AgentEndpointImplTest {
 	 */
 	@BeforeClass
 	public static void initSpringContextAndDatabase() throws Exception {
-		context = new ClassPathXmlApplicationContext("applicationContext-flexoffice-adminui-test.xml");
+		context = new ClassPathXmlApplicationContext("classpath:applicationContext-flexoffice-adminui-test.xml");
 		agentEndpoint = (AgentEndpointImpl)context.getBean("agentEndpoint");
 	}
 

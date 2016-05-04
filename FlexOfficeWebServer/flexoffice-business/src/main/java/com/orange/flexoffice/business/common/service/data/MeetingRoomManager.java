@@ -61,8 +61,9 @@ public interface MeetingRoomManager {
 	 * method used by adminui
 	 * @param roomDao the new {@link MeetingRoomDao}
 	 * @return a saved {@link MeetingRoomDao}
+	 * @throws DataAlreadyExistsException 
 	 */
-	MeetingRoomDao update(MeetingRoomDao meetingroomDao) throws DataNotExistsException;
+	MeetingRoomDao update(MeetingRoomDao meetingroomDao) throws DataNotExistsException, DataAlreadyExistsException;
 
 
 	/**

@@ -22,6 +22,7 @@ import com.orange.flexoffice.adminui.ws.model.MeetingRoom;
 import com.orange.flexoffice.adminui.ws.model.MeetingRoomInput;
 import com.orange.flexoffice.adminui.ws.model.MeetingRoomOutput;
 import com.orange.flexoffice.adminui.ws.model.MeetingRoomSummary;
+import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 
@@ -79,6 +80,7 @@ public interface MeetingRoomEndpoint {
 	 * @param id a meeting room id. 
 	 * @param meetingroom the new <code>meetingroom</code>
 	 * @return If ok, a <code>Response</code> with a status code 201 Create & Location.
+	 * @throws DataAlreadyExistsException 
 	 * 
 	 * @see Response
 	 */

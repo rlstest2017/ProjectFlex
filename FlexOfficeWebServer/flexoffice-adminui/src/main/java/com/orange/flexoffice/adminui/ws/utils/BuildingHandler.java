@@ -1,5 +1,8 @@
 package com.orange.flexoffice.adminui.ws.utils;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,9 +10,12 @@ import java.util.List;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.xml.sax.SAXException;
 
 import com.orange.flexoffice.adminui.ws.model.Building;
 import com.orange.flexoffice.adminui.ws.model.BuildingInput;
@@ -114,9 +120,14 @@ public class BuildingHandler {
 	 * addBuilding
 	 * @param building
 	 * @return
+	 * @throws FileNotFoundException 
+	 * @throws UnsupportedEncodingException 
+	 * @throws JAXBException 
+	 * @throws IOException 
+	 * @throws DataNotExistsException 
 	 */
 	
-	public BuildingItem addBuilding(BuildingInput building) throws DataAlreadyExistsException {
+	public BuildingItem addBuilding(BuildingInput building) throws DataAlreadyExistsException, UnsupportedEncodingException, FileNotFoundException, IOException, JAXBException, DataNotExistsException {
 		BuildingDao buildingDao = new BuildingDao();
 		buildingDao.setName(building.getName());
 		buildingDao.setAddress(building.getAddress());
@@ -134,8 +145,12 @@ public class BuildingHandler {
 	 * @param building
 	 * @return
 	 * @throws DataNotExistsException
+	 * @throws JAXBException 
+	 * @throws IOException 
+	 * @throws SAXException 
+	 * @throws ParserConfigurationException 
 	 */
-	public Response updateBuilding(String id, BuildingInput building) throws DataNotExistsException {
+	public Response updateBuilding(String id, BuildingInput building) throws DataNotExistsException, IOException, JAXBException, ParserConfigurationException, SAXException {
 		BuildingDao buildingDao = new BuildingDao();
 		buildingDao.setColumnId(id);
 		buildingDao.setName(building.getName());
