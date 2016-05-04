@@ -175,8 +175,8 @@ public class PhpConnectorImplTest {
 		params.setRoomID("brehat.rennes@microsoft.cad.aql.fr");
 		params.setOrganizerFullName("rachid test organisateur java");
 		params.setSubject("rachid test sujet java");
-		params.setStartDate("1461588300"); // 25/4/2016 à 14:45:00 
-		params.setEndDate("1461591900"); // 25/4/2016 à 15:45:00 
+		params.setStartDate("1462370400"); // 25/4/2016 à 14:45:00 
+		params.setEndDate("1462372200"); // 25/4/2016 à 15:45:00 
 		params.setFormat("json");
 		params.setAcknowledged("0");
 		
@@ -224,9 +224,9 @@ public class PhpConnectorImplTest {
 		boolean expectedResult = false;
 		UpdateBookingParameters params = new UpdateBookingParameters();
 		params.setRoomID("brehat.rennes@microsoft.cad.aql.fr");
-		params.setIdReservation("AAAiAGJyZWhhdC5yZW5uZXNAbWljcm9zb2Z0LmNhZC5hcWwuZnIARgAAAAAAJjiq1ulLK0Kj6vNsTnRuywcAQopQvd4yGUaRbVXWgALbzwAAAAfOdQAAQopQvd4yGUaRbVXWgALbzwAAkZg7uQAA");
-		params.setRevisionReservation("DwAAABYAAABCilC93jIZRpFtVdaAAtvPAACRmLLu");
-		params.setStartDate("1461576126"); // 25/4/2016 à 11:22:06
+		params.setIdReservation("AAAiAGJyZWhhdC5yZW5uZXNAbWljcm9zb2Z0LmNhZC5hcWwuZnIARgAAAAAA4hbJIXdxqUekYUmwv7EwXgcA0rSto+je7kuOKCCGs7ckzgAAAKdqzQAA0rSto+je7kuOKCCGs7ckzgAAAKeSFQAA");
+		params.setRevisionReservation("DwAAABYAAADStK2j6N7uS44oIIaztyTOAAAAp6Ku");
+		params.setStartDate("1462370700"); // 25/4/2016 à 11:22:06
 		params.setFormat("json"); 
 				
 		try {
@@ -250,9 +250,9 @@ public class PhpConnectorImplTest {
 		boolean expectedResult = false;
 		UpdateBookingParameters params = new UpdateBookingParameters();
 		params.setRoomID("brehat.rennes@microsoft.cad.aql.fr");
-		params.setIdReservation("AAAiAGJyZWhhdC5yZW5uZXNAbWljcm9zb2Z0LmNhZC5hcWwuZnIARgAAAAAAJjiq1ulLK0Kj6vNsTnRuywcAQopQvd4yGUaRbVXWgALbzwAAAAfOdQAAQopQvd4yGUaRbVXWgALbzwAAkZg7uQAA");
-		params.setRevisionReservation("DwAAABYAAABCilC93jIZRpFtVdaAAtvPAACRmLLu");
-		params.setEndDate("1461576126"); // 25/4/2016 à 11:22:06
+		params.setIdReservation("AAAiAGJyZWhhdC5yZW5uZXNAbWljcm9zb2Z0LmNhZC5hcWwuZnIARgAAAAAA4hbJIXdxqUekYUmwv7EwXgcA0rSto+je7kuOKCCGs7ckzgAAAKdqzQAA0rSto+je7kuOKCCGs7ckzgAAAKeSFwAA");
+		params.setRevisionReservation("DwAAABYAAADStK2j6N7uS44oIIaztyTOAAAAp6Lb");
+		params.setEndDate("1462371334"); // 04/05/2016 à 16:17:34
 		params.setFormat("json"); 
 				
 		try {

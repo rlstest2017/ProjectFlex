@@ -83,9 +83,9 @@ public class PhpConnectorClient {
 //	    CloseableHttpClient httpClient = builder.build(); 
 	    try	{
 			//HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&RoomID=brehat.rennes@microsoft.cad.aql.fr&ForceUpdateCache=false&_=1461057699231");
-			// TODO decoment String request = phpGetBookingsURL + "?" + dataTools.getAgentBookingsParametersToUrlEncode(params);
+			String request = phpGetBookingsURL + "?" + dataTools.getAgentBookingsParametersToUrlEncode(params);
 			//String request = "http://192.168.103.193:3000/getAgentBookingsKO1"; // TODO delete only for testing
-			String request = "http://192.168.103.193:3000/getAgentBookingsKO3"; // TODO delete only for testing
+			//String request = "http://192.168.103.193:3000/getAgentBookingsKO3"; // TODO delete only for testing
 			
 			HttpGet getRequest = new HttpGet(request);
 			
@@ -115,7 +115,7 @@ public class PhpConnectorClient {
 			Integer currentDate = (Integer)((Map<String, Object>)mp.get(EnumRoomInfos.INFOS.value())).get(EnumRoomInfos.CURRENT_DATE.value());
 			meetingroom.setCurrentDate(currentDate);
 			
-			Map<String, Map<String, Object>> roomLevelOneMap = (Map<String, Map<String, Object>>)mp.get("Rooms");
+			Map<String, Map<String, Object>> roomLevelOneMap = (Map<String, Map<String, Object>>)mp.get(EnumRoomInfos.ROOMS.value());
 			for (Entry<String, Map<String, Object>> element : roomLevelOneMap.entrySet()) {
 				try {
 				Boolean errorFlag = (Boolean)element.getValue().get(EnumRoomInfos.ERROR_FLAG.value());
@@ -229,9 +229,9 @@ public class PhpConnectorClient {
 //	    CloseableHttpClient httpClient = builder.build();
 		try	{
 			//HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&MaxBookings=2&StartDate=0&RoomGroupID=rg_oab_full&_=1461061105469");
-			// TODO decoment String request = phpGetBookingsURL + "?" + dataTools.getDashboardBookingsParametersToUrlEncode(params);
-			//String request =  "http://192.168.103.193:3000/getDashboardBookingsKO2"; // TODO remove
-			String request =  "http://192.168.103.193:3000/getDashboardBookingsKO1";
+			String request = phpGetBookingsURL + "?" + dataTools.getDashboardBookingsParametersToUrlEncode(params);
+			//String request =  "http://192.168.103.193:3000/getDashboardBookingsKO2"; // TODO delete only for testing
+			//String request =  "http://192.168.103.193:3000/getDashboardBookingsKO1"; // TODO delete only for testing
 			
 			HttpGet getRequest = new HttpGet(request);
 			
@@ -258,18 +258,18 @@ public class PhpConnectorClient {
 			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
 			
 			// get currentDate
-			Integer currentDate = (Integer)((Map<String, Object>)mp.get("Infos")).get("CurrentDate");
+			Integer currentDate = (Integer)((Map<String, Object>)mp.get(EnumRoomInfos.INFOS.value())).get(EnumRoomInfos.CURRENT_DATE.value());
 			meetingrooms.setCurrentDate(currentDate);
 			
 			try {
-				Map<String, Map<String, Map<String, Object>>> roomMap = (Map<String, Map<String, Map<String, Object>>>)mp.get("Rooms");
+				Map<String, Map<String, Map<String, Object>>> roomMap = (Map<String, Map<String, Map<String, Object>>>)mp.get(EnumRoomInfos.ROOMS.value());
 				for (Entry<String, Map<String, Map<String, Object>>> element : roomMap.entrySet()) {
 					try {
 						MeetingRoomBookings meetingRoomBookings = new MeetingRoomBookings();
 						MeetingRoomDetails details = new MeetingRoomDetails(); 
-						String meetingRoomExternalId = (String)element.getValue().get("RoomDetails").get("RoomID");
-						String meetingRoomExternalName = (String)element.getValue().get("RoomDetails").get("RoomName");
-						String meetingRoomExternalLocation = (String)element.getValue().get("RoomDetails").get("RoomLocation");
+						String meetingRoomExternalId = (String)element.getValue().get(EnumRoomInfos.ROOM_DETAILS.value()).get(EnumRoomDetails.ROOM_ID.value());
+						String meetingRoomExternalName = (String)element.getValue().get(EnumRoomInfos.ROOM_DETAILS.value()).get(EnumRoomDetails.ROOM_NAME.value());
+						String meetingRoomExternalLocation = (String)element.getValue().get(EnumRoomInfos.ROOM_DETAILS.value()).get(EnumRoomDetails.ROOM_LOCATION.value());
 						details.setMeetingRoomExternalId(meetingRoomExternalId);
 						details.setMeetingRoomExternalName(meetingRoomExternalName);
 						details.setMeetingRoomExternalLocation(meetingRoomExternalLocation);
@@ -287,28 +287,28 @@ public class PhpConnectorClient {
 				throw new MethodNotAllowedException("no rooms found. May be the xml file is wrong !!!");
 			}
 			
-			Map<String, Map<String, Map<String, Map<String, Object>>>> roomMapBookings = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get("Rooms");
+			Map<String, Map<String, Map<String, Map<String, Object>>>> roomMapBookings = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get(EnumRoomInfos.ROOMS.value());
 			int incr = 0; // get data from meetingRoomBookingsList for update bookings in the correct meetingRoomBookings object
 			try {
 				for (Entry<String, Map<String, Map<String, Map<String, Object>>>> elementBooking : roomMapBookings.entrySet()) {
 					MeetingRoomBookings meetingRoomBookings = meetingRoomBookingsList.get(incr);
 					incr = incr + 1;
 					try {
-						Map<String, Map<String, Object>> bookings =  (Map<String, Map<String, Object>>)elementBooking.getValue().get("Bookings");
+						Map<String, Map<String, Object>> bookings =  (Map<String, Map<String, Object>>)elementBooking.getValue().get(EnumRoomInfos.BOOKINGS.value());
 						for (Entry<String, Map<String, Object>> book : bookings.entrySet()) {
 							Booking booking = new Booking();
-							String idReservation = (String)book.getValue().get("IDReservation");
-							String revisionReservation = (String)book.getValue().get("RevisionReservation");
-							String organizer = (String)book.getValue().get("Organizer");
-							String organizeFullName = (String)book.getValue().get("OrganizerFullName");
-							String organizerMail = (String)book.getValue().get("OrganizerEmail");
-							String creator = (String)book.getValue().get("Creator");
-							String creatorFullName = (String)book.getValue().get("CreatorFullName");
-							String creatorEmail = (String)book.getValue().get("CreatorEmail");
-							String subject = (String)book.getValue().get("Subject");
-							Integer startDate = (Integer)book.getValue().get("StartDate");
-							Integer endDate = (Integer)book.getValue().get("EndDate");
-							Boolean acknowledged = (Boolean)book.getValue().get("Acknowledged");
+							String idReservation = (String)book.getValue().get(EnumBookingDetails.ID_RESERVATION.value());
+							String revisionReservation = (String)book.getValue().get(EnumBookingDetails.REVISION_RESERVATION.value());
+							String organizer = (String)book.getValue().get(EnumBookingDetails.ORGANIZER.value());
+							String organizeFullName = (String)book.getValue().get(EnumBookingDetails.ORGANIZER_FULL_NAME.value());
+							String organizerMail = (String)book.getValue().get(EnumBookingDetails.ORGANIZER_EMAIL.value());
+							String creator = (String)book.getValue().get(EnumBookingDetails.CREATOR.value());
+							String creatorFullName = (String)book.getValue().get(EnumBookingDetails.CREATOR_FULL_NAME.value());
+							String creatorEmail = (String)book.getValue().get(EnumBookingDetails.CREATOR_EMAIL.value());
+							String subject = (String)book.getValue().get(EnumBookingDetails.SUBJECT.value());
+							Integer startDate = (Integer)book.getValue().get(EnumBookingDetails.START_DATE.value());
+							Integer endDate = (Integer)book.getValue().get(EnumBookingDetails.END_DATE.value());
+							Boolean acknowledged = (Boolean)book.getValue().get(EnumBookingDetails.ACKNOWLEDGED.value());
 							booking.setIdReservation(idReservation);
 							booking.setRevisionReservation(revisionReservation);
 							booking.setSubject(subject);
@@ -373,9 +373,10 @@ public class PhpConnectorClient {
 		try	{
 			//Define a postRequest request
 			//HttpPost postRequest = new HttpPost("http://192.168.103.193/services/SetBooking.php");
-			String request = "http://192.168.103.193:3000/agents/FF:RR:EE:SS:DD:AA"; //setBookingKO1
-			// TODO decoment HttpPost postRequest = new HttpPost(phpSetBookingsURL);
-			HttpPost postRequest = new HttpPost(request); // TODO coment
+			//String request = "http://192.168.103.193:3000/agents/FF:RR:EE:SS:DD:AA"; // TODO delete only for testing setBookingKO1
+			//HttpPost postRequest = new HttpPost(request); // TODO delete only for testing
+			HttpPost postRequest = new HttpPost(phpSetBookingsURL);
+			
 			
 			//Set the API media type in http content-type header
 			postRequest.addHeader("content-type", "application/x-www-form-urlencoded");
@@ -402,14 +403,14 @@ public class PhpConnectorClient {
 			// parse the JSON response
 			ObjectMapper mapper = new ObjectMapper();
 			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
-			Boolean errorFlag = (Boolean)mp.get("ErrorFlag");
+			Boolean errorFlag = (Boolean)mp.get(EnumRoomInfos.ERROR_FLAG.value());
 			if (errorFlag) {
-				String errorMessage = (String)mp.get("Message");
+				String errorMessage = (String)mp.get(EnumRoomInfos.MESSAGE.value());
 				LOGGER.error("error when set booking:" + errorMessage);
 				throw new MethodNotAllowedException("error when set booking:" + errorMessage);
 			} else {
-				String idReservation = (String)mp.get("IDReservation");
-				String revisionReservation = (String)mp.get("RevisionReservation");
+				String idReservation = (String)mp.get(EnumBookingDetails.ID_RESERVATION.value());
+				String revisionReservation = (String)mp.get(EnumBookingDetails.REVISION_RESERVATION.value());
 				bookingSummary.setIdReservation(idReservation);
 				bookingSummary.setRevisionReservation(revisionReservation);
 			}
@@ -481,14 +482,14 @@ public class PhpConnectorClient {
 			// parse the JSON response
 			ObjectMapper mapper = new ObjectMapper();
 			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
-			Boolean errorFlag = (Boolean)mp.get("ErrorFlag");
+			Boolean errorFlag = (Boolean)mp.get(EnumRoomInfos.ERROR_FLAG.value());
 			if (errorFlag) {
-				String errorMessage = (String)mp.get("Message");
+				String errorMessage = (String)mp.get(EnumRoomInfos.MESSAGE.value());
 				LOGGER.error("error when update booking:" + errorMessage);
 				throw new MethodNotAllowedException("error when update booking:" + errorMessage);
 			} else {
-				String idReservation = (String)mp.get("IDReservation");
-				String revisionReservation = (String)mp.get("RevisionReservation");
+				String idReservation = (String)mp.get(EnumBookingDetails.ID_RESERVATION.value());
+				String revisionReservation = (String)mp.get(EnumBookingDetails.REVISION_RESERVATION.value());
 				bookingSummary.setIdReservation(idReservation);
 				bookingSummary.setRevisionReservation(revisionReservation);
 			}
