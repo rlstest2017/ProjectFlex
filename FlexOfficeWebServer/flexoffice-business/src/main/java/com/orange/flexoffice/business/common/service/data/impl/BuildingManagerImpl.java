@@ -91,7 +91,7 @@ public class BuildingManagerImpl implements BuildingManager {
 		try {
 			// create xml meeting room config file
 			String meetingroomActivated = properties.getProperty("meetingroom.activated");
-			if ("true".equals(meetingroomActivated)){
+			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
 				String fileName = addressTools.getCountryRegionCityNamesFromCityId(buildingDao.getCityId()) + "_" + buildingDao.getName();
 				fileManager.createFile(fileName);
 			}
@@ -119,7 +119,7 @@ public class BuildingManagerImpl implements BuildingManager {
 	public BuildingDao update(BuildingDao building) throws DataNotExistsException, IOException, JAXBException, ParserConfigurationException, SAXException {
 		// update xml meeting room config file
 		String meetingroomActivated = properties.getProperty("meetingroom.activated");
-		if ("true".equals(meetingroomActivated)){
+		if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
 			BuildingDao oldBuildingDao = buildingRepository.findOne(building.getId());
 			String fileSubName = addressTools.getCountryRegionCityNamesFromCityId(oldBuildingDao.getCityId());
 			fileManager.updateFile(fileSubName + "_" + oldBuildingDao.getName(), fileSubName + "_" + building.getName());
@@ -133,7 +133,7 @@ public class BuildingManagerImpl implements BuildingManager {
 			buildingRepository.findOne(buildingId);
 			// delete xml meeting room config file
 			String meetingroomActivated = properties.getProperty("meetingroom.activated");
-			if ("true".equals(meetingroomActivated)){
+			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
 				BuildingDao buildingDao = buildingRepository.findOne(buildingId);
 				String fileName = addressTools.getCountryRegionCityNamesFromCityId(buildingDao.getCityId()) + "_" + buildingDao.getName();
 				fileManager.deleteFile(fileName);

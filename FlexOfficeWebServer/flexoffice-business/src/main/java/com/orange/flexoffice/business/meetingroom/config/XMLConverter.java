@@ -21,6 +21,12 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class XMLConverter {
+	
+	private String DESCRIPTION = "description";
+	
+	private String ROOMS = "rooms";
+	
+	private String ROOM_ID = "RoomID";
 
 	private Marshaller marshaller;
 	private Unmarshaller unmarshaller;
@@ -78,10 +84,10 @@ public class XMLConverter {
         for (int temp = 0; temp < nodes.getLength(); temp++) {
         	Node nNode = nodes.item(temp);
 	        if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-	        	if ("description".equals(nNode.getNodeName())){
+	        	if (DESCRIPTION.equals(nNode.getNodeName())){
 	           		array.setDescription(nNode.getTextContent());
 	           	}
-	           	if("rooms".equals(nNode.getNodeName())){
+	           	if(ROOMS.equals(nNode.getNodeName())){
 	           		nodeRooms = nNode;
 	           	}
 	        }
@@ -95,7 +101,7 @@ public class XMLConverter {
             	Element eElement = (Element) nNode;
             	num = new Numeric();
             	num.setName(nNode.getNodeName());
-            	num.setRoomId(eElement.getElementsByTagName("RoomID").item(0).getTextContent());
+            	num.setRoomId(eElement.getElementsByTagName(ROOM_ID).item(0).getTextContent());
             	numerics.add(num);
             }
         }

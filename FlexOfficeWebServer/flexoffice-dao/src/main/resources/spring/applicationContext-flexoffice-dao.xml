@@ -11,8 +11,8 @@
 	<!-- Scan base package -->
 	<context:component-scan base-package="com.orange.flexoffice.dao.common.repository, com.orange.flexoffice.dao.common.model" />
 
-	<util:properties id="appProperties" location="file:C:/Users/pqrn4797/Workspace/flexoffice.properties" />
-	<!--<util:properties id="appProperties" location="file:/home/flexoffice/flexoffice-webserver/Config/flexoffice.properties" />-->
+	<!--<util:properties id="appProperties" location="file:C:/Users/pqrn4797/Workspace/flexoffice.properties" />-->
+	<util:properties id="appProperties" location="file:/home/flexoffice/flexoffice-webserver/Config/flexoffice.properties" />
     <context:property-placeholder  ignore-resource-not-found="true" properties-ref="appProperties"/>
 
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">

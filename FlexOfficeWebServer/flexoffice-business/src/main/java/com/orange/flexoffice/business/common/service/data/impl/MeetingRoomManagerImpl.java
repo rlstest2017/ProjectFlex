@@ -177,7 +177,7 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 		try {
 			// Update xml meeting room file config
 			String meetingroomActivated = properties.getProperty("meetingroom.activated");
-			if ("true".equals(meetingroomActivated)){
+			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
 				String fileName = addressTools.getCountryRegionCityBuildingNamesBuildingId(meetingroomDao.getBuildingId());
 				fileManager.addObjectToFile(fileName, meetingroomDao.getExternalId());
 			}
@@ -213,7 +213,7 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 		try {
 			// Update xml meeting room file config
 			String meetingroomActivated = properties.getProperty("meetingroom.activated");
-			if ("true".equals(meetingroomActivated)){
+			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
 				MeetingRoomDao oldMeetingRoomDao = meetingroomRepository.findOne(meetingroomDao.getId()); 
 				
 				String fileName = addressTools.getCountryRegionCityBuildingNamesBuildingId(meetingroomDao.getBuildingId());
@@ -283,7 +283,7 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			if (meetingroom.getOrganizerLabel() == null){
 				// Update xml meeting room file config
 				String meetingroomActivated = properties.getProperty("meetingroom.activated");
-				if ("true".equals(meetingroomActivated)){
+				if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
 					String fileName = addressTools.getCountryRegionCityBuildingNamesBuildingId(meetingroom.getBuildingId());
 					fileManager.removeObjectFromFile(fileName, meetingroom.getExternalId());
 				}

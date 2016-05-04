@@ -22,7 +22,11 @@ import com.orange.flexoffice.business.common.exception.DataAlreadyExistsExceptio
 public class FileManager {
 	public String EXTENSION = ".xml";
 	
+	public String SEPARATOR = "\\";
+	
 	private Properties properties;
+	
+	private String NUMERIC = "numeric";
 	
 	@Autowired
     @Qualifier("appProperties")
@@ -41,27 +45,27 @@ public class FileManager {
 		rooms.setNumeric(nums);
 		room.setRooms(rooms);
 	
-		converter.convertFromObjectToXML(room, filePath + "\\" + fileName + EXTENSION);
+		converter.convertFromObjectToXML(room, filePath + SEPARATOR + fileName + EXTENSION);
 	}
 	
 	public void updateFile(String oldName, String newName) throws IOException, JAXBException, ParserConfigurationException, SAXException{		
 		String filePath = properties.getProperty("meetingroom.path");
-		Array array = converter.convertFromXMLToObject(filePath + "\\" + oldName + EXTENSION);
+		Array array = converter.convertFromXMLToObject(filePath + SEPARATOR + oldName + EXTENSION);
 		deleteFile(oldName);
 		array.setDescription("Liste des meeting rooms pour le bâtiment " + newName);
 		
-		converter.convertFromObjectToXML(array, filePath + "\\" + newName + EXTENSION);
+		converter.convertFromObjectToXML(array, filePath + SEPARATOR + newName + EXTENSION);
 	}
 	
 	public void deleteFile(String fileName){
 		String filePath = properties.getProperty("meetingroom.path");
-		File file = new File(filePath + "\\" + fileName + EXTENSION);
+		File file = new File(filePath + SEPARATOR + fileName + EXTENSION);
 		file.delete();
 	}
 	
 	public void addObjectToFile(String fileName, String roomId) throws DataAlreadyExistsException, IOException, JAXBException, ParserConfigurationException, SAXException{
 		String filePath = properties.getProperty("meetingroom.path");
-		Array array = converter.convertFromXMLToObject(filePath + "\\" + fileName + EXTENSION);
+		Array array = converter.convertFromXMLToObject(filePath + SEPARATOR + fileName + EXTENSION);
 		List<JAXBElement<Numeric>> JAXBnums = array.getRooms().getNumeric();
 		ArrayList<Numeric> nums = new ArrayList<Numeric>();
 		Rooms rooms = array.getRooms();
@@ -79,18 +83,18 @@ public class FileManager {
 		
 		Numeric numToAdd = new Numeric();
 		numToAdd.setRoomId(roomId);
-		numToAdd.setName("numeric" + String.valueOf(JAXBnums.size()));
+		numToAdd.setName(NUMERIC + String.valueOf(JAXBnums.size()));
 
 		nums.add(numToAdd);
 
 		rooms.setNumeric(nums);
 		
-		converter.convertFromObjectToXML(array, filePath + "\\" + fileName + EXTENSION);
+		converter.convertFromObjectToXML(array, filePath + SEPARATOR + fileName + EXTENSION);
 	}
 	
 	public void updateObjectFromFile(String fileName, String oldRoomId, String newRoomId) throws DataAlreadyExistsException, IOException, JAXBException, ParserConfigurationException, SAXException{
 		String filePath = properties.getProperty("meetingroom.path");
-		Array array = converter.convertFromXMLToObject(filePath + "\\" + fileName + EXTENSION);
+		Array array = converter.convertFromXMLToObject(filePath + SEPARATOR + fileName + EXTENSION);
 		List<JAXBElement<Numeric>> JAXBnums = array.getRooms().getNumeric();
 		ArrayList<Numeric> nums = new ArrayList<Numeric>();
 		Rooms rooms = array.getRooms();
@@ -116,12 +120,12 @@ public class FileManager {
 
 		rooms.setNumeric(nums);
 		
-		converter.convertFromObjectToXML(array, filePath + "\\" + fileName + EXTENSION);
+		converter.convertFromObjectToXML(array, filePath + SEPARATOR + fileName + EXTENSION);
 	}
 	
 	public void removeObjectFromFile(String fileName, String roomId) throws IOException, JAXBException, ParserConfigurationException, SAXException{
 		String filePath = properties.getProperty("meetingroom.path");
-		Array array = converter.convertFromXMLToObject(filePath + "\\" + fileName + EXTENSION);
+		Array array = converter.convertFromXMLToObject(filePath + SEPARATOR + fileName + EXTENSION);
 		List<JAXBElement<Numeric>> JAXBnums = array.getRooms().getNumeric();
 		ArrayList<Numeric> nums = new ArrayList<Numeric>();
 		Rooms rooms = array.getRooms();
@@ -132,7 +136,7 @@ public class FileManager {
 			numeric = new Numeric();
 			numeric.setRoomId(num.getValue().getRoomId());
 			if(!numeric.getRoomId().equals(roomId)){
-				numeric.setName("numeric" + i);
+				numeric.setName(NUMERIC + i);
 				nums.add(numeric);
 				i++;
 			}
@@ -140,7 +144,7 @@ public class FileManager {
 
 		rooms.setNumeric(nums);
 		
-		converter.convertFromObjectToXML(array, filePath + "\\" + fileName + EXTENSION);
+		converter.convertFromObjectToXML(array, filePath + SEPARATOR + fileName + EXTENSION);
 	}
 	
 }
