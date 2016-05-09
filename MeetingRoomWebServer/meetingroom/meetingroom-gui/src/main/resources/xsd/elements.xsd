@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<xsd:include id="types" schemaLocation="types.xsd"/>
+	
+	<xsd:element name="sensorNewSummary" type="SensorNewSummary"/>
+	<xsd:element name="sensorInput" type="SensorInput"/>
+	<xsd:element name="gatewaySummary" type="GatewaySummary"/>
+	<xsd:element name="gatewayReturn" type="GatewayReturn"/>
+	<xsd:element name="gatewayInput" type="GatewayInput"/>
+	<xsd:element name="room" type="Room"/>
+	
+	<xsd:element name="error" type="ErrorModel"/>
+	
+</xsd:schema>

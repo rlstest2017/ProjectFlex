@@ -12,15 +12,107 @@
   <packaging>war</packaging>
   <name>meetingroom-gui Maven Webapp</name>
   <url>http://maven.apache.org</url>
+
   <dependencies>
+ 	<dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>meetingroom-business</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     <dependency>
+     <groupId>javax.servlet</groupId>
+	 <artifactId>javax.servlet-api</artifactId>
+	 <scope>provided</scope>
+    </dependency>
+
+  	<!-- Apache Common codec -->
+	<dependency>
+		<groupId>commons-codec</groupId>
+		<artifactId>commons-codec</artifactId>
+	</dependency>
+  		
+	<!-- CXF -->	
+		<dependency>
+     		<groupId>org.apache.cxf</groupId>
+     		<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+  		</dependency>
+	    <dependency>
+	        <groupId>org.apache.cxf</groupId>
+	        <artifactId>cxf-rt-rs-extension-providers</artifactId>
+	    </dependency>
+  		
+ 	<!--  for JSON provider -->
+	    <dependency>
+  			<groupId>org.codehaus.jackson</groupId>
+  			<artifactId>jackson-jaxrs</artifactId>
+    	</dependency>
+    	<dependency>
+    		<groupId>org.codehaus.jackson</groupId>
+    		<artifactId>jackson-xc</artifactId>
+     	</dependency>
+
+	<!-- Log -->
+	<dependency>
+		<groupId>log4j</groupId>
+	    <artifactId>log4j</artifactId>
+	</dependency>
+	
+	<!-- Spring -->
+	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+	</dependency>
+	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+	</dependency>
+	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+	</dependency>
+	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+	</dependency>
+	
+	<!-- spring AOP -->
+	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+	</dependency>
+	
+		<!-- Testing -->
+	<dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
       <scope>test</scope>
-    </dependency>
+    </dependency>	
+  	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-test</artifactId>
+   		<scope>test</scope>
+	</dependency>
+	
   </dependencies>
+  
   <build>
     <finalName>meetingroom-gui</finalName>
+      <plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<executions>
+                    <execution>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+               </executions>
+				<configuration>
+					<packageName>com.orange.meetingroom.gui.ws.model</packageName>
+					<schemaDirectory>${basedir}/src/main/resources/xsd</schemaDirectory>
+				</configuration>
+			</plugin>
+	  </plugins>
   </build>
 </project>

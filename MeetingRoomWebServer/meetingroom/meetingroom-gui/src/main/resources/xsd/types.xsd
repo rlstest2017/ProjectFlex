@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	
+	<!-- Begin Enumeration Type -->
+	<xsd:simpleType name="e-sensorStatus">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="ONLINE"/>
+	 	<xsd:enumeration value="UNSTABLE"/>
+	 	<xsd:enumeration value="UNSTABLE_VOLTAGE"/>
+	 	<xsd:enumeration value="UNSTABLE_RSSI"/>
+	 	<xsd:enumeration value="TEACHIN_ERROR"/>
+	 	<xsd:enumeration value="OFFLINE"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="e-gatewayStatus">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="ONLINE"/>
+	 	<xsd:enumeration value="ONTEACHIN"/>
+	 	<xsd:enumeration value="OFFLINE"/>
+	 	<xsd:enumeration value="ERROR_NO_USB_DEVICE"/>
+	 	<xsd:enumeration value="ERROR_FIFO_FILE"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="e-commandModel">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="NONE"/>
+	 	<xsd:enumeration value="TEACHIN"/>
+	 	<xsd:enumeration value="STOPTEACHIN"/>
+	 	<xsd:enumeration value="RESET"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="e-occupancyInfo">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="UNOCCUPIED"/>
+	 	<xsd:enumeration value="OCCUPIED"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
+	<!-- End Enumeration Type -->
+	
+	<xsd:complexType name="SensorSummary">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="profile" type="xsd:string"/>
+ 		    <xsd:element name="status" type="e-sensorStatus"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="SensorNewSummary">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="profile" type="xsd:string"/>
+ 		    <xsd:element name="gatewayId" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="SensorInput">
+		<xsd:sequence>
+			<xsd:element name="occupancyInfo" type="e-occupancyInfo" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="sensorStatus" type="e-sensorStatus"  minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="temperature" type="xsd:double"  minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="humidity" type="xsd:double"  minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="GatewaySummary">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="status" type="e-gatewayStatus" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="GatewayInput">
+		<xsd:sequence>
+			<xsd:element name="gatewayStatus" type="e-gatewayStatus" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="GatewayReturn">
+		<xsd:sequence>
+			<xsd:element name="roomId" type="xsd:integer"/>
+			<xsd:element name="command" type="e-commandModel" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="Room">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:integer"/>
+			<xsd:element name="name" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="occupancyTimeout" type="xsd:integer"/>
+			<xsd:element name="sensors" type="SensorSummary" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- Error Model -->
+	<xsd:complexType name="ErrorModel">
+		<xsd:sequence>
+			<xsd:element name="code" type="xsd:string"/>
+			<xsd:element name="message" type="xsd:string"/>
+ 		</xsd:sequence>
+	</xsd:complexType>
+	
+</xsd:schema>

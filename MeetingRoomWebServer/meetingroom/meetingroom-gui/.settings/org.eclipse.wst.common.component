@@ -3,9 +3,16 @@
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/ressources"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/ressources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/jaxb"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="meetingroom-business-2.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/meetingroom-business/meetingroom-business">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="meetingroom-connector-2.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/meetingroom-connector/meetingroom-connector">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="meetingroom-gui"/>
         <property name="java-output-path" value="/meetingroom-gui/build/classes"/>
     </wb-module>
