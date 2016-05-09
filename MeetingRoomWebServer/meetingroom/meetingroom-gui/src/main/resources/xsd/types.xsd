@@ -2,95 +2,166 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 	
 	<!-- Begin Enumeration Type -->
-	<xsd:simpleType name="e-sensorStatus">
+	<xsd:simpleType name="e-dashboardStatus">
 	 <xsd:restriction base="xsd:string">
 	 	<xsd:enumeration value="ONLINE"/>
-	 	<xsd:enumeration value="UNSTABLE"/>
-	 	<xsd:enumeration value="UNSTABLE_VOLTAGE"/>
-	 	<xsd:enumeration value="UNSTABLE_RSSI"/>
-	 	<xsd:enumeration value="TEACHIN_ERROR"/>
 	 	<xsd:enumeration value="OFFLINE"/>
+	 	<xsd:enumeration value="ECONOMIC"/>
 	 </xsd:restriction>
 	</xsd:simpleType>
-	
-	<xsd:simpleType name="e-gatewayStatus">
+	<xsd:simpleType name="e-agentStatus">
 	 <xsd:restriction base="xsd:string">
 	 	<xsd:enumeration value="ONLINE"/>
-	 	<xsd:enumeration value="ONTEACHIN"/>
 	 	<xsd:enumeration value="OFFLINE"/>
-	 	<xsd:enumeration value="ERROR_NO_USB_DEVICE"/>
-	 	<xsd:enumeration value="ERROR_FIFO_FILE"/>
+	 	<xsd:enumeration value="ECONOMIC"/>
 	 </xsd:restriction>
 	</xsd:simpleType>
-	
+	<xsd:simpleType name="e-meetingroomStatus">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="FREE"/>
+	 	<xsd:enumeration value="OCCUPIED"/>
+	 	<xsd:enumeration value="ACK"/>
+		<xsd:enumeration value="UNKNOWN"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
 	<xsd:simpleType name="e-commandModel">
 	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="ONLINE"/>
+	 	<xsd:enumeration value="OFFLINE"/>
+	 	<xsd:enumeration value="ECONOMIC"/>
 	 	<xsd:enumeration value="NONE"/>
-	 	<xsd:enumeration value="TEACHIN"/>
-	 	<xsd:enumeration value="STOPTEACHIN"/>
-	 	<xsd:enumeration value="RESET"/>
-	 </xsd:restriction>
-	</xsd:simpleType>
-	
-	<xsd:simpleType name="e-occupancyInfo">
-	 <xsd:restriction base="xsd:string">
-	 	<xsd:enumeration value="UNOCCUPIED"/>
-	 	<xsd:enumeration value="OCCUPIED"/>
 	 </xsd:restriction>
 	</xsd:simpleType>
 	<!-- End Enumeration Type -->
 	
-	<xsd:complexType name="SensorSummary">
+	<!-- System -->
+	<xsd:complexType name="SystemReturn">
 		<xsd:sequence>
-			<xsd:element name="id" type="xsd:string"/>
-			<xsd:element name="profile" type="xsd:string"/>
- 		    <xsd:element name="status" type="e-sensorStatus"/>
+			<xsd:element name="agentTimeout" type="xsd:integer"/>
+			<xsd:element name="dashboardTimeout" type="xsd:integer"/>
+			<xsd:element name="meetingRoomTimeout" type="xsd:integer"/>
+			<xsd:element name="wsRefreshInterval" type="xsd:integer"/>
+			<xsd:element name="inactivityTime" type="xsd:integer"/>
+			<xsd:element name="hourStart" type="xsd:integer"/>
+			<xsd:element name="hourEnd" type="xsd:integer"/>
+			<xsd:element name="organizerMandatory" type="xsd:boolean"/>
+			<xsd:element name="subjectMandatory" type="xsd:boolean"/>
+			<xsd:element name="ackTime" type="xsd:integer"/>
+			<xsd:element name="userCanCancel" type="xsd:boolean"/>
+			<xsd:element name="canShowSubject" type="xsd:boolean"/>
+			<xsd:element name="canShowOrganizer" type="xsd:boolean"/>
+			<xsd:element name="durationStep" type="xsd:integer"/>
+			<xsd:element name="maxDuration" type="xsd:integer"/>
+			<xsd:element name="pagesShiftInterval" type="xsd:integer"/>
+			<xsd:element name="nbRoomsPerPage" type="xsd:integer"/>
+ 		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- Booking -->
+	<xsd:complexType name="Booking">
+		<xsd:sequence>
+			<xsd:element name="iDReservation" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="revisionReservation" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="organizerFullName" type="xsd:string"/>
+			<xsd:element name="subject" type="xsd:string"/>
+			<xsd:element name="startDate" type="xsd:integer"/>
+			<xsd:element name="endDate" type="xsd:integer"/>
+			<xsd:element name="acknowledged" type="xsd:boolean"/>
+ 		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- MeetingRoomDetails -->
+	<xsd:complexType name="MeetingRoomDetails">
+		<xsd:sequence>
+			<xsd:element name="meetingRoomExternalId" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="meetingRoomExternalName" type="xsd:string"/>
+			<xsd:element name="meetingRoomExternalLocation" type="xsd:string"/>
+			<xsd:element name="meetingRoomStatus" type="e-meetingroomStatus"/>
+ 		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- MeetingRoomBookings -->
+	<xsd:complexType name="MeetingRoomBookings">
+		<xsd:sequence>
+			<xsd:element name="meetingRoomDetails" type="MeetingRoomDetails"/>
+			<xsd:element name="bookings" type="Booking" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- MeetingRoom -->
+	<xsd:complexType name="MeetingRoom">
+		<xsd:sequence>
+			<xsd:element name="currentDate" type="xsd:integer"/>
+			<xsd:element name="room" type="MeetingRoomBookings" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- MeetingRooms -->
+	<xsd:complexType name="MeetingRooms">
+		<xsd:sequence>
+			<xsd:element name="currentDate" type="xsd:integer"/>
+			<xsd:element name="rooms" type="MeetingRoomBookings" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- DashboardInput -->
+	<xsd:complexType name="DashboardInput">
+		<xsd:sequence>
+			<xsd:element name="dashboardStatus" type="e-dashboardStatus"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- DashboardOutput -->
+	<xsd:complexType name="DashboardOutput">
+		<xsd:sequence>
+			<xsd:element name="command" type="e-commandModel"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- AgentInput -->
+	<xsd:complexType name="AgentInput">
+		<xsd:sequence>
+			<xsd:element name="agentStatus" type="e-agentStatus"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- AgentOutput -->
+	<xsd:complexType name="AgentOutput">
+		<xsd:sequence>
+			<xsd:element name="meetingRoomExternalId" type="xsd:string"/>
+			<xsd:element name="command" type="e-commandModel"/>
 		</xsd:sequence>
 	</xsd:complexType>
 
-	<xsd:complexType name="SensorNewSummary">
+	<!-- BookingSetInput -->
+	<xsd:complexType name="BookingSetInput">
 		<xsd:sequence>
-			<xsd:element name="id" type="xsd:string"/>
-			<xsd:element name="profile" type="xsd:string"/>
- 		    <xsd:element name="gatewayId" type="xsd:string"/>
+			<xsd:element name="organizerFullName" type="xsd:string"/>
+			<xsd:element name="subject" type="xsd:string"/>
+			<xsd:element name="startDate" type="xsd:integer"/>
+			<xsd:element name="endDate" type="xsd:integer"/>
 		</xsd:sequence>
 	</xsd:complexType>
-	
-	<xsd:complexType name="SensorInput">
+	<!-- BookingSetOutput -->
+	<xsd:complexType name="BookingSetOutput">
 		<xsd:sequence>
-			<xsd:element name="occupancyInfo" type="e-occupancyInfo" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="sensorStatus" type="e-sensorStatus"  minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="temperature" type="xsd:double"  minOccurs="0" maxOccurs="1"/>
- 		    <xsd:element name="humidity" type="xsd:double"  minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="iDReservation" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="revisionReservation" type="xsd:string" minOccurs="1" maxOccurs="1"/>
 		</xsd:sequence>
 	</xsd:complexType>
 
-	<xsd:complexType name="GatewaySummary">
+	<!-- BookingUpdateInput -->
+	<xsd:complexType name="BookingUpdateInput">
 		<xsd:sequence>
-			<xsd:element name="id" type="xsd:string"/>
-			<xsd:element name="status" type="e-gatewayStatus" />
+			<xsd:element name="iDReservation" type="xsd:string"/>
+			<xsd:element name="revisionReservation" type="xsd:string"/>
+			<xsd:element name="startDate" type="xsd:integer"/>
+			<xsd:element name="endDate" type="xsd:integer"/>
 		</xsd:sequence>
 	</xsd:complexType>
-	
-	<xsd:complexType name="GatewayInput">
+	<!-- BookingUpdateOutput -->
+	<xsd:complexType name="BookingUpdateOutput">
 		<xsd:sequence>
-			<xsd:element name="gatewayStatus" type="e-gatewayStatus" />
-		</xsd:sequence>
-	</xsd:complexType>
-	
-	<xsd:complexType name="GatewayReturn">
-		<xsd:sequence>
-			<xsd:element name="roomId" type="xsd:integer"/>
-			<xsd:element name="command" type="e-commandModel" />
-		</xsd:sequence>
-	</xsd:complexType>
-	
-	<xsd:complexType name="Room">
-		<xsd:sequence>
-			<xsd:element name="id" type="xsd:integer"/>
-			<xsd:element name="name" type="xsd:string" minOccurs="0" maxOccurs="1"/>
- 		    <xsd:element name="occupancyTimeout" type="xsd:integer"/>
-			<xsd:element name="sensors" type="SensorSummary" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="iDReservation" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="revisionReservation" type="xsd:string" minOccurs="1" maxOccurs="1"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	
