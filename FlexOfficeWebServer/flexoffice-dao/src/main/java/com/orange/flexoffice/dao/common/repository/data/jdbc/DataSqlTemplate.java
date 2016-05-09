@@ -20,8 +20,12 @@ public final class DataSqlTemplate {
 			"select * from %s where key=:key";
 	public static final String FIND_ROOMSTAT_BY_ROOMID_TEMPLATE = 
 			"select * from %s where room_id=:roomId and room_info=CAST(:roomInfo AS roomInfo)";
+	public static final String FIND_MEETINGROOMSTAT_BY_MEETINGROOMID_TEMPLATE = 
+			"select * from %s where meetingroom_id=:meetingRoomId and meetingroom_info=CAST(:meetingRoomInfo AS meetingRoomInfo)";
 	public static final String FIND_ROOMSTAT_BY_ROOMINFO_TEMPLATE = 
 			"select * from %s where room_info=CAST(:roomInfo AS roomInfo)";
+	public static final String FIND_MEETINGROOMSTAT_BY_MEETINGROOMINFO_TEMPLATE = 
+			"select * from %s where meetingroom_info=CAST(:meetingRoomInfo AS meetingRoomInfo)";
 	public static final String FIND_BY_MAC_ADDRESS_TEMPLATE = 
 			"select * from %s where mac_address=:macAddress";
 	public static final String FIND_BY_MEETINGROOM_ID_TEMPLATE = 
@@ -90,10 +94,16 @@ public final class DataSqlTemplate {
 			"select distinct countries.id, countries.name From rooms, buildings, cities, regions, countries where rooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=regions.id and regions.country_id=countries.id";
 	public static final String FIND_ALL_ROOM_DAILY_TEMPLATE = 
 			"select * from %s order by room_id";
+	public static final String FIND_ALL_MEETINGROOM_DAILY_TEMPLATE = 
+			"select * from %s order by meetingroom_id";
 	public static final String FIND_REQUESTED_ROOM_DAILY_AND_TYPE_TEMPLATE = 
 			"select room_daily_occupancy.day, room_daily_occupancy.occupancy_duration, rooms.type From room_daily_occupancy, rooms where rooms.id=room_daily_occupancy.room_id and room_daily_occupancy.day >:fromDate and room_daily_occupancy.day <:toDate order by room_daily_occupancy.day";
+	public static final String FIND_REQUESTED_MEETINGROOM_DAILY_AND_TYPE_TEMPLATE = 
+			"select meetingroom_daily_occupancy.day, meetingroom_daily_occupancy.occupancy_duration, meetingrooms.type From meetingroom_daily_occupancy, meetingrooms where meetingrooms.id=meetingroom_daily_occupancy.meetingroom_id and meetingroom_daily_occupancy.day >:fromDate and meetingroom_daily_occupancy.day <:toDate order by meetingroom_daily_occupancy.day";
 	public static final String FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE = 
 			"select * from %s where room_info=CAST(:roomInfo AS roomInfo) and begin_occupancy_date >:beginOccupancyDate and end_occupancy_date <:endOccupancyDate order by room_id";
+	public static final String FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE_MEETINGROOM = 
+			"select * from %s where meetingroom_info=CAST(:meetingroomInfo AS meetingRoomInfo) and begin_occupancy_date >:beginOccupancyDate and end_occupancy_date <:endOccupancyDate order by meetingroom_id";
 	public static final String FIND_ALL_REGIONS_SUMMARY_TEMPLATE = 
 	"select regions.id, regions.name, countries.name as country_name From regions, countries where regions.country_id=countries.id";
 	public static final String FIND_ALL_CITIES_SUMMARY_TEMPLATE = 
@@ -101,6 +111,8 @@ public final class DataSqlTemplate {
 	public static final String FIND_ALL_BUILDINGS_SUMMARY_TEMPLATE = 
 	"select buildings.id, buildings.name, cities.name as city_name, regions.name as region_name, countries.name as country_name, buildings.address, buildings.nb_floors From buildings, cities, regions, countries where buildings.city_id=cities.id and cities.region_id=regions.id and regions.country_id=countries.id";
 	public static final String FIND_REQUESTED_ROOM_DAILY_TEMPLATE = 
+			"select * from %s where day >:fromDate and day <:toDate order by day";
+	public static final String FIND_REQUESTED_MEETINGROOM_DAILY_TEMPLATE = 
 			"select * from %s where day >:fromDate and day <:toDate order by day";
 	public static final String FIND_LATEST_RESERVED_ROOM_TEMPLATE = 
 			"select * from %s where user_id=:userId order by reservation_date desc";
@@ -114,10 +126,16 @@ public final class DataSqlTemplate {
 			"delete from %s where identifier=:identifier";
 	public static final String REMOVE_BY_DAY_ROOM_DAILY_TEMPLATE = 
 			"delete from %s where day<:day";
+	public static final String REMOVE_BY_DAY_MEETINGROOM_DAILY_TEMPLATE = 
+			"delete from %s where day<:day";
 	public static final String REMOVE_BY_DATE_ROOM_STATS_TEMPLATE = 
+			"delete from %s where begin_occupancy_date<:date";
+	public static final String REMOVE_BY_DATE_MEETINGROOM_STATS_TEMPLATE = 
 			"delete from %s where begin_occupancy_date<:date";
 	public static final String REMOVE_STAT_BY_ROOM_ID_TEMPLATE = 
 			"delete from %s where room_id =:roomId";
+	public static final String REMOVE_STAT_BY_MEETINGROOM_ID_TEMPLATE = 
+			"delete from %s where meetingroom_id =:meetingroomId";
 	public static final String REMOVE_PREFERENCES_BY_COUNTRY_ID_TEMPLATE = 
 			"delete from %s where country_id =:countryId";
 	public static final String REMOVE_PREFERENCES_BY_REGION_ID_TEMPLATE = 
@@ -176,18 +194,26 @@ public final class DataSqlTemplate {
 			"insert into %s (room_id, user_id, reservation_date, room_info) values (:roomId, :userId, now(), CAST(:roomInfo AS roomInfo))";
 	public static final String CREATE_ROOMDAILY_TEMPLATE = 
 			"insert into %s (room_id, occupancy_duration) values (:roomId, :occupancyDuration)";
+	public static final String CREATE_MEETINGROOM_DAILY_TEMPLATE = 
+			"insert into %s (meetingroom_id, occupancy_duration) values (:meetingroomId, :occupancyDuration)";
 	public static final String CREATE_OCCUPIED_ROOMSTAT_TEMPLATE = 
 			"insert into %s (room_id, room_info, begin_occupancy_date) values (:roomId, CAST(:roomInfo AS roomInfo), now())";
+	public static final String CREATE_OCCUPIED_MEETINGROOMSTAT_TEMPLATE = 
+			"insert into %s (meetingroom_id, meetingroom_info, begin_occupancy_date) values (:meetingRoomId, CAST(:meetingRoomInfo AS meetingRoomInfo), :beginOccupancyDate)";
 	public static final String CREATE_SENSOR_TEMPLATE = 
 			"insert into %s (identifier, name, type, profile, description, status, room_id) values (:identifier, :name, CAST(:type AS sensortype), :profile, :description, CAST(:status AS sensorstatus), :roomId)";
 	public static final String UPDATE_RESERVED_ROOMSTAT_TEMPLATE = 
 			"update %s set room_info=CAST(:roomInfo AS roomInfo) WHERE room_id=:roomId and user_id=:userId and room_info='RESERVED'";
 	public static final String UPDATE_ROOMSTAT_BY_ID_TEMPLATE = 
 			"update %s set room_info=CAST(:roomInfo AS roomInfo) WHERE id=:id";
+	public static final String UPDATE_MEETINGROOMSTAT_BY_ID_TEMPLATE = 
+			"update %s set meetingroom_info=CAST(:meetingRoomInfo AS meetingRoomInfo) WHERE id=:id";
 	public static final String UPDATE_OCCUPIED_ROOMSTAT_TEMPLATE = 
 			"update %s set room_info='OCCUPIED', begin_occupancy_date=now(), is_reservation_honored=true WHERE room_id=:roomId and room_info='RESERVED'";
 	public static final String UPDATE_UNOCCUPIED_ROOMSTAT_TEMPLATE = 
 			"update %s set room_info='UNOCCUPIED', end_occupancy_date=now() WHERE room_id=:roomId and room_info='OCCUPIED'";
+	public static final String UPDATE_UNOCCUPIED_MEETINGROOMSTAT_TEMPLATE = 
+			"update %s set meetingroom_info='UNOCCUPIED', end_occupancy_date=now() WHERE meetingroom_id=:meetingRoomId and meetingroom_info='OCCUPIED'";
 	public static final String UPDATE_GATEWAY_TEMPLATE = 
 			"update %s set name=:name, description=:description WHERE mac_address=:macAddress";
 	public static final String UPDATE_AGENT_TEMPLATE = 

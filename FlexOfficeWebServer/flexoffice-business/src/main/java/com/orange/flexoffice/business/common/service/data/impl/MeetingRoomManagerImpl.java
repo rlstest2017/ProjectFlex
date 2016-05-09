@@ -1,7 +1,6 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -27,17 +26,16 @@ import com.orange.flexoffice.business.common.utils.AddressTools;
 import com.orange.flexoffice.business.meetingroom.config.FileManager;
 import com.orange.flexoffice.dao.common.model.data.AgentDao;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
-import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
+import com.orange.flexoffice.dao.common.model.data.MeetingRoomStatDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_MeetingRoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_MeetingRoomType;
 import com.orange.flexoffice.dao.common.model.object.BuildingDto;
 import com.orange.flexoffice.dao.common.model.object.MeetingRoomBuildingInfosDto;
 import com.orange.flexoffice.dao.common.model.object.MeetingRoomDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AgentDaoRepository;
-import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomDailyOccupancyDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomDaoRepository;
-import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDailyOccupancyDaoRepository;
-import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomStatDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomStatDaoRepository;
 
 /**
  * Manages {@link MeetingRoomDto}.
@@ -64,11 +62,9 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 	@Autowired
 	private AgentDaoRepository agentRepository;
 	@Autowired
-	private RoomStatDaoRepository roomStatRepository;
+	private MeetingRoomStatDaoRepository meetingRoomStatRepository;
 	@Autowired
-	private RoomDailyOccupancyDaoRepository roomDailyRepository;
-	@Autowired
-	private ConfigurationDaoRepository configRepository;
+	private MeetingRoomDailyOccupancyDaoRepository meetingRoomDailyRepository;
 	@Autowired
 	private BuildingManager buildingManager;
 	@Autowired
@@ -252,14 +248,31 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 		try {
 
 			LOGGER.debug("Meeting Room id is : " + meetingroomDao.getId());
-			if  (meetingroomDao.getStatus().equals(E_MeetingRoomStatus.FREE.toString())) { // from UserUi.RoomEndpoint.cancelRoom
+			// Use in case of reservation meeting Room in agent/dashboard
+			if  (meetingroomDao.getStatus().equals(E_MeetingRoomStatus.OCCUPIED.toString())) { 
 				MeetingRoomDao foundMeetingRoom = meetingroomRepository.findByMeetingRoomId(meetingroomDao.getId());
-				if (foundMeetingRoom.getStatus().equals(E_MeetingRoomStatus.OCCUPIED.toString())) { // cancel from "J'ai fini " room is in OCCUPIED status
-					LOGGER.debug("RoomStat to update !!!");
-					RoomStatDao roomStat = new RoomStatDao();
-					roomStat.setRoomId(meetingroomDao.getId().intValue());
-					roomStatRepository.updateEndOccupancyDate(roomStat);
-					LOGGER.info("roomStat updateEndOccupancyDate for room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
+				
+				LOGGER.info("foundMeetingRoomStatus is " + foundMeetingRoom.getStatus() + " for meeting room#" + foundMeetingRoom.getName());
+				
+				if (!foundMeetingRoom.getStatus().equals(E_MeetingRoomStatus.FREE.toString())) {
+					LOGGER.error("Meeting Room status is not FREE !!!");
+					throw new RoomAlreadyUsedException("MeetingRoomManager.updateStatus : meeting Room is not in FREE status");
+				} else {
+					LOGGER.debug("MeetingRoomStat to create !!!");
+					MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
+					meetingRoomStat.setMeetingRoomId(meetingroomDao.getId().intValue());
+					meetingRoomStat.setMeetingRoomInfo(E_MeetingRoomStatus.OCCUPIED.toString());
+					meetingRoomStatRepository.saveOccupiedMeetingRoomStat(meetingRoomStat);
+					LOGGER.info("meetingRoomStat created for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
+				}
+			} else if (meetingroomDao.getStatus().equals(E_MeetingRoomStatus.FREE.toString())) { 
+				MeetingRoomDao foundMeetingRoom = meetingroomRepository.findByMeetingRoomId(meetingroomDao.getId());
+				if (foundMeetingRoom.getStatus().equals(E_MeetingRoomStatus.OCCUPIED.toString())) { 
+					LOGGER.debug("MeetingRoomStat to update !!!");
+					MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
+					meetingRoomStat.setMeetingRoomId(meetingroomDao.getId().intValue());
+					meetingRoomStatRepository.updateEndOccupancyDate(meetingRoomStat);
+					LOGGER.info("meetingRoomStat updateEndOccupancyDate for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
 					meetingroomDao.setOrganizerLabel(null);
 				}
 			}
@@ -294,10 +307,10 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 				agentRepository.updateAgentMeetingRoomId(agent);
 				LOGGER.info("Meeting room id set to 0 for agent id #: " + meetingroom.getAgentId());
 				
-				// Delete the room & associated stats (room_stats, room_daily_occupancy)
+				// Delete the room & associated stats (meetingroom_stats, meetingroom_daily_occupancy)
 				meetingroomRepository.delete(id);
-				roomStatRepository.deleteByRoomId(meetingroom.getId());
-				roomDailyRepository.deleteByRoomId(meetingroom.getId());
+				meetingRoomStatRepository.deleteByMeetingRoomId(meetingroom.getId());
+				meetingRoomDailyRepository.deleteByMeetingRoomId(meetingroom.getId());
 			} else {
 				LOGGER.error("MeetingRoomManager.delete : Meeting Room #" + id + " is occupied");
 				throw new IntegrityViolationException("MeetingRoomManager.delete : Meeting Room #" + id + " is occupied");
@@ -329,42 +342,6 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			throw new DataNotExistsException("RoomManager.findByName : Room by name #" + name + " is not found");
 		}
 	}
-
-
-	/*@Override
-	@Transactional(readOnly=true)
-	public List<MeetingRoomDao> findLatestReservedRoomsByUserId(String userId) {
-		List<MeetingRoomDao> dataList = null;
-		/*
-		ConfigurationDao lastReservedCount = configRepository.findByKey(E_ConfigurationKey.LAST_RESERVED_COUNT.toString());
-		int lastReservedCountValue = Integer.valueOf(lastReservedCount.getValue());
-		int countAddedRoomStats = 0;
-		
-		try {
-		// get reserved roomStats by userId order by reservation_date desc
-		List<RoomStatDao> roomStatsFromDB = roomStatRepository.findLatestReservedRoomsByUserId(Long.valueOf(userId));
-		
-		// get latest reserved roomStats by userId
-		List<RoomStatDao> roomStats = removeDuplicateFromList(roomStatsFromDB);
-		
-			if ((roomStats != null) && (!roomStats.isEmpty())) {
-				dataList = new ArrayList<MeetingRoomDao>();
-				for (RoomStatDao roomStatDao : roomStats) {
-					MeetingRoomDao roomDao = meetingroomRepository.findByRoomId(Long.valueOf(roomStatDao.getRoomId()));
-					dataList.add(roomDao);
-					countAddedRoomStats = countAddedRoomStats +1;
-					if ((lastReservedCountValue != 0)&&(countAddedRoomStats == lastReservedCountValue)) {
-						break; // sortir de la boucle for
-					} 
-				}
-			}
-		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("user by id " + userId + " has not roomStats", e);
-			LOGGER.info("user by id " + userId + " has not roomStats");
-		
-		}
-		return dataList;
-	}*/
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -381,32 +358,6 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			LOGGER.error("RoomManager.findByRoomId : Meeting Room by Id #" + meetingroomId + " is not found");
 			throw new DataNotExistsException("RoomManager.findByRoomId : Meeting Room by Id #" + meetingroomId + " is not found");
 		}
-	}
-	
-	/**
-	 * removeDuplicateFromList
-	 * @param roomStats
-	 * @return
-	 */
-	private List<RoomStatDao> removeDuplicateFromList(List<RoomStatDao> roomStats) {
-		List<RoomStatDao> dataList = null;
-		if ((roomStats != null) && (!roomStats.isEmpty())) {
-			int s=0;
-			dataList = new ArrayList<RoomStatDao>();
-			for (RoomStatDao roomStatDao : roomStats) {
-				for (RoomStatDao data : dataList) {
-					if (roomStatDao.getRoomId() == data.getRoomId()) {
-						s=1;
-						break;
-					} 
-				} if (s==0) {
-					dataList.add(roomStatDao);
-				}
-				s=0;
-			}
-		}
-		
-		return dataList;
 	}
 	
 	/**
