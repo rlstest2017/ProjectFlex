@@ -16,6 +16,10 @@ public final class PathConst {
 	// Resources 2nd level
 	public static final String CONFIG_PATH = "/config";
 	public static final String TIMEOUT_PATH = "/timeout";
+	public static final String BOOKINGS_PATH = "/bookings";
+	public static final String RESERVE_PATH = "/reserve";
+	public static final String CANCEL_PATH = "/cancel";
+	public static final String CONFIRM_PATH = "/confirm";
 	
 	private PathConst() {
 		
