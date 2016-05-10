@@ -11,7 +11,10 @@
 	
 	<jaxrs:server id="server" address="/">
 		<jaxrs:serviceBeans>
-  			<!--  <bean class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.RoomEndpointImpl"/>-->
+  			<bean class="com.orange.meetingroom.gui.ws.endPoint.entity.impl.AgentEndpointImpl"/>
+  			<bean class="com.orange.meetingroom.gui.ws.endPoint.entity.impl.DashboardEndpointImpl"/>
+  			<bean class="com.orange.meetingroom.gui.ws.endPoint.entity.impl.MeetingRoomEndpointImpl"/>
+  			<bean class="com.orange.meetingroom.gui.ws.endPoint.data.impl.SystemEndpointImpl"/>
   		</jaxrs:serviceBeans>
   		 <jaxrs:extensionMappings>
             <entry key="json" value="application/json"/>
