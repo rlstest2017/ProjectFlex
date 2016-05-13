@@ -3,27 +3,14 @@ package com.orange.meetingroom.connector.flexoffice.model.response;
 import com.orange.meetingroom.connector.flexoffice.enums.EnumCommand;
 
 /**
- * AgentOutput
+ * DashboardOutput
  * @author oab
  *
  */
-public class AgentOutput {
+public class DashboardConnectorOutput {
 
-	String meetingRoomExternalId;
 	EnumCommand command;
 	
-	/**
-	 * @return the meetingRoomExternalId
-	 */
-	public String getMeetingRoomExternalId() {
-		return meetingRoomExternalId;
-	}
-	/**
-	 * @param meetingRoomExternalId the meetingRoomExternalId to set
-	 */
-	public void setMeetingRoomExternalId(String meetingRoomExternalId) {
-		this.meetingRoomExternalId = meetingRoomExternalId;
-	}
 	/**
 	 * @return the command
 	 */

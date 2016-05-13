@@ -6,7 +6,9 @@ package com.orange.meetingroom.business.service.enums;
  * @author oab
  */
 public enum EnumErrorModel {
-	ERROR_1("500","une erreur métier s'est produite ");
+	ERROR_1("500","une erreur métier s'est produite"),
+	ERROR_2("A001","agentMacAddress is not found"),
+	ERROR_3("A002","agentMacAddress is not paired to a meetingroom");
 	
      /**
      * status code

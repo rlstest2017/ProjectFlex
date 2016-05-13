@@ -13,6 +13,7 @@ import com.orange.meetingroom.business.connector.FlexOfficeConnectorManager;
 import com.orange.meetingroom.business.service.enums.EnumErrorModel;
 import com.orange.meetingroom.connector.exception.FlexOfficeInternalServerException;
 import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerException;
+import com.orange.meetingroom.connector.flexoffice.model.response.SystemConnectorReturn;
 import com.orange.meetingroom.gui.ws.endPoint.data.SystemEndpoint;
 import com.orange.meetingroom.gui.ws.model.ObjectFactory;
 import com.orange.meetingroom.gui.ws.model.SystemReturn;
@@ -35,15 +36,16 @@ public class SystemEndpointImpl implements SystemEndpoint {
 
 	@Override
 	public SystemReturn getSystem() {
+		
 		try {
 			LOGGER.debug( "Begin call getSystem() method for SystemEndpoint at: " + new Date() );
 			
-			com.orange.meetingroom.connector.flexoffice.model.response.SystemReturn data = flexOfficeConnectorManager.getSystem();
+			SystemConnectorReturn data = flexOfficeConnectorManager.getSystem();
 			
 			SystemReturn system = factory.createSystemReturn();
 			
 			if (data == null) {
-				LOGGER.debug("data is null");
+				LOGGER.debug("systemConnectorReturn object is null");
 			} else {
 				system.setAckTime(BigInteger.valueOf(data.getAckTime()));
 				system.setAgentTimeout(BigInteger.valueOf(data.getAgentTimeout()));

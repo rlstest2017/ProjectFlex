@@ -10,12 +10,12 @@ import com.orange.meetingroom.connector.exception.FlexOfficeInternalServerExcept
 import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerException;
 import com.orange.meetingroom.connector.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.flexoffice.FlexOfficeConnectorClient;
-import com.orange.meetingroom.connector.flexoffice.model.request.AgentInput;
-import com.orange.meetingroom.connector.flexoffice.model.request.DashboardInput;
+import com.orange.meetingroom.connector.flexoffice.model.request.AgentConnectorInput;
+import com.orange.meetingroom.connector.flexoffice.model.request.DashboardConnectorInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.MeetingRoomData;
-import com.orange.meetingroom.connector.flexoffice.model.response.AgentOutput;
-import com.orange.meetingroom.connector.flexoffice.model.response.DashboardOutput;
-import com.orange.meetingroom.connector.flexoffice.model.response.SystemReturn;
+import com.orange.meetingroom.connector.flexoffice.model.response.AgentConnectorOutput;
+import com.orange.meetingroom.connector.flexoffice.model.response.DashboardConnectorOutput;
+import com.orange.meetingroom.connector.flexoffice.model.response.SystemConnectorReturn;
 
 /**
  * FlexOfficeConnectorManagerImpl
@@ -28,7 +28,7 @@ public class FlexOfficeConnectorManagerImpl implements FlexOfficeConnectorManage
 	FlexOfficeConnectorClient flexofficeConnector;
 
 	@Override
-	public SystemReturn getSystem() throws FlexOfficeInternalServerException, MeetingRoomInternalServerException {
+	public SystemConnectorReturn getSystem() throws FlexOfficeInternalServerException, MeetingRoomInternalServerException {
 		return flexofficeConnector.getSystem();
 	}
 
@@ -38,17 +38,17 @@ public class FlexOfficeConnectorManagerImpl implements FlexOfficeConnectorManage
 	}
 
 	@Override
-	public List<String> getDashboardXMLConfigFilesName(DashboardInput params) throws FlexOfficeInternalServerException, MeetingRoomInternalServerException, DataNotExistsException {
+	public List<String> getDashboardXMLConfigFilesName(DashboardConnectorInput params) throws FlexOfficeInternalServerException, MeetingRoomInternalServerException, DataNotExistsException {
 		return flexofficeConnector.getDashboardXMLConfigFilesName(params);
 	}
 
 	@Override
-	public DashboardOutput updateDashboardStatus(DashboardInput params) throws DataNotExistsException, FlexOfficeInternalServerException, MeetingRoomInternalServerException {
+	public DashboardConnectorOutput updateDashboardStatus(DashboardConnectorInput params) throws DataNotExistsException, FlexOfficeInternalServerException, MeetingRoomInternalServerException {
 		return flexofficeConnector.updateDashboardStatus(params);
 	}
 
 	@Override
-	public AgentOutput updateAgentStatus(AgentInput params) throws MethodNotAllowedException, DataNotExistsException, FlexOfficeInternalServerException, MeetingRoomInternalServerException {
+	public AgentConnectorOutput updateAgentStatus(AgentConnectorInput params) throws MethodNotAllowedException, DataNotExistsException, FlexOfficeInternalServerException, MeetingRoomInternalServerException {
 		return flexofficeConnector.updateAgentStatus(params);
 	}
 

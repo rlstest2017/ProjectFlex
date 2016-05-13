@@ -7,7 +7,7 @@ import com.orange.meetingroom.connector.flexoffice.enums.EnumAgentStatus;
  * @author oab
  *
  */
-public class AgentInput {
+public class AgentConnectorInput {
 	
 	String agentMacAddress;
 	EnumAgentStatus agentStatus;

@@ -4,7 +4,7 @@
 	<xsd:include id="types" schemaLocation="types.xsd"/>
 	
 	<xsd:element name="systemReturn" type="SystemReturn"/>
+	<xsd:element name="agentOutput" type="AgentOutput"/>
 	<xsd:element name="error" type="ErrorModel"/>
-	
-	
+		
 </xsd:schema>

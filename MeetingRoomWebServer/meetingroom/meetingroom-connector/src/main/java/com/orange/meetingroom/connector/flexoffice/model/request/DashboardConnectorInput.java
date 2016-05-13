@@ -8,7 +8,7 @@ import com.orange.meetingroom.connector.flexoffice.enums.EnumDashboardStatus;
  * @author oab
  *
  */
-public class DashboardInput {
+public class DashboardConnectorInput {
 	
 	String dashboardMacAddress;
 	EnumDashboardStatus dashboardStatus;

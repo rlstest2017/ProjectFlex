@@ -18,12 +18,12 @@ import com.orange.meetingroom.business.connector.impl.FlexOfficeConnectorManager
 import com.orange.meetingroom.connector.flexoffice.enums.EnumAgentStatus;
 import com.orange.meetingroom.connector.flexoffice.enums.EnumDashboardStatus;
 import com.orange.meetingroom.connector.flexoffice.enums.EnumMeetingRoomStatus;
-import com.orange.meetingroom.connector.flexoffice.model.request.AgentInput;
-import com.orange.meetingroom.connector.flexoffice.model.request.DashboardInput;
+import com.orange.meetingroom.connector.flexoffice.model.request.AgentConnectorInput;
+import com.orange.meetingroom.connector.flexoffice.model.request.DashboardConnectorInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.MeetingRoomData;
-import com.orange.meetingroom.connector.flexoffice.model.response.AgentOutput;
-import com.orange.meetingroom.connector.flexoffice.model.response.DashboardOutput;
-import com.orange.meetingroom.connector.flexoffice.model.response.SystemReturn;
+import com.orange.meetingroom.connector.flexoffice.model.response.AgentConnectorOutput;
+import com.orange.meetingroom.connector.flexoffice.model.response.DashboardConnectorOutput;
+import com.orange.meetingroom.connector.flexoffice.model.response.SystemConnectorReturn;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FlexofficeConnectorImplTest {
@@ -56,7 +56,7 @@ public class FlexofficeConnectorImplTest {
 		// SetUp
 		boolean expectedResult = false;
 		try {
-			SystemReturn systemReturn = flexofficeBusinessConnector.getSystem();
+			SystemConnectorReturn systemReturn = flexofficeBusinessConnector.getSystem();
 			
 			// Asserts
 			assertEquals("37", systemReturn.getAgentTimeout().toString());
@@ -93,7 +93,7 @@ public class FlexofficeConnectorImplTest {
 	public void TestC_flexofficeGetXmlFilesNameConfig() {
 		// SetUp
 		boolean expectedResult = false;
-		DashboardInput params = new DashboardInput();
+		DashboardConnectorInput params = new DashboardConnectorInput();
 		params.setDashboardMacAddress("FF:RR:EE:SS:DD:AA");
 		
 		try {
@@ -115,12 +115,12 @@ public class FlexofficeConnectorImplTest {
 	public void TestD_flexofficePutDashboardStatus() {
 		// SetUp
 		boolean expectedResult = false;
-		DashboardInput params = new DashboardInput();
+		DashboardConnectorInput params = new DashboardConnectorInput();
 		params.setDashboardMacAddress("FF:RR:EE:SS:DD:AA");
 		params.setDashboardStatus(EnumDashboardStatus.ONLINE);
 		
 		try {
-			DashboardOutput output = flexofficeBusinessConnector.updateDashboardStatus(params);
+			DashboardConnectorOutput output = flexofficeBusinessConnector.updateDashboardStatus(params);
 			
 			// Asserts
 			assertEquals("ONLINE", output.getCommand().toString());
@@ -138,12 +138,12 @@ public class FlexofficeConnectorImplTest {
 	public void TestE_flexofficePutAgentStatus() {
 		// SetUp
 		boolean expectedResult = false;
-		AgentInput params = new AgentInput();
+		AgentConnectorInput params = new AgentConnectorInput();
 		params.setAgentMacAddress("FF:RR:EE:SS:DD:AA");
 		params.setAgentStatus(EnumAgentStatus.ONLINE);
 		
 		try {
-			AgentOutput output = flexofficeBusinessConnector.updateAgentStatus(params);
+			AgentConnectorOutput output = flexofficeBusinessConnector.updateAgentStatus(params);
 			
 			// Asserts
 			assertEquals("OFFLINE", output.getCommand().toString());

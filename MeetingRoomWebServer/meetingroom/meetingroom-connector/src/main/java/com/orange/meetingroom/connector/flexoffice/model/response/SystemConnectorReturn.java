@@ -5,7 +5,7 @@ package com.orange.meetingroom.connector.flexoffice.model.response;
  * @author oab
  *
  */
-public class SystemReturn {
+public class SystemConnectorReturn {
 	
 	Integer agentTimeout;
 	Integer dashboardTimeout;

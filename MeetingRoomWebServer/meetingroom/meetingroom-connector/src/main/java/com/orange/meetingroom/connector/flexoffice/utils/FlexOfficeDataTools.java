@@ -1,7 +1,7 @@
 package com.orange.meetingroom.connector.flexoffice.utils;
 
-import com.orange.meetingroom.connector.flexoffice.model.request.AgentInput;
-import com.orange.meetingroom.connector.flexoffice.model.request.DashboardInput;
+import com.orange.meetingroom.connector.flexoffice.model.request.AgentConnectorInput;
+import com.orange.meetingroom.connector.flexoffice.model.request.DashboardConnectorInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.MeetingRoomData;
 
 /**
@@ -16,7 +16,7 @@ public class FlexOfficeDataTools {
 	 * @param params DashboardInput
 	 * @return String
 	 */
-	public String constructJSONDashboardStatus(DashboardInput params) {
+	public String constructJSONDashboardStatus(DashboardConnectorInput params) {
 		
 		final StringBuilder inputJson = new StringBuilder( 1000 );
 		inputJson.append( "{\"" );
@@ -30,7 +30,7 @@ public class FlexOfficeDataTools {
 	 * @param params AgentInput
 	 * @return String
 	 */
-	public String constructJSONAgentStatus(AgentInput params) {
+	public String constructJSONAgentStatus(AgentConnectorInput params) {
 		
 		final StringBuilder inputJson = new StringBuilder( 1000 );
 		inputJson.append( "{\"" );

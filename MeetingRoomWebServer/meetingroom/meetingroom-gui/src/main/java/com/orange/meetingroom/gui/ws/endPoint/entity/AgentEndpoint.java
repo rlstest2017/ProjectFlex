@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.orange.meetingroom.gui.ws.model.AgentInput;
 import com.orange.meetingroom.gui.ws.model.AgentOutput;
 
 /**
@@ -36,7 +37,7 @@ public interface AgentEndpoint {
 	@Path(AGENT_MAC_ADDRESS_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	AgentOutput updateAgent(@PathParam(AGENT_MAC_ADDRESS_PARAM)String macAddress);
+	AgentOutput updateAgent(@PathParam(AGENT_MAC_ADDRESS_PARAM)String macAddress, AgentInput agentInput);
 
 	
 }
