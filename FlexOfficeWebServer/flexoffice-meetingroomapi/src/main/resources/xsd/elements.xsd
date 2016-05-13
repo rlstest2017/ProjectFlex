@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<xsd:include id="types" schemaLocation="types.xsd"/>
+	
+	<xsd:element name="system" type="System"/>
+	<xsd:element name="agentInput" type="AgentInput"/>
+	<xsd:element name="agentOutput" type="AgentOutput"/>
+	<xsd:element name="dashboardInput" type="DashboardInput"/>
+	<xsd:element name="dashboardOutput" type="DashboardOutput"/>
+	<xsd:element name="meetingRoomInput" type="MeetingRoomInput"/>
+	
+	<xsd:element name="error" type="ErrorModel"/>
+	
+</xsd:schema>

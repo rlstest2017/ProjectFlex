@@ -16,6 +16,7 @@
     <module>flexoffice-userui</module>
     <module>flexoffice-business</module>
     <module>flexoffice-dao</module>
+    <module>flexoffice-meetingroomapi</module>
   </modules>
  
   <properties>

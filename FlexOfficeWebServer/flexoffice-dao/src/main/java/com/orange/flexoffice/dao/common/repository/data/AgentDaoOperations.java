@@ -26,8 +26,6 @@ public interface AgentDaoOperations {
 	
 	AgentDao updateAgentMeetingRoomId(AgentDao data);
 	
-	//AgentDao updateGatewayCommand(AgentDao data);
-	
 	AgentDao saveAgent(AgentDao data) throws DataIntegrityViolationException;
 	
 	AgentDao updateAgent(AgentDao data);

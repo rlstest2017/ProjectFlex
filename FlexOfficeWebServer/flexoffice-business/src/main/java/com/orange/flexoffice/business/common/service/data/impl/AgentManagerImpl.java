@@ -242,63 +242,22 @@ public class AgentManagerImpl implements AgentManager {
 		}
 	}
 
-	/*@Override
-	public GatewayCommand updateStatus(GatewayDao gatewayDao) throws DataNotExistsException {
-		try {
-			String status = gatewayDao.getStatus();
+	@Override
+	public AgentDao updateStatus(AgentDao agentDao) throws DataNotExistsException {
+		try {	
+			AgentDao agent = agentRepository.findByMacAddress(agentDao.getMacAddress());
+			agentDao.setId(agent.getId());
+			agentDao.setMeetingroomId(agent.getMeetingroomId());
+			agentDao.setCommand(agent.getCommand());
 			
-			String macAddress = gatewayDao.getMacAddress();
-			GatewayDao gateway = agentRepository.findByMacAddress(macAddress);
-			gatewayDao.setId(gateway.getId());
-			
-			// update Gateway Status
-			gatewayDao.setCommand(gateway.getCommand()); // Don't change the present state in DB on column Command !!!
-			agentRepository.updateGatewayStatus(gatewayDao);
-			
-			// update Gateway Alert
-			Long gatewayId =gateway.getId();
-			alertManager.updateGatewayAlert(gatewayId, status);
-			
-
-			// check room & room_stats states
-			if ( status.equals(E_GatewayStatus.OFFLINE.toString()) || status.equals(E_GatewayStatus.ERROR_NO_USB_DEVICE.toString()) || status.equals(E_GatewayStatus.ERROR_FIFO_FILE.toString()) ) {
-				// set all rooms of the Gateway at UNKNOWN Status & RoomStat room_info to UNOCCUPIED
-				List<RoomDao> rooms = meetingroomRepository.findByGatewayId(gatewayId);
-				for (RoomDao roomDao : rooms) {
-					// set Room Status to UNKNOWN
-					LOGGER.info("RoomDao in gatewayManager updateStatus() is going to set RoomStatus to UNKNOWN, for room#" + roomDao.getName());
-					roomDao.setStatus(E_RoomStatus.UNKNOWN.toString());
-					roomDao.setUserId(null);
-					meetingroomRepository.updateRoomStatus(roomDao); // update Room Status to UNKNOWN
-					
-					// set RoomStatus room_info UNOCCUPIED if there was OCCUPIED !!!
-					try {
-						// if roomId & room_info=OCCUPIED in roomStats
-						RoomStatDao data = new RoomStatDao();
-						data.setRoomId(roomDao.getId().intValue());
-						data.setRoomInfo(E_RoomInfo.OCCUPIED.toString());
-						RoomStatDao roomStat = findByRoomId(data); // Synchronised method to avoid concurrent access  !!!
-						if (roomStat != null) {
-							// update by end_occupancy_date=now() & room_info=UNOCCUPIED
-							roomStatRepository.updateEndOccupancyDate(roomStat);
-						} 
-					} catch(IncorrectResultSizeDataAccessException e ) {
-						LOGGER.debug("GatewayManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId(), e);
-						LOGGER.info("GatewayManager.updateStatus : There is no OCCUPIED roomStat with roomId #" + roomDao.getId());
-					}
-				}
-			} 
-			
-			// process commandGateway & teachin state
-			String commandGateway = gateway.getCommand();
-			return	processCommand(status, gatewayId, commandGateway);
-			
+			// update AgentDao
+			return agentRepository.updateAgentStatus(agentDao);
 		} catch(IncorrectResultSizeDataAccessException e ) {
-			LOGGER.debug("gateway is not found", e);
-			LOGGER.error("gateway is not found");
-			throw new DataNotExistsException("Gateway not exist");
+			LOGGER.debug("DataAccessException in update() AgentManagerImpl with message :" + e.getMessage(), e);
+			LOGGER.error("DataAccessException in update() AgentManagerImpl with message :" + e.getMessage());
+			throw new DataNotExistsException("Agent not exist");
 		}
-	}*/
+	}
 
 	@Override
 	public void delete(String macAddress) throws DataNotExistsException, IntegrityViolationException {

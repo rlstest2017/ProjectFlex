@@ -63,11 +63,11 @@ public interface AgentManager {
 
 	/**
 	 * Updates a {@link AgentDao}
-	 * method used by gatewayapi
+	 * method used by meetingroomapi
 	 * @param AgentDao the new {@link AgentDao}
 	 * @return a command {@link AgentCommand}
 	 */
-	//AgentCommand updateStatus(AgentDao agentDao) throws DataNotExistsException;
+	AgentDao updateStatus(AgentDao agentDao) throws DataNotExistsException;
 	
 	/**
 	 * Deletes a {@link AgentDto}.
