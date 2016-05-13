@@ -21,6 +21,9 @@
 	<bean id="statTools"
 	class="com.orange.flexoffice.business.common.utils.StatTools" />
 	
+	<bean id="meetingRoomStatTools"
+	class="com.orange.flexoffice.business.common.utils.MeetingRoomStatTools" />
+	
 	<bean id="addressTools"
 	class="com.orange.flexoffice.business.common.utils.AddressTools" />
 	

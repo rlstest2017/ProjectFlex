@@ -14,7 +14,6 @@ import com.orange.flexoffice.meetingroomapi.ws.model.AgentInput;
 import com.orange.flexoffice.meetingroomapi.ws.model.AgentOutput;
 import com.orange.flexoffice.meetingroomapi.ws.model.ECommandModel;
 import com.orange.flexoffice.meetingroomapi.ws.model.ObjectFactory;
-import com.orange.flexoffice.meetingroomapi.ws.utils.ErrorMessageHandler;
 
 /**
  * AgentApiEndpointImpl
@@ -33,8 +32,6 @@ public class AgentApiEndpointImpl implements AgentApiEndpoint {
 	private MeetingRoomManager meetingRoomManager;
 	@Autowired
 	private TestManager testManager;
-	@Autowired
-	private ErrorMessageHandler errorMessageHandler;
 	
 	@Override
 	public AgentOutput updateStatus(String macAddress, AgentInput agent) {
@@ -53,24 +50,14 @@ public class AgentApiEndpointImpl implements AgentApiEndpoint {
 			
 			return factory.createAgentOutput(returnedAgent).getValue();
 		} catch (DataNotExistsException e) {
+			LOGGER.debug("Agent has none meetingroom associated");
 			returnedAgent.setMeetingRoomExternalId("0");
 			return factory.createAgentOutput(returnedAgent).getValue();
 		}
-	}
-	
-	/*@Override
-	public GatewayDto findByMacAddress(String macAddress) throws DataNotExistsException {
-		return gatewayManager.findByMacAddress(macAddress);
 	}
 
 	@Override
 	public boolean executeInitTestFile() {
 		return testManager.executeInitTestFile();
 	}
-
-	@Override
-	public boolean initTeachinSensorsTable() {
-		return testManager.initTeachinSensorsTable();
-	}*/
-	
 }

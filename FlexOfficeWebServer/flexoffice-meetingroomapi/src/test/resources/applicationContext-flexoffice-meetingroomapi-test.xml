@@ -10,13 +10,19 @@
     <!-- Import related to Flex Office Web Sever Business -->
 	<import resource="classpath*:spring/applicationContext-flexoffice-business-test.xml" />
 	
-	<bean id="gatewayEndpoint" class="com.orange.flexoffice.gatewayapi.ws.endPoint.entity.impl.GatewayApiEndpointImpl">
+	<bean id="agentEndpoint" class="com.orange.flexoffice.meetingroomapi.ws.endPoint.entity.impl.AgentApiEndpointImpl">
 	</bean>
 	
-	<bean id="sensorEndpoint" class="com.orange.flexoffice.gatewayapi.ws.endPoint.entity.impl.SensorApiEndpointImpl">
+	<bean id="dashboardEndpoint" class="com.orange.flexoffice.meetingroomapi.ws.endPoint.entity.impl.DashboardApiEndpointImpl">
 	</bean>
 	
-	<bean id="errorMessageHandler" class="com.orange.flexoffice.gatewayapi.ws.utils.ErrorMessageHandler">
+	<bean id="meetingRoomEndpoint" class="com.orange.flexoffice.meetingroomapi.ws.endPoint.entity.impl.MeetingRoomApiEndpointImpl">
+	</bean>
+	
+	<bean id="systemEndpoint" class="com.orange.flexoffice.meetingroomapi.ws.endPoint.data.impl.SystemApiEndpointImpl">
+	</bean>
+	
+	<bean id="errorMessageHandler" class="com.orange.flexoffice.meetingroomapi.ws.utils.ErrorMessageHandler">
 	</bean>
 		
 </beans>
