@@ -16,6 +16,9 @@
 	<bean id="statTools"
 	class="com.orange.flexoffice.business.common.utils.StatTools" />
 	
+	<bean id="meetingRoomStatTools"
+	class="com.orange.flexoffice.business.common.utils.MeetingRoomStatTools" />
+	
 	<!-- Import Dao -->
 	<import resource="classpath*:spring/applicationContext-flexoffice-dao.xml" />
 	
