@@ -5,7 +5,7 @@ package com.orange.meetingroom.connector.php.model.response;
  * @author oab
  *
  */
-public class MeetingRoomDetails {
+public class MeetingRoomDetailsConnectorReturn {
 
 	String meetingRoomExternalId;
 	String meetingRoomExternalName;

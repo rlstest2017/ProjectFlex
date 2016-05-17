@@ -5,10 +5,10 @@ package com.orange.meetingroom.connector.php.model.response;
  * @author oab
  *
  */
-public class MeetingRoom {
+public class MeetingRoomConnectorReturn {
 	
 	Integer currentDate;
-	MeetingRoomBookings meetingroom;
+	MeetingRoomBookingsConnectorReturn meetingroom;
 	/**
 	 * @return the currentDate
 	 */
@@ -24,13 +24,13 @@ public class MeetingRoom {
 	/**
 	 * @return the room
 	 */
-	public MeetingRoomBookings getMeetingRoom() {
+	public MeetingRoomBookingsConnectorReturn getMeetingRoom() {
 		return meetingroom;
 	}
 	/**
 	 * @param room the room to set
 	 */
-	public void setMeetingRoom(MeetingRoomBookings meetingroom) {
+	public void setMeetingRoom(MeetingRoomBookingsConnectorReturn meetingroom) {
 		this.meetingroom = meetingroom;
 	}
 	

@@ -19,8 +19,8 @@ import com.orange.meetingroom.connector.php.model.request.GetDashboardBookingsPa
 import com.orange.meetingroom.connector.php.model.request.SetBookingParameters;
 import com.orange.meetingroom.connector.php.model.request.UpdateBookingParameters;
 import com.orange.meetingroom.connector.php.model.response.BookingSummary;
-import com.orange.meetingroom.connector.php.model.response.MeetingRoom;
-import com.orange.meetingroom.connector.php.model.response.MeetingRooms;
+import com.orange.meetingroom.connector.php.model.response.MeetingRoomConnectorReturn;
+import com.orange.meetingroom.connector.php.model.response.MeetingRoomsConnectorReturn;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PhpConnectorImplTest {
@@ -57,7 +57,7 @@ public class PhpConnectorImplTest {
 		params.setRoomID("brehat.rennes@microsoft.cad.aql.fr");
 		params.setForceUpdateCache("false");
 		try {
-			MeetingRoom meetingroom = phpBusinessConnector.getBookingsFromAgent(params);
+			MeetingRoomConnectorReturn meetingroom = phpBusinessConnector.getBookingsFromAgent(params);
 			String externalId = meetingroom.getMeetingRoom().getMeetingRoomDetails().getMeetingRoomExternalId();
 			// Asserts
 			assertEquals("brehat.rennes@microsoft.cad.aql.fr", externalId);
@@ -116,7 +116,7 @@ public class PhpConnectorImplTest {
 		params.setStartDate("0");
 		params.setRoomGroupID("rg_oab_full");
 		try {
-			MeetingRooms meetingrooms = phpBusinessConnector.getBookingsFromDashboard(params);
+			MeetingRoomsConnectorReturn meetingrooms = phpBusinessConnector.getBookingsFromDashboard(params);
 			int size = meetingrooms.getMeetingRooms().size();
 			// Asserts
 			assertEquals(2, size);
@@ -228,6 +228,8 @@ public class PhpConnectorImplTest {
 		params.setRevisionReservation("DwAAABYAAADStK2j6N7uS44oIIaztyTOAAAAp6Ku");
 		params.setStartDate("1462370700"); // 25/4/2016 à 11:22:06
 		params.setFormat("json"); 
+		params.setSubject("test RLS");
+		params.setAcknowledged("1");
 				
 		try {
 			BookingSummary booking = phpBusinessConnector.updateBooking(params);

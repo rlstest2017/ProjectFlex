@@ -5,7 +5,7 @@ package com.orange.meetingroom.connector.php.model.response;
  * @author oab
  *
  */
-public class Booking {
+public class BookingConnectorReturn {
 
 	String idReservation;
 	String revisionReservation;

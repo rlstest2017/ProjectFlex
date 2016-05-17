@@ -13,8 +13,8 @@ import com.orange.meetingroom.connector.php.model.request.GetDashboardBookingsPa
 import com.orange.meetingroom.connector.php.model.request.SetBookingParameters;
 import com.orange.meetingroom.connector.php.model.request.UpdateBookingParameters;
 import com.orange.meetingroom.connector.php.model.response.BookingSummary;
-import com.orange.meetingroom.connector.php.model.response.MeetingRoom;
-import com.orange.meetingroom.connector.php.model.response.MeetingRooms;
+import com.orange.meetingroom.connector.php.model.response.MeetingRoomConnectorReturn;
+import com.orange.meetingroom.connector.php.model.response.MeetingRoomsConnectorReturn;
 
 /**
  * PhpConnectorManagerImpl
@@ -27,12 +27,12 @@ public class PhpConnectorManagerImpl implements PhpConnectorManager {
 	PhpConnectorClient phpConnector;
 	
 	@Override
-	public MeetingRoom getBookingsFromAgent(GetAgentBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, DataNotExistsException, MethodNotAllowedException  {
+	public MeetingRoomConnectorReturn getBookingsFromAgent(GetAgentBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, DataNotExistsException, MethodNotAllowedException  {
 		return phpConnector.getBookingsFromAgent(params);
 	}
 
 	@Override
-	public MeetingRooms getBookingsFromDashboard(GetDashboardBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, MethodNotAllowedException  {
+	public MeetingRoomsConnectorReturn getBookingsFromDashboard(GetDashboardBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, MethodNotAllowedException  {
 		return phpConnector.getBookingsFromDashboard(params);
 	}
 

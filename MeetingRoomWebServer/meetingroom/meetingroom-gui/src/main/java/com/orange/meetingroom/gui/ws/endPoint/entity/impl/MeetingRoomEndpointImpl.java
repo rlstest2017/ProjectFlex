@@ -1,5 +1,8 @@
 package com.orange.meetingroom.gui.ws.endPoint.entity.impl;
 
+import java.math.BigInteger;
+import java.util.List;
+
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -8,13 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.meetingroom.business.connector.PhpConnectorManager;
 import com.orange.meetingroom.business.service.enums.EnumErrorModel;
+import com.orange.meetingroom.connector.exception.DataNotExistsException;
 import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerException;
 import com.orange.meetingroom.connector.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.exception.PhpInternalServerException;
+import com.orange.meetingroom.connector.php.model.request.GetAgentBookingsParameters;
 import com.orange.meetingroom.connector.php.model.request.SetBookingParameters;
 import com.orange.meetingroom.connector.php.model.request.UpdateBookingParameters;
+import com.orange.meetingroom.connector.php.model.response.BookingConnectorReturn;
 import com.orange.meetingroom.connector.php.model.response.BookingSummary;
+import com.orange.meetingroom.connector.php.model.response.MeetingRoomBookingsConnectorReturn;
+import com.orange.meetingroom.connector.php.model.response.MeetingRoomConnectorReturn;
 import com.orange.meetingroom.gui.ws.endPoint.entity.MeetingRoomEndpoint;
+import com.orange.meetingroom.gui.ws.model.Booking;
 import com.orange.meetingroom.gui.ws.model.BookingSetInput;
 import com.orange.meetingroom.gui.ws.model.BookingSetOutput;
 import com.orange.meetingroom.gui.ws.model.BookingUpdateInput;
@@ -33,7 +42,8 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 
 	private static final Logger LOGGER = Logger.getLogger(MeetingRoomEndpointImpl.class);
 	private final ObjectFactory factory = new ObjectFactory();
-	static final String FOMRAT_JSON = "json";
+	static final String FORMAT_JSON = "json";
+	static final String FORCED_UPDATE_CACHE_DEFAULT = "false";
 	static final String ACKNOWLEDGED_DAFAULT = "1";
 
 	@Autowired
@@ -43,7 +53,46 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 
 	@Override
 	public MeetingRoom getMeetingRoomBookings(String meetingRoomExternalId) {
-		// TODO Auto-generated method stub
+		
+		try {
+		MeetingRoom meetingroom = factory.createMeetingRoom();
+		
+		GetAgentBookingsParameters params = new GetAgentBookingsParameters();
+		params.setRoomID(meetingRoomExternalId);
+		params.setFormat(FORMAT_JSON);
+		params.setForceUpdateCache(FORCED_UPDATE_CACHE_DEFAULT);
+			
+		MeetingRoomConnectorReturn meetingroomreturn = phpConnectorManager.getBookingsFromAgent(params);
+		
+		meetingroom.setCurrentDate(BigInteger.valueOf(meetingroomreturn.getCurrentDate()));
+		
+		MeetingRoomBookingsConnectorReturn bookingsReturn = meetingroomreturn.getMeetingRoom();
+		
+		List<BookingConnectorReturn> bookingsReturnList = bookingsReturn.getBookings();
+		
+				
+		for (BookingConnectorReturn bookConnector : bookingsReturnList) {
+			Booking book = factory.createBooking();
+			book.setIDReservation(bookConnector.getIdReservation());
+			book.setRevisionReservation(bookConnector.getRevisionReservation());
+			book.setOrganizerFullName(bookConnector.getOrganizerFullName());
+			book.setSubject(bookConnector.getSubject());
+			book.setStartDate(BigInteger.valueOf(bookConnector.getStartDate()));
+			book.setEndDate(BigInteger.valueOf(bookConnector.getEndDate()));
+			book.setAcknowledged(bookConnector.getAcknowledged());
+		}
+		
+		}  catch (DataNotExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MethodNotAllowedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MeetingRoomInternalServerException | PhpInternalServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
 		return null;
 	}
 
@@ -63,7 +112,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 		params.setRoomID(meetingRoomExternalId);
 		params.setOrganizerFullName(bookingSetInput.getOrganizerFullName());
 		params.setSubject(bookingSetInput.getSubject());
-		params.setFormat(FOMRAT_JSON);
+		params.setFormat(FORMAT_JSON);
 		params.setStartDate(bookingSetInput.getStartDate().toString());
 		params.setEndDate(bookingSetInput.getEndDate().toString());
 		params.setAcknowledged(ACKNOWLEDGED_DAFAULT);
@@ -98,7 +147,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			params.setIdReservation(bookingUpdateInput.getIDReservation());
 			params.setRevisionReservation(bookingUpdateInput.getRevisionReservation());
 			params.setEndDate(bookingUpdateInput.getEndDate().toString()); // only endDate to cancel request !!!
-			params.setFormat(FOMRAT_JSON);
+			params.setFormat(FORMAT_JSON);
 						
 			BookingSummary outputSummary = phpConnectorManager.updateBooking(params);
 			
@@ -130,7 +179,9 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			params.setIdReservation(bookingUpdateInput.getIDReservation());
 			params.setRevisionReservation(bookingUpdateInput.getRevisionReservation());
 			params.setStartDate(bookingUpdateInput.getStartDate().toString()); // only startDate to confirm request !!!
-			params.setFormat(FOMRAT_JSON);
+			params.setAcknowledged(ACKNOWLEDGED_DAFAULT);
+			params.setSubject(bookingUpdateInput.getSubject());
+			params.setFormat(FORMAT_JSON);
 						
 			BookingSummary outputSummary = phpConnectorManager.updateBooking(params);
 			

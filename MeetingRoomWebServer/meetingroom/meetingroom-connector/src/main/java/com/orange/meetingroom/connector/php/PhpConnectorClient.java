@@ -32,12 +32,12 @@ import com.orange.meetingroom.connector.php.model.request.GetAgentBookingsParame
 import com.orange.meetingroom.connector.php.model.request.GetDashboardBookingsParameters;
 import com.orange.meetingroom.connector.php.model.request.SetBookingParameters;
 import com.orange.meetingroom.connector.php.model.request.UpdateBookingParameters;
-import com.orange.meetingroom.connector.php.model.response.Booking;
+import com.orange.meetingroom.connector.php.model.response.BookingConnectorReturn;
 import com.orange.meetingroom.connector.php.model.response.BookingSummary;
-import com.orange.meetingroom.connector.php.model.response.MeetingRoom;
-import com.orange.meetingroom.connector.php.model.response.MeetingRoomBookings;
-import com.orange.meetingroom.connector.php.model.response.MeetingRoomDetails;
-import com.orange.meetingroom.connector.php.model.response.MeetingRooms;
+import com.orange.meetingroom.connector.php.model.response.MeetingRoomConnectorReturn;
+import com.orange.meetingroom.connector.php.model.response.MeetingRoomBookingsConnectorReturn;
+import com.orange.meetingroom.connector.php.model.response.MeetingRoomDetailsConnectorReturn;
+import com.orange.meetingroom.connector.php.model.response.MeetingRoomsConnectorReturn;
 import com.orange.meetingroom.connector.php.utils.DataTools;
 
 /**
@@ -72,13 +72,13 @@ public class PhpConnectorClient {
 	 * @return MeetingRoomBookings
 	 * @throws Exception
 	 */
-	public MeetingRoom getBookingsFromAgent(GetAgentBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, DataNotExistsException, MethodNotAllowedException {
+	public MeetingRoomConnectorReturn getBookingsFromAgent(GetAgentBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, DataNotExistsException, MethodNotAllowedException {
 		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call getBookingsFromAgent(GetAgentBookingsParameters params) method");
 		}
-		MeetingRoom meetingroom = new MeetingRoom();
-		MeetingRoomBookings meetingRoomBookings = new MeetingRoomBookings();
+		MeetingRoomConnectorReturn meetingroom = new MeetingRoomConnectorReturn();
+		MeetingRoomBookingsConnectorReturn meetingRoomBookings = new MeetingRoomBookingsConnectorReturn();
 //		HttpClientBuilder builder = HttpClientBuilder.create();
 //	    CloseableHttpClient httpClient = builder.build(); 
 	    try	{
@@ -135,7 +135,7 @@ public class PhpConnectorClient {
 			
 			for (Entry<String, Map<String, Map<String, Object>>> element : roomMap.entrySet()) {
 				try {	
-					MeetingRoomDetails details = new MeetingRoomDetails(); 
+					MeetingRoomDetailsConnectorReturn details = new MeetingRoomDetailsConnectorReturn(); 
 					String meetingRoomExternalId = (String)element.getValue().get(EnumRoomInfos.ROOM_DETAILS.value()).get(EnumRoomDetails.ROOM_ID.value());
 					String meetingRoomExternalName = (String)element.getValue().get(EnumRoomInfos.ROOM_DETAILS.value()).get(EnumRoomDetails.ROOM_NAME.value());
 					String meetingRoomExternalLocation = (String)element.getValue().get(EnumRoomInfos.ROOM_DETAILS.value()).get(EnumRoomDetails.ROOM_LOCATION.value());
@@ -160,7 +160,7 @@ public class PhpConnectorClient {
 					Map<String, Map<String, Object>> bookings =  (Map<String, Map<String, Object>>)elementBooking.getValue().get(EnumRoomInfos.BOOKINGS.value());
 				
 					for (Entry<String, Map<String, Object>> book : bookings.entrySet()) {
-						Booking booking = new Booking();
+						BookingConnectorReturn booking = new BookingConnectorReturn();
 						String idReservation = (String)book.getValue().get(EnumBookingDetails.ID_RESERVATION.value());
 						String revisionReservation = (String)book.getValue().get(EnumBookingDetails.REVISION_RESERVATION.value());
 						String organizer = (String)book.getValue().get(EnumBookingDetails.ORGANIZER.value());
@@ -218,13 +218,13 @@ public class PhpConnectorClient {
 	 * @param GetDashboardBookingsParameters params
 	 * @throws Exception
 	 */
-	public MeetingRooms getBookingsFromDashboard(GetDashboardBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, MethodNotAllowedException {
+	public MeetingRoomsConnectorReturn getBookingsFromDashboard(GetDashboardBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, MethodNotAllowedException {
 		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call getBookingsFromDashboard(GetDashboardBookingsParameters params) method");
 		}
-		MeetingRooms meetingrooms = new MeetingRooms();
-		List<MeetingRoomBookings> meetingRoomBookingsList = new ArrayList<MeetingRoomBookings>(); 
+		MeetingRoomsConnectorReturn meetingrooms = new MeetingRoomsConnectorReturn();
+		List<MeetingRoomBookingsConnectorReturn> meetingRoomBookingsList = new ArrayList<MeetingRoomBookingsConnectorReturn>(); 
 //		HttpClientBuilder builder = HttpClientBuilder.create();
 //	    CloseableHttpClient httpClient = builder.build();
 		try	{
@@ -265,8 +265,8 @@ public class PhpConnectorClient {
 				Map<String, Map<String, Map<String, Object>>> roomMap = (Map<String, Map<String, Map<String, Object>>>)mp.get(EnumRoomInfos.ROOMS.value());
 				for (Entry<String, Map<String, Map<String, Object>>> element : roomMap.entrySet()) {
 					try {
-						MeetingRoomBookings meetingRoomBookings = new MeetingRoomBookings();
-						MeetingRoomDetails details = new MeetingRoomDetails(); 
+						MeetingRoomBookingsConnectorReturn meetingRoomBookings = new MeetingRoomBookingsConnectorReturn();
+						MeetingRoomDetailsConnectorReturn details = new MeetingRoomDetailsConnectorReturn(); 
 						String meetingRoomExternalId = (String)element.getValue().get(EnumRoomInfos.ROOM_DETAILS.value()).get(EnumRoomDetails.ROOM_ID.value());
 						String meetingRoomExternalName = (String)element.getValue().get(EnumRoomInfos.ROOM_DETAILS.value()).get(EnumRoomDetails.ROOM_NAME.value());
 						String meetingRoomExternalLocation = (String)element.getValue().get(EnumRoomInfos.ROOM_DETAILS.value()).get(EnumRoomDetails.ROOM_LOCATION.value());
@@ -291,12 +291,12 @@ public class PhpConnectorClient {
 			int incr = 0; // get data from meetingRoomBookingsList for update bookings in the correct meetingRoomBookings object
 			try {
 				for (Entry<String, Map<String, Map<String, Map<String, Object>>>> elementBooking : roomMapBookings.entrySet()) {
-					MeetingRoomBookings meetingRoomBookings = meetingRoomBookingsList.get(incr);
+					MeetingRoomBookingsConnectorReturn meetingRoomBookings = meetingRoomBookingsList.get(incr);
 					incr = incr + 1;
 					try {
 						Map<String, Map<String, Object>> bookings =  (Map<String, Map<String, Object>>)elementBooking.getValue().get(EnumRoomInfos.BOOKINGS.value());
 						for (Entry<String, Map<String, Object>> book : bookings.entrySet()) {
-							Booking booking = new Booking();
+							BookingConnectorReturn booking = new BookingConnectorReturn();
 							String idReservation = (String)book.getValue().get(EnumBookingDetails.ID_RESERVATION.value());
 							String revisionReservation = (String)book.getValue().get(EnumBookingDetails.REVISION_RESERVATION.value());
 							String organizer = (String)book.getValue().get(EnumBookingDetails.ORGANIZER.value());

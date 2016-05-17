@@ -6,8 +6,10 @@ public class UpdateBookingParameters {
 	String idReservation;
 	String revisionReservation;
 	String format;
-	String endDate; // to close meeting
-	String startDate; // to confirm meeting 
+	String endDate; // only to close meeting
+	String startDate; // only to confirm meeting 
+	String acknowledged; // only to confirm meeting
+	String subject; // only to confirm meeting
 	
 	/**
 	 * @return the roomID
@@ -80,6 +82,30 @@ public class UpdateBookingParameters {
 	 */
 	public void setRevisionReservation(String revisionReservation) {
 		this.revisionReservation = revisionReservation;
+	}
+	/**
+	 * @return the acknowledged
+	 */
+	public String getAcknowledged() {
+		return acknowledged;
+	}
+	/**
+	 * @param acknowledged the acknowledged to set
+	 */
+	public void setAcknowledged(String acknowledged) {
+		this.acknowledged = acknowledged;
+	}
+	/**
+	 * @return the subject
+	 */
+	public String getSubject() {
+		return subject;
+	}
+	/**
+	 * @param subject the subject to set
+	 */
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 	
 	

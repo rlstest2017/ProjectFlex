@@ -8,36 +8,36 @@ import java.util.List;
  * @author oab
  *
  */
-public class MeetingRoomBookings {
+public class MeetingRoomBookingsConnectorReturn {
 
-	MeetingRoomDetails meetingRoomDetails;
-	List<Booking> bookings;
+	MeetingRoomDetailsConnectorReturn meetingRoomDetails;
+	List<BookingConnectorReturn> bookings;
 	
 	/**
 	 * @return the meetingRoomDetails
 	 */
-	public MeetingRoomDetails getMeetingRoomDetails() {
+	public MeetingRoomDetailsConnectorReturn getMeetingRoomDetails() {
 		return meetingRoomDetails;
 	}
 	/**
 	 * @param meetingRoomDetails the meetingRoomDetails to set
 	 */
-	public void setMeetingRoomDetails(MeetingRoomDetails meetingRoomDetails) {
+	public void setMeetingRoomDetails(MeetingRoomDetailsConnectorReturn meetingRoomDetails) {
 		this.meetingRoomDetails = meetingRoomDetails;
 	}
 	/**
 	 * @return the bookings
 	 */
-	public List<Booking> getBookings() {
+	public List<BookingConnectorReturn> getBookings() {
 		if (bookings == null) {
-			bookings = new ArrayList<Booking>();
+			bookings = new ArrayList<BookingConnectorReturn>();
 		}
 		return bookings;
 	}
 	/**
 	 * @param bookings the bookings to set
 	 */
-	public void setBookings(List<Booking> bookings) {
+	public void setBookings(List<BookingConnectorReturn> bookings) {
 		this.bookings = bookings;
 	}
 	
