@@ -8,7 +8,11 @@ package com.orange.meetingroom.business.service.enums;
 public enum EnumErrorModel {
 	ERROR_1("500","une erreur métier s'est produite"),
 	ERROR_2("A001","agentMacAddress is not found"),
-	ERROR_3("A002","agentMacAddress is not paired to a meetingroom");
+	ERROR_3("A002","agentMacAddress is not paired to a meetingroom"),
+	ERROR_4("D001","dashboardMacAddress is not found"),
+	ERROR_5("M001","reservation is failed, Timeslot was not available or Internal error"),
+	ERROR_6("M002","cancel reservation is failed"),
+	ERROR_7("M003","confirm reservation is failed");;
 	
      /**
      * status code

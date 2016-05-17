@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.orange.meetingroom.gui.ws.model.DashboardInput;
 import com.orange.meetingroom.gui.ws.model.DashboardOutput;
 
 /**
@@ -36,7 +37,7 @@ public interface DashboardEndpoint {
 	@Path(DASHBOARD_MAC_ADDRESS_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	DashboardOutput updateDashboard(@PathParam(DASHBOARD_MAC_ADDRESS_PARAM)String macAddress);
+	DashboardOutput updateDashboard(@PathParam(DASHBOARD_MAC_ADDRESS_PARAM)String macAddress, DashboardInput dashboardInput);
 
 	
 }
