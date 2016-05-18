@@ -28,11 +28,17 @@ public class PhpConnectorManagerImpl implements PhpConnectorManager {
 	
 	@Override
 	public MeetingRoomConnectorReturn getBookingsFromAgent(GetAgentBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, DataNotExistsException, MethodNotAllowedException  {
+		// TODO process the meetingRoomStatus
+		// TODO call flexOfficeConnectorManager for send meetingRoomInfos (status, ...)
+		// TODO process the result and send it to GUI
 		return phpConnector.getBookingsFromAgent(params);
 	}
 
 	@Override
 	public MeetingRoomsConnectorReturn getBookingsFromDashboard(GetDashboardBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, MethodNotAllowedException  {
+		// TODO from dashboardMacAddress call flexOfficeConnectorManager for get config Files 
+		// TODO call phpConnector.getBookingsFromDashboard(params) foreach config File
+		// TODO process the result and send it to GUI
 		return phpConnector.getBookingsFromDashboard(params);
 	}
 

@@ -1,7 +1,7 @@
 package com.orange.meetingroom.connector.php.model.response;
 
 /**
- * MeetingRoom
+ * MeetingRoomConnectorReturn
  * @author oab
  *
  */

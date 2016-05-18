@@ -1,7 +1,9 @@
 package com.orange.meetingroom.connector.php.model.response;
 
+import com.orange.meetingroom.connector.flexoffice.enums.EnumMeetingRoomStatus;
+
 /**
- * MeetingRoomDetails
+ * MeetingRoomDetailsConnectorReturn
  * @author oab
  *
  */
@@ -10,6 +12,8 @@ public class MeetingRoomDetailsConnectorReturn {
 	String meetingRoomExternalId;
 	String meetingRoomExternalName;
 	String meetingRoomExternalLocation;
+	EnumMeetingRoomStatus meetingRoomStatus;
+	
 	/**
 	 * @return the meetingRoomExternalId
 	 */
@@ -46,5 +50,18 @@ public class MeetingRoomDetailsConnectorReturn {
 	public void setMeetingRoomExternalLocation(String meetingRoomExternalLocation) {
 		this.meetingRoomExternalLocation = meetingRoomExternalLocation;
 	}
+	/**
+	 * @return the meetingRoomStatus
+	 */
+	public EnumMeetingRoomStatus getMeetingRoomStatus() {
+		return meetingRoomStatus;
+	}
+	/**
+	 * @param meetingRoomStatus the meetingRoomStatus to set
+	 */
+	public void setMeetingRoomStatus(EnumMeetingRoomStatus meetingRoomStatus) {
+		this.meetingRoomStatus = meetingRoomStatus;
+	}
+	
 	
 }
