@@ -32,9 +32,9 @@ public interface DashboardApiEndpoint {
 	 * 
 	 */
 	@GET
-	@Path(DASHBOARD_MAC_ADDRESS_PARAM + CONFIG_PATH)
+	@Path(DASHBOARD_ID_PATH + CONFIG_PATH)
 	@Produces(MediaType.APPLICATION_JSON)
-	List<String> getConfig();
+	List<String> getConfig(@PathParam(DASHBOARD_MAC_ADDRESS_PARAM)String macAddress);
 
 	
 	/**

@@ -32,7 +32,7 @@ public class AddressTools {
 		return "rg_" + cityDto.getCountryName() + "_" + cityDto.getRegionName() + "_" + cityDto.getName();
 	}
 	
-	public String getCountryRegionCityBuildingNamesBuildingId(Long buildingId) throws NumberFormatException, DataNotExistsException{
+	public String getCountryRegionCityBuildingNamesFromBuildingId(Long buildingId) throws NumberFormatException, DataNotExistsException{
 		BuildingDto buildingDto = buildingManager.find(buildingId);
 		
 		LOGGER.debug("getCountryRegionCityBuildingNamesBuildingId for building" + buildingId);

@@ -174,8 +174,8 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			// Update xml meeting room file config
 			String meetingroomActivated = properties.getProperty("meetingroom.activated");
 			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
-				String fileName = addressTools.getCountryRegionCityBuildingNamesBuildingId(meetingroomDao.getBuildingId());
-				fileManager.addObjectToFile(fileName, meetingroomDao.getExternalId());
+				String fileName = addressTools.getCountryRegionCityBuildingNamesFromBuildingId(meetingroomDao.getBuildingId());
+				fileManager.addObjectToFile(fileName + "_" + meetingroomDao.getFloor(), meetingroomDao.getExternalId());
 			}
 			// Save MeetingRoomDao
 			MeetingRoomDao meetingroom = meetingroomRepository.saveMeetingRoom(meetingroomDao);
@@ -212,8 +212,8 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
 				MeetingRoomDao oldMeetingRoomDao = meetingroomRepository.findOne(meetingroomDao.getId()); 
 				
-				String fileName = addressTools.getCountryRegionCityBuildingNamesBuildingId(meetingroomDao.getBuildingId());
-				fileManager.updateObjectFromFile(fileName, oldMeetingRoomDao.getExternalId(), meetingroomDao.getExternalId());
+				String fileName = addressTools.getCountryRegionCityBuildingNamesFromBuildingId(meetingroomDao.getBuildingId());
+				fileManager.updateObjectFromFile(fileName + "_" + meetingroomDao.getFloor(), oldMeetingRoomDao.getExternalId(), meetingroomDao.getExternalId());
 			}
 			// Update former Agent
 			AgentDao formerAgent = new AgentDao();
@@ -297,8 +297,8 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 				// Update xml meeting room file config
 				String meetingroomActivated = properties.getProperty("meetingroom.activated");
 				if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
-					String fileName = addressTools.getCountryRegionCityBuildingNamesBuildingId(meetingroom.getBuildingId());
-					fileManager.removeObjectFromFile(fileName, meetingroom.getExternalId());
+					String fileName = addressTools.getCountryRegionCityBuildingNamesFromBuildingId(meetingroom.getBuildingId());
+					fileManager.removeObjectFromFile(fileName + "_" + meetingroom.getFloor(), meetingroom.getExternalId());
 				}
 				// Set meeting room id to 0 for associated Agent 
 				AgentDao agent = new AgentDao();

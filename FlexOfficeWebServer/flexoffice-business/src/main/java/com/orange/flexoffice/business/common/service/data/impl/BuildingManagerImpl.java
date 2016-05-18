@@ -25,9 +25,11 @@ import com.orange.flexoffice.business.common.service.data.BuildingManager;
 import com.orange.flexoffice.business.common.utils.AddressTools;
 import com.orange.flexoffice.business.meetingroom.config.FileManager;
 import com.orange.flexoffice.dao.common.model.data.BuildingDao;
+import com.orange.flexoffice.dao.common.model.data.MeetingRoomGroupsConfigurationDao;
 import com.orange.flexoffice.dao.common.model.object.BuildingDto;
 import com.orange.flexoffice.dao.common.model.object.BuildingSummaryDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.BuildingDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomGroupsConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.PreferencesDaoRepository;
 
 /**
@@ -52,6 +54,8 @@ public class BuildingManagerImpl implements BuildingManager {
 
 	@Autowired
 	private BuildingDaoRepository buildingRepository;
+	@Autowired
+	private MeetingRoomGroupsConfigurationDaoRepository meetingRoomGroupsConfigurationRepository;
 	@Autowired
 	private PreferencesDaoRepository preferenceRepository;
 	@Autowired
@@ -89,30 +93,46 @@ public class BuildingManagerImpl implements BuildingManager {
 	@Override
 	public BuildingDao save(BuildingDao buildingDao) throws DataAlreadyExistsException, UnsupportedEncodingException, FileNotFoundException, DataNotExistsException {
 		try {
-			// create xml meeting room config file
-			String meetingroomActivated = properties.getProperty("meetingroom.activated");
-			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
-				String fileName = addressTools.getCountryRegionCityNamesFromCityId(buildingDao.getCityId()) + "_" + buildingDao.getName();
-				fileManager.createFile(fileName);
-			}
-			
 			// save BuildingDao
 			BuildingDao building = buildingRepository.saveBuilding(buildingDao);
+			
+			// if meetingroom activated 
+			String meetingroomActivated = properties.getProperty("meetingroom.activated");
+			
+			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
+				MeetingRoomGroupsConfigurationDao meetingRoomGroupsConfiguration;
+				
+				for(int i = 0; i < buildingDao.getNbFloors(); i ++){
+					String fileName = addressTools.getCountryRegionCityNamesFromCityId(buildingDao.getCityId()) + "_" + buildingDao.getName() + "_" + i;
+					
+					meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
+					meetingRoomGroupsConfiguration.setBuildingId(building.getId());
+					meetingRoomGroupsConfiguration.setFloor(Long.valueOf(i));
+					meetingRoomGroupsConfiguration.setMeetingroomGroupId(fileName);
+					
+					// Add entry in meetingroom_groups_configuration
+					meetingRoomGroupsConfigurationRepository.saveMeetingRoomGroupsConfiguration(meetingRoomGroupsConfiguration);
+					
+					// create xml file
+					fileManager.createFile(fileName);
+				}
+			}
+			
 			return building;
 			
-			} catch (DataIntegrityViolationException e) {
-				LOGGER.debug("BuildingManager.save : Building already exists", e);
-				LOGGER.error("BuildingManager.save : Building already exists");
-				throw new DataAlreadyExistsException("BuildingManager.save : Building already exists"); 
-			} catch (DataNotExistsException e) {
-				LOGGER.debug("BuildingManager.save : Building already exists", e);
-				LOGGER.error("BuildingManager.save : Building already exists");
-				throw new DataNotExistsException("BuildingManager.save : Building already exists");
-			} catch (IOException | JAXBException e) {
-				LOGGER.debug("ConfigurationEndpoint.addBuilding : Meeting Room xml meeting room file in error", e);
-				LOGGER.error("ConfigurationEndpoint.addBuilding : Meeting Room xml meeting room file in error");
-				throw new RuntimeException("ConfigurationEndpoint.addBuilding : Meeting Room xml meeting room file in error");
-			}
+		} catch (DataIntegrityViolationException e) {
+			LOGGER.debug("BuildingManager.save : Building already exists", e);
+			LOGGER.error("BuildingManager.save : Building already exists");
+			throw new DataAlreadyExistsException("BuildingManager.save : Building already exists"); 
+		} catch (DataNotExistsException e) {
+			LOGGER.debug("BuildingManager.save : Building already exists", e);
+			LOGGER.error("BuildingManager.save : Building already exists");
+			throw new DataNotExistsException("BuildingManager.save : Building already exists");
+		} catch (IOException | JAXBException e) {
+			LOGGER.debug("ConfigurationEndpoint.addBuilding : Meeting Room xml meeting room file in error", e);
+			LOGGER.error("ConfigurationEndpoint.addBuilding : Meeting Room xml meeting room file in error");
+			throw new RuntimeException("ConfigurationEndpoint.addBuilding : Meeting Room xml meeting room file in error");
+		}
 	}
 
 	@Override
@@ -121,8 +141,78 @@ public class BuildingManagerImpl implements BuildingManager {
 		String meetingroomActivated = properties.getProperty("meetingroom.activated");
 		if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
 			BuildingDao oldBuildingDao = buildingRepository.findOne(building.getId());
-			String fileSubName = addressTools.getCountryRegionCityNamesFromCityId(oldBuildingDao.getCityId());
-			fileManager.updateFile(fileSubName + "_" + oldBuildingDao.getName(), fileSubName + "_" + building.getName());
+			MeetingRoomGroupsConfigurationDao meetingRoomGroupsConfiguration;
+			if (oldBuildingDao.getNbFloors() < building.getNbFloors()){
+				for(int i = oldBuildingDao.getNbFloors().intValue(); i < building.getNbFloors(); i ++){
+					String fileName = addressTools.getCountryRegionCityNamesFromCityId(building.getCityId()) + "_" + building.getName() + "_" + i;
+					
+					meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
+					meetingRoomGroupsConfiguration.setBuildingId(building.getId());
+					meetingRoomGroupsConfiguration.setFloor(Long.valueOf(i));
+					meetingRoomGroupsConfiguration.setMeetingroomGroupId(fileName);
+					
+					// Add entry in meetingroom_groups_configuration
+					meetingRoomGroupsConfigurationRepository.saveMeetingRoomGroupsConfiguration(meetingRoomGroupsConfiguration);
+					
+					fileManager.createFile(fileName);
+				}
+				for(int i = 0; i < oldBuildingDao.getNbFloors(); i ++){
+					String fileName = addressTools.getCountryRegionCityNamesFromCityId(building.getCityId()) + "_" + building.getName() + "_" + i;
+					String fileSubName = addressTools.getCountryRegionCityNamesFromCityId(oldBuildingDao.getCityId());
+					
+					meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
+					meetingRoomGroupsConfiguration.setBuildingId(building.getId());
+					meetingRoomGroupsConfiguration.setFloor(Long.valueOf(i));
+					meetingRoomGroupsConfiguration.setMeetingroomGroupId(fileName);
+					
+					// update entry in meetingroom_groups_configuration
+					meetingRoomGroupsConfigurationRepository.updateMeetingRoomGroupsConfiguration(meetingRoomGroupsConfiguration);
+					
+					fileManager.updateFile(fileSubName + "_" + oldBuildingDao.getName() + "_" + i, fileName);
+				}
+			} else if (oldBuildingDao.getNbFloors() > building.getNbFloors()){
+				for(int i = oldBuildingDao.getNbFloors().intValue(); i > building.getNbFloors(); i --){
+					String fileName = addressTools.getCountryRegionCityNamesFromCityId(oldBuildingDao.getCityId()) + "_" + oldBuildingDao.getName() + "_" + i;
+					
+					meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
+					meetingRoomGroupsConfiguration.setBuildingId(building.getId());
+					meetingRoomGroupsConfiguration.setFloor(Long.valueOf(i));
+					
+					// delete entry in meetingroom_groups_configuration
+					meetingRoomGroupsConfigurationRepository.deleteByBuildingIdAndFloor(meetingRoomGroupsConfiguration);
+					
+					fileManager.deleteFile(fileName);
+				}
+				for(int i = 0; i <= building.getNbFloors(); i ++){
+					String fileName = addressTools.getCountryRegionCityNamesFromCityId(building.getCityId()) + "_" + building.getName() + "_" + i;
+					String fileSubName = addressTools.getCountryRegionCityNamesFromCityId(oldBuildingDao.getCityId());
+					
+					meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
+					meetingRoomGroupsConfiguration.setBuildingId(building.getId());
+					meetingRoomGroupsConfiguration.setFloor(Long.valueOf(i));
+					meetingRoomGroupsConfiguration.setMeetingroomGroupId(fileName);
+					
+					// update entry in meetingroom_groups_configuration
+					meetingRoomGroupsConfigurationRepository.updateMeetingRoomGroupsConfiguration(meetingRoomGroupsConfiguration);
+					
+					fileManager.updateFile(fileSubName + "_" + oldBuildingDao.getName() + "_" + i, fileName);
+				}
+			} else {
+				for(int i = 0; i <= building.getNbFloors(); i ++){
+					String fileName = addressTools.getCountryRegionCityNamesFromCityId(building.getCityId()) + "_" + building.getName() + "_" + i;
+					String fileSubName = addressTools.getCountryRegionCityNamesFromCityId(oldBuildingDao.getCityId());
+					
+					meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
+					meetingRoomGroupsConfiguration.setBuildingId(building.getId());
+					meetingRoomGroupsConfiguration.setFloor(Long.valueOf(i));
+					meetingRoomGroupsConfiguration.setMeetingroomGroupId(fileName);
+					
+					// update entry in meetingroom_groups_configuration
+					meetingRoomGroupsConfigurationRepository.updateMeetingRoomGroupsConfiguration(meetingRoomGroupsConfiguration);
+					
+					fileManager.updateFile(fileSubName + "_" + oldBuildingDao.getName() + "_" + i, fileName);
+				}
+			}
 		}
 		return buildingRepository.updateBuilding(building);
 	}
@@ -130,13 +220,20 @@ public class BuildingManagerImpl implements BuildingManager {
 	@Override
 	public void delete(long buildingId) throws DataNotExistsException, IntegrityViolationException {
 		try {
-			buildingRepository.findOne(buildingId);
-			// delete xml meeting room config file
+			BuildingDao buildingDao = buildingRepository.findOne(buildingId);
+			
+			// if meetingroom activated in flexOffice
 			String meetingroomActivated = properties.getProperty("meetingroom.activated");
+			
+			// delete xml meeting room config file
 			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
-				BuildingDao buildingDao = buildingRepository.findOne(buildingId);
-				String fileName = addressTools.getCountryRegionCityNamesFromCityId(buildingDao.getCityId()) + "_" + buildingDao.getName();
-				fileManager.deleteFile(fileName);
+				// delete entries in table meetingroom_groups_configuration for buildingId
+				meetingRoomGroupsConfigurationRepository.deleteByBuildingId(buildingDao.getId().toString());
+				
+				for(int i = 0; i < buildingDao.getNbFloors(); i ++){
+					String fileName = addressTools.getCountryRegionCityNamesFromCityId(buildingDao.getCityId()) + "_" + buildingDao.getName() + "_" + i;
+					fileManager.deleteFile(fileName);
+				}
 			}
 			
 			preferenceRepository.deleteByBuildingId(buildingId);

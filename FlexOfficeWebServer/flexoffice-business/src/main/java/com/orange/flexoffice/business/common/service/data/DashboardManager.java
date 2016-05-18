@@ -55,11 +55,11 @@ public interface DashboardManager {
 
 	/**
 	 * Updates a {@link DashboardDao}
-	 * method used by gatewayapi
+	 * method used by meetingroomapi
 	 * @param DashboardDao the new {@link DashboardDao}
-	 * @return a command {@link DashbaordCommand}
+	 * @return a command {@link DashboardDao}
 	 */
-	//AgentCommand updateStatus(AgentDao agentDao) throws DataNotExistsException;
+	DashboardDao updateStatus(DashboardDao dashboardDao) throws DataNotExistsException;
 	
 	/**
 	 * Deletes a {@link DashboardDto}.

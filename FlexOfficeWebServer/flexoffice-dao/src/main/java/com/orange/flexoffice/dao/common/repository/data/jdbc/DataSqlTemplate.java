@@ -68,6 +68,10 @@ public final class DataSqlTemplate {
 			"select * from %s where region_id=:regionId";
 	public static final String FIND_BY_COL_CITY_ID_TEMPLATE = 
 			"select * from %s where city_id=:cityId";
+	public static final String FIND_BY_COL_BUILDING_ID_TEMPLATE = 
+			"select * from %s where building_id=:buildingId";
+	public static final String FIND_BY_COL_BUILDING_ID_AND_FLOOR_TEMPLATE = 
+			"select * from %s where building_id=:buildingId and floor=:floor";
 	public static final String FIND_BY_COL_SENSOR_ID_TEMPLATE = 
 			"select * from %s where sensor_id=:sensorId";
 	public static final String FIND_BY_COL_NAME_TEMPLATE = 
@@ -94,6 +98,8 @@ public final class DataSqlTemplate {
 			"select distinct countries.id, countries.name From rooms, buildings, cities, regions, countries where rooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=regions.id and regions.country_id=countries.id";
 	public static final String FIND_ALL_ROOM_DAILY_TEMPLATE = 
 			"select * from %s order by room_id";
+	public static final String FIND_ALL_MEETINGROOM_GROUPS_CONFIGURATION_TEMPLATE = 
+			"select * from %s order by building_id";
 	public static final String FIND_ALL_MEETINGROOM_DAILY_TEMPLATE = 
 			"select * from %s order by meetingroom_id";
 	public static final String FIND_REQUESTED_ROOM_DAILY_AND_TYPE_TEMPLATE = 
@@ -118,6 +124,10 @@ public final class DataSqlTemplate {
 			"select * from %s where user_id=:userId order by reservation_date desc";
 	public static final String REMOVE_BY_MAC_ADDRESS_TEMPLATE = 
 			"delete from %s where mac_address=:macAddress";
+	public static final String REMOVE_BY_BUILDING_ID_TEMPLATE = 
+			"delete from %s where building_id=:buildingId";
+	public static final String REMOVE_BY_BUILDING_ID_AND_FLOOR_TEMPLATE = 
+			"delete from %s where building_id=:buildingId and floor=:floor";
 	public static final String REMOVE_BY_GATEWAY_ID_TEMPLATE = 
 			"delete from %s where gateway_id=:gatewayId";
 	public static final String REMOVE_BY_SENSOR_ID_TEMPLATE = 
@@ -168,6 +178,8 @@ public final class DataSqlTemplate {
 			"insert into %s (first_name, last_name, email, is_created_from_userui, access_token, expired_token_date) values (:firstName, :lastName, :email, :isCreatedFromUserui, :accessToken, :expiredTokenDate)";
 	public static final String CREATE_GATEWAY_TEMPLATE = 
 			"insert into %s (mac_address, name, description) values (:macAddress, :name, :description)";
+	public static final String CREATE_MEETINGROOM_GROUPS_CONFIGURATION_TEMPLATE = 
+			"insert into %s (building_id, floor, meetingroom_group_id) values (:buildingId, :floor, :meetingRoomGroupId)";
 	public static final String CREATE_AGENT_TEMPLATE = 
 			"insert into %s (mac_address, name, description) values (:macAddress, :name, :description)";
 	public static final String CREATE_DASHBOARD_TEMPLATE = 
@@ -218,6 +230,8 @@ public final class DataSqlTemplate {
 			"update %s set name=:name, description=:description WHERE mac_address=:macAddress";
 	public static final String UPDATE_AGENT_TEMPLATE = 
 			"update %s set name=:name, description=:description WHERE mac_address=:macAddress";
+	public static final String UPDATE_MEETINGROOM_GROUPS_CONFIGURATION_TEMPLATE = 
+			"update %s set meetingroom_group_id=:meetingRoomGroupId WHERE building_id=:buildingId and floor=:floor";
 	public static final String UPDATE_DASHBOARD_TEMPLATE = 
 			"update %s set name=:name, description=:description, city_id=:cityId, building_id=:buildingId, floor=:floor WHERE mac_address=:macAddress";
 	public static final String UPDATE_USER_TEMPLATE =

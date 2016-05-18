@@ -26,6 +26,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String findAllQuery;
 	protected final String findCountriesHaveRoomsQuery;
 	protected final String findAllRoomDailyQuery;
+	protected final String findAllMeetingRoomGroupsConfigurationQuery;
 	protected final String findAllMeetingRoomDailyQuery;
 	protected final String findAllRegionsSummaryQuery;
 	protected final String findAllCitiesSummaryQuery;
@@ -77,6 +78,8 @@ public abstract class DataRepository<T extends Data>
 	protected final String findBuildingsHaveRoomsByCityIdQuery;
 	protected final String findByColumnRegionIdQuery;
 	protected final String findByColumnCityIdQuery;
+	protected final String findByColumnBuildingIdQuery;
+	protected final String findByColumnBuildingIdAndFloorQuery;
 	protected final String findByColumnSensorIdQuery;
 	protected final String findByColumnNameQuery;
 	
@@ -84,6 +87,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String saveUserQuery;
 	protected final String saveUserFromUserUIQuery;	
 	protected final String saveGatewayQuery;
+	protected final String saveMeetingRoomGroupsConfigurationQuery;
 	protected final String saveAgentQuery;
 	protected final String saveDashboardQuery;
 	protected final String saveRoomQuery;
@@ -118,6 +122,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String updateDashboardStatusQuery;
 	protected final String updateGatewayCommandQuery;
 	protected final String updateGatewayQuery;
+	protected final String updateMeetingRoomGroupsConfigurationQuery;
 	protected final String updateAgentQuery;
 	protected final String updateDashboardQuery;
 	protected final String updateRoomQuery;
@@ -137,6 +142,8 @@ public abstract class DataRepository<T extends Data>
 	protected final String updateSensorRoomIdQuery;
 	// DELETE QUERIES -----------------------------
 	protected final String deleteByMacAddressQuery;
+	protected final String deleteByBuildingIdQuery;
+	protected final String deleteByBuildingIdAndFloorQuery;
 	protected final String deleteByGatewayIdQuery;
 	protected final String deleteBySensorIdQuery;
 	protected final String deleteByIdentifier;
@@ -152,10 +159,10 @@ public abstract class DataRepository<T extends Data>
 	protected final String deletePrefByBuildingIdQuery;
 	protected final String deletePrefByUserIdQuery;
 	private   final String deleteQuery;
-	protected   final String deleteAllQuery;
+	protected final String deleteAllQuery;
 	// COUNT QUERIES --------------
 	private   final String countQuery;
-	protected   final String countSensorsByTypeAndRoomIdQuery;
+	protected final String countSensorsByTypeAndRoomIdQuery;
 	protected final String countActiveUsersQuery;
 	protected final String countNbRoomsByTypeQuery;
 	protected final String countNbMeetingRoomsByTypeQuery;
@@ -174,6 +181,7 @@ public abstract class DataRepository<T extends Data>
 		findCountriesHaveRoomsQuery = String.format(FIND_COUNTRIES_HAVE_ROOMS_TEMPLATE, getTableName(), getColName());
 		findAllMeetingRoomDailyQuery = String.format(FIND_ALL_MEETINGROOM_DAILY_TEMPLATE, getTableName());
 		findAllRoomDailyQuery = String.format(FIND_ALL_ROOM_DAILY_TEMPLATE, getTableName());
+		findAllMeetingRoomGroupsConfigurationQuery = String.format(FIND_ALL_MEETINGROOM_GROUPS_CONFIGURATION_TEMPLATE, getTableName());
 		findAllDailyQuery = String.format(FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE, getTableName());
 		findAllDailyQueryMeetingRoom = String.format(FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE_MEETINGROOM, getTableName());
 		findAllRegionsSummaryQuery = String.format(FIND_ALL_REGIONS_SUMMARY_TEMPLATE);
@@ -224,6 +232,8 @@ public abstract class DataRepository<T extends Data>
 		findBuildingsHaveRoomsByCityIdQuery = String.format(FIND_BUILDINGS_HAVE_ROOMS_BY_CITY_ID_TEMPLATE, getTableName());
 		findByColumnRegionIdQuery = String.format(FIND_BY_COL_REGION_ID_TEMPLATE, getTableName());
 		findByColumnCityIdQuery = String.format(FIND_BY_COL_CITY_ID_TEMPLATE, getTableName());
+		findByColumnBuildingIdQuery = String.format(FIND_BY_COL_BUILDING_ID_TEMPLATE, getTableName());
+		findByColumnBuildingIdAndFloorQuery = String.format(FIND_BY_COL_BUILDING_ID_AND_FLOOR_TEMPLATE, getTableName());
 		findByColumnSensorIdQuery = String.format(FIND_BY_COL_SENSOR_ID_TEMPLATE, getTableName());
 		findByColumnNameQuery = String.format(FIND_BY_COL_NAME_TEMPLATE, getTableName());
 				
@@ -231,6 +241,7 @@ public abstract class DataRepository<T extends Data>
 		saveUserQuery = String.format(CREATE_USER_TEMPLATE, getTableName());
 		saveUserFromUserUIQuery = String.format(CREATE_USER_FROM_USERUI_TEMPLATE, getTableName());
 		saveGatewayQuery = String.format(CREATE_GATEWAY_TEMPLATE, getTableName());
+		saveMeetingRoomGroupsConfigurationQuery = String.format(CREATE_MEETINGROOM_GROUPS_CONFIGURATION_TEMPLATE, getTableName());
 		saveAgentQuery = String.format(CREATE_AGENT_TEMPLATE, getTableName());
 		saveDashboardQuery = String.format(CREATE_DASHBOARD_TEMPLATE, getTableName());
 		saveRoomQuery = String.format(CREATE_ROOM_TEMPLATE, getTableName());
@@ -281,6 +292,7 @@ public abstract class DataRepository<T extends Data>
 		updateSensorStatusQuery = String.format(UPDATE_SENSOR_STATUS_TEMPLATE, getTableName(), getColumnColName());
 		updateSensorRoomIdQuery = String.format(UPDATE_SENSOR_ROOM_ID_TEMPLATE, getTableName());
 		updateGatewayQuery = String.format(UPDATE_GATEWAY_TEMPLATE, getTableName());
+		updateMeetingRoomGroupsConfigurationQuery = String.format(UPDATE_MEETINGROOM_GROUPS_CONFIGURATION_TEMPLATE, getTableName());
 		updateAgentQuery = String.format(UPDATE_AGENT_TEMPLATE, getTableName());
 		updateDashboardQuery = String.format(UPDATE_DASHBOARD_TEMPLATE, getTableName());
 		
@@ -288,6 +300,8 @@ public abstract class DataRepository<T extends Data>
 		deleteQuery = String.format(REMOVE_TEMPLATE, getTableName());
 		deleteAllQuery = String.format(REMOVE_ALL_TEMPLATE, getTableName());
 		deleteByMacAddressQuery = String.format(REMOVE_BY_MAC_ADDRESS_TEMPLATE, getTableName());
+		deleteByBuildingIdQuery = String.format(REMOVE_BY_BUILDING_ID_TEMPLATE, getTableName());
+		deleteByBuildingIdAndFloorQuery = String.format(REMOVE_BY_BUILDING_ID_AND_FLOOR_TEMPLATE, getTableName());
 		deleteByGatewayIdQuery = String.format(REMOVE_BY_GATEWAY_ID_TEMPLATE, getTableName());
 		deleteBySensorIdQuery = String.format(REMOVE_BY_SENSOR_ID_TEMPLATE, getTableName());
 		deleteByIdentifier = String.format(REMOVE_BY_IDENTIFIER_TEMPLATE, getTableName());

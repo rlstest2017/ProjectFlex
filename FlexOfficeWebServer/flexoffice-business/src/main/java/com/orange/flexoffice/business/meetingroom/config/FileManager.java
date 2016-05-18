@@ -52,7 +52,7 @@ public class FileManager {
 		String filePath = properties.getProperty("meetingroom.path");
 		Array array = converter.convertFromXMLToObject(filePath + SEPARATOR + oldName + EXTENSION);
 		deleteFile(oldName);
-		array.setDescription("Liste des meeting rooms pour le bâtiment " + newName);
+		array.setDescription("Liste des meeting rooms pour le bâtiment et l'étage suivant: " + newName);
 		
 		converter.convertFromObjectToXML(array, filePath + SEPARATOR + newName + EXTENSION);
 	}
