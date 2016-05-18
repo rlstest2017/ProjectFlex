@@ -60,11 +60,11 @@ public class AgentEndpointImpl implements AgentEndpoint {
 			
 			return factory.createAgentOutput(output).getValue();
 			
-		} catch (MethodNotAllowedException e1) {
-			LOGGER.debug("RuntimeException in updateAgent() AgentEndpointImpl with message :" + e1.getMessage(), e1);
+		} catch (MethodNotAllowedException e) {
+			LOGGER.debug("MethodNotAllowedException in updateAgent() AgentEndpointImpl with message :" + e.getMessage(), e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_3, Response.Status.METHOD_NOT_ALLOWED));
-		} catch (DataNotExistsException e2) {
-			LOGGER.debug("RuntimeException in updateAgent() AgentEndpointImpl with message :" + e2.getMessage(), e2);
+		} catch (DataNotExistsException e) {
+			LOGGER.debug("DataNotExistsException in updateAgent() AgentEndpointImpl with message :" + e.getMessage(), e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_2, Response.Status.NOT_FOUND));
 		} catch (FlexOfficeInternalServerException | MeetingRoomInternalServerException e) {
 			LOGGER.debug("RuntimeException in updateAgent() AgentEndpointImpl with message :" + e.getMessage(), e);

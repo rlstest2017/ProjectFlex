@@ -12,7 +12,10 @@ public enum EnumErrorModel {
 	ERROR_4("D001","dashboardMacAddress is not found"),
 	ERROR_5("M001","reservation is failed, Timeslot was not available or Internal error"),
 	ERROR_6("M002","cancel reservation is failed"),
-	ERROR_7("M003","confirm reservation is failed");;
+	ERROR_7("M003","confirm reservation is failed"),
+	ERROR_8("M004","meetingRoomExternalId not found, It doesn't exist or connexion problem to Exchange Server"),
+	ERROR_9("M005","errorFlag=true in PHP server return"),
+	ERROR_10("M006","no rooms or at least one roomId is not found in exchange server or the RoomGroupID (config xml file referenced) is wrong");
 	
      /**
      * status code

@@ -11,6 +11,7 @@ public class GetDashboardBookingsParameters {
 	String format;
 	String maxBookings;
 	String roomGroupID;
+	String dashboardMacAddress;
 	
 	/**
 	 * @return the format
@@ -59,6 +60,18 @@ public class GetDashboardBookingsParameters {
 	 */
 	public void setRoomGroupID(String roomGroupID) {
 		this.roomGroupID = roomGroupID;
+	}
+	/**
+	 * @return the dashboardMacAddress
+	 */
+	public String getDashboardMacAddress() {
+		return dashboardMacAddress;
+	}
+	/**
+	 * @param dashboardMacAddress the dashboardMacAddress to set
+	 */
+	public void setDashboardMacAddress(String dashboardMacAddress) {
+		this.dashboardMacAddress = dashboardMacAddress;
 	}
 				
 	

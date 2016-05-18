@@ -16,12 +16,15 @@ import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerExcep
 import com.orange.meetingroom.connector.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.exception.PhpInternalServerException;
 import com.orange.meetingroom.connector.php.model.request.GetAgentBookingsParameters;
+import com.orange.meetingroom.connector.php.model.request.GetDashboardBookingsParameters;
 import com.orange.meetingroom.connector.php.model.request.SetBookingParameters;
 import com.orange.meetingroom.connector.php.model.request.UpdateBookingParameters;
 import com.orange.meetingroom.connector.php.model.response.BookingConnectorReturn;
 import com.orange.meetingroom.connector.php.model.response.BookingSummary;
 import com.orange.meetingroom.connector.php.model.response.MeetingRoomBookingsConnectorReturn;
 import com.orange.meetingroom.connector.php.model.response.MeetingRoomConnectorReturn;
+import com.orange.meetingroom.connector.php.model.response.MeetingRoomDetailsConnectorReturn;
+import com.orange.meetingroom.connector.php.model.response.MeetingRoomsConnectorReturn;
 import com.orange.meetingroom.gui.ws.endPoint.entity.MeetingRoomEndpoint;
 import com.orange.meetingroom.gui.ws.model.Booking;
 import com.orange.meetingroom.gui.ws.model.BookingSetInput;
@@ -29,6 +32,8 @@ import com.orange.meetingroom.gui.ws.model.BookingSetOutput;
 import com.orange.meetingroom.gui.ws.model.BookingUpdateInput;
 import com.orange.meetingroom.gui.ws.model.BookingUpdateOutput;
 import com.orange.meetingroom.gui.ws.model.MeetingRoom;
+import com.orange.meetingroom.gui.ws.model.MeetingRoomBookings;
+import com.orange.meetingroom.gui.ws.model.MeetingRoomDetails;
 import com.orange.meetingroom.gui.ws.model.MeetingRooms;
 import com.orange.meetingroom.gui.ws.model.ObjectFactory;
 import com.orange.meetingroom.gui.ws.utils.ErrorMessageHandler;
@@ -64,42 +69,114 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			
 		MeetingRoomConnectorReturn meetingroomreturn = phpConnectorManager.getBookingsFromAgent(params);
 		
-		meetingroom.setCurrentDate(BigInteger.valueOf(meetingroomreturn.getCurrentDate()));
-		
-		MeetingRoomBookingsConnectorReturn bookingsReturn = meetingroomreturn.getMeetingRoom();
-		
-		List<BookingConnectorReturn> bookingsReturnList = bookingsReturn.getBookings();
-		
+		if (meetingroomreturn != null) {
+			meetingroom.setCurrentDate(BigInteger.valueOf(meetingroomreturn.getCurrentDate()));
+			
+			if (meetingroomreturn.getMeetingRoom() != null) {
+				MeetingRoomDetailsConnectorReturn detailsReturn = meetingroomreturn.getMeetingRoom().getMeetingRoomDetails();
 				
-		for (BookingConnectorReturn bookConnector : bookingsReturnList) {
-			Booking book = factory.createBooking();
-			book.setIDReservation(bookConnector.getIdReservation());
-			book.setRevisionReservation(bookConnector.getRevisionReservation());
-			book.setOrganizerFullName(bookConnector.getOrganizerFullName());
-			book.setSubject(bookConnector.getSubject());
-			book.setStartDate(BigInteger.valueOf(bookConnector.getStartDate()));
-			book.setEndDate(BigInteger.valueOf(bookConnector.getEndDate()));
-			book.setAcknowledged(bookConnector.getAcknowledged());
+				MeetingRoomBookings meetingRoomBookings = factory.createMeetingRoomBookings();
+				MeetingRoomDetails details = factory.createMeetingRoomDetails(); 
+				details.setMeetingRoomExternalId(detailsReturn.getMeetingRoomExternalId());
+				details.setMeetingRoomExternalName(detailsReturn.getMeetingRoomExternalName());
+				details.setMeetingRoomExternalLocation(detailsReturn.getMeetingRoomExternalLocation());
+				// TODO add details.setMeetingRoomStatus(detailsReturn.get);
+				
+				meetingRoomBookings.setMeetingRoomDetails(details);
+				
+				List<BookingConnectorReturn> bookingsReturnList = meetingroomreturn.getMeetingRoom().getBookings();
+						
+				for (BookingConnectorReturn bookConnector : bookingsReturnList) {
+					Booking book = factory.createBooking();
+					book.setIDReservation(bookConnector.getIdReservation());
+					book.setRevisionReservation(bookConnector.getRevisionReservation());
+					book.setOrganizerFullName(bookConnector.getOrganizerFullName());
+					book.setSubject(bookConnector.getSubject());
+					book.setStartDate(BigInteger.valueOf(bookConnector.getStartDate()));
+					book.setEndDate(BigInteger.valueOf(bookConnector.getEndDate()));
+					book.setAcknowledged(bookConnector.getAcknowledged());
+					meetingRoomBookings.getBookings().add(book);
+				}
+				
+				meetingroom.setRoom(meetingRoomBookings);
+			}
 		}
 		
-		}  catch (DataNotExistsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MethodNotAllowedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MeetingRoomInternalServerException | PhpInternalServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+		return factory.createMeetingRoom(meetingroom).getValue();
 		
-		return null;
+		}  catch (DataNotExistsException e) {
+			LOGGER.debug("DataNotExistsException in getMeetingRoomBookings() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_8, Response.Status.NOT_FOUND));
+		} catch (MethodNotAllowedException e) {
+			LOGGER.debug("MethodNotAllowedException in getMeetingRoomBookings() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_9, Response.Status.METHOD_NOT_ALLOWED));
+		} catch (MeetingRoomInternalServerException | PhpInternalServerException e) {
+			LOGGER.debug("RuntimeException in getMeetingRoomBookings() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_1, Response.Status.INTERNAL_SERVER_ERROR));
+		} 
+				
 	}
 
 	@Override
 	public MeetingRooms getBookings(String dashboardMacAddress, Integer maxBookings, Integer startDate) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			MeetingRooms meetingrooms = factory.createMeetingRooms();
+			
+			GetDashboardBookingsParameters params = new GetDashboardBookingsParameters();
+			params.setDashboardMacAddress(dashboardMacAddress);
+			params.setMaxBookings(maxBookings.toString());
+			params.setStartDate(startDate.toString());
+			params.setFormat(FORMAT_JSON);
+			
+			MeetingRoomsConnectorReturn meetingroomsreturn = phpConnectorManager.getBookingsFromDashboard(params);
+			
+			if (meetingroomsreturn != null) {
+				meetingrooms.setCurrentDate(BigInteger.valueOf(meetingroomsreturn.getCurrentDate()));
+				
+				if (meetingroomsreturn.getMeetingRooms() != null) {
+					List<MeetingRoomBookingsConnectorReturn> meetingroomList = meetingroomsreturn.getMeetingRooms();
+					
+					for (MeetingRoomBookingsConnectorReturn meetingroomReturn : meetingroomList) {
+						MeetingRoomBookings meetingRoomBookings = factory.createMeetingRoomBookings();
+						
+						MeetingRoomDetailsConnectorReturn detailsReturn = meetingroomReturn.getMeetingRoomDetails();
+						MeetingRoomDetails details = factory.createMeetingRoomDetails(); 
+						details.setMeetingRoomExternalId(detailsReturn.getMeetingRoomExternalId());
+						details.setMeetingRoomExternalName(detailsReturn.getMeetingRoomExternalName());
+						details.setMeetingRoomExternalLocation(detailsReturn.getMeetingRoomExternalLocation());
+						// TODO add details.setMeetingRoomStatus(detailsReturn.get);
+						
+						meetingRoomBookings.setMeetingRoomDetails(details);
+						
+						List<BookingConnectorReturn> bookingsReturnList = meetingroomReturn.getBookings();
+								
+						for (BookingConnectorReturn bookConnector : bookingsReturnList) {
+							Booking book = factory.createBooking();
+							book.setIDReservation(bookConnector.getIdReservation());
+							book.setRevisionReservation(bookConnector.getRevisionReservation());
+							book.setOrganizerFullName(bookConnector.getOrganizerFullName());
+							book.setSubject(bookConnector.getSubject());
+							book.setStartDate(BigInteger.valueOf(bookConnector.getStartDate()));
+							book.setEndDate(BigInteger.valueOf(bookConnector.getEndDate()));
+							book.setAcknowledged(bookConnector.getAcknowledged());
+							meetingRoomBookings.getBookings().add(book);
+						}
+						
+						meetingrooms.getRooms().add(meetingRoomBookings);
+					}
+					
+				}
+			}
+			
+			return factory.createMeetingRooms(meetingrooms).getValue();
+			
+			} catch (MethodNotAllowedException e) {
+				LOGGER.debug("MethodNotAllowedException in getBookings() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
+				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_10, Response.Status.METHOD_NOT_ALLOWED));
+			} catch (MeetingRoomInternalServerException | PhpInternalServerException e) {
+				LOGGER.debug("RuntimeException in getBookings() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
+				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_1, Response.Status.INTERNAL_SERVER_ERROR));
+			}
 	}
 
 	@Override
