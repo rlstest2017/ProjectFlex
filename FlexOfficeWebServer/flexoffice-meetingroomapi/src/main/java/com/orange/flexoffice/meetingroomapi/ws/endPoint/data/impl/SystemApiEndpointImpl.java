@@ -1,12 +1,17 @@
 package com.orange.flexoffice.meetingroomapi.ws.endPoint.data.impl;
 
+import java.math.BigInteger;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.business.common.service.data.SystemManager;
+import com.orange.flexoffice.business.common.service.data.TestManager;
+import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.meetingroomapi.ws.endPoint.data.SystemApiEndpoint;
-import com.orange.flexoffice.meetingroomapi.ws.utils.ErrorMessageHandler;
+import com.orange.flexoffice.meetingroomapi.ws.model.ObjectFactory;
+import com.orange.flexoffice.meetingroomapi.ws.model.System;
 
 /**
  * SystemApiEndpointImpl
@@ -16,119 +21,90 @@ import com.orange.flexoffice.meetingroomapi.ws.utils.ErrorMessageHandler;
 public class SystemApiEndpointImpl implements SystemApiEndpoint {
 
 	private static final Logger LOGGER = Logger.getLogger(SystemApiEndpointImpl.class);
-	private static final String DEFAULT_PROFILE = "UNKNOWN";
+	private final ObjectFactory factory = new ObjectFactory();
 	
 	@Autowired
 	private SystemManager systemManager;
 	@Autowired
-	private RoomManager roomManager;
-
-	@Autowired
-	private ErrorMessageHandler errorMessageHandler;
+	private TestManager testManager;
 
 	@Override
 	public System getSystem() {
-		//systemManager.getSystem()
-		return null;
+		LOGGER.info("SystemApiEndpointImpl.getSystem");
+		
+		System system = factory.createSystem();
+		ConfigurationDao configuration;
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.AGENT_STATUS_TIMEOUT.toString());
+		if (configuration != null)
+		system.setAgentTimeout(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.DASHBOARD_STATUS_TIMEOUT.toString());
+		if (configuration != null)
+		system.setDashboardTimeout(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.MEETINGROOM_STATUS_TIMEOUT.toString());
+		if (configuration != null)
+		system.setMeetingRoomTimeout(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.WS_REFRESH_INTERVAL.toString());
+		if (configuration != null)
+		system.setWsRefreshInterval(Long.valueOf(configuration.getValue()));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.INACTIVITY_TIME.toString());
+		if (configuration != null)
+		system.setInactivityTime(Long.valueOf(configuration.getValue()));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.HOUR_START.toString());
+		if (configuration != null)
+		system.setHourStart(Long.valueOf(configuration.getValue()));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.HOUR_END.toString());
+		if (configuration != null)
+		system.setHourEnd(Long.valueOf(configuration.getValue()));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.ORGANIZER_MANDATORY.toString());
+		if (configuration != null)
+		system.setOrganizerMandatory(Boolean.valueOf(configuration.getValue()));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.SUBJECT_MANDATORY.toString());
+		if (configuration != null)
+		system.setSubjectMandatory(Boolean.valueOf(configuration.getValue()));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.ACK_TIME.toString());
+		if (configuration != null)
+		system.setAckTime(Long.valueOf(configuration.getValue()));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.USER_CAN_CANCEL.toString());
+		if (configuration != null)
+		system.setUserCanCancel(Boolean.valueOf(configuration.getValue()));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.CAN_SHOW_SUBJECT.toString());
+		if (configuration != null)
+		system.setCanShowSubject(Boolean.valueOf(configuration.getValue()));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.CAN_SHOW_ORGANIZER.toString());
+		if (configuration != null)
+		system.setCanShowOrganizer(Boolean.valueOf(configuration.getValue()));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.DURATION_STEP.toString());
+		if (configuration != null)
+		system.setDurationStep(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.PAGES_SHIFT_INTERVAL.toString());
+		if (configuration != null)
+		system.setPagesShiftInterval(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.NB_ROOMS_PER_PAGE.toString());
+		if (configuration != null)
+		system.setNbRoomsPerPage(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+		
+		return factory.createSystem(system).getValue();
 	}
-
-
-	/*@Override
-	public Response updateSensor(String identifier, SensorInput sensor)  {
-		
-		LOGGER.debug( "Begin call SensorEndpoint.updateSensor at: " + new Date() );
-		
-		try {
-			
-			if (ESensorStatus.TEACHIN_ERROR.toString().equals(sensor.getSensorStatus().toString())) { // process teachin error
 	
-				sensorManager.processTeachinSensor(identifier, null, false);
-					
-			} else { // process updateSensor
-				SensorDao sensorDao = sensorManager.find(identifier);
-				sensorDao.setStatus(sensor.getSensorStatus().toString());
-				if (sensor.getOccupancyInfo() != null) {
-					sensorDao.setOccupancyInfo(sensor.getOccupancyInfo().toString());
-				}
-				
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("updateSensor with room parameters :");
-					final StringBuilder message = new StringBuilder( 1000 );
-					message.append( "room Id :" );
-					message.append( sensorDao.getRoomId() );
-					message.append( "\n" );
-					message.append( "sensor room Temperature Info :" );
-					message.append( sensor.getTemperature() );
-					message.append( "\n" );
-					message.append( "sensor room Humidity Info :" );
-					message.append( sensor.getHumidity() );
-					message.append( "\n" );
-					message.append( "sensor Occupancy Info :" );
-					message.append( sensor.getOccupancyInfo() );
-					message.append( "\n" );
-					message.append( "sensor Status :" );
-					message.append( sensor.getSensorStatus() );
-					message.append( "\n" );
-					message.append( "sensor Identifier :" );
-					message.append( identifier  );
-					LOGGER.debug( message.toString() );
-				}
-				
-				RoomDao roomDao = null;
-				if ((sensorDao.getRoomId() != null) && (sensorDao.getRoomId() != 0)) {
-					// get room 
-					roomDao = roomManager.findByRoomId(Long.valueOf(sensorDao.getRoomId()));
-					if (sensor.getTemperature() != null) {
-						roomDao.setTemperature(sensor.getTemperature());
-					} 
-					if (sensor.getHumidity() != null) {
-						roomDao.setHumidity(sensor.getHumidity());
-					} 
-					
-					LOGGER.debug("RoomDao is instanciated");
-				}
-		
-				sensorManager.updateStatus(sensorDao, roomDao);
-			}
-		} catch (DataNotExistsException e){
-
-			LOGGER.debug("DataNotExistsException in SensorEndpoint.updateSensor with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_12, Response.Status.NOT_FOUND));
-
-		} catch (RuntimeException ex){
-
-			LOGGER.debug("RuntimeException in SensorEndpoint.updateSensor with message :", ex);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
-		}
-
-		LOGGER.debug( "End call SensorEndpoint.updateSensor at: " + new Date() );
-
-		return Response.status(Status.ACCEPTED).build();
+	@Override
+	public boolean executeInitTestFile() {
+		return testManager.executeInitTestFile();
 	}
-*/
-
-	/**
-	 * computeType
-	 * @param currentProfile
-	 * @return
-	 * @throws WrongProfileException
-	 */
-	/*private String computeType(final String currentProfile) throws WrongProfileException {
-		String type = DEFAULT_PROFILE;
-		EnumAcceptedProfile[] values = EnumAcceptedProfile.values();
-		for (EnumAcceptedProfile profile : values) {
-			if (profile.code().equalsIgnoreCase(currentProfile)) {
-				type = profile.value();
-				break;
-			}
-		}
-		 
-		if (type.equals(DEFAULT_PROFILE)) {
-			throw new WrongProfileException("wrong profile is detected !!!");
-		} 
-
-		return type;
-	}*/
-
 
 }

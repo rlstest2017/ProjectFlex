@@ -6,6 +6,7 @@ import javax.naming.AuthenticationException;
 
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.object.SystemDto;
 import com.orange.flexoffice.dao.common.model.object.TeachinSensorDto;
@@ -82,5 +83,8 @@ public interface SystemManager {
 	 */
 	void submitTeachin(List<String> sensorIdentifiers) throws DataNotExistsException;
 	
-	
+	/**
+	 * getConfigurationValue
+	 */
+	public ConfigurationDao getConfigurationValue(String key);
 }

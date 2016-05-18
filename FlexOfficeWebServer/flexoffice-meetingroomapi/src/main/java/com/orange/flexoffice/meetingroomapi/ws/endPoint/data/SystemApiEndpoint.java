@@ -7,6 +7,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.orange.flexoffice.meetingroomapi.ws.model.System;
+
 /**
  * Defines all operations available for a resource "agent".
  */
@@ -26,13 +28,11 @@ public interface SystemApiEndpoint {
 
 	
 	// used for tests
-	/*boolean executeInitTestFile();
+	boolean executeInitTestFile();
 
-	// used for tests
+	/*// used for tests
 	GatewayDto findByMacAddress(String macAddress)  throws DataNotExistsException;
-
-	// used for tests
-	boolean initTeachinSensorsTable();*/
+*/
 
 }
 

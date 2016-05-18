@@ -40,6 +40,8 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		jdbcTemplateForTest.execute(query);
 		query = "DELETE FROM agents";
 		jdbcTemplateForTest.execute(query);
+		query = "DELETE FROM meetingroom_groups_configuration";
+		jdbcTemplateForTest.execute(query);
 		query = "DELETE FROM buildings";
 		jdbcTemplateForTest.execute(query);
 		query = "DELETE FROM cities";
@@ -47,6 +49,8 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		query = "DELETE FROM regions";
 		jdbcTemplateForTest.execute(query);
 		query = "DELETE FROM countries";
+		jdbcTemplateForTest.execute(query);
+		query = "DELETE FROM configuration";
 		jdbcTemplateForTest.execute(query);
 		
 		String sqlGateways = "INSERT INTO gateways " +
@@ -128,11 +132,32 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		
 		String sqlDashboards = "INSERT INTO dashboards " +
 				"(id, mac_address, name, description, status, last_measure_date, city_id, building_id, floor, command) VALUES (?, ?, ?, ?, CAST(? AS dashboardStatus), CAST(? AS timestamp), ?, ?, ?, CAST(? AS commandModel))";
-		jdbcTemplateForTest.update(sqlDashboards, new Object[] {1, "FF:EE:ZZ:AA:GG:PP", "dashboard 1", "dashboard 1 test", "ONLINE", "2016-01-21 07:04:35.051909", 1, 1, 0, "ECONOMIC"});
+		jdbcTemplateForTest.update(sqlDashboards, new Object[] {1, "FF:EE:ZZ:AA:GG:PP", "dashboard 1", "dashboard 1 test", "ONLINE", "2016-01-21 07:04:35.051909", 1, 1, null, "ECONOMIC"});
 		jdbcTemplateForTest.update(sqlDashboards, new Object[] {2, "FF:TT:ZZ:AA:GG:PP", "dashboard 2", "dashboard 2 test", "OFFLINE", "2016-01-22 07:04:35.051909", 1, 1, 0, "ECONOMIC"});
 		jdbcTemplateForTest.update(sqlDashboards, new Object[] {3, "AA:BB:CC:AA:GG:PP", "dashboard 3", "dashboard 3 test", "ONLINE", "2016-01-23 07:04:35.051909", 1, 1, 0, "ECONOMIC"});
 		jdbcTemplateForTest.update(sqlDashboards, new Object[] {4, "FF:TS:ZZ:AA:GG:PP", "dashboard 4", "dashboard 4 test", "OFFLINE", "2016-01-24 07:04:35.051909", 2, 1, 0, "STANDBY"});
 		jdbcTemplateForTest.update(sqlDashboards, new Object[] {5, "AA:BS:CC:AA:GG:PP", "dashboard 5", "dashboard 5 test", "ONLINE", "2016-01-25 07:04:35.051909", 2, 1, 0, "ECONOMIC"});
+
+		String sqlMeetinRoomGroupsConfiguration = "INSERT INTO meetingroom_groups_configuration (id, building_id, floor, meetingroom_group_id) VALUES (?, ?, ?, ?)";
+		jdbcTemplateForTest.update(sqlMeetinRoomGroupsConfiguration, new Object[] {1, 1, 0, "id@1"});
+		jdbcTemplateForTest.update(sqlMeetinRoomGroupsConfiguration, new Object[] {2, 1, 1, "id@2"});
+		jdbcTemplateForTest.update(sqlMeetinRoomGroupsConfiguration, new Object[] {3, 1, 2, "id@3"});
+		jdbcTemplateForTest.update(sqlMeetinRoomGroupsConfiguration, new Object[] {4, 2, 0, "id@4"});
+		jdbcTemplateForTest.update(sqlMeetinRoomGroupsConfiguration, new Object[] {5, 2, 1, "id@5"});
+		
+		String sqlConfiguration = "INSERT INTO configuration (id, key, value, description) VALUES (?, ?, ?, ?)";
+		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {1, "LAST_CONNECTION_DURATION", "15", "This data is in days"});
+		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {2, "OCCUPANCY_TIMEOUT", "3", "This data is in minutes"});
+		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {3, "BOOKING_DURATION", "300", "This data is in secondes"});
+		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {4, "LAST_RESERVED_COUNT", "0", "This data is number of rooms to return, 0 means all rooms"});
+		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {5, "DATE_BEGIN_DAY", "07:30", "This data is in format hour:minutes"});
+		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {6, "DATE_END_DAY", "20:00", "This data is in format hour:minutes"});
+		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {7, "TEACHIN_TIMEOUT", "15", "This data is in minutes"});
+		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {8, "KEEP_STAT_DATA_IN_DAYS", "365", "This data is in days"});
+		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {9, "THRESHOLD_ENABLED_ADVANCEDRESEARCH_OF_ROOMS", "1", "more than this parameter value, the advanced research of rooms is activated"});
+		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {10, "AGENT_STATUS_TIMEOUT", "3", "This data is in minutes"});
+		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {11, "DASHBOARD_STATUS_TIMEOUT", "3", "This data is in minutes"});
+		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {12, "MEETINGROOM_STATUS_TIMEOUT", "3", "This data is in minutes"});
 		
 		return true;
 	}

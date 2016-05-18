@@ -3,7 +3,9 @@ package com.orange.flexoffice.business.common.service.data.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,8 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomGroupsCo
 @Transactional
 public class MeetingRoomGroupsConfigurationManagerImpl implements MeetingRoomGroupsConfigurationManager {
 	
+	private static final Logger LOGGER = Logger.getLogger(MeetingRoomGroupsConfigurationManagerImpl.class);
+	
 	@Autowired
 	private MeetingRoomGroupsConfigurationDaoRepository meetingRoomGroupsConfigurationRepository;
 	@Autowired
@@ -38,6 +42,7 @@ public class MeetingRoomGroupsConfigurationManagerImpl implements MeetingRoomGro
 		List<String> configFiles = new ArrayList<String>();
 		List<MeetingRoomGroupsConfigurationDao> lst = new ArrayList<MeetingRoomGroupsConfigurationDao>();
 		
+		try {
 		DashboardDao dashboardDao = dashboardRepository.findByMacAddress(macAddress);
 		Long buildingId = dashboardDao.getBuildingId();
 		Long floor = dashboardDao.getFloor();
@@ -58,6 +63,10 @@ public class MeetingRoomGroupsConfigurationManagerImpl implements MeetingRoomGro
 		
 		for(MeetingRoomGroupsConfigurationDao configDao : lst){
 			configFiles.add(configDao.getMeetingroomGroupId());
+		}
+		
+		} catch (EmptyResultDataAccessException e){
+			LOGGER.info("MeetingRoomGroupsConfigurationManagerImpl.getConfigurationFiles: Dashboard not existing");
 		}
 		return configFiles;
 	}

@@ -73,23 +73,23 @@
 	
 	<xsd:complexType name="System">
 		<xsd:sequence>
-			<xsd:element name="agentTimeout" type="xsd:integer"/>
-			<xsd:element name="dashboardTimeout" type="xsd:integer"/>
- 		    <xsd:element name="meetingRoomTimeout" type="xsd:integer"/>
- 		    <xsd:element name="wsRefreshInterval" type="xsd:long"/>
- 		    <xsd:element name="inactivityTime" type="xsd:long"/>
- 		    <xsd:element name="hourStart" type="xsd:long"/>
- 		    <xsd:element name="hourEnd" type="xsd:long"/>
- 		    <xsd:element name="ackTime" type="xsd:long"/>
- 		    <xsd:element name="organizerMandatory" type="xsd:boolean"/>
- 		    <xsd:element name="subjectMandatory" type="xsd:boolean"/>
- 		    <xsd:element name="userCanCancel" type="xsd:boolean"/>
- 		    <xsd:element name="canShowSubject" type="xsd:boolean"/>
- 		    <xsd:element name="canShowOrganizer" type="xsd:boolean"/>
-			<xsd:element name="durationStep" type="xsd:integer"/>
-			<xsd:element name="maxDuration" type="xsd:integer"/>
-			<xsd:element name="pagesShiftInterval" type="xsd:integer"/>
-			<xsd:element name="nbRoomsperPage" type="xsd:integer"/>
+			<xsd:element name="agentTimeout" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="dashboardTimeout" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="meetingRoomTimeout" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="wsRefreshInterval" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="inactivityTime" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="hourStart" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="hourEnd" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="ackTime" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="organizerMandatory" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="subjectMandatory" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="userCanCancel" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="canShowSubject" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="canShowOrganizer" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="durationStep" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="maxDuration" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="pagesShiftInterval" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="nbRoomsPerPage" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	

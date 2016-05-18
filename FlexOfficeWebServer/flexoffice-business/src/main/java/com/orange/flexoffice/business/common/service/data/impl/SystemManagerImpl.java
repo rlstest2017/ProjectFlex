@@ -9,6 +9,7 @@ import javax.naming.AuthenticationException;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -485,5 +486,19 @@ public class SystemManagerImpl implements SystemManager {
 		}	
 	}
 
-		
+	/**
+	 * Get configuration value from key 
+	 * @param key
+	 * @return ConfigurationDao
+	 */
+	@Transactional(readOnly=true)
+	public	ConfigurationDao getConfigurationValue(String key){
+		try {
+			ConfigurationDao configurationDao = configRepository.findByKey(key);
+			return configurationDao;
+		} catch(EmptyResultDataAccessException e){
+			LOGGER.debug("SystemManager.getConfigurationValue : no configuration value for :" + key);
+			return null;
+		}
+	}
 }

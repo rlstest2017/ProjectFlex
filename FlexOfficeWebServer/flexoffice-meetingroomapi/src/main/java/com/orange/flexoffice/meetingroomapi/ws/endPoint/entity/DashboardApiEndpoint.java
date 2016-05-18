@@ -53,6 +53,8 @@ public interface DashboardApiEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	DashboardOutput updateStatus(@PathParam(DASHBOARD_MAC_ADDRESS_PARAM)String identifier, DashboardInput dashboard);
 
+	// used for tests
+	boolean executeInitTestFile();
 }
 
 

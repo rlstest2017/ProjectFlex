@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.DashboardManager;
 import com.orange.flexoffice.business.common.service.data.MeetingRoomGroupsConfigurationManager;
+import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.dao.common.model.data.DashboardDao;
 import com.orange.flexoffice.meetingroomapi.ws.endPoint.entity.DashboardApiEndpoint;
 import com.orange.flexoffice.meetingroomapi.ws.model.DashboardInput;
@@ -30,6 +31,8 @@ public class DashboardApiEndpointImpl implements DashboardApiEndpoint {
 	private DashboardManager dashboardManager;
 	@Autowired
 	private MeetingRoomGroupsConfigurationManager meetinRoomGroupsConfigurationManager;
+	@Autowired
+	private TestManager testManager;
 
 	@Override
 	public List<String> getConfig(String macAddress) {
@@ -52,6 +55,11 @@ public class DashboardApiEndpointImpl implements DashboardApiEndpoint {
 			LOGGER.debug("Dashboard not existing");
 		}
 		return factory.createDashboardOutput(returnedDashboard).getValue();
+	}
+	
+	@Override
+	public boolean executeInitTestFile() {
+		return testManager.executeInitTestFile();
 	}
 
 }
