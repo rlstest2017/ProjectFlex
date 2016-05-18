@@ -125,6 +125,16 @@ public class MeetingRoomDaoRepository extends DataRepository<MeetingRoomDao> imp
 	}
 	
 	@Override
+	public MeetingRoomDao findByExternalId(String externalId) throws IncorrectResultSizeDataAccessException{
+		SqlParameterSource paramMap = new MapSqlParameterSource("externalId", externalId);
+		return jdbcTemplate.queryForObject(
+				findMeetingRoomsByExternalIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<MeetingRoomDao>(MeetingRoomDao.class)
+			);
+	}
+	
+	@Override
 	public MeetingRoomDao saveMeetingRoom(MeetingRoomDao data) throws DataIntegrityViolationException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		
@@ -157,6 +167,17 @@ public class MeetingRoomDaoRepository extends DataRepository<MeetingRoomDao> imp
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
 		jdbcTemplate.update(updateMeetingRoomStatusQuery, paramBean, keyHolder);
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());	
+		return data;
+	}
+	
+	@Override
+	public MeetingRoomDao updateMeetingRoomData(MeetingRoomDao data) throws DataAccessException{
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateMeetingRoomDataQuery, paramBean, keyHolder);
 		// Retrieves generated id of saved data.
 		Integer id = (Integer)keyHolder.getKeys().get("id");
 		data.setId(id.longValue());	

@@ -285,6 +285,48 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			throw new DataNotExistsException("MeetingRoomManager.updateStatus : Meeting Room to update Status not found");
 		}
 	}
+	
+	@Override
+	public MeetingRoomDao updateData(MeetingRoomDao meetingroomDao) throws DataNotExistsException, RoomAlreadyUsedException {
+		try {
+			MeetingRoomDao foundMeetingRoom = meetingroomRepository.findByExternalId(meetingroomDao.getExternalId());
+			meetingroomDao.setId(foundMeetingRoom.getId());
+
+			LOGGER.debug("Meeting Room id is : " + meetingroomDao.getId());
+			// Use in case of reservation meeting Room in agent/dashboard
+			if  (meetingroomDao.getStatus().equals(E_MeetingRoomStatus.OCCUPIED.toString())) { 
+				LOGGER.info("foundMeetingRoomStatus is " + foundMeetingRoom.getStatus() + " for meeting room#" + foundMeetingRoom.getName());
+				
+				if (!foundMeetingRoom.getStatus().equals(E_MeetingRoomStatus.FREE.toString())) {
+					LOGGER.error("Meeting Room status is not FREE !!!");
+					throw new RoomAlreadyUsedException("MeetingRoomManager.updateStatus : meeting Room is not in FREE status");
+				} else {
+					LOGGER.debug("MeetingRoomStat to create !!!");
+					MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
+					meetingRoomStat.setMeetingRoomId(meetingroomDao.getId().intValue());
+					meetingRoomStat.setMeetingRoomInfo(E_MeetingRoomStatus.OCCUPIED.toString());
+					meetingRoomStatRepository.saveOccupiedMeetingRoomStat(meetingRoomStat);
+					LOGGER.info("meetingRoomStat created for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
+				}
+			} else if (meetingroomDao.getStatus().equals(E_MeetingRoomStatus.FREE.toString())) { 
+				if (foundMeetingRoom.getStatus().equals(E_MeetingRoomStatus.OCCUPIED.toString())) { 
+					LOGGER.debug("MeetingRoomStat to update !!!");
+					MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
+					meetingRoomStat.setMeetingRoomId(meetingroomDao.getId().intValue());
+					meetingRoomStatRepository.updateEndOccupancyDate(meetingRoomStat);
+					LOGGER.info("meetingRoomStat updateEndOccupancyDate for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
+					meetingroomDao.setOrganizerLabel(null);
+				}
+			}
+			// update MeetingRoomDao => status & organizer label & Start & End date
+			
+			return meetingroomRepository.updateMeetingRoomData(meetingroomDao);
+		} catch (RuntimeException e) {
+			LOGGER.debug("MeetingRoomManager.updateStatus : Meeting Room to update Status not found", e);
+			LOGGER.error("MeetingRoomManager.updateStatus : Meeting Room to update Status not found");
+			throw new DataNotExistsException("MeetingRoomManager.updateStatus : Meeting Room to update Status not found");
+		}
+	}
 
 	@Override
 	public void delete(long id) throws DataNotExistsException, IntegrityViolationException {

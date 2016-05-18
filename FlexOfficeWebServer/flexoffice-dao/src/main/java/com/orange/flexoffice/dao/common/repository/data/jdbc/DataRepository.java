@@ -72,6 +72,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String findMeetingRoomsByCityIdQuery;
 	protected final String findMeetingRoomsByBuildingIdQuery;
 	protected final String findMeetingRoomsByBuildingIdAndFloorQuery;
+	protected final String findMeetingRoomsByExternalIdQuery;
 	protected final String findByColumnCountryIdQuery;
 	protected final String findRegionsHaveRoomsByCountryIdQuery;
 	protected final String findCitiesHaveRoomsByRegionIdQuery;
@@ -137,6 +138,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String updateAlertQuery;
 	protected final String updateRoomStatusQuery;
 	protected final String updateMeetingRoomStatusQuery;
+	protected final String updateMeetingRoomDataQuery;
 	protected final String updateSensorQuery;
 	protected final String updateSensorStatusQuery;
 	protected final String updateSensorRoomIdQuery;
@@ -226,6 +228,7 @@ public abstract class DataRepository<T extends Data>
 		findMeetingRoomsByCityIdQuery = String.format(FIND_MEETINGROOMS_BY_CITY_ID_TEMPLATE, getTableName());
 		findMeetingRoomsByBuildingIdQuery = String.format(FIND_MEETINGROOMS_BY_BUILDING_ID_TEMPLATE, getTableName());
 		findMeetingRoomsByBuildingIdAndFloorQuery = String.format(FIND_MEETINGROOMS_BY_BUILDING_ID_AND_FLOOR_TEMPLATE, getTableName());
+		findMeetingRoomsByExternalIdQuery = String.format(FIND_MEETINGROOMS_BY_EXTERNAL_ID_TEMPLATE, getTableName());
 		findByColumnCountryIdQuery = String.format(FIND_BY_COL_COUNTRY_ID_TEMPLATE, getTableName());
 		findRegionsHaveRoomsByCountryIdQuery = String.format(FIND_REGIONS_HAVE_ROOMS_BY_COUNTRY_ID_TEMPLATE, getTableName());
 		findCitiesHaveRoomsByRegionIdQuery = String.format(FIND_CITIES_HAVE_ROOMS_BY_REGION_ID_TEMPLATE, getTableName());
@@ -288,6 +291,7 @@ public abstract class DataRepository<T extends Data>
 		updateAlertQuery = String.format(UPDATE_ALERT_TEMPLATE, getTableName());
 		updateRoomStatusQuery = String.format(UPDATE_ROOM_STATUS_TEMPLATE, getTableName());// set also humidity, temperature & user_id if filled
 		updateMeetingRoomStatusQuery = String.format(UPDATE_MEETINGROOM_STATUS_TEMPLATE, getTableName()); // set also oragnizzerlabel if filled
+		updateMeetingRoomDataQuery = String.format(UPDATE_MEETINGROOM_DATA_TEMPLATE, getTableName());
 		updateSensorQuery = String.format(UPDATE_SENSOR_TEMPLATE, getTableName(), getColumnColName());
 		updateSensorStatusQuery = String.format(UPDATE_SENSOR_STATUS_TEMPLATE, getTableName(), getColumnColName());
 		updateSensorRoomIdQuery = String.format(UPDATE_SENSOR_ROOM_ID_TEMPLATE, getTableName());

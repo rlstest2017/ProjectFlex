@@ -34,11 +34,15 @@ public interface MeetingRoomDaoOperations {
 
 	MeetingRoomDao findByName(String name) throws IncorrectResultSizeDataAccessException;
 	
+	MeetingRoomDao findByExternalId(String externalId) throws IncorrectResultSizeDataAccessException;
+	
 	MeetingRoomDao saveMeetingRoom(MeetingRoomDao data) throws DataIntegrityViolationException;
 	
 	MeetingRoomDao updateMeetingRoom(MeetingRoomDao data) throws DataAccessException; 
 	
 	MeetingRoomDao updateMeetingRoomStatus(MeetingRoomDao data) throws DataAccessException;
+	
+	MeetingRoomDao updateMeetingRoomData(MeetingRoomDao data) throws DataAccessException;
 	
 	Long countMeetingRoomsByType(String type);
 }

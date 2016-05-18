@@ -73,6 +73,14 @@ public interface MeetingRoomManager {
 	 * @return a saved {@link MeetingRoomDao}
 	 */
 	MeetingRoomDao updateStatus(MeetingRoomDao meetingroomDao) throws DataNotExistsException, RoomAlreadyUsedException;
+	
+	/**
+	 * Updates Data {@link MeetingRoomDao}
+	 * method used by meetingroomapi
+	 * @param roomDao the new {@link MeetingRoomDao}
+	 * @return a saved {@link MeetingRoomDao}
+	 */
+	MeetingRoomDao updateData(MeetingRoomDao meetingroomDao) throws DataNotExistsException, RoomAlreadyUsedException;
 
 	/**
 	 * Deletes a meeting room

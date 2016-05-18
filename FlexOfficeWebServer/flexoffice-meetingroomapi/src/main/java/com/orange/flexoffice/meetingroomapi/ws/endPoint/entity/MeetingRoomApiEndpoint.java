@@ -50,14 +50,14 @@ public interface MeetingRoomApiEndpoint {
 	@Path(MEETINGROOM_EXTERNAL_ID_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response updateData(@PathParam(MEETINGROOM_EXTERNAL_ID_PARAM)String identifier, MeetingRoomInput meetingRoom);
+	Response updateData(@PathParam(MEETINGROOM_EXTERNAL_ID_PARAM)String externalId, MeetingRoomInput meetingRoom);
 
 	
 	// used for tests
-	/*boolean executeInitTestFile();
+	boolean executeInitTestFile();
 
 	// used for tests
-	GatewayDto findByMacAddress(String macAddress)  throws DataNotExistsException;
+	/*GatewayDto findByMacAddress(String macAddress)  throws DataNotExistsException;
 
 	// used for tests
 	boolean initTeachinSensorsTable();*/

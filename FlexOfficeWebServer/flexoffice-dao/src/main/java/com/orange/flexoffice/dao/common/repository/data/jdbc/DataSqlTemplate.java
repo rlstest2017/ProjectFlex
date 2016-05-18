@@ -58,6 +58,8 @@ public final class DataSqlTemplate {
 			"select distinct meetingrooms.* From meetingrooms where meetingrooms.building_id=:buildingId order by meetingrooms.name";
 	public static final String FIND_MEETINGROOMS_BY_BUILDING_ID_AND_FLOOR_TEMPLATE = 
 			"select distinct meetingrooms.* From meetingrooms where meetingrooms.building_id=:buildingId and meetingrooms.floor=:floor order by meetingrooms.name";
+	public static final String FIND_MEETINGROOMS_BY_EXTERNAL_ID_TEMPLATE = 
+			"select distinct meetingrooms.* From meetingrooms where meetingrooms.external_id=:externalId";
 	public static final String FIND_REGIONS_HAVE_ROOMS_BY_COUNTRY_ID_TEMPLATE = 
 			"select distinct regions.id, regions.name From rooms, buildings, cities, regions, countries where rooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=regions.id and regions.country_id=countries.id and country_id=:countryId";
 	public static final String FIND_CITIES_HAVE_ROOMS_BY_REGION_ID_TEMPLATE = 
@@ -272,6 +274,8 @@ public final class DataSqlTemplate {
 			"update %s set status=CAST(:status AS roomstatus), temperature=:temperature, humidity=:humidity, last_measure_date=now(), user_id=:userId where id=:id";
 	public static final String UPDATE_MEETINGROOM_STATUS_TEMPLATE =
 			"update %s set status=CAST(:status AS meetingroomstatus), last_measure_date=now(), organizerlabel=:organizerLabel where id=:id";
+	public static final String UPDATE_MEETINGROOM_DATA_TEMPLATE =
+			"update %s set status=CAST(:status AS meetingroomstatus), last_measure_date=now(), organizerlabel=:organizerLabel, start_date=:startDate, end_date=:endDate where id=:id";
 	public static final String UPDATE_ALERT_TEMPLATE =
 			"update %s set name=:name, last_notification=:lastNotification where id=:id";
 	public static final String UPDATE_SENSOR_TEMPLATE =
