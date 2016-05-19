@@ -135,6 +135,16 @@ public class MeetingRoomDaoRepository extends DataRepository<MeetingRoomDao> imp
 	}
 	
 	@Override
+	public List<MeetingRoomDao> findMeetingRoomsInTimeout(String intervalTimeout) throws IncorrectResultSizeDataAccessException{
+		SqlParameterSource paramMap = new MapSqlParameterSource("intervalTimeout", intervalTimeout);
+		return jdbcTemplate.query(
+				findMeetingRoomsInTimeoutQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<MeetingRoomDao>(MeetingRoomDao.class)
+			);
+	}
+	
+	@Override
 	public MeetingRoomDao saveMeetingRoom(MeetingRoomDao data) throws DataIntegrityViolationException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		

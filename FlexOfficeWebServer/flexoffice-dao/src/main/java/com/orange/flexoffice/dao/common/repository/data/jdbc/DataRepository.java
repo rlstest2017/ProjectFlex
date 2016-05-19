@@ -73,6 +73,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String findMeetingRoomsByBuildingIdQuery;
 	protected final String findMeetingRoomsByBuildingIdAndFloorQuery;
 	protected final String findMeetingRoomsByExternalIdQuery;
+	protected final String findMeetingRoomsInTimeoutQuery;
 	protected final String findByColumnCountryIdQuery;
 	protected final String findRegionsHaveRoomsByCountryIdQuery;
 	protected final String findCitiesHaveRoomsByRegionIdQuery;
@@ -229,6 +230,7 @@ public abstract class DataRepository<T extends Data>
 		findMeetingRoomsByBuildingIdQuery = String.format(FIND_MEETINGROOMS_BY_BUILDING_ID_TEMPLATE, getTableName());
 		findMeetingRoomsByBuildingIdAndFloorQuery = String.format(FIND_MEETINGROOMS_BY_BUILDING_ID_AND_FLOOR_TEMPLATE, getTableName());
 		findMeetingRoomsByExternalIdQuery = String.format(FIND_MEETINGROOMS_BY_EXTERNAL_ID_TEMPLATE, getTableName());
+		findMeetingRoomsInTimeoutQuery = String.format(FIND_MEETINGROOMS_IN_TIMEOUT_TEMPLATE, getTableName());
 		findByColumnCountryIdQuery = String.format(FIND_BY_COL_COUNTRY_ID_TEMPLATE, getTableName());
 		findRegionsHaveRoomsByCountryIdQuery = String.format(FIND_REGIONS_HAVE_ROOMS_BY_COUNTRY_ID_TEMPLATE, getTableName());
 		findCitiesHaveRoomsByRegionIdQuery = String.format(FIND_CITIES_HAVE_ROOMS_BY_REGION_ID_TEMPLATE, getTableName());

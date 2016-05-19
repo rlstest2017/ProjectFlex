@@ -1,5 +1,6 @@
 package com.orange.flexoffice.meetingroomapi.ws.endPoint.entity.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.RoomAlreadyUsedException;
-import com.orange.flexoffice.business.common.service.data.DashboardManager;
 import com.orange.flexoffice.business.common.service.data.MeetingRoomManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
@@ -31,8 +31,6 @@ public class MeetingRoomApiEndpointImpl implements MeetingRoomApiEndpoint {
 	private static final Logger LOGGER = Logger.getLogger(MeetingRoomApiEndpointImpl.class);
 	
 	@Autowired
-	private DashboardManager dashboardManager;
-	@Autowired
 	private MeetingRoomManager meetingRoomManager;
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
@@ -41,8 +39,13 @@ public class MeetingRoomApiEndpointImpl implements MeetingRoomApiEndpoint {
 
 	@Override
 	public List<String> getTimeout() {
-		// TODO Auto-generated method stub
-		return null;
+		List<MeetingRoomDao> lstMeetingRooms = meetingRoomManager.getTimeout();
+		List<String> lstReturned = new ArrayList<String>();
+		
+		for(MeetingRoomDao meetingRoomDao :lstMeetingRooms){
+			lstReturned.add(meetingRoomDao.getExternalId());
+		}
+		return lstReturned;
 	}
 
 	@Override

@@ -60,6 +60,8 @@ public final class DataSqlTemplate {
 			"select distinct meetingrooms.* From meetingrooms where meetingrooms.building_id=:buildingId and meetingrooms.floor=:floor order by meetingrooms.name";
 	public static final String FIND_MEETINGROOMS_BY_EXTERNAL_ID_TEMPLATE = 
 			"select distinct meetingrooms.* From meetingrooms where meetingrooms.external_id=:externalId";
+	public static final String FIND_MEETINGROOMS_IN_TIMEOUT_TEMPLATE = 
+			"select distinct meetingrooms.* From meetingrooms where last_measure_date > current_timestamp - cast(:intervalTimeout|| 'MINUTE' as interval)";
 	public static final String FIND_REGIONS_HAVE_ROOMS_BY_COUNTRY_ID_TEMPLATE = 
 			"select distinct regions.id, regions.name From rooms, buildings, cities, regions, countries where rooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=regions.id and regions.country_id=countries.id and country_id=:countryId";
 	public static final String FIND_CITIES_HAVE_ROOMS_BY_REGION_ID_TEMPLATE = 

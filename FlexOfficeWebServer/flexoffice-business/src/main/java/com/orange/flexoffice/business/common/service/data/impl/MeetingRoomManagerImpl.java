@@ -25,14 +25,17 @@ import com.orange.flexoffice.business.common.service.data.MeetingRoomManager;
 import com.orange.flexoffice.business.common.utils.AddressTools;
 import com.orange.flexoffice.business.meetingroom.config.FileManager;
 import com.orange.flexoffice.dao.common.model.data.AgentDao;
+import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomStatDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_MeetingRoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_MeetingRoomType;
 import com.orange.flexoffice.dao.common.model.object.BuildingDto;
 import com.orange.flexoffice.dao.common.model.object.MeetingRoomBuildingInfosDto;
 import com.orange.flexoffice.dao.common.model.object.MeetingRoomDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AgentDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomDailyOccupancyDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomStatDaoRepository;
@@ -65,6 +68,8 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 	private MeetingRoomStatDaoRepository meetingRoomStatRepository;
 	@Autowired
 	private MeetingRoomDailyOccupancyDaoRepository meetingRoomDailyRepository;
+	@Autowired
+	private ConfigurationDaoRepository configurationRepository;
 	@Autowired
 	private BuildingManager buildingManager;
 	@Autowired
@@ -326,6 +331,14 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			LOGGER.error("MeetingRoomManager.updateStatus : Meeting Room to update Status not found");
 			throw new DataNotExistsException("MeetingRoomManager.updateStatus : Meeting Room to update Status not found");
 		}
+	}
+	
+	@Override
+	public List<MeetingRoomDao> getTimeout() {
+		ConfigurationDao intervalTimeout = configurationRepository.findByKey(E_ConfigurationKey.MEETINGROOM_STATUS_TIMEOUT.toString());
+		List<MeetingRoomDao> listMeetingRooms = meetingroomRepository.findMeetingRoomsInTimeout(intervalTimeout.getValue()); 
+		
+		return listMeetingRooms;
 	}
 
 	@Override

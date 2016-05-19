@@ -3,6 +3,7 @@ package com.orange.flexoffice.meetingroomapi.ws.endPoint.entity.impl;
 import static org.junit.Assert.assertEquals;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
@@ -99,5 +100,15 @@ public class MeetingRoomApiEndpointImplTest {
 		assertEquals(true, dataNotExisting);
 	}
 
+	@Test
+	public void TestC_GetTimeout() {
+		
+		// Test
+		List<String> lst = meetingRoomApiEndpoint.getTimeout();
+		
+		
+		// Assert
+		assertEquals(1, lst.size());
+	}
 	
 }

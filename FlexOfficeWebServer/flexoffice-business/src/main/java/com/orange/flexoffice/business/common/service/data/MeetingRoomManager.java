@@ -81,6 +81,13 @@ public interface MeetingRoomManager {
 	 * @return a saved {@link MeetingRoomDao}
 	 */
 	MeetingRoomDao updateData(MeetingRoomDao meetingroomDao) throws DataNotExistsException, RoomAlreadyUsedException;
+	
+	/**
+	 * Get list of meetinr rooms in timeout
+	 * method used by meetingroomapi
+	 * @return a list of {@link MeetingRoomDao}
+	 */
+	List<MeetingRoomDao> getTimeout();
 
 	/**
 	 * Deletes a meeting room

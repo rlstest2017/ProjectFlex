@@ -27,7 +27,6 @@ import com.orange.flexoffice.adminui.ws.model.MeetingRoom;
 import com.orange.flexoffice.adminui.ws.model.MeetingRoomInput;
 import com.orange.flexoffice.adminui.ws.model.MeetingRoomSummary;
 import com.orange.flexoffice.adminui.ws.task.AdminUiTasks;
-import com.orange.flexoffice.adminui.ws.utils.InitOfflineGatewaysAlerts;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 
@@ -51,8 +50,6 @@ public class MeetingRoomEndpointImplTest {
 
 	private static AdminUiTasks adminUiTasks;
 	
-	private static InitOfflineGatewaysAlerts initOfflineGatewaysAlerts;
-
 	@Context
 	private UriInfo uriInfo;
 
@@ -65,7 +62,6 @@ public class MeetingRoomEndpointImplTest {
 		meetingroomEndpoint = (MeetingRoomEndpointImpl)context.getBean("meetingroomEndpoint");
 		agentEndpoint = (AgentEndpointImpl)context.getBean("agentEndpoint");
 		adminUiTasks = (AdminUiTasks)context.getBean("adminUiTasks");
-		initOfflineGatewaysAlerts = (InitOfflineGatewaysAlerts)context.getBean("initOfflineGatewaysAlerts");
 	}
 
 
