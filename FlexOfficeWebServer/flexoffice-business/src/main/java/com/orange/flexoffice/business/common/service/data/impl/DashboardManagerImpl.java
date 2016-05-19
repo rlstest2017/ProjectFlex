@@ -17,6 +17,7 @@ import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.DashboardDao;
 import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_CommandModel;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_DashboardStatus;
 import com.orange.flexoffice.dao.common.model.object.DashboardDto;
@@ -52,38 +53,7 @@ public class DashboardManagerImpl implements DashboardManager {
 		return dashboardRepository.findAllDashboards();
 	}
 
-	/*@Override
-	@Transactional(readOnly=true)
-	public MeetingRoomDto findAgentMeetingRoom(String agentMacAddress) {
-		
-		List<RoomDto> roomDtoList = new ArrayList<RoomDto>();
-		
-		GatewayDao gateway = agentRepository.findByMacAddress(agentMacAddress);
-		
-		List<RoomDao> roomsDao = roomRepository.findByGatewayId(gateway.getId());
-		
-		LOGGER.info("There is: " + roomsDao.size() + " rooms for gateway (macAddress) :" + agentMacAddress );
-		
-		for (RoomDao roomDao : roomsDao) {
-			RoomDto roomDto = new RoomDto();
-			roomDto.setId(roomDao.getId());
-			roomDto.setName(roomDao.getName());
-			roomDto.setOccupancyTimeOut(getOccupancyTimeOut());
-			List<SensorDao> sonsensDao = getSensors(roomDao.getId());
-			
-			LOGGER.info("There is: " + sonsensDao.size() + " sensors for room :" + roomDao.getColumnId());
-			
-			if ((sonsensDao != null)&&(!sonsensDao.isEmpty())) {
-				roomDto.setSensors(sonsensDao);					
-			}
-			
-			roomDtoList.add(roomDto);
-		}
-		
-		return roomDtoList;
-	}*/
-	
-	
+
 	@Override
 	@Transactional(readOnly=true)
 	public DashboardDto find(long dashboardId)  throws DataNotExistsException {
@@ -201,9 +171,13 @@ public class DashboardManagerImpl implements DashboardManager {
 	@Override
 	public DashboardDao updateStatus(DashboardDao dashboardDao) throws DataNotExistsException {
 		try {	
-			DashboardDao agent = dashboardRepository.findByMacAddress(dashboardDao.getMacAddress());
-			dashboardDao.setId(agent.getId());
-			dashboardDao.setCommand(agent.getCommand());
+			DashboardDao dashboard = dashboardRepository.findByMacAddress(dashboardDao.getMacAddress());
+			dashboardDao.setId(dashboard.getId());
+			if(dashboard.getCommand() == null){
+				dashboardDao.setCommand(E_CommandModel.NONE.toString());
+			} else {
+				dashboardDao.setCommand(dashboard.getCommand());
+			}
 			
 			// update DashboardDao
 			return dashboardRepository.updateDashboardStatus(dashboardDao);
@@ -244,24 +218,6 @@ public class DashboardManagerImpl implements DashboardManager {
 		}
 	}
 	
-	/*@Override
-	public void updateOFFLINEGatewaysAlerts() {
-		LOGGER.debug("Begin GatewayManager.updateOFFLINEGatewaysAlerts method.");
-		List<GatewayDao> gateways = agentRepository.findAllGateways();
-		for (GatewayDao gateway : gateways) {
-			if ( E_GatewayStatus.OFFLINE.toString().equals(gateway.getStatus()) ||
-					E_GatewayStatus.ERROR_FIFO_FILE.toString().equals(gateway.getStatus()) ||
-							(E_GatewayStatus.ERROR_NO_USB_DEVICE.toString().equals(gateway.getStatus())))  {
-				
-				// update Gateway Alert
-				Long gatewayId =gateway.getId();
-				alertManager.updateGatewayAlert(gatewayId, gateway.getStatus());
-				LOGGER.debug("alertManager.updateGatewayAlert is process for gateway :" + gatewayId);
-			}
-		}
-		LOGGER.debug("End GatewayManager.updateOFFLINEGatewaysAlerts method.");
-	}*/
-	
 
 	/**
 	 * getOccupancyTimeOut
@@ -275,170 +231,6 @@ public class DashboardManagerImpl implements DashboardManager {
 		return Long.valueOf(occupancyTimeOutValueValue);
 	}
 	
-	/**
-	 * processCommand
-	 * @param gatewayStatus
-	 */
-	/*@Transactional
-	private GatewayCommand processCommand(String gatewayStatus, Long gatewayId, String commandGateway) {
-		
-		LOGGER.debug( "Begin call processCommand method for GatewayEndpoint at: " + new Date() );
-		
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug( "Call processCommand(String gatewayStatus, Long gatewayId, String commandGateway) method of GatewayEndpoint, with parameters :");
-			final StringBuilder message = new StringBuilder( 1000 );
-			message.append( "\n" );
-			message.append( "gatewayStatus :" );
-			message.append( gatewayStatus );
-			message.append( "\n" );
-			message.append( "gatewayId :" );
-			message.append( gatewayId );
-			message.append( "\n" );
-			message.append( "commandGateway :" );
-			message.append( commandGateway );
-			message.append( "\n" );
-			LOGGER.debug( message.toString() );
-		}
-
-		
-		GatewayCommand commandToSendToGateway = new GatewayCommand();
-		try {
-			TeachinSensorDao teachin = teachinRepository.findByTeachinStatus();
-			
-			if (teachin.getGatewayId().intValue() == gatewayId) {
-				LOGGER.info( "teachin.getGatewayId() is the same as gatewayId" );
-				if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
-					// the teachin is founded (teachin_status not null)
-					if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()))  {
-						// update status to running
-						teachin.setTeachinStatus(E_TeachinStatus.RUNNING.toString());
-						teachinRepository.updateTeachinStatus(teachin);
-						teachinRepository.updateTeachinDate(teachin);
-						commandToSendToGateway.setRoomId(teachin.getRoomId());
-						commandToSendToGateway.setCommand(EnumCommandModel.TEACHIN);
-						LOGGER.info( "setted command in ONTEACHIN => INITIALIZING case, is :" + commandToSendToGateway.getCommand().toString() );
-					} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString())) { // status RUNNING
-						commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
-						LOGGER.info( "setted command in ONTEACHIN => RUNNING case, is :" + commandToSendToGateway.getCommand().toString() );
-					} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
-						commandToSendToGateway.setCommand(EnumCommandModel.STOPTEACHIN);
-						LOGGER.info( "setted command in ONTEACHIN => ENDED case, is :" + commandToSendToGateway.getCommand().toString() );
-					}
-				} else {
-					if (gatewayStatus.equals(E_GatewayStatus.ONLINE.toString())) {
-						// the teachin is founded (teachin_status not null)
-						if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()))  {
-							if (commandGateway != null && commandGateway.equals(E_CommandModel.RESET.toString())) {
-								LOGGER.info( "In ONLINE => INITIALIZING + RESET Command None" );
-								commandToSendToGateway.setCommand(EnumCommandModel.NONE);
-							} else {
-								LOGGER.info( "In ONLINE => INITIALIZING state teachin will be send TEACHIN Command " );
-								commandToSendToGateway.setRoomId(teachin.getRoomId());
-								commandToSendToGateway.setCommand(EnumCommandModel.TEACHIN);
-							}
-							LOGGER.info( "setted command in ONLINE => INITIALIZING case, is :" + commandToSendToGateway.getCommand().toString() );
-						} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()))  {
-							// update status to ended
-							teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
-							teachinRepository.updateTeachinStatus(teachin);
-							commandToSendToGateway.setCommand(EnumCommandModel.NONE);
-							LOGGER.info( "setted command in ONLINE => RUNNING case, is :" + commandToSendToGateway.getCommand().toString() );
-						} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString()))  {
-							commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
-							LOGGER.info( "setted command in ONLINE => ENDED case, is :" + commandToSendToGateway.getCommand().toString() );
-						} 		
-					} else { // OFFLINE or ERRORs
-						// the teachin is founded (teachin_status not null)
-						if (teachin.getTeachinStatus().equals(E_TeachinStatus.INITIALIZING.toString()) || teachin.getTeachinStatus().equals(E_TeachinStatus.RUNNING.toString()))  {
-							// update status to running
-							teachin.setTeachinStatus(E_TeachinStatus.ENDED.toString());
-							teachinRepository.updateTeachinStatus(teachin);
-							// -----------------------------------------------------------------------------------------
-							commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
-							LOGGER.info( "setted command in OFFLINE or ERRORs => INITIALIZING or RUNNING case, is :" + commandToSendToGateway.getCommand().toString() );
-							// -----------------------------------------------------------------------------------------
-						} else if (teachin.getTeachinStatus().equals(E_TeachinStatus.ENDED.toString())) { // status ENDED
-							// -----------------------------------------------------------------------------------------
-							commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);	
-							// -----------------------------------------------------------------------------------------
-							LOGGER.info( "setted command in OFFLINE or ERRORs => ENDED case, is :" + commandToSendToGateway.getCommand().toString() );
-						}
-					}
-				}
-			} else {
-				LOGGER.debug( "teachin.getGatewayId() is not same as gatewayId" );
-				if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
-					commandToSendToGateway.setCommand(EnumCommandModel.STOPTEACHIN);
-					LOGGER.info( "setted command in ONTEACHIN => teachin founded but not same gateway case, is :" + commandToSendToGateway.getCommand().toString() );
-				} else {
-					// -----------------------------------------------------------------------------------------
-					commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
-					// -----------------------------------------------------------------------------------------
-					LOGGER.info( "setted command in other then ONTEACHIN => teachin founded but not same gateway case, is :" + commandToSendToGateway.getCommand().toString() );
-				}	
-			}
-			
-		} catch(IncorrectResultSizeDataAccessException e ) {
-			// Table teachin_sensors is empty
-			if (gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
-				commandToSendToGateway.setCommand(EnumCommandModel.STOPTEACHIN);
-				LOGGER.info( "setted command in ONTEACHIN => no teachin founded case, is :" + commandToSendToGateway.getCommand().toString() );
-			} else {
-				// -----------------------------------------------------------------------------------------
-				commandToSendToGateway = setCommandToSend(gatewayStatus, gatewayId, commandGateway);
-				// -----------------------------------------------------------------------------------------
-				LOGGER.debug( "setted command in other then ONTEACHIN => no teachin founded case, is :" + commandToSendToGateway.getCommand().toString() );
-			}
-
-	    }
-		
-		LOGGER.debug( "End call processCommand method for GatewayEndpoint at: " + new Date() );
-		
-		return commandToSendToGateway;
-	}*/
-	
-	/**
-	 * setCommand
-	 * @param gatewayStatus
-	 * @param commandGateway
-	 * @return
-	 */
-	/*@Transactional
-	private GatewayCommand setCommandToSend(String gatewayStatus, Long gatewayId, String commandGateway) {
-		GatewayCommand commandStateProcess = new GatewayCommand();
-		
-		if (gatewayStatus.equals(E_GatewayStatus.ONLINE.toString()) || gatewayStatus.equals(E_GatewayStatus.ONTEACHIN.toString())) {
-			if (commandGateway != null && commandGateway.equals(E_CommandModel.RESET.toString())) {
-				commandStateProcess.setCommand(EnumCommandModel.RESET);
-				LOGGER.debug("RESET command has sent to gateway id #: " + gatewayId);
-				// update Command colon for this Gateway "Delete REST state"
-				GatewayDao gateway = new GatewayDao();
-				gateway.setId(gatewayId);
-				agentRepository.updateGatewayCommand(gateway);
-				LOGGER.debug("The RESET state has deleted from gateway id #: " + gatewayId);
-			} else {
-				commandStateProcess.setCommand(EnumCommandModel.NONE);
-			}
-		} else {
-			commandStateProcess.setCommand(EnumCommandModel.NONE);
-
-			// Set status associated Rooms to UNKNOWN
-			List<RoomDao> rooms = meetingroomRepository.findByGatewayId(gatewayId);
-			for (RoomDao room : rooms) {
-				room.setStatus(E_RoomStatus.UNKNOWN.toString());
-				room.setUserId(null);
-				meetingroomRepository.updateRoomStatus(room);
-				// Set status associated Sensors to OFFLINE
-				List<SensorDao> sensors = sensorRepository.findByRoomId(room.getId());
-				for (SensorDao sensor : sensors) {
-					sensor.setStatus(E_SensorStatus.OFFLINE.toString());
-					sensorRepository.updateSensorStatus(sensor);
-				}
-			}
-		}
-		
-		return commandStateProcess;
-	}*/
 	
 	/**
 	 * findByRoomId synchronized method

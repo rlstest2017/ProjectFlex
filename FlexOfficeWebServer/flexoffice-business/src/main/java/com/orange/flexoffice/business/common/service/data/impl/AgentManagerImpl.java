@@ -20,6 +20,7 @@ import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_AgentStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_CommandModel;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.object.AgentDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AgentDaoRepository;
@@ -216,7 +217,11 @@ public class AgentManagerImpl implements AgentManager {
 			AgentDao agent = agentRepository.findByMacAddress(agentDao.getMacAddress());
 			agentDao.setId(agent.getId());
 			agentDao.setMeetingroomId(agent.getMeetingroomId());
-			agentDao.setCommand(agent.getCommand());
+			if(agent.getCommand() == null){
+				agentDao.setCommand(E_CommandModel.NONE.toString());
+			} else {
+				agentDao.setCommand(agent.getCommand());
+			}
 			
 			// update AgentDao
 			return agentRepository.updateAgentStatus(agentDao);
