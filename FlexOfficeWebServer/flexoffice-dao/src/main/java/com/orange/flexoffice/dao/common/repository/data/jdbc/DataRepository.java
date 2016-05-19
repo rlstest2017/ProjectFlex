@@ -122,8 +122,10 @@ public abstract class DataRepository<T extends Data>
 	protected final String updateUserByMailQuery;
 	protected final String updateGatewayStatusQuery;
 	protected final String updateAgentStatusQuery;
+	protected final String updateAgentStatusForTimeoutQuery;
 	protected final String updateAgentMeetingRoomIdQuery;
 	protected final String updateDashboardStatusQuery;
+	protected final String updateDashboardStatusForTimeoutQuery;
 	protected final String updateGatewayCommandQuery;
 	protected final String updateGatewayQuery;
 	protected final String updateMeetingRoomGroupsConfigurationQuery;
@@ -282,8 +284,10 @@ public abstract class DataRepository<T extends Data>
 		updateUserByMailQuery = String.format(UPDATE_USER_BY_MAIL_TEMPLATE, getTableName());
 		updateGatewayStatusQuery = String.format(UPDATE_GATEWAY_STATUS_TEMPLATE, getTableName());
 		updateAgentStatusQuery = String.format(UPDATE_AGENT_STATUS_TEMPLATE, getTableName());
+		updateAgentStatusForTimeoutQuery = String.format(UPDATE_AGENT_STATUS_FOR_TIMEOUT_TEMPLATE, getTableName());
 		updateAgentMeetingRoomIdQuery = String.format(UPDATE_AGENT_MEETINGROOM_ID_TEMPLATE, getTableName());
 		updateDashboardStatusQuery = String.format(UPDATE_DASHBOARD_STATUS_TEMPLATE, getTableName());
+		updateDashboardStatusForTimeoutQuery = String.format(UPDATE_DASHBOARD_STATUS_FOR_TIMEOUT_TEMPLATE, getTableName());
 		updateGatewayCommandQuery = String.format(UPDATE_GATEWAY_COMMAND_TEMPLATE, getTableName());
 		updateRoomQuery = String.format(UPDATE_ROOM_TEMPLATE, getTableName(), getColumnColName());
 		updateMeetingRoomQuery = String.format(UPDATE_MEETINGROOM_TEMPLATE, getTableName(), getColumnColName());

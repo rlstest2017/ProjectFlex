@@ -310,7 +310,7 @@ public class TaskManagerImpl implements TaskManager {
 		for(AgentDao agent : listAgents){
 			if(E_AgentStatus.ONLINE.toString().equals(agent.getStatus())){
 				agent.setStatus(E_AgentStatus.OFFLINE.toString());
-				agentRepository.updateAgentStatus(agent);
+				agentRepository.updateAgentStatusForTimeout(agent);
 			}
 		}
 		
@@ -320,7 +320,7 @@ public class TaskManagerImpl implements TaskManager {
 		for(DashboardDao dashboard : listDashboards){
 			if(E_DashboardStatus.ONLINE.toString().equals(dashboard.getStatus())){
 				dashboard.setStatus(E_DashboardStatus.OFFLINE.toString());
-				dashboardRepository.updateDashboardStatus(dashboard);
+				dashboardRepository.updateDashboardStatusForTimeout(dashboard);
 			}
 		}
 	}	

@@ -252,10 +252,14 @@ public final class DataSqlTemplate {
 			"update %s set status=CAST(:status AS gatewayStatus), last_polling_date=now() where id=:id";
 	public static final String UPDATE_AGENT_STATUS_TEMPLATE =
 			"update %s set status=CAST(:status AS agentStatus), last_measure_date=now() where id=:id";
+	public static final String UPDATE_AGENT_STATUS_FOR_TIMEOUT_TEMPLATE =
+			"update %s set status=CAST(:status AS agentStatus) where id=:id";
 	public static final String UPDATE_AGENT_MEETINGROOM_ID_TEMPLATE =
 			"update %s set meetingroom_id=:meetingroomId where id=:id";
 	public static final String UPDATE_DASHBOARD_STATUS_TEMPLATE =
 			"update %s set status=CAST(:status AS dashboardStatus), last_measure_date=now() where id=:id";
+	public static final String UPDATE_DASHBOARD_STATUS_FOR_TIMEOUT_TEMPLATE =
+			"update %s set status=CAST(:status AS dashboardStatus) where id=:id";
 	public static final String UPDATE_GATEWAY_COMMAND_TEMPLATE =
 			"update %s set command=CAST(:command AS commandModel) where id=:id";
 	public static final String UPDATE_ROOM_TEMPLATE =

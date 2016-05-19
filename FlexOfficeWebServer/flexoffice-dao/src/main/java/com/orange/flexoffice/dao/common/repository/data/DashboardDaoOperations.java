@@ -24,7 +24,7 @@ public interface DashboardDaoOperations {
 	
 	DashboardDao updateDashboardStatus(DashboardDao data);
 	
-	//AgentDao updateGatewayCommand(AgentDao data);
+	DashboardDao updateDashboardStatusForTimeout(DashboardDao data);
 	
 	DashboardDao saveDashboard(DashboardDao data) throws DataIntegrityViolationException;
 	

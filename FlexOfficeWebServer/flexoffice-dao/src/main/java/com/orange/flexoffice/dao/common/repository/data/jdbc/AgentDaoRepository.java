@@ -134,6 +134,24 @@ public class AgentDaoRepository extends DataRepository<AgentDao> implements Agen
 	}
 	
 	@Override
+	public AgentDao updateAgentStatusForTimeout(AgentDao data) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		LOGGER.debug("Before execute jdbcTemplate update() method");
+		
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		jdbcTemplate.update(updateAgentStatusForTimeoutQuery, paramBean, keyHolder);
+		
+		LOGGER.debug("After execute jdbcTemplate update() method");
+		
+		// Retrieves generated id of saved data.
+		Integer id = (Integer)keyHolder.getKeys().get("id");
+		data.setId(id.longValue());
+		
+		return data;
+	}
+	
+	@Override
 	public AgentDao updateAgentMeetingRoomId(AgentDao data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		

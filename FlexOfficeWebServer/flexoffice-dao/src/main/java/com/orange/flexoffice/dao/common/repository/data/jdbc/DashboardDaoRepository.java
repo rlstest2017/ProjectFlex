@@ -121,14 +121,14 @@ public class DashboardDaoRepository extends DataRepository<DashboardDao> impleme
 		return data;
 	}
 	
-	/*@Override
-	public AgentDao updateAgentCommand(AgentDao data) {
+	@Override
+	public DashboardDao updateDashboardStatusForTimeout(DashboardDao data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		
 		LOGGER.debug("Before execute jdbcTemplate update() method");
 		
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
-		jdbcTemplate.update(updateGatewayCommandQuery, paramBean, keyHolder);
+		jdbcTemplate.update(updateDashboardStatusForTimeoutQuery, paramBean, keyHolder);
 		
 		LOGGER.debug("After execute jdbcTemplate update() method");
 		
@@ -137,7 +137,7 @@ public class DashboardDaoRepository extends DataRepository<DashboardDao> impleme
 		data.setId(id.longValue());
 		
 		return data;
-	}*/
+	}
 	
 	@Override
 	public void deleteByMacAddress(String macAddress) {
