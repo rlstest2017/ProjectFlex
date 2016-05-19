@@ -64,6 +64,8 @@ public class SystemEndpointImpl implements SystemEndpoint {
 				system.setSubjectMandatory(data.getSubjectMandatory());
 				system.setUserCanCancel(data.getUserCanCancel());
 				system.setWsRefreshInterval(BigInteger.valueOf(data.getWsRefreshInterval()));
+				system.setVirtualKeyboard(data.getVirtualKeyboard());
+				system.setKeyboardLang(data.getKeyboardLang());
 			}
 					
 			LOGGER.debug( "End call getSystem() method for SystemEndpoint at: " + new Date() );

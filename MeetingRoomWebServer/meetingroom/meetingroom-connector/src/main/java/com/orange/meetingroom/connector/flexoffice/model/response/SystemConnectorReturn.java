@@ -24,6 +24,8 @@ public class SystemConnectorReturn {
 	Integer maxDuration;
 	Integer pagesShiftInterval;
 	Integer nbRoomsPerPage;
+	Boolean virtualKeyboard;
+	String  keyboardLang;
 	
 	/**
 	 * @return the agentTimeout
@@ -228,6 +230,30 @@ public class SystemConnectorReturn {
 	 */
 	public void setNbRoomsPerPage(Integer nbRoomsPerPage) {
 		this.nbRoomsPerPage = nbRoomsPerPage;
+	}
+	/**
+	 * @return the virtualKeyboard
+	 */
+	public Boolean getVirtualKeyboard() {
+		return virtualKeyboard;
+	}
+	/**
+	 * @param virtualKeyboard the virtualKeyboard to set
+	 */
+	public void setVirtualKeyboard(Boolean virtualKeyboard) {
+		this.virtualKeyboard = virtualKeyboard;
+	}
+	/**
+	 * @return the keyboardLang
+	 */
+	public String getKeyboardLang() {
+		return keyboardLang;
+	}
+	/**
+	 * @param keyboardLang the keyboardLang to set
+	 */
+	public void setKeyboardLang(String keyboardLang) {
+		this.keyboardLang = keyboardLang;
 	}
 	
 	

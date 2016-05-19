@@ -51,7 +51,7 @@ public class FlexofficeConnectorImplTest {
 	}
 
 
-	@Test
+	//@Test
 	public void TestA_flexofficeGetSystem() {
 		// SetUp
 		boolean expectedResult = false;
@@ -70,7 +70,7 @@ public class FlexofficeConnectorImplTest {
 		assertEquals(false, expectedResult);
 	}
 
-	@Test
+	//@Test
 	public void TestB_flexofficeGetMeetingRoomsTimeout() {
 		// SetUp
 		boolean expectedResult = false;
@@ -89,7 +89,7 @@ public class FlexofficeConnectorImplTest {
 		assertEquals(false, expectedResult);
 	}
 
-	@Test
+	//@Test
 	public void TestC_flexofficeGetXmlFilesNameConfig() {
 		// SetUp
 		boolean expectedResult = false;
@@ -111,7 +111,7 @@ public class FlexofficeConnectorImplTest {
 		assertEquals(false, expectedResult);
 	}
 	
-	@Test
+	//@Test
 	public void TestD_flexofficePutDashboardStatus() {
 		// SetUp
 		boolean expectedResult = false;
@@ -134,7 +134,7 @@ public class FlexofficeConnectorImplTest {
 		assertEquals(false, expectedResult);
 	}
 	
-	@Test
+	//@Test
 	public void TestE_flexofficePutAgentStatus() {
 		// SetUp
 		boolean expectedResult = false;
@@ -158,7 +158,7 @@ public class FlexofficeConnectorImplTest {
 		assertEquals(false, expectedResult);
 	}
 	
-	@Test
+	//@Test
 	public void TestF_flexofficePutMeetingRoomData() {
 		// SetUp
 		boolean expectedResult = false;
