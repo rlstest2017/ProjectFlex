@@ -55,13 +55,6 @@ public interface MeetingRoomApiEndpoint {
 	
 	// used for tests
 	boolean executeInitTestFile();
-
-	// used for tests
-	/*GatewayDto findByMacAddress(String macAddress)  throws DataNotExistsException;
-
-	// used for tests
-	boolean initTeachinSensorsTable();*/
-
 }
 
 

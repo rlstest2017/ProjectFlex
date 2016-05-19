@@ -14,6 +14,7 @@ import org.junit.runners.MethodSorters;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Log4jConfigurer;
 
+import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.meetingroomapi.ws.endPoint.entity.AgentApiEndpoint;
 import com.orange.flexoffice.meetingroomapi.ws.model.AgentInput;
 import com.orange.flexoffice.meetingroomapi.ws.model.AgentOutput;
@@ -60,7 +61,7 @@ public class AgentApiEndpointImplTest {
 
 	
 	@Test
-	public void TestB_UpdateStatus() {
+	public void TestB_UpdateStatus() throws DataNotExistsException {
 		String macAddress = "FF:TS:ZZ:AA:GG:PP";
 		AgentInput agent = new AgentInput();
 		agent.setAgentStatus(EAgentStatus.ECONOMIC);
@@ -74,7 +75,7 @@ public class AgentApiEndpointImplTest {
 	}
 
 	@Test
-	public void TestC_UpdateStatusWithAgentNotAssociatedToMeetingRoom() {
+	public void TestC_UpdateStatusWithAgentNotAssociatedToMeetingRoom() throws DataNotExistsException {
 		String macAddress = "AA:BS:CC:AA:GG:PP";
 		AgentInput agent = new AgentInput();
 		agent.setAgentStatus(EAgentStatus.ECONOMIC);

@@ -29,11 +29,6 @@ public interface SystemApiEndpoint {
 	
 	// used for tests
 	boolean executeInitTestFile();
-
-	/*// used for tests
-	GatewayDto findByMacAddress(String macAddress)  throws DataNotExistsException;
-*/
-
 }
 
 

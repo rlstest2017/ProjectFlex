@@ -292,7 +292,7 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 	}
 	
 	@Override
-	public MeetingRoomDao updateData(MeetingRoomDao meetingroomDao) throws DataNotExistsException, RoomAlreadyUsedException {
+	public MeetingRoomDao updateData(MeetingRoomDao meetingroomDao) throws DataNotExistsException {
 		try {
 			MeetingRoomDao foundMeetingRoom = meetingroomRepository.findByExternalId(meetingroomDao.getExternalId());
 			meetingroomDao.setId(foundMeetingRoom.getId());
@@ -302,17 +302,13 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			if  (meetingroomDao.getStatus().equals(E_MeetingRoomStatus.OCCUPIED.toString())) { 
 				LOGGER.info("foundMeetingRoomStatus is " + foundMeetingRoom.getStatus() + " for meeting room#" + foundMeetingRoom.getName());
 				
-				if (!foundMeetingRoom.getStatus().equals(E_MeetingRoomStatus.FREE.toString())) {
-					LOGGER.error("Meeting Room status is not FREE !!!");
-					throw new RoomAlreadyUsedException("MeetingRoomManager.updateStatus : meeting Room is not in FREE status");
-				} else {
-					LOGGER.debug("MeetingRoomStat to create !!!");
-					MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
-					meetingRoomStat.setMeetingRoomId(meetingroomDao.getId().intValue());
-					meetingRoomStat.setMeetingRoomInfo(E_MeetingRoomStatus.OCCUPIED.toString());
-					meetingRoomStatRepository.saveOccupiedMeetingRoomStat(meetingRoomStat);
-					LOGGER.info("meetingRoomStat created for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
-				}
+				LOGGER.debug("MeetingRoomStat to create !!!");
+				MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
+				meetingRoomStat.setMeetingRoomId(meetingroomDao.getId().intValue());
+				meetingRoomStat.setMeetingRoomInfo(E_MeetingRoomStatus.OCCUPIED.toString());
+				meetingRoomStatRepository.saveOccupiedMeetingRoomStat(meetingRoomStat);
+				LOGGER.info("meetingRoomStat created for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
+				
 			} else if (meetingroomDao.getStatus().equals(E_MeetingRoomStatus.FREE.toString())) { 
 				if (foundMeetingRoom.getStatus().equals(E_MeetingRoomStatus.OCCUPIED.toString())) { 
 					LOGGER.debug("MeetingRoomStat to update !!!");

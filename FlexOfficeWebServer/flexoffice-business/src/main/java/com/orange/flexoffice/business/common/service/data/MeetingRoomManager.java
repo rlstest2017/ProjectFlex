@@ -80,7 +80,7 @@ public interface MeetingRoomManager {
 	 * @param roomDao the new {@link MeetingRoomDao}
 	 * @return a saved {@link MeetingRoomDao}
 	 */
-	MeetingRoomDao updateData(MeetingRoomDao meetingroomDao) throws DataNotExistsException, RoomAlreadyUsedException;
+	MeetingRoomDao updateData(MeetingRoomDao meetingroomDao) throws DataNotExistsException;
 	
 	/**
 	 * Get list of meetinr rooms in timeout

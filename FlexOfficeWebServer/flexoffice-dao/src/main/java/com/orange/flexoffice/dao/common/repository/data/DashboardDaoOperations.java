@@ -3,7 +3,7 @@ package com.orange.flexoffice.dao.common.repository.data;
 import java.util.List;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import com.orange.flexoffice.dao.common.model.data.DashboardDao;
 
@@ -18,7 +18,7 @@ public interface DashboardDaoOperations {
 	
 	DashboardDao findByDashboardId(Long dashboardId);
 	
-	DashboardDao findByMacAddress(String macAddress) throws IncorrectResultSizeDataAccessException;
+	DashboardDao findByMacAddress(String macAddress) throws EmptyResultDataAccessException;
 	
 	List<DashboardDao> findDashboardsInTimeout(String intervalTimeout);
 	

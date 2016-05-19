@@ -2,9 +2,13 @@ package com.orange.flexoffice.meetingroomapi.ws.endPoint.entity.impl;
 
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.DashboardManager;
 import com.orange.flexoffice.business.common.service.data.MeetingRoomGroupsConfigurationManager;
@@ -15,6 +19,7 @@ import com.orange.flexoffice.meetingroomapi.ws.model.DashboardInput;
 import com.orange.flexoffice.meetingroomapi.ws.model.DashboardOutput;
 import com.orange.flexoffice.meetingroomapi.ws.model.ECommandModel;
 import com.orange.flexoffice.meetingroomapi.ws.model.ObjectFactory;
+import com.orange.flexoffice.meetingroomapi.ws.utils.ErrorMessageHandler;
 
 /**
  * DashboardApiEndpointImpl
@@ -32,11 +37,23 @@ public class DashboardApiEndpointImpl implements DashboardApiEndpoint {
 	@Autowired
 	private MeetingRoomGroupsConfigurationManager meetinRoomGroupsConfigurationManager;
 	@Autowired
+	private ErrorMessageHandler errorMessageHandler;
+	@Autowired
 	private TestManager testManager;
 
 	@Override
 	public List<String> getConfig(String macAddress) {
-		return meetinRoomGroupsConfigurationManager.getConfigurationFiles(macAddress);
+		try {
+			
+			return meetinRoomGroupsConfigurationManager.getConfigurationFiles(macAddress);
+		
+		} catch (DataNotExistsException e) {
+			LOGGER.debug("DataNotExistsException in getConfig() DashboardApiEndpointImpl with message :" + e.getMessage(), e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_66, Response.Status.NOT_FOUND));
+		} catch (RuntimeException ex) {
+			LOGGER.debug("RuntimeException in getConfig() DashboardApiEndpointImpl with message :" + ex.getMessage(), ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		}
 	}
 
 	@Override
@@ -51,10 +68,15 @@ public class DashboardApiEndpointImpl implements DashboardApiEndpoint {
 			ECommandModel command = ECommandModel.valueOf(dashboardUpdated.getCommand());
 			returnedDashboard.setCommand(command);
 			
+			return factory.createDashboardOutput(returnedDashboard).getValue();
 		} catch (DataNotExistsException e) {
-			LOGGER.debug("Dashboard not existing");
+			LOGGER.debug("DataNotExistsException in updateStatus() DashboardApiEndpointImpl with message :" + e.getMessage(), e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_66, Response.Status.NOT_FOUND));
+		} catch (RuntimeException ex) {
+			LOGGER.debug("RuntimeException in updateStatus() DashboardApiEndpointImpl with message :" + ex.getMessage(), ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
-		return factory.createDashboardOutput(returnedDashboard).getValue();
+		
 	}
 	
 	@Override

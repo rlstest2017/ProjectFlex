@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
-import com.orange.flexoffice.business.common.exception.RoomAlreadyUsedException;
 import com.orange.flexoffice.business.common.service.data.MeetingRoomManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
@@ -39,13 +38,18 @@ public class MeetingRoomApiEndpointImpl implements MeetingRoomApiEndpoint {
 
 	@Override
 	public List<String> getTimeout() {
-		List<MeetingRoomDao> lstMeetingRooms = meetingRoomManager.getTimeout();
-		List<String> lstReturned = new ArrayList<String>();
-		
-		for(MeetingRoomDao meetingRoomDao :lstMeetingRooms){
-			lstReturned.add(meetingRoomDao.getExternalId());
+		try{
+			List<MeetingRoomDao> lstMeetingRooms = meetingRoomManager.getTimeout();
+			List<String> lstReturned = new ArrayList<String>();
+			
+			for(MeetingRoomDao meetingRoomDao :lstMeetingRooms){
+				lstReturned.add(meetingRoomDao.getExternalId());
+			}
+			return lstReturned;
+		} catch (RuntimeException e){
+			LOGGER.debug("RuntimeException in MeetingRoomApiEndpoint.getTimeout with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
-		return lstReturned;
 	}
 
 	@Override
@@ -63,9 +67,9 @@ public class MeetingRoomApiEndpointImpl implements MeetingRoomApiEndpoint {
 		} catch (DataNotExistsException e) {
 			LOGGER.debug("DataNotExistsException in MeetingRoomApiEndpoint.updateData with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_71, Response.Status.NOT_FOUND));
-		} catch (RoomAlreadyUsedException e) {
-			LOGGER.debug("RoomAlreadyUsedException in MeetingRoomApiEndpoint.updateData with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_71, Response.Status.METHOD_NOT_ALLOWED));
+		} catch (RuntimeException e){
+			LOGGER.debug("RuntimeException in MeetingRoomApiEndpoint.updateData with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 		
 		return Response.status(Status.ACCEPTED).build();

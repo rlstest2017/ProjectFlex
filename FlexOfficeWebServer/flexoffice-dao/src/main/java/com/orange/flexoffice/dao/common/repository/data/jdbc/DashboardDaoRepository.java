@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -54,7 +54,7 @@ public class DashboardDaoRepository extends DataRepository<DashboardDao> impleme
 	}
 	
 	@Override
-	public DashboardDao findByMacAddress(String macAddress) throws IncorrectResultSizeDataAccessException {
+	public DashboardDao findByMacAddress(String macAddress) throws EmptyResultDataAccessException {
 		SqlParameterSource paramMap = new MapSqlParameterSource("macAddress", macAddress);
 		DashboardDao data = null;
 		data = jdbcTemplate.queryForObject(

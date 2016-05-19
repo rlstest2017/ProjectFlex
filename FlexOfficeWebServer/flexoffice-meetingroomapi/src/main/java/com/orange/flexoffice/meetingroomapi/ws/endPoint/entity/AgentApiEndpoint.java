@@ -11,6 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.meetingroomapi.ws.model.AgentInput;
 import com.orange.flexoffice.meetingroomapi.ws.model.AgentOutput;
 
@@ -26,6 +27,7 @@ public interface AgentApiEndpoint {
 	 * @param id an agent id. 
 	 * @param user the new <code>agent</code>
 	 * @return If ok, a <code>Response</code> with a status code 201
+	 * @throws DataNotExistsException 
 	 * 
 	 * @see AgentOutput
 	 */
@@ -33,7 +35,7 @@ public interface AgentApiEndpoint {
 	@Path(AGENT_ID_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	AgentOutput updateStatus(@PathParam(AGENT_MAC_ADDRESS_PARAM)String macAddress, AgentInput agent);
+	AgentOutput updateStatus(@PathParam(AGENT_MAC_ADDRESS_PARAM)String macAddress, AgentInput agent) throws DataNotExistsException;
 
 	
 	// used for tests
