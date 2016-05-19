@@ -91,6 +91,10 @@ public class SystemApiEndpointImpl implements SystemApiEndpoint {
 		if (configuration != null)
 		system.setDurationStep(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
 		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.MAX_DURATION.toString());
+		if (configuration != null)
+		system.setMaxDuration(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+		
 		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.PAGES_SHIFT_INTERVAL.toString());
 		if (configuration != null)
 		system.setPagesShiftInterval(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
@@ -98,6 +102,14 @@ public class SystemApiEndpointImpl implements SystemApiEndpoint {
 		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.NB_ROOMS_PER_PAGE.toString());
 		if (configuration != null)
 		system.setNbRoomsPerPage(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.VIRTUAL_KEYBOARD.toString());
+		if (configuration != null)
+		system.setVirtualKeyboard(Boolean.valueOf(configuration.getValue()));
+		
+		configuration = systemManager.getConfigurationValue(E_ConfigurationKey.KEYBOARD_LANG.toString());
+		if (configuration != null)
+		system.setKeyboardLang(configuration.getValue());
 		
 		return factory.createSystem(system).getValue();
 	}
