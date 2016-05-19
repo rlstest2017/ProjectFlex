@@ -113,5 +113,21 @@ CREATE INDEX meetingroom_daily_occupancy_day_idx ON meetingroom_daily_occupancy 
 INSERT INTO configuration ("key", "value", description) VALUES
     ('AGENT_STATUS_TIMEOUT', '3', 'This data is in minutes'),
     ('DASHBOARD_STATUS_TIMEOUT', '3', 'This data is in minutes'),
-    ('MEETINGROOM_STATUS_TIMEOUT', '3', 'This data is in minutes');
+    ('MEETINGROOM_STATUS_TIMEOUT', '3', 'This data is in minutes'),
+    ('WS_REFRESH_INTERVAL', '10', 'This data is in secondes'),
+    ('INACTIVITY_TIME', '0', 'This data is in secondes'),
+    ('HOUR_START', '420', 'This data is in minutes'),
+    ('HOUR_END', '1200', 'This data is in minutes'),
+    ('ORGANIZER_MANDATORY', 'false', 'This data is in boolean'),
+    ('SUBJECT_MANDATORY', 'false', 'This data is in boolean'),
+    ('ACK_TIME', '5', 'This data is in minutes'),
+    ('USER_CAN_CANCEL', 'false', 'This data is in boolean'),
+    ('CAN_SHOW_SUBJECT', 'false', 'This data is in boolean'),
+    ('CAN_SHOW_ORGANIZER', 'false', 'This data is in boolean'),
+    ('DURATION_STEP', '15', 'This data is in minutes'),
+    ('MAX_DURATION', '720', 'This data is in minutes'),
+    ('PAGES_SHIFT_INTERVAL', '2', 'This data is in secondes'),
+    ('NB_ROOMS_PER_PAGE', '6', 'This data is an integer'),
+    ('VIRTUAL_KEYBOARD', 'false', 'This data is in boolean'),
+    ('KEYBOARD_LANG', 'french', 'This data is in string');
 
