@@ -4,5 +4,7 @@ public enum E_CommandModel {
 	RESET,
 	ECONOMIC,
 	STANDBY,
+	ONLINE,
+	OFFLINE,
 	NONE;
 }
