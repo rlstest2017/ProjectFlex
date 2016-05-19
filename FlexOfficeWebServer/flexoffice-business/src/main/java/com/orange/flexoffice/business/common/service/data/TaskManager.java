@@ -43,4 +43,10 @@ public interface TaskManager {
 	 */
 	void purgeMeetingRoomStatsDataMethod();
 	
+	/**
+	 * checkAgentDashboardTimeOut every 4 minutes
+	 * Set to offline agent/dashbaord if timeout and status = online
+	 */
+	void checkAgentDashboardTimeOut();
+	
 }

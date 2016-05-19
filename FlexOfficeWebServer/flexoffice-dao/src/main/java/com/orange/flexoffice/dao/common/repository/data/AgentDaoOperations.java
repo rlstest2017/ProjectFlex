@@ -22,6 +22,8 @@ public interface AgentDaoOperations {
 	
 	AgentDao findByMeetingRoomId(Long meetingRoomId) throws IncorrectResultSizeDataAccessException;
 	
+	List<AgentDao> findAgentsInTimeout(String intervalTimeout);
+	
 	AgentDao updateAgentStatus(AgentDao data);
 	
 	AgentDao updateAgentMeetingRoomId(AgentDao data);

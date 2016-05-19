@@ -20,6 +20,8 @@ public interface DashboardDaoOperations {
 	
 	DashboardDao findByMacAddress(String macAddress) throws IncorrectResultSizeDataAccessException;
 	
+	List<DashboardDao> findDashboardsInTimeout(String intervalTimeout);
+	
 	DashboardDao updateDashboardStatus(DashboardDao data);
 	
 	//AgentDao updateGatewayCommand(AgentDao data);

@@ -24,5 +24,7 @@
 	
 	<bean id="errorMessageHandler" class="com.orange.flexoffice.meetingroomapi.ws.utils.ErrorMessageHandler">
 	</bean>
+	
+	<bean id="meetingRoomApiTasks" class="com.orange.flexoffice.meetingroomapi.ws.task.MeetingRoomApiTasks"/>
 		
 </beans>

@@ -12,19 +12,25 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.orange.flexoffice.business.common.service.data.TaskManager;
 import com.orange.flexoffice.business.common.utils.DateTools;
+import com.orange.flexoffice.dao.common.model.data.AgentDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
+import com.orange.flexoffice.dao.common.model.data.DashboardDao;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDailyOccupancyDao;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomStatDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDailyOccupancyDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
 import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_AgentStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
+import com.orange.flexoffice.dao.common.model.enumeration.E_DashboardStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_MeetingRoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.AgentDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.DashboardDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomDailyOccupancyDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomStatDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDailyOccupancyDaoRepository;
@@ -57,6 +63,10 @@ public class TaskManagerImpl implements TaskManager {
 	private MeetingRoomDailyOccupancyDaoRepository meetingRoomDailyRepository;
 	@Autowired
 	private TeachinSensorsDaoRepository teachinRepository;
+	@Autowired
+	private AgentDaoRepository agentRepository;
+	@Autowired
+	private DashboardDaoRepository dashboardRepository;
 	
 	@Autowired
 	DateTools dateTools;
@@ -292,6 +302,29 @@ public class TaskManagerImpl implements TaskManager {
 		LOGGER.debug(" End TaskManager.purgeMeetingRoomStatsDataMethod method : " + new Date());
 	}
 	
+	@Override
+	public void checkAgentDashboardTimeOut() {
+		ConfigurationDao intervalAgentTimeout = configRepository.findByKey(E_ConfigurationKey.AGENT_STATUS_TIMEOUT.toString());
+		List<AgentDao> listAgents = agentRepository.findAgentsInTimeout(intervalAgentTimeout.getValue()); 
+		
+		for(AgentDao agent : listAgents){
+			if(E_AgentStatus.ONLINE.toString().equals(agent.getStatus())){
+				agent.setStatus(E_AgentStatus.OFFLINE.toString());
+				agentRepository.updateAgentStatus(agent);
+			}
+		}
+		
+		ConfigurationDao intervalDashboardTimeout = configRepository.findByKey(E_ConfigurationKey.DASHBOARD_STATUS_TIMEOUT.toString());
+		List<DashboardDao> listDashboards = dashboardRepository.findDashboardsInTimeout(intervalDashboardTimeout.getValue()); 
+		
+		for(DashboardDao dashboard : listDashboards){
+			if(E_DashboardStatus.ONLINE.toString().equals(dashboard.getStatus())){
+				dashboard.setStatus(E_DashboardStatus.OFFLINE.toString());
+				dashboardRepository.updateDashboardStatus(dashboard);
+			}
+		}
+	}	
+	
 	/**
 	 * isRoomInList
 	 * @param roomId
@@ -342,5 +375,5 @@ public class TaskManagerImpl implements TaskManager {
 		}
 		
 		return index;
-	}	
+	}
 }

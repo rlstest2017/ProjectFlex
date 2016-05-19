@@ -36,7 +36,7 @@ public interface MeetingRoomDaoOperations {
 	
 	MeetingRoomDao findByExternalId(String externalId) throws IncorrectResultSizeDataAccessException;
 	
-	List<MeetingRoomDao> findMeetingRoomsInTimeout(String intervalTimeout) throws IncorrectResultSizeDataAccessException;
+	List<MeetingRoomDao> findMeetingRoomsInTimeout(String intervalTimeout);
 	
 	MeetingRoomDao saveMeetingRoom(MeetingRoomDao data) throws DataIntegrityViolationException;
 	

@@ -21,6 +21,7 @@ import org.springframework.util.Log4jConfigurer;
 import com.orange.flexoffice.meetingroomapi.ws.endPoint.entity.MeetingRoomApiEndpoint;
 import com.orange.flexoffice.meetingroomapi.ws.model.EMeetingRoomStatus;
 import com.orange.flexoffice.meetingroomapi.ws.model.MeetingRoomInput;
+import com.orange.flexoffice.meetingroomapi.ws.task.MeetingRoomApiTasks;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MeetingRoomApiEndpointImplTest {
@@ -38,6 +39,8 @@ public class MeetingRoomApiEndpointImplTest {
 
 	private static MeetingRoomApiEndpoint meetingRoomApiEndpoint;
 	
+	private static MeetingRoomApiTasks meetingRoomApiTasks;
+	
 	@Context
 	private UriInfo uriInfo;
 
@@ -48,6 +51,7 @@ public class MeetingRoomApiEndpointImplTest {
 	public static void initSpringContextAndDatabase() throws Exception {
 		context = new ClassPathXmlApplicationContext("applicationContext-flexoffice-meetingroomapi-test.xml");
 		meetingRoomApiEndpoint = (MeetingRoomApiEndpointImpl)context.getBean("meetingRoomEndpoint");
+		meetingRoomApiTasks = (MeetingRoomApiTasks)context.getBean("meetingRoomApiTasks");
 	}
 
 
@@ -108,7 +112,16 @@ public class MeetingRoomApiEndpointImplTest {
 		
 		
 		// Assert
-		assertEquals(1, lst.size());
+		assertEquals(4, lst.size());
+	}
+	
+	@Test
+	public void TestD_checkAgentDashboardTimeOut(){
+		// Test
+		boolean state = meetingRoomApiTasks.checkAgentDashboardTimeOutTestMethod();
+		
+		// Assert
+		assertEquals(true, state);
 	}
 	
 }

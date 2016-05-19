@@ -135,7 +135,7 @@ public class MeetingRoomDaoRepository extends DataRepository<MeetingRoomDao> imp
 	}
 	
 	@Override
-	public List<MeetingRoomDao> findMeetingRoomsInTimeout(String intervalTimeout) throws IncorrectResultSizeDataAccessException{
+	public List<MeetingRoomDao> findMeetingRoomsInTimeout(String intervalTimeout) {
 		SqlParameterSource paramMap = new MapSqlParameterSource("intervalTimeout", intervalTimeout);
 		return jdbcTemplate.query(
 				findMeetingRoomsInTimeoutQuery, 

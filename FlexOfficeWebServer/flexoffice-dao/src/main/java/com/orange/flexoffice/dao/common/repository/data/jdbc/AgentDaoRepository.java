@@ -78,6 +78,16 @@ public class AgentDaoRepository extends DataRepository<AgentDao> implements Agen
 	}
 	
 	@Override
+	public List<AgentDao> findAgentsInTimeout(String intervalTimeout) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("intervalTimeout", intervalTimeout);
+		return jdbcTemplate.query(
+				findAgentsInTimeoutQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<AgentDao>(AgentDao.class)
+			);
+	}
+	
+	@Override
 	public AgentDao saveAgent(AgentDao data) throws DataIntegrityViolationException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		

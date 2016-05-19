@@ -66,6 +66,16 @@ public class DashboardDaoRepository extends DataRepository<DashboardDao> impleme
 	}
 	
 	@Override
+	public List<DashboardDao> findDashboardsInTimeout(String intervalTimeout){
+		SqlParameterSource paramMap = new MapSqlParameterSource("intervalTimeout", intervalTimeout);
+		return jdbcTemplate.query(
+				findDashboardsInTimeoutQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<DashboardDao>(DashboardDao.class)
+			);
+	}
+	
+	@Override
 	public DashboardDao saveDashboard(DashboardDao data) throws DataIntegrityViolationException {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		
