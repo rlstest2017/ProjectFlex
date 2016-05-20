@@ -24,7 +24,7 @@ public interface MeetingRoomGroupsConfigurationDaoOperations {
 	
 	MeetingRoomGroupsConfigurationDao updateMeetingRoomGroupsConfiguration(MeetingRoomGroupsConfigurationDao data);
 	
-	void deleteByBuildingId(String buildingId); 
+	void deleteByBuildingId(Long buildingId); 
 	
 	void deleteByBuildingIdAndFloor(MeetingRoomGroupsConfigurationDao data); 
 }

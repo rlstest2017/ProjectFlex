@@ -51,10 +51,10 @@ public class FileManager {
 	public void updateFile(String oldName, String newName) throws IOException, JAXBException, ParserConfigurationException, SAXException{		
 		String filePath = properties.getProperty("meetingroom.path");
 		Array array = converter.convertFromXMLToObject(filePath + SEPARATOR + oldName + EXTENSION);
-		deleteFile(oldName);
 		array.setDescription("Liste des meeting rooms pour le bâtiment et l'étage suivant: " + newName);
 		
 		converter.convertFromObjectToXML(array, filePath + SEPARATOR + newName + EXTENSION);
+		deleteFile(oldName);
 	}
 	
 	public void deleteFile(String fileName){

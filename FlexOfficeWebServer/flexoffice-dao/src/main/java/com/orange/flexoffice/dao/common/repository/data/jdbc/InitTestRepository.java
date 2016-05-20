@@ -124,7 +124,7 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		String sqlMeetingRooms = "INSERT INTO meetingrooms " +
 				"(id, external_id, name, organizerLabel, capacity, description, status, type, agent_id, building_id, floor, start_date, end_date, last_measure_date) VALUES"
 				+ " (?, ?, ?, ?,  ?, ?, CAST(? AS meetingroomStatus), CAST(? AS meetingroomType), ?, ?, ?, CAST(? AS timestamp), CAST(? AS timestamp), CAST(? AS timestamp))";
-		jdbcTemplateForTest.update(sqlMeetingRooms, new Object[] {1, "1@id.fr", "meeting room 1", "organizer 1", 5, "meeting room 1 desc", "FREE", "BOX", 1, 1, 1, "2016-01-20 07:04:35.051909", "2016-01-20 09:04:35.051909", "2016-01-19 10:04:35.051909"});
+		jdbcTemplateForTest.update(sqlMeetingRooms, new Object[] {1, "1@id.fr", "meeting room 1", null, 5, "meeting room 1 desc", "FREE", "BOX", 1, 1, 1, "2016-01-20 07:04:35.051909", "2016-01-20 09:04:35.051909", "2016-01-19 10:04:35.051909"});
 		jdbcTemplateForTest.update(sqlMeetingRooms, new Object[] {2, "2@id.fr", "meeting room 2", "organizer 2", 25, "meeting room 2 desc", "OCCUPIED", "VIDEO_CONF", 2, 2, 1, "2016-01-19 07:04:35.051909", "2016-01-19 08:04:35.051909", "2016-01-19 17:04:35.051909"});
 		jdbcTemplateForTest.update(sqlMeetingRooms, new Object[] {3, "3@id.fr", "meeting room 3", "organizer 3", 5, "meeting room 3 desc", "FREE", "BOX", 3, 1, 4, "2016-01-22 07:04:35.051909", "2016-01-22 09:04:35.051909", "2016-01-22 16:04:35.051909"});
 		jdbcTemplateForTest.update(sqlMeetingRooms, new Object[] {4, "4@id.fr", "meeting room 4", "organizer 4", 35, "meeting room 4 desc", "FREE", "BOX", 4, 2, 1, "2016-01-23 07:04:35.051909", "2016-01-23 10:04:35.051909", "2016-01-23 14:04:35.051909"});
@@ -139,11 +139,11 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		jdbcTemplateForTest.update(sqlDashboards, new Object[] {5, "AA:BS:CC:AA:GG:PP", "dashboard 5", "dashboard 5 test", "ONLINE", "2016-01-25 07:04:35.051909", 2, 1, 0, "ECONOMIC"});
 
 		String sqlMeetinRoomGroupsConfiguration = "INSERT INTO meetingroom_groups_configuration (id, building_id, floor, meetingroom_group_id) VALUES (?, ?, ?, ?)";
-		jdbcTemplateForTest.update(sqlMeetinRoomGroupsConfiguration, new Object[] {1, 1, 0, "id@1"});
-		jdbcTemplateForTest.update(sqlMeetinRoomGroupsConfiguration, new Object[] {2, 1, 1, "id@2"});
-		jdbcTemplateForTest.update(sqlMeetinRoomGroupsConfiguration, new Object[] {3, 1, 2, "id@3"});
-		jdbcTemplateForTest.update(sqlMeetinRoomGroupsConfiguration, new Object[] {4, 2, 0, "id@4"});
-		jdbcTemplateForTest.update(sqlMeetinRoomGroupsConfiguration, new Object[] {5, 2, 1, "id@5"});
+		jdbcTemplateForTest.update(sqlMeetinRoomGroupsConfiguration, new Object[] {1, 1, 0, "rg_country 1_region 1_city 1_building 1_0"});
+		jdbcTemplateForTest.update(sqlMeetinRoomGroupsConfiguration, new Object[] {2, 1, 1, "rg_country 1_region 1_city 1_building 1_1"});
+		jdbcTemplateForTest.update(sqlMeetinRoomGroupsConfiguration, new Object[] {3, 1, 2, "rg_country 1_region 1_city 1_building 1_2"});
+		jdbcTemplateForTest.update(sqlMeetinRoomGroupsConfiguration, new Object[] {4, 2, 0, "rg_country 1_region 1_city 1_building 2_0"});
+		jdbcTemplateForTest.update(sqlMeetinRoomGroupsConfiguration, new Object[] {5, 2, 1, "rg_country 1_region 1_city 1_building 2_1"});
 		
 		String sqlConfiguration = "INSERT INTO configuration (id, key, value, description) VALUES (?, ?, ?, ?)";
 		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {1, "LAST_CONNECTION_DURATION", "15", "This data is in days"});

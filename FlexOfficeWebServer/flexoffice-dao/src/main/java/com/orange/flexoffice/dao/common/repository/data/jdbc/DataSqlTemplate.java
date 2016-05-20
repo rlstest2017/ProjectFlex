@@ -187,7 +187,7 @@ public final class DataSqlTemplate {
 	public static final String CREATE_GATEWAY_TEMPLATE = 
 			"insert into %s (mac_address, name, description) values (:macAddress, :name, :description)";
 	public static final String CREATE_MEETINGROOM_GROUPS_CONFIGURATION_TEMPLATE = 
-			"insert into %s (building_id, floor, meetingroom_group_id) values (:buildingId, :floor, :meetingRoomGroupId)";
+			"insert into %s (building_id, floor, meetingroom_group_id) values (:buildingId, :floor, :meetingroomGroupId)";
 	public static final String CREATE_AGENT_TEMPLATE = 
 			"insert into %s (mac_address, name, description) values (:macAddress, :name, :description)";
 	public static final String CREATE_DASHBOARD_TEMPLATE = 
@@ -239,7 +239,7 @@ public final class DataSqlTemplate {
 	public static final String UPDATE_AGENT_TEMPLATE = 
 			"update %s set name=:name, description=:description WHERE mac_address=:macAddress";
 	public static final String UPDATE_MEETINGROOM_GROUPS_CONFIGURATION_TEMPLATE = 
-			"update %s set meetingroom_group_id=:meetingRoomGroupId WHERE building_id=:buildingId and floor=:floor";
+			"update %s set meetingroom_group_id=:meetingroomGroupId WHERE building_id=:buildingId and floor=:floor";
 	public static final String UPDATE_DASHBOARD_TEMPLATE = 
 			"update %s set name=:name, description=:description, city_id=:cityId, building_id=:buildingId, floor=:floor WHERE mac_address=:macAddress";
 	public static final String UPDATE_USER_TEMPLATE =

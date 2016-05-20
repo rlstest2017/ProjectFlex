@@ -19,9 +19,13 @@ import org.junit.runners.MethodSorters;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Log4jConfigurer;
 
+import com.orange.flexoffice.adminui.ws.endPoint.data.ConfigurationEndpoint;
+import com.orange.flexoffice.adminui.ws.endPoint.data.impl.ConfigurationEndpointImpl;
 import com.orange.flexoffice.adminui.ws.endPoint.entity.AgentEndpoint;
 import com.orange.flexoffice.adminui.ws.endPoint.entity.MeetingRoomEndpoint;
 import com.orange.flexoffice.adminui.ws.model.AgentInput3;
+import com.orange.flexoffice.adminui.ws.model.BuildingInput;
+import com.orange.flexoffice.adminui.ws.model.BuildingItem;
 import com.orange.flexoffice.adminui.ws.model.EMeetingroomType;
 import com.orange.flexoffice.adminui.ws.model.MeetingRoom;
 import com.orange.flexoffice.adminui.ws.model.MeetingRoomInput;
@@ -47,6 +51,8 @@ public class MeetingRoomEndpointImplTest {
 	private static MeetingRoomEndpoint meetingroomEndpoint;
 
 	private static AgentEndpoint agentEndpoint;
+	
+	private static ConfigurationEndpoint configurationEndpoint;
 
 	private static AdminUiTasks adminUiTasks;
 	
@@ -62,6 +68,7 @@ public class MeetingRoomEndpointImplTest {
 		meetingroomEndpoint = (MeetingRoomEndpointImpl)context.getBean("meetingroomEndpoint");
 		agentEndpoint = (AgentEndpointImpl)context.getBean("agentEndpoint");
 		adminUiTasks = (AdminUiTasks)context.getBean("adminUiTasks");
+		configurationEndpoint = (ConfigurationEndpointImpl)context.getBean("configurationEndpoint");
 	}
 
 
@@ -158,10 +165,18 @@ public class MeetingRoomEndpointImplTest {
 		
 		try {
 			// Setup
+			final BuildingInput building = new BuildingInput();
+			building.setName("building 5");
+			building.setCityId("1");
+			building.setAddress("05 rue de la gloire 35980 Rennes");
+			building.setNbFloors(BigInteger.valueOf(4l));
+			// Test
+			final BuildingItem buildingId = configurationEndpoint.addBuilding(building);
+			
 			final MeetingRoomInput meetingroomInput = new MeetingRoomInput();
 			meetingroomInput.setName("MeetingRoomTest1");
-			meetingroomInput.setBuildingId("2");
-			meetingroomInput.setFloor(BigInteger.valueOf(15));
+			meetingroomInput.setBuildingId(buildingId.getBuildingId());
+			meetingroomInput.setFloor(BigInteger.valueOf(2));
 			meetingroomInput.setCapacity(BigInteger.valueOf(4));
 			meetingroomInput.setDesc("MeetingRoomDescription-modified");
 			meetingroomInput.setType(EMeetingroomType.BOX);
@@ -256,12 +271,14 @@ public class MeetingRoomEndpointImplTest {
 		// Setup
 		boolean expectedResult = false;
 		try {
-			final MeetingRoomDao meetingroom = meetingroomEndpoint.findByName("meeting room 5");
-
+			final MeetingRoomDao meetingroom = meetingroomEndpoint.findByName("MeetingRoomTest1");
 
 			// Test
 			Response response = meetingroomEndpoint.removeMeetingRoom(meetingroom.getColumnId());
-
+			
+			// Delete meetingRoom xml files -> remove building
+			configurationEndpoint.removeBuilding(meetingroom.getBuildingId().toString());
+			
 			// Assert
 			assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 			expectedResult = true;

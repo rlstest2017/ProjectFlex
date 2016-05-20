@@ -1,6 +1,7 @@
 package com.orange.flexoffice.adminui.ws.endPoint.entity.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
@@ -9,8 +10,8 @@ import java.util.List;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -368,7 +369,7 @@ public class ConfigurationEndpointImplTest {
 		building.setName("building 4");
 		building.setCityId("2");
 		building.setAddress("05 rue de la gloire 35980 Rennes");
-		building.setNbFloors(BigInteger.valueOf(20l));
+		building.setNbFloors(BigInteger.valueOf(10l));
 		// Test
 		final BuildingItem response = configurationEndpoint.addBuilding(building);
 		// Asserts
@@ -387,20 +388,34 @@ public class ConfigurationEndpointImplTest {
 	public void TestY_updateBuilding() throws WebApplicationException {
 		// Setup
 		final BuildingInput building = new BuildingInput();
-		building.setName("building 3 update");
-		building.setCityId("1");
+		building.setName("building 4 update");
+		building.setCityId("2");
 		building.setAddress("05 rue de la gloire 35000 Rennes");
-		building.setNbFloors(BigInteger.valueOf(15l));
+		building.setNbFloors(BigInteger.valueOf(10l));
+		String id = null;
+		List<BuildingSummary> lst = configurationEndpoint.getBuildings();
+		for(BuildingSummary buildingSummary : lst){
+			if (buildingSummary.getCityName().equals("building 4"));
+			id = buildingSummary.getId();
+		}
 		// Test
-		final Response response = configurationEndpoint.updateBuilding("3", building);
+		final Response response = configurationEndpoint.updateBuilding(id, building);
 		// Asserts
 		assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
 	}
 	
 	@Test
 	public void TestZ_removeBuilding() throws WebApplicationException {
+		String id = null;
+		List<BuildingSummary> lst = configurationEndpoint.getBuildings();
+		for(BuildingSummary buildingSummary : lst){
+			if (buildingSummary.getName().equals("building 4 update")){
+				id = buildingSummary.getId();
+				break;
+			}
+		}
 		// Test
-		Response response = configurationEndpoint.removeBuilding("3");
+		Response response = configurationEndpoint.removeBuilding(id);
 		// Assert
 		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 	}

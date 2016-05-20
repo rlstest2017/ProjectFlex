@@ -86,7 +86,7 @@ public class MeetingRoomGroupsConfigurationDaoRepository extends DataRepository<
 	}
 	
 	@Override
-	public void deleteByBuildingId(String buildingId) {
+	public void deleteByBuildingId(Long buildingId) {
 		SqlParameterSource paramMap = new MapSqlParameterSource("buildingId", buildingId);
 		jdbcTemplate.update(deleteByBuildingIdQuery, paramMap);
 	}

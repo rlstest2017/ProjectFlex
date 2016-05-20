@@ -171,7 +171,7 @@ public class BuildingManagerImpl implements BuildingManager {
 					fileManager.updateFile(fileSubName + "_" + oldBuildingDao.getName() + "_" + i, fileName);
 				}
 			} else if (oldBuildingDao.getNbFloors() > building.getNbFloors()){
-				for(int i = oldBuildingDao.getNbFloors().intValue(); i > building.getNbFloors(); i --){
+				for(int i = oldBuildingDao.getNbFloors().intValue(); i >= building.getNbFloors(); i --){
 					String fileName = addressTools.getCountryRegionCityNamesFromCityId(oldBuildingDao.getCityId()) + "_" + oldBuildingDao.getName() + "_" + i;
 					
 					meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
@@ -183,7 +183,7 @@ public class BuildingManagerImpl implements BuildingManager {
 					
 					fileManager.deleteFile(fileName);
 				}
-				for(int i = 0; i <= building.getNbFloors(); i ++){
+				for(int i = 0; i < building.getNbFloors(); i ++){
 					String fileName = addressTools.getCountryRegionCityNamesFromCityId(building.getCityId()) + "_" + building.getName() + "_" + i;
 					String fileSubName = addressTools.getCountryRegionCityNamesFromCityId(oldBuildingDao.getCityId());
 					
@@ -198,7 +198,7 @@ public class BuildingManagerImpl implements BuildingManager {
 					fileManager.updateFile(fileSubName + "_" + oldBuildingDao.getName() + "_" + i, fileName);
 				}
 			} else {
-				for(int i = 0; i <= building.getNbFloors(); i ++){
+				for(int i = 0; i < building.getNbFloors(); i ++){
 					String fileName = addressTools.getCountryRegionCityNamesFromCityId(building.getCityId()) + "_" + building.getName() + "_" + i;
 					String fileSubName = addressTools.getCountryRegionCityNamesFromCityId(oldBuildingDao.getCityId());
 					
@@ -228,7 +228,7 @@ public class BuildingManagerImpl implements BuildingManager {
 			// delete xml meeting room config file
 			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
 				// delete entries in table meetingroom_groups_configuration for buildingId
-				meetingRoomGroupsConfigurationRepository.deleteByBuildingId(buildingDao.getId().toString());
+				meetingRoomGroupsConfigurationRepository.deleteByBuildingId(buildingDao.getId());
 				
 				for(int i = 0; i < buildingDao.getNbFloors(); i ++){
 					String fileName = addressTools.getCountryRegionCityNamesFromCityId(buildingDao.getCityId()) + "_" + buildingDao.getName() + "_" + i;
