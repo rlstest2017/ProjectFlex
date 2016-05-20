@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
@@ -87,12 +88,17 @@ public class DashboardApiEndpointImplTest {
 	@Test
 	public void TestC_GetConfig2() {
 		String macAddress = "FF:TS:ZZ:AA:GG:ZZ";
+		boolean expected = false;
 		
-		// Test
-		List<String> lst =	dashboardEndpoint.getConfig(macAddress);
+		try {
+			// Test
+			dashboardEndpoint.getConfig(macAddress);
+		} catch(WebApplicationException e){
+			expected = true;
+		}
 		
 		// Assert
-		assertEquals(0, lst.size());
+		assertEquals(true, expected);
 	}
 	
 }

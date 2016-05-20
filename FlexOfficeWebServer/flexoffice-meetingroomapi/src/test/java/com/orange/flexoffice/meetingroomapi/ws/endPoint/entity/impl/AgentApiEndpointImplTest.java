@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.FileNotFoundException;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
@@ -79,12 +80,16 @@ public class AgentApiEndpointImplTest {
 		String macAddress = "AA:BS:CC:AA:GG:PP";
 		AgentInput agent = new AgentInput();
 		agent.setAgentStatus(EAgentStatus.ECONOMIC);
+		boolean expected = false;
 		
-		// Test
-		AgentOutput agentOutput =	agentEndpoint.updateStatus(macAddress, agent);
+		try {
+			// Test
+			agentEndpoint.updateStatus(macAddress, agent);
 		
+		} catch (WebApplicationException e){
+			expected = true;
+		}
 		// Asserts
-		assertEquals("0", agentOutput.getMeetingRoomExternalId());
-		assertEquals(ECommandModel.ECONOMIC, agentOutput.getCommand());
+		assertEquals(true, expected);
 	}
 }
