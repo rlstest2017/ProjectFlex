@@ -1,6 +1,7 @@
 package com.orange.meetingroom.business.connector.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.orange.meetingroom.business.connector.PhpConnectorManager;
 import com.orange.meetingroom.connector.exception.DataNotExistsException;
@@ -21,6 +22,7 @@ import com.orange.meetingroom.connector.php.model.response.MeetingRoomsConnector
  * @author oab
  *
  */
+@Service("PhpConnectorManager")
 public class PhpConnectorManagerImpl implements PhpConnectorManager {
 
 	@Autowired

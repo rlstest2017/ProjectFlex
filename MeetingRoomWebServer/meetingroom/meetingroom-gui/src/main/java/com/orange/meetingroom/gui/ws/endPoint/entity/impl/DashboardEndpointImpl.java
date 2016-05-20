@@ -45,6 +45,7 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 			
 			DashboardConnectorInput input = new DashboardConnectorInput();
 			input.setDashboardStatus(EnumDashboardStatus.valueOf(dashboardInput.getDashboardStatus().toString()));
+			input.setDashboardMacAddress(macAddress);
 			
 			DashboardConnectorOutput outputConnector = flexOfficeConnectorManager.updateDashboardStatus(input);
 			

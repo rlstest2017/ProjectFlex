@@ -3,6 +3,7 @@ package com.orange.meetingroom.business.connector.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.orange.meetingroom.business.connector.FlexOfficeConnectorManager;
 import com.orange.meetingroom.connector.exception.DataNotExistsException;
@@ -22,6 +23,7 @@ import com.orange.meetingroom.connector.flexoffice.model.response.SystemConnecto
  * @author oab
  *
  */
+@Service("FlexOfficeConnectorManager")
 public class FlexOfficeConnectorManagerImpl implements FlexOfficeConnectorManager {
 
 	@Autowired

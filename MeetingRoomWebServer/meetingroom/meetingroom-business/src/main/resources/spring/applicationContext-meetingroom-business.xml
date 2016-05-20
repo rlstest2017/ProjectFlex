@@ -8,14 +8,8 @@
 	<!-- Import Connector -->
 	<import resource="classpath*:spring/applicationContext-meetingroom-connector.xml" />
 
- 	<bean id="phpConnector" class="com.orange.meetingroom.connector.php.PhpConnectorClient"/>
-    <bean id="flexofficeConnector" class="com.orange.meetingroom.connector.flexoffice.FlexOfficeConnectorClient"/>
- 	
 	<!-- Scan base package -->
 	<context:component-scan base-package="com.orange.meetingroom.business.connector, com.orange.meetingroom.business.service" />
-
-	<bean id="phpConnectorManager" class="com.orange.meetingroom.business.connector.impl.PhpConnectorManagerImpl"/>
-    <bean id="flexOfficeConnectorManager" class="com.orange.meetingroom.business.connector.impl.FlexOfficeConnectorManagerImpl"/>
- 	
+	
     
 </beans>
