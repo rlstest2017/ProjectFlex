@@ -21,7 +21,8 @@
 	<bean id="flexofficeDataTools" class="com.orange.meetingroom.connector.flexoffice.utils.FlexOfficeDataTools" >
 	</bean>
     
-    <!-- Scan base package -->
-	<context:component-scan base-package="com.orange.meetingroom.connector.flexoffice, com.orange.meetingroom.connector.php" />
+    <bean id="phpConnectorClient" class="com.orange.meetingroom.connector.php.impl.PhpConnectorClientImpl" />
+	<bean id="flexOfficeConnectorClient" class="com.orange.meetingroom.connector.flexoffice.impl.FlexOfficeConnectorClientImpl" />
+    
     
 </beans>
