@@ -1,6 +1,22 @@
 package com.orange.flexoffice.userui.ws.endPoint.entity;
 
 
+import static com.orange.flexoffice.userui.ws.ParamsConst.BUILDING_ID_PARAM;
+import static com.orange.flexoffice.userui.ws.ParamsConst.CITY_ID_PARAM;
+import static com.orange.flexoffice.userui.ws.ParamsConst.COUNTRY_ID_PARAM;
+import static com.orange.flexoffice.userui.ws.ParamsConst.FLOOR_PARAM;
+import static com.orange.flexoffice.userui.ws.ParamsConst.LATEST_PARAM;
+import static com.orange.flexoffice.userui.ws.ParamsConst.REGION_ID_PARAM;
+import static com.orange.flexoffice.userui.ws.ParamsConst.ROOM_ID_PARAM;
+import static com.orange.flexoffice.userui.ws.ParamsConst.ROOM_KIND_PARAM;
+import static com.orange.flexoffice.userui.ws.ParamsConst.TOKEN_HEADER_PARAM;
+import static com.orange.flexoffice.userui.ws.PathConst.CANCEL_PATH;
+import static com.orange.flexoffice.userui.ws.PathConst.RESERVE_PATH;
+import static com.orange.flexoffice.userui.ws.PathConst.ROOMS_PATH;
+import static com.orange.flexoffice.userui.ws.PathConst.ROOM_ID_PATH;
+
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -12,20 +28,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static com.orange.flexoffice.userui.ws.ParamsConst.TOKEN_HEADER_PARAM;
-import static com.orange.flexoffice.userui.ws.ParamsConst.ROOM_ID_PARAM;
-import static com.orange.flexoffice.userui.ws.PathConst.ROOMS_PATH;
-import static com.orange.flexoffice.userui.ws.PathConst.RESERVE_PATH;
-import static com.orange.flexoffice.userui.ws.PathConst.CANCEL_PATH;
-import static com.orange.flexoffice.userui.ws.PathConst.ROOM_ID_PATH;
-import static com.orange.flexoffice.userui.ws.ParamsConst.LATEST_PARAM;
-import static com.orange.flexoffice.userui.ws.ParamsConst.COUNTRY_ID_PARAM;
-import static com.orange.flexoffice.userui.ws.ParamsConst.REGION_ID_PARAM;
-import static com.orange.flexoffice.userui.ws.ParamsConst.CITY_ID_PARAM;
-import static com.orange.flexoffice.userui.ws.ParamsConst.BUILDING_ID_PARAM;
-import static com.orange.flexoffice.userui.ws.ParamsConst.FLOOR_PARAM;
-
-import java.util.List;
 import com.orange.flexoffice.userui.ws.model.Room;
 import com.orange.flexoffice.userui.ws.model.RoomSummary;
 
@@ -51,8 +53,8 @@ public interface RoomEndpoint {
 	/**
 	 * Gets information on a specific room.
 	 * 
-	 * @param roomId
-	 *            the room ID
+	 * @param roomId the room ID
+	 * @param kind kind of room (flexoffice/meetingroom)
 	 * 
 	 * @return information about a specific room.
 	 * 
@@ -62,7 +64,7 @@ public interface RoomEndpoint {
 	@Path(ROOM_ID_PATH)
 	@Consumes (MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Room getRoom(@PathParam(ROOM_ID_PARAM) String roomId);
+	Room getRoom(@PathParam(ROOM_ID_PARAM) String roomId, @QueryParam(ROOM_KIND_PARAM) String kind);
 
 	/**
 	 * Reserve a room.

@@ -13,27 +13,33 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.orange.flexoffice.userui.ws.model.ERoomStatus;
-import com.orange.flexoffice.userui.ws.model.ERoomType;
-import com.orange.flexoffice.userui.ws.model.UserSummary;
-import com.orange.flexoffice.userui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.RoomAlreadyUsedException;
+import com.orange.flexoffice.business.common.service.data.MeetingRoomManager;
 import com.orange.flexoffice.business.common.service.data.PreferenceUserManager;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.business.common.service.data.UserManager;
+import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 import com.orange.flexoffice.dao.common.model.data.PreferencesDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
+import com.orange.flexoffice.dao.common.model.object.MeetingRoomDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 import com.orange.flexoffice.dao.common.model.object.UserDto;
 import com.orange.flexoffice.userui.ws.endPoint.entity.RoomEndpoint;
+import com.orange.flexoffice.userui.ws.model.ERoomKind;
+import com.orange.flexoffice.userui.ws.model.ERoomStatus;
+import com.orange.flexoffice.userui.ws.model.ERoomType;
+import com.orange.flexoffice.userui.ws.model.FlexOfficeRoomAddon;
+import com.orange.flexoffice.userui.ws.model.MeetingRoomAddon;
 import com.orange.flexoffice.userui.ws.model.ObjectFactory;
 import com.orange.flexoffice.userui.ws.model.Room;
 import com.orange.flexoffice.userui.ws.model.RoomSummary;
+import com.orange.flexoffice.userui.ws.model.UserSummary;
+import com.orange.flexoffice.userui.ws.utils.ErrorMessageHandler;
 
 /**
  * @author oab
@@ -46,6 +52,8 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	
 	@Autowired
 	private RoomManager roomManager;
+	@Autowired
+	private MeetingRoomManager meetingRoomManager;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
@@ -120,6 +128,25 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				}
 				room.setStatus(ERoomStatus.valueOf(roomDao.getStatus().toString()));
 				room.setTenantName(computeTenant(room.getStatus(), roomDao.getUserId(), roomDao.getName()));
+				room.setKind(ERoomKind.FLEXOFFICE);
+				roomList.add(room);
+			}
+		}
+		
+		// Add meeting rooms
+		List<MeetingRoomDao> dataMeetingRoomList = meetingRoomManager.findMeetingRoomsByCriteria(countryId, regionId, cityId, buildingId, floor);
+		
+		if (dataMeetingRoomList != null) {
+			for (RoomDao roomDao : dataList) {
+				RoomSummary room = factory.createRoomSummary();
+				room.setId(roomDao.getColumnId());
+				room.setName(roomDao.getName());
+				room.setType(ERoomType.valueOf(roomDao.getType()));
+				if (roomDao.getCapacity() != null) {
+					room.setCapacity(BigInteger.valueOf(roomDao.getCapacity()));
+				}
+				room.setStatus(ERoomStatus.valueOf(roomDao.getStatus().toString()));
+				room.setKind(ERoomKind.MEETINGROOM);
 				roomList.add(room);
 			}
 		}
@@ -132,46 +159,84 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	/**
 	 * Gets information on a specific room.
 	 * 
-	 * @param roomId
-	 *            the room ID
+	 * @param roomId the room ID
+	 * @param kind kind of room (flexoffice/meetingroom)
 	 * 
 	 * @return information about a specific room.
 	 * 
 	 * @see Room
 	 */
 	@Override
-	public Room getRoom(String roomId) {
+	public Room getRoom(String roomId, String kind) {
 		
 		LOGGER.debug( "Begin call UserUi.RoomEndpoint.getRoom at: " + new Date() );
 
+		Room room = factory.createRoom();
 		try {
-			RoomDto roomDto = roomManager.find(Long.valueOf(roomId));
-
-			Room room = factory.createRoom();
-			room.setId(String.valueOf(roomDto.getId()));
-			room.setName(roomDto.getName());
-			room.setType(ERoomType.valueOf(roomDto.getType().toString()));
-			room.setDesc(roomDto.getDescription());
-			room.setAddress(roomDto.getAddress());
-			if (roomDto.getCapacity() != null) {
-				room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));
+			if (ERoomKind.FLEXOFFICE.toString().equals(kind)){
+				RoomDto roomDto = roomManager.find(Long.valueOf(roomId));
+	
+				room.setId(String.valueOf(roomDto.getId()));
+				room.setName(roomDto.getName());
+				room.setType(ERoomType.valueOf(roomDto.getType().toString()));
+				room.setDesc(roomDto.getDescription());
+				room.setAddress(roomDto.getAddress());
+				if (roomDto.getCapacity() != null) {
+					room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));
+				}
+				room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
+				room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
+				if (roomDto.getTemperature() != null) {
+					room.setTemperature(formatDisplay(roomDto.getTemperature()));
+				}
+				if (roomDto.getHumidity() != null) {
+					room.setHumidity(formatDisplay(roomDto.getHumidity()));
+				}
+				
+				if (roomDto.getLastMeasureDate() != null) {
+					room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
+				}
+				
+				FlexOfficeRoomAddon fxAddon = new FlexOfficeRoomAddon();
+				fxAddon.setKind(ERoomKind.FLEXOFFICE);
+				if (roomDto.getTemperature() != null) {
+					fxAddon.setTemperature(formatDisplay(roomDto.getTemperature()));
+				}
+				if (roomDto.getHumidity() != null) {
+					fxAddon.setHumidity(formatDisplay(roomDto.getHumidity()));
+				}
+				fxAddon.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
+				room.setAddon(fxAddon);
+				
+				LOGGER.debug( "End call UserUi.RoomEndpoint.getRoom  at: " + new Date() );
+	
+			} else if (ERoomKind.MEETINGROOM.toString().equals(kind)){
+				MeetingRoomDto meetingRoomDto = meetingRoomManager.find(Long.valueOf(roomId));
+				
+				room.setId(String.valueOf(meetingRoomDto.getId()));
+				room.setName(meetingRoomDto.getName());
+				room.setType(ERoomType.valueOf(meetingRoomDto.getType().toString()));
+				room.setDesc(meetingRoomDto.getDescription());
+				room.setAddress(meetingRoomDto.getAddress());
+				if (meetingRoomDto.getCapacity() != null) {
+					room.setCapacity(BigInteger.valueOf(meetingRoomDto.getCapacity()));
+				}
+				room.setStatus(ERoomStatus.valueOf(meetingRoomDto.getStatus().toString()));
+				
+				if (meetingRoomDto.getLastMeasureDate() != null) {
+					room.setLastMeasureDate(BigInteger.valueOf(meetingRoomDto.getLastMeasureDate().getTime()));
+				}
+				
+				MeetingRoomAddon meetingRoomAddon = new MeetingRoomAddon();
+				meetingRoomAddon.setKind(ERoomKind.MEETINGROOM);
+				meetingRoomAddon.setStartDate(meetingRoomDto.getStartDate().getTime());
+				meetingRoomAddon.setEndDate(meetingRoomDto.getEndDate().getTime());
+				meetingRoomAddon.setOrganizerLabel(meetingRoomDto.getOrganizerLabel());
+				room.setAddon(meetingRoomAddon);
+				
+				LOGGER.debug( "End call UserUi.RoomEndpoint.getRoom  at: " + new Date() );
+	
 			}
-			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
-			room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
-			if (roomDto.getTemperature() != null) {
-				room.setTemperature(formatDisplay(roomDto.getTemperature()));
-			}
-			if (roomDto.getHumidity() != null) {
-				room.setHumidity(formatDisplay(roomDto.getHumidity()));
-			}
-			
-			if (roomDto.getLastMeasureDate() != null) {
-				room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
-			}
-			
-			LOGGER.debug( "End call UserUi.RoomEndpoint.getRoom  at: " + new Date() );
-
-			return room;
 
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.getSensor with message :", e);
@@ -180,6 +245,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			LOGGER.debug("RuntimeException in UserUi.RoomEndpoint.getSensor with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
+		return room;
 	}
 
 	/**
@@ -232,6 +298,17 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			if (roomDto.getLastMeasureDate() != null) {
 				room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
 			}
+			
+			FlexOfficeRoomAddon fxAddon = new FlexOfficeRoomAddon();
+			fxAddon.setKind(ERoomKind.FLEXOFFICE);
+			if (roomDto.getTemperature() != null) {
+				fxAddon.setTemperature(formatDisplay(roomDto.getTemperature()));
+			}
+			if (roomDto.getHumidity() != null) {
+				fxAddon.setHumidity(formatDisplay(roomDto.getHumidity()));
+			}
+			fxAddon.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
+			room.setAddon(fxAddon);
 			
 			LOGGER.debug( "End call UserUi.RoomEndpoint.reserveRoom at: " + new Date() );
 			
@@ -302,6 +379,17 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			if (roomDto.getLastMeasureDate() != null) {
 				room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
 			}
+			
+			FlexOfficeRoomAddon fxAddon = new FlexOfficeRoomAddon();
+			fxAddon.setKind(ERoomKind.FLEXOFFICE);
+			if (roomDto.getTemperature() != null) {
+				fxAddon.setTemperature(formatDisplay(roomDto.getTemperature()));
+			}
+			if (roomDto.getHumidity() != null) {
+				fxAddon.setHumidity(formatDisplay(roomDto.getHumidity()));
+			}
+			fxAddon.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
+			room.setAddon(fxAddon);
 			
 			LOGGER.debug( "End call UserUi.RoomEndpoint.cancelRoom at: " + new Date() );
 			

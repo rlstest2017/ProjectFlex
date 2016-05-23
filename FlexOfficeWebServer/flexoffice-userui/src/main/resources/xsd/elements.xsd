@@ -11,6 +11,7 @@
 	
 	<xsd:element name="room" type="Room"/>
 	<xsd:element name="roomSummary" type="RoomSummary"/>
+	<xsd:element name="addon" type="RoomAddon"/>
 	
 	<xsd:element name="location" type="LocationItem"/>
 	<xsd:element name="building" type="BuildingItem"/>
