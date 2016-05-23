@@ -1,6 +1,7 @@
 package com.orange.meetingroom.connector.php.impl;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -445,6 +446,8 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 	 */
 	public BookingSummary updateBooking(UpdateBookingParameters params) throws MeetingRoomInternalServerException, MethodNotAllowedException, PhpInternalServerException {
 		
+		try	{
+			
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call updateBooking(UpdateBookingParameters params) method");
 		}
@@ -454,8 +457,10 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 
 		// construct the writer from UpdateBookingParameters
 		// String writer = "RoomID=brehat.rennes@microsoft.cad.aql.fr&IDReservation=AAAiAGJyZWhhdC5yZW5uZXNAbWljcm9zb2Z0LmNhZC5hcWwuZnIARgAAAAAAJjiq1ulLK0Kj6vNsTnRuywcAQopQvd4yGUaRbVXWgALbzwAAAAfOdQAAQopQvd4yGUaRbVXWgALbzwAAkZg7ggAA&RevisionReservation=DwAAABYAAABCilC93jIZRpFtVdaAAtvPAACRmK21&EndDate=1461060745&format=json";
-		String writer = dataTools.updateBookingParametersToUrlEncode(params);
-		try	{
+		String writer;
+		writer = dataTools.updateBookingParametersToUrlEncode(params);
+		
+		
 			// Define a postRequest request
 			// HttpPost postRequest = new HttpPost("http://192.168.103.193/services/UpdateBooking.php");
 			HttpPost postRequest = new HttpPost(phpUpdateBookingsURL);
@@ -499,13 +504,16 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 			
 			return bookingSummary;
 		
-		} catch (ClientProtocolException ex) {
-			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
-			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
+		} catch (ClientProtocolException e) {
+			LOGGER.error("Error in httpClient.execute() method, with message: " + e.getMessage(), e);
+			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + e.getMessage());
+		} catch (UnsupportedEncodingException e) {
+			LOGGER.debug( "UnsupportedEncodingException exception in updateBooking(UpdateBookingParameters params) method");
+			throw new MeetingRoomInternalServerException("Error in url encode method, with message: " + e.getMessage());
 		} catch (IOException e) {
 			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage(), e);
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
-		} finally	{
+		}  finally	{
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call updateBooking(UpdateBookingParameters params) method");
 			}

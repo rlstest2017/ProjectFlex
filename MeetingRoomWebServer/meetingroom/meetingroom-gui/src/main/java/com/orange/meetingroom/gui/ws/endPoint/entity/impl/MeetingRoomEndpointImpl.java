@@ -49,7 +49,9 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	private final ObjectFactory factory = new ObjectFactory();
 	static final String FORMAT_JSON = "json";
 	static final String FORCED_UPDATE_CACHE_DEFAULT = "false";
-	static final String ACKNOWLEDGED_DAFAULT = "1";
+	static final String ACKNOWLEDGED_DAFAULT = "0";
+	static final String ACKNOWLEDGED_CONFIRM = "1";
+	
 
 	@Autowired
 	private PhpConnectorManager phpConnectorManager;
@@ -110,7 +112,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 		} catch (MethodNotAllowedException e) {
 			LOGGER.debug("MethodNotAllowedException in getMeetingRoomBookings() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_9, Response.Status.METHOD_NOT_ALLOWED));
-		} catch (MeetingRoomInternalServerException | PhpInternalServerException e) {
+		} catch (MeetingRoomInternalServerException | PhpInternalServerException | RuntimeException e) {
 			LOGGER.debug("RuntimeException in getMeetingRoomBookings() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_1, Response.Status.INTERNAL_SERVER_ERROR));
 		} 
@@ -173,7 +175,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			} catch (MethodNotAllowedException e) {
 				LOGGER.debug("MethodNotAllowedException in getBookings() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_10, Response.Status.METHOD_NOT_ALLOWED));
-			} catch (MeetingRoomInternalServerException | PhpInternalServerException e) {
+			} catch (MeetingRoomInternalServerException | PhpInternalServerException | RuntimeException e) {
 				LOGGER.debug("RuntimeException in getBookings() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_1, Response.Status.INTERNAL_SERVER_ERROR));
 			}
@@ -208,7 +210,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 		} catch (MethodNotAllowedException e) {
 			LOGGER.debug("MethodNotAllowedException in setBooking() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_5, Response.Status.METHOD_NOT_ALLOWED));
-		} catch (PhpInternalServerException | MeetingRoomInternalServerException e) {
+		} catch (PhpInternalServerException | MeetingRoomInternalServerException | RuntimeException e) {
 			LOGGER.debug("RuntimeException in setBooking() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_1, Response.Status.INTERNAL_SERVER_ERROR));		
 		}
@@ -240,7 +242,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			} catch (MethodNotAllowedException e) {
 				LOGGER.debug("MethodNotAllowedException in cancelBooking() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_6, Response.Status.METHOD_NOT_ALLOWED));
-			} catch (PhpInternalServerException | MeetingRoomInternalServerException e) {
+			} catch (PhpInternalServerException | MeetingRoomInternalServerException | RuntimeException e) {
 				LOGGER.debug("RuntimeException in cancelBooking() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_1, Response.Status.INTERNAL_SERVER_ERROR));		
 			}	
@@ -256,7 +258,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			params.setIdReservation(bookingUpdateInput.getIDReservation());
 			params.setRevisionReservation(bookingUpdateInput.getRevisionReservation());
 			params.setStartDate(bookingUpdateInput.getStartDate().toString()); // only startDate to confirm request !!!
-			params.setAcknowledged(ACKNOWLEDGED_DAFAULT);
+			params.setAcknowledged(ACKNOWLEDGED_CONFIRM);
 			params.setSubject(bookingUpdateInput.getSubject());
 			params.setFormat(FORMAT_JSON);
 						
@@ -274,7 +276,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			} catch (MethodNotAllowedException e) {
 				LOGGER.debug("MethodNotAllowedException in confirmBooking() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_7, Response.Status.METHOD_NOT_ALLOWED));
-			} catch (PhpInternalServerException | MeetingRoomInternalServerException e) {
+			} catch (PhpInternalServerException | MeetingRoomInternalServerException | RuntimeException e) {
 				LOGGER.debug("RuntimeException in confirmBooking() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_1, Response.Status.INTERNAL_SERVER_ERROR));		
 			}

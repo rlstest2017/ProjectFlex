@@ -66,7 +66,7 @@ public class AgentEndpointImpl implements AgentEndpoint {
 		} catch (DataNotExistsException e) {
 			LOGGER.debug("DataNotExistsException in updateAgent() AgentEndpointImpl with message :" + e.getMessage(), e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_2, Response.Status.NOT_FOUND));
-		} catch (FlexOfficeInternalServerException | MeetingRoomInternalServerException e) {
+		} catch (FlexOfficeInternalServerException | MeetingRoomInternalServerException | RuntimeException e) {
 			LOGGER.debug("RuntimeException in updateAgent() AgentEndpointImpl with message :" + e.getMessage(), e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_1, Response.Status.INTERNAL_SERVER_ERROR));
 		}

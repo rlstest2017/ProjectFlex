@@ -1,5 +1,7 @@
 package com.orange.meetingroom.connector.php.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.ParseException;
 
 import com.orange.meetingroom.connector.php.model.request.GetAgentBookingsParameters;
@@ -84,21 +86,23 @@ public class DataTools {
 	 * updateBookingParametersToUrlEncode
 	 * @param params
 	 * @return
+	 * @throws UnsupportedEncodingException 
 	 */
-	public String updateBookingParametersToUrlEncode(UpdateBookingParameters params) {
+	public String updateBookingParametersToUrlEncode(UpdateBookingParameters params) throws UnsupportedEncodingException {
 		
 		final StringBuilder urlEncodeParameters = new StringBuilder( 1000 );
 		urlEncodeParameters.append( "RoomID="+params.getRoomID());
 		urlEncodeParameters.append( "&" );
-		urlEncodeParameters.append( "IDReservation="+params.getIdReservation());
+		urlEncodeParameters.append( "IDReservation="+URLEncoder.encode(params.getIdReservation(), "UTF-8"));
 		urlEncodeParameters.append( "&" );
-		urlEncodeParameters.append( "RevisionReservation="+params.getRevisionReservation());
+		urlEncodeParameters.append( "RevisionReservation="+URLEncoder.encode(params.getRevisionReservation(), "UTF-8"));
 		urlEncodeParameters.append( "&" );
 		urlEncodeParameters.append( "format="+params.getFormat());
 		if (params.getEndDate() != null) { // to close meeting
 			urlEncodeParameters.append( "&" );
 			urlEncodeParameters.append( "EndDate="+params.getEndDate());
 		} else if (params.getStartDate() != null) { // to confirm meeting
+			urlEncodeParameters.append( "&" );
 			urlEncodeParameters.append( "StartDate="+params.getStartDate());
 			urlEncodeParameters.append( "&" );
 			urlEncodeParameters.append( "Acknowledged="+params.getAcknowledged());

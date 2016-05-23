@@ -59,7 +59,7 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 		} catch (DataNotExistsException e2) {
 			LOGGER.debug("RuntimeException in updateDashboard() DashboardEndpointImpl with message :" + e2.getMessage(), e2);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_4, Response.Status.NOT_FOUND));
-		} catch (FlexOfficeInternalServerException | MeetingRoomInternalServerException e) {
+		} catch (FlexOfficeInternalServerException | MeetingRoomInternalServerException  | RuntimeException e) {
 			LOGGER.debug("RuntimeException in updateDashboard() DashboardEndpointImpl with message :" + e.getMessage(), e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_1, Response.Status.INTERNAL_SERVER_ERROR));
 		}

@@ -72,7 +72,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
 			
 			return factory.createSystemReturn(system).getValue();
 			
-		} catch (FlexOfficeInternalServerException | MeetingRoomInternalServerException e) {
+		} catch (FlexOfficeInternalServerException | MeetingRoomInternalServerException  | RuntimeException e) {
 			LOGGER.debug("RuntimeException in getSystem() SystemEndpointImpl with message :" + e.getMessage(), e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_1, Response.Status.INTERNAL_SERVER_ERROR));
 		}

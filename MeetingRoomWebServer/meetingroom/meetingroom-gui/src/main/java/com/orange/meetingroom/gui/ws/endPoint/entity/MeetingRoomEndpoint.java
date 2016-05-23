@@ -78,7 +78,7 @@ public interface MeetingRoomEndpoint {
 	@Path(MEETINGROOMS_EXTERNAL_ID_PATH + BOOKINGS_PATH + RESERVE_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	BookingSetOutput setBooking(@PathParam(MEETINGROOMS_EXTERNAL_ID_PATH)String meetingRoomExternalId, BookingSetInput bookingSetInput);
+	BookingSetOutput setBooking(@PathParam(MEETINGROOM_EXTERNAL_ID_PARAM)String meetingRoomExternalId, BookingSetInput bookingSetInput);
 
 	/**
 	 * Cancel a specific booking.
@@ -95,7 +95,7 @@ public interface MeetingRoomEndpoint {
 	@Path(MEETINGROOMS_EXTERNAL_ID_PATH + BOOKINGS_PATH + CANCEL_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	BookingUpdateOutput cancelBooking(@PathParam(MEETINGROOMS_EXTERNAL_ID_PATH)String meetingRoomExternalId, BookingUpdateInput bookingUpdateInput);
+	BookingUpdateOutput cancelBooking(@PathParam(MEETINGROOM_EXTERNAL_ID_PARAM)String meetingRoomExternalId, BookingUpdateInput bookingUpdateInput);
 	
 	/**
 	 * Confirm a specific booking.
@@ -112,7 +112,7 @@ public interface MeetingRoomEndpoint {
 	@Path(MEETINGROOMS_EXTERNAL_ID_PATH + BOOKINGS_PATH + CONFIRM_PATH)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	BookingUpdateOutput confirmBooking(@PathParam(MEETINGROOMS_EXTERNAL_ID_PATH)String meetingRoomExternalId, BookingUpdateInput bookingUpdateInput);
+	BookingUpdateOutput confirmBooking(@PathParam(MEETINGROOM_EXTERNAL_ID_PARAM)String meetingRoomExternalId, BookingUpdateInput bookingUpdateInput);
 	
 
 }
