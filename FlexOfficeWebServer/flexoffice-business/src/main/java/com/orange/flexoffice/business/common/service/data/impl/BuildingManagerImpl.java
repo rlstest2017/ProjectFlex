@@ -21,16 +21,21 @@ import org.xml.sax.SAXException;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
+import com.orange.flexoffice.business.common.exception.InvalidParametersException;
 import com.orange.flexoffice.business.common.service.data.BuildingManager;
 import com.orange.flexoffice.business.common.utils.AddressTools;
 import com.orange.flexoffice.business.meetingroom.config.FileManager;
 import com.orange.flexoffice.dao.common.model.data.BuildingDao;
+import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomGroupsConfigurationDao;
+import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.object.BuildingDto;
 import com.orange.flexoffice.dao.common.model.object.BuildingSummaryDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.BuildingDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomGroupsConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.PreferencesDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 
 /**
  * Manages {@link BuildingSummaryDto}.
@@ -58,6 +63,10 @@ public class BuildingManagerImpl implements BuildingManager {
 	private MeetingRoomGroupsConfigurationDaoRepository meetingRoomGroupsConfigurationRepository;
 	@Autowired
 	private PreferencesDaoRepository preferenceRepository;
+	@Autowired
+	private RoomDaoRepository roomRepository;
+	@Autowired
+	private MeetingRoomDaoRepository meetingRoomRepository;
 	@Autowired
 	private FileManager fileManager;
 	@Autowired
@@ -136,11 +145,34 @@ public class BuildingManagerImpl implements BuildingManager {
 	}
 
 	@Override
-	public BuildingDao update(BuildingDao building) throws DataNotExistsException, IOException, JAXBException, ParserConfigurationException, SAXException {
+	public BuildingDao update(BuildingDao building) throws DataNotExistsException, IOException, JAXBException, ParserConfigurationException, SAXException, InvalidParametersException {
+		// If newNbFloors < oldNBFloors && room associated to deleted floors -> throws exception
+		BuildingDao oldBuildingDao = buildingRepository.findOne(building.getId());
+		if(building.getNbFloors() < oldBuildingDao.getNbFloors()){
+			List<RoomDao> rooms = roomRepository.findRoomsByBuildingId(building.getId());
+			for(RoomDao room :rooms){
+				if (room.getFloor() > building.getNbFloors()){ 
+					LOGGER.debug("ConfigurationEndpoint.update : Can not update buildding floor because rooms are on deleted floors");
+					LOGGER.error("ConfigurationEndpoint.update : Can not update buildding floor because rooms are on deleted floors");
+					throw new InvalidParametersException("ConfigurationEndpoint.update : Can not update buildding floor because rooms are on deleted floors");
+				}
+			}
+		}
+		
 		// update xml meeting room config file
 		String meetingroomActivated = properties.getProperty("meetingroom.activated");
 		if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
-			BuildingDao oldBuildingDao = buildingRepository.findOne(building.getId());
+			
+			// If newNbFloors < oldNBFloors && meeting room associated to deleted floors -> throws exception
+			List<MeetingRoomDao> meetingRooms = meetingRoomRepository.findMeetingRoomsByBuildingId(building.getId());
+			for(MeetingRoomDao meetingRoom :meetingRooms){
+				if (meetingRoom.getFloor() > building.getNbFloors()){ 
+					LOGGER.debug("ConfigurationEndpoint.update : Can not update buildding floor because meeting meeting rooms are on deleted floors");
+					LOGGER.error("ConfigurationEndpoint.update : Can not update buildding floor because meeting meeting rooms are on deleted floors");
+					throw new InvalidParametersException("ConfigurationEndpoint.update : Can not update buildding floor because meeting rooms are on deleted floors");
+				}
+			}
+			
 			MeetingRoomGroupsConfigurationDao meetingRoomGroupsConfiguration;
 			if (oldBuildingDao.getNbFloors() < building.getNbFloors()){
 				for(int i = oldBuildingDao.getNbFloors().intValue(); i < building.getNbFloors(); i ++){

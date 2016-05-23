@@ -13,6 +13,7 @@ import org.xml.sax.SAXException;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
+import com.orange.flexoffice.business.common.exception.InvalidParametersException;
 import com.orange.flexoffice.dao.common.model.data.BuildingDao;
 import com.orange.flexoffice.dao.common.model.object.BuildingDto;
 import com.orange.flexoffice.dao.common.model.object.BuildingSummaryDto;
@@ -69,8 +70,9 @@ public interface BuildingManager {
 	 * @throws IOException 
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
+	 * @throws InvalidParametersException 
 	 */
-	BuildingDao update(BuildingDao building) throws DataNotExistsException, IOException, JAXBException, ParserConfigurationException, SAXException;
+	BuildingDao update(BuildingDao building) throws DataNotExistsException, IOException, JAXBException, ParserConfigurationException, SAXException, InvalidParametersException;
 
 	/**
 	 * Delete a building
