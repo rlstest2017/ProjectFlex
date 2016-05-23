@@ -22,7 +22,6 @@ import com.orange.flexoffice.business.common.exception.IntegrityViolationExcepti
 import com.orange.flexoffice.business.common.exception.RoomAlreadyUsedException;
 import com.orange.flexoffice.business.common.service.data.BuildingManager;
 import com.orange.flexoffice.business.common.service.data.MeetingRoomManager;
-import com.orange.flexoffice.business.common.utils.AddressTools;
 import com.orange.flexoffice.business.meetingroom.config.FileManager;
 import com.orange.flexoffice.dao.common.model.data.AgentDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
@@ -74,8 +73,6 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 	private BuildingManager buildingManager;
 	@Autowired
 	private FileManager fileManager;
-	@Autowired
-	private AddressTools addressTools;
 
 	@Override
 	@Transactional(readOnly=true)
@@ -176,12 +173,6 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 	@Override
 	public MeetingRoomDao save(MeetingRoomDao meetingroomDao) throws DataAlreadyExistsException {
 		try {
-			// Update xml meeting room file config
-			String meetingroomActivated = properties.getProperty("meetingroom.activated");
-			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
-				String fileName = addressTools.getCountryRegionCityBuildingNamesFromBuildingId(meetingroomDao.getBuildingId());
-				fileManager.addObjectToFile(fileName + "_" + meetingroomDao.getFloor(), meetingroomDao.getExternalId());
-			}
 			// Save MeetingRoomDao
 			MeetingRoomDao meetingroom = meetingroomRepository.saveMeetingRoom(meetingroomDao);
 
@@ -191,6 +182,12 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			agent.setMeetingroomId(meetingroom.getId());
 			agentRepository.updateAgentMeetingRoomId(agent);
 			LOGGER.debug("Agent has set in table for agent id #: " + meetingroom.getAgentId());
+			
+			// Update xml meeting room file config
+			String meetingroomActivated = properties.getProperty("meetingroom.activated");
+			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
+				fileManager.addObjectToFile(meetingroomDao.getBuildingId() + "_" + meetingroomDao.getFloor(), meetingroomDao.getExternalId());
+			}
 			
 			return meetingroom;
 			
@@ -202,7 +199,7 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			LOGGER.debug("MeetingRoomManager.save : Meeting Room xml meeting room file in error", e);
 			LOGGER.error("MeetingRoomManager.save : Meeting Room xml meeting room file in error");
 			throw new RuntimeException("MeetingRoomManager.save : Meeting Room xml meeting room file in error");
-		} catch (DataNotExistsException | NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			LOGGER.debug("MeetingRoomManager.save : Error while retieving location from building id" +  meetingroomDao.getBuildingId(), e);
 			LOGGER.error("MeetingRoomManager.save : Error while retieving location from building id" +  meetingroomDao.getBuildingId());
 			throw new DataAlreadyExistsException("MeetingRoomManager.save : Error while retieving location from building id");
@@ -212,14 +209,6 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 	@Override
 	public MeetingRoomDao update(MeetingRoomDao meetingroomDao) throws DataNotExistsException, DataAlreadyExistsException {
 		try {
-			// Update xml meeting room file config
-			String meetingroomActivated = properties.getProperty("meetingroom.activated");
-			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
-				MeetingRoomDao oldMeetingRoomDao = meetingroomRepository.findOne(meetingroomDao.getId()); 
-				
-				String fileName = addressTools.getCountryRegionCityBuildingNamesFromBuildingId(meetingroomDao.getBuildingId());
-				fileManager.updateObjectFromFile(fileName + "_" + meetingroomDao.getFloor(), oldMeetingRoomDao.getExternalId(), meetingroomDao.getExternalId());
-			}
 			// Update former Agent
 			AgentDao formerAgent = new AgentDao();
 			formerAgent = agentRepository.findByMeetingRoomId(meetingroomDao.getId());
@@ -233,7 +222,15 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			agent.setMeetingroomId(meetingroomDao.getId());
 			agentRepository.updateAgentMeetingRoomId(agent);
 			LOGGER.debug("Agent has set in table for agent id #: " + meetingroomDao.getAgentId());
-						
+			
+			// Update xml meeting room file config
+			String meetingroomActivated = properties.getProperty("meetingroom.activated");
+			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
+				MeetingRoomDao oldMeetingRoomDao = meetingroomRepository.findOne(meetingroomDao.getId()); 
+				
+				fileManager.updateObjectFromFile(meetingroomDao.getBuildingId() + "_" + meetingroomDao.getFloor(), oldMeetingRoomDao.getExternalId(), meetingroomDao.getExternalId());
+			}
+			
 			// Update MeetingRoomDao
 			return meetingroomRepository.updateMeetingRoom(meetingroomDao);
 		} catch (RuntimeException e) {
@@ -345,12 +342,6 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			MeetingRoomDao meetingroom = meetingroomRepository.findOne(id);
 			
 			if (meetingroom.getOrganizerLabel() == null){
-				// Update xml meeting room file config
-				String meetingroomActivated = properties.getProperty("meetingroom.activated");
-				if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
-					String fileName = addressTools.getCountryRegionCityBuildingNamesFromBuildingId(meetingroom.getBuildingId());
-					fileManager.removeObjectFromFile(fileName + "_" + meetingroom.getFloor(), meetingroom.getExternalId());
-				}
 				// Set meeting room id to 0 for associated Agent 
 				AgentDao agent = new AgentDao();
 				agent = agentRepository.findByAgentId(meetingroom.getAgentId());
@@ -362,6 +353,12 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 				meetingroomRepository.delete(id);
 				meetingRoomStatRepository.deleteByMeetingRoomId(meetingroom.getId());
 				meetingRoomDailyRepository.deleteByMeetingRoomId(meetingroom.getId());
+				
+				// Update xml meeting room file config
+				String meetingroomActivated = properties.getProperty("meetingroom.activated");
+				if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
+					fileManager.removeObjectFromFile(meetingroom.getBuildingId() + "_" + meetingroom.getFloor(), meetingroom.getExternalId());
+				}
 			} else {
 				LOGGER.error("MeetingRoomManager.delete : Meeting Room #" + id + " is occupied");
 				throw new IntegrityViolationException("MeetingRoomManager.delete : Meeting Room #" + id + " is occupied");

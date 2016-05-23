@@ -23,7 +23,6 @@ import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.common.exception.InvalidParametersException;
 import com.orange.flexoffice.business.common.service.data.BuildingManager;
-import com.orange.flexoffice.business.common.utils.AddressTools;
 import com.orange.flexoffice.business.meetingroom.config.FileManager;
 import com.orange.flexoffice.dao.common.model.data.BuildingDao;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
@@ -69,8 +68,6 @@ public class BuildingManagerImpl implements BuildingManager {
 	private MeetingRoomDaoRepository meetingRoomRepository;
 	@Autowired
 	private FileManager fileManager;
-	@Autowired
-	private AddressTools addressTools;
 
 	@Override
 	public List<BuildingSummaryDto> findAllBuildings() {
@@ -112,7 +109,7 @@ public class BuildingManagerImpl implements BuildingManager {
 				MeetingRoomGroupsConfigurationDao meetingRoomGroupsConfiguration;
 				
 				for(int i = 0; i < buildingDao.getNbFloors(); i ++){
-					String fileName = addressTools.getCountryRegionCityNamesFromCityId(buildingDao.getCityId()) + "_" + buildingDao.getName() + "_" + i;
+					String fileName = buildingDao.getId() + "_" + i;
 					
 					meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
 					meetingRoomGroupsConfiguration.setBuildingId(building.getId());
@@ -133,10 +130,6 @@ public class BuildingManagerImpl implements BuildingManager {
 			LOGGER.debug("BuildingManager.save : Building already exists", e);
 			LOGGER.error("BuildingManager.save : Building already exists");
 			throw new DataAlreadyExistsException("BuildingManager.save : Building already exists"); 
-		} catch (DataNotExistsException e) {
-			LOGGER.debug("BuildingManager.save : Building already exists", e);
-			LOGGER.error("BuildingManager.save : Building already exists");
-			throw new DataNotExistsException("BuildingManager.save : Building already exists");
 		} catch (IOException | JAXBException e) {
 			LOGGER.debug("ConfigurationEndpoint.addBuilding : Meeting Room xml meeting room file in error", e);
 			LOGGER.error("ConfigurationEndpoint.addBuilding : Meeting Room xml meeting room file in error");
@@ -157,12 +150,6 @@ public class BuildingManagerImpl implements BuildingManager {
 					throw new InvalidParametersException("ConfigurationEndpoint.update : Can not update buildding floor because rooms are on deleted floors");
 				}
 			}
-		}
-		
-		// update xml meeting room config file
-		String meetingroomActivated = properties.getProperty("meetingroom.activated");
-		if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
-			
 			// If newNbFloors < oldNBFloors && meeting room associated to deleted floors -> throws exception
 			List<MeetingRoomDao> meetingRooms = meetingRoomRepository.findMeetingRoomsByBuildingId(building.getId());
 			for(MeetingRoomDao meetingRoom :meetingRooms){
@@ -172,11 +159,18 @@ public class BuildingManagerImpl implements BuildingManager {
 					throw new InvalidParametersException("ConfigurationEndpoint.update : Can not update buildding floor because meeting rooms are on deleted floors");
 				}
 			}
+		}
+		
+		BuildingDao buildingUpdated = buildingRepository.updateBuilding(building);
+		
+		// update xml meeting room config file
+		String meetingroomActivated = properties.getProperty("meetingroom.activated");
+		if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
 			
 			MeetingRoomGroupsConfigurationDao meetingRoomGroupsConfiguration;
 			if (oldBuildingDao.getNbFloors() < building.getNbFloors()){
 				for(int i = oldBuildingDao.getNbFloors().intValue(); i < building.getNbFloors(); i ++){
-					String fileName = addressTools.getCountryRegionCityNamesFromCityId(building.getCityId()) + "_" + building.getName() + "_" + i;
+					String fileName = building.getId() + "_" + i;
 					
 					meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
 					meetingRoomGroupsConfiguration.setBuildingId(building.getId());
@@ -188,23 +182,9 @@ public class BuildingManagerImpl implements BuildingManager {
 					
 					fileManager.createFile(fileName);
 				}
-				for(int i = 0; i < oldBuildingDao.getNbFloors(); i ++){
-					String fileName = addressTools.getCountryRegionCityNamesFromCityId(building.getCityId()) + "_" + building.getName() + "_" + i;
-					String fileSubName = addressTools.getCountryRegionCityNamesFromCityId(oldBuildingDao.getCityId());
-					
-					meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
-					meetingRoomGroupsConfiguration.setBuildingId(building.getId());
-					meetingRoomGroupsConfiguration.setFloor(Long.valueOf(i));
-					meetingRoomGroupsConfiguration.setMeetingroomGroupId(fileName);
-					
-					// update entry in meetingroom_groups_configuration
-					meetingRoomGroupsConfigurationRepository.updateMeetingRoomGroupsConfiguration(meetingRoomGroupsConfiguration);
-					
-					fileManager.updateFile(fileSubName + "_" + oldBuildingDao.getName() + "_" + i, fileName);
-				}
 			} else if (oldBuildingDao.getNbFloors() > building.getNbFloors()){
 				for(int i = oldBuildingDao.getNbFloors().intValue(); i >= building.getNbFloors(); i --){
-					String fileName = addressTools.getCountryRegionCityNamesFromCityId(oldBuildingDao.getCityId()) + "_" + oldBuildingDao.getName() + "_" + i;
+					String fileName = oldBuildingDao.getId() + "_" + i;
 					
 					meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
 					meetingRoomGroupsConfiguration.setBuildingId(building.getId());
@@ -215,38 +195,9 @@ public class BuildingManagerImpl implements BuildingManager {
 					
 					fileManager.deleteFile(fileName);
 				}
-				for(int i = 0; i < building.getNbFloors(); i ++){
-					String fileName = addressTools.getCountryRegionCityNamesFromCityId(building.getCityId()) + "_" + building.getName() + "_" + i;
-					String fileSubName = addressTools.getCountryRegionCityNamesFromCityId(oldBuildingDao.getCityId());
-					
-					meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
-					meetingRoomGroupsConfiguration.setBuildingId(building.getId());
-					meetingRoomGroupsConfiguration.setFloor(Long.valueOf(i));
-					meetingRoomGroupsConfiguration.setMeetingroomGroupId(fileName);
-					
-					// update entry in meetingroom_groups_configuration
-					meetingRoomGroupsConfigurationRepository.updateMeetingRoomGroupsConfiguration(meetingRoomGroupsConfiguration);
-					
-					fileManager.updateFile(fileSubName + "_" + oldBuildingDao.getName() + "_" + i, fileName);
-				}
-			} else {
-				for(int i = 0; i < building.getNbFloors(); i ++){
-					String fileName = addressTools.getCountryRegionCityNamesFromCityId(building.getCityId()) + "_" + building.getName() + "_" + i;
-					String fileSubName = addressTools.getCountryRegionCityNamesFromCityId(oldBuildingDao.getCityId());
-					
-					meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
-					meetingRoomGroupsConfiguration.setBuildingId(building.getId());
-					meetingRoomGroupsConfiguration.setFloor(Long.valueOf(i));
-					meetingRoomGroupsConfiguration.setMeetingroomGroupId(fileName);
-					
-					// update entry in meetingroom_groups_configuration
-					meetingRoomGroupsConfigurationRepository.updateMeetingRoomGroupsConfiguration(meetingRoomGroupsConfiguration);
-					
-					fileManager.updateFile(fileSubName + "_" + oldBuildingDao.getName() + "_" + i, fileName);
-				}
 			}
 		}
-		return buildingRepository.updateBuilding(building);
+		return buildingUpdated;
 	}
 
 	@Override
@@ -263,13 +214,14 @@ public class BuildingManagerImpl implements BuildingManager {
 				meetingRoomGroupsConfigurationRepository.deleteByBuildingId(buildingDao.getId());
 				
 				for(int i = 0; i < buildingDao.getNbFloors(); i ++){
-					String fileName = addressTools.getCountryRegionCityNamesFromCityId(buildingDao.getCityId()) + "_" + buildingDao.getName() + "_" + i;
+					String fileName = buildingDao.getId() + "_" + i;
 					fileManager.deleteFile(fileName);
 				}
 			}
-			
+
 			preferenceRepository.deleteByBuildingId(buildingId);
 			buildingRepository.delete(buildingId);
+			
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("Building by id " + buildingId + " is not found", e);
 			LOGGER.error("Building by id " + buildingId + " is not found");

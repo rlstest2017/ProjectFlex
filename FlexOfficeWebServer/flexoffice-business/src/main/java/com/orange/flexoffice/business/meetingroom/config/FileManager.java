@@ -39,7 +39,7 @@ public class FileManager {
 	public void createFile(String fileName) throws IOException, JAXBException {
 		String filePath = properties.getProperty("meetingroom.path");
 		Array room = new Array();
-		room.setDescription("Liste des meeting rooms pour le bâtiment " + fileName);
+		room.setDescription("Liste des meeting rooms pour le bâtiment avec l'identifiant suivi de l'étage suivant: " + fileName);
 		Rooms rooms = new Rooms();
 		ArrayList<Numeric> nums = new ArrayList<Numeric>();
 		rooms.setNumeric(nums);
