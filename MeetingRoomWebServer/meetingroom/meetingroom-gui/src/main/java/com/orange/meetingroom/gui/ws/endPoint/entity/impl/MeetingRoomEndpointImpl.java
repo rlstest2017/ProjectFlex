@@ -31,6 +31,7 @@ import com.orange.meetingroom.gui.ws.model.BookingSetInput;
 import com.orange.meetingroom.gui.ws.model.BookingSetOutput;
 import com.orange.meetingroom.gui.ws.model.BookingUpdateInput;
 import com.orange.meetingroom.gui.ws.model.BookingUpdateOutput;
+import com.orange.meetingroom.gui.ws.model.EMeetingroomStatus;
 import com.orange.meetingroom.gui.ws.model.MeetingRoom;
 import com.orange.meetingroom.gui.ws.model.MeetingRoomBookings;
 import com.orange.meetingroom.gui.ws.model.MeetingRoomDetails;
@@ -48,7 +49,8 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	private static final Logger LOGGER = Logger.getLogger(MeetingRoomEndpointImpl.class);
 	private final ObjectFactory factory = new ObjectFactory();
 	static final String FORMAT_JSON = "json";
-	static final String FORCED_UPDATE_CACHE_DEFAULT = "false";
+	static final String FORCED_UPDATE_CACHE_TRUE = "true";
+	static final String FORCED_UPDATE_CACHE_FALSE = "false";
 	static final String ACKNOWLEDGED_DAFAULT = "0";
 	static final String ACKNOWLEDGED_CONFIRM = "1";
 	
@@ -59,7 +61,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	private ErrorMessageHandler errorMessageHandler;
 
 	@Override
-	public MeetingRoom getMeetingRoomBookings(String meetingRoomExternalId) {
+	public MeetingRoom getMeetingRoomBookings(String meetingRoomExternalId, Boolean forceUpdateCache) {
 		
 		try {
 		MeetingRoom meetingroom = factory.createMeetingRoom();
@@ -67,7 +69,15 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 		GetAgentBookingsParameters params = new GetAgentBookingsParameters();
 		params.setRoomID(meetingRoomExternalId);
 		params.setFormat(FORMAT_JSON);
-		params.setForceUpdateCache(FORCED_UPDATE_CACHE_DEFAULT);
+		if (forceUpdateCache != null) {
+			if (forceUpdateCache) {
+				params.setForceUpdateCache(FORCED_UPDATE_CACHE_TRUE);
+			} else {
+				params.setForceUpdateCache(FORCED_UPDATE_CACHE_FALSE);
+			}
+		} else {
+			params.setForceUpdateCache(FORCED_UPDATE_CACHE_FALSE);
+		}
 			
 		MeetingRoomConnectorReturn meetingroomreturn = phpConnectorManager.getBookingsFromAgent(params);
 		
@@ -82,7 +92,9 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 				details.setMeetingRoomExternalId(detailsReturn.getMeetingRoomExternalId());
 				details.setMeetingRoomExternalName(detailsReturn.getMeetingRoomExternalName());
 				details.setMeetingRoomExternalLocation(detailsReturn.getMeetingRoomExternalLocation());
-				// TODO add details.setMeetingRoomStatus(detailsReturn.get);
+				if (detailsReturn.getMeetingRoomStatus() != null) {
+					details.setMeetingRoomStatus(EMeetingroomStatus.valueOf(detailsReturn.getMeetingRoomStatus().toString()));
+				}
 				
 				meetingRoomBookings.setMeetingRoomDetails(details);
 				

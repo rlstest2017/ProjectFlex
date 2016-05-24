@@ -1,12 +1,13 @@
 package com.orange.meetingroom.connector.flexoffice.enums;
 
 /**
- * EnumCommand
+ * EnumMeetingRoomStatus
  * @author oab
  *
  */
 public enum EnumMeetingRoomStatus {
 	FREE,
 	OCCUPIED,
-	UNKNOWN
+	UNKNOWN,
+	ACK
 }

@@ -1,6 +1,7 @@
 package com.orange.meetingroom.gui.ws.endPoint.entity;
 
 import static com.orange.meetingroom.gui.ws.ParamsConst.MEETINGROOM_EXTERNAL_ID_PARAM;
+import static com.orange.meetingroom.gui.ws.ParamsConst.FORCE_UPDATE_CACHE;
 import static com.orange.meetingroom.gui.ws.ParamsConst.DASHBOARD_MAC_ADDRESS_PARAM;
 import static com.orange.meetingroom.gui.ws.ParamsConst.DASHBOARD_MAX_BOOKINGS_PARAM;
 import static com.orange.meetingroom.gui.ws.ParamsConst.DASHBOARD_START_DATE_BOOKINGS_PARAM;
@@ -47,7 +48,7 @@ public interface MeetingRoomEndpoint {
 	@Path(MEETINGROOMS_EXTERNAL_ID_PATH + BOOKINGS_PATH)
 	@Consumes (MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	MeetingRoom getMeetingRoomBookings(@PathParam(MEETINGROOM_EXTERNAL_ID_PARAM) String meetingRoomExternalId);
+	MeetingRoom getMeetingRoomBookings(@PathParam(MEETINGROOM_EXTERNAL_ID_PARAM) String meetingRoomExternalId, @QueryParam(FORCE_UPDATE_CACHE) Boolean forceUpdateCache);
 
 	/**
 	 * Get information on meetingrooms for dashboard.
