@@ -28,6 +28,7 @@ import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomStatDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
+import com.orange.flexoffice.dao.common.model.enumeration.E_MeetingRoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_MeetingRoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_MeetingRoomType;
 import com.orange.flexoffice.dao.common.model.object.BuildingDto;
@@ -262,8 +263,8 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 				} else {
 					LOGGER.debug("MeetingRoomStat to create !!!");
 					MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
-					meetingRoomStat.setMeetingRoomId(meetingroomDao.getId().intValue());
-					meetingRoomStat.setMeetingRoomInfo(E_MeetingRoomStatus.OCCUPIED.toString());
+					meetingRoomStat.setMeetingroomId(meetingroomDao.getId().intValue());
+					meetingRoomStat.setMeetingRoomInfo(E_MeetingRoomInfo.OCCUPIED.toString());
 					meetingRoomStatRepository.saveOccupiedMeetingRoomStat(meetingRoomStat);
 					LOGGER.info("meetingRoomStat created for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
 				}
@@ -272,7 +273,7 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 				if (foundMeetingRoom.getStatus().equals(E_MeetingRoomStatus.OCCUPIED.toString())) { 
 					LOGGER.debug("MeetingRoomStat to update !!!");
 					MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
-					meetingRoomStat.setMeetingRoomId(meetingroomDao.getId().intValue());
+					meetingRoomStat.setMeetingroomId(meetingroomDao.getId().intValue());
 					meetingRoomStatRepository.updateEndOccupancyDate(meetingRoomStat);
 					LOGGER.info("meetingRoomStat updateEndOccupancyDate for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
 					meetingroomDao.setOrganizerLabel(null);
@@ -301,8 +302,8 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 				
 				LOGGER.debug("MeetingRoomStat to create !!!");
 				MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
-				meetingRoomStat.setMeetingRoomId(meetingroomDao.getId().intValue());
-				meetingRoomStat.setMeetingRoomInfo(E_MeetingRoomStatus.OCCUPIED.toString());
+				meetingRoomStat.setMeetingroomId(meetingroomDao.getId().intValue());
+				meetingRoomStat.setMeetingRoomInfo(E_MeetingRoomInfo.OCCUPIED.toString());
 				meetingRoomStatRepository.saveOccupiedMeetingRoomStat(meetingRoomStat);
 				LOGGER.info("meetingRoomStat created for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
 				
@@ -310,7 +311,7 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 				if (foundMeetingRoom.getStatus().equals(E_MeetingRoomStatus.OCCUPIED.toString())) { 
 					LOGGER.debug("MeetingRoomStat to update !!!");
 					MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
-					meetingRoomStat.setMeetingRoomId(meetingroomDao.getId().intValue());
+					meetingRoomStat.setMeetingroomId(meetingroomDao.getId().intValue());
 					meetingRoomStatRepository.updateEndOccupancyDate(meetingRoomStat);
 					LOGGER.info("meetingRoomStat updateEndOccupancyDate for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
 					meetingroomDao.setOrganizerLabel(null);

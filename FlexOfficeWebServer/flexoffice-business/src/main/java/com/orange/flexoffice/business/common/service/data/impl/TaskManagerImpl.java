@@ -24,7 +24,7 @@ import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_AgentStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_DashboardStatus;
-import com.orange.flexoffice.dao.common.model.enumeration.E_MeetingRoomStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_MeetingRoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
@@ -124,6 +124,26 @@ public class TaskManagerImpl implements TaskManager {
 		LOGGER.info("TaskManager.purgeStatsDataMethod is executed");
 		
 		LOGGER.debug(" End TaskManager.purgeStatsDataMethod method : " + new Date());
+	}
+	
+	@Override
+	public void purgeMeetingRoomStatsDataMethod() {
+		
+		LOGGER.debug(" Begin TaskManager.purgeMeetingRoomStatsDataMethod method : " + new Date());
+		
+		// - Calculate Date with KEEP_STAT_DATA_IN_DAYS parameter
+		ConfigurationDao keepStatDataInDays = configRepository.findByKey(E_ConfigurationKey.KEEP_STAT_DATA_IN_DAYS.toString());
+		int keepStatDataInDaysValue = Integer.valueOf(keepStatDataInDays.getValue()); // in days	
+					
+		Date lastAcceptedStatDate = dateTools.lastAcceptedStatDate(String.valueOf(keepStatDataInDaysValue));
+		
+		// Delete all lines before lastAcceptedStatDate in meetingroom_stats & meetingroom_daily_occupancy
+		meetingRoomDailyRepository.deleteByDay(lastAcceptedStatDate);
+		meetingRoomStatsRepository.deleteByBeginOccupancyDate(lastAcceptedStatDate);
+		
+		LOGGER.info("TaskManager.purgeMeetingRoomStatsDataMethod is executed");
+		
+		LOGGER.debug(" End TaskManager.purgeMeetingRoomStatsDataMethod method : " + new Date());
 	}
 	
 	
@@ -245,12 +265,12 @@ public class TaskManagerImpl implements TaskManager {
 			MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
 			meetingRoomStat.setBeginOccupancyDate(beginDayDate);
 			meetingRoomStat.setEndOccupancyDate(endDayDate);
-			meetingRoomStat.setMeetingRoomInfo(E_MeetingRoomStatus.FREE.toString());
+			meetingRoomStat.setMeetingRoomInfo(E_MeetingRoomInfo.UNOCCUPIED.toString());
 			List<MeetingRoomStatDao> meetingRoomSt = meetingRoomStatsRepository.findAllOccupiedDailyMeetingRoomStats(meetingRoomStat);
 			
 			// 4 - cumulate the stats by meetingroomId
 			for (MeetingRoomStatDao rstat : meetingRoomSt) { // the meetingroomStats are order by meetingroomId 1,2,3,....
-					Integer index = getMeetingRoomInList(rstat.getMeetingRoomId(), meetingRoomDailyList);
+					Integer index = getMeetingRoomInList(rstat.getMeetingroomId(), meetingRoomDailyList);
 					if (index != -1) {
 						// calculate occupancyDuration
 						Long duration = dateTools.calculateDuration(rstat.getBeginOccupancyDate(), rstat.getEndOccupancyDate());
@@ -263,7 +283,7 @@ public class TaskManagerImpl implements TaskManager {
 						MeetingRoomDailyOccupancyDao meetingRoomEntry = new MeetingRoomDailyOccupancyDao();
 						// calculate occupancyDuration
 						Long duration = dateTools.calculateDuration(rstat.getBeginOccupancyDate(), rstat.getEndOccupancyDate());
-						meetingRoomEntry.setMeetingRoomId(rstat.getMeetingRoomId());
+						meetingRoomEntry.setMeetingroomId(rstat.getMeetingroomId());
 						meetingRoomEntry.setOccupancyDuration(duration);
 						// ------ Add new meeting room in the list ----
 						meetingRoomDailyList.add(meetingRoomEntry);
@@ -281,25 +301,6 @@ public class TaskManagerImpl implements TaskManager {
 		
 		LOGGER.debug(" end TaskManager.processMeetingRoomDailyStats method : " + new Date());
 		
-	}
-
-	@Override
-	public void purgeMeetingRoomStatsDataMethod() {
-		LOGGER.debug(" Begin TaskManager.purgeMeetingRoomStatsDataMethod method : " + new Date());
-		
-		// - Calculate Date with KEEP_STAT_DATA_IN_DAYS parameter
-		ConfigurationDao keepStatDataInDays = configRepository.findByKey(E_ConfigurationKey.KEEP_STAT_DATA_IN_DAYS.toString());
-		int keepStatDataInDaysValue = Integer.valueOf(keepStatDataInDays.getValue()); // in days	
-					
-		Date lastAcceptedStatDate = dateTools.lastAcceptedStatDate(String.valueOf(keepStatDataInDaysValue));
-		
-		// Delete all lines before lastAcceptedStatDate in room_stats & room_daily_occupancy
-		meetingRoomDailyRepository.deleteByDay(lastAcceptedStatDate);
-		meetingRoomStatsRepository.deleteByBeginOccupancyDate(lastAcceptedStatDate);
-		
-		LOGGER.info("TaskManager.purgeMeetingRoomStatsDataMethod is executed");
-		
-		LOGGER.debug(" End TaskManager.purgeMeetingRoomStatsDataMethod method : " + new Date());
 	}
 	
 	@Override
@@ -363,7 +364,7 @@ public class TaskManagerImpl implements TaskManager {
 		if (!meetingRoomDailyList.isEmpty()) {
 			for (MeetingRoomDailyOccupancyDao meetingRoomDaily : meetingRoomDailyList) {
 				index = index + 1;
-				if (meetingRoomId == meetingRoomDaily.getMeetingRoomId()) {
+				if (meetingRoomId == meetingRoomDaily.getMeetingroomId()) {
 					state = true;
 					break;
 				} 

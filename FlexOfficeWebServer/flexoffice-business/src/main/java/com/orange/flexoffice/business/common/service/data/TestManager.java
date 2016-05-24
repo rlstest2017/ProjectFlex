@@ -44,6 +44,24 @@ public interface TestManager {
 	boolean initRoomMonthlyOccupancyTable();
 	
 	/**
+	 * Initialise MeetingRoomStats tests data in DB
+	 * @return true if successfully done
+	 */
+	boolean initMeetingRoomStatsTableForAdminUI();
+	
+	/**
+	 * Initialise MeetingRoomDailyOccupancy tests data in DB by DAY
+	 * @return true if successfully done
+	 */
+	boolean initMeetingRoomDailyOccupancyTable();
+	
+	/**
+	 * Initialise MeetingRoomDailyOccupancy tests data in DB by MONTH
+	 * @return true if successfully done
+	 */
+	boolean initMeetingRoomMonthlyOccupancyTable();
+	
+	/**
 	 * initTeachinSensorsTable
 	 * @return
 	 */

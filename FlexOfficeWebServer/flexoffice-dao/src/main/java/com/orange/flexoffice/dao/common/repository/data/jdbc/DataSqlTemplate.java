@@ -117,7 +117,7 @@ public final class DataSqlTemplate {
 	public static final String FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE = 
 			"select * from %s where room_info=CAST(:roomInfo AS roomInfo) and begin_occupancy_date >:beginOccupancyDate and end_occupancy_date <:endOccupancyDate order by room_id";
 	public static final String FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE_MEETINGROOM = 
-			"select * from %s where meetingroom_info=CAST(:meetingroomInfo AS meetingRoomInfo) and begin_occupancy_date >:beginOccupancyDate and end_occupancy_date <:endOccupancyDate order by meetingroom_id";
+			"select * from %s where meetingroom_info=CAST(:meetingRoomInfo AS meetingRoomInfo) and begin_occupancy_date >:beginOccupancyDate and end_occupancy_date <:endOccupancyDate order by meetingroom_id";
 	public static final String FIND_ALL_REGIONS_SUMMARY_TEMPLATE = 
 	"select regions.id, regions.name, countries.name as country_name From regions, countries where regions.country_id=countries.id";
 	public static final String FIND_ALL_CITIES_SUMMARY_TEMPLATE = 
@@ -219,7 +219,7 @@ public final class DataSqlTemplate {
 	public static final String CREATE_OCCUPIED_ROOMSTAT_TEMPLATE = 
 			"insert into %s (room_id, room_info, begin_occupancy_date) values (:roomId, CAST(:roomInfo AS roomInfo), now())";
 	public static final String CREATE_OCCUPIED_MEETINGROOMSTAT_TEMPLATE = 
-			"insert into %s (meetingroom_id, meetingroom_info, begin_occupancy_date) values (:meetingRoomId, CAST(:meetingRoomInfo AS meetingRoomInfo), :beginOccupancyDate)";
+			"insert into %s (meetingroom_id, meetingroom_info, begin_occupancy_date) values (:meetingroomId, CAST(:meetingRoomInfo AS meetingRoomInfo), :beginOccupancyDate)";
 	public static final String CREATE_SENSOR_TEMPLATE = 
 			"insert into %s (identifier, name, type, profile, description, status, room_id) values (:identifier, :name, CAST(:type AS sensortype), :profile, :description, CAST(:status AS sensorstatus), :roomId)";
 	public static final String UPDATE_RESERVED_ROOMSTAT_TEMPLATE = 

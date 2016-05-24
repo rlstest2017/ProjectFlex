@@ -16,7 +16,6 @@ import com.orange.flexoffice.business.common.service.data.DashboardManager;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.DashboardDao;
-import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_CommandModel;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_DashboardStatus;
@@ -24,7 +23,6 @@ import com.orange.flexoffice.dao.common.model.object.DashboardDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.DashboardDaoRepository;
-import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomStatDaoRepository;
 
 /**
  * Manages {@link DashboardDto}.
@@ -40,8 +38,6 @@ public class DashboardManagerImpl implements DashboardManager {
 	
 	@Autowired
 	private DashboardDaoRepository dashboardRepository;
-	@Autowired
-	private RoomStatDaoRepository roomStatRepository;
 	@Autowired
 	private AlertDaoRepository alertRepository;
 	@Autowired
@@ -229,16 +225,5 @@ public class DashboardManagerImpl implements DashboardManager {
 		ConfigurationDao occupancyTimeOut = configRepository.findByKey(E_ConfigurationKey.OCCUPANCY_TIMEOUT.toString());
 		String occupancyTimeOutValueValue = occupancyTimeOut.getValue();
 		return Long.valueOf(occupancyTimeOutValueValue);
-	}
-	
-	
-	/**
-	 * findByRoomId synchronized method
-	 * @param data
-	 * @return
-	 */
-	private synchronized RoomStatDao findByRoomId(RoomStatDao data) { 
-	 return roomStatRepository.findbyRoomId(data);
-	}
-	
+	}	
 }

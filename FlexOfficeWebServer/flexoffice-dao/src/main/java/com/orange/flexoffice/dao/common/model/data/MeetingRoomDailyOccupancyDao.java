@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public class MeetingRoomDailyOccupancyDao extends AbstractData {
 	
-	private Integer meetingRoomId;
+	private Integer meetingroomId;
 	private Long occupancyDuration;
 	private Date day;
 	
@@ -33,11 +33,11 @@ public class MeetingRoomDailyOccupancyDao extends AbstractData {
 	public String getColumnId() {
 		return getId().toString();
 	}
-	public Integer getMeetingRoomId() {
-		return meetingRoomId;
+	public Integer getMeetingroomId() {
+		return meetingroomId;
 	}
-	public void setMeetingRoomId(Integer meetingRoomId) {
-		this.meetingRoomId = meetingRoomId;
+	public void setMeetingroomId(Integer meetingRoomId) {
+		this.meetingroomId = meetingRoomId;
 	}
 	
 

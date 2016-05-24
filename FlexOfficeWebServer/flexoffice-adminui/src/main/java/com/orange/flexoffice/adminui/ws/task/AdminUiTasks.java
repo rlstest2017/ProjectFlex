@@ -76,6 +76,14 @@ public class AdminUiTasks {
     }
 	
 	// for tests
+	public boolean processMeetingRoomDailyStatsTestMethod()  {
+		LOGGER.debug("Before Method executed every day at 23:00. Current time is :: "+ new Date());
+		taskManager.processMeetingRoomDailyStats();
+		LOGGER.debug("After Method executed every day at 23:00. Current time is :: "+ new Date());
+		return true;
+    }
+	
+	// for tests
 	public boolean checkTeachinTimeOutTestMethod()  {
 		LOGGER.debug("Before checkTeachinTimeOutTestMethod. Current time is : "+ new Date());
 		taskManager.checkTeachinTimeOut();
@@ -87,6 +95,14 @@ public class AdminUiTasks {
 	public boolean purgeStatsDataTestMethod()  {
 		LOGGER.debug("Before purgeStatsDataTestMethod. Current time is : "+ new Date());
 		taskManager.purgeStatsDataMethod();
+		LOGGER.debug("After purgeStatsDataTestMethod. Current time is : "+ new Date());
+		return true;
+	}
+	
+	// for tests
+	public boolean purgeMeetingRoomStatsDataTestMethod()  {
+		LOGGER.debug("Before purgeStatsDataTestMethod. Current time is : "+ new Date());
+		taskManager.purgeMeetingRoomStatsDataMethod();
 		LOGGER.debug("After purgeStatsDataTestMethod. Current time is : "+ new Date());
 		return true;
 	}

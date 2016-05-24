@@ -30,5 +30,6 @@
 	<bean id="errorMessageHandler" class="com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler"/>
 	<bean id="adminUiTasks" class="com.orange.flexoffice.adminui.ws.task.AdminUiTasks"/>
 	<bean id="initOfflineGatewaysAlerts" class="com.orange.flexoffice.adminui.ws.utils.InitOfflineGatewaysAlerts"/>
+	<bean id="meetingRoomStatEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.MeetingRoomStatEndpointImpl"/>
 		
 </beans>

@@ -119,7 +119,7 @@ public interface MeetingRoomEndpoint {
 	 * @return true if successfully done
 	 */
 	// Used for tests
-	boolean initRoomStatsTable();
+	boolean initMeetingRoomStatsTable();
 	
 }
 

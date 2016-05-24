@@ -290,40 +290,30 @@ public class MeetingRoomEndpointImplTest {
 		assertEquals(true, expectedResult);	
 	}
 
-	/*@Test
-	public void TestN_initRoomStatsTable() {
+	@Test
+	public void TestN_initMeetingRoomStatsTable() {
 		// SetUp
-		boolean state = meetingroomEndpoint.initRoomStatsTable();
+		boolean state = meetingroomEndpoint.initMeetingRoomStatsTable();
 
 		// Asserts
 		assertEquals(true, state);
 	}
 
 	@Test
-	public void TestO_processDailyStatsTask() {
+	public void TestO_processDailyMeetingRoomStatsTask() {
 		// SetUp
-		boolean state = adminUiTasks.processDailyStatsTestMethod();
+		boolean state = adminUiTasks.processMeetingRoomDailyStatsTestMethod();
 
 		// Asserts
 		assertEquals(true, state);
 	}
 	
 	@Test
-	public void TestP_purgeStatsTask() {
+	public void TestP_purgeMeetingRoomStatsTask() {
 		// SetUp
-		boolean state = adminUiTasks.purgeStatsDataTestMethod();
+		boolean state = adminUiTasks.purgeMeetingRoomStatsDataTestMethod();
 
 		// Asserts
 		assertEquals(true, state);
-	}
-	
-	@Test
-	public void TestQ_updateOFFLINEGatewaysAlerts() {
-		// SetUp
-		boolean state = initOfflineGatewaysAlerts.updateOFFLINEGatewaysAlertsForTest();
-
-		// Asserts
-		assertEquals(true, state);
-	}*/
-	
+	}	
 }

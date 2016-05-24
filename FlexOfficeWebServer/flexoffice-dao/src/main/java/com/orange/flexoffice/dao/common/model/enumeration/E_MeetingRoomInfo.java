@@ -1,8 +1,7 @@
 package com.orange.flexoffice.dao.common.model.enumeration;
 
-public enum E_MeetingRoomStatus {
-	FREE,
+public enum E_MeetingRoomInfo {
 	OCCUPIED,
-	UNKNOWN,
-	ACK;
+	TIMEOUT,
+	UNOCCUPIED
 }

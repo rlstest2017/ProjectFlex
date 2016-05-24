@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.orange.flexoffice.business.common.service.data.TestManager;
+import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.InitTestRepository;
 
 /**
@@ -48,6 +49,21 @@ public class TestManagerImpl implements TestManager {
 	@Override
 	public boolean initRoomMonthlyOccupancyTable() {
 		return testRepository.initRoomMonthlyOccupancyTable();
+	}
+
+	@Override
+	public boolean initMeetingRoomStatsTableForAdminUI() {
+		return testRepository.initMeetingRoomStatsTableForAdminUi();
+	}
+
+	@Override
+	public boolean initMeetingRoomDailyOccupancyTable() {
+		return testRepository.initMeetingRoomDailyOccupancyTable();
+	}
+
+	@Override
+	public boolean initMeetingRoomMonthlyOccupancyTable() {
+		return testRepository.initMeetingRoomMonthlyOccupancyTable();
 	}
 
 	@Override

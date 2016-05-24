@@ -7,19 +7,14 @@
 	<import resource="classpath*:spring/applicationContext-flexoffice-dao-test.xml" />
 	
 	<!-- JobRepository and JobLauncher are configuration/setup classes -->
-	<bean id="jobRepository"
-		class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean" />
+	<bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean" />
 
-	<bean id="jobLauncher"
-		class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+	<bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
 		<property name="jobRepository" ref="jobRepository" />
 	</bean>
 
-	<!-- ItemReader which reads from database and returns the row mapped by 
-		rowMapper -->
-	<bean id="databaseItemReader"
-		class="org.springframework.batch.item.database.JdbcCursorItemReader">
-
+	<!-- ItemReader which reads from database and returns the row mapped by rowMapper -->
+	<bean id="databaseItemReader" class="org.springframework.batch.item.database.JdbcCursorItemReader">
 		<property name="dataSource" ref="dataSource" />
 
 		<!--  value="select rooms.name as room_name, rooms.type as room_type, room_stats.begin_occupancy_date, room_stats.end_occupancy_date 
@@ -31,37 +26,28 @@
 		<property name="rowMapper">
 			<bean class="com.orange.flexoffice.business.adminui.stat.ExportStatRowMapper" />
 		</property>
-
 	</bean>
 
-
 	<!-- ItemWriter writes a line into output flat file -->
-	<bean id="flatFileItemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter"
-		scope="step">
-
+	<bean id="flatFileItemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
 		<property name="resource" value="file:export_stats.csv" />
 		<property name="shouldDeleteIfExists" value="true"/>
 		<property name="lineAggregator">
 			<!-- An Aggregator which converts an object into delimited list of strings -->
-			<bean
-				class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+			<bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
 				<property name="delimiter" value="," />
 				<property name="fieldExtractor">
 					<!-- Extractor which returns the value of beans property through reflection -->
-					<bean
-						class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+					<bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
 						<property name="names" value="roomName, roomType, beginOccupancyDate, endOccupancyDate" />
 					</bean>
 				</property>
 			</bean>
 		</property>
-		 <property name="headerCallback" ref="exportStatFlatFileWriter" />
+		<property name="headerCallback" ref="exportStatFlatFileWriter" />
 	</bean>
 
-	<bean id="exportStatFlatFileWriter"
-		class="com.orange.flexoffice.business.adminui.stat.ExportStatFlatFileWriter" >
-	</bean>	
-
+	<bean id="exportStatFlatFileWriter" class="com.orange.flexoffice.business.adminui.stat.ExportStatFlatFileWriter" />
 
 	<!-- Optional JobExecutionListener to perform business logic before and after the job -->
 	<bean id="jobListener" class="com.orange.flexoffice.business.adminui.stat.ExportStatJobListener" />
@@ -75,13 +61,70 @@
 			<batch:tasklet transaction-manager="transactionManager">
 				<!--  <batch:chunk reader="databaseItemReader" writer="flatFileItemWriter"
 					processor="itemProcessor" commit-interval="500" />-->
-				<batch:chunk reader="databaseItemReader" writer="flatFileItemWriter"
-					commit-interval="500"/>
+				<batch:chunk reader="databaseItemReader" writer="flatFileItemWriter" commit-interval="500"/>
 				<!-- 500 => 832ms for 7000 lines, 10 => 2200ms for 7000 lines -->	
 			</batch:tasklet>
 		</batch:step>
 		<batch:listeners>
 			<batch:listener ref="jobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<!-- MEETING ROOM -->
+	<!-- ItemReader which reads from database and returns the row mapped by rowMapper -->
+	<bean id="databaseMeetingRoomItemReader" class="org.springframework.batch.item.database.JdbcCursorItemReader">
+		<property name="dataSource" ref="dataSource" />
+
+		<!--  value="select rooms.name as room_name, rooms.type as room_type, room_stats.begin_occupancy_date, room_stats.end_occupancy_date 
+				from rooms, room_stats where rooms.id=room_stats.room_id order by room_stats.begin_occupancy_date" />-->
+		<property name="sql"
+			value="select meetingrooms.name as meeting_room_name, meetingrooms.type as meeting_room_type, meetingroom_stats.begin_occupancy_date, meetingroom_stats.end_occupancy_date 
+				from meetingrooms, meetingroom_stats where meetingrooms.id=meetingroom_stats.meetingroom_id and meetingroom_stats.begin_occupancy_date is not null and meetingroom_stats.end_occupancy_date is not null order by meetingroom_stats.begin_occupancy_date" />
+		
+		<property name="rowMapper">
+			<bean class="com.orange.flexoffice.business.adminui.stat.ExportMeetingRoomStatRowMapper" />
+		</property>
+	</bean>
+
+	<!-- ItemWriter writes a line into output flat file -->
+	<bean id="flatFileMeetingRoomItemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
+		<property name="resource" value="file:export_meetingroom_stats.csv" />
+		<property name="shouldDeleteIfExists" value="true"/>
+		<property name="lineAggregator">
+			<!-- An Aggregator which converts an object into delimited list of strings -->
+			<bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+				<property name="delimiter" value="," />
+				<property name="fieldExtractor">
+					<!-- Extractor which returns the value of beans property through reflection -->
+					<bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+						<property name="names" value="meetingRoomName, meetingRoomType, beginOccupancyDate, endOccupancyDate" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+		<property name="headerCallback" ref="exportStatFlatFileWriter" />
+	</bean>
+
+	<bean id="exportMeetingRoomStatFlatFileWriter" class="com.orange.flexoffice.business.adminui.stat.ExportMeetingRoomStatFlatFileWriter" />
+
+	<!-- Optional JobExecutionListener to perform business logic before and after the job -->
+	<bean id="jobMeetingRoomListener" class="com.orange.flexoffice.business.adminui.stat.ExportMeetingRoomStatJobListener" />
+
+	<!-- Optional ItemProcessor to perform business logic/filtering on the input records -->
+	<bean id="itemMeetingRoomProcessor" class="com.orange.flexoffice.business.adminui.stat.ExportMeetingRoomStatItemProcessor" />
+
+	<!-- Actual Job -->
+	<batch:job id="exportMeetingRoomStatJob">
+		<batch:step id="stepMeetingRoom1">
+			<batch:tasklet transaction-manager="transactionManager">
+				<!--  <batch:chunk reader="databaseItemReader" writer="flatFileItemWriter"
+					processor="itemMeetingRoomProcessor" commit-interval="500" />-->
+				<batch:chunk reader="databaseMeetingRoomItemReader" writer="flatFileMeetingRoomItemWriter" commit-interval="500"/>
+				<!-- 500 => 832ms for 7000 lines, 10 => 2200ms for 7000 lines -->	
+			</batch:tasklet>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="jobMeetingRoomListener" />
 		</batch:listeners>
 	</batch:job>
 

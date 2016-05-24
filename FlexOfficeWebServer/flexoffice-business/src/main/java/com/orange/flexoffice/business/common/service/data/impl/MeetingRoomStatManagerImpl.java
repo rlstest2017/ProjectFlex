@@ -82,7 +82,7 @@ public class MeetingRoomStatManagerImpl implements MeetingRoomStatManager {
 		
 		// 3 - cumulate & calculate the rates by meetingroomId
 		for (MeetingRoomDailyOccupancyDao meetingRoomDailyOccupancyDao : meetingRoomDailyList) { // the statsDaily are order by meetingroomId 1,2,3,....
-			Integer index = meetingRoomStatTools.getStatInList(meetingRoomDailyOccupancyDao.getMeetingRoomId(), simpleStatList);
+			Integer index = meetingRoomStatTools.getStatInList(meetingRoomDailyOccupancyDao.getMeetingroomId(), simpleStatList);
 			if (index != -1) {
 				// calculate occupancyDuration
 				MeetingRoomSimpleStatDto statGet = simpleStatList.get(index);
@@ -92,7 +92,7 @@ public class MeetingRoomStatManagerImpl implements MeetingRoomStatManager {
 				// add entry
 				MeetingRoomSimpleStatDto statEntry = new MeetingRoomSimpleStatDto();
 				// set Data
-				statEntry.setMeetingRoomId(meetingRoomDailyOccupancyDao.getMeetingRoomId());
+				statEntry.setMeetingRoomId(meetingRoomDailyOccupancyDao.getMeetingroomId());
 				statEntry.setOccupancyDuration(meetingRoomDailyOccupancyDao.getOccupancyDuration());
 				
 				// ------ Add new stat in the list ----
@@ -450,7 +450,7 @@ public class MeetingRoomStatManagerImpl implements MeetingRoomStatManager {
 		context = new ClassPathXmlApplicationContext("classpath:spring/spring-batch-context.xml");
 		
 		JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
-		Job job = (Job) context.getBean("exportStatJob");
+		Job job = (Job) context.getBean("exportMeetingRoomStatJob");
 	 
 		try {
 			JobExecution execution = jobLauncher.run(job, new JobParameters());

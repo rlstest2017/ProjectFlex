@@ -56,7 +56,6 @@ public interface MeetingRoomStatEndpoint {
 	@GET
     @Path(MEETINGROOMS_PATH + EXPORT_PATH)
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-	//Response[] getFile();
 	Response getFile();
 	
 	// used for tests
@@ -66,10 +65,10 @@ public interface MeetingRoomStatEndpoint {
 	boolean executeInitTestFile();
 	
 	// used for tests
-	boolean initRoomDailyOccupancyTable();
+	boolean initMeetingRoomDailyOccupancyTable();
 	
 	// used for tests
-	boolean initRoomMonthlyOccupancyTable();
+	boolean initMeetingRoomMonthlyOccupancyTable();
 	
 }
 

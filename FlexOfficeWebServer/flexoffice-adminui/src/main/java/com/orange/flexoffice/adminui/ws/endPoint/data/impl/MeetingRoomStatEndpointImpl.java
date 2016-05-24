@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.orange.flexoffice.adminui.ws.endPoint.data.StatEndpoint;
+import com.orange.flexoffice.adminui.ws.endPoint.data.MeetingRoomStatEndpoint;
 import com.orange.flexoffice.adminui.ws.model.MultiStat;
 import com.orange.flexoffice.adminui.ws.model.MultiStatSet;
 import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
@@ -37,7 +37,7 @@ import com.orange.flexoffice.dao.common.model.object.MultiStatSetDto;
  * @author oab
  *
  */
-public class MeetingRoomStatEndpointImpl implements StatEndpoint {
+public class MeetingRoomStatEndpointImpl implements MeetingRoomStatEndpoint {
 	
 	private static final Logger LOGGER = Logger.getLogger(MeetingRoomStatEndpointImpl.class);
 	private final ObjectFactory factory = new ObjectFactory();
@@ -130,18 +130,16 @@ public class MeetingRoomStatEndpointImpl implements StatEndpoint {
 		context = new ClassPathXmlApplicationContext("classpath:spring/spring-batch-context.xml");
 		
 		JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
-		Job job = (Job) context.getBean("exportStatJob");
+		Job job = (Job) context.getBean("exportMeetingRoomStatJob");
 	 
 		try {
 			jobLauncher.run(job, new JobParameters());
-			File file = new File(properties.getProperty("export.file.location"));
+			File file = new File(properties.getProperty("export.meetingroom.file.location"));
 			ResponseBuilder response = Response.ok((Object) file);
 		    response.header("Content-Disposition",
-		           "attachment; filename=\"export_stats.csv\"");
+		           "attachment; filename=\"export__meetingroom_stats.csv\"");
 		    
 			return response.build();
-		    //Response[] table = {response.build()};
-		   //return table; 
 			
 		} catch (JobExecutionException e) {
 			LOGGER.info("Job ExportStat failed");
@@ -159,7 +157,7 @@ public class MeetingRoomStatEndpointImpl implements StatEndpoint {
 		context = new ClassPathXmlApplicationContext("classpath:spring/spring-batch-context-test.xml");
 		
 		JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
-		Job job = (Job) context.getBean("exportStatJob");
+		Job job = (Job) context.getBean("exportMeetingRoomStatJob");
 	 
 		try {
 			jobLauncher.run(job, new JobParameters());
@@ -181,13 +179,13 @@ public class MeetingRoomStatEndpointImpl implements StatEndpoint {
 	}
 
 	@Override
-	public boolean initRoomDailyOccupancyTable() {
-		return testManager.initRoomDailyOccupancyTable();
+	public boolean initMeetingRoomDailyOccupancyTable() {
+		return testManager.initMeetingRoomDailyOccupancyTable();
 	}
 
 	@Override
-	public boolean initRoomMonthlyOccupancyTable() {
-		return testManager.initRoomMonthlyOccupancyTable();
+	public boolean initMeetingRoomMonthlyOccupancyTable() {
+		return testManager.initMeetingRoomMonthlyOccupancyTable();
 	}
 
 	

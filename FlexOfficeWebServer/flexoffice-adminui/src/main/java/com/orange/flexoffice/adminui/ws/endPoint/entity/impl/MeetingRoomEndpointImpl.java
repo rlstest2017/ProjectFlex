@@ -319,11 +319,6 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 		return meetingroomManager.findByName(name);
 	}
 
-	@Override
-	public boolean initRoomStatsTable() {
-		return testManager.initRoomStatsTableForAdminUI();
-	}
-
 	/** Create Agent output from agent id
 	 * 
 	 * @param agentId
@@ -366,5 +361,11 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 		}
 
 		return tenant;
+	}
+	
+	// For test
+	@Override
+	public boolean initMeetingRoomStatsTable() {
+		return testManager.initMeetingRoomStatsTableForAdminUI();
 	}
 }

@@ -13,12 +13,10 @@ import com.orange.flexoffice.business.common.exception.DataAlreadyExistsExceptio
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.common.service.data.AgentManager;
-import com.orange.flexoffice.business.common.service.data.AlertManager;
 import com.orange.flexoffice.dao.common.model.data.AgentDao;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
-import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_AgentStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_CommandModel;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
@@ -27,7 +25,6 @@ import com.orange.flexoffice.dao.common.repository.data.jdbc.AgentDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomDaoRepository;
-import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomStatDaoRepository;
 
 /**
  * Manages {@link AgentDto}.
@@ -46,11 +43,7 @@ public class AgentManagerImpl implements AgentManager {
 	@Autowired
 	private MeetingRoomDaoRepository meetingroomRepository;
 	@Autowired
-	private RoomStatDaoRepository roomStatRepository;
-	@Autowired
 	private AlertDaoRepository alertRepository;
-	@Autowired
-	private AlertManager alertManager;
 	@Autowired
 	private ConfigurationDaoRepository configRepository;
 	
@@ -290,15 +283,4 @@ public class AgentManagerImpl implements AgentManager {
 		String occupancyTimeOutValueValue = occupancyTimeOut.getValue();
 		return Long.valueOf(occupancyTimeOutValueValue);
 	}
-	
-	
-	/**
-	 * findByRoomId synchronized method
-	 * @param data
-	 * @return
-	 */
-	private synchronized RoomStatDao findByRoomId(RoomStatDao data) { 
-	 return roomStatRepository.findbyRoomId(data);
-	}
-	
 }
