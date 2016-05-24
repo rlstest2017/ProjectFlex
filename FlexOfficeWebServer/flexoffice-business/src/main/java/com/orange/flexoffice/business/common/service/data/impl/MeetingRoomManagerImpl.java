@@ -316,6 +316,9 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 					LOGGER.info("meetingRoomStat updateEndOccupancyDate for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
 					meetingroomDao.setOrganizerLabel(null);
 				}
+			} else if(meetingroomDao.getStatus().equals(E_MeetingRoomStatus.UNKNOWN.toString())){
+				meetingroomDao.setStartDate(null);
+				meetingroomDao.setEndDate(null);
 			}
 			// update MeetingRoomDao => status & organizer label & Start & End date
 			
