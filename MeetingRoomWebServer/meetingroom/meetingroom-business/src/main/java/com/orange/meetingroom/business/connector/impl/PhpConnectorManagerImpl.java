@@ -1,5 +1,6 @@
 package com.orange.meetingroom.business.connector.impl;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ import com.orange.meetingroom.connector.php.model.response.MeetingRoomsConnector
 @Service("PhpConnectorManager")
 public class PhpConnectorManagerImpl implements PhpConnectorManager {
 
+	private static final Logger LOGGER = Logger.getLogger(PhpConnectorManagerImpl.class);
 	@Autowired
 	PhpConnectorClient phpConnector;
 	@Autowired
@@ -48,11 +50,10 @@ public class PhpConnectorManagerImpl implements PhpConnectorManager {
 				// call flexOfficeConnectorManager for send meetingRoomInfos (status, ...)
 				flexOfficeConnector.updateMeetingRoomData(data);
 			} catch (FlexOfficeInternalServerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.debug("FlexOfficeInternalServerException in updateMeetingRoomData()." + e.getMessage(), e);
 			}
 		} else {
-			// LOGGER
+			LOGGER.debug("MeetingRoomData get from processMeetingRoomStatus() is null !!!");
 		}
 		
 		return metingroomreturn;
