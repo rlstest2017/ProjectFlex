@@ -324,6 +324,10 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 					meetingroomDao.setOrganizerLabel(null);
 					meetingroomDao.setStartDate(null);
 					meetingroomDao.setEndDate(null);
+				} else {
+					meetingroomDao.setOrganizerLabel(null);
+					meetingroomDao.setStartDate(null);
+					meetingroomDao.setEndDate(null);
 				}
 			} else if(meetingroomDao.getStatus().equals(E_MeetingRoomStatus.UNKNOWN.toString())){
 				meetingroomDao.setStartDate(null);

@@ -63,8 +63,8 @@ public class MeetingRoomApiEndpointImpl implements MeetingRoomApiEndpoint {
 			MeetingRoomDao meetingRoomDao = new MeetingRoomDao();
 			meetingRoomDao.setExternalId(externalId);
 			meetingRoomDao.setStatus(meetingRoom.getMeetingRoomStatus().toString());
-			meetingRoomDao.setStartDate(new Date(meetingRoom.getStartDate()));
-			meetingRoomDao.setEndDate(new Date(meetingRoom.getEndDate()));
+			meetingRoomDao.setStartDate(new Date(meetingRoom.getStartDate() * 1000));
+			meetingRoomDao.setEndDate(new Date(meetingRoom.getEndDate() * 1000));
 			meetingRoomDao.setOrganizerLabel(meetingRoom.getOrganizerLabel());
 			
 			meetingRoomManager.updateData(meetingRoomDao);
@@ -79,7 +79,7 @@ public class MeetingRoomApiEndpointImpl implements MeetingRoomApiEndpoint {
 		
 		LOGGER.debug( "End call MeetingRoomApiEndpointImpl.updateData  at: " + new Date() );
 		
-		return Response.noContent().build();
+		return Response.ok().build();
 	}
 	
 	@Override
