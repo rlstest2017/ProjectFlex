@@ -304,6 +304,7 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 				MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
 				meetingRoomStat.setMeetingroomId(meetingroomDao.getId().intValue());
 				meetingRoomStat.setMeetingRoomInfo(E_MeetingRoomInfo.OCCUPIED.toString());
+				meetingRoomStat.setBeginOccupancyDate(meetingroomDao.getStartDate());
 				meetingRoomStatRepository.saveOccupiedMeetingRoomStat(meetingRoomStat);
 				LOGGER.info("meetingRoomStat created for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
 				
@@ -312,6 +313,7 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 					LOGGER.debug("MeetingRoomStat to update !!!");
 					MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
 					meetingRoomStat.setMeetingroomId(meetingroomDao.getId().intValue());
+					meetingRoomStat.setEndOccupancyDate(meetingroomDao.getEndDate());
 					meetingRoomStatRepository.updateEndOccupancyDate(meetingRoomStat);
 					LOGGER.info("meetingRoomStat updateEndOccupancyDate for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
 					meetingroomDao.setOrganizerLabel(null);
@@ -421,12 +423,5 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 	private String getAddressFromBuilding(final Long buildingId) throws DataNotExistsException {
 			final BuildingDto buiding = buildingManager.find(Long.valueOf(buildingId));
 			return buiding.getAddress();	
-	}
-
-	@Override
-	public List<MeetingRoomDao> findLatestReservedMeetingRoomsByUserId(String userId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
+	}	
 }

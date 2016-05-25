@@ -1,5 +1,6 @@
 package com.orange.flexoffice.meetingroomapi.ws.endPoint.entity.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
@@ -43,7 +44,11 @@ public class DashboardApiEndpointImpl implements DashboardApiEndpoint {
 
 	@Override
 	public List<String> getConfig(String macAddress) {
+		LOGGER.debug( "Begin call DashboardApiEndpointImpl.getConfig at: " + new Date() );
+		
 		try {
+			
+			LOGGER.debug( "End call DashboardApiEndpointImpl.getConfig  at: " + new Date() );
 			
 			return meetinRoomGroupsConfigurationManager.getConfigurationFiles(macAddress);
 		
@@ -58,6 +63,8 @@ public class DashboardApiEndpointImpl implements DashboardApiEndpoint {
 
 	@Override
 	public DashboardOutput updateStatus(String identifier, DashboardInput dashboard) {
+		LOGGER.debug( "Begin call DashboardApiEndpointImpl.updateStatus at: " + new Date() );
+		
 		DashboardOutput returnedDashboard = factory.createDashboardOutput();
 		try {
 			DashboardDao dashboardDao = new DashboardDao();
@@ -67,6 +74,8 @@ public class DashboardApiEndpointImpl implements DashboardApiEndpoint {
 			
 			ECommandModel command = ECommandModel.valueOf(dashboardUpdated.getCommand());
 			returnedDashboard.setCommand(command);
+			
+			LOGGER.debug( "End call DashboardApiEndpointImpl.updateStatus  at: " + new Date() );
 			
 			return factory.createDashboardOutput(returnedDashboard).getValue();
 		} catch (DataNotExistsException e) {

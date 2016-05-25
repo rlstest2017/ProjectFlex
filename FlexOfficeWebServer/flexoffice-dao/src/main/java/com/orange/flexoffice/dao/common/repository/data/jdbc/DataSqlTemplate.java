@@ -233,7 +233,7 @@ public final class DataSqlTemplate {
 	public static final String UPDATE_UNOCCUPIED_ROOMSTAT_TEMPLATE = 
 			"update %s set room_info='UNOCCUPIED', end_occupancy_date=now() WHERE room_id=:roomId and room_info='OCCUPIED'";
 	public static final String UPDATE_UNOCCUPIED_MEETINGROOMSTAT_TEMPLATE = 
-			"update %s set meetingroom_info='UNOCCUPIED', end_occupancy_date=now() WHERE meetingroom_id=:meetingRoomId and meetingroom_info='OCCUPIED'";
+			"update %s set meetingroom_info='UNOCCUPIED', end_occupancy_date=now() WHERE meetingroom_id=:meetingroomId and meetingroom_info='OCCUPIED'";
 	public static final String UPDATE_GATEWAY_TEMPLATE = 
 			"update %s set name=:name, description=:description WHERE mac_address=:macAddress";
 	public static final String UPDATE_AGENT_TEMPLATE = 

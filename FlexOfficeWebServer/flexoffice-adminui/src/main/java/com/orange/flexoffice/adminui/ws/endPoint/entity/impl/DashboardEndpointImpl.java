@@ -56,42 +56,52 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 	
 	@Override
 	public List<DashboardSummary> getDashboards() {
+		LOGGER.debug( "Begin call DashboardEndpointImpl.getDashboards at: " + new Date() );
+		
+		try {
+			List<DashboardDao> dataList = dashboardManager.findAllDashboards();
 			
-		List<DashboardDao> dataList = dashboardManager.findAllDashboards();
-		
-		if (dataList == null) {
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_64, Response.Status.NOT_FOUND));
-		}
-		
-		LOGGER.debug("List of dashboards : " + dataList.size());
-		
-		List<DashboardSummary> dashboardList = new ArrayList<DashboardSummary>();
-		
-		for (DashboardDao dashboardDao : dataList) {
-			DashboardSummary dashboard = factory.createDashboardSummary();
-			dashboard.setMacAddress(dashboardDao.getMacAddress());
-			dashboard.setName(dashboardDao.getName());
-			if (dashboardDao.getStatus().equals(E_DashboardStatus.ONLINE.toString())) {
-				dashboard.setStatus(EDashboardStatus.ONLINE);
-			} else if (dashboardDao.getStatus().equals(E_DashboardStatus.OFFLINE.toString())) {
-				dashboard.setStatus(EDashboardStatus.OFFLINE);
-			} else if (dashboardDao.getStatus().equals(E_DashboardStatus.STANDBY.toString())){
-				dashboard.setStatus(EDashboardStatus.STANDBY);
-			} else {
-				dashboard.setStatus(EDashboardStatus.ECONOMIC);
-			}
-			if (dashboardDao.getLastMeasureDate() != null) {
-				dashboard.setLastMeasureDate(dashboardDao.getLastMeasureDate().getTime());
+			if (dataList == null) {
+				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_64, Response.Status.NOT_FOUND));
 			}
 			
-			dashboardList.add(dashboard);
+			LOGGER.debug("List of dashboards : " + dataList.size());
+			
+			List<DashboardSummary> dashboardList = new ArrayList<DashboardSummary>();
+			
+			for (DashboardDao dashboardDao : dataList) {
+				DashboardSummary dashboard = factory.createDashboardSummary();
+				dashboard.setMacAddress(dashboardDao.getMacAddress());
+				dashboard.setName(dashboardDao.getName());
+				if (dashboardDao.getStatus().equals(E_DashboardStatus.ONLINE.toString())) {
+					dashboard.setStatus(EDashboardStatus.ONLINE);
+				} else if (dashboardDao.getStatus().equals(E_DashboardStatus.OFFLINE.toString())) {
+					dashboard.setStatus(EDashboardStatus.OFFLINE);
+				} else if (dashboardDao.getStatus().equals(E_DashboardStatus.STANDBY.toString())){
+					dashboard.setStatus(EDashboardStatus.STANDBY);
+				} else {
+					dashboard.setStatus(EDashboardStatus.ECONOMIC);
+				}
+				if (dashboardDao.getLastMeasureDate() != null) {
+					dashboard.setLastMeasureDate(dashboardDao.getLastMeasureDate().getTime());
+				}
+				
+				dashboardList.add(dashboard);
+			}
+			
+			LOGGER.debug( "End call DashboardEndpointImpl.getDashboards  at: " + new Date() );
+			
+			return dashboardList;
+		} catch (RuntimeException ex){
+			LOGGER.debug("RuntimeException in getDashboards() DashboardEndpointImpl with message :" + ex.getMessage(), ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
-		
-		return dashboardList;
 	}
 
 	@Override
 	public Dashboard getDashboard(String macAddress) {
+		LOGGER.debug( "Begin call DashboardEndpointImpl.getDashboard at: " + new Date() );
+		
 		
 		try {
 			DashboardDto data = dashboardManager.findByMacAddress(macAddress);
@@ -158,7 +168,9 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 				
 				dashboard.setLocation(location);
 			}
-		
+			
+			LOGGER.debug( "End call DashboardEndpointImpl.getDashboard  at: " + new Date() );
+			
 			return factory.createDashboard(dashboard).getValue();
 			
 		} catch (DataNotExistsException e){
@@ -261,8 +273,7 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 
 		} catch (DataNotExistsException e) {
 			LOGGER.debug("DataNotExistsException in updateDashboard() DashboardEndpointImpl with message :" + e.getMessage(), e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_66, Response.Status.METHOD_NOT_ALLOWED));
-
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_66, Response.Status.NOT_FOUND));
 		} catch (RuntimeException ex) {
 			LOGGER.debug("RuntimeException in updateDahboard() DashboardEndpointImpl with message :" + ex.getMessage(), ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -312,7 +323,4 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 	public DashboardDto findByMacAddress(String macAddress) throws DataNotExistsException {
 		return dashboardManager.findByMacAddress(macAddress);
 	}
-
-		
-	
 }

@@ -33,13 +33,6 @@ public interface MeetingRoomManager {
 	List<MeetingRoomDao> findMeetingRoomsByCriteria(String countryId, String regionId, String cityId, String buildingId, Integer floor);
 	
 	/**
-	 * findLatestReservedMeetingRoomsByUserId
-	 * @param userId
-	 * @return
-	 */
-	List<MeetingRoomDao> findLatestReservedMeetingRoomsByUserId(String userId);
-	
-	/**
 	 * Finds a meeting room by its ID.
 	 * method used by adminui
 	 * @param roomId the {@link roomId} ID

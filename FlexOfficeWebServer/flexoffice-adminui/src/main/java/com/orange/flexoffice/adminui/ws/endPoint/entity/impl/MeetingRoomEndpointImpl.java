@@ -59,34 +59,39 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	public List<MeetingRoomSummary> getMeetingRooms() {
 
 		LOGGER.debug( "Begin call MeetingRoomEndpoint.getMeetingRooms at: " + new Date() );
-
-		List<MeetingRoomDao> dataList = meetingroomManager.findAllMeetingRooms();
-		
-		if (dataList == null) {
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_69, Response.Status.NOT_FOUND));
-		}
-
-		List<MeetingRoomSummary> meetingroomList = new ArrayList<MeetingRoomSummary>();
-
-		for (MeetingRoomDao meetingroomDao : dataList) {
-			MeetingRoomSummary meetingroom = factory.createMeetingRoomSummary();
-			meetingroom.setId(meetingroomDao.getColumnId());
-			meetingroom.setName(meetingroomDao.getName());
-			meetingroom.setExternalId(meetingroomDao.getExternalId());
-			meetingroom.setType(EMeetingroomType.valueOf(meetingroomDao.getType().toString()));
-			meetingroom.setAgent(getAgentFromId(Long.valueOf(meetingroomDao.getAgentId()), meetingroomDao.getName()));
-
-			if (meetingroomDao.getStatus() != null) {
-				meetingroom.setStatus(EMeetingroomStatus.valueOf(meetingroomDao.getStatus().toString()));
+		try {
+			
+			List<MeetingRoomDao> dataList = meetingroomManager.findAllMeetingRooms();
+			
+			if (dataList == null) {
+				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_69, Response.Status.NOT_FOUND));
 			}
-			meetingroomList.add(meetingroom);
+	
+			List<MeetingRoomSummary> meetingroomList = new ArrayList<MeetingRoomSummary>();
+	
+			for (MeetingRoomDao meetingroomDao : dataList) {
+				MeetingRoomSummary meetingroom = factory.createMeetingRoomSummary();
+				meetingroom.setId(meetingroomDao.getColumnId());
+				meetingroom.setName(meetingroomDao.getName());
+				meetingroom.setExternalId(meetingroomDao.getExternalId());
+				meetingroom.setType(EMeetingroomType.valueOf(meetingroomDao.getType().toString()));
+				meetingroom.setAgent(getAgentFromId(Long.valueOf(meetingroomDao.getAgentId()), meetingroomDao.getName()));
+	
+				if (meetingroomDao.getStatus() != null) {
+					meetingroom.setStatus(EMeetingroomStatus.valueOf(meetingroomDao.getStatus().toString()));
+				}
+				meetingroomList.add(meetingroom);
+			}
+	
+			LOGGER.debug("List of meeting rooms : nb = " + meetingroomList.size());
+	
+			LOGGER.debug( "End call MeetingRoomEndpoint.getMeetingRooms  at: " + new Date() );
+	
+			return meetingroomList;
+		} catch (RuntimeException ex){
+			LOGGER.debug("RuntimeException in MeetingRoomEndpoint.getMeetingRooms with message :", ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
-
-		LOGGER.debug("List of meeting rooms : nb = " + meetingroomList.size());
-
-		LOGGER.debug( "End call MeetingRoomEndpoint.getMeetingRooms  at: " + new Date() );
-
-		return meetingroomList;
 	}
 
 	/* (non-Javadoc)

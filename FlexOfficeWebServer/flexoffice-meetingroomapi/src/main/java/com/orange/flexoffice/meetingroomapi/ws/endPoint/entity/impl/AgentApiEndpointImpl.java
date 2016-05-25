@@ -1,5 +1,7 @@
 package com.orange.flexoffice.meetingroomapi.ws.endPoint.entity.impl;
 
+import java.util.Date;
+
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -42,6 +44,8 @@ public class AgentApiEndpointImpl implements AgentApiEndpoint {
 	
 	@Override
 	public AgentOutput updateStatus(String macAddress, AgentInput agent) throws DataNotExistsException {
+		LOGGER.debug( "Begin call AgentApiEndpointImpl.updateStatus at: " + new Date() );
+		
 		AgentOutput returnedAgent = factory.createAgentOutput();
 		AgentDao agentUpdated = new AgentDao();
 		try {
@@ -65,6 +69,8 @@ public class AgentApiEndpointImpl implements AgentApiEndpoint {
 			
 			MeetingRoomDto meetingRoomDto = meetingRoomManager.find(agentUpdated.getMeetingroomId());
 			returnedAgent.setMeetingRoomExternalId(meetingRoomDto.getExternalId());
+			
+			LOGGER.debug( "End call AgentApiEndpointImpl.updateStatus  at: " + new Date() );
 			
 			return factory.createAgentOutput(returnedAgent).getValue();
 		} catch (DataNotExistsException e) {

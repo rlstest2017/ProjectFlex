@@ -1,6 +1,7 @@
 package com.orange.flexoffice.meetingroomapi.ws.endPoint.data.impl;
 
 import java.math.BigInteger;
+import java.util.Date;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -37,6 +38,8 @@ public class SystemApiEndpointImpl implements SystemApiEndpoint {
 
 	@Override
 	public System getSystem() {
+		LOGGER.debug( "Begin call SystemApiEndpointImpl.getSystem at: " + new Date() );
+		
 		try {
 			System system = factory.createSystem();
 			ConfigurationDao configuration;
@@ -116,6 +119,8 @@ public class SystemApiEndpointImpl implements SystemApiEndpoint {
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.KEYBOARD_LANG.toString());
 			if (configuration != null)
 			system.setKeyboardLang(configuration.getValue());
+			
+			LOGGER.debug( "End call SystemApiEndpointImpl.getSystem  at: " + new Date() );
 			
 			return factory.createSystem(system).getValue();
 			

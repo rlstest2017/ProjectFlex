@@ -47,43 +47,53 @@ public class AgentEndpointImpl implements AgentEndpoint {
 	
 	@Override
 	public List<AgentSummary> getAgents() {
+		LOGGER.debug( "Begin call AgentEndpointImpl.getAgents at: " + new Date() );
+		
+		try {	
+			List<AgentDao> dataList = agentManager.findAllAgents();
 			
-		List<AgentDao> dataList = agentManager.findAllAgents();
-		
-		if (dataList == null) {
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_59, Response.Status.NOT_FOUND));
-		}
-		
-		LOGGER.debug("List of agents : " + dataList.size());
-		
-		List<AgentSummary> agentList = new ArrayList<AgentSummary>();
-		
-		for (AgentDao agentDao : dataList) {
-			AgentSummary agent = factory.createAgentSummary();
-			agent.setMacAddress(agentDao.getMacAddress());
-			agent.setName(agentDao.getName());
-			agent.setMeetingroomId(agentDao.getMeetingroomId().toString());
-			if (agentDao.getStatus().equals(E_AgentStatus.ONLINE.toString())) {
-				agent.setStatus(EAgentStatus.ONLINE);
-			} else if (agentDao.getStatus().equals(E_AgentStatus.OFFLINE.toString())) {
-				agent.setStatus(EAgentStatus.OFFLINE);
-			} else if (agentDao.getStatus().equals(E_AgentStatus.STANDBY.toString())){
-				agent.setStatus(EAgentStatus.STANDBY);
-			} else {
-				agent.setStatus(EAgentStatus.ECONOMIC);
-			}
-			if (agentDao.getLastMeasureDate() != null) {
-				agent.setLastMeasureDate(agentDao.getLastMeasureDate().getTime());
+			if (dataList == null) {
+				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_59, Response.Status.NOT_FOUND));
 			}
 			
-			agentList.add(agent);
+			LOGGER.debug("List of agents : " + dataList.size());
+			
+			List<AgentSummary> agentList = new ArrayList<AgentSummary>();
+			
+			for (AgentDao agentDao : dataList) {
+				AgentSummary agent = factory.createAgentSummary();
+				agent.setMacAddress(agentDao.getMacAddress());
+				agent.setName(agentDao.getName());
+				agent.setMeetingroomId(agentDao.getMeetingroomId().toString());
+				if (agentDao.getStatus().equals(E_AgentStatus.ONLINE.toString())) {
+					agent.setStatus(EAgentStatus.ONLINE);
+				} else if (agentDao.getStatus().equals(E_AgentStatus.OFFLINE.toString())) {
+					agent.setStatus(EAgentStatus.OFFLINE);
+				} else if (agentDao.getStatus().equals(E_AgentStatus.STANDBY.toString())){
+					agent.setStatus(EAgentStatus.STANDBY);
+				} else {
+					agent.setStatus(EAgentStatus.ECONOMIC);
+				}
+				if (agentDao.getLastMeasureDate() != null) {
+					agent.setLastMeasureDate(agentDao.getLastMeasureDate().getTime());
+				}
+				
+				agentList.add(agent);
+			}
+			
+			LOGGER.debug( "End call AgentEndpointImpl.getAgents  at: " + new Date() );
+			
+			return agentList;
+		} catch (RuntimeException ex){
+			LOGGER.debug("RuntimeException in getAgents() AgentEndpointImpl with message :" + ex.getMessage(), ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
-		
-		return agentList;
 	}
 
 	@Override
 	public Agent getAgent(String macAddress) {
+		LOGGER.debug( "Begin call AgentEndpointImpl.getAgent at: " + new Date() );
+		
 		try {
 			AgentDto data = agentManager.findByMacAddress(macAddress);
 			
@@ -114,6 +124,8 @@ public class AgentEndpointImpl implements AgentEndpoint {
 				rm.setName(meetingroom.getName());
 				agent.setMeetingroom(rm);
 			}
+			
+			LOGGER.debug( "End call AgentEndpointImpl.getAgent  at: " + new Date() );
 			
 			return factory.createAgent(agent).getValue();
 			
@@ -201,7 +213,7 @@ public class AgentEndpointImpl implements AgentEndpoint {
 
 		} catch (DataNotExistsException e) {
 			LOGGER.debug("DataNotExistsException in updateAgent() AgentEndpointImpl with message :" + e.getMessage(), e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_61, Response.Status.METHOD_NOT_ALLOWED));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_61, Response.Status.NOT_FOUND));
 
 		} catch (RuntimeException ex) {
 			LOGGER.debug("RuntimeException in updateAgent() AgentEndpointImpl with message :" + ex.getMessage(), ex);

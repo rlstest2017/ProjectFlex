@@ -109,7 +109,6 @@ public class MeetingRoomGroupsConfigurationDaoRepository extends DataRepository<
 
 	@Override
 	protected String getColName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
