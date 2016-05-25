@@ -22,6 +22,8 @@ public class MeetingRoomInfoTools {
 	
 	@Autowired
 	DateTools dateTools;
+	// TODO get ackTime from /system request
+	Integer ackTime = 0;
 	
 	/**
 	 * processMeetingRoomStatus
@@ -29,17 +31,18 @@ public class MeetingRoomInfoTools {
 	 * @return
 	 */
 	public MeetingRoomData processMeetingRoomStatus(MeetingRoomConnectorReturn metingroomreturn) {
-		
 		try {
+			Integer currentDate = metingroomreturn.getCurrentDate();
+			String meetingRoomExternalId = metingroomreturn.getMeetingRoom().getMeetingRoomDetails().getMeetingRoomExternalId();
 			List<BookingConnectorReturn> bookings = metingroomreturn.getMeetingRoom().getBookings();
 			
 			MeetingRoomData data = new MeetingRoomData();
 			data.setMeetingRoomStatus(EnumMeetingRoomStatus.FREE);
 			
 			for (BookingConnectorReturn book : bookings) {
-				Boolean compareDates = dateTools.isTime1BeforeTime2(book.getStartDate(), metingroomreturn.getCurrentDate(), 0);
-				if (compareDates) { // currentDate est dans un booking
-					// TODO updateInfos();
+				Boolean compareDates = dateTools.isTime1BeforeTime2(book.getStartDate(), currentDate, 0);
+				if (compareDates) { // startDate and currentDate of a booking
+					updateInfos(book, data, meetingRoomExternalId, currentDate);
 					break;
 				} 
 			}
@@ -49,6 +52,47 @@ public class MeetingRoomInfoTools {
 			LOGGER.debug("RuntimeException in processMeetingRoomStatus(...) method");
 			return null;
 		}
+	}
+	
+	/**
+	 * updateInfos
+	 * @param book BookingConnectorReturn
+	 * @param data MeetingRoomData
+	 */
+	private void updateInfos(BookingConnectorReturn book, MeetingRoomData data, String meetingRoomExternalId, Integer currentDate) {
+		if (ackTime == 0) {
+			data.setMeetingRoomStatus(EnumMeetingRoomStatus.OCCUPIED);
+			setMeetingRoomData(book, data, meetingRoomExternalId);
+		} else { // (ackTime != 0)
+			if (book.getAcknowledged()) { // acknowledged = true
+				data.setMeetingRoomStatus(EnumMeetingRoomStatus.OCCUPIED);
+				setMeetingRoomData(book, data, meetingRoomExternalId);
+			} else { // acknowledged = false
+				Boolean compareDates = dateTools.isTime1BeforeTime2(book.getStartDate(), currentDate, ackTime);
+				if (compareDates) { // startDate + ackTime and currentDate of a booking
+					// exceeding ack Time
+					data.setMeetingRoomStatus(EnumMeetingRoomStatus.FREE);
+					// TODO cancel book
+				} else {
+					// still in ack time
+					data.setMeetingRoomStatus(EnumMeetingRoomStatus.ACK);
+					setMeetingRoomData(book, data, meetingRoomExternalId);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * setMeetingRoomData
+	 * @param book BookingConnectorReturn
+	 * @param data MeetingRoomData
+	 * @param meetingRoomExternalId
+	 */
+	private void setMeetingRoomData(BookingConnectorReturn book, MeetingRoomData data, String meetingRoomExternalId) {
+		data.setStartDate(book.getStartDate());
+		data.setEndDate(book.getEndDate());
+		data.setOrganizerLabel(book.getOrganizerFullName());
+		data.setMeetingRoomExternalId(meetingRoomExternalId);
 	}
 
 }
