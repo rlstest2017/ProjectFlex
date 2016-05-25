@@ -1,6 +1,7 @@
 package com.orange.meetingroom.business.connector;
 
 import com.orange.meetingroom.connector.exception.DataNotExistsException;
+import com.orange.meetingroom.connector.exception.FlexOfficeInternalServerException;
 import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerException;
 import com.orange.meetingroom.connector.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.exception.PhpInternalServerException;
@@ -21,7 +22,7 @@ public interface PhpConnectorManager {
 	
 	public MeetingRoomConnectorReturn getBookingsFromAgent(GetAgentBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, DataNotExistsException, MethodNotAllowedException;
 	
-	public MeetingRoomsConnectorReturn getBookingsFromDashboard(GetDashboardBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, MethodNotAllowedException;
+	public MeetingRoomsConnectorReturn getBookingsFromDashboard(GetDashboardBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, MethodNotAllowedException, FlexOfficeInternalServerException, DataNotExistsException;
 
 	public BookingSummary setBooking(SetBookingParameters params) throws MeetingRoomInternalServerException, MethodNotAllowedException, PhpInternalServerException;
 	

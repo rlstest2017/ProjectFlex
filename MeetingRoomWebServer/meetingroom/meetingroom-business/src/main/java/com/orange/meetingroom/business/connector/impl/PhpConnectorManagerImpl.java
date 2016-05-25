@@ -1,5 +1,7 @@
 package com.orange.meetingroom.business.connector.impl;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerExcep
 import com.orange.meetingroom.connector.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.exception.PhpInternalServerException;
 import com.orange.meetingroom.connector.flexoffice.FlexOfficeConnectorClient;
+import com.orange.meetingroom.connector.flexoffice.model.request.DashboardConnectorInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.MeetingRoomData;
 import com.orange.meetingroom.connector.php.PhpConnectorClient;
 import com.orange.meetingroom.connector.php.model.request.GetAgentBookingsParameters;
@@ -60,8 +63,12 @@ public class PhpConnectorManagerImpl implements PhpConnectorManager {
 	}
 
 	@Override
-	public MeetingRoomsConnectorReturn getBookingsFromDashboard(GetDashboardBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, MethodNotAllowedException  {
-		// TODO from dashboardMacAddress call flexOfficeConnectorManager for get config Files 
+	public MeetingRoomsConnectorReturn getBookingsFromDashboard(GetDashboardBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, MethodNotAllowedException, FlexOfficeInternalServerException, DataNotExistsException {
+		// from dashboardMacAddress call flexOfficeConnectorManager for get config Files 
+		DashboardConnectorInput input = new DashboardConnectorInput();
+		input.setDashboardMacAddress(params.getDashboardMacAddress());
+		List<String> xmlFilesGroupRoomIdNames = flexOfficeConnector.getDashboardXMLConfigFilesName(input);
+		
 		// TODO call phpConnector.getBookingsFromDashboard(params) foreach config File
 		// TODO process the result and send it to GUI
 		return phpConnector.getBookingsFromDashboard(params);

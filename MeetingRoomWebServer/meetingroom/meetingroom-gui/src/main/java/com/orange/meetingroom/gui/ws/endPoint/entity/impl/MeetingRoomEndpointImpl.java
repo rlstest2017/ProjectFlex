@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.orange.meetingroom.business.connector.PhpConnectorManager;
 import com.orange.meetingroom.business.service.enums.EnumErrorModel;
 import com.orange.meetingroom.connector.exception.DataNotExistsException;
+import com.orange.meetingroom.connector.exception.FlexOfficeInternalServerException;
 import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerException;
 import com.orange.meetingroom.connector.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.exception.PhpInternalServerException;
@@ -142,7 +143,9 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			params.setStartDate(startDate.toString());
 			params.setFormat(FORMAT_JSON);
 			
-			MeetingRoomsConnectorReturn meetingroomsreturn = phpConnectorManager.getBookingsFromDashboard(params);
+			MeetingRoomsConnectorReturn meetingroomsreturn;
+				meetingroomsreturn = phpConnectorManager.getBookingsFromDashboard(params);
+			
 			
 			if (meetingroomsreturn != null) {
 				meetingrooms.setCurrentDate(BigInteger.valueOf(meetingroomsreturn.getCurrentDate()));
@@ -187,7 +190,10 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			} catch (MethodNotAllowedException e) {
 				LOGGER.debug("MethodNotAllowedException in getBookings() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_10, Response.Status.METHOD_NOT_ALLOWED));
-			} catch (MeetingRoomInternalServerException | PhpInternalServerException | RuntimeException e) {
+			} catch (DataNotExistsException e) {
+				LOGGER.debug("DataNotExistsException in getBookings() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
+				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_4, Response.Status.NOT_FOUND));
+			} catch (MeetingRoomInternalServerException | FlexOfficeInternalServerException |PhpInternalServerException | RuntimeException e) {
 				LOGGER.debug("RuntimeException in getBookings() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_1, Response.Status.INTERNAL_SERVER_ERROR));
 			}
