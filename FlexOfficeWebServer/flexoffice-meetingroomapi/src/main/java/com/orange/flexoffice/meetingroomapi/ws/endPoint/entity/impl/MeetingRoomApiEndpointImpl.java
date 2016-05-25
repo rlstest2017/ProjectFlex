@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +79,7 @@ public class MeetingRoomApiEndpointImpl implements MeetingRoomApiEndpoint {
 		
 		LOGGER.debug( "End call MeetingRoomApiEndpointImpl.updateData  at: " + new Date() );
 		
-		return Response.status(Status.ACCEPTED).build();
+		return Response.noContent().build();
 	}
 	
 	@Override

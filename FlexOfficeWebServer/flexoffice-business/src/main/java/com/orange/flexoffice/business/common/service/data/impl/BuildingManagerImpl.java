@@ -205,6 +205,9 @@ public class BuildingManagerImpl implements BuildingManager {
 		try {
 			BuildingDao buildingDao = buildingRepository.findOne(buildingId);
 			
+			preferenceRepository.deleteByBuildingId(buildingId);
+			buildingRepository.delete(buildingId);
+			
 			// if meetingroom activated in flexOffice
 			String meetingroomActivated = properties.getProperty("meetingroom.activated");
 			
@@ -218,9 +221,6 @@ public class BuildingManagerImpl implements BuildingManager {
 					fileManager.deleteFile(fileName);
 				}
 			}
-
-			preferenceRepository.deleteByBuildingId(buildingId);
-			buildingRepository.delete(buildingId);
 			
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("Building by id " + buildingId + " is not found", e);

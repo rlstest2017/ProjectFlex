@@ -229,7 +229,12 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
 				MeetingRoomDao oldMeetingRoomDao = meetingroomRepository.findOne(meetingroomDao.getId()); 
 				
-				fileManager.updateObjectFromFile(meetingroomDao.getBuildingId() + "_" + meetingroomDao.getFloor(), oldMeetingRoomDao.getExternalId(), meetingroomDao.getExternalId());
+				if (oldMeetingRoomDao.getBuildingId() == meetingroomDao.getBuildingId() && oldMeetingRoomDao.getFloor() == meetingroomDao.getFloor()){
+					fileManager.updateObjectFromFile(meetingroomDao.getBuildingId() + "_" + meetingroomDao.getFloor(), oldMeetingRoomDao.getExternalId(), meetingroomDao.getExternalId());
+				} else {
+					fileManager.removeObjectFromFile(oldMeetingRoomDao.getBuildingId() + "_" + oldMeetingRoomDao.getFloor(), oldMeetingRoomDao.getExternalId());
+					fileManager.addObjectToFile(meetingroomDao.getBuildingId() + "_" + meetingroomDao.getFloor(), meetingroomDao.getExternalId());
+				}
 			}
 			
 			// Update MeetingRoomDao
@@ -317,6 +322,8 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 					meetingRoomStatRepository.updateEndOccupancyDate(meetingRoomStat);
 					LOGGER.info("meetingRoomStat updateEndOccupancyDate for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
 					meetingroomDao.setOrganizerLabel(null);
+					meetingroomDao.setStartDate(null);
+					meetingroomDao.setEndDate(null);
 				}
 			} else if(meetingroomDao.getStatus().equals(E_MeetingRoomStatus.UNKNOWN.toString())){
 				meetingroomDao.setStartDate(null);

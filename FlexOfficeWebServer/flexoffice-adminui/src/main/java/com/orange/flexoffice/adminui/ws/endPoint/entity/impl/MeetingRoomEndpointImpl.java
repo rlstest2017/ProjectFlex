@@ -223,7 +223,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in MeetingRoomEndpoint.saveMeetingRoom with message :", e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_71, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_70, Response.Status.NOT_FOUND));
 		} catch (DataAlreadyExistsException e) {
 			LOGGER.debug("DataNotExistsException in MeetingRoomEndpoint.addMeetingRoom with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_70, Response.Status.METHOD_NOT_ALLOWED));
