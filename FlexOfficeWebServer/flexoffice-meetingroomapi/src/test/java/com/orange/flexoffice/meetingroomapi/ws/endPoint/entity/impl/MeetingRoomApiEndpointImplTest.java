@@ -78,7 +78,7 @@ public class MeetingRoomApiEndpointImplTest {
 		Response response =	meetingRoomApiEndpoint.updateData(externalId, meetingRoomInput);
 		
 		// Assert
-		assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 	}
 	
 	@Test
