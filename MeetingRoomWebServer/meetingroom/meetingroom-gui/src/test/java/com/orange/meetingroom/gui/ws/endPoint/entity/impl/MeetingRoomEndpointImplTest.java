@@ -15,6 +15,7 @@ import org.springframework.util.Log4jConfigurer;
 
 import com.orange.meetingroom.gui.ws.endPoint.entity.MeetingRoomEndpoint;
 import com.orange.meetingroom.gui.ws.model.MeetingRoom;
+import com.orange.meetingroom.gui.ws.model.MeetingRooms;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MeetingRoomEndpointImplTest {
@@ -58,6 +59,24 @@ public class MeetingRoomEndpointImplTest {
 		assertEquals(false, expectedResult);
 	}
 	
+	@Test
+	public void TestB() {
+		// SetUp
+		boolean expectedResult = false;
+		try {
+			MeetingRooms output = meetingRoomEndpoint.getBookings("AB:AB:AB:AC:AB:AB", 2, 0);
+			
+			// Asserts
+			assertEquals("brehat.rennes@microsoft.cad.aql.fr", output.getRooms().get(0).getMeetingRoomDetails().getMeetingRoomExternalId());
+			
+			
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(false, expectedResult);
+	}
 	
 
 }
