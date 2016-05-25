@@ -22,7 +22,7 @@ import com.orange.flexoffice.business.common.exception.DataAlreadyExistsExceptio
 public class FileManager {
 	public String EXTENSION = ".xml";
 	
-	public String SEPARATOR = "\\";
+	public String SEPARATOR = "/";
 	
 	private Properties properties;
 	
