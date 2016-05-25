@@ -38,6 +38,7 @@ public class MeetingRoomInfoTools {
 			
 			MeetingRoomData data = new MeetingRoomData();
 			data.setMeetingRoomStatus(EnumMeetingRoomStatus.FREE);
+			data.setMeetingRoomExternalId(meetingRoomExternalId);
 			
 			for (BookingConnectorReturn book : bookings) {
 				Boolean compareDates = dateTools.isTime1BeforeTime2(book.getStartDate(), currentDate, 0);

@@ -81,7 +81,7 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 		
 		//verify the valid error code first
 		int statusCode = response.getStatusLine().getStatusCode();
-		if (statusCode != 200) {
+		if ((statusCode != 200) && (statusCode != 201) && (statusCode != 202)) {
 			LOGGER.error("Internal error produce in FlexOffice, with error code: " + statusCode);
 			throw new FlexOfficeInternalServerException("Internal error produce in FlexOffice, with error code: " + statusCode);
 		}
@@ -138,7 +138,7 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 		
 		//verify the valid error code first
 		int statusCode = response.getStatusLine().getStatusCode();
-		if (statusCode != 200) {
+		if ((statusCode != 200) && (statusCode != 201) && (statusCode != 202)) {
 			LOGGER.error("Internal error produce in FlexOffice, with error code: " + statusCode);
 			throw new FlexOfficeInternalServerException("Internal error produce in FlexOffice, with error code: " + statusCode);
 		}
@@ -196,7 +196,7 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 		
 		//verify the valid error code first
 		int statusCode = response.getStatusLine().getStatusCode();
-		if (statusCode != 200) {
+		if ((statusCode != 200) && (statusCode != 201) && (statusCode != 202)) {
 			if (statusCode == 404) {
 				LOGGER.error("dashboardMacAddress #: " + params.getDashboardMacAddress() + " is not found in FlexOffice DataBase");
 				throw new DataNotExistsException("dashboardMacAddress #: " + params.getDashboardMacAddress() + " is not found in FlexOffice DataBase");
@@ -264,7 +264,7 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode != 200) {
+			if ((statusCode != 200) && (statusCode != 201) && (statusCode != 202)) {
 				if (statusCode == 404) {
 					LOGGER.error("dashboardMacAddress #: " + params.getDashboardMacAddress() + " is not found in FlexOffice DataBase");
 					throw new DataNotExistsException("dashboardMacAddress #: " + params.getDashboardMacAddress() + " is not found in FlexOffice DataBase");
@@ -336,7 +336,7 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode != 200) {
+			if ((statusCode != 200) && (statusCode != 201) && (statusCode != 202)) {
 				if (statusCode == 405) {
 					LOGGER.error("agentMacAddress #: " + params.getAgentMacAddress() + " is not not paired to a meetingroom");
 					throw new MethodNotAllowedException("agentMacAddress #: " + params.getAgentMacAddress() + " is not paired to a meetingroom");
@@ -408,7 +408,7 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode != 200) {
+			if ((statusCode != 200) && (statusCode != 201) && (statusCode != 202)) {
 				if (statusCode == 404) {
 					LOGGER.error("meetingRoomExternalId #: " + params.getMeetingRoomExternalId() + " is not found in FlexOffice DataBase");
 					throw new DataNotExistsException("meetingRoomExternalId #: " + params.getMeetingRoomExternalId() + " is not found in FlexOffice DataBase");

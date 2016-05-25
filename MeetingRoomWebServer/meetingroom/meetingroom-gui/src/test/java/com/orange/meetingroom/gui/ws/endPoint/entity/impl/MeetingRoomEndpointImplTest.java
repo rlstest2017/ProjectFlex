@@ -12,14 +12,12 @@ import org.junit.runners.MethodSorters;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Log4jConfigurer;
 
-import com.orange.meetingroom.gui.ws.endPoint.entity.AgentEndpoint;
-import com.orange.meetingroom.gui.ws.endPoint.entity.impl.AgentEndpointImpl;
-import com.orange.meetingroom.gui.ws.model.AgentInput;
-import com.orange.meetingroom.gui.ws.model.AgentOutput;
-import com.orange.meetingroom.gui.ws.model.EAgentStatus;
+
+import com.orange.meetingroom.gui.ws.endPoint.entity.MeetingRoomEndpoint;
+import com.orange.meetingroom.gui.ws.model.MeetingRoom;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class AgentEndpointImplTest {
+public class MeetingRoomEndpointImplTest {
 
 	static {
 	    try {
@@ -30,15 +28,15 @@ public class AgentEndpointImplTest {
 	    }
 	  }
 
-	private static final Logger LOGGER = Logger.getLogger(AgentEndpointImplTest.class);
+	private static final Logger LOGGER = Logger.getLogger(MeetingRoomEndpointImplTest.class);
 
 	private static ClassPathXmlApplicationContext context;
-	private static AgentEndpoint agentEndpoint;
+	private static MeetingRoomEndpoint meetingRoomEndpoint;
 	
 	@BeforeClass
 	public static void initSpringContextAndDatabase() throws Exception {
 		context = new ClassPathXmlApplicationContext("classpath*:applicationContext-meetingroom-gui-test.xml");
-		agentEndpoint = (AgentEndpointImpl)context.getBean("agentEndpoint");
+		meetingRoomEndpoint = (MeetingRoomEndpointImpl)context.getBean("meetingRoomEndpoint");
 	}
 	
 	@Test
@@ -46,12 +44,10 @@ public class AgentEndpointImplTest {
 		// SetUp
 		boolean expectedResult = false;
 		try {
-			AgentInput params = new AgentInput();
-			params.setAgentStatus(EAgentStatus.ECONOMIC);
-			AgentOutput output = agentEndpoint.updateAgent("AB:AB:AB:AB:AB:AB", params);
+			MeetingRoom output = meetingRoomEndpoint.getMeetingRoomBookings("brehat.rennes@microsoft.cad.aql.fr", false);
 			
 			// Asserts
-			assertEquals("brehat.rennes@microsoft.cad.aql.fr", output.getMeetingRoomExternalId().toString());
+			assertEquals("brehat.rennes@microsoft.cad.aql.fr", output.getRoom().getMeetingRoomDetails().getMeetingRoomExternalId());
 			
 			
 		} catch (Exception e) {
