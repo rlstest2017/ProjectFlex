@@ -173,9 +173,35 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		Room room = factory.createRoom();
 		try {
-			if (ERoomKind.FLEXOFFICE.toString().equals(kind)){
-				RoomDto roomDto = roomManager.find(Long.valueOf(roomId));
+			if (kind != null && ERoomKind.MEETINGROOM.toString().equals(kind)){
+				MeetingRoomDto meetingRoomDto = meetingRoomManager.find(Long.valueOf(roomId));
+				
+				room.setId(String.valueOf(meetingRoomDto.getId()));
+				room.setName(meetingRoomDto.getName());
+				room.setType(ERoomType.valueOf(meetingRoomDto.getType().toString()));
+				room.setDesc(meetingRoomDto.getDescription());
+				room.setAddress(meetingRoomDto.getAddress());
+				if (meetingRoomDto.getCapacity() != null) {
+					room.setCapacity(BigInteger.valueOf(meetingRoomDto.getCapacity()));
+				}
+				room.setStatus(ERoomStatus.valueOf(meetingRoomDto.getStatus().toString()));
+				
+				if (meetingRoomDto.getLastMeasureDate() != null) {
+					room.setLastMeasureDate(BigInteger.valueOf(meetingRoomDto.getLastMeasureDate().getTime()));
+				}
+				
+				MeetingRoomAddon meetingRoomAddon = new MeetingRoomAddon();
+				meetingRoomAddon.setKind(ERoomKind.MEETINGROOM);
+				meetingRoomAddon.setStartDate(meetingRoomDto.getStartDate().getTime());
+				meetingRoomAddon.setEndDate(meetingRoomDto.getEndDate().getTime());
+				meetingRoomAddon.setOrganizerLabel(meetingRoomDto.getOrganizerLabel());
+				room.setAddon(meetingRoomAddon);
+				
+				LOGGER.debug( "End call UserUi.RoomEndpoint.getRoom  at: " + new Date() );
 	
+			} else {
+				RoomDto roomDto = roomManager.find(Long.valueOf(roomId));
+				
 				room.setId(String.valueOf(roomDto.getId()));
 				room.setName(roomDto.getName());
 				room.setType(ERoomType.valueOf(roomDto.getType().toString()));
@@ -209,33 +235,6 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				room.setAddon(fxAddon);
 				
 				LOGGER.debug( "End call UserUi.RoomEndpoint.getRoom  at: " + new Date() );
-	
-			} else if (ERoomKind.MEETINGROOM.toString().equals(kind)){
-				MeetingRoomDto meetingRoomDto = meetingRoomManager.find(Long.valueOf(roomId));
-				
-				room.setId(String.valueOf(meetingRoomDto.getId()));
-				room.setName(meetingRoomDto.getName());
-				room.setType(ERoomType.valueOf(meetingRoomDto.getType().toString()));
-				room.setDesc(meetingRoomDto.getDescription());
-				room.setAddress(meetingRoomDto.getAddress());
-				if (meetingRoomDto.getCapacity() != null) {
-					room.setCapacity(BigInteger.valueOf(meetingRoomDto.getCapacity()));
-				}
-				room.setStatus(ERoomStatus.valueOf(meetingRoomDto.getStatus().toString()));
-				
-				if (meetingRoomDto.getLastMeasureDate() != null) {
-					room.setLastMeasureDate(BigInteger.valueOf(meetingRoomDto.getLastMeasureDate().getTime()));
-				}
-				
-				MeetingRoomAddon meetingRoomAddon = new MeetingRoomAddon();
-				meetingRoomAddon.setKind(ERoomKind.MEETINGROOM);
-				meetingRoomAddon.setStartDate(meetingRoomDto.getStartDate().getTime());
-				meetingRoomAddon.setEndDate(meetingRoomDto.getEndDate().getTime());
-				meetingRoomAddon.setOrganizerLabel(meetingRoomDto.getOrganizerLabel());
-				room.setAddon(meetingRoomAddon);
-				
-				LOGGER.debug( "End call UserUi.RoomEndpoint.getRoom  at: " + new Date() );
-	
 			}
 
 		} catch (DataNotExistsException e){
