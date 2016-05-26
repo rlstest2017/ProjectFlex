@@ -3,8 +3,6 @@ package com.orange.meetingroom.gui.ws.endPoint.entity;
 import static com.orange.meetingroom.gui.ws.ParamsConst.MEETINGROOM_EXTERNAL_ID_PARAM;
 import static com.orange.meetingroom.gui.ws.ParamsConst.FORCE_UPDATE_CACHE;
 import static com.orange.meetingroom.gui.ws.ParamsConst.DASHBOARD_MAC_ADDRESS_PARAM;
-import static com.orange.meetingroom.gui.ws.ParamsConst.DASHBOARD_MAX_BOOKINGS_PARAM;
-import static com.orange.meetingroom.gui.ws.ParamsConst.DASHBOARD_START_DATE_BOOKINGS_PARAM;
 import static com.orange.meetingroom.gui.ws.PathConst.MEETINGROOMS_PATH;
 import static com.orange.meetingroom.gui.ws.PathConst.BOOKINGS_PATH;
 import static com.orange.meetingroom.gui.ws.PathConst.RESERVE_PATH;
@@ -62,7 +60,7 @@ public interface MeetingRoomEndpoint {
 	@Path(BOOKINGS_PATH)
 	@Consumes (MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	MeetingRooms getBookings(@QueryParam(DASHBOARD_MAC_ADDRESS_PARAM) String dashboardMacAddress, @QueryParam(DASHBOARD_MAX_BOOKINGS_PARAM) Integer maxBookings, @QueryParam(DASHBOARD_START_DATE_BOOKINGS_PARAM) Integer startDate);
+	MeetingRooms getBookings(@QueryParam(DASHBOARD_MAC_ADDRESS_PARAM) String dashboardMacAddress);
 	
 	/**
 	 * Set a specific booking.

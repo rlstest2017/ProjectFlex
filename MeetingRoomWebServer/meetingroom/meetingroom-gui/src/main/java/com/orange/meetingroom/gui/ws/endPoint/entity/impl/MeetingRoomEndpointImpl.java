@@ -53,6 +53,11 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	static final String FORCED_UPDATE_CACHE_TRUE = "true";
 	static final String FORCED_UPDATE_CACHE_FALSE = "false";
 	static final String START_DATE_DEFAULT = "0";
+	static final String DASHBOARD_MAX_BOOKINGS_PARAM = "2"; // TODO system param from Map
+	// maxBooking bookings to get from now() 
+	static final String DASHBOARD_START_DATE_BOOKINGS_PARAM = "0"; // TODO system param from Map
+	// if this date is after now(), PHP server get maxBookings bookings to get from this date
+	// if startDate = 0 or before now(), PHP server get maxBookings bookings to get from now()
 	static final String ACKNOWLEDGED_DAFAULT = "0";
 	static final String ACKNOWLEDGED_CONFIRM = "1";
 	
@@ -134,20 +139,14 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	}
 
 	@Override
-	public MeetingRooms getBookings(String dashboardMacAddress, Integer maxBookings, Integer startDate) {
+	public MeetingRooms getBookings(String dashboardMacAddress) {
 		try {
 			MeetingRooms meetingrooms = factory.createMeetingRooms();
 			
 			GetDashboardBookingsParameters params = new GetDashboardBookingsParameters();
 			params.setDashboardMacAddress(dashboardMacAddress);
-			if (maxBookings != null) {
-				params.setMaxBookings(maxBookings.toString());
-			}	
-			if (startDate != null) {
-				params.setStartDate(startDate.toString());
-			} else {
-				params.setStartDate(START_DATE_DEFAULT);
-			}
+			params.setMaxBookings(DASHBOARD_MAX_BOOKINGS_PARAM);
+			params.setStartDate(DASHBOARD_START_DATE_BOOKINGS_PARAM);
 			params.setFormat(FORMAT_JSON);
 			
 			MeetingRoomsConnectorReturn meetingroomsreturn;
@@ -168,7 +167,6 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 						details.setMeetingRoomExternalId(detailsReturn.getMeetingRoomExternalId());
 						details.setMeetingRoomExternalName(detailsReturn.getMeetingRoomExternalName());
 						details.setMeetingRoomExternalLocation(detailsReturn.getMeetingRoomExternalLocation());
-						// TODO add details.setMeetingRoomStatus(detailsReturn.get);
 						
 						meetingRoomBookings.setMeetingRoomDetails(details);
 						

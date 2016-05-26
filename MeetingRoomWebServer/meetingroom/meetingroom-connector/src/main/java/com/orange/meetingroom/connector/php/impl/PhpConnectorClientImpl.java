@@ -285,58 +285,60 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 						throw new MethodNotAllowedException("no roomId is found in exchange server");
 					}
 				}
+				
+				Map<String, Map<String, Map<String, Map<String, Object>>>> roomMapBookings = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get(EnumRoomInfos.ROOMS.value());
+				int incr = 0; // get data from meetingRoomBookingsList for update bookings in the correct meetingRoomBookings object
+				try {
+					for (Entry<String, Map<String, Map<String, Map<String, Object>>>> elementBooking : roomMapBookings.entrySet()) {
+						MeetingRoomBookingsConnectorReturn meetingRoomBookings = meetingRoomBookingsList.get(incr);
+						incr = incr + 1;
+						try {
+							Map<String, Map<String, Object>> bookings =  (Map<String, Map<String, Object>>)elementBooking.getValue().get(EnumRoomInfos.BOOKINGS.value());
+							for (Entry<String, Map<String, Object>> book : bookings.entrySet()) {
+								BookingConnectorReturn booking = new BookingConnectorReturn();
+								String idReservation = (String)book.getValue().get(EnumBookingDetails.ID_RESERVATION.value());
+								String revisionReservation = (String)book.getValue().get(EnumBookingDetails.REVISION_RESERVATION.value());
+								String organizer = (String)book.getValue().get(EnumBookingDetails.ORGANIZER.value());
+								String organizeFullName = (String)book.getValue().get(EnumBookingDetails.ORGANIZER_FULL_NAME.value());
+								String organizerMail = (String)book.getValue().get(EnumBookingDetails.ORGANIZER_EMAIL.value());
+								String creator = (String)book.getValue().get(EnumBookingDetails.CREATOR.value());
+								String creatorFullName = (String)book.getValue().get(EnumBookingDetails.CREATOR_FULL_NAME.value());
+								String creatorEmail = (String)book.getValue().get(EnumBookingDetails.CREATOR_EMAIL.value());
+								String subject = (String)book.getValue().get(EnumBookingDetails.SUBJECT.value());
+								Integer startDate = (Integer)book.getValue().get(EnumBookingDetails.START_DATE.value());
+								Integer endDate = (Integer)book.getValue().get(EnumBookingDetails.END_DATE.value());
+								Boolean acknowledged = (Boolean)book.getValue().get(EnumBookingDetails.ACKNOWLEDGED.value());
+								booking.setIdReservation(idReservation);
+								booking.setRevisionReservation(revisionReservation);
+								booking.setSubject(subject);
+								booking.setStartDate(startDate);
+								booking.setEndDate(endDate);
+								booking.setAcknowledged(acknowledged);
+								String constructedOrganizer = dataTools.constructOrganizerFullName(organizer, organizeFullName, organizerMail, creator, creatorFullName, creatorEmail);
+								booking.setOrganizerFullName(constructedOrganizer);		
+								meetingRoomBookings.getBookings().add(booking);
+							}
+						} catch (java.lang.ClassCastException e) {
+							// if not bookings, PHP returns ( "Bookings": []) witch produce this exception
+							LOGGER.debug("No bookings found.", e);
+						} catch (RuntimeException e) {
+							LOGGER.error("Error when parsing Bookings element, with message: " + e.getMessage(), e);
+							throw new MeetingRoomInternalServerException("Error when parsing Bookings element, with message: " + e.getMessage());
+						}	
+					}
+				} catch (RuntimeException e) {
+					// if not roomId, PHP returns ( "Rooms": {"toto": false }) witch produce this exception
+					LOGGER.error("error when parsing rooms: " + e.getMessage(), e);
+					throw new MeetingRoomInternalServerException("error when parsing rooms: " + e.getMessage());
+				}
+				
+				meetingrooms.setMeetingRooms(meetingRoomBookingsList);
+
 			} catch (java.lang.ClassCastException e) {
 				// if not rooms, PHP returns ( "Rooms": []) witch produce this exception
 				LOGGER.error("no rooms found.", e);
 			}
 			
-			Map<String, Map<String, Map<String, Map<String, Object>>>> roomMapBookings = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get(EnumRoomInfos.ROOMS.value());
-			int incr = 0; // get data from meetingRoomBookingsList for update bookings in the correct meetingRoomBookings object
-			try {
-				for (Entry<String, Map<String, Map<String, Map<String, Object>>>> elementBooking : roomMapBookings.entrySet()) {
-					MeetingRoomBookingsConnectorReturn meetingRoomBookings = meetingRoomBookingsList.get(incr);
-					incr = incr + 1;
-					try {
-						Map<String, Map<String, Object>> bookings =  (Map<String, Map<String, Object>>)elementBooking.getValue().get(EnumRoomInfos.BOOKINGS.value());
-						for (Entry<String, Map<String, Object>> book : bookings.entrySet()) {
-							BookingConnectorReturn booking = new BookingConnectorReturn();
-							String idReservation = (String)book.getValue().get(EnumBookingDetails.ID_RESERVATION.value());
-							String revisionReservation = (String)book.getValue().get(EnumBookingDetails.REVISION_RESERVATION.value());
-							String organizer = (String)book.getValue().get(EnumBookingDetails.ORGANIZER.value());
-							String organizeFullName = (String)book.getValue().get(EnumBookingDetails.ORGANIZER_FULL_NAME.value());
-							String organizerMail = (String)book.getValue().get(EnumBookingDetails.ORGANIZER_EMAIL.value());
-							String creator = (String)book.getValue().get(EnumBookingDetails.CREATOR.value());
-							String creatorFullName = (String)book.getValue().get(EnumBookingDetails.CREATOR_FULL_NAME.value());
-							String creatorEmail = (String)book.getValue().get(EnumBookingDetails.CREATOR_EMAIL.value());
-							String subject = (String)book.getValue().get(EnumBookingDetails.SUBJECT.value());
-							Integer startDate = (Integer)book.getValue().get(EnumBookingDetails.START_DATE.value());
-							Integer endDate = (Integer)book.getValue().get(EnumBookingDetails.END_DATE.value());
-							Boolean acknowledged = (Boolean)book.getValue().get(EnumBookingDetails.ACKNOWLEDGED.value());
-							booking.setIdReservation(idReservation);
-							booking.setRevisionReservation(revisionReservation);
-							booking.setSubject(subject);
-							booking.setStartDate(startDate);
-							booking.setEndDate(endDate);
-							booking.setAcknowledged(acknowledged);
-							String constructedOrganizer = dataTools.constructOrganizerFullName(organizer, organizeFullName, organizerMail, creator, creatorFullName, creatorEmail);
-							booking.setOrganizerFullName(constructedOrganizer);		
-							meetingRoomBookings.getBookings().add(booking);
-						}
-					} catch (java.lang.ClassCastException e) {
-						// if not bookings, PHP returns ( "Bookings": []) witch produce this exception
-						LOGGER.debug("No bookings found.", e);
-					} catch (RuntimeException e) {
-						LOGGER.error("Error when parsing Bookings element, with message: " + e.getMessage(), e);
-						throw new MeetingRoomInternalServerException("Error when parsing Bookings element, with message: " + e.getMessage());
-					}	
-				}
-			} catch (RuntimeException e) {
-				// if not roomId, PHP returns ( "Rooms": {"toto": false }) witch produce this exception
-				LOGGER.error("error when parsing rooms: " + e.getMessage(), e);
-				throw new MeetingRoomInternalServerException("error when parsing rooms: " + e.getMessage());
-			}
-			
-			meetingrooms.setMeetingRooms(meetingRoomBookingsList);
 			return meetingrooms;
 
 		} catch (ClientProtocolException ex) {
