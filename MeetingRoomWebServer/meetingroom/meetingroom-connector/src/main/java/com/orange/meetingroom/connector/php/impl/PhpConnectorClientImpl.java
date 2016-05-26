@@ -287,8 +287,7 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 				}
 			} catch (java.lang.ClassCastException e) {
 				// if not rooms, PHP returns ( "Rooms": []) witch produce this exception
-				LOGGER.error("no rooms found. May be the xml file is wrong !!!", e);
-				throw new MethodNotAllowedException("no rooms found. May be the xml file is wrong !!!");
+				LOGGER.error("no rooms found.", e);
 			}
 			
 			Map<String, Map<String, Map<String, Map<String, Object>>>> roomMapBookings = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get(EnumRoomInfos.ROOMS.value());

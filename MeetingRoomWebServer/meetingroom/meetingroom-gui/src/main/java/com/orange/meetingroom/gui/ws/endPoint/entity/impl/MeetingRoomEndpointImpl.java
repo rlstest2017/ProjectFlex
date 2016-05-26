@@ -52,6 +52,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	static final String FORMAT_JSON = "json";
 	static final String FORCED_UPDATE_CACHE_TRUE = "true";
 	static final String FORCED_UPDATE_CACHE_FALSE = "false";
+	static final String START_DATE_DEFAULT = "0";
 	static final String ACKNOWLEDGED_DAFAULT = "0";
 	static final String ACKNOWLEDGED_CONFIRM = "1";
 	
@@ -139,8 +140,14 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			
 			GetDashboardBookingsParameters params = new GetDashboardBookingsParameters();
 			params.setDashboardMacAddress(dashboardMacAddress);
-			params.setMaxBookings(maxBookings.toString());
-			params.setStartDate(startDate.toString());
+			if (maxBookings != null) {
+				params.setMaxBookings(maxBookings.toString());
+			}	
+			if (startDate != null) {
+				params.setStartDate(startDate.toString());
+			} else {
+				params.setStartDate(START_DATE_DEFAULT);
+			}
 			params.setFormat(FORMAT_JSON);
 			
 			MeetingRoomsConnectorReturn meetingroomsreturn;

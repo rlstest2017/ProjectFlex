@@ -45,8 +45,10 @@ public class DataTools {
 
 		final StringBuilder urlEncodeParameters = new StringBuilder( 1000 );
 		urlEncodeParameters.append( "format="+params.getFormat());
-		urlEncodeParameters.append( "&" );
-		urlEncodeParameters.append( "MaxBookings="+params.getMaxBookings());
+		if (params.getMaxBookings() != null) {
+			urlEncodeParameters.append( "&" );
+			urlEncodeParameters.append( "MaxBookings="+params.getMaxBookings());
+		}
 		urlEncodeParameters.append( "&" );
 		urlEncodeParameters.append( "StartDate="+params.getStartDate());
 		urlEncodeParameters.append( "&" );

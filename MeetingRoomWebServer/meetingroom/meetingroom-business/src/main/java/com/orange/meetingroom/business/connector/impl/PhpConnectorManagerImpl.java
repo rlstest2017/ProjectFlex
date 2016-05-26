@@ -22,6 +22,7 @@ import com.orange.meetingroom.connector.php.model.request.GetDashboardBookingsPa
 import com.orange.meetingroom.connector.php.model.request.SetBookingParameters;
 import com.orange.meetingroom.connector.php.model.request.UpdateBookingParameters;
 import com.orange.meetingroom.connector.php.model.response.BookingSummary;
+import com.orange.meetingroom.connector.php.model.response.MeetingRoomBookingsConnectorReturn;
 import com.orange.meetingroom.connector.php.model.response.MeetingRoomConnectorReturn;
 import com.orange.meetingroom.connector.php.model.response.MeetingRoomsConnectorReturn;
 
@@ -69,9 +70,21 @@ public class PhpConnectorManagerImpl implements PhpConnectorManager {
 		input.setDashboardMacAddress(params.getDashboardMacAddress());
 		List<String> xmlFilesGroupRoomIdNames = flexOfficeConnector.getDashboardXMLConfigFilesName(input);
 		
-		// TODO call phpConnector.getBookingsFromDashboard(params) foreach config File
-		// TODO process the result and send it to GUI
-		return phpConnector.getBookingsFromDashboard(params);
+		MeetingRoomsConnectorReturn rooms = new MeetingRoomsConnectorReturn();
+		
+		// call phpConnector.getBookingsFromDashboard(params) foreach config File
+		// process the result and send it to GUI
+		for (String filename : xmlFilesGroupRoomIdNames) {
+			params.setRoomGroupID(filename);
+			MeetingRoomsConnectorReturn roomsList = phpConnector.getBookingsFromDashboard(params);
+			rooms.setCurrentDate(roomsList.getCurrentDate());
+			List<MeetingRoomBookingsConnectorReturn> meetingRooms = roomsList.getMeetingRooms();
+			for (MeetingRoomBookingsConnectorReturn meetingRoom : meetingRooms) {
+				rooms.getMeetingRooms().add(meetingRoom);	
+			}
+		}
+		
+		return rooms;
 	}
 
 	@Override
