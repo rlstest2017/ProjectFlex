@@ -169,8 +169,11 @@ public class BuildingHandler {
 	 * @return
 	 * @throws DataNotExistsException
 	 * @throws IntegrityViolationException
+	 * @throws JAXBException 
+	 * @throws IOException 
+	 * @throws NumberFormatException 
 	 */
-	public Response removeBuilding(String id) throws DataNotExistsException, IntegrityViolationException {
+	public Response removeBuilding(String id) throws DataNotExistsException, IntegrityViolationException, NumberFormatException, IOException, JAXBException {
 		buildingManager.delete(Long.valueOf(id));
 		return Response.noContent().build();
 	}

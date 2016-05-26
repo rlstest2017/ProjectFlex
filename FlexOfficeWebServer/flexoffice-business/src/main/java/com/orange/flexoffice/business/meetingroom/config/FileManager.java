@@ -36,7 +36,7 @@ public class FileManager {
 	
 	XMLConverter converter = new XMLConverter();
 
-	public void createFile(String fileName) throws IOException, JAXBException {
+	public synchronized void createFile(String fileName) throws IOException, JAXBException {
 		String filePath = properties.getProperty("meetingroom.path");
 		Array room = new Array();
 		room.setDescription("Liste des meeting rooms pour le bâtiment avec l'identifiant suivi de l'étage suivant: " + fileName);
@@ -48,7 +48,7 @@ public class FileManager {
 		converter.convertFromObjectToXML(room, filePath + SEPARATOR + fileName + EXTENSION);
 	}
 	
-	public void updateFile(String oldName, String newName) throws IOException, JAXBException, ParserConfigurationException, SAXException{		
+	public synchronized void updateFile(String oldName, String newName) throws IOException, JAXBException, ParserConfigurationException, SAXException{		
 		String filePath = properties.getProperty("meetingroom.path");
 		Array array = converter.convertFromXMLToObject(filePath + SEPARATOR + oldName + EXTENSION);
 		array.setDescription("Liste des meeting rooms pour le bâtiment et l'étage suivant: " + newName);
@@ -57,13 +57,13 @@ public class FileManager {
 		deleteFile(oldName);
 	}
 	
-	public void deleteFile(String fileName){
+	public synchronized void deleteFile(String fileName){
 		String filePath = properties.getProperty("meetingroom.path");
 		File file = new File(filePath + SEPARATOR + fileName + EXTENSION);
 		file.delete();
 	}
 	
-	public void addObjectToFile(String fileName, String roomId) throws DataAlreadyExistsException, IOException, JAXBException, ParserConfigurationException, SAXException{
+	public synchronized void addObjectToFile(String fileName, String roomId) throws DataAlreadyExistsException, IOException, JAXBException, ParserConfigurationException, SAXException{
 		String filePath = properties.getProperty("meetingroom.path");
 		Array array = converter.convertFromXMLToObject(filePath + SEPARATOR + fileName + EXTENSION);
 		List<JAXBElement<Numeric>> JAXBnums = array.getRooms().getNumeric();
@@ -92,7 +92,7 @@ public class FileManager {
 		converter.convertFromObjectToXML(array, filePath + SEPARATOR + fileName + EXTENSION);
 	}
 	
-	public void updateObjectFromFile(String fileName, String oldRoomId, String newRoomId) throws DataAlreadyExistsException, IOException, JAXBException, ParserConfigurationException, SAXException{
+	public synchronized void updateObjectFromFile(String fileName, String oldRoomId, String newRoomId) throws DataAlreadyExistsException, IOException, JAXBException, ParserConfigurationException, SAXException{
 		String filePath = properties.getProperty("meetingroom.path");
 		Array array = converter.convertFromXMLToObject(filePath + SEPARATOR + fileName + EXTENSION);
 		List<JAXBElement<Numeric>> JAXBnums = array.getRooms().getNumeric();
@@ -123,7 +123,7 @@ public class FileManager {
 		converter.convertFromObjectToXML(array, filePath + SEPARATOR + fileName + EXTENSION);
 	}
 	
-	public void removeObjectFromFile(String fileName, String roomId) throws IOException, JAXBException, ParserConfigurationException, SAXException{
+	public synchronized void removeObjectFromFile(String fileName, String roomId) throws IOException, JAXBException, ParserConfigurationException, SAXException{
 		String filePath = properties.getProperty("meetingroom.path");
 		Array array = converter.convertFromXMLToObject(filePath + SEPARATOR + fileName + EXTENSION);
 		List<JAXBElement<Numeric>> JAXBnums = array.getRooms().getNumeric();

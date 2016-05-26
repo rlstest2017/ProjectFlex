@@ -79,7 +79,9 @@ public interface BuildingManager {
 	 * method used by adminui
 	 * @param buildingId 
 	 * 		  a building ID
+	 * @throws JAXBException 
+	 * @throws IOException 
 	 */
-	void delete(long buildingId) throws DataNotExistsException, IntegrityViolationException;
+	void delete(long buildingId) throws DataNotExistsException, IntegrityViolationException, IOException, JAXBException;
 	
 }

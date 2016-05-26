@@ -209,6 +209,7 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 
 	@Override
 	public MeetingRoomDao update(MeetingRoomDao meetingroomDao) throws DataNotExistsException, DataAlreadyExistsException {
+		MeetingRoomDao oldMeetingRoomDao = meetingroomRepository.findOne(meetingroomDao.getId()); 
 		try {
 			// Update former Agent
 			AgentDao formerAgent = new AgentDao();
@@ -224,11 +225,14 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			agentRepository.updateAgentMeetingRoomId(agent);
 			LOGGER.debug("Agent has set in table for agent id #: " + meetingroomDao.getAgentId());
 			
+			
+			
+			// Update MeetingRoomDao
+			MeetingRoomDao updatedDao = meetingroomRepository.updateMeetingRoom(meetingroomDao);
+			
 			// Update xml meeting room file config
 			String meetingroomActivated = properties.getProperty("meetingroom.activated");
 			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
-				MeetingRoomDao oldMeetingRoomDao = meetingroomRepository.findOne(meetingroomDao.getId()); 
-				
 				if (oldMeetingRoomDao.getBuildingId() == meetingroomDao.getBuildingId() && oldMeetingRoomDao.getFloor() == meetingroomDao.getFloor()){
 					fileManager.updateObjectFromFile(meetingroomDao.getBuildingId() + "_" + meetingroomDao.getFloor(), oldMeetingRoomDao.getExternalId(), meetingroomDao.getExternalId());
 				} else {
@@ -238,12 +242,27 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			}
 			
 			// Update MeetingRoomDao
-			return meetingroomRepository.updateMeetingRoom(meetingroomDao);
+			return updatedDao;
 		} catch (RuntimeException e) {
 			LOGGER.debug("MeetingRoomManager.update : Meeting Room to update not found", e);
 			LOGGER.error("MeetingRoomManager.update : Meeting Room to update not found");
 			throw new DataNotExistsException("MeetingRoomManager.update : Meeting Room to update not found");
 		} catch (IOException | JAXBException | SAXException | ParserConfigurationException e) {
+			String meetingroomActivated = properties.getProperty("meetingroom.activated");
+			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
+				try {
+					if (oldMeetingRoomDao.getBuildingId() == meetingroomDao.getBuildingId() && oldMeetingRoomDao.getFloor() == meetingroomDao.getFloor()){
+						fileManager.updateObjectFromFile(meetingroomDao.getBuildingId() + "_" + meetingroomDao.getFloor(), meetingroomDao.getExternalId(), oldMeetingRoomDao.getExternalId());
+					} else {
+						fileManager.addObjectToFile(oldMeetingRoomDao.getBuildingId() + "_" + oldMeetingRoomDao.getFloor(), oldMeetingRoomDao.getExternalId());
+						fileManager.removeObjectFromFile(meetingroomDao.getBuildingId() + "_" + meetingroomDao.getFloor(), meetingroomDao.getExternalId());
+					}
+				} catch (IOException | JAXBException | ParserConfigurationException | SAXException e1) {
+					LOGGER.debug("MeetingRoomManager.update : Meeting Room xml meeting room file in error", e);
+					LOGGER.error("MeetingRoomManager.update : Meeting Room xml meeting room file in error");
+					throw new RuntimeException("MeetingRoomManager.update : Meeting Room xml meeting room file in error");
+				}
+			}
 			LOGGER.debug("MeetingRoomManager.update : Meeting Room xml meeting room file in error", e);
 			LOGGER.error("MeetingRoomManager.update : Meeting Room xml meeting room file in error");
 			throw new RuntimeException("MeetingRoomManager.update : Meeting Room xml meeting room file in error");

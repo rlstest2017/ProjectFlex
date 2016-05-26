@@ -118,6 +118,10 @@ public class BuildingManagerImpl implements BuildingManager {
 					
 					// Add entry in meetingroom_groups_configuration
 					meetingRoomGroupsConfigurationRepository.saveMeetingRoomGroupsConfiguration(meetingRoomGroupsConfiguration);
+				}
+				
+				for(int i = 0; i < buildingDao.getNbFloors(); i ++){
+					String fileName = buildingDao.getId() + "_" + i;
 					
 					// create xml file
 					fileManager.createFile(fileName);
@@ -130,7 +134,18 @@ public class BuildingManagerImpl implements BuildingManager {
 			LOGGER.debug("BuildingManager.save : Building already exists", e);
 			LOGGER.error("BuildingManager.save : Building already exists");
 			throw new DataAlreadyExistsException("BuildingManager.save : Building already exists"); 
-		} catch (IOException | JAXBException e) {
+		} catch (Exception e) {
+			// if meetingroom activated 
+			String meetingroomActivated = properties.getProperty("meetingroom.activated");
+			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
+				for(int i = 0; i < buildingDao.getNbFloors(); i ++){
+					String fileName = buildingDao.getId() + "_" + i;
+					
+					// delete xml file
+					fileManager.deleteFile(fileName);
+				}
+			}
+			
 			LOGGER.debug("ConfigurationEndpoint.addBuilding : Meeting Room xml meeting room file in error", e);
 			LOGGER.error("ConfigurationEndpoint.addBuilding : Meeting Room xml meeting room file in error");
 			throw new RuntimeException("ConfigurationEndpoint.addBuilding : Meeting Room xml meeting room file in error");
@@ -138,66 +153,95 @@ public class BuildingManagerImpl implements BuildingManager {
 	}
 
 	@Override
-	public BuildingDao update(BuildingDao building) throws DataNotExistsException, IOException, JAXBException, ParserConfigurationException, SAXException, InvalidParametersException {
-		// If newNbFloors < oldNBFloors && room associated to deleted floors -> throws exception
-		BuildingDao oldBuildingDao = buildingRepository.findOne(building.getId());
-		if(building.getNbFloors() < oldBuildingDao.getNbFloors()){
-			List<RoomDao> rooms = roomRepository.findRoomsByBuildingId(building.getId());
-			for(RoomDao room :rooms){
-				if (room.getFloor() > building.getNbFloors()){ 
-					LOGGER.debug("ConfigurationEndpoint.update : Can not update buildding floor because rooms are on deleted floors");
-					LOGGER.error("ConfigurationEndpoint.update : Can not update buildding floor because rooms are on deleted floors");
-					throw new InvalidParametersException("ConfigurationEndpoint.update : Can not update buildding floor because rooms are on deleted floors");
-				}
-			}
-			// If newNbFloors < oldNBFloors && meeting room associated to deleted floors -> throws exception
-			List<MeetingRoomDao> meetingRooms = meetingRoomRepository.findMeetingRoomsByBuildingId(building.getId());
-			for(MeetingRoomDao meetingRoom :meetingRooms){
-				if (meetingRoom.getFloor() > building.getNbFloors()){ 
-					LOGGER.debug("ConfigurationEndpoint.update : Can not update buildding floor because meeting meeting rooms are on deleted floors");
-					LOGGER.error("ConfigurationEndpoint.update : Can not update buildding floor because meeting meeting rooms are on deleted floors");
-					throw new InvalidParametersException("ConfigurationEndpoint.update : Can not update buildding floor because meeting rooms are on deleted floors");
-				}
-			}
-		}
-		
-		BuildingDao buildingUpdated = buildingRepository.updateBuilding(building);
-		
-		// update xml meeting room config file
-		String meetingroomActivated = properties.getProperty("meetingroom.activated");
-		if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
+	public BuildingDao update(BuildingDao building) throws DataNotExistsException, ParserConfigurationException, SAXException, InvalidParametersException, IOException, JAXBException {
+		try {
+			// If newNbFloors < oldNBFloors && room associated to deleted floors -> throws exception
 			
-			MeetingRoomGroupsConfigurationDao meetingRoomGroupsConfiguration;
-			if (oldBuildingDao.getNbFloors() < building.getNbFloors()){
-				for(int i = oldBuildingDao.getNbFloors().intValue(); i < building.getNbFloors(); i ++){
-					String fileName = building.getId() + "_" + i;
-					
-					meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
-					meetingRoomGroupsConfiguration.setBuildingId(building.getId());
-					meetingRoomGroupsConfiguration.setFloor(Long.valueOf(i));
-					meetingRoomGroupsConfiguration.setMeetingroomGroupId(fileName);
-					
-					// Add entry in meetingroom_groups_configuration
-					meetingRoomGroupsConfigurationRepository.saveMeetingRoomGroupsConfiguration(meetingRoomGroupsConfiguration);
-					
-					fileManager.createFile(fileName);
+			BuildingDao oldBuildingDao = buildingRepository.findOne(building.getId());
+			if(building.getNbFloors() < oldBuildingDao.getNbFloors()){
+				List<RoomDao> rooms = roomRepository.findRoomsByBuildingId(building.getId());
+				for(RoomDao room :rooms){
+					if (room.getFloor() > building.getNbFloors()){ 
+						LOGGER.debug("ConfigurationEndpoint.update : Can not update buildding floor because rooms are on deleted floors");
+						LOGGER.error("ConfigurationEndpoint.update : Can not update buildding floor because rooms are on deleted floors");
+						throw new InvalidParametersException("ConfigurationEndpoint.update : Can not update buildding floor because rooms are on deleted floors");
+					}
 				}
-			} else if (oldBuildingDao.getNbFloors() > building.getNbFloors()){
-				for(int i = oldBuildingDao.getNbFloors().intValue(); i >= building.getNbFloors(); i --){
-					String fileName = oldBuildingDao.getId() + "_" + i;
-					
-					meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
-					meetingRoomGroupsConfiguration.setBuildingId(building.getId());
-					meetingRoomGroupsConfiguration.setFloor(Long.valueOf(i));
-					
-					// delete entry in meetingroom_groups_configuration
-					meetingRoomGroupsConfigurationRepository.deleteByBuildingIdAndFloor(meetingRoomGroupsConfiguration);
-					
-					fileManager.deleteFile(fileName);
+				// If newNbFloors < oldNBFloors && meeting room associated to deleted floors -> throws exception
+				List<MeetingRoomDao> meetingRooms = meetingRoomRepository.findMeetingRoomsByBuildingId(building.getId());
+				for(MeetingRoomDao meetingRoom :meetingRooms){
+					if (meetingRoom.getFloor() > building.getNbFloors()){ 
+						LOGGER.debug("ConfigurationEndpoint.update : Can not update buildding floor because meeting meeting rooms are on deleted floors");
+						LOGGER.error("ConfigurationEndpoint.update : Can not update buildding floor because meeting meeting rooms are on deleted floors");
+						throw new InvalidParametersException("ConfigurationEndpoint.update : Can not update buildding floor because meeting rooms are on deleted floors");
+					}
 				}
 			}
+			
+			BuildingDao buildingUpdated = buildingRepository.updateBuilding(building);
+			
+			// update xml meeting room config file
+			String meetingroomActivated = properties.getProperty("meetingroom.activated");
+			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
+				
+				MeetingRoomGroupsConfigurationDao meetingRoomGroupsConfiguration;
+				if (oldBuildingDao.getNbFloors() < building.getNbFloors()){
+					for(int i = oldBuildingDao.getNbFloors().intValue(); i < building.getNbFloors(); i ++){
+						String fileName = building.getId() + "_" + i;
+						
+						meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
+						meetingRoomGroupsConfiguration.setBuildingId(building.getId());
+						meetingRoomGroupsConfiguration.setFloor(Long.valueOf(i));
+						meetingRoomGroupsConfiguration.setMeetingroomGroupId(fileName);
+						
+						// Add entry in meetingroom_groups_configuration
+						meetingRoomGroupsConfigurationRepository.saveMeetingRoomGroupsConfiguration(meetingRoomGroupsConfiguration);
+					}
+					for(int i = oldBuildingDao.getNbFloors().intValue(); i < building.getNbFloors(); i ++){
+						String fileName = building.getId() + "_" + i;
+						
+						fileManager.createFile(fileName);
+					}
+				} else if (oldBuildingDao.getNbFloors() > building.getNbFloors()){
+					for(int i = oldBuildingDao.getNbFloors().intValue(); i >= building.getNbFloors(); i --){
+						meetingRoomGroupsConfiguration = new MeetingRoomGroupsConfigurationDao();
+						meetingRoomGroupsConfiguration.setBuildingId(building.getId());
+						meetingRoomGroupsConfiguration.setFloor(Long.valueOf(i));
+						
+						// delete entry in meetingroom_groups_configuration
+						meetingRoomGroupsConfigurationRepository.deleteByBuildingIdAndFloor(meetingRoomGroupsConfiguration);
+					}
+					for(int i = oldBuildingDao.getNbFloors().intValue(); i >= building.getNbFloors(); i --){
+						String fileName = oldBuildingDao.getId() + "_" + i;
+						
+						fileManager.deleteFile(fileName);
+					}
+				}
+			}
+			return buildingUpdated;
+		} catch(Exception e){
+			// update xml meeting room config file
+			String meetingroomActivated = properties.getProperty("meetingroom.activated");
+			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
+				BuildingDao oldBuildingDao = buildingRepository.findOne(building.getId());
+				if (oldBuildingDao.getNbFloors() < building.getNbFloors()){
+					for(int i = oldBuildingDao.getNbFloors().intValue(); i < building.getNbFloors(); i ++){
+						String fileName = building.getId() + "_" + i;
+						
+						fileManager.deleteFile(fileName);
+					}
+				} else if (oldBuildingDao.getNbFloors() > building.getNbFloors()){
+					for(int i = oldBuildingDao.getNbFloors().intValue(); i >= building.getNbFloors(); i --){
+						String fileName = oldBuildingDao.getId() + "_" + i;
+						
+						fileManager.createFile(fileName);
+					}
+				}
+			}
+			LOGGER.debug("ConfigurationEndpoint.update : Meeting Room xml meeting room file in error", e);
+			LOGGER.error("ConfigurationEndpoint.update : Meeting Room xml meeting room file in error");
+			throw new RuntimeException("ConfigurationEndpoint.update : Meeting Room xml meeting room file in error");
 		}
-		return buildingUpdated;
 	}
 
 	@Override
@@ -208,19 +252,21 @@ public class BuildingManagerImpl implements BuildingManager {
 			// if meetingroom activated in flexOffice
 			String meetingroomActivated = properties.getProperty("meetingroom.activated");
 			
-			// delete xml meeting room config file
 			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
 				// delete entries in table meetingroom_groups_configuration for buildingId
 				meetingRoomGroupsConfigurationRepository.deleteByBuildingId(buildingDao.getId());
-				
+			}
+			
+			preferenceRepository.deleteByBuildingId(buildingId);
+			buildingRepository.delete(buildingId);
+			
+			// delete xml meeting room config file
+			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
 				for(int i = 0; i < buildingDao.getNbFloors(); i ++){
 					String fileName = buildingDao.getId() + "_" + i;
 					fileManager.deleteFile(fileName);
 				}
 			}
-			
-			preferenceRepository.deleteByBuildingId(buildingId);
-			buildingRepository.delete(buildingId);
 			
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("Building by id " + buildingId + " is not found", e);
@@ -230,7 +276,26 @@ public class BuildingManagerImpl implements BuildingManager {
 			LOGGER.debug("BuildingManager.delete : Building associated to rooms", e);
 			LOGGER.error("BuildingManager.delete : Building associated to rooms");
 			throw new IntegrityViolationException("BuildingManager.delete : Building associated to rooms");
-		}	
+		} catch(Exception e){
+			// update xml meeting room config file
+			String meetingroomActivated = properties.getProperty("meetingroom.activated");
+			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
+				BuildingDao oldBuildingDao = buildingRepository.findOne(buildingId);
+				for(int i = 0; i < oldBuildingDao.getNbFloors(); i ++){
+					String fileName = oldBuildingDao.getId() + "_" + i;
+					try {
+						fileManager.createFile(fileName);
+					} catch (IOException | JAXBException e1) {
+						LOGGER.debug("ConfigurationEndpoint.update : Meeting Room xml meeting room file in error", e);
+						LOGGER.error("ConfigurationEndpoint.update : Meeting Room xml meeting room file in error");
+						throw new RuntimeException("ConfigurationEndpoint.update : Meeting Room xml meeting room file in error");
+					}
+				}
+			}
+			LOGGER.debug("ConfigurationEndpoint.update : Meeting Room xml meeting room file in error", e);
+			LOGGER.error("ConfigurationEndpoint.update : Meeting Room xml meeting room file in error");
+			throw new RuntimeException("ConfigurationEndpoint.update : Meeting Room xml meeting room file in error");
+		}
 	}
 		
 }

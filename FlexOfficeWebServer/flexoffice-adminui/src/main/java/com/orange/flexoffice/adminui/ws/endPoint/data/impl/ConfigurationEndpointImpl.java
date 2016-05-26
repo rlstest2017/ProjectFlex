@@ -155,6 +155,9 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.removeBuilding with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		} catch (IOException | JAXBException e) {
+			LOGGER.debug("RuntimeException in ConfigurationEndpoint.removeBuilding with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		} finally {
 			LOGGER.debug( "End call ConfigurationEndpoint.removeBuilding at: " + new Date() );
 		}
