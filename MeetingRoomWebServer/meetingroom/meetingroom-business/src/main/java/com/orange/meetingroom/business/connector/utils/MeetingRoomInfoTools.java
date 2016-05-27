@@ -49,8 +49,9 @@ public class MeetingRoomInfoTools {
 			data.setMeetingRoomExternalId(meetingRoomExternalId);
 			
 			for (BookingConnectorReturn book : bookings) {
-				Boolean compareDates = dateTools.isTime1BeforeTime2(book.getStartDate(), currentDate, 0);
-				if (compareDates) { // startDate and currentDate of a booking
+				Boolean compareDates1 = dateTools.isTime1BeforeTime2(book.getStartDate(), currentDate, 0);
+				Boolean compareDates2 = dateTools.isTime1BeforeTime2(currentDate, book.getEndDate(), 0);
+				if ((compareDates1) && (compareDates2)) { // currentDate of a booking is between startDate and endDate
 					updateInfos(book, data, meetingRoomExternalId, currentDate);
 					break;
 				} 
