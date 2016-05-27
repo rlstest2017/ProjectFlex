@@ -120,6 +120,18 @@ public class SystemApiEndpointImpl implements SystemApiEndpoint {
 			if (configuration != null)
 			system.setKeyboardLang(configuration.getValue());
 			
+			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.DASHBOARD_START_DATE.toString());
+			if (configuration != null)
+			system.setDashboardStartDate(Long.valueOf(configuration.getValue()));
+			
+			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.DASHBOARD_MAX_BOOKINGS.toString());
+			if (configuration != null)
+			system.setDashboardMaxBookings(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			
+			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.SYNCHRO_TIME.toString());
+			if (configuration != null)
+			system.setSynchroTime(Long.valueOf(configuration.getValue()));
+		
 			LOGGER.debug( "End call SystemApiEndpointImpl.getSystem  at: " + new Date() );
 			
 			return factory.createSystem(system).getValue();
