@@ -176,7 +176,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			meetingroomDao.setName(meetingroomInput.getName());
 			meetingroomDao.setType(meetingroomInput.getType().toString());
 			meetingroomDao.setBuildingId(Long.valueOf(meetingroomInput.getBuildingId()));
-			meetingroomDao.setExternalId(meetingroomInput.getExternalId());
+			meetingroomDao.setExternalId(meetingroomInput.getExternalId().trim());
 			
 			if(meetingroomInput.getFloor() != null)
 				meetingroomDao.setFloor(meetingroomInput.getFloor().longValue());
@@ -248,7 +248,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			meetingroomDao.setName(meetingroomInput.getName());
 			meetingroomDao.setType(meetingroomInput.getType().toString());
 			meetingroomDao.setBuildingId(Long.valueOf(meetingroomInput.getBuildingId()));
-			meetingroomDao.setExternalId(meetingroomInput.getExternalId());
+			meetingroomDao.setExternalId(meetingroomInput.getExternalId().trim());
 			if(meetingroomInput.getFloor() != null)
 			meetingroomDao.setFloor(meetingroomInput.getFloor().longValue());
 	
