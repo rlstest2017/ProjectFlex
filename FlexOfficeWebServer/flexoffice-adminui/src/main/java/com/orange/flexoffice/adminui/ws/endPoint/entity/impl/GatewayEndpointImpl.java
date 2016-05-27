@@ -128,7 +128,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 		LOGGER.debug( "Begin call doPost method for GatewayEndpoint at: " + new Date() );
 
 		GatewayDao gatewayDao = new GatewayDao();
-		gatewayDao.setMacAddress(gateway.getMacAddress());
+		gatewayDao.setMacAddress(gateway.getMacAddress().toLowerCase());
 		gatewayDao.setName(gateway.getName().trim());
 		gatewayDao.setDescription(gateway.getDesc());
 
