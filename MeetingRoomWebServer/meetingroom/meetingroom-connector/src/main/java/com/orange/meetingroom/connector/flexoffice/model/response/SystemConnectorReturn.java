@@ -26,6 +26,9 @@ public class SystemConnectorReturn {
 	Integer nbRoomsPerPage;
 	Boolean virtualKeyboard;
 	String  keyboardLang;
+	Integer dashboardStartDate;
+	Integer dashboardMaxBookings;
+	Integer syncroTime;
 	
 	/**
 	 * @return the agentTimeout
@@ -255,6 +258,41 @@ public class SystemConnectorReturn {
 	public void setKeyboardLang(String keyboardLang) {
 		this.keyboardLang = keyboardLang;
 	}
-	
+	/**
+	 * @return the dashboardStartDate
+	 */
+	public Integer getDashboardStartDate() {
+		return dashboardStartDate;
+	}
+	/**
+	 * @param dashboardStartDate the dashboardStartDate to set
+	 */
+	public void setDashboardStartDate(Integer dashboardStartDate) {
+		this.dashboardStartDate = dashboardStartDate;
+	}
+	/**
+	 * @return the dashboardMaxBookings
+	 */
+	public Integer getDashboardMaxBookings() {
+		return dashboardMaxBookings;
+	}
+	/**
+	 * @param dashboardMaxBookings the dashboardMaxBookings to set
+	 */
+	public void setDashboardMaxBookings(Integer dashboardMaxBookings) {
+		this.dashboardMaxBookings = dashboardMaxBookings;
+	}
+	/**
+	 * @return the syncroTime
+	 */
+	public Integer getSyncroTime() {
+		return syncroTime;
+	}
+	/**
+	 * @param syncroTime the syncroTime to set
+	 */
+	public void setSyncroTime(Integer syncroTime) {
+		this.syncroTime = syncroTime;
+	}
 	
 }

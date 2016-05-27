@@ -129,5 +129,7 @@ INSERT INTO configuration ("key", "value", description) VALUES
     ('PAGES_SHIFT_INTERVAL', '2', 'This data is in secondes'),
     ('NB_ROOMS_PER_PAGE', '6', 'This data is an integer'),
     ('VIRTUAL_KEYBOARD', 'false', 'This data is in boolean'),
-    ('KEYBOARD_LANG', 'french', 'This data is in string');
-
+    ('KEYBOARD_LANG', 'french', 'This data is in string'),
+    ('DASHBOARD_START_DATE', '0', 'The time in the current Day used by dashboards, This data is in seconds'),
+    ('DASHBOARD_MAX_BOOKINGS', '2', 'The max bookings returned by dashboards, This data is an integer'),
+    ('SYNCHRO_TIME', '30', 'The synchr interval with currentDate of server, This data isin seconds');

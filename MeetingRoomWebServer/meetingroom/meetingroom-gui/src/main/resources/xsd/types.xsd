@@ -56,6 +56,9 @@
 			<xsd:element name="nbRoomsPerPage" type="xsd:integer"/>
 			<xsd:element name="virtualKeyboard" type="xsd:boolean"/>
 			<xsd:element name="keyboardLang" type="xsd:string"/>
+			<xsd:element name="dashboardStartDate" type="xsd:integer"/>
+			<xsd:element name="dashboardMaxBookings" type="xsd:integer"/>
+			<xsd:element name="syncroTime" type="xsd:integer"/>
  		</xsd:sequence>
 	</xsd:complexType>
 	
