@@ -58,7 +58,7 @@
 			<xsd:element name="keyboardLang" type="xsd:string"/>
 			<xsd:element name="dashboardStartDate" type="xsd:integer"/>
 			<xsd:element name="dashboardMaxBookings" type="xsd:integer"/>
-			<xsd:element name="syncroTime" type="xsd:integer"/>
+			<xsd:element name="synchroTime" type="xsd:integer"/>
  		</xsd:sequence>
 	</xsd:complexType>
 	

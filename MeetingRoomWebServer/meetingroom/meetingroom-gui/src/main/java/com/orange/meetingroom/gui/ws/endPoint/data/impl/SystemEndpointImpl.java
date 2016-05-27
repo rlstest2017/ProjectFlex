@@ -68,7 +68,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
 				system.setKeyboardLang(data.getKeyboardLang());
 				system.setDashboardStartDate(BigInteger.valueOf(data.getDashboardStartDate()));
 				system.setDashboardMaxBookings(BigInteger.valueOf(data.getDashboardMaxBookings()));
-				system.setSyncroTime(BigInteger.valueOf(data.getSyncroTime()));
+				system.setSynchroTime(BigInteger.valueOf(data.getSynchroTime()));
 				
 			}
 					

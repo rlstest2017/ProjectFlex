@@ -28,7 +28,7 @@ public class SystemConnectorReturn {
 	String  keyboardLang;
 	Integer dashboardStartDate;
 	Integer dashboardMaxBookings;
-	Integer syncroTime;
+	Integer synchroTime;
 	
 	/**
 	 * @return the agentTimeout
@@ -283,16 +283,17 @@ public class SystemConnectorReturn {
 		this.dashboardMaxBookings = dashboardMaxBookings;
 	}
 	/**
-	 * @return the syncroTime
+	 * @return the synchroTime
 	 */
-	public Integer getSyncroTime() {
-		return syncroTime;
+	public Integer getSynchroTime() {
+		return synchroTime;
 	}
 	/**
-	 * @param syncroTime the syncroTime to set
+	 * @param synchroTime the synchroTime to set
 	 */
-	public void setSyncroTime(Integer syncroTime) {
-		this.syncroTime = syncroTime;
+	public void setSynchroTime(Integer synchroTime) {
+		this.synchroTime = synchroTime;
 	}
+	
 	
 }
