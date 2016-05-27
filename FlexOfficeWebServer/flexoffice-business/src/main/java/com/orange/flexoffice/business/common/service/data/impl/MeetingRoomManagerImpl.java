@@ -324,15 +324,18 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			if  (meetingroomDao.getStatus().equals(E_MeetingRoomStatus.OCCUPIED.toString())) { 
 				LOGGER.info("foundMeetingRoomStatus is " + foundMeetingRoom.getStatus() + " for meeting room#" + foundMeetingRoom.getName());
 				
-				LOGGER.debug("MeetingRoomStat to create !!!");
-				MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
-				meetingRoomStat.setMeetingroomId(meetingroomDao.getId().intValue());
-				meetingRoomStat.setMeetingRoomInfo(E_MeetingRoomInfo.OCCUPIED.toString());
-				meetingRoomStat.setBeginOccupancyDate(meetingroomDao.getStartDate());
-				meetingRoomStatRepository.saveOccupiedMeetingRoomStat(meetingRoomStat);
-				LOGGER.info("meetingRoomStat created for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
-				
-			} else if (meetingroomDao.getStatus().equals(E_MeetingRoomStatus.FREE.toString())) { 
+				if (foundMeetingRoom.getStatus().equals(E_MeetingRoomStatus.OCCUPIED.toString())) {
+					LOGGER.error("Meeting Room status is not FREE !!!");
+				} else {
+					LOGGER.debug("MeetingRoomStat to create !!!");
+					MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
+					meetingRoomStat.setMeetingroomId(meetingroomDao.getId().intValue());
+					meetingRoomStat.setMeetingRoomInfo(E_MeetingRoomInfo.OCCUPIED.toString());
+					meetingRoomStat.setBeginOccupancyDate(meetingroomDao.getStartDate());
+					meetingRoomStatRepository.saveOccupiedMeetingRoomStat(meetingRoomStat);
+					LOGGER.info("meetingRoomStat created for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
+				}
+			} else if (meetingroomDao.getStatus().equals(E_MeetingRoomStatus.FREE.toString()) || meetingroomDao.getStatus().equals(E_MeetingRoomStatus.UNKNOWN.toString())) { 
 				if (foundMeetingRoom.getStatus().equals(E_MeetingRoomStatus.OCCUPIED.toString())) { 
 					LOGGER.debug("MeetingRoomStat to update !!!");
 					MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
@@ -348,12 +351,9 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 					meetingroomDao.setStartDate(null);
 					meetingroomDao.setEndDate(null);
 				}
-			} else if(meetingroomDao.getStatus().equals(E_MeetingRoomStatus.UNKNOWN.toString())){
-				meetingroomDao.setStartDate(null);
-				meetingroomDao.setEndDate(null);
-			}
-			// update MeetingRoomDao => status & organizer label & Start & End date
+			} 
 			
+			// update MeetingRoomDao => status & organizer label & Start & End date
 			return meetingroomRepository.updateMeetingRoomData(meetingroomDao);
 		} catch (RuntimeException e) {
 			LOGGER.debug("MeetingRoomManager.updateStatus : Meeting Room to update Status not found", e);
