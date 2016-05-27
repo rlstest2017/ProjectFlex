@@ -495,6 +495,8 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				tenant = factory.createUserSummary();
 				tenant.setId(userDao.getId().toString());
 				
+				tenant.setRoomKind(ERoomKind.FLEXOFFICE);
+				
 				// Compute tenant
 				if (userDao.getFirstName() != null) {
 					tenant.setFirstName(userDao.getFirstName());

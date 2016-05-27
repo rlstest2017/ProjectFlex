@@ -57,6 +57,7 @@
 			<xsd:element name="lastName" type="xsd:string"/>
 			<xsd:element name="email" type="xsd:string"/>
 			<xsd:element name="roomId" type="xsd:string"/>
+			<xsd:element name="roomKind" type="e-roomKind"/>
 			<xsd:element name="context" type="UserContext"/>
 		</xsd:sequence>
 	</xsd:complexType>
@@ -68,6 +69,7 @@
 			<xsd:element name="lastName" type="xsd:string"/>
 			<xsd:element name="email" type="xsd:string"/>
 			<xsd:element name="roomId" type="xsd:string"/>
+			<xsd:element name="roomKind" type="e-roomKind"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:complexType name="UserInput">
