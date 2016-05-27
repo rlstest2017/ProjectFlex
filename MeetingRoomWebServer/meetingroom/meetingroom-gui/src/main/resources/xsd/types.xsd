@@ -34,6 +34,20 @@
 	</xsd:simpleType>
 	<!-- End Enumeration Type -->
 	
+	<!-- System CurrentDate -->
+	<xsd:complexType name="SystemCurrentDate">
+		<xsd:sequence>
+			<xsd:element name="currentDate" type="xsd:integer"/>
+ 		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- System MacAddress -->
+	<xsd:complexType name="SystemRemoteMacAddress">
+		<xsd:sequence>
+			<xsd:element name="macAddress" type="xsd:string"/>
+ 		</xsd:sequence>
+	</xsd:complexType>
+			
 	<!-- System -->
 	<xsd:complexType name="SystemReturn">
 		<xsd:sequence>

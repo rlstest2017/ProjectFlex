@@ -16,6 +16,8 @@ import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerExcep
 import com.orange.meetingroom.connector.flexoffice.model.response.SystemConnectorReturn;
 import com.orange.meetingroom.gui.ws.endPoint.data.SystemEndpoint;
 import com.orange.meetingroom.gui.ws.model.ObjectFactory;
+import com.orange.meetingroom.gui.ws.model.SystemCurrentDate;
+import com.orange.meetingroom.gui.ws.model.SystemRemoteMacAddress;
 import com.orange.meetingroom.gui.ws.model.SystemReturn;
 import com.orange.meetingroom.gui.ws.utils.ErrorMessageHandler;
 
@@ -84,6 +86,19 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	}
 
 	@Override
+	public SystemCurrentDate getSystemCurrentDate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public SystemRemoteMacAddress getSystemRemoteMacAddress() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+	@Override
 	public Response options() {
 	    return Response.ok("")
 	            .header("Access-Control-Allow-Origin", "*")
@@ -93,5 +108,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	            .header("Access-Control-Max-Age", "1209600")
 	            .build();
 	}
+
+	
 
 }

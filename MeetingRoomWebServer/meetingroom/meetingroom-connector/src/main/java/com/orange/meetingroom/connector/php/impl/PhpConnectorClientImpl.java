@@ -1,11 +1,16 @@
 package com.orange.meetingroom.connector.php.impl;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -41,6 +46,8 @@ import com.orange.meetingroom.connector.php.model.response.MeetingRoomConnectorR
 import com.orange.meetingroom.connector.php.model.response.MeetingRoomBookingsConnectorReturn;
 import com.orange.meetingroom.connector.php.model.response.MeetingRoomDetailsConnectorReturn;
 import com.orange.meetingroom.connector.php.model.response.MeetingRoomsConnectorReturn;
+import com.orange.meetingroom.connector.php.model.response.SystemCurrentDateConnectorReturn;
+import com.orange.meetingroom.connector.php.model.response.XMLGetBookings;
 import com.orange.meetingroom.connector.php.utils.DataTools;
 
 /**
@@ -68,6 +75,66 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 	//**************************************************************************
     //************************* METHODS  ***************************************
     //**************************************************************************
+	
+	/**
+	 * getCurrentDate
+	 * @return SystemCurrentDateConnectorReturn
+	 * @throws PhpInternalServerException 
+	 * @throws MeetingRoomInternalServerException 
+	 */
+	public SystemCurrentDateConnectorReturn getCurrentDate() throws PhpInternalServerException, MeetingRoomInternalServerException {
+		
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug( "Begin call getCurrentDate() method");
+		}
+	
+		try {
+			
+		SystemCurrentDateConnectorReturn returnedCurrentDate = new SystemCurrentDateConnectorReturn();
+		
+		String request = phpGetBookingsURL;
+		HttpGet getRequest = new HttpGet(request);
+		//Send the request; It will immediately return the response in HttpResponse object
+		LOGGER.info("The getRequest in getCurrentDate() method is : " + getRequest);
+		
+		HttpResponse response;
+		response = httpClient.execute(getRequest);
+
+		//verify the valid error code first
+		int statusCode = response.getStatusLine().getStatusCode();
+		if (statusCode != 200) {
+			LOGGER.error("Internal error produce in PHP server, with error code: " + statusCode);
+			throw new PhpInternalServerException("Internal error produce in Php server, with error code: " + statusCode);
+		}
+		
+		//Now pull back the response object
+		HttpEntity httpEntity = response.getEntity();
+		String apiOutput = EntityUtils.toString(httpEntity);
+		StringReader reader = new StringReader(apiOutput);
+		JAXBContext jaxbContext = JAXBContext.newInstance(XMLGetBookings.class);
+		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		XMLGetBookings bookings = (XMLGetBookings) jaxbUnmarshaller.unmarshal(reader);
+		
+		returnedCurrentDate.setCurrentDate(bookings.getBookingsInfos().get(0).getCurrentDate());
+		
+		return returnedCurrentDate;
+		
+		} catch (ClientProtocolException ex) {
+			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
+			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
+		} catch (IOException e) {
+			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage(), e);
+			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
+		} catch (JAXBException e) {
+			LOGGER.error("Error in jaxbUnmarshaller.unmarshal(reader) method, with message: " + e.getMessage(), e);
+			throw new MeetingRoomInternalServerException("Error in jaxbUnmarshaller.unmarshal(reader) method, with message: " + e.getMessage());
+		} finally	{
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug( "End call getCurrentDate() method");
+			}
+		}
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	/**

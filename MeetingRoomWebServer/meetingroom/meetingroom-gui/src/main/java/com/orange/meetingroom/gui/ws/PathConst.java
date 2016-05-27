@@ -20,6 +20,8 @@ public final class PathConst {
 	public static final String RESERVE_PATH = "/reserve";
 	public static final String CANCEL_PATH = "/cancel";
 	public static final String CONFIRM_PATH = "/confirm";
+	public static final String CURRENT_DATE = "/currentDate";
+	public static final String MAC_ADDRESS = "/macAddress";
 	
 	private PathConst() {
 		

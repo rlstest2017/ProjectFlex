@@ -4,6 +4,8 @@
 	<xsd:include id="types" schemaLocation="types.xsd"/>
 	
 	<xsd:element name="systemReturn" type="SystemReturn"/>
+	<xsd:element name="systemCurrentDate" type="SystemCurrentDate"/>
+	<xsd:element name="systemRemoteMacAddress" type="SystemRemoteMacAddress"/>
 	<xsd:element name="agentOutput" type="AgentOutput"/>
 	<xsd:element name="dashboardOutput" type="DashboardOutput"/>
 	<xsd:element name="bookingSetOutput" type="BookingSetOutput"/>

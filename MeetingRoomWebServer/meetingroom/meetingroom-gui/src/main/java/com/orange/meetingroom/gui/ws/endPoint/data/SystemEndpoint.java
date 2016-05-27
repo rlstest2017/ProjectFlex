@@ -7,8 +7,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.orange.meetingroom.gui.ws.model.SystemCurrentDate;
+import com.orange.meetingroom.gui.ws.model.SystemRemoteMacAddress;
 import com.orange.meetingroom.gui.ws.model.SystemReturn;
 
+import static com.orange.meetingroom.gui.ws.PathConst.CURRENT_DATE;
+import static com.orange.meetingroom.gui.ws.PathConst.MAC_ADDRESS;
 import static com.orange.meetingroom.gui.ws.PathConst.SYSTEM_PATH;
 
 /**
@@ -27,6 +31,31 @@ public interface SystemEndpoint {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	SystemReturn getSystem();
+	
+	/**
+	 * Gets system currentDate.
+	 * 
+	 * @return SystemCurrentDate .
+	 * 
+	 * @see SystemCurrentDate
+	 */
+	@GET
+	@Path(CURRENT_DATE)
+	@Produces(MediaType.APPLICATION_JSON)
+	SystemCurrentDate getSystemCurrentDate();
+	
+	/**
+	 * Gets system macAddress.
+	 * 
+	 * @return SystemRemoteMacAddress.
+	 * 
+	 * @see SystemRemoteMacAddress
+	 */
+	@GET
+	@Path(MAC_ADDRESS)
+	@Produces(MediaType.APPLICATION_JSON)
+	SystemRemoteMacAddress getSystemRemoteMacAddress();
+	
 	
 	@OPTIONS
 	@Path("{path : .*}")
