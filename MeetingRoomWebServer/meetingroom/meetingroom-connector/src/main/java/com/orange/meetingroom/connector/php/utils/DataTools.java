@@ -16,7 +16,18 @@ import com.orange.meetingroom.connector.php.model.request.UpdateBookingParameter
  */
 public class DataTools {
 	
-	
+
+	/**
+	 * getAgentBookingsParametersToUrlEncode
+	 * @param params
+	 * @return
+	 */
+	public String getCurrentDateParameterToUrlEncode() {
+		final StringBuilder urlEncodeParameters = new StringBuilder( 1000 );
+		urlEncodeParameters.append( "format=json");
+		return urlEncodeParameters.toString();
+	}
+
 	/**
 	 * getAgentBookingsParametersToUrlEncode
 	 * @param params

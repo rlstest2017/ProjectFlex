@@ -102,8 +102,9 @@ public class SystemEndpointImpl implements SystemEndpoint {
 			if (data == null) {
 				LOGGER.debug("SystemCurrentDateConnectorReturn object is null");
 			} else {
-				systemCurrentDate.setCurrentDate(BigInteger.valueOf(data.getCurrentDate()));
-				
+				if (data.getCurrentDate() != null) {
+					systemCurrentDate.setCurrentDate(BigInteger.valueOf(data.getCurrentDate()));
+				}
 			}
 			
 		LOGGER.debug( "End call getSystemCurrentDate() method for SystemEndpoint at: " + new Date() );

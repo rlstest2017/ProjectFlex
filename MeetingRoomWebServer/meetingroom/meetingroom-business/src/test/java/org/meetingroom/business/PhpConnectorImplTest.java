@@ -36,7 +36,7 @@ public class PhpConnectorImplTest {
 
 	private static final Logger LOGGER = Logger.getLogger(PhpConnectorImplTest.class);
 	private static ClassPathXmlApplicationContext context;
-	private static PhpConnectorManager phpBusinessConnector;
+	private static PhpConnectorManager phpConnectorManager;
 	
 	/**
 	 * @throws java.lang.Exception
@@ -44,7 +44,21 @@ public class PhpConnectorImplTest {
 	@BeforeClass
 	public static void initSpringContextAndDatabase() throws Exception {
 		context = new ClassPathXmlApplicationContext("classpath*:applicationContext-meetingroom-business-test.xml");
-		phpBusinessConnector = (PhpConnectorManagerImpl)context.getBean("phpBusinessConnector");
+		phpConnectorManager = (PhpConnectorManagerImpl)context.getBean("phpConnectorManager");
+	}
+	
+	@Test
+	public void TestA_phpGetCurrentDate() {
+		// SetUp
+		boolean expectedResult = false;
+		try {
+			phpConnectorManager.getCurrentDate();
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(false, expectedResult);
 	}
 
 
@@ -57,7 +71,7 @@ public class PhpConnectorImplTest {
 		params.setRoomID("brehat.rennes@microsoft.cad.aql.fr");
 		params.setForceUpdateCache("false");
 		try {
-			MeetingRoomConnectorReturn meetingroom = phpBusinessConnector.getBookingsFromAgent(params);
+			MeetingRoomConnectorReturn meetingroom = phpConnectorManager.getBookingsFromAgent(params);
 			String externalId = meetingroom.getMeetingRoom().getMeetingRoomDetails().getMeetingRoomExternalId();
 			// Asserts
 			assertEquals("brehat.rennes@microsoft.cad.aql.fr", externalId);
@@ -79,7 +93,7 @@ public class PhpConnectorImplTest {
 		params.setRoomID("toto");
 		params.setForceUpdateCache("false");
 		try {
-			phpBusinessConnector.getBookingsFromAgent(params);
+			phpConnectorManager.getBookingsFromAgent(params);
 		} catch (Exception e) {
 			expectedResult = true;
 			LOGGER.error(e.getMessage());
@@ -97,7 +111,7 @@ public class PhpConnectorImplTest {
 		params.setRoomID("toto");
 		params.setForceUpdateCache("false");
 		try {
-			phpBusinessConnector.getBookingsFromAgent(params);
+			phpConnectorManager.getBookingsFromAgent(params);
 		} catch (Exception e) {
 			expectedResult = true;
 			LOGGER.error(e.getMessage());
@@ -116,7 +130,7 @@ public class PhpConnectorImplTest {
 		params.setStartDate("0");
 		params.setRoomGroupID("rg_oab_full");
 		try {
-			MeetingRoomsConnectorReturn meetingrooms = phpBusinessConnector.getBookingsFromDashboard(params);
+			MeetingRoomsConnectorReturn meetingrooms = phpConnectorManager.getBookingsFromDashboard(params);
 			int size = meetingrooms.getMeetingRooms().size();
 			// Asserts
 			assertEquals(2, size);
@@ -139,7 +153,7 @@ public class PhpConnectorImplTest {
 		params.setStartDate("0");
 		params.setRoomGroupID("rg_oab_full_bad");
 		try {
-			phpBusinessConnector.getBookingsFromDashboard(params);
+			phpConnectorManager.getBookingsFromDashboard(params);
 		} catch (Exception e) {
 			expectedResult = true;
 			LOGGER.error(e.getMessage());		
@@ -158,7 +172,7 @@ public class PhpConnectorImplTest {
 		params.setStartDate("0");
 		params.setRoomGroupID("rg_oab_full_bad");
 		try {
-			phpBusinessConnector.getBookingsFromDashboard(params);
+			phpConnectorManager.getBookingsFromDashboard(params);
 		} catch (Exception e) {
 			expectedResult = true;
 			LOGGER.error(e.getMessage());		
@@ -181,7 +195,7 @@ public class PhpConnectorImplTest {
 		params.setAcknowledged("0");
 		
 		try {
-			BookingSummary booking = phpBusinessConnector.setBooking(params);
+			BookingSummary booking = phpConnectorManager.setBooking(params);
 			String idReservation = booking.getIdReservation();
 			// Asserts
 			assertNotEquals(null , idReservation);
@@ -208,7 +222,7 @@ public class PhpConnectorImplTest {
 		params.setAcknowledged("0");
 		
 		try {
-			phpBusinessConnector.setBooking(params);
+			phpConnectorManager.setBooking(params);
 		} catch (Exception e) {
 			expectedResult = true;
 			LOGGER.error(e.getMessage());		
@@ -232,7 +246,7 @@ public class PhpConnectorImplTest {
 		params.setAcknowledged("1");
 				
 		try {
-			BookingSummary booking = phpBusinessConnector.updateBooking(params);
+			BookingSummary booking = phpConnectorManager.updateBooking(params);
 			String idReservation = booking.getIdReservation();
 			// Asserts
 			assertNotEquals(null , idReservation);
@@ -258,7 +272,7 @@ public class PhpConnectorImplTest {
 		params.setFormat("json"); 
 				
 		try {
-			BookingSummary booking = phpBusinessConnector.updateBooking(params);
+			BookingSummary booking = phpConnectorManager.updateBooking(params);
 			String idReservation = booking.getIdReservation();
 			// Asserts
 			assertNotEquals(null , idReservation);

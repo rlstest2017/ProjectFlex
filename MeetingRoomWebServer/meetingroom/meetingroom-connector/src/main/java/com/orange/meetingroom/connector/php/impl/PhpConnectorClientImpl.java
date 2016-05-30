@@ -1,16 +1,11 @@
 package com.orange.meetingroom.connector.php.impl;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -47,7 +42,6 @@ import com.orange.meetingroom.connector.php.model.response.MeetingRoomBookingsCo
 import com.orange.meetingroom.connector.php.model.response.MeetingRoomDetailsConnectorReturn;
 import com.orange.meetingroom.connector.php.model.response.MeetingRoomsConnectorReturn;
 import com.orange.meetingroom.connector.php.model.response.SystemCurrentDateConnectorReturn;
-import com.orange.meetingroom.connector.php.model.response.XMLGetBookings;
 import com.orange.meetingroom.connector.php.utils.DataTools;
 
 /**
@@ -82,17 +76,15 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 	 * @throws PhpInternalServerException 
 	 * @throws MeetingRoomInternalServerException 
 	 */
+	@SuppressWarnings("unchecked")
 	public SystemCurrentDateConnectorReturn getCurrentDate() throws PhpInternalServerException, MeetingRoomInternalServerException {
-		
+		try {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call getCurrentDate() method");
 		}
-	
-		try {
-			
+
 		SystemCurrentDateConnectorReturn returnedCurrentDate = new SystemCurrentDateConnectorReturn();
-		
-		String request = phpGetBookingsURL;
+		String request = phpGetBookingsURL + "?" + dataTools.getCurrentDateParameterToUrlEncode(); 
 		HttpGet getRequest = new HttpGet(request);
 		//Send the request; It will immediately return the response in HttpResponse object
 		LOGGER.info("The getRequest in getCurrentDate() method is : " + getRequest);
@@ -110,12 +102,15 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 		//Now pull back the response object
 		HttpEntity httpEntity = response.getEntity();
 		String apiOutput = EntityUtils.toString(httpEntity);
-		StringReader reader = new StringReader(apiOutput);
-		JAXBContext jaxbContext = JAXBContext.newInstance(XMLGetBookings.class);
-		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		XMLGetBookings bookings = (XMLGetBookings) jaxbUnmarshaller.unmarshal(reader);
+					
+		// parse the JSON response
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
 		
-		returnedCurrentDate.setCurrentDate(bookings.getBookingsInfos().get(0).getCurrentDate());
+		// get currentDate
+
+		Integer currentDate = (Integer)((Map<String, Object>)mp.get(EnumRoomInfos.INFOS.value())).get(EnumRoomInfos.CURRENT_DATE.value());
+		returnedCurrentDate.setCurrentDate(currentDate);
 		
 		return returnedCurrentDate;
 		
@@ -125,9 +120,6 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 		} catch (IOException e) {
 			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage(), e);
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
-		} catch (JAXBException e) {
-			LOGGER.error("Error in jaxbUnmarshaller.unmarshal(reader) method, with message: " + e.getMessage(), e);
-			throw new MeetingRoomInternalServerException("Error in jaxbUnmarshaller.unmarshal(reader) method, with message: " + e.getMessage());
 		} finally	{
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call getCurrentDate() method");
