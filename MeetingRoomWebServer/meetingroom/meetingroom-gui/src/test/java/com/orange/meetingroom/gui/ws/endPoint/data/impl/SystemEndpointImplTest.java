@@ -13,7 +13,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Log4jConfigurer;
 
 import com.orange.meetingroom.gui.ws.endPoint.data.SystemEndpoint;
-import com.orange.meetingroom.gui.ws.endPoint.entity.impl.AgentEndpointImplTest;
 import com.orange.meetingroom.gui.ws.model.SystemReturn;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -28,7 +27,7 @@ public class SystemEndpointImplTest {
 	    }
 	  }
 
-	private static final Logger LOGGER = Logger.getLogger(AgentEndpointImplTest.class);
+	private static final Logger LOGGER = Logger.getLogger(SystemEndpointImplTest.class);
 
 	private static ClassPathXmlApplicationContext context;
 	private static SystemEndpoint systemEndpoint;
@@ -59,5 +58,18 @@ public class SystemEndpointImplTest {
 		assertEquals(false, expectedResult);
 	}
 
+	@Test
+	public void TestB() {
+		// SetUp
+		boolean expectedResult = false;
+		try {
+			systemEndpoint.getSystemCurrentDate();
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(false, expectedResult);
+	}
 
 }

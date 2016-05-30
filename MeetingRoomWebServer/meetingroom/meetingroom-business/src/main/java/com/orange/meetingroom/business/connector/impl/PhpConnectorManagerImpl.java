@@ -25,6 +25,7 @@ import com.orange.meetingroom.connector.php.model.response.BookingSummary;
 import com.orange.meetingroom.connector.php.model.response.MeetingRoomBookingsConnectorReturn;
 import com.orange.meetingroom.connector.php.model.response.MeetingRoomConnectorReturn;
 import com.orange.meetingroom.connector.php.model.response.MeetingRoomsConnectorReturn;
+import com.orange.meetingroom.connector.php.model.response.SystemCurrentDateConnectorReturn;
 
 /**
  * PhpConnectorManagerImpl
@@ -41,6 +42,11 @@ public class PhpConnectorManagerImpl implements PhpConnectorManager {
 	FlexOfficeConnectorClient flexOfficeConnector;
 	@Autowired
 	MeetingRoomInfoTools meetingRoomInfoTools;
+
+	@Override
+	public SystemCurrentDateConnectorReturn getCurrentDate() throws PhpInternalServerException, MeetingRoomInternalServerException {
+		return phpConnector.getCurrentDate();
+	}
 	
 	@Override
 	public MeetingRoomConnectorReturn getBookingsFromAgent(GetAgentBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, DataNotExistsException, MethodNotAllowedException  {
@@ -96,6 +102,6 @@ public class PhpConnectorManagerImpl implements PhpConnectorManager {
 	public BookingSummary updateBooking(UpdateBookingParameters params) throws MeetingRoomInternalServerException, MethodNotAllowedException, PhpInternalServerException  {
 		return phpConnector.updateBooking(params);
 	}
-	
+
 
 }

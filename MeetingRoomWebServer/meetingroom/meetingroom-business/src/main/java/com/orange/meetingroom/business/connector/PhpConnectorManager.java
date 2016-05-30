@@ -12,6 +12,7 @@ import com.orange.meetingroom.connector.php.model.request.UpdateBookingParameter
 import com.orange.meetingroom.connector.php.model.response.BookingSummary;
 import com.orange.meetingroom.connector.php.model.response.MeetingRoomConnectorReturn;
 import com.orange.meetingroom.connector.php.model.response.MeetingRoomsConnectorReturn;
+import com.orange.meetingroom.connector.php.model.response.SystemCurrentDateConnectorReturn;
 
 /**
  * PhpConnectorManager
@@ -19,6 +20,8 @@ import com.orange.meetingroom.connector.php.model.response.MeetingRoomsConnector
  *
  */
 public interface PhpConnectorManager {
+	
+	public SystemCurrentDateConnectorReturn getCurrentDate() throws PhpInternalServerException, MeetingRoomInternalServerException;
 	
 	public MeetingRoomConnectorReturn getBookingsFromAgent(GetAgentBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, DataNotExistsException, MethodNotAllowedException;
 	
