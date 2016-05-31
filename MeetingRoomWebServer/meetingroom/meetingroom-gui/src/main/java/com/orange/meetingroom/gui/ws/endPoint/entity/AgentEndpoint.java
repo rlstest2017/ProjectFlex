@@ -6,6 +6,7 @@ import static com.orange.meetingroom.gui.ws.PathConst.AGENTS_PATH;
 import static com.orange.meetingroom.gui.ws.PathConst.AGENT_MAC_ADDRESS_PATH;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -39,7 +40,9 @@ public interface AgentEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	AgentOutput updateAgent(@PathParam(AGENT_MAC_ADDRESS_PARAM)String macAddress, AgentInput agentInput);
 
-	
+	@OPTIONS
+	@Path("{path : .*}")
+	Response options();
 }
 
 

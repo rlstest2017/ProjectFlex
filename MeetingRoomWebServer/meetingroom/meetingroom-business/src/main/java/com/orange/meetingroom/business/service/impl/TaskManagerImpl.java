@@ -57,8 +57,9 @@ public class TaskManagerImpl implements TaskManager {
 						// process the result => add MeetingRoomStatus in meetingRoomDetails and send it to GUI
 						metingroomreturn.getMeetingRoom().getMeetingRoomDetails().setMeetingRoomStatus(data.getMeetingRoomStatus());
 						try {
-							// call flexOfficeConnectorManager for send meetingRoomInfos (status, ...)
+								// call flexOfficeConnectorManager for send meetingRoomInfos (status, ...)
 								flexofficeConnector.updateMeetingRoomData(data);
+								LOGGER.debug("Update succefull meetingRoom: " + externalId); 
 						} catch (DataNotExistsException e) {
 								LOGGER.debug("DataNotExistsException in updateMeetingRoomData() " + e.getMessage(), e);
 						} catch (FlexOfficeInternalServerException e) {

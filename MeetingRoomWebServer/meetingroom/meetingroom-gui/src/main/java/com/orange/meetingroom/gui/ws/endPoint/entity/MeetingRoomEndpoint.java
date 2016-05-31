@@ -12,12 +12,14 @@ import static com.orange.meetingroom.gui.ws.PathConst.MEETINGROOMS_EXTERNAL_ID_P
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.orange.meetingroom.gui.ws.model.BookingSetInput;
 import com.orange.meetingroom.gui.ws.model.BookingSetOutput;
@@ -112,6 +114,10 @@ public interface MeetingRoomEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	BookingUpdateOutput confirmBooking(@PathParam(MEETINGROOM_EXTERNAL_ID_PARAM)String meetingRoomExternalId, BookingUpdateInput bookingUpdateInput);
+
+	@OPTIONS
+	@Path("{path : .*}")
+	Response options();
 	
 	// for test
 	public boolean checkMeetingRoomsStatusTimeOutTestMethod();

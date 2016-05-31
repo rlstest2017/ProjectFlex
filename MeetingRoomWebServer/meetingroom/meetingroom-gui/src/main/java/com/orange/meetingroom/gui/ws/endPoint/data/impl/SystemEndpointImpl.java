@@ -123,18 +123,15 @@ public class SystemEndpointImpl implements SystemEndpoint {
 		return null;
 	}
 	
-	
 	@Override
 	public Response options() {
 	    return Response.ok("")
 	            .header("Access-Control-Allow-Origin", "*")
 	            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization, x-auth-token")
 	            .header("Access-Control-Allow-Credentials", "true")
-	            .header("Access-Control-Allow-Methods", "OPTIONS, HEAD")
+	            .header("Access-Control-Allow-Methods", "OPTIONS, HEAD, GET, POST, PUT, DELETE")
 	            .header("Access-Control-Max-Age", "1209600")
 	            .build();
 	}
-
-	
 
 }

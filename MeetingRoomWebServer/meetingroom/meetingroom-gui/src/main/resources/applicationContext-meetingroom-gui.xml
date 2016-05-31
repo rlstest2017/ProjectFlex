@@ -16,6 +16,6 @@
 	<bean id="errorMessageHandler" class="com.orange.meetingroom.gui.ws.utils.ErrorMessageHandler"/>
 	
 	<task:annotation-driven />
-    <bean id="guiUiTasks" class="com.orange.meetingroom.gui.ws.task.MeetingRoomGuiTasks"></bean>
+    <bean id="meetingRoomGuiTasks" class="com.orange.meetingroom.gui.ws.task.MeetingRoomGuiTasks"></bean>
 	    	
 </beans>
