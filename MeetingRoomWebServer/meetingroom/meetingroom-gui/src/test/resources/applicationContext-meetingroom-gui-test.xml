@@ -6,9 +6,10 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
 
     <!-- Import related to Meeting Room Web Sever Business -->
-	<import resource="classpath*:applicationContext-meetingroom-business-test.xml" />
+	<import resource="classpath*:spring/applicationContext-meetingroom-business-test.xml"/> 
 	
 	<bean id="errorMessageHandler" class="com.orange.meetingroom.gui.ws.utils.ErrorMessageHandler"/>
+	<bean id="meetingRoomGuiTasks" class="com.orange.meetingroom.gui.ws.task.MeetingRoomGuiTasks"/>
 	
 	<bean id="agentEndpoint" class="com.orange.meetingroom.gui.ws.endPoint.entity.impl.AgentEndpointImpl"/>
 	<bean id="dashboardEndpoint" class="com.orange.meetingroom.gui.ws.endPoint.entity.impl.DashboardEndpointImpl"/>

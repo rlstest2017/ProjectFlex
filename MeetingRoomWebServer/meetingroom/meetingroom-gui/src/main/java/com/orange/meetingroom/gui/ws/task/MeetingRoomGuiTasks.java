@@ -5,8 +5,6 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
 import com.orange.meetingroom.business.service.TaskManager;
 
 /**
@@ -14,7 +12,6 @@ import com.orange.meetingroom.business.service.TaskManager;
  * @author oab
  *
  */
-@Component
 public class MeetingRoomGuiTasks {
 	
 	private static final Logger LOGGER = Logger.getLogger(MeetingRoomGuiTasks.class);
@@ -24,7 +21,7 @@ public class MeetingRoomGuiTasks {
 
 	// Every 4 minutes
 	//second, minute, hour, day of month, month, day(s) of week
-	@Scheduled(cron="0 0/4 * * * ?")
+	@Scheduled(cron="0 */4 * * * ?")
     public void checkMeetingRoomsStatusTimeOutMethod()  {
 		LOGGER.debug("Before checkMeetingRoomsStatusTimeOutMethod. Current time is : "+ new Date());
 		taskManager.checkMeetingRoomTimeOut();

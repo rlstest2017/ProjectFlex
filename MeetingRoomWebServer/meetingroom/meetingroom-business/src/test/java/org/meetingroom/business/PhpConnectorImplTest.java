@@ -47,7 +47,7 @@ public class PhpConnectorImplTest {
 		phpConnectorManager = (PhpConnectorManagerImpl)context.getBean("phpConnectorManager");
 	}
 	
-	@Test
+	//@Test
 	public void TestA_phpGetCurrentDate() {
 		// SetUp
 		boolean expectedResult = false;

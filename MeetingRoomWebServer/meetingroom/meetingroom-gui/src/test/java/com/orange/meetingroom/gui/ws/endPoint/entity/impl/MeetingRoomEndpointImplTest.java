@@ -75,5 +75,13 @@ public class MeetingRoomEndpointImplTest {
 		assertEquals(false, expectedResult);
 	}
 	
+	@Test
+	public void TestC() {
+		// SetUp
+		Boolean output = meetingRoomEndpoint.checkMeetingRoomsStatusTimeOutTestMethod();
+		// Asserts
+		assertEquals(true, output);
+	
+	}
 
 }
