@@ -79,6 +79,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
 			system.setFreeRoomCount(BigInteger.valueOf(data.getFreeRoomCount()));
 			system.setOccupiedRoomCount(BigInteger.valueOf(data.getOccupiedRoomCount()));
 			system.setAgentCount(BigInteger.valueOf(data.getAgentCount()));
+			system.setActiveAgentCount(BigInteger.valueOf(data.getActiveAgentCount()));
 			system.setMeetingroomCount(BigInteger.valueOf(data.getMeetingroomCount()));
 			system.setFreeMeetingroomCount(BigInteger.valueOf(data.getFreeMeetingroomCount()));
 			system.setOccupiedMeetingroomCount(BigInteger.valueOf(data.getOccupiedMeetingroomCount()));

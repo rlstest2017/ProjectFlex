@@ -237,6 +237,7 @@
 			<xsd:element name="freeMeetingroomCount" type="xsd:integer"/>
 			<xsd:element name="occupiedMeetingroomCount" type="xsd:integer"/>
 			<xsd:element name="agentCount" type="xsd:integer"/>
+			<xsd:element name="activeAgentCount" type="xsd:integer"/>
 			<xsd:element name="deviceStatuses" type="e-deviceStatus" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="sensorTypes" type="e-sensorType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="roomTypes" type="e-roomType" minOccurs="0" maxOccurs="unbounded"/>

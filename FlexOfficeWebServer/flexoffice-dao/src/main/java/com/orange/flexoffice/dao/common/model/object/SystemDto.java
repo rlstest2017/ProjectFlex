@@ -20,6 +20,7 @@ public class SystemDto {
 	private Integer freeRoomCount;
 	private Integer occupiedRoomCount;
 	private Integer agentCount;
+	private Integer activeAgentCount;
 	private Integer meetingroomCount;
 	private Integer freeMeetingroomCount;
 	private Integer occupiedMeetingroomCount;
@@ -121,6 +122,12 @@ public class SystemDto {
 	}
 	public void setOccupiedMeetingroomCount(Integer occupiedMeetingroomCount) {
 		this.occupiedMeetingroomCount = occupiedMeetingroomCount;
+	}
+	public Integer getActiveAgentCount() {
+		return activeAgentCount;
+	}
+	public void setActiveAgentCount(Integer activeAgentCount) {
+		this.activeAgentCount = activeAgentCount;
 	}
 	
 	

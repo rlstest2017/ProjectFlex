@@ -19,6 +19,7 @@ import com.orange.flexoffice.business.common.exception.DataAlreadyExistsExceptio
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.SystemManager;
 import com.orange.flexoffice.business.common.utils.DateTools;
+import com.orange.flexoffice.dao.common.model.data.AgentDao;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
@@ -27,6 +28,7 @@ import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_AgentStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_MeetingRoomStatus;
@@ -94,6 +96,7 @@ public class SystemManagerImpl implements SystemManager {
 		Long roomsCount = countRooms();
 		Long meetingroomsCount = countMeetingrooms();
 		Long agentsCount = countAgents();
+		Long activeAgentsCount = countActiveAgents();
 		List<AlertDao> deviceAlerts = findAllAlerts();
 		
 		if (LOGGER.isDebugEnabled()) {
@@ -137,6 +140,7 @@ public class SystemManagerImpl implements SystemManager {
 		system.setFreeRoomCount(freeRoomsCount.intValue());
 		system.setOccupiedRoomCount(occupiedRoomsCount.intValue());
 		system.setAgentCount(agentsCount.intValue());
+		system.setActiveAgentCount(activeAgentsCount.intValue());
 		system.setMeetingroomCount(meetingroomsCount.intValue());
 		system.setFreeMeetingroomCount(freeMeetingroomsCount.intValue());
 		system.setOccupiedMeetingroomCount(occupiedMeetingroomsCount.intValue());
@@ -448,6 +452,21 @@ public class SystemManagerImpl implements SystemManager {
 		
 		for (GatewayDao gateway : gateways) {
 			if (E_GatewayStatus.ONLINE.toString().equals(gateway.getStatus())) {
+				count++;
+			}
+		}
+		
+		return count;
+	}
+	
+	@Transactional(readOnly=true)
+	private Long countActiveAgents() {
+		// get activeAgents
+		Long count = 0L;
+		List<AgentDao> agents = agentRepository.findAllAgents();
+		
+		for (AgentDao agent : agents) {
+			if (E_AgentStatus.ONLINE.toString().equals(agent.getStatus())) {
 				count++;
 			}
 		}
