@@ -16,6 +16,7 @@ import com.orange.flexoffice.adminui.ws.endPoint.data.SystemEndpoint;
 import com.orange.flexoffice.adminui.ws.model.DeviceAlertSummary;
 import com.orange.flexoffice.adminui.ws.model.EDeviceStatus;
 import com.orange.flexoffice.adminui.ws.model.EDeviceType;
+import com.orange.flexoffice.adminui.ws.model.EMeetingroomType;
 import com.orange.flexoffice.adminui.ws.model.ERoomType;
 import com.orange.flexoffice.adminui.ws.model.ESensorType;
 import com.orange.flexoffice.adminui.ws.model.ETeachinSensorStatus;
@@ -98,6 +99,12 @@ public class SystemEndpointImpl implements SystemEndpoint {
 			List<ERoomType> roomTypesToRet = system.getRoomTypes();
 			for (ERoomType eRoomType : roomTypes) {
 				roomTypesToRet.add(eRoomType);
+			}
+			
+			List<EMeetingroomType> meetingRoomTypes = constructMeetingRoomtypes();
+			List<EMeetingroomType> meetingRoomTypesToRet = system.getMeetingRoomTypes();
+			for (EMeetingroomType eMeetingRoomType : meetingRoomTypes) {
+				meetingRoomTypesToRet.add(eMeetingRoomType);
 			}
 			
 			List<AlertDao> alertsDao = data.getDeviceAlerts();
@@ -317,4 +324,11 @@ public class SystemEndpointImpl implements SystemEndpoint {
 		return roomTypes;
 	}
 	
+	private List<EMeetingroomType> constructMeetingRoomtypes() {
+		List<EMeetingroomType> meetingRoomTypes = new ArrayList<EMeetingroomType>();
+		meetingRoomTypes.add(EMeetingroomType.BOX);
+		meetingRoomTypes.add(EMeetingroomType.VIDEO_CONF);
+		
+		return meetingRoomTypes;
+	}
 }

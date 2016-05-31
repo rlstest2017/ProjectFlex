@@ -7,7 +7,7 @@
 	 	<xsd:enumeration value="BOX"/>
 	 	<xsd:enumeration value="VIDEO_CONF"/>
 	 </xsd:restriction>
-	</xsd:simpleType>	
+	</xsd:simpleType>
 	
 	<xsd:simpleType name="e-sensorType">
 	 <xsd:restriction base="xsd:string">
@@ -240,6 +240,7 @@
 			<xsd:element name="deviceStatuses" type="e-deviceStatus" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="sensorTypes" type="e-sensorType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="roomTypes" type="e-roomType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="meetingRoomTypes" type="e-meetingroomType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="deviceAlerts" type="DeviceAlertSummary" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>

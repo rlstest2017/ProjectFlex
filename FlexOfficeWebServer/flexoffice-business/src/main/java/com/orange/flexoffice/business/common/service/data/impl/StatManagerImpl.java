@@ -425,7 +425,9 @@ public class StatManagerImpl implements StatManager {
 		parameters.setFromDate(dateTools.getDateFromString("0"));
 		parameters.setToDate(new Date());
 		List<RoomDailyOccupancyDao> dailyRoomsList = dailyRoomsList(parameters);
-		if ( (dailyRoomsList != null) && (!dailyRoomsList.isEmpty()) ) {
+		if (dailyRoomsList == null || dailyRoomsList.isEmpty() || dailyRoomsList.size() == 1) {
+			returnedValue = 1; // default value (not influence in calculate of rate (division))
+		} else {
 				// - Get startdate & enddate
 				RoomDailyOccupancyDao firstEntry = dailyRoomsList.get(0);
 				Date startdate = firstEntry.getDay();
@@ -436,10 +438,7 @@ public class StatManagerImpl implements StatManager {
 				LOGGER.debug("endEntry in nbJoursOuvrableForPopular() is :" + endEntry);
 				
 				returnedValue = dateTools.nbJoursOuvrable(startdate, enddate, true, true, true, true, true, true, false, false);
-				
-		} else {
-			returnedValue = 1; // default value (not influence in calculate of rate (division))
-		}
+		} 
 		return returnedValue;
 	}
 	

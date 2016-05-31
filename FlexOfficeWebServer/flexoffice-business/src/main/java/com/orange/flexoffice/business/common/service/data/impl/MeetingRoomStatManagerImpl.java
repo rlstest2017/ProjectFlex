@@ -426,7 +426,9 @@ public class MeetingRoomStatManagerImpl implements MeetingRoomStatManager {
 		parameters.setFromDate(dateTools.getDateFromString("0"));
 		parameters.setToDate(new Date());
 		List<MeetingRoomDailyOccupancyDao> dailyMeetingRoomsList = dailyMeetingRoomsList(parameters);
-		if ( (dailyMeetingRoomsList != null) && (!dailyMeetingRoomsList.isEmpty()) ) {
+		if (dailyMeetingRoomsList == null || dailyMeetingRoomsList.isEmpty() || dailyMeetingRoomsList.size() == 1) {
+			returnedValue = 1; // default value (not influence in calculate of rate (division))
+		} else {
 				// - Get startdate & enddate
 				MeetingRoomDailyOccupancyDao firstEntry = dailyMeetingRoomsList.get(0);
 				Date startdate = firstEntry.getDay();
@@ -437,9 +439,6 @@ public class MeetingRoomStatManagerImpl implements MeetingRoomStatManager {
 				LOGGER.debug("endEntry in nbJoursOuvrableForPopular() is :" + endEntry);
 				
 				returnedValue = dateTools.nbJoursOuvrable(startdate, enddate, true, true, true, true, true, true, false, false);
-				
-		} else {
-			returnedValue = 1; // default value (not influence in calculate of rate (division))
 		}
 		return returnedValue;
 	}
