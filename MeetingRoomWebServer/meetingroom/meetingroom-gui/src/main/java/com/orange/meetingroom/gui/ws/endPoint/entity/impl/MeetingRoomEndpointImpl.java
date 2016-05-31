@@ -38,6 +38,7 @@ import com.orange.meetingroom.gui.ws.model.MeetingRoomBookings;
 import com.orange.meetingroom.gui.ws.model.MeetingRoomDetails;
 import com.orange.meetingroom.gui.ws.model.MeetingRooms;
 import com.orange.meetingroom.gui.ws.model.ObjectFactory;
+import com.orange.meetingroom.gui.ws.task.MeetingRoomGuiTasks;
 import com.orange.meetingroom.gui.ws.utils.ErrorMessageHandler;
 
 /**
@@ -60,19 +61,19 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	// if startDate = 0 or before now(), PHP server get maxBookings bookings to get from now()
 	static final String ACKNOWLEDGED_DAFAULT = "0";
 	static final String ACKNOWLEDGED_CONFIRM = "1";
-	
 
 	@Autowired
 	private PhpConnectorManager phpConnectorManager;
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
-
+	// for testing
+	@Autowired
+	private MeetingRoomGuiTasks meetingRoomTask;
+	
 	@Override
 	public MeetingRoom getMeetingRoomBookings(String meetingRoomExternalId, Boolean forceUpdateCache) {
-		
 		try {
 		MeetingRoom meetingroom = factory.createMeetingRoom();
-		
 		GetAgentBookingsParameters params = new GetAgentBookingsParameters();
 		params.setRoomID(meetingRoomExternalId);
 		params.setFormat(FORMAT_JSON);
@@ -305,5 +306,10 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			}
 	}
 	
+	// only for testing
+	@Override
+	public boolean checkMeetingRoomsStatusTimeOutTestMethod() {
+		return meetingRoomTask.checkMeetingRoomsStatusTimeOutTestMethod();
+	}
 
 }

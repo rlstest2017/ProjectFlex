@@ -113,6 +113,8 @@ public interface MeetingRoomEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	BookingUpdateOutput confirmBooking(@PathParam(MEETINGROOM_EXTERNAL_ID_PARAM)String meetingRoomExternalId, BookingUpdateInput bookingUpdateInput);
 	
+	// for test
+	public boolean checkMeetingRoomsStatusTimeOutTestMethod();
 
 }
 

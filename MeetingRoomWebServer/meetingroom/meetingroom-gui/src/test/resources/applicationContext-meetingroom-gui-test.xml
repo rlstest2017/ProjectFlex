@@ -14,5 +14,5 @@
 	<bean id="dashboardEndpoint" class="com.orange.meetingroom.gui.ws.endPoint.entity.impl.DashboardEndpointImpl"/>
 	<bean id="systemEndpoint" class="com.orange.meetingroom.gui.ws.endPoint.data.impl.SystemEndpointImpl"/>
 	<bean id="meetingRoomEndpoint" class="com.orange.meetingroom.gui.ws.endPoint.entity.impl.MeetingRoomEndpointImpl"/>
-	    	
+		    	
 </beans>
