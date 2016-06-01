@@ -1,6 +1,7 @@
 package com.orange.meetingroom.business.connector.utils;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerExcep
 import com.orange.meetingroom.connector.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.exception.PhpInternalServerException;
 import com.orange.meetingroom.connector.flexoffice.enums.EnumMeetingRoomStatus;
+import com.orange.meetingroom.connector.flexoffice.enums.EnumSystemInMap;
 import com.orange.meetingroom.connector.flexoffice.model.request.MeetingRoomData;
 import com.orange.meetingroom.connector.php.PhpConnectorClient;
 import com.orange.meetingroom.connector.php.model.request.UpdateBookingParameters;
@@ -26,12 +28,15 @@ public class MeetingRoomInfoTools {
 	
 	private static final Logger LOGGER = Logger.getLogger(MeetingRoomInfoTools.class);
 	static final String FORMAT_JSON = "json";
+	
+	@Autowired
+	ConfHashMapFactoryBean confHashMapFactoryBean; 
 	@Autowired
 	PhpConnectorClient phpConnector;
 	@Autowired
 	DateTools dateTools;
-	// TODO get ackTime from /system request
-	Integer ackTime = 2;
+	
+	Integer ackTime = 0;
 	
 	/**
 	 * processMeetingRoomStatus
@@ -47,6 +52,8 @@ public class MeetingRoomInfoTools {
 			MeetingRoomData data = new MeetingRoomData();
 			data.setMeetingRoomStatus(EnumMeetingRoomStatus.FREE);
 			data.setMeetingRoomExternalId(meetingRoomExternalId);
+			
+			getAckTime(); // get AckTime from Config hashMap from DataBase System Table
 			
 			for (BookingConnectorReturn book : bookings) {
 				Boolean compareDates1 = dateTools.isTime1BeforeTime2(book.getStartDate(), currentDate, 0);
@@ -70,6 +77,7 @@ public class MeetingRoomInfoTools {
 	 * @param data MeetingRoomData
 	 */
 	private void updateInfos(BookingConnectorReturn book, MeetingRoomData data, String meetingRoomExternalId, Integer currentDate) {
+		
 		if (ackTime == 0) {
 			data.setMeetingRoomStatus(EnumMeetingRoomStatus.OCCUPIED);
 			setMeetingRoomData(book, data, meetingRoomExternalId);
@@ -117,6 +125,14 @@ public class MeetingRoomInfoTools {
 		data.setEndDate(book.getEndDate());
 		data.setOrganizerLabel(book.getOrganizerFullName());
 		data.setMeetingRoomExternalId(meetingRoomExternalId);
+	}
+	
+	private Integer getAckTime() {
+		Map<String, Integer> configMap = confHashMapFactoryBean.getObject();
+		if (configMap.containsKey(EnumSystemInMap.ACK_TIME.toString())) {
+			this.ackTime = configMap.get(EnumSystemInMap.ACK_TIME.toString());
+		}
+		return this.ackTime;
 	}
 
 }

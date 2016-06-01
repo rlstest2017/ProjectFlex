@@ -2,6 +2,7 @@ package com.orange.meetingroom.gui.ws.endPoint.entity.impl;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -10,12 +11,14 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.meetingroom.business.connector.PhpConnectorManager;
+import com.orange.meetingroom.business.connector.utils.ConfHashMapFactoryBean;
 import com.orange.meetingroom.business.service.enums.EnumErrorModel;
 import com.orange.meetingroom.connector.exception.DataNotExistsException;
 import com.orange.meetingroom.connector.exception.FlexOfficeInternalServerException;
 import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerException;
 import com.orange.meetingroom.connector.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.exception.PhpInternalServerException;
+import com.orange.meetingroom.connector.flexoffice.enums.EnumSystemInMap;
 import com.orange.meetingroom.connector.php.model.request.GetAgentBookingsParameters;
 import com.orange.meetingroom.connector.php.model.request.GetDashboardBookingsParameters;
 import com.orange.meetingroom.connector.php.model.request.SetBookingParameters;
@@ -53,15 +56,18 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	static final String FORMAT_JSON = "json";
 	static final String FORCED_UPDATE_CACHE_TRUE = "true";
 	static final String FORCED_UPDATE_CACHE_FALSE = "false";
-	static final String START_DATE_DEFAULT = "0";
-	static final String DASHBOARD_MAX_BOOKINGS_PARAM = "2"; // TODO system param from Map
-	// maxBooking bookings to get from now() 
-	static final String DASHBOARD_START_DATE_BOOKINGS_PARAM = "0"; // TODO system param from Map
-	// if this date is after now(), PHP server get maxBookings bookings to get from this date
-	// if startDate = 0 or before now(), PHP server get maxBookings bookings to get from now()
 	static final String ACKNOWLEDGED_DAFAULT = "0";
 	static final String ACKNOWLEDGED_CONFIRM = "1";
 
+	String dashboardMaxBookingsParam = "2"; // number of bookings to get from now() 
+	 
+	// if this date is after now(), PHP server get maxBookings from this date
+	// if startDate = 0 or before now(), PHP server get maxBookings from now()
+	// dashboardStartDateBookingsParam is date in milliseconds
+	String dashboardStartDateBookingsParam = "0";
+	
+	@Autowired
+	private ConfHashMapFactoryBean confHashMapFactoryBean;
 	@Autowired
 	private PhpConnectorManager phpConnectorManager;
 	@Autowired
@@ -69,6 +75,28 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	// for testing
 	@Autowired
 	private MeetingRoomGuiTasks meetingRoomTask;
+	
+	/**
+	 * @return the dashboardMaxBookingsParam
+	 */
+	private String getDashboardMaxBookingsParam() {
+		Map<String, Integer> configMap = confHashMapFactoryBean.getObject();
+		if (configMap.containsKey(EnumSystemInMap.DASHBOARD_MAX_BOOKINGS.toString())) {
+			this.dashboardMaxBookingsParam = configMap.get(EnumSystemInMap.DASHBOARD_MAX_BOOKINGS.toString()).toString();
+		}
+		return this.dashboardMaxBookingsParam;
+	}
+
+	/**
+	 * @return the dashboardStartDateBookingsParam
+	 */
+	private String getDashboardStartDateBookingsParam() {
+		Map<String, Integer> configMap = confHashMapFactoryBean.getObject();
+		if (configMap.containsKey(EnumSystemInMap.DASHBOARD_START_DATE.toString())) {
+			this.dashboardStartDateBookingsParam = configMap.get(EnumSystemInMap.DASHBOARD_START_DATE.toString()).toString();
+		}
+		return this.dashboardStartDateBookingsParam;
+	}
 	
 	@Override
 	public MeetingRoom getMeetingRoomBookings(String meetingRoomExternalId, Boolean forceUpdateCache) {
@@ -146,8 +174,8 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			
 			GetDashboardBookingsParameters params = new GetDashboardBookingsParameters();
 			params.setDashboardMacAddress(dashboardMacAddress);
-			params.setMaxBookings(DASHBOARD_MAX_BOOKINGS_PARAM);
-			params.setStartDate(DASHBOARD_START_DATE_BOOKINGS_PARAM);
+			params.setMaxBookings(getDashboardMaxBookingsParam());
+			params.setStartDate(getDashboardStartDateBookingsParam());
 			params.setFormat(FORMAT_JSON);
 			
 			MeetingRoomsConnectorReturn meetingroomsreturn;
@@ -322,5 +350,6 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	public boolean checkMeetingRoomsStatusTimeOutTestMethod() {
 		return meetingRoomTask.checkMeetingRoomsStatusTimeOutTestMethod();
 	}
+
 
 }

@@ -1,6 +1,8 @@
 package com.orange.meetingroom.business.connector.utils;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -44,18 +46,41 @@ public class DateTools {
 		return status;
 	}
 	
+	/**
+	 * processStartDate
+	 * @param nbSeconds
+	 * @return
+	 */
+	public Integer processStartDate(Integer nbSeconds) {
+		Date beginOfDay = beginOfDay();
+		Timestamp later = new Timestamp(beginOfDay.getTime() + (nbSeconds * 1000L));
+		return (int)(long)(later.getTime()/1000L);
+	}
 	
+	// hh:00; mm:00; ss:00
+		/**
+		 * beginOfDay
+		 * @param dailyDate
+		 * @return
+		 */
+	private Date beginOfDay() {
+		Calendar cal = Calendar.getInstance();
+		cal.getTime();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND,0);
+		cal.set(Calendar.MILLISECOND,0);
+		return cal.getTime();
+	}
 	
 	public static void main(String[] args) throws ParseException {
-		
-		//System.out.println("currentTime" + date);
-		
 		DateTools dateTool = new DateTools();
-		Integer debut = 1464078960; // 10:38:00
-		Integer fin = 1464079800; // 10:50:00
+		//Integer debut = 1464078960; // 10:38:00
+		//Integer fin = 1464079800; // 10:50:00
+		//dateTool.isTime1BeforeTime2(debut, fin, 10);
 		
-		dateTool.isTime1BeforeTime2(debut, fin, 10);
-		
+		Integer time = dateTool.processStartDate(42340); // 11h45m40s
+		System.out.println("currentTime " + time);
 
 	}
 }
