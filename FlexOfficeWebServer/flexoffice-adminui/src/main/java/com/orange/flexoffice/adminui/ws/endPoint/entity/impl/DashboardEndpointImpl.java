@@ -187,7 +187,7 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 		LOGGER.debug( "Begin call doPost method for DashboardEndpoint at: " + new Date() );
 
 		DashboardDao dashboardDao = new DashboardDao();
-		dashboardDao.setMacAddress(dashboard.getMacAddress());
+		dashboardDao.setMacAddress(dashboard.getMacAddress().toLowerCase().replaceAll("-", ":"));
 		dashboardDao.setName(dashboard.getName().trim());
 		dashboardDao.setDescription(dashboard.getDesc());
 		dashboardDao.setCityId(Long.valueOf(dashboard.getCityId()));

@@ -143,7 +143,7 @@ public class AgentEndpointImpl implements AgentEndpoint {
 		LOGGER.debug( "Begin call doPost method for AgentEndpoint at: " + new Date() );
 
 		AgentDao agentDao = new AgentDao();
-		agentDao.setMacAddress(agent.getMacAddress());
+		agentDao.setMacAddress(agent.getMacAddress().toLowerCase().replaceAll("-", ":"));
 		agentDao.setName(agent.getName().trim());
 		agentDao.setDescription(agent.getDesc());
 
