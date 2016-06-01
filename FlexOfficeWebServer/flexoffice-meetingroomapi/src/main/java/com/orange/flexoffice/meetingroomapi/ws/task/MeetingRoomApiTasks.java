@@ -17,7 +17,7 @@ public class MeetingRoomApiTasks {
 	
 
 	// Every 4 minutes
-	@Scheduled(cron="* 0/4 * * * ?")
+	@Scheduled(cron="0 0/4 * * * ?")
     public void checkAgentDashboardTimeOutMethod()  {
 		LOGGER.debug("Before checkAgentDashboardTimeOutMethod. Current time is : "+ new Date());
 		taskManager.checkAgentDashboardTimeOut();
