@@ -20,6 +20,8 @@
 	 <xsd:restriction base="xsd:string">
 	 	<xsd:enumeration value="GATEWAY"/>
 	 	<xsd:enumeration value="SENSOR"/>
+	 	<xsd:enumeration value="AGENT"/>
+	 	<xsd:enumeration value="DASHBOARD"/>
 	 </xsd:restriction>
 	</xsd:simpleType>
 	

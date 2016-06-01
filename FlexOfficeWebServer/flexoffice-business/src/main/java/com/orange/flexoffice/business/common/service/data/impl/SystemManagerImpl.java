@@ -22,6 +22,7 @@ import com.orange.flexoffice.business.common.utils.DateTools;
 import com.orange.flexoffice.dao.common.model.data.AgentDao;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
+import com.orange.flexoffice.dao.common.model.data.DashboardDao;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
@@ -41,6 +42,7 @@ import com.orange.flexoffice.dao.common.model.object.TeachinSensorDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AgentDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.DashboardDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
@@ -65,6 +67,8 @@ public class SystemManagerImpl implements SystemManager {
 	private GatewayDaoRepository gatewayRepository;
 	@Autowired
 	private SensorDaoRepository sensorRepository;
+	@Autowired
+	private DashboardDaoRepository dashboardRepository;
 	@Autowired
 	private RoomDaoRepository roomRepository;
 	@Autowired
@@ -430,7 +434,13 @@ public class SystemManagerImpl implements SystemManager {
 			} else if (alertDao.getSensorId() != null) {
 				SensorDao sensor = sensorRepository.findOne(Long.valueOf(alertDao.getSensorId()));
 				alertDao.setName(sensor.getName() + " " + alertDao.getName());
-			} 
+			} else if (alertDao.getAgentId() != null) {
+				AgentDao agent = agentRepository.findOne(Long.valueOf(alertDao.getAgentId()));
+				alertDao.setName(agent.getName() + " " + alertDao.getName());
+			} else if (alertDao.getDashboardId() != null) {
+				DashboardDao dashboard = dashboardRepository.findOne(Long.valueOf(alertDao.getDashboardId()));
+				alertDao.setName(dashboard.getName() + " " + alertDao.getName());
+			}
 		}
 		return alertList;
 	}
