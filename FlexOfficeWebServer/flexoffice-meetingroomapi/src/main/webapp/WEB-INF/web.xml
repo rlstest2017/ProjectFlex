@@ -14,7 +14,7 @@
     <param-value>classpath:applicationContext-flexoffice-meetingroomapi.xml</param-value>
   </context-param>
     <servlet>
-		<servlet-name>MeetingRoomsManageServlet</servlet-name>
+		<servlet-name>FlexOfficeManageServlet</servlet-name>
 		<servlet-class>
 			org.apache.cxf.transport.servlet.CXFServlet
 		</servlet-class>
@@ -22,7 +22,7 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>MeetingRoomsManageServlet</servlet-name>
+		<servlet-name>FlexOfficeManageServlet</servlet-name>
 		<url-pattern>/v2/*</url-pattern>
 	</servlet-mapping>
   
