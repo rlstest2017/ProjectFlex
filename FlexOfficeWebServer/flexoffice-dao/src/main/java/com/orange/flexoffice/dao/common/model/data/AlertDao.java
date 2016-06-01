@@ -12,6 +12,8 @@ public class AlertDao extends AbstractData {
 	private String name;
 	private String type;
 	private Integer gatewayId;
+	private Integer agentId;
+	private Integer dashboardId;
 	private Integer sensorId;
 	private Date lastNotification;
 	
@@ -54,6 +56,18 @@ public class AlertDao extends AbstractData {
 	@Override
 	public String getColumnId() {
 		return getId().toString();
+	}
+	public Integer getAgentId() {
+		return agentId;
+	}
+	public void setAgentId(Integer agentId) {
+		this.agentId = agentId;
+	}
+	public Integer getDashboardId() {
+		return dashboardId;
+	}
+	public void setDashboardId(Integer dashboardId) {
+		this.dashboardId = dashboardId;
 	}
 	
 

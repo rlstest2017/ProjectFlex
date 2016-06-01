@@ -11,12 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.orange.flexoffice.business.common.service.data.AlertManager;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
+import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_AgentStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_DashboardStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_DeviceType;
 import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_SensorStatus;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
 
@@ -34,10 +38,10 @@ public class AlertManagerImpl implements AlertManager {
 	
 	@Autowired
 	private AlertDaoRepository alertRepository;
-
 	@Autowired
 	private RoomDaoRepository roomRepository;
-
+	@Autowired
+	private MeetingRoomDaoRepository meetingRoomRepository;
 	@Autowired
 	private SensorDaoRepository sensorRepository;
 	
@@ -56,7 +60,7 @@ public class AlertManagerImpl implements AlertManager {
 					List<RoomDao> rooms = roomRepository.findByGatewayId(gatewayId);
 					if ((rooms != null)&&(!rooms.isEmpty())) {
 						LOGGER.info ("updateGatewayAlert Gateway is associated to " + rooms.size() + " rooms.");
-						setAlert(gatewayId, null, status);
+						setAlert(gatewayId, null, null, null, status);
 					} else {
 						alertRepository.deleteAlertByGatewayId(gatewayId);
 					}
@@ -67,10 +71,62 @@ public class AlertManagerImpl implements AlertManager {
 				}
 		} else {
 			LOGGER.info ("updateGatewayAlert OTHER condition, for Gateway#" + gatewayId);
-			setAlert(gatewayId, null, status);
+			setAlert(gatewayId, null, null, null, status);
 		}
 		
 		LOGGER.debug ("End updateGatewayAlert");
+	}
+	
+	@Override
+	public void updateAgentAlert(Long agentId, String status) {
+		
+		LOGGER.debug ("Begin updateAgentAlert with parameters : agentId " + agentId + " status: " + status);
+		
+		if (status.equals(E_AgentStatus.ONLINE.toString()) || status.equals(E_AgentStatus.ECONOMIC.toString()) || status.equals(E_AgentStatus.STANDBY.toString())) {
+			LOGGER.debug ("updateAgentAlert ONLINE/ECONOMIC/STANDBY condition, for Agent#" + agentId);
+			alertRepository.deleteAlertByAgentId(agentId);
+		} else if (status.equals(E_AgentStatus.OFFLINE.toString())) {  
+			LOGGER.info ("updateAgentAlert OFFLINE condition, for Agent#" + agentId);
+			// if Agent appears then declare error
+				try {
+					MeetingRoomDao meetingRooms = meetingRoomRepository.findByAgentId(agentId);
+					if (meetingRooms != null) {
+						LOGGER.info ("updateAgentAlert Agent is associated to " + meetingRooms.getName());
+						setAlert(null, null, agentId, null, status);
+					} else {
+						alertRepository.deleteAlertByAgentId(agentId);
+					}
+				} catch(IncorrectResultSizeDataAccessException e ) {
+					LOGGER.debug("agent by id " + agentId + " has none associated meeting room", e);
+					LOGGER.info("agent by id " + agentId + " has none associated meeting room");
+					alertRepository.deleteAlertByAgentId(agentId);
+				}
+		} else {
+			LOGGER.info ("updateAgentAlert OTHER condition, for Agent#" + agentId);
+			setAlert(null, null, agentId, null, status);
+		}
+		
+		LOGGER.debug ("End updateAgentAlert");
+	}
+	
+	@Override
+	public void updateDashboardAlert(Long dashboardId, String status) {
+		
+		LOGGER.debug ("Begin updateDashboardAlert with parameters : dashboardId " + dashboardId + " status: " + status);
+		
+		if (status.equals(E_DashboardStatus.ONLINE.toString()) || status.equals(E_DashboardStatus.STANDBY.toString()) || status.equals(E_DashboardStatus.ECONOMIC.toString())) {
+			LOGGER.debug ("updateDashboardAlert ONLINE/STANDBY/ECONOMIC condition, for Dashboard#" + dashboardId);
+			alertRepository.deleteAlertByDashboardId(dashboardId);
+		} else if (status.equals(E_DashboardStatus.OFFLINE.toString())) {  
+			LOGGER.info ("updateDashboardAlert OFFLINE condition, for Dashboard#" + dashboardId);
+			// if Dashboard appears then declare error
+			setAlert(null, null, null, dashboardId, status);
+		} else {
+			LOGGER.info ("updateDashboardAlert OTHER condition, for Dashboard#" + dashboardId);
+			setAlert(null, null, null, dashboardId, status);
+		}
+		
+		LOGGER.debug ("End updateDashboardAlert");
 	}
 
 	@Override
@@ -102,7 +158,7 @@ public class AlertManagerImpl implements AlertManager {
 				}
 				if ((sensor!= null)&&(sensor.getRoomId()!= null)&&(sensor.getRoomId()!=0)) {
 					LOGGER.info ("updateSensorAlert Sensor appared to room");
-					setAlert(null, sensorId, status);
+					setAlert(null, sensorId, null, null, status);
 				} else {
 					LOGGER.info ("updateSensorAlert Sensor not appared to room");
 					alertRepository.deleteAlertBySensorId(sensorId);
@@ -114,7 +170,7 @@ public class AlertManagerImpl implements AlertManager {
 			}
 		} else {
 			LOGGER.info ("updateSensorAlert OTHER condition, for Sensor#" + sensorId);
-			setAlert(null, sensorId, status);
+			setAlert(null, sensorId, null, null, status);
 		}
 		
 		LOGGER.debug ("End updateSensorAlert");
@@ -126,7 +182,7 @@ public class AlertManagerImpl implements AlertManager {
 	 * @param sensorId
 	 * @param status
 	 */
-	private void setAlert(Long gatewayId, Long sensorId, String status) {
+	private void setAlert(Long gatewayId, Long sensorId, Long agentId, Long dashboardId, String status) {
 		LOGGER.debug ("Begin setAlert");
 		AlertDao alert = null;
 		// if status exist in DB then no thing
@@ -183,7 +239,61 @@ public class AlertManagerImpl implements AlertManager {
 					alertRepository.saveAlert(alert);
 				}	
 
-		}
+		} else if (agentId != null) {
+			try {
+				alert = alertRepository.findByAgentId(agentId);
+				if (alert != null) {
+					if ((alert.getType().equals(E_DeviceType.AGENT.toString()))&&(!alert.getName().equals(status))) {
+						// update name & lastnotification
+						alert.setName(status);
+						alert.setLastNotification(new Date());
+						alertRepository.updateAlert(alert);
+					}
+				} else {
+					// save alert
+					alert = new AlertDao();
+					alert.setName(status);
+					alert.setType(E_DeviceType.AGENT.toString());
+					alertRepository.saveAlert(alert);
+				}
+			} catch(IncorrectResultSizeDataAccessException e ) {
+				LOGGER.debug("agentId by id " + agentId + " has not alert", e);
+				// save alert
+				alert = new AlertDao();
+				alert.setName(status);
+				alert.setType(E_DeviceType.AGENT.toString());
+				alert.setAgentId(agentId.intValue());
+				alertRepository.saveAlert(alert);
+			}	
+
+	} else if (dashboardId != null) {
+		try {
+			alert = alertRepository.findByDashboardId(dashboardId);
+			if (alert != null) {
+				if ((alert.getType().equals(E_DeviceType.DASHBOARD.toString()))&&(!alert.getName().equals(status))) {
+					// update name & lastnotification
+					alert.setName(status);
+					alert.setLastNotification(new Date());
+					alertRepository.updateAlert(alert);
+				}
+			} else {
+				// save alert
+				alert = new AlertDao();
+				alert.setName(status);
+				alert.setType(E_DeviceType.DASHBOARD.toString());
+				alertRepository.saveAlert(alert);
+			}
+		} catch(IncorrectResultSizeDataAccessException e ) {
+			LOGGER.debug("dashboardId by id " + dashboardId + " has not alert", e);
+			// save alert
+			alert = new AlertDao();
+			alert.setName(status);
+			alert.setType(E_DeviceType.DASHBOARD.toString());
+			alert.setDashboardId(dashboardId.intValue());
+			alertRepository.saveAlert(alert);
+		}	
+
+	}
 		
 		LOGGER.debug ("End setAlert");
 	}

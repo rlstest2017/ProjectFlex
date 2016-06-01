@@ -113,6 +113,18 @@ public class AlertDaoRepository extends DataRepository<AlertDao> implements Aler
 		SqlParameterSource paramMap = new MapSqlParameterSource("gatewayId", gatewayId);
 		jdbcTemplate.update(deleteByGatewayIdQuery, paramMap);
 	}
+	
+	@Override
+	public void deleteAlertByAgentId(Long agentId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("agentId", agentId);
+		jdbcTemplate.update(deleteByAgentIdQuery, paramMap);
+	}
+	
+	@Override
+	public void deleteAlertByDashboardId(Long dashboardId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("dashboardId", dashboardId);
+		jdbcTemplate.update(deleteByDashboardIdQuery, paramMap);
+	}
 
 	@Override
 	public void deleteAlertBySensorId(Long sensorId) {

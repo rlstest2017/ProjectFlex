@@ -25,6 +25,10 @@ public interface AlertDaoOperations {
 	
 	void deleteAlertByGatewayId(Long gatewayId);
 	
+	void deleteAlertByAgentId(Long agentId);
+	
+	void deleteAlertByDashboardId(Long dashboardId);
+	
 	void deleteAlertBySensorId(Long sensorId);
 	
 	AlertDao saveAlert(AlertDao data);

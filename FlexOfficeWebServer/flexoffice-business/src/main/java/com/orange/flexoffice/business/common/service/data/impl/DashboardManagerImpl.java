@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
+import com.orange.flexoffice.business.common.service.data.AlertManager;
 import com.orange.flexoffice.business.common.service.data.DashboardManager;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
@@ -42,6 +43,8 @@ public class DashboardManagerImpl implements DashboardManager {
 	private AlertDaoRepository alertRepository;
 	@Autowired
 	private ConfigurationDaoRepository configRepository;
+	@Autowired
+	private AlertManager alertManager;
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -174,6 +177,10 @@ public class DashboardManagerImpl implements DashboardManager {
 			} else {
 				dashboardDao.setCommand(dashboard.getCommand());
 			}
+			
+			// update Dashboard Alert
+			Long dashboardId = dashboardDao.getId();
+			alertManager.updateDashboardAlert(dashboardId, dashboardDao.getStatus());
 			
 			// update DashboardDao
 			return dashboardRepository.updateDashboardStatus(dashboardDao);

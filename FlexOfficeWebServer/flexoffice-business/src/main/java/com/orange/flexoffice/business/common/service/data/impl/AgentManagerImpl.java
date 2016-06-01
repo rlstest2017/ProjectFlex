@@ -13,6 +13,7 @@ import com.orange.flexoffice.business.common.exception.DataAlreadyExistsExceptio
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.common.service.data.AgentManager;
+import com.orange.flexoffice.business.common.service.data.AlertManager;
 import com.orange.flexoffice.dao.common.model.data.AgentDao;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
@@ -46,6 +47,8 @@ public class AgentManagerImpl implements AgentManager {
 	private AlertDaoRepository alertRepository;
 	@Autowired
 	private ConfigurationDaoRepository configRepository;
+	@Autowired
+	private AlertManager alertManager;
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -215,6 +218,10 @@ public class AgentManagerImpl implements AgentManager {
 			} else {
 				agentDao.setCommand(agent.getCommand());
 			}
+			
+			// update Agent Alert
+			Long agentId = agentDao.getId();
+			alertManager.updateAgentAlert(agentId, agentDao.getStatus());
 			
 			// update AgentDao
 			return agentRepository.updateAgentStatus(agentDao);

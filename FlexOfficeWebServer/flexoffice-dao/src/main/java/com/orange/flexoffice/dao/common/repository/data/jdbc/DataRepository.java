@@ -152,6 +152,8 @@ public abstract class DataRepository<T extends Data>
 	protected final String deleteByBuildingIdQuery;
 	protected final String deleteByBuildingIdAndFloorQuery;
 	protected final String deleteByGatewayIdQuery;
+	protected final String deleteByAgentIdQuery;
+	protected final String deleteByDashboardIdQuery;
 	protected final String deleteBySensorIdQuery;
 	protected final String deleteByIdentifier;
 	protected final String deleteByDayQuery;
@@ -317,6 +319,8 @@ public abstract class DataRepository<T extends Data>
 		deleteByBuildingIdQuery = String.format(REMOVE_BY_BUILDING_ID_TEMPLATE, getTableName());
 		deleteByBuildingIdAndFloorQuery = String.format(REMOVE_BY_BUILDING_ID_AND_FLOOR_TEMPLATE, getTableName());
 		deleteByGatewayIdQuery = String.format(REMOVE_BY_GATEWAY_ID_TEMPLATE, getTableName());
+		deleteByAgentIdQuery = String.format(REMOVE_BY_AGENT_ID_TEMPLATE, getTableName());
+		deleteByDashboardIdQuery = String.format(REMOVE_BY_DASHBOARD_ID_TEMPLATE, getTableName());
 		deleteBySensorIdQuery = String.format(REMOVE_BY_SENSOR_ID_TEMPLATE, getTableName());
 		deleteByIdentifier = String.format(REMOVE_BY_IDENTIFIER_TEMPLATE, getTableName());
 		deleteByDayQuery = String.format(REMOVE_BY_DAY_ROOM_DAILY_TEMPLATE, getTableName());

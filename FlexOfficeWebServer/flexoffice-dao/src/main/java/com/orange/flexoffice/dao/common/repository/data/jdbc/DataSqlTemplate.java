@@ -138,6 +138,10 @@ public final class DataSqlTemplate {
 			"delete from %s where building_id=:buildingId and floor=:floor";
 	public static final String REMOVE_BY_GATEWAY_ID_TEMPLATE = 
 			"delete from %s where gateway_id=:gatewayId";
+	public static final String REMOVE_BY_AGENT_ID_TEMPLATE = 
+			"delete from %s where agent_id=:agentId";
+	public static final String REMOVE_BY_DASHBOARD_ID_TEMPLATE = 
+			"delete from %s where dashboard_id=:dashboardId";
 	public static final String REMOVE_BY_SENSOR_ID_TEMPLATE = 
 			"delete from %s where sensor_id=:sensorId";
 	public static final String REMOVE_BY_IDENTIFIER_TEMPLATE = 
@@ -179,7 +183,7 @@ public final class DataSqlTemplate {
 	public static final String COUNT_MEETINGROOM_BY_TYPE_TEMPLATE =
 			"select count(id) from %s where type=CAST(:type AS meetingroomtype)";
 	public static final String CREATE_ALERT_TEMPLATE = 
-			"insert into %s (name, type, gateway_id, sensor_id) values (:name, CAST(:type AS deviceType), :gatewayId, :sensorId)";
+			"insert into %s (name, type, gateway_id, sensor_id, agent_id, dashboard_id) values (:name, CAST(:type AS deviceType), :gatewayId, :sensorId, :agentId, :dashboardId)";
 	public static final String CREATE_USER_TEMPLATE = 
 			"insert into %s (first_name, last_name, email) values (:firstName, :lastName, :email)";
 	public static final String CREATE_USER_FROM_USERUI_TEMPLATE = 
