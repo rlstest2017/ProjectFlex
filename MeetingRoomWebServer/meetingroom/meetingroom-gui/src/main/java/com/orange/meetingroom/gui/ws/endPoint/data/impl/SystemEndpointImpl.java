@@ -3,6 +3,7 @@ package com.orange.meetingroom.gui.ws.endPoint.data.impl;
 import java.math.BigInteger;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.meetingroom.business.connector.FlexOfficeConnectorManager;
 import com.orange.meetingroom.business.connector.PhpConnectorManager;
+import com.orange.meetingroom.business.service.SystemManager;
 import com.orange.meetingroom.business.service.enums.EnumErrorModel;
 import com.orange.meetingroom.connector.exception.FlexOfficeInternalServerException;
 import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerException;
@@ -38,6 +40,8 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	private FlexOfficeConnectorManager flexOfficeConnectorManager;
 	@Autowired
 	private PhpConnectorManager phpConnectorManager;
+	@Autowired
+	private SystemManager systemManager;
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
 
@@ -118,9 +122,24 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	}
 
 	@Override
-	public SystemRemoteMacAddress getSystemRemoteMacAddress() {
-		// TODO Auto-generated method stub
-		return null;
+	public SystemRemoteMacAddress getSystemRemoteMacAddress(HttpServletRequest req) {
+		try {
+		LOGGER.debug( "Begin call getSystemRemoteMacAddress() method for SystemEndpoint at: " + new Date() );
+		SystemRemoteMacAddress remoteMacAddress = factory.createSystemRemoteMacAddress();
+		
+		String ipAddress = req.getRemoteHost();
+		String macAddress = systemManager.getRemoteMacAddress(ipAddress);
+		remoteMacAddress.setMacAddress(macAddress);
+		
+		LOGGER.debug( "End call getSystemRemoteMacAddress() method for SystemEndpoint at: " + new Date() );
+		
+		return factory.createSystemRemoteMacAddress(remoteMacAddress).getValue();
+		
+		} catch (MeetingRoomInternalServerException e) {
+			LOGGER.debug("MeetingRoomInternalServerException in getSystemRemoteMacAddress() SystemEndpointImpl with message :" + e.getMessage(), e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_1, Response.Status.INTERNAL_SERVER_ERROR));
+		}
+		
 	}
 	
 	@Override
@@ -133,5 +152,6 @@ public class SystemEndpointImpl implements SystemEndpoint {
 	            .header("Access-Control-Max-Age", "1209600")
 	            .build();
 	}
+	
 
 }

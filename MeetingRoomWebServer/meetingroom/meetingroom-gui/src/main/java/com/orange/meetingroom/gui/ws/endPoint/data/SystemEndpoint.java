@@ -1,9 +1,11 @@
 package com.orange.meetingroom.gui.ws.endPoint.data;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -54,7 +56,7 @@ public interface SystemEndpoint {
 	@GET
 	@Path(MAC_ADDRESS)
 	@Produces(MediaType.APPLICATION_JSON)
-	SystemRemoteMacAddress getSystemRemoteMacAddress();
+	SystemRemoteMacAddress getSystemRemoteMacAddress(@Context HttpServletRequest req);
 	
 	
 	@OPTIONS
