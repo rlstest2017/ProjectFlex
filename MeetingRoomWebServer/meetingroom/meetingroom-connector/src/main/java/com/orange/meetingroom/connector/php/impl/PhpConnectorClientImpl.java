@@ -78,19 +78,20 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public SystemCurrentDateConnectorReturn getCurrentDate() throws PhpInternalServerException, MeetingRoomInternalServerException {
-		try {
+		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call getCurrentDate() method");
 		}
-
+		HttpGet getRequest = null;
+		
+		try {
 		SystemCurrentDateConnectorReturn returnedCurrentDate = new SystemCurrentDateConnectorReturn();
 		String request = phpGetBookingsURL + "?" + dataTools.getCurrentDateParameterToUrlEncode(); 
-		HttpGet getRequest = new HttpGet(request);
+		getRequest = new HttpGet(request);
 		//Send the request; It will immediately return the response in HttpResponse object
 		LOGGER.info("The getRequest in getCurrentDate() method is : " + getRequest);
 		
-		HttpResponse response;
-		response = httpClient.execute(getRequest);
+		HttpResponse response = httpClient.execute(getRequest);
 
 		//verify the valid error code first
 		int statusCode = response.getStatusLine().getStatusCode();
@@ -124,6 +125,9 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call getCurrentDate() method");
 			}
+			if (getRequest != null) {
+				getRequest.releaseConnection();
+			}
 		}
 	}
 	
@@ -144,13 +148,14 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 		MeetingRoomBookingsConnectorReturn meetingRoomBookings = new MeetingRoomBookingsConnectorReturn();
 //		HttpClientBuilder builder = HttpClientBuilder.create();
 //	    CloseableHttpClient httpClient = builder.build(); 
+		HttpGet getRequest = null;
 	    try	{
 			//HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&RoomID=brehat.rennes@microsoft.cad.aql.fr&ForceUpdateCache=false&_=1461057699231");
 			String request = phpGetBookingsURL + "?" + dataTools.getAgentBookingsParametersToUrlEncode(params);
 			//String request = "http://192.168.103.193:3000/getAgentBookingsKO1"; // TODO delete only for testing
 			//String request = "http://192.168.103.193:3000/getAgentBookingsKO3"; // TODO delete only for testing
 			
-			HttpGet getRequest = new HttpGet(request);
+			getRequest = new HttpGet(request);
 			
 			//Set the API media type in http accept header
 			getRequest.addHeader("accept", "application/json");
@@ -270,6 +275,9 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call getBookingsFromAgent(GetAgentBookingsParameters params) method");
 			}
+			if (getRequest != null) {
+				getRequest.releaseConnection();
+			}
 			//Important: Close the connect
 			//httpClient.close();
 		}
@@ -290,13 +298,14 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 		List<MeetingRoomBookingsConnectorReturn> meetingRoomBookingsList = new ArrayList<MeetingRoomBookingsConnectorReturn>(); 
 //		HttpClientBuilder builder = HttpClientBuilder.create();
 //	    CloseableHttpClient httpClient = builder.build();
+		HttpGet getRequest = null;
 		try	{
 			//HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&MaxBookings=2&StartDate=0&RoomGroupID=rg_oab_full&_=1461061105469");
 			String request = phpGetBookingsURL + "?" + dataTools.getDashboardBookingsParametersToUrlEncode(params);
 			//String request =  "http://192.168.103.193:3000/getDashboardBookingsKO2"; // TODO delete only for testing
 			//String request =  "http://192.168.103.193:3000/getDashboardBookingsKO1"; // TODO delete only for testing
 			
-			HttpGet getRequest = new HttpGet(request);
+			getRequest = new HttpGet(request);
 			
 			//Set the API media type in http accept header
 			getRequest.addHeader("accept", "application/json");
@@ -410,6 +419,9 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call getBookingsFromDashboard(GetDashboardBookingsParameters params) method");
 			}
+			if (getRequest != null) {
+				getRequest.releaseConnection();
+			}
 			//Important: Close the connect
 			//httpClient.close();
 		}
@@ -433,13 +445,15 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 //	    CloseableHttpClient httpClient = builder.build();
 		// construct writer using SetBookingParameters
 		// String writer = "RoomID=brehat.rennes@microsoft.cad.aql.fr&OrganizerFullName=&Subject=&format=json&StartDate=1461060000&EndDate=1461060600&Acknowledged=1";
-		String writer = dataTools.setBookingParametersToUrlEncode(params); 
+		String writer = dataTools.setBookingParametersToUrlEncode(params);
+		HttpPost postRequest = null;
+		
 		try	{
 			//Define a postRequest request
 			//HttpPost postRequest = new HttpPost("http://192.168.103.193/services/SetBooking.php");
 			//String request = "http://192.168.103.193:3000/agents/FF:RR:EE:SS:DD:AA"; // TODO delete only for testing setBookingKO1
 			//HttpPost postRequest = new HttpPost(request); // TODO delete only for testing
-			HttpPost postRequest = new HttpPost(phpSetBookingsURL);
+			postRequest = new HttpPost(phpSetBookingsURL);
 			
 			
 			//Set the API media type in http content-type header
@@ -491,6 +505,9 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call setBooking(SetBookingParameters params) method");
 			}
+			if (postRequest != null) {
+				postRequest.releaseConnection();
+			}
 			//Important: Close the connect
 			//httpClient.close();
 		}
@@ -505,12 +522,11 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 	 * @throws Exception
 	 */
 	public BookingSummary updateBooking(UpdateBookingParameters params) throws MeetingRoomInternalServerException, MethodNotAllowedException, PhpInternalServerException {
-		
-		try	{
 			
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call updateBooking(UpdateBookingParameters params) method");
 		}
+		
 		BookingSummary bookingSummary = new BookingSummary();
 //		HttpClientBuilder builder = HttpClientBuilder.create();
 //	    CloseableHttpClient httpClient = builder.build();
@@ -518,12 +534,13 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 		// construct the writer from UpdateBookingParameters
 		// String writer = "RoomID=brehat.rennes@microsoft.cad.aql.fr&IDReservation=AAAiAGJyZWhhdC5yZW5uZXNAbWljcm9zb2Z0LmNhZC5hcWwuZnIARgAAAAAAJjiq1ulLK0Kj6vNsTnRuywcAQopQvd4yGUaRbVXWgALbzwAAAAfOdQAAQopQvd4yGUaRbVXWgALbzwAAkZg7ggAA&RevisionReservation=DwAAABYAAABCilC93jIZRpFtVdaAAtvPAACRmK21&EndDate=1461060745&format=json";
 		String writer;
-		writer = dataTools.updateBookingParametersToUrlEncode(params);
+		HttpPost postRequest = null;
 		
-		
+		try	{
+			writer = dataTools.updateBookingParametersToUrlEncode(params);
 			// Define a postRequest request
 			// HttpPost postRequest = new HttpPost("http://192.168.103.193/services/UpdateBooking.php");
-			HttpPost postRequest = new HttpPost(phpUpdateBookingsURL);
+			postRequest = new HttpPost(phpUpdateBookingsURL);
 			
 			//Set the API media type in http content-type header
 			postRequest.addHeader("content-type", "application/x-www-form-urlencoded");
@@ -576,6 +593,9 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 		}  finally	{
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call updateBooking(UpdateBookingParameters params) method");
+			}
+			if (postRequest != null) {
+				postRequest.releaseConnection();
 			}
 			//Important: Close the connect
 			//httpClient.close();

@@ -67,10 +67,12 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			LOGGER.debug( "Begin call getSystem() method");
 		}
 		SystemConnectorReturn systemReturn = new SystemConnectorReturn();
+		HttpGet getRequest = null;
+		
 		try	{
 		//HttpGet getRequest = new HttpGet("http://192.168.103.193:8080/flexoffice-meetingroomapi/v2/system");
 		String request = flexofficeMeetingRoomAPIServerURL + PathConst.SYSTEM_PATH;
-		HttpGet getRequest = new HttpGet(request);
+		getRequest = new HttpGet(request);
 		
 		//Set the API media type in http accept header
 		getRequest.addHeader("accept", "application/json");
@@ -105,6 +107,10 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call getSystem() method");
 			}
+			if (getRequest != null) {
+				getRequest.releaseConnection();
+			}
+			
 		}
 		
 		return systemReturn;
@@ -122,12 +128,13 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			LOGGER.debug( "Begin call getMeetingRoomsInTimeOut() method");
 		}
 		List<String> meetingRoomsExternalIdsList;
+		HttpGet getRequest = null;
 		
 		try	{
 		//HttpGet getRequest = new HttpGet("http://192.168.103.193:8080/flexoffice-meetingroomapi/v2/meetingrooms/timeout");
 		String request = flexofficeMeetingRoomAPIServerURL + PathConst.MEETINGROOMS_PATH + PathConst.TIMEOUT_PATH;
 		
-		HttpGet getRequest = new HttpGet(request);
+		getRequest = new HttpGet(request);
 		
 		//Set the API media type in http accept header
 		getRequest.addHeader("accept", "application/json");
@@ -161,6 +168,9 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call getMeetingRoomsInTimeOut() method");
 			}
+			if (getRequest != null) {
+				getRequest.releaseConnection();
+			}
 		}
 	
 		return meetingRoomsExternalIdsList;
@@ -180,12 +190,12 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			LOGGER.debug( "Begin call getDashboardXMLConfigFilesName(DashboardInput params) method");
 		}
 		List<String> xmlFilesNameList;
-		
+		HttpGet getRequest = null;
 		try	{
 		//HttpGet getRequest = new HttpGet("http://192.168.103.193:8080/flexoffice-meetingroomapi/v2/dashboards/{dashboardMacAddress}/config");
 		String request = flexofficeMeetingRoomAPIServerURL + PathConst.DASHBOARDS_PATH + "/" + params.getDashboardMacAddress() + PathConst.CONFIG_PATH;
 
-		HttpGet getRequest = new HttpGet(request);
+		getRequest = new HttpGet(request);
 		
 		//Set the API media type in http accept header
 		getRequest.addHeader("accept", "application/json");
@@ -224,6 +234,9 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call getDashboardXMLConfigFilesName(DashboardInput params) method");
 			}
+			if (getRequest != null) {
+				getRequest.releaseConnection();
+			}
 		}
 	
 		return xmlFilesNameList;
@@ -245,11 +258,11 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 
 		// construct the writer from DashboardInput
 		String writer = flexofficeDataTools.constructJSONDashboardStatus(params);
-		
+		HttpPut putRequest = null;
 		try	{
 			// Define a putRequest request
 			String request = flexofficeMeetingRoomAPIServerURL + PathConst.DASHBOARDS_PATH +"/" + params.getDashboardMacAddress();
-			HttpPut putRequest = new HttpPut(request);
+			putRequest = new HttpPut(request);
 			
 			//Set the API media type in http content-type header
 			putRequest.addHeader("content-type", "application/json");
@@ -296,6 +309,9 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call updateDashboardStatus(DashboardInput params) method");
 			}
+			if (putRequest != null) {
+				putRequest.releaseConnection();
+			}
 		}
 	}
 	
@@ -317,11 +333,11 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 
 		// construct the writer from AgentInput
 		String writer = flexofficeDataTools.constructJSONAgentStatus(params);
-		
+		HttpPut putRequest = null;
 		try	{
 			// Define a putRequest request
 			String request = flexofficeMeetingRoomAPIServerURL + PathConst.AGENTS_PATH +"/" + params.getAgentMacAddress();
-			HttpPut putRequest = new HttpPut(request);
+			putRequest = new HttpPut(request);
 			
 			//Set the API media type in http content-type header
 			putRequest.addHeader("content-type", "application/json");
@@ -373,6 +389,9 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call updateAgentStatus(AgentInput params) method");
 			}
+			if (putRequest != null) {
+				putRequest.releaseConnection();
+			}
 		}	
 	}
 
@@ -389,11 +408,11 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 		}
 		// construct the writer from MeetingRoomData
 		String writer = flexofficeDataTools.constructJSONMeetingRoomData(params);
-		
+		HttpPut putRequest = null;
 		try	{
 			// Define a putRequest request
 			String request = flexofficeMeetingRoomAPIServerURL + PathConst.MEETINGROOMS_PATH +"/" + params.getMeetingRoomExternalId();
-			HttpPut putRequest = new HttpPut(request);
+			putRequest = new HttpPut(request);
 			
 			//Set the API media type in http content-type header
 			putRequest.addHeader("content-type", "application/json");
@@ -426,6 +445,9 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 		} finally {	
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug( "End call updateMeetingRoomData(MeetingRoomData params) method");
+			}
+			if (putRequest != null) {
+				putRequest.releaseConnection();
 			}
 		}
 	}
