@@ -233,12 +233,14 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			// Update xml meeting room file config
 			String meetingroomActivated = properties.getProperty("meetingroom.activated");
 			if (Boolean.TRUE.toString().equalsIgnoreCase(meetingroomActivated)){
-				if (oldMeetingRoomDao.getBuildingId() == meetingroomDao.getBuildingId() && oldMeetingRoomDao.getFloor() == meetingroomDao.getFloor()){
-					fileManager.updateObjectFromFile(meetingroomDao.getBuildingId() + "_" + meetingroomDao.getFloor(), oldMeetingRoomDao.getExternalId(), meetingroomDao.getExternalId());
-				} else {
-					fileManager.removeObjectFromFile(oldMeetingRoomDao.getBuildingId() + "_" + oldMeetingRoomDao.getFloor(), oldMeetingRoomDao.getExternalId());
-					fileManager.addObjectToFile(meetingroomDao.getBuildingId() + "_" + meetingroomDao.getFloor(), meetingroomDao.getExternalId());
-				}
+				
+					if (oldMeetingRoomDao.getBuildingId() == meetingroomDao.getBuildingId() && oldMeetingRoomDao.getFloor() == meetingroomDao.getFloor() && !oldMeetingRoomDao.getExternalId().equals(meetingroomDao.getExternalId())){
+						fileManager.updateObjectFromFile(meetingroomDao.getBuildingId() + "_" + meetingroomDao.getFloor(), oldMeetingRoomDao.getExternalId(), meetingroomDao.getExternalId());
+					} else {
+						fileManager.removeObjectFromFile(oldMeetingRoomDao.getBuildingId() + "_" + oldMeetingRoomDao.getFloor(), oldMeetingRoomDao.getExternalId());
+						fileManager.addObjectToFile(meetingroomDao.getBuildingId() + "_" + meetingroomDao.getFloor(), meetingroomDao.getExternalId());
+					}
+				
 			}
 			
 			// Update MeetingRoomDao
