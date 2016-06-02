@@ -35,15 +35,13 @@ public class SystemManagerImpl implements SystemManager {
 		        while (s.hasNext()) {
 		            str = s.next();
 		            Matcher matcher = pattern.matcher(str);
-		            if (matcher.matches()){
+		            if (matcher.matches()) {
 		                break;
-		            }
-		            else{
+		            } else {
 		                str = null;
 		            }
 		        }
-		    }
-		    finally {
+		    } finally {
 		        s.close();
 		    }
 		    return (str != null) ? str.toLowerCase(): null;  

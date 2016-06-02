@@ -62,41 +62,33 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 	 * @throws MeetingRoomInternalServerException
 	 */
 	public SystemConnectorReturn getSystem() throws FlexOfficeInternalServerException, MeetingRoomInternalServerException {
-		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call getSystem() method");
 		}
 		SystemConnectorReturn systemReturn = new SystemConnectorReturn();
 		HttpGet getRequest = null;
-		
 		try	{
 		//HttpGet getRequest = new HttpGet("http://192.168.103.193:8080/flexoffice-meetingroomapi/v2/system");
 		String request = flexofficeMeetingRoomAPIServerURL + PathConst.SYSTEM_PATH;
 		getRequest = new HttpGet(request);
-		
 		//Set the API media type in http accept header
 		getRequest.addHeader("accept", "application/json");
-		
 		//Send the request; It will immediately return the response in HttpResponse object
 		LOGGER.info("The getRequest in getSystem(...) method is : " + getRequest);
 		HttpResponse response = httpClient.execute(getRequest);
-		
 		//verify the valid error code first
 		int statusCode = response.getStatusLine().getStatusCode();
 		if ((statusCode != 200) && (statusCode != 201) && (statusCode != 202)) {
 			LOGGER.error("Internal error produce in FlexOffice, with error code: " + statusCode);
 			throw new FlexOfficeInternalServerException("Internal error produce in FlexOffice, with error code: " + statusCode);
 		}
-		
 		//Now pull back the response object
 		HttpEntity httpEntity = response.getEntity();
 		String apiOutput = EntityUtils.toString(httpEntity);
-		
 		// parse the JSON response
 		ObjectMapper mapper = new ObjectMapper();
 		//JSON from URL to Object
 		systemReturn = mapper.readValue(apiOutput, SystemConnectorReturn.class);
-		
 		} catch (ClientProtocolException ex) {
 			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
 			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
@@ -110,7 +102,6 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			if (getRequest != null) {
 				getRequest.releaseConnection();
 			}
-			
 		}
 		
 		return systemReturn;
@@ -123,41 +114,33 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 	 * @throws MeetingRoomInternalServerException
 	 */
 	public List<String>  getMeetingRoomsInTimeOut() throws FlexOfficeInternalServerException, MeetingRoomInternalServerException {
-	
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call getMeetingRoomsInTimeOut() method");
 		}
 		List<String> meetingRoomsExternalIdsList;
 		HttpGet getRequest = null;
-		
 		try	{
 		//HttpGet getRequest = new HttpGet("http://192.168.103.193:8080/flexoffice-meetingroomapi/v2/meetingrooms/timeout");
 		String request = flexofficeMeetingRoomAPIServerURL + PathConst.MEETINGROOMS_PATH + PathConst.TIMEOUT_PATH;
-		
 		getRequest = new HttpGet(request);
-		
 		//Set the API media type in http accept header
 		getRequest.addHeader("accept", "application/json");
-		
 		//Send the request; It will immediately return the response in HttpResponse object
 		LOGGER.info("The getRequest in getMeetingRoomsInTimeOut(...) method is : " + getRequest);
 		HttpResponse response = httpClient.execute(getRequest);
-		
 		//verify the valid error code first
 		int statusCode = response.getStatusLine().getStatusCode();
 		if ((statusCode != 200) && (statusCode != 201) && (statusCode != 202)) {
 			LOGGER.error("Internal error produce in FlexOffice, with error code: " + statusCode);
 			throw new FlexOfficeInternalServerException("Internal error produce in FlexOffice, with error code: " + statusCode);
 		}
-		
 		//Now pull back the response object
 		HttpEntity httpEntity = response.getEntity();
 		String apiOutput = EntityUtils.toString(httpEntity);
-		
 		// parse the JSON response
 		ObjectMapper mapper = new ObjectMapper();
-		meetingRoomsExternalIdsList = mapper.readValue(apiOutput,new TypeReference<List<String>>() {});
-		
+		meetingRoomsExternalIdsList = mapper.readValue(apiOutput,new TypeReference<List<String>>() {
+		});
 		} catch (ClientProtocolException ex) {
 			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
 			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
@@ -185,7 +168,6 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 	 * @throws DataNotExistsException
 	 */
 	public List<String> getDashboardXMLConfigFilesName(DashboardConnectorInput params) throws FlexOfficeInternalServerException, MeetingRoomInternalServerException, DataNotExistsException {
-		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call getDashboardXMLConfigFilesName(DashboardInput params) method");
 		}
@@ -194,16 +176,12 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 		try	{
 		//HttpGet getRequest = new HttpGet("http://192.168.103.193:8080/flexoffice-meetingroomapi/v2/dashboards/{dashboardMacAddress}/config");
 		String request = flexofficeMeetingRoomAPIServerURL + PathConst.DASHBOARDS_PATH + "/" + params.getDashboardMacAddress() + PathConst.CONFIG_PATH;
-
 		getRequest = new HttpGet(request);
-		
 		//Set the API media type in http accept header
 		getRequest.addHeader("accept", "application/json");
-		
 		//Send the request; It will immediately return the response in HttpResponse object
 		LOGGER.info("The getRequest in getMeetingRoomsInTimeOut(...) method is : " + getRequest);
 		HttpResponse response = httpClient.execute(getRequest);
-		
 		//verify the valid error code first
 		int statusCode = response.getStatusLine().getStatusCode();
 		if ((statusCode != 200) && (statusCode != 201) && (statusCode != 202)) {
@@ -215,15 +193,13 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 				throw new FlexOfficeInternalServerException("Internal error produce in FlexOffice, with error code: " + statusCode);
 			}
 		}
-		
 		//Now pull back the response object
 		HttpEntity httpEntity = response.getEntity();
 		String apiOutput = EntityUtils.toString(httpEntity);
-		
 		// parse the JSON response
 		ObjectMapper mapper = new ObjectMapper();
-		xmlFilesNameList = mapper.readValue(apiOutput,new TypeReference<List<String>>() {});
-		
+		xmlFilesNameList = mapper.readValue(apiOutput,new TypeReference<List<String>>() {
+		});
 		} catch (ClientProtocolException ex) {
 			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
 			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
@@ -255,7 +231,6 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			LOGGER.debug( "Begin call updateDashboardStatus(DashboardInput params) method");
 		}
 		DashboardConnectorOutput dashboardOutput = new DashboardConnectorOutput();
-
 		// construct the writer from DashboardInput
 		String writer = flexofficeDataTools.constructJSONDashboardStatus(params);
 		HttpPut putRequest = null;
@@ -263,18 +238,14 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			// Define a putRequest request
 			String request = flexofficeMeetingRoomAPIServerURL + PathConst.DASHBOARDS_PATH +"/" + params.getDashboardMacAddress();
 			putRequest = new HttpPut(request);
-			
 			//Set the API media type in http content-type header
 			putRequest.addHeader("content-type", "application/json");
-			
 			//Set the request post body
 			StringEntity input = new StringEntity(writer);
 			putRequest.setEntity(input);
-			 
 			//Send the request; It will immediately return the response in HttpResponse object if any
 			LOGGER.info("The putRequest in updateDashboardStatus(...) method is : " + putRequest);
 			HttpResponse response = httpClient.execute(putRequest);
-			
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
 			if ((statusCode != 200) && (statusCode != 201) && (statusCode != 202)) {
@@ -286,14 +257,13 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 					throw new FlexOfficeInternalServerException("Internal error produce in FlexOffice, with error code: " + statusCode);
 				}
 			}
-			
 			//Now pull back the response object
 			HttpEntity httpEntity = response.getEntity();
 			String apiOutput = EntityUtils.toString(httpEntity);
-						
 			// parse the JSON response
 			ObjectMapper mapper = new ObjectMapper();
-			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
+			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {
+			});
 			String command = (String)mp.get("command");
 			dashboardOutput.setCommand(EnumCommand.valueOf(command));
 			
@@ -330,7 +300,6 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			LOGGER.debug( "Begin call updateAgentStatus(AgentInput params) method");
 		}
 		AgentConnectorOutput agentOutput = new AgentConnectorOutput();
-
 		// construct the writer from AgentInput
 		String writer = flexofficeDataTools.constructJSONAgentStatus(params);
 		HttpPut putRequest = null;
@@ -338,18 +307,14 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			// Define a putRequest request
 			String request = flexofficeMeetingRoomAPIServerURL + PathConst.AGENTS_PATH +"/" + params.getAgentMacAddress();
 			putRequest = new HttpPut(request);
-			
 			//Set the API media type in http content-type header
 			putRequest.addHeader("content-type", "application/json");
-			
 			//Set the request post body
 			StringEntity input = new StringEntity(writer);
 			putRequest.setEntity(input);
-			 
 			//Send the request; It will immediately return the response in HttpResponse object if any
 			LOGGER.info("The putRequest in updateAgentStatus(...) method is : " + putRequest);
 			HttpResponse response = httpClient.execute(putRequest);
-			
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
 			if ((statusCode != 200) && (statusCode != 201) && (statusCode != 202)) {
@@ -364,14 +329,13 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 					throw new FlexOfficeInternalServerException("Internal error produce in FlexOffice, with error code: " + statusCode);
 				}
 			}
-			
 			//Now pull back the response object
 			HttpEntity httpEntity = response.getEntity();
 			String apiOutput = EntityUtils.toString(httpEntity);
-						
 			// parse the JSON response
 			ObjectMapper mapper = new ObjectMapper();
-			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
+			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {
+			});
 			String meetingRoomExternalId = (String)mp.get("meetingRoomExternalId");
 			String command = (String)mp.get("command");
 			agentOutput.setMeetingRoomExternalId(meetingRoomExternalId);
@@ -413,18 +377,14 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			// Define a putRequest request
 			String request = flexofficeMeetingRoomAPIServerURL + PathConst.MEETINGROOMS_PATH +"/" + params.getMeetingRoomExternalId();
 			putRequest = new HttpPut(request);
-			
 			//Set the API media type in http content-type header
 			putRequest.addHeader("content-type", "application/json");
-			
 			//Set the request post body
 			StringEntity input = new StringEntity(writer);
 			putRequest.setEntity(input);
-			 
 			//Send the request; It will immediately return the response in HttpResponse object if any
 			LOGGER.info("The putRequest in updateMeetingRoomData(...) method is : " + putRequest);
 			HttpResponse response = httpClient.execute(putRequest);
-			
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
 			if ((statusCode != 200) && (statusCode != 201) && (statusCode != 202)) {

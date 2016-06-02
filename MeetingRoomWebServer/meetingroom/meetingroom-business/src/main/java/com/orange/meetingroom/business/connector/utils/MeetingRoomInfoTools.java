@@ -66,7 +66,7 @@ public class MeetingRoomInfoTools {
 			
 			return data;
 		} catch (RuntimeException e ) {
-			LOGGER.debug("RuntimeException in processMeetingRoomStatus(...) method");
+			LOGGER.debug("RuntimeException in processMeetingRoomStatus(...) method. ", e);
 			return null;
 		}
 	}
@@ -77,7 +77,6 @@ public class MeetingRoomInfoTools {
 	 * @param data MeetingRoomData
 	 */
 	private void updateInfos(BookingConnectorReturn book, MeetingRoomData data, String meetingRoomExternalId, Integer currentDate) {
-		
 		if (ackTime == 0) {
 			data.setMeetingRoomStatus(EnumMeetingRoomStatus.OCCUPIED);
 			setMeetingRoomData(book, data, meetingRoomExternalId);
@@ -100,7 +99,7 @@ public class MeetingRoomInfoTools {
 						phpConnector.updateBooking(params);
 						data.setMeetingRoomStatus(EnumMeetingRoomStatus.FREE);
 					} catch (MeetingRoomInternalServerException | MethodNotAllowedException	| PhpInternalServerException e) {
-						LOGGER.debug("Exception when trying to cancel reservation, with message:" + e.getMessage());
+						LOGGER.debug("Exception when trying to cancel reservation, with message:" + e.getMessage(), e);
 						// keep it in ack status
 						data.setMeetingRoomStatus(EnumMeetingRoomStatus.ACK);
 						setMeetingRoomData(book, data, meetingRoomExternalId);
@@ -127,6 +126,10 @@ public class MeetingRoomInfoTools {
 		data.setMeetingRoomExternalId(meetingRoomExternalId);
 	}
 	
+	/**
+	 * getAckTime
+	 * @return
+	 */
 	private Integer getAckTime() {
 		Map<String, Integer> configMap = confHashMapFactoryBean.getObject();
 		if (configMap.containsKey(EnumSystemInMap.ACK_TIME.toString())) {

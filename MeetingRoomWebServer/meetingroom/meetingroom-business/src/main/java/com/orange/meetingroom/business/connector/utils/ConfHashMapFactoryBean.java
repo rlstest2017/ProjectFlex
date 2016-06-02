@@ -27,8 +27,7 @@ public class ConfHashMapFactoryBean implements FactoryBean<Map<String, Integer>>
 	FlexOfficeConnectorClient flexofficeConnector;
 	@Autowired
 	DateTools dateTools;
-	
-	public Map<String, Integer> configMap = null;
+	Map<String, Integer> configMap = null;
 
 	/**
 	 * initialize method, get params from DB
@@ -36,23 +35,20 @@ public class ConfHashMapFactoryBean implements FactoryBean<Map<String, Integer>>
 	public void initialize() {
 		try {
 			configMap = new HashMap<String, Integer>();
-			
 			SystemConnectorReturn systemreturn;
 			systemreturn = flexofficeConnector.getSystem();
-			
 			// process startDate
 			Integer startDate = 0;
 			Integer nbSeconds = systemreturn.getDashboardStartDate();
 			if (nbSeconds != 0) {
 				startDate = dateTools.processStartDate(nbSeconds);
 			}
-			
 			configMap.put(EnumSystemInMap.ACK_TIME.toString(), systemreturn.getAckTime());
 			configMap.put(EnumSystemInMap.DASHBOARD_START_DATE.toString(), startDate);
 			configMap.put(EnumSystemInMap.DASHBOARD_MAX_BOOKINGS.toString(), systemreturn.getDashboardMaxBookings());
-			} catch (FlexOfficeInternalServerException | MeetingRoomInternalServerException e) {
+		} catch (FlexOfficeInternalServerException | MeetingRoomInternalServerException e) {
 			LOGGER.debug("Exception thrown in flexofficeConnector.getSystem() in ConfHashMapFactoryBean class: " + e.getMessage(), e);
-			}
+		}
 	}
 	
 	@Override

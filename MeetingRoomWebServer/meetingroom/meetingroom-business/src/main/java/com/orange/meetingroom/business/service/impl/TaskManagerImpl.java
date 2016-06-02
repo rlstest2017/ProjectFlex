@@ -50,7 +50,6 @@ public class TaskManagerImpl implements TaskManager {
 				try {
 					params.setRoomID(externalId);
 					MeetingRoomConnectorReturn metingroomreturn = phpConnector.getBookingsFromAgent(params);
-					
 					// process the meetingRoomStatus
 					MeetingRoomData data = meetingRoomInfoTools.processMeetingRoomStatus(metingroomreturn);
 					if (data != null) {
@@ -78,7 +77,7 @@ public class TaskManagerImpl implements TaskManager {
 			} // end for
 			
 		} catch ( FlexOfficeInternalServerException | MeetingRoomInternalServerException | RuntimeException e) {
-			LOGGER.debug("Un exception was thrown from getMeetingRoomsInTimeOut() method: " + e.getMessage());
+			LOGGER.debug("Un exception was thrown from getMeetingRoomsInTimeOut() method: " + e.getMessage(), e);
 		}
 	}
 

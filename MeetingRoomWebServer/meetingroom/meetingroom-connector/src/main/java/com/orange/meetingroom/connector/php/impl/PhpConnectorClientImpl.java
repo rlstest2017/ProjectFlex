@@ -78,46 +78,38 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public SystemCurrentDateConnectorReturn getCurrentDate() throws PhpInternalServerException, MeetingRoomInternalServerException {
-		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call getCurrentDate() method");
 		}
 		HttpGet getRequest = null;
-		
 		try {
-		SystemCurrentDateConnectorReturn returnedCurrentDate = new SystemCurrentDateConnectorReturn();
-		String request = phpGetBookingsURL + "?" + dataTools.getCurrentDateParameterToUrlEncode(); 
-		getRequest = new HttpGet(request);
-		//Send the request; It will immediately return the response in HttpResponse object
-		LOGGER.info("The getRequest in getCurrentDate() method is : " + getRequest);
-		
-		HttpResponse response = httpClient.execute(getRequest);
-
-		//verify the valid error code first
-		int statusCode = response.getStatusLine().getStatusCode();
-		if (statusCode != 200) {
-			LOGGER.error("Internal error produce in PHP server, with error code: " + statusCode);
-			throw new PhpInternalServerException("Internal error produce in Php server, with error code: " + statusCode);
-		}
-		
-		//Now pull back the response object
-		HttpEntity httpEntity = response.getEntity();
-		String apiOutput = EntityUtils.toString(httpEntity);
-					
-		// parse the JSON response
-		ObjectMapper mapper = new ObjectMapper();
-		Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
-		
-		// get currentDate
-
-		Integer currentDate = (Integer)((Map<String, Object>)mp.get(EnumRoomInfos.INFOS.value())).get(EnumRoomInfos.CURRENT_DATE.value());
-		returnedCurrentDate.setCurrentDate(currentDate);
-		
-		return returnedCurrentDate;
-		
-		} catch (ClientProtocolException ex) {
-			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
-			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
+			SystemCurrentDateConnectorReturn returnedCurrentDate = new SystemCurrentDateConnectorReturn();
+			String request = phpGetBookingsURL + "?" + dataTools.getCurrentDateParameterToUrlEncode(); 
+			getRequest = new HttpGet(request);
+			//Send the request; It will immediately return the response in HttpResponse object
+			LOGGER.info("The getRequest in getCurrentDate() method is : " + getRequest);
+			HttpResponse response = httpClient.execute(getRequest);
+			//verify the valid error code first
+			int statusCode = response.getStatusLine().getStatusCode();
+			if (statusCode != 200) {
+				LOGGER.error("Internal error produce in PHP server, with error code: " + statusCode);
+				throw new PhpInternalServerException("Internal error produce in Php server, with error code: " + statusCode);
+			}
+			//Now pull back the response object
+			HttpEntity httpEntity = response.getEntity();
+			String apiOutput = EntityUtils.toString(httpEntity);
+			// parse the JSON response
+			ObjectMapper mapper = new ObjectMapper();
+			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {
+			});
+			// get currentDate
+			Integer currentDate = (Integer)((Map<String, Object>)mp.get(EnumRoomInfos.INFOS.value())).get(EnumRoomInfos.CURRENT_DATE.value());
+			returnedCurrentDate.setCurrentDate(currentDate);
+			return returnedCurrentDate;
+			
+		} catch (ClientProtocolException e) {
+			LOGGER.error("Error in httpClient.execute() method, with message: " + e.getMessage(), e);
+			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + e.getMessage());
 		} catch (IOException e) {
 			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage(), e);
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());
@@ -146,39 +138,31 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 		}
 		MeetingRoomConnectorReturn meetingroom = new MeetingRoomConnectorReturn();
 		MeetingRoomBookingsConnectorReturn meetingRoomBookings = new MeetingRoomBookingsConnectorReturn();
-//		HttpClientBuilder builder = HttpClientBuilder.create();
-//	    CloseableHttpClient httpClient = builder.build(); 
+		// HttpClientBuilder builder = HttpClientBuilder.create();
+	    // CloseableHttpClient httpClient = builder.build(); 
 		HttpGet getRequest = null;
 	    try	{
 			//HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&RoomID=brehat.rennes@microsoft.cad.aql.fr&ForceUpdateCache=false&_=1461057699231");
 			String request = phpGetBookingsURL + "?" + dataTools.getAgentBookingsParametersToUrlEncode(params);
-			//String request = "http://192.168.103.193:3000/getAgentBookingsKO1"; // TODO delete only for testing
-			//String request = "http://192.168.103.193:3000/getAgentBookingsKO3"; // TODO delete only for testing
-			
 			getRequest = new HttpGet(request);
-			
 			//Set the API media type in http accept header
 			getRequest.addHeader("accept", "application/json");
-			
 			//Send the request; It will immediately return the response in HttpResponse object
 			LOGGER.info("The getRequest in getBookingsFromAgent(...) method is : " + getRequest);
 			HttpResponse response = httpClient.execute(getRequest);
-			
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode != 200) {
 				LOGGER.error("Internal error produce in PHP server, with error code: " + statusCode);
 				throw new PhpInternalServerException("Internal error produce in Php server, with error code: " + statusCode);
 			}
-			
 			//Now pull back the response object
 			HttpEntity httpEntity = response.getEntity();
 			String apiOutput = EntityUtils.toString(httpEntity);
-						
 			// parse the JSON response
 			ObjectMapper mapper = new ObjectMapper();
-			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
-			
+			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {
+			});
 			// get currentDate
 			Integer currentDate = (Integer)((Map<String, Object>)mp.get(EnumRoomInfos.INFOS.value())).get(EnumRoomInfos.CURRENT_DATE.value());
 			meetingroom.setCurrentDate(currentDate);
@@ -186,21 +170,19 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 			Map<String, Map<String, Object>> roomLevelOneMap = (Map<String, Map<String, Object>>)mp.get(EnumRoomInfos.ROOMS.value());
 			for (Entry<String, Map<String, Object>> element : roomLevelOneMap.entrySet()) {
 				try {
-				Boolean errorFlag = (Boolean)element.getValue().get(EnumRoomInfos.ERROR_FLAG.value());
-				String message = (String)element.getValue().get(EnumRoomInfos.MESSAGE.value());
-				if (errorFlag) { // errorFlag = true
-					LOGGER.error("errorFlag is true in Php Server return with message:" + message);
-					throw new MethodNotAllowedException("errorFlag is true in Php Server return with message:" + message);
-				}
+					Boolean errorFlag = (Boolean)element.getValue().get(EnumRoomInfos.ERROR_FLAG.value());
+					String message = (String)element.getValue().get(EnumRoomInfos.MESSAGE.value());
+					if (errorFlag) { // errorFlag = true
+						LOGGER.error("errorFlag is true in Php Server return with message:" + message);
+						throw new MethodNotAllowedException("errorFlag is true in Php Server return with message:" + message);
+					}
 				} catch (RuntimeException e ) { // {"Infos":{"CurrentDate":1461938475},"Rooms":{"toto":false}}
-					LOGGER.error("meetingRoomExternalId is not exist or Connexion to Exchange Server is impossible", e);
-					throw new DataNotExistsException("meetingRoomExternalId is not exist or Connexion to Exchange Server is impossible");
+					LOGGER.error("meetingRoomExternalId is not exist or Connexion to Exchange Server is impossible." , e);
+					throw new DataNotExistsException("meetingRoomExternalId is not exist or Connexion to Exchange Server is impossible: "  + e.getMessage());
 				}
-
 			}
 			
 			Map<String, Map<String, Map<String, Object>>> roomMap = (Map<String, Map<String, Map<String, Object>>>)mp.get(EnumRoomInfos.ROOMS.value());
-			
 			for (Entry<String, Map<String, Map<String, Object>>> element : roomMap.entrySet()) {
 				try {	
 					MeetingRoomDetailsConnectorReturn details = new MeetingRoomDetailsConnectorReturn(); 
@@ -221,12 +203,9 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 			}
 			
 			Map<String, Map<String, Map<String, Map<String, Object>>>> roomMapBookings = (Map<String, Map<String, Map<String, Map<String, Object>>>>)mp.get(EnumRoomInfos.ROOMS.value());
-			
 			for (Entry<String, Map<String, Map<String, Map<String, Object>>>> elementBooking : roomMapBookings.entrySet()) {
-				
 				try {
 					Map<String, Map<String, Object>> bookings =  (Map<String, Map<String, Object>>)elementBooking.getValue().get(EnumRoomInfos.BOOKINGS.value());
-				
 					for (Entry<String, Map<String, Object>> book : bookings.entrySet()) {
 						BookingConnectorReturn booking = new BookingConnectorReturn();
 						String idReservation = (String)book.getValue().get(EnumBookingDetails.ID_RESERVATION.value());
@@ -290,49 +269,37 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 	 * @throws Exception
 	 */
 	public MeetingRoomsConnectorReturn getBookingsFromDashboard(GetDashboardBookingsParameters params) throws MeetingRoomInternalServerException, PhpInternalServerException, MethodNotAllowedException {
-		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call getBookingsFromDashboard(GetDashboardBookingsParameters params) method");
 		}
 		MeetingRoomsConnectorReturn meetingrooms = new MeetingRoomsConnectorReturn();
 		List<MeetingRoomBookingsConnectorReturn> meetingRoomBookingsList = new ArrayList<MeetingRoomBookingsConnectorReturn>(); 
-//		HttpClientBuilder builder = HttpClientBuilder.create();
-//	    CloseableHttpClient httpClient = builder.build();
 		HttpGet getRequest = null;
 		try	{
 			//HttpGet getRequest = new HttpGet("http://192.168.103.193/services/GetBookings.php?format=json&MaxBookings=2&StartDate=0&RoomGroupID=rg_oab_full&_=1461061105469");
 			String request = phpGetBookingsURL + "?" + dataTools.getDashboardBookingsParametersToUrlEncode(params);
-			//String request =  "http://192.168.103.193:3000/getDashboardBookingsKO2"; // TODO delete only for testing
-			//String request =  "http://192.168.103.193:3000/getDashboardBookingsKO1"; // TODO delete only for testing
-			
 			getRequest = new HttpGet(request);
-			
 			//Set the API media type in http accept header
 			getRequest.addHeader("accept", "application/json");
-			 
 			//Send the request; It will immediately return the response in HttpResponse object
 			LOGGER.info("The getRequest in getBookingsFromAgent(...) method is : " + getRequest);
 			HttpResponse response = httpClient.execute(getRequest);
-			
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode != 200) {
 				LOGGER.error("Internal error produce in PHP server, with error code: " + statusCode);
 				throw new PhpInternalServerException("Internal error produce in Php server, with error code: " + statusCode);
 			}
-			
 			//Now pull back the response object
 			HttpEntity httpEntity = response.getEntity();
 			String apiOutput = EntityUtils.toString(httpEntity);
-			
 			// parse the JSON response
 			ObjectMapper mapper = new ObjectMapper();
-			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
-			
+			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {
+			});
 			// get currentDate
 			Integer currentDate = (Integer)((Map<String, Object>)mp.get(EnumRoomInfos.INFOS.value())).get(EnumRoomInfos.CURRENT_DATE.value());
 			meetingrooms.setCurrentDate(currentDate);
-			
 			try {
 				Map<String, Map<String, Map<String, Object>>> roomMap = (Map<String, Map<String, Map<String, Object>>>)mp.get(EnumRoomInfos.ROOMS.value());
 				for (Entry<String, Map<String, Map<String, Object>>> element : roomMap.entrySet()) {
@@ -349,8 +316,8 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 						meetingRoomBookingsList.add(meetingRoomBookings);
 					} catch (RuntimeException e) {
 						// if not roomId, PHP returns ( "Rooms": {"toto": false }, {...}) witch produce this exception
-						LOGGER.error("no roomId is found in exchange server");
-						throw new MethodNotAllowedException("no roomId is found in exchange server");
+						LOGGER.error("no roomId is found in exchange server ", e);
+						throw new MethodNotAllowedException("no roomId is found in exchange server: "  + e.getMessage());
 					}
 				}
 				
@@ -422,8 +389,6 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 			if (getRequest != null) {
 				getRequest.releaseConnection();
 			}
-			//Important: Close the connect
-			//httpClient.close();
 		}
 	}
 
@@ -436,51 +401,39 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 	 * @throws Exception
 	 */
 	public BookingSummary setBooking(SetBookingParameters params) throws MeetingRoomInternalServerException, MethodNotAllowedException, PhpInternalServerException {
-		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call setBooking(SetBookingParameters params) method");
 		}
 		BookingSummary bookingSummary = new BookingSummary();
-//		HttpClientBuilder builder = HttpClientBuilder.create();
-//	    CloseableHttpClient httpClient = builder.build();
 		// construct writer using SetBookingParameters
 		// String writer = "RoomID=brehat.rennes@microsoft.cad.aql.fr&OrganizerFullName=&Subject=&format=json&StartDate=1461060000&EndDate=1461060600&Acknowledged=1";
 		String writer = dataTools.setBookingParametersToUrlEncode(params);
 		HttpPost postRequest = null;
-		
 		try	{
 			//Define a postRequest request
 			//HttpPost postRequest = new HttpPost("http://192.168.103.193/services/SetBooking.php");
-			//String request = "http://192.168.103.193:3000/agents/FF:RR:EE:SS:DD:AA"; // TODO delete only for testing setBookingKO1
-			//HttpPost postRequest = new HttpPost(request); // TODO delete only for testing
 			postRequest = new HttpPost(phpSetBookingsURL);
-			
-			
 			//Set the API media type in http content-type header
 			postRequest.addHeader("content-type", "application/x-www-form-urlencoded");
-			
 			//Set the request post body
 			StringEntity userEntity = new StringEntity(writer);
 			postRequest.setEntity(userEntity);
-			 
 			//Send the request; It will immediately return the response in HttpResponse object if any
 			LOGGER.info("The postRequest in setBooking(...) method is : " + postRequest);
 			HttpResponse response = httpClient.execute(postRequest);
-			
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode != 200) {
 				LOGGER.error("Internal error produce in PHP server, with error code: " + statusCode);
 				throw new PhpInternalServerException("Internal error produce in Php server, with error code: " + statusCode);
 			}
-			
 			//Now pull back the response object
 			HttpEntity httpEntity = response.getEntity();
 			String apiOutput = EntityUtils.toString(httpEntity);
-						
 			// parse the JSON response
 			ObjectMapper mapper = new ObjectMapper();
-			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
+			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {
+			});
 			Boolean errorFlag = (Boolean)mp.get(EnumRoomInfos.ERROR_FLAG.value());
 			if (errorFlag) {
 				String errorMessage = (String)mp.get(EnumRoomInfos.MESSAGE.value());
@@ -508,8 +461,6 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 			if (postRequest != null) {
 				postRequest.releaseConnection();
 			}
-			//Important: Close the connect
-			//httpClient.close();
 		}
 	}
 	
@@ -522,51 +473,40 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 	 * @throws Exception
 	 */
 	public BookingSummary updateBooking(UpdateBookingParameters params) throws MeetingRoomInternalServerException, MethodNotAllowedException, PhpInternalServerException {
-			
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call updateBooking(UpdateBookingParameters params) method");
 		}
-		
 		BookingSummary bookingSummary = new BookingSummary();
-//		HttpClientBuilder builder = HttpClientBuilder.create();
-//	    CloseableHttpClient httpClient = builder.build();
-
 		// construct the writer from UpdateBookingParameters
 		// String writer = "RoomID=brehat.rennes@microsoft.cad.aql.fr&IDReservation=AAAiAGJyZWhhdC5yZW5uZXNAbWljcm9zb2Z0LmNhZC5hcWwuZnIARgAAAAAAJjiq1ulLK0Kj6vNsTnRuywcAQopQvd4yGUaRbVXWgALbzwAAAAfOdQAAQopQvd4yGUaRbVXWgALbzwAAkZg7ggAA&RevisionReservation=DwAAABYAAABCilC93jIZRpFtVdaAAtvPAACRmK21&EndDate=1461060745&format=json";
 		String writer;
 		HttpPost postRequest = null;
-		
 		try	{
 			writer = dataTools.updateBookingParametersToUrlEncode(params);
 			// Define a postRequest request
 			// HttpPost postRequest = new HttpPost("http://192.168.103.193/services/UpdateBooking.php");
 			postRequest = new HttpPost(phpUpdateBookingsURL);
-			
 			//Set the API media type in http content-type header
 			postRequest.addHeader("content-type", "application/x-www-form-urlencoded");
-			
 			//Set the request post body
 			StringEntity userEntity = new StringEntity(writer);
 			postRequest.setEntity(userEntity);
-			 
 			//Send the request; It will immediately return the response in HttpResponse object if any
 			LOGGER.info("The postRequest in updateBooking(...) method is : " + postRequest);
 			HttpResponse response = httpClient.execute(postRequest);
-			
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode != 200) {
 				LOGGER.error("Internal error produce in PHP server, with error code: " + statusCode);
 				throw new PhpInternalServerException("Internal error produce in Php server, with error code: " + statusCode);
 			}
-			
 			//Now pull back the response object
 			HttpEntity httpEntity = response.getEntity();
 			String apiOutput = EntityUtils.toString(httpEntity);
-						
 			// parse the JSON response
 			ObjectMapper mapper = new ObjectMapper();
-			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {});
+			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {
+			});
 			Boolean errorFlag = (Boolean)mp.get(EnumRoomInfos.ERROR_FLAG.value());
 			if (errorFlag) {
 				String errorMessage = (String)mp.get(EnumRoomInfos.MESSAGE.value());
@@ -597,8 +537,6 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 			if (postRequest != null) {
 				postRequest.releaseConnection();
 			}
-			//Important: Close the connect
-			//httpClient.close();
 		}
 	}
 	
