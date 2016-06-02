@@ -3,8 +3,6 @@ package com.orange.meetingroom.business.connector.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +28,15 @@ public class ConfHashMapFactoryBean implements FactoryBean<Map<String, Integer>>
 	@Autowired
 	DateTools dateTools;
 	
-	public Map<String, Integer> configMap = new HashMap<String, Integer>();
-	
-	@PostConstruct
+	public Map<String, Integer> configMap = null;
+
+	/**
+	 * initialize method, get params from DB
+	 */
 	public void initialize() {
 		try {
+			configMap = new HashMap<String, Integer>();
+			
 			SystemConnectorReturn systemreturn;
 			systemreturn = flexofficeConnector.getSystem();
 			
@@ -55,6 +57,9 @@ public class ConfHashMapFactoryBean implements FactoryBean<Map<String, Integer>>
 	
 	@Override
 	public Map<String, Integer> getObject()  {
+		if (configMap == null) {
+			initialize();
+		}
 		return configMap;
 	}
 
