@@ -19,7 +19,7 @@ public class MeetingRoomGuiTasks {
 	TaskManager taskManager;
 	
 
-	// Every 4 minutes
+	// Every 5 minutes
 	//second, minute, hour, day of month, month, day(s) of week
 	@Scheduled(cron="0 */5 * * * ?")
     public void checkMeetingRoomsStatusTimeOutMethod()  {
@@ -27,7 +27,6 @@ public class MeetingRoomGuiTasks {
 		taskManager.checkMeetingRoomTimeOut();
 		LOGGER.debug("After checkMeetingRoomsStatusTimeOutMethod. Current time is : "+ new Date());
     }
-	
 
 	// for tests
 	public boolean checkMeetingRoomsStatusTimeOutTestMethod()  {
