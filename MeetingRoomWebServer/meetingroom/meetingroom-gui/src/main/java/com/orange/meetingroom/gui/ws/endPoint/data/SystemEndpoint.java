@@ -23,6 +23,8 @@ import static com.orange.meetingroom.gui.ws.PathConst.SYSTEM_PATH;
 @Path(SYSTEM_PATH)
 public interface SystemEndpoint {
 	
+	static final String ORIGIN = "Origin";
+	
 	/**
 	 * Gets system.
 	 * 
@@ -62,7 +64,6 @@ public interface SystemEndpoint {
 	@OPTIONS
 	@Path("{path : .*}")
 	Response options();
-	
 		
 }
 

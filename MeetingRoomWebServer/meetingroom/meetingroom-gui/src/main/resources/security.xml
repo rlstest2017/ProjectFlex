@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/security"
+             xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- Only for Test export -->
+ 	<!-- <http pattern="/v1/stats/export" security="none"/> -->
+ 	
+    <http  pattern="/v2/**" entry-point-ref="restAuthenticationEntryPoint" use-expressions="true" auto-config="false" create-session="stateless" >
+	     <!-- Adds the custom login filter to the Spring Security filter chain -->
+	    <custom-filter ref="authenticationTokenProcessingFilter" position="FORM_LOGIN_FILTER"   />
+	    <intercept-url pattern="/v2/**" access="isAuthenticated()" />
+	    <logout />
+	    <csrf disabled="true"/>
+	</http>
+ 
+     <!-- Configures the authentication entry point -->
+     <!-- If @OPTIONS request then return OK, else return UNAUTHORIZATION response -->
+    <beans:bean id="restAuthenticationEntryPoint" class="com.orange.meetingroom.gui.ws.endPoint.impl.RestAuthenticationEntryPoint"/>
+    
+    <beans:bean id="restAuthenticationSuccessHandler" class="com.orange.meetingroom.gui.ws.auth.TokenSimpleUrlAuthenticationSuccessHandler"/>
+    
+    <!-- Configures a custom authentication success handler that returns the HTTP status code 200 instead of the 301 HTTP status code -->
+    <!-- If x-auth-token is OK then redirect to request, else return UNAUTHORIZATION response -->
+    <beans:bean class="com.orange.meetingroom.gui.ws.filters.CustomTokenAuthenticationFilter" id="authenticationTokenProcessingFilter">
+    	<beans:constructor-arg type="java.lang.String"><beans:value>/v2/**</beans:value></beans:constructor-arg>
+    	
+	</beans:bean>
+	
+	<!-- Used for @autowired spring context SystemManager -->
+	<beans:bean class="com.orange.meetingroom.gui.ws.auth.AuthenticationToken" id="authToken" />
+	
+	<!-- Configures in-memory implementation of the UserDetailsService implementation -->
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider>
+            <user-service>
+                <user name="user" password="password" authorities="ROLE_USER"/>
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+	
+</beans:beans>

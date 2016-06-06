@@ -12,6 +12,7 @@
     <!-- Import related to Meeting Room Web Sever Business -->
 	<import resource="classpath*:spring/applicationContext-meetingroom-business.xml" />
 	
+	<import resource="classpath*:security.xml"/>
 	
 	<bean id="errorMessageHandler" class="com.orange.meetingroom.gui.ws.utils.ErrorMessageHandler"/>
 	

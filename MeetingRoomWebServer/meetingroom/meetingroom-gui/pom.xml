@@ -22,6 +22,7 @@
     <dependency>
      <groupId>javax.servlet</groupId>
 	 <artifactId>javax.servlet-api</artifactId>
+	 <scope>provided</scope>
     </dependency>
 
   	<!-- Apache Common codec -->
@@ -74,6 +75,20 @@
 			<artifactId>spring-context-support</artifactId>
 	</dependency>
 	
+	<!-- spring Security -->
+	<dependency>
+       	<groupId>org.springframework.security</groupId>
+       	<artifactId>spring-security-web</artifactId>
+    </dependency>
+   	<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-core</artifactId>
+	</dependency>
+	<dependency>
+  		<groupId>org.springframework.security</groupId>
+  		<artifactId>spring-security-config</artifactId>
+  	</dependency>
+  	
 	<!-- spring AOP -->
 	<dependency>
 			<groupId>org.springframework</groupId>
