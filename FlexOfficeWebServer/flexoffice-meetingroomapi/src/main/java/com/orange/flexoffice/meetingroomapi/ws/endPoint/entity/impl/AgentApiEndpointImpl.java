@@ -67,8 +67,10 @@ public class AgentApiEndpointImpl implements AgentApiEndpoint {
 			ECommandModel command = ECommandModel.valueOf(agentUpdated.getCommand());
 			returnedAgent.setCommand(command);
 			
-			MeetingRoomDto meetingRoomDto = meetingRoomManager.find(agentUpdated.getMeetingroomId());
-			returnedAgent.setMeetingRoomExternalId(meetingRoomDto.getExternalId());
+			if (agentUpdated.getMeetingroomId() != 0){
+				MeetingRoomDto meetingRoomDto = meetingRoomManager.find(agentUpdated.getMeetingroomId());
+				returnedAgent.setMeetingRoomExternalId(meetingRoomDto.getExternalId());
+			}
 			
 			LOGGER.debug( "End call AgentApiEndpointImpl.updateStatus  at: " + new Date() );
 			
