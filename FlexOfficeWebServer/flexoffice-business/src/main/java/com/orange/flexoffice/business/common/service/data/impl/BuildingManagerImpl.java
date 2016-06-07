@@ -161,7 +161,7 @@ public class BuildingManagerImpl implements BuildingManager {
 			if(building.getNbFloors() < oldBuildingDao.getNbFloors()){
 				List<RoomDao> rooms = roomRepository.findRoomsByBuildingId(building.getId());
 				for(RoomDao room :rooms){
-					if (room.getFloor() > building.getNbFloors()){ 
+					if (room.getFloor() >= building.getNbFloors()){ 
 						LOGGER.debug("ConfigurationEndpoint.update : Can not update buildding floor because rooms are on deleted floors");
 						LOGGER.error("ConfigurationEndpoint.update : Can not update buildding floor because rooms are on deleted floors");
 						throw new InvalidParametersException("ConfigurationEndpoint.update : Can not update buildding floor because rooms are on deleted floors");
@@ -170,7 +170,7 @@ public class BuildingManagerImpl implements BuildingManager {
 				// If newNbFloors < oldNBFloors && meeting room associated to deleted floors -> throws exception
 				List<MeetingRoomDao> meetingRooms = meetingRoomRepository.findMeetingRoomsByBuildingId(building.getId());
 				for(MeetingRoomDao meetingRoom :meetingRooms){
-					if (meetingRoom.getFloor() > building.getNbFloors()){ 
+					if (meetingRoom.getFloor() >= building.getNbFloors()){ 
 						LOGGER.debug("ConfigurationEndpoint.update : Can not update buildding floor because meeting meeting rooms are on deleted floors");
 						LOGGER.error("ConfigurationEndpoint.update : Can not update buildding floor because meeting meeting rooms are on deleted floors");
 						throw new InvalidParametersException("ConfigurationEndpoint.update : Can not update buildding floor because meeting rooms are on deleted floors");
