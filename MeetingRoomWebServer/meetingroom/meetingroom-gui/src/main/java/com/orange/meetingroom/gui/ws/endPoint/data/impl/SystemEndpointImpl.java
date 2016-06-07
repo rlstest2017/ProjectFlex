@@ -65,7 +65,7 @@ public class SystemEndpointImpl implements SystemEndpoint {
 				system.setDashboardTimeout(BigInteger.valueOf(data.getDashboardTimeout()));
 				system.setDurationStep(BigInteger.valueOf(data.getDurationStep()));
 				system.setHourEnd(BigInteger.valueOf(data.getHourEnd()));
-				system.setHourStart(BigInteger.valueOf(data.getHourEnd()));
+				system.setHourStart(BigInteger.valueOf(data.getHourStart()));
 				system.setInactivityTime(BigInteger.valueOf(data.getInactivityTime()));
 				system.setMaxDuration(BigInteger.valueOf(data.getMaxDuration()));
 				system.setMeetingRoomTimeout(BigInteger.valueOf(data.getMeetingRoomTimeout()));
@@ -141,17 +141,5 @@ public class SystemEndpointImpl implements SystemEndpoint {
 		}
 		
 	}
-	
-	@Override
-	public Response options() {
-	    return Response.ok("")
-	            .header("Access-Control-Allow-Origin", "*")
-	            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization, x-auth-token")
-	            .header("Access-Control-Allow-Credentials", "true")
-	            .header("Access-Control-Allow-Methods", "OPTIONS, HEAD, GET, POST, PUT, DELETE")
-	            .header("Access-Control-Max-Age", "1209600")
-	            .build();
-	}
-	
 
 }

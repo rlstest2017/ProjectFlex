@@ -2,12 +2,12 @@ package com.orange.meetingroom.gui.ws.endPoint.data;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
-import javax.ws.rs.OPTIONS;
+//import javax.ws.rs.OPTIONS;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+//import javax.ws.rs.core.Response;
 
 import com.orange.meetingroom.gui.ws.model.SystemCurrentDate;
 import com.orange.meetingroom.gui.ws.model.SystemRemoteMacAddress;
@@ -59,11 +59,6 @@ public interface SystemEndpoint {
 	@Path(MAC_ADDRESS)
 	@Produces(MediaType.APPLICATION_JSON)
 	SystemRemoteMacAddress getSystemRemoteMacAddress(@Context HttpServletRequest req);
-	
-	
-	@OPTIONS
-	@Path("{path : .*}")
-	Response options();
 		
 }
 

@@ -64,7 +64,7 @@ public class CustomTokenAuthenticationFilter extends AbstractAuthenticationProce
     	}   
     	
     	//String token = request.getHeader(HEADER_SECURITY_TOKEN);
-    	String token = "ZmxleG9mZmljZUBvcmFuZ2UuY29tOjE0NTk1MTQ0ODM1OTE=";
+    	String token = "UNKNOWN";
         logger.debug("token found:"+token);
         AbstractAuthenticationToken userAuthenticationToken = authUserByToken(token);
         if(userAuthenticationToken == null) { 
