@@ -8,10 +8,11 @@
 		http://www.springframework.org/schema/util 
 		http://www.springframework.org/schema/util/spring-util-4.1.xsd">
 
+	<!-- Import Connector -->
 	
-	<util:properties id="appProperties" location="classpath:meetingroom-test.properties" />
-    <!--  <util:properties id="appProperties" location="file:/home/flexoffice/flexoffice-webserver/Config/meetingroom-test.properties" /> 
-    <context:property-placeholder  ignore-resource-not-found="true" properties-ref="appProperties"/>-->
+	 <util:properties id="appProperties" location="classpath*:spring/meetingroom-test.properties" />
+    <!--  <util:properties id="appProperties" location="file:/home/flexoffice/flexoffice-webserver/Config/meetingroom-test.properties" />--> 
+    <context:property-placeholder  ignore-resource-not-found="true" properties-ref="appProperties"/> 
     
     <bean id="httpClient" class="org.apache.http.impl.client.HttpClients" factory-method="createDefault" >
 	</bean>
