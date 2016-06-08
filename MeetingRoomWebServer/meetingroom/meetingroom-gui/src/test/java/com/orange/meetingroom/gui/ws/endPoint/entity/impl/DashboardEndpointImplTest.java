@@ -47,7 +47,7 @@ public class DashboardEndpointImplTest {
 		try {
 			DashboardInput params = new DashboardInput();
 			params.setDashboardStatus(EDashboardStatus.ONLINE);
-			DashboardOutput output = dashboardEndpoint.updateDashboard("AB:AB:AB:AB:AB:AB", params);
+			DashboardOutput output = dashboardEndpoint.updateDashboard("RL:RL:RL:RL:RL:RL", params);
 			
 			// Asserts
 			assertEquals("NONE", output.getCommand().toString());

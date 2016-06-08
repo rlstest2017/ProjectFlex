@@ -13,6 +13,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Log4jConfigurer;
 
 import com.orange.meetingroom.gui.ws.endPoint.data.SystemEndpoint;
+import com.orange.meetingroom.gui.ws.model.SystemCurrentDate;
 import com.orange.meetingroom.gui.ws.model.SystemReturn;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -47,7 +48,7 @@ public class SystemEndpointImplTest {
 			SystemReturn output = systemEndpoint.getSystem();
 			
 			// Asserts
-			assertEquals("3", output.getAgentTimeout().toString());
+			assertEquals("7", output.getHourStart().toString());
 			
 			
 		} catch (Exception e) {
@@ -63,7 +64,8 @@ public class SystemEndpointImplTest {
 		// SetUp
 		boolean expectedResult = false;
 		try {
-			systemEndpoint.getSystemCurrentDate();
+			SystemCurrentDate returnedDate = systemEndpoint.getSystemCurrentDate();
+			assertEquals("1465379549", returnedDate.getCurrentDate().toString());
 		} catch (Exception e) {
 			expectedResult = true;
 			LOGGER.error(e.getMessage());

@@ -1,5 +1,8 @@
 package com.orange.meetingroom.connector.flexoffice.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import com.orange.meetingroom.connector.flexoffice.model.request.AgentConnectorInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.DashboardConnectorInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.MeetingRoomData;
@@ -43,15 +46,18 @@ public class FlexOfficeDataTools {
 	 * constructJSONMeetingRoomData
 	 * @param params MeetingRoomData
 	 * @return String
+	 * @throws UnsupportedEncodingException 
 	 */
-	public String constructJSONMeetingRoomData(MeetingRoomData params) {
+	public String constructJSONMeetingRoomData(MeetingRoomData params) throws UnsupportedEncodingException {
 		
 		final StringBuilder inputJson = new StringBuilder( 1000 );
 		inputJson.append( "{\"" );
 		inputJson.append( "meetingRoomStatus\":\""+params.getMeetingRoomStatus().toString());
 		inputJson.append( "\",\"startDate\":"+params.getStartDate());
 		inputJson.append( ",\"endDate\":"+params.getEndDate());
-		inputJson.append( ",\"organizerLabel\":\""+params.getOrganizerLabel());
+		if (params.getOrganizerLabel() != null) {
+			inputJson.append( ",\"organizerLabel\":\""+URLEncoder.encode(params.getOrganizerLabel(), "UTF-8"));
+		} 
 		inputJson.append( "\"}" );
 		return inputJson.toString();
 	}

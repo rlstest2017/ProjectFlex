@@ -1,6 +1,8 @@
 package com.orange.meetingroom.connector.flexoffice.impl;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -175,7 +177,7 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 		HttpGet getRequest = null;
 		try	{
 		//HttpGet getRequest = new HttpGet("http://192.168.103.193:8080/flexoffice-meetingroomapi/v2/dashboards/{dashboardMacAddress}/config");
-		String request = flexofficeMeetingRoomAPIServerURL + PathConst.DASHBOARDS_PATH + "/" + params.getDashboardMacAddress() + PathConst.CONFIG_PATH;
+		String request = flexofficeMeetingRoomAPIServerURL + PathConst.DASHBOARDS_PATH + "/" + URLEncoder.encode(params.getDashboardMacAddress(), "UTF-8") + PathConst.CONFIG_PATH;
 		getRequest = new HttpGet(request);
 		//Set the API media type in http accept header
 		getRequest.addHeader("accept", "application/json");
@@ -236,7 +238,7 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 		HttpPut putRequest = null;
 		try	{
 			// Define a putRequest request
-			String request = flexofficeMeetingRoomAPIServerURL + PathConst.DASHBOARDS_PATH +"/" + params.getDashboardMacAddress();
+			String request = flexofficeMeetingRoomAPIServerURL + PathConst.DASHBOARDS_PATH +"/" + URLEncoder.encode(params.getDashboardMacAddress(), "UTF-8");
 			putRequest = new HttpPut(request);
 			//Set the API media type in http content-type header
 			putRequest.addHeader("content-type", "application/json");
@@ -305,7 +307,7 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 		HttpPut putRequest = null;
 		try	{
 			// Define a putRequest request
-			String request = flexofficeMeetingRoomAPIServerURL + PathConst.AGENTS_PATH +"/" + params.getAgentMacAddress();
+			String request = flexofficeMeetingRoomAPIServerURL + PathConst.AGENTS_PATH +"/" + URLEncoder.encode(params.getAgentMacAddress(), "UTF-8");
 			putRequest = new HttpPut(request);
 			//Set the API media type in http content-type header
 			putRequest.addHeader("content-type", "application/json");
@@ -370,12 +372,12 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin call updateMeetingRoomData(MeetingRoomData params) method");
 		}
-		// construct the writer from MeetingRoomData
-		String writer = flexofficeDataTools.constructJSONMeetingRoomData(params);
 		HttpPut putRequest = null;
 		try	{
+		// construct the writer from MeetingRoomData
+		String writer = flexofficeDataTools.constructJSONMeetingRoomData(params);
 			// Define a putRequest request
-			String request = flexofficeMeetingRoomAPIServerURL + PathConst.MEETINGROOMS_PATH +"/" + params.getMeetingRoomExternalId();
+			String request = flexofficeMeetingRoomAPIServerURL + PathConst.MEETINGROOMS_PATH +"/" + URLEncoder.encode(params.getMeetingRoomExternalId(), "UTF-8");
 			putRequest = new HttpPut(request);
 			//Set the API media type in http content-type header
 			putRequest.addHeader("content-type", "application/json");
@@ -399,6 +401,9 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 		} catch (ClientProtocolException ex) {
 			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
 			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
+		} catch (UnsupportedEncodingException e) {
+			LOGGER.debug( "UnsupportedEncodingException exception in updateMeetingRoomData() method");
+			throw new MeetingRoomInternalServerException("Error in url encode method, with message: " + e.getMessage());
 		} catch (IOException e) {
 			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage(), e);
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());

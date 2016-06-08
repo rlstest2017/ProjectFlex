@@ -48,10 +48,10 @@ public class AgentEndpointImplTest {
 		try {
 			AgentInput params = new AgentInput();
 			params.setAgentStatus(EAgentStatus.ECONOMIC);
-			AgentOutput output = agentEndpoint.updateAgent("AB:AB:AB:AB:AB:AB", params);
+			AgentOutput output = agentEndpoint.updateAgent("RL:RL:RL:RL:RL:RL", params);
 			
 			// Asserts
-			assertEquals("brehat.rennes@microsoft.cad.aql.fr", output.getMeetingRoomExternalId().toString());
+			assertEquals("[TEST]gardian.paris@microsoft.cad.aql.fr", output.getMeetingRoomExternalId().toString());
 			
 			
 		} catch (Exception e) {

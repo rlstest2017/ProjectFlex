@@ -404,12 +404,14 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call setBooking(SetBookingParameters params) method");
 		}
+		
+		HttpPost postRequest = null;
+		
+		try	{
 		BookingSummary bookingSummary = new BookingSummary();
 		// construct writer using SetBookingParameters
 		// String writer = "RoomID=brehat.rennes@microsoft.cad.aql.fr&OrganizerFullName=&Subject=&format=json&StartDate=1461060000&EndDate=1461060600&Acknowledged=1";
 		String writer = dataTools.setBookingParametersToUrlEncode(params);
-		HttpPost postRequest = null;
-		try	{
 			//Define a postRequest request
 			//HttpPost postRequest = new HttpPost("http://192.168.103.193/services/SetBooking.php");
 			postRequest = new HttpPost(phpSetBookingsURL);
@@ -451,6 +453,9 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 		} catch (ClientProtocolException ex) {
 			LOGGER.error("Error in httpClient.execute() method, with message: " + ex.getMessage(), ex);
 			throw new MeetingRoomInternalServerException("Error in httpClient.execute() method, with message: " + ex.getMessage());
+		} catch (UnsupportedEncodingException e) {
+			LOGGER.debug( "UnsupportedEncodingException exception in setBooking(SetBookingParameters params) method");
+			throw new MeetingRoomInternalServerException("Error in url encode method, with message: " + e.getMessage());
 		} catch (IOException e) {
 			LOGGER.error("Error in EntityUtils.toString() method, with message: " + e.getMessage(), e);
 			throw new MeetingRoomInternalServerException("Error in EntityUtils.toString() method, with message: " + e.getMessage());

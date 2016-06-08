@@ -29,12 +29,17 @@ public class DataTools {
 	 * getAgentBookingsParametersToUrlEncode
 	 * @param params
 	 * @return
+	 * @throws UnsupportedEncodingException 
 	 */
-	public String getAgentBookingsParametersToUrlEncode(GetAgentBookingsParameters params) {
+	public String getAgentBookingsParametersToUrlEncode(GetAgentBookingsParameters params) throws UnsupportedEncodingException {
 		final StringBuilder urlEncodeParameters = new StringBuilder( 1000 );
 		urlEncodeParameters.append( "format="+params.getFormat());
 		urlEncodeParameters.append( "&" );
-		urlEncodeParameters.append( "RoomID="+params.getRoomID());
+		if (params.getRoomID() != null) {
+			urlEncodeParameters.append( "RoomID="+URLEncoder.encode(params.getRoomID(), "UTF-8"));
+		} else {
+			urlEncodeParameters.append( "RoomID="+params.getRoomID());	
+		}
 		urlEncodeParameters.append( "&" );
 		urlEncodeParameters.append( "ForceUpdateCache="+params.getForceUpdateCache());
 		urlEncodeParameters.append( "&" );
@@ -46,8 +51,9 @@ public class DataTools {
 	 * getDashboardBookingsParametersToUrlEncode
 	 * @param params
 	 * @return
+	 * @throws UnsupportedEncodingException 
 	 */
-	public String getDashboardBookingsParametersToUrlEncode(GetDashboardBookingsParameters params) {
+	public String getDashboardBookingsParametersToUrlEncode(GetDashboardBookingsParameters params) throws UnsupportedEncodingException {
 		final StringBuilder urlEncodeParameters = new StringBuilder( 1000 );
 		urlEncodeParameters.append( "format="+params.getFormat());
 		if (params.getMaxBookings() != null) {
@@ -56,8 +62,10 @@ public class DataTools {
 		}
 		urlEncodeParameters.append( "&" );
 		urlEncodeParameters.append( "StartDate="+params.getStartDate());
-		urlEncodeParameters.append( "&" );
-		urlEncodeParameters.append( "RoomGroupID="+params.getRoomGroupID());
+		if (params.getRoomGroupID() != null) {
+			urlEncodeParameters.append( "&" );
+			urlEncodeParameters.append( "RoomGroupID="+URLEncoder.encode(params.getRoomGroupID(), "UTF-8"));
+		} 
 		urlEncodeParameters.append( "&" );
 		urlEncodeParameters.append( "_="+System.currentTimeMillis()); // in milliseconds !!!
 		return urlEncodeParameters.toString();
@@ -67,14 +75,21 @@ public class DataTools {
 	 * setBookingParametersToUrlEncode
 	 * @param params
 	 * @return
+	 * @throws UnsupportedEncodingException 
 	 */
-	public String setBookingParametersToUrlEncode(SetBookingParameters params) {
+	public String setBookingParametersToUrlEncode(SetBookingParameters params) throws UnsupportedEncodingException {
 		final StringBuilder urlEncodeParameters = new StringBuilder( 1000 );
-		urlEncodeParameters.append( "RoomID="+params.getRoomID());
-		urlEncodeParameters.append( "&" );
-		urlEncodeParameters.append( "OrganizerFullName="+params.getOrganizerFullName());
-		urlEncodeParameters.append( "&" );
-		urlEncodeParameters.append( "Subject="+params.getSubject());
+		if (params.getRoomID() != null) {
+			urlEncodeParameters.append( "RoomID="+URLEncoder.encode(params.getRoomID(), "UTF-8"));
+		} 
+		if (params.getOrganizerFullName() != null) {
+			urlEncodeParameters.append( "&" );
+			urlEncodeParameters.append( "OrganizerFullName="+URLEncoder.encode(params.getOrganizerFullName(), "UTF-8"));
+		} 
+		if (params.getSubject() != null) {
+			urlEncodeParameters.append( "&" );
+			urlEncodeParameters.append( "Subject="+URLEncoder.encode(params.getSubject(), "UTF-8"));
+		} 
 		urlEncodeParameters.append( "&" );
 		urlEncodeParameters.append( "format="+params.getFormat());
 		urlEncodeParameters.append( "&" );
@@ -94,11 +109,17 @@ public class DataTools {
 	 */
 	public String updateBookingParametersToUrlEncode(UpdateBookingParameters params) throws UnsupportedEncodingException {
 		final StringBuilder urlEncodeParameters = new StringBuilder( 1000 );
-		urlEncodeParameters.append( "RoomID="+params.getRoomID());
-		urlEncodeParameters.append( "&" );
-		urlEncodeParameters.append( "IDReservation="+URLEncoder.encode(params.getIdReservation(), "UTF-8"));
-		urlEncodeParameters.append( "&" );
-		urlEncodeParameters.append( "RevisionReservation="+URLEncoder.encode(params.getRevisionReservation(), "UTF-8"));
+		if (params.getRoomID() != null) {
+			urlEncodeParameters.append( "RoomID="+URLEncoder.encode(params.getRoomID(), "UTF-8"));
+		} 
+		if (params.getIdReservation() != null) {
+			urlEncodeParameters.append( "&" );
+			urlEncodeParameters.append( "IDReservation="+URLEncoder.encode(params.getIdReservation(), "UTF-8"));
+		} 
+		if (params.getRevisionReservation() != null) {
+			urlEncodeParameters.append( "&" );
+			urlEncodeParameters.append( "RevisionReservation="+URLEncoder.encode(params.getRevisionReservation(), "UTF-8"));
+		} 
 		urlEncodeParameters.append( "&" );
 		urlEncodeParameters.append( "format="+params.getFormat());
 		if (params.getEndDate() != null) { // to close meeting
@@ -110,7 +131,9 @@ public class DataTools {
 			urlEncodeParameters.append( "&" );
 			urlEncodeParameters.append( "Acknowledged="+params.getAcknowledged());
 			urlEncodeParameters.append( "&" );
-			urlEncodeParameters.append( "Subject="+params.getSubject());
+			if (params.getSubject() != null) {
+				urlEncodeParameters.append( "Subject="+URLEncoder.encode(params.getSubject(), "UTF-8"));
+			} 
 		}
 		return urlEncodeParameters.toString();
 	}
