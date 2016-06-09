@@ -182,7 +182,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 				meetingroomDao.setFloor(meetingroomInput.getFloor().longValue());
 			
 			if (meetingroomInput.getAgent() !=null) {
-				AgentDto agent = agentManager.findByMacAddress(meetingroomInput.getAgent().getMacAddress());
+				AgentDto agent = agentManager.findByMacAddress(meetingroomInput.getAgent().getMacAddress().toLowerCase().replaceAll("-", ":"));
 				meetingroomDao.setAgentId(Long.valueOf(agent.getId()));
 			} else {
 				meetingroomDao.setAgentId(0L);
@@ -253,7 +253,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			meetingroomDao.setFloor(meetingroomInput.getFloor().longValue());
 	
 			if (meetingroomInput.getAgent() !=null) {
-				AgentDto agent = agentManager.findByMacAddressWithoutMeetingRoomInfo(meetingroomInput.getAgent().getMacAddress());
+				AgentDto agent = agentManager.findByMacAddressWithoutMeetingRoomInfo(meetingroomInput.getAgent().getMacAddress().toLowerCase().replaceAll("-", ":"));
 				meetingroomDao.setAgentId(Long.valueOf(agent.getId()));
 			} else {
 				meetingroomDao.setAgentId(0L);

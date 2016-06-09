@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_MeetingRoomStatus;
 import com.orange.flexoffice.dao.common.model.object.MeetingRoomBuildingInfosDto;
 import com.orange.flexoffice.dao.common.repository.data.MeetingRoomDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.MeetingRoomDaoMetadata;
@@ -187,7 +188,11 @@ public class MeetingRoomDaoRepository extends DataRepository<MeetingRoomDao> imp
 	public MeetingRoomDao updateMeetingRoomData(MeetingRoomDao data) throws DataAccessException{
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
-		jdbcTemplate.update(updateMeetingRoomDataQuery, paramBean, keyHolder);
+		if (E_MeetingRoomStatus.UNKNOWN.equals(data.getStatus())){
+			jdbcTemplate.update(updateMeetingRoomDataForUnknownStatusQuery, paramBean, keyHolder);
+		} else {
+			jdbcTemplate.update(updateMeetingRoomDataQuery, paramBean, keyHolder);
+		}
 		// Retrieves generated id of saved data.
 		Integer id = (Integer)keyHolder.getKeys().get("id");
 		data.setId(id.longValue());	

@@ -144,6 +144,7 @@ public abstract class DataRepository<T extends Data>
 	protected final String updateRoomStatusQuery;
 	protected final String updateMeetingRoomStatusQuery;
 	protected final String updateMeetingRoomDataQuery;
+	protected final String updateMeetingRoomDataForUnknownStatusQuery;
 	protected final String updateSensorQuery;
 	protected final String updateSensorStatusQuery;
 	protected final String updateSensorRoomIdQuery;
@@ -304,6 +305,7 @@ public abstract class DataRepository<T extends Data>
 		updateRoomStatusQuery = String.format(UPDATE_ROOM_STATUS_TEMPLATE, getTableName());// set also humidity, temperature & user_id if filled
 		updateMeetingRoomStatusQuery = String.format(UPDATE_MEETINGROOM_STATUS_TEMPLATE, getTableName()); // set also oragnizzerlabel if filled
 		updateMeetingRoomDataQuery = String.format(UPDATE_MEETINGROOM_DATA_TEMPLATE, getTableName());
+		updateMeetingRoomDataForUnknownStatusQuery = String.format(UPDATE_MEETINGROOM_FOR_UNKNOWN_STATUS_DATA_TEMPLATE, getTableName());
 		updateSensorQuery = String.format(UPDATE_SENSOR_TEMPLATE, getTableName(), getColumnColName());
 		updateSensorStatusQuery = String.format(UPDATE_SENSOR_STATUS_TEMPLATE, getTableName(), getColumnColName());
 		updateSensorRoomIdQuery = String.format(UPDATE_SENSOR_ROOM_ID_TEMPLATE, getTableName());

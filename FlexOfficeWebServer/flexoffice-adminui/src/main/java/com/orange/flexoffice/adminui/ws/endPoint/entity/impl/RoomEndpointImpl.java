@@ -207,7 +207,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		roomDao.setFloor(roomInput.getFloor().longValue());
 		
 		if (roomInput.getGateway() !=null) {
-			GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress());
+			GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress().toLowerCase().replaceAll("-", ":"));
 			roomDao.setGatewayId(Long.valueOf(gateway.getId()));
 		} else {
 			roomDao.setGatewayId(0L);
@@ -282,7 +282,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			roomDao.setFloor(roomInput.getFloor().longValue());
 	
 			if (roomInput.getGateway() !=null) {
-				GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress());
+				GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress().toLowerCase().replaceAll("-", ":"));
 				roomDao.setGatewayId(Long.valueOf(gateway.getId()));
 			} else {
 				roomDao.setGatewayId(0L);

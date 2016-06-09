@@ -11,6 +11,15 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.orange.flexoffice.business.common.enums.EnumErrorModel;
+import com.orange.flexoffice.business.common.exception.DataNotExistsException;
+import com.orange.flexoffice.business.common.service.data.GatewayManager;
+import com.orange.flexoffice.business.common.service.data.TestManager;
+import com.orange.flexoffice.business.gatewayapi.dto.GatewayCommand;
+import com.orange.flexoffice.dao.common.model.data.GatewayDao;
+import com.orange.flexoffice.dao.common.model.data.SensorDao;
+import com.orange.flexoffice.dao.common.model.object.GatewayDto;
+import com.orange.flexoffice.dao.common.model.object.RoomDto;
 import com.orange.flexoffice.gatewayapi.ws.endPoint.entity.GatewayApiEndpoint;
 import com.orange.flexoffice.gatewayapi.ws.model.ECommandModel;
 import com.orange.flexoffice.gatewayapi.ws.model.EGatewayStatus;
@@ -22,15 +31,6 @@ import com.orange.flexoffice.gatewayapi.ws.model.ObjectFactory;
 import com.orange.flexoffice.gatewayapi.ws.model.Room;
 import com.orange.flexoffice.gatewayapi.ws.model.SensorSummary;
 import com.orange.flexoffice.gatewayapi.ws.utils.ErrorMessageHandler;
-import com.orange.flexoffice.business.common.enums.EnumErrorModel;
-import com.orange.flexoffice.business.common.exception.DataNotExistsException;
-import com.orange.flexoffice.business.common.service.data.GatewayManager;
-import com.orange.flexoffice.business.common.service.data.TestManager;
-import com.orange.flexoffice.business.gatewayapi.dto.GatewayCommand;
-import com.orange.flexoffice.dao.common.model.data.GatewayDao;
-import com.orange.flexoffice.dao.common.model.data.SensorDao;
-import com.orange.flexoffice.dao.common.model.object.GatewayDto;
-import com.orange.flexoffice.dao.common.model.object.RoomDto;
 
 /**
  * GatewayApiEndpointImpl
@@ -82,7 +82,7 @@ public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 		try {
 			List<Room> rooms = new ArrayList<Room>();
 			
-			List<RoomDto> data = gatewayManager.findGatewayRooms(gatewayMacAddress);
+			List<RoomDto> data = gatewayManager.findGatewayRooms(gatewayMacAddress.toLowerCase().replaceAll("-", ":"));
 			
 			LOGGER.debug("There is: " + data.size() + " rooms");
 			
@@ -117,7 +117,7 @@ public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 		try {
 		LOGGER.debug( "Begin call doPut method for GatewayEndpoint at: " + new Date() );
 		GatewayDao gatewayDao = new GatewayDao();
-		gatewayDao.setMacAddress(macAddress);
+		gatewayDao.setMacAddress(macAddress.toLowerCase().replaceAll("-", ":"));
 		gatewayDao.setStatus(gateway.getGatewayStatus().toString());
 		
 			GatewayCommand command = gatewayManager.updateStatus(gatewayDao);
@@ -146,7 +146,7 @@ public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 	
 	@Override
 	public GatewayDto findByMacAddress(String macAddress) throws DataNotExistsException {
-		return gatewayManager.findByMacAddress(macAddress);
+		return gatewayManager.findByMacAddress(macAddress.toLowerCase().replaceAll("-", ":"));
 	}
 
 	@Override

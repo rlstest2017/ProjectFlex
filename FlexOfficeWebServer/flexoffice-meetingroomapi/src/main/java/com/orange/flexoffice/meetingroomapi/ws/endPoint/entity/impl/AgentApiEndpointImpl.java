@@ -50,7 +50,7 @@ public class AgentApiEndpointImpl implements AgentApiEndpoint {
 		AgentDao agentUpdated = new AgentDao();
 		try {
 			AgentDao agentDao = new AgentDao();
-			agentDao.setMacAddress(macAddress);
+			agentDao.setMacAddress(macAddress.toLowerCase().replaceAll("-", ":"));
 			agentDao.setStatus(agent.getAgentStatus().toString());
 			agentUpdated = agentManager.updateStatus(agentDao);
 			
