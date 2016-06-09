@@ -137,15 +137,15 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		List<MeetingRoomDao> dataMeetingRoomList = meetingRoomManager.findMeetingRoomsByCriteria(countryId, regionId, cityId, buildingId, floor);
 		
 		if (dataMeetingRoomList != null) {
-			for (RoomDao roomDao : dataList) {
+			for (MeetingRoomDao meetingRoomDao : dataMeetingRoomList) {
 				RoomSummary room = factory.createRoomSummary();
-				room.setId(roomDao.getColumnId());
-				room.setName(roomDao.getName());
-				room.setType(ERoomType.valueOf(roomDao.getType()));
-				if (roomDao.getCapacity() != null) {
-					room.setCapacity(BigInteger.valueOf(roomDao.getCapacity()));
+				room.setId(meetingRoomDao.getColumnId());
+				room.setName(meetingRoomDao.getName());
+				room.setType(ERoomType.valueOf(meetingRoomDao.getType()));
+				if (meetingRoomDao.getCapacity() != null) {
+					room.setCapacity(BigInteger.valueOf(meetingRoomDao.getCapacity()));
 				}
-				room.setStatus(ERoomStatus.valueOf(roomDao.getStatus().toString()));
+				room.setStatus(ERoomStatus.valueOf(meetingRoomDao.getStatus().toString()));
 				room.setKind(ERoomKind.MEETINGROOM);
 				roomList.add(room);
 			}
