@@ -14,6 +14,7 @@ import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerExcep
 import com.orange.meetingroom.connector.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.exception.PhpInternalServerException;
 import com.orange.meetingroom.connector.flexoffice.FlexOfficeConnectorClient;
+import com.orange.meetingroom.connector.flexoffice.enums.EnumMeetingRoomStatus;
 import com.orange.meetingroom.connector.flexoffice.model.request.MeetingRoomData;
 import com.orange.meetingroom.connector.php.PhpConnectorClient;
 import com.orange.meetingroom.connector.php.model.request.GetAgentBookingsParameters;
@@ -66,18 +67,49 @@ public class TaskManagerImpl implements TaskManager {
 						}
 					} else {
 						LOGGER.debug("MeetingRoomData get from processMeetingRoomStatus() is null for externalId: " + externalId);
+						// put status UNKNOWN
+						updateMeetingRoomStatus(externalId); 
 					}
 				} catch (PhpInternalServerException e) {
 					LOGGER.debug("PhpInternalServerException from getBookingsFromAgent() " + e.getMessage(), e);
+					// put status UNKNOWN
+					updateMeetingRoomStatus(externalId);
 				} catch (DataNotExistsException e) {
 					LOGGER.debug("DataNotExistsException from getBookingsFromAgent() " + e.getMessage(), e);
+					// put status UNKNOWN
+					updateMeetingRoomStatus(externalId);
 				} catch (MethodNotAllowedException e) {
 					LOGGER.debug("MethodNotAllowedException from getBookingsFromAgent() " + e.getMessage(), e);
+					// put status UNKNOWN
+					updateMeetingRoomStatus(externalId);
 				}
 			} // end for
 			
 		} catch ( FlexOfficeInternalServerException | MeetingRoomInternalServerException | RuntimeException e) {
 			LOGGER.debug("Un exception was thrown from getMeetingRoomsInTimeOut() method: " + e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * updateMeetingRoomStatus
+	 * @param externalId
+	 */
+	private void updateMeetingRoomStatus(String externalId) {
+		
+		MeetingRoomData data = new MeetingRoomData();
+		data.setMeetingRoomStatus(EnumMeetingRoomStatus.UNKNOWN);
+		data.setMeetingRoomExternalId(externalId);
+		
+		try {
+			// call flexOfficeConnectorManager for send meetingRoomInfos (status, ...)
+			flexofficeConnector.updateMeetingRoomData(data);
+			LOGGER.debug("Update succefull meetingRoom: " + externalId); 
+		} catch (DataNotExistsException e) {
+				LOGGER.debug("DataNotExistsException in updateMeetingRoomData() " + e.getMessage(), e);
+		} catch (FlexOfficeInternalServerException e) {
+			LOGGER.debug("FlexOfficeInternalServerException in updateMeetingRoomData() " + e.getMessage(), e);
+		} catch (MeetingRoomInternalServerException e) {
+			LOGGER.debug("MeetingRoomInternalServerException in updateMeetingRoomData() " + e.getMessage(), e);
 		}
 	}
 

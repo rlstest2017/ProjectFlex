@@ -57,8 +57,9 @@ public class FlexOfficeDataTools {
 		inputJson.append( ",\"endDate\":"+params.getEndDate());
 		if (params.getOrganizerLabel() != null) {
 			inputJson.append( ",\"organizerLabel\":\""+URLEncoder.encode(params.getOrganizerLabel(), "UTF-8"));
+			inputJson.append( "\"");
 		} 
-		inputJson.append( "\"}" );
+		inputJson.append( "}" );
 		return inputJson.toString();
 	}
 

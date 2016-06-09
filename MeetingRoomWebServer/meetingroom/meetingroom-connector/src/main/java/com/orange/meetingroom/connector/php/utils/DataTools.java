@@ -81,7 +81,9 @@ public class DataTools {
 		final StringBuilder urlEncodeParameters = new StringBuilder( 1000 );
 		if (params.getRoomID() != null) {
 			urlEncodeParameters.append( "RoomID="+URLEncoder.encode(params.getRoomID(), "UTF-8"));
-		} 
+		} else {
+			urlEncodeParameters.append( "RoomID="+params.getRoomID());
+		}
 		if (params.getOrganizerFullName() != null) {
 			urlEncodeParameters.append( "&" );
 			urlEncodeParameters.append( "OrganizerFullName="+URLEncoder.encode(params.getOrganizerFullName(), "UTF-8"));
@@ -111,7 +113,9 @@ public class DataTools {
 		final StringBuilder urlEncodeParameters = new StringBuilder( 1000 );
 		if (params.getRoomID() != null) {
 			urlEncodeParameters.append( "RoomID="+URLEncoder.encode(params.getRoomID(), "UTF-8"));
-		} 
+		} else {
+			urlEncodeParameters.append( "RoomID="+params.getRoomID());
+		}
 		if (params.getIdReservation() != null) {
 			urlEncodeParameters.append( "&" );
 			urlEncodeParameters.append( "IDReservation="+URLEncoder.encode(params.getIdReservation(), "UTF-8"));
