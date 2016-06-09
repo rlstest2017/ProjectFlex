@@ -188,7 +188,7 @@ public class MeetingRoomDaoRepository extends DataRepository<MeetingRoomDao> imp
 	public MeetingRoomDao updateMeetingRoomData(MeetingRoomDao data) throws DataAccessException{
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
-		if (E_MeetingRoomStatus.UNKNOWN.equals(data.getStatus())){
+		if (E_MeetingRoomStatus.UNKNOWN.toString().equals(data.getStatus())){
 			jdbcTemplate.update(updateMeetingRoomDataForUnknownStatusQuery, paramBean, keyHolder);
 		} else {
 			jdbcTemplate.update(updateMeetingRoomDataQuery, paramBean, keyHolder);
