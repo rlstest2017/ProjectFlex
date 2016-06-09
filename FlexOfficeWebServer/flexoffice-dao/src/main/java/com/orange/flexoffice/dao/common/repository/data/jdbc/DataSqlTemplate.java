@@ -290,6 +290,8 @@ public final class DataSqlTemplate {
 			"update %s set status=CAST(:status AS meetingroomstatus), last_measure_date=now(), organizerlabel=:organizerLabel where id=:id";
 	public static final String UPDATE_MEETINGROOM_DATA_TEMPLATE =
 			"update %s set status=CAST(:status AS meetingroomstatus), last_measure_date=now(), organizerlabel=:organizerLabel, start_date=:startDate, end_date=:endDate where id=:id";
+	public static final String UPDATE_MEETINGROOM_FOR_UNKNOWN_STATUS_DATA_TEMPLATE =
+	"update %s set status=CAST(:status AS meetingroomstatus), organizerlabel=:organizerLabel, start_date=:startDate, end_date=:endDate where id=:id";
 	public static final String UPDATE_ALERT_TEMPLATE =
 			"update %s set name=:name, last_notification=:lastNotification where id=:id";
 	public static final String UPDATE_SENSOR_TEMPLATE =
