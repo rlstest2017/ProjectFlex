@@ -130,8 +130,8 @@ public class DataTools {
 			urlEncodeParameters.append( "StartDate="+params.getStartDate());
 			urlEncodeParameters.append( "&" );
 			urlEncodeParameters.append( "Acknowledged="+params.getAcknowledged());
-			urlEncodeParameters.append( "&" );
 			if (params.getSubject() != null) {
+				urlEncodeParameters.append( "&" );
 				urlEncodeParameters.append( "Subject="+URLEncoder.encode(params.getSubject(), "UTF-8"));
 			} 
 		}
