@@ -59,14 +59,14 @@ public class MeetingRoomEndpointImplTest {
 		assertEquals(false, expectedResult);
 	}
 	
-	@Test
+	//@Test
 	public void TestB() {
 		// SetUp
 		boolean expectedResult = false;
 		try {
-			MeetingRooms output = meetingRoomEndpoint.getBookings("AB:AB:AB:AC:AB:AB");
+			MeetingRooms output = meetingRoomEndpoint.getBookings("rl:rl:rl:rl:rl:rl");
 			// Asserts
-			assertEquals("brehat.rennes@microsoft.cad.aql.fr", output.getRooms().get(0).getMeetingRoomDetails().getMeetingRoomExternalId());
+			assertEquals("[TEST]gardian.paris@microsoft.cad.aql.fr", output.getRooms().get(0).getMeetingRoomDetails().getMeetingRoomExternalId());
 		} catch (Exception e) {
 			expectedResult = true;
 			LOGGER.error(e.getMessage());

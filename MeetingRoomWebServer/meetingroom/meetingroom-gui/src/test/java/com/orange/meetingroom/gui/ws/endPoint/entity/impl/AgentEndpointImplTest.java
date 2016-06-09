@@ -48,7 +48,7 @@ public class AgentEndpointImplTest {
 		try {
 			AgentInput params = new AgentInput();
 			params.setAgentStatus(EAgentStatus.ECONOMIC);
-			AgentOutput output = agentEndpoint.updateAgent("RL:RL:RL:RL:RL:RL", params);
+			AgentOutput output = agentEndpoint.updateAgent("rl:rl:rl:rl:rl:rl", params);
 			
 			// Asserts
 			assertEquals("[TEST]gardian.paris@microsoft.cad.aql.fr", output.getMeetingRoomExternalId().toString());
