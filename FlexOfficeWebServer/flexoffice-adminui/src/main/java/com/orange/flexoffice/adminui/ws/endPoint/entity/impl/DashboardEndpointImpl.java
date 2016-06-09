@@ -104,7 +104,7 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 		
 		
 		try {
-			DashboardDto data = dashboardManager.findByMacAddress(macAddress);
+			DashboardDto data = dashboardManager.findByMacAddress(macAddress.toLowerCase().replaceAll("-", ":"));
 			
 			Dashboard dashboard = factory.createDashboard();
 			dashboard.setId(data.getId());
@@ -242,7 +242,7 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 		LOGGER.debug( "Begin call doPut method for DashboardEndpoint at: " + new Date() );
 
 		DashboardDao dashboardDao = new DashboardDao();
-		dashboardDao.setMacAddress(macAddress);
+		dashboardDao.setMacAddress(macAddress.toLowerCase().replaceAll("-", ":"));
 		dashboardDao.setName(dashboard.getName().trim());
 		dashboardDao.setDescription(dashboard.getDesc());
 		if (dashboard.getBuildingId() != null){
@@ -262,7 +262,7 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 			LOGGER.debug( "Begin call updateDashboard(String id, DashboardInput2 dashboard) method of DashboardEndpoint, with parameters :");
 			final StringBuilder message = new StringBuilder( 1000 );
 			message.append( "macAddress :" );
-			message.append( macAddress );
+			message.append( macAddress.toLowerCase().replaceAll("-", ":") );
 			message.append( "\n" );
 			message.append( "name :" );
 			message.append( dashboard.getName() );
@@ -297,7 +297,7 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 	public Response removeDashboard(String macAddress) {
 		try {
 
-			dashboardManager.delete(macAddress);
+			dashboardManager.delete(macAddress.toLowerCase().replaceAll("-", ":"));
 
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in removeDashboard() DashboardEndpointImpl with message :" + e.getMessage(), e);			
@@ -326,6 +326,6 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 
 	@Override
 	public DashboardDto findByMacAddress(String macAddress) throws DataNotExistsException {
-		return dashboardManager.findByMacAddress(macAddress);
+		return dashboardManager.findByMacAddress(macAddress.toLowerCase().replaceAll("-", ":"));
 	}
 }

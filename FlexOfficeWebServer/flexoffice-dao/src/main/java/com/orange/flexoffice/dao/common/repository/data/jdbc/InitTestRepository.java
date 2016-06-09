@@ -57,9 +57,9 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		
 		String sqlGateways = "INSERT INTO gateways " +
 					"(id, name, mac_address, description, status) VALUES (?, ?, ?, ?, CAST(? AS gatewayStatus))";
-		jdbcTemplateForTest.update(sqlGateways, new Object[] {1, "gateway 1", "FF:EE:ZZ:AA:GG:PP", "gateway 1 test", "ONLINE"});
-		jdbcTemplateForTest.update(sqlGateways, new Object[] {2, "gateway 2", "FF:TT:ZZ:AA:GG:PP", "gateway 2 test", "OFFLINE"});
-		jdbcTemplateForTest.update(sqlGateways, new Object[] {3, "gateway 3", "AA:BB:CC:AA:GG:PP", "gateway 3 test", "ONLINE"});
+		jdbcTemplateForTest.update(sqlGateways, new Object[] {1, "gateway 1", "ff:ee:zz:aa:gg:pp", "gateway 1 test", "ONLINE"});
+		jdbcTemplateForTest.update(sqlGateways, new Object[] {2, "gateway 2", "ff:tt:zz:aa:gg:pp", "gateway 2 test", "OFFLINE"});
+		jdbcTemplateForTest.update(sqlGateways, new Object[] {3, "gateway 3", "aa:bb:cc:aa:gg:pp", "gateway 3 test", "ONLINE"});
 		
 		String sqlSensors = "INSERT INTO sensors " +
 				 	            "(id, identifier, name, type, profile, description, status, room_id) VALUES (?, ?, ?, CAST(? AS sensorType), ?, ?, CAST(? AS sensorStatus), ?)";
@@ -125,11 +125,11 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		
 		String sqlAgents = "INSERT INTO agents " +
 				"(id, name, mac_address, description, status, meetingroom_id, last_measure_date, command) VALUES (?, ?, ?, ?, CAST(? AS agentStatus), ?, CAST(? AS timestamp), CAST(? AS commandModel))";
-		jdbcTemplateForTest.update(sqlAgents, new Object[] {1, "agent 1", "FF:EE:ZZ:AA:GG:PP", "agent 1 test", "ONLINE", 1, "2016-01-21 07:04:35.051909", "ECONOMIC"});
-		jdbcTemplateForTest.update(sqlAgents, new Object[] {2, "agent 2", "FF:TT:ZZ:AA:GG:PP", "agent 2 test", "OFFLINE", 0, "2016-01-22 07:04:35.051909", "ECONOMIC"});
-		jdbcTemplateForTest.update(sqlAgents, new Object[] {3, "agent 3", "AA:BB:CC:AA:GG:PP", "agent 3 test", "ONLINE", 3, "2016-01-23 07:04:35.051909", "STANDBY"});
-		jdbcTemplateForTest.update(sqlAgents, new Object[] {4, "agent 4", "FF:TS:ZZ:AA:GG:PP", "agent 4 test", "OFFLINE", 4, "2016-01-24 07:04:35.051909", "ECONOMIC"});
-		jdbcTemplateForTest.update(sqlAgents, new Object[] {5, "agent 5", "AA:BS:CC:AA:GG:PP", "agent 5 test", "ONLINE", 0, "2016-01-25 07:04:35.051909", "ECONOMIC"});
+		jdbcTemplateForTest.update(sqlAgents, new Object[] {1, "agent 1", "ff:ee:zz:aa:gg:pp", "agent 1 test", "ONLINE", 1, "2016-01-21 07:04:35.051909", "ECONOMIC"});
+		jdbcTemplateForTest.update(sqlAgents, new Object[] {2, "agent 2", "ff:tt:zz:aa:gg:pp", "agent 2 test", "OFFLINE", 0, "2016-01-22 07:04:35.051909", "ECONOMIC"});
+		jdbcTemplateForTest.update(sqlAgents, new Object[] {3, "agent 3", "aa:bb:cc:aa:gg:pp", "agent 3 test", "ONLINE", 3, "2016-01-23 07:04:35.051909", "STANDBY"});
+		jdbcTemplateForTest.update(sqlAgents, new Object[] {4, "agent 4", "ff:ts:zz:aa:gg:pp", "agent 4 test", "OFFLINE", 4, "2016-01-24 07:04:35.051909", "ECONOMIC"});
+		jdbcTemplateForTest.update(sqlAgents, new Object[] {5, "agent 5", "aa:bs:cc:aa:gg:pp", "agent 5 test", "ONLINE", 0, "2016-01-25 07:04:35.051909", "ECONOMIC"});
 		
 		String sqlMeetingRooms = "INSERT INTO meetingrooms " +
 				"(id, external_id, name, organizerLabel, capacity, description, status, type, agent_id, building_id, floor, start_date, end_date, last_measure_date) VALUES"
@@ -142,11 +142,11 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		
 		String sqlDashboards = "INSERT INTO dashboards " +
 				"(id, mac_address, name, description, status, last_measure_date, city_id, building_id, floor, command) VALUES (?, ?, ?, ?, CAST(? AS dashboardStatus), CAST(? AS timestamp), ?, ?, ?, CAST(? AS commandModel))";
-		jdbcTemplateForTest.update(sqlDashboards, new Object[] {1, "FF:EE:ZZ:AA:GG:PP", "dashboard 1", "dashboard 1 test", "ONLINE", "2016-01-21 07:04:35.051909", 1, 1, null, "ECONOMIC"});
-		jdbcTemplateForTest.update(sqlDashboards, new Object[] {2, "FF:TT:ZZ:AA:GG:PP", "dashboard 2", "dashboard 2 test", "OFFLINE", "2016-01-22 07:04:35.051909", 1, 1, 0, "ECONOMIC"});
-		jdbcTemplateForTest.update(sqlDashboards, new Object[] {3, "AA:BB:CC:AA:GG:PP", "dashboard 3", "dashboard 3 test", "ONLINE", "2016-01-23 07:04:35.051909", 1, 1, 0, "ECONOMIC"});
-		jdbcTemplateForTest.update(sqlDashboards, new Object[] {4, "FF:TS:ZZ:AA:GG:PP", "dashboard 4", "dashboard 4 test", "OFFLINE", "2016-01-24 07:04:35.051909", 2, 1, 0, "STANDBY"});
-		jdbcTemplateForTest.update(sqlDashboards, new Object[] {5, "AA:BS:CC:AA:GG:PP", "dashboard 5", "dashboard 5 test", "ONLINE", "2016-01-25 07:04:35.051909", 2, 1, 0, "ECONOMIC"});
+		jdbcTemplateForTest.update(sqlDashboards, new Object[] {1, "ff:ee:zz:aa:gg:pp", "dashboard 1", "dashboard 1 test", "ONLINE", "2016-01-21 07:04:35.051909", 1, 1, null, "ECONOMIC"});
+		jdbcTemplateForTest.update(sqlDashboards, new Object[] {2, "ff:tt:zz:aa:gg:pp", "dashboard 2", "dashboard 2 test", "OFFLINE", "2016-01-22 07:04:35.051909", 1, 1, 0, "ECONOMIC"});
+		jdbcTemplateForTest.update(sqlDashboards, new Object[] {3, "aa:bb:cc:aa:gg:pp", "dashboard 3", "dashboard 3 test", "ONLINE", "2016-01-23 07:04:35.051909", 1, 1, 0, "ECONOMIC"});
+		jdbcTemplateForTest.update(sqlDashboards, new Object[] {4, "ff:ts:zz:aa:gg:pp", "dashboard 4", "dashboard 4 test", "OFFLINE", "2016-01-24 07:04:35.051909", 2, 1, 0, "STANDBY"});
+		jdbcTemplateForTest.update(sqlDashboards, new Object[] {5, "aa:bs:cc:aa:gg:pp", "dashboard 5", "dashboard 5 test", "ONLINE", "2016-01-25 07:04:35.051909", 2, 1, 0, "ECONOMIC"});
 
 		String sqlMeetinRoomGroupsConfiguration = "INSERT INTO meetingroom_groups_configuration (id, building_id, floor, meetingroom_group_id) VALUES (?, ?, ?, ?)";
 		jdbcTemplateForTest.update(sqlMeetinRoomGroupsConfiguration, new Object[] {1, 1, 0, "1_0"});

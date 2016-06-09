@@ -95,7 +95,7 @@ public class AgentEndpointImpl implements AgentEndpoint {
 		LOGGER.debug( "Begin call AgentEndpointImpl.getAgent at: " + new Date() );
 		
 		try {
-			AgentDto data = agentManager.findByMacAddress(macAddress);
+			AgentDto data = agentManager.findByMacAddress(macAddress.toLowerCase().replaceAll("-", ":"));
 			
 			Agent agent = factory.createAgent();
 			agent.setId(data.getId());
@@ -152,7 +152,7 @@ public class AgentEndpointImpl implements AgentEndpoint {
 			final StringBuilder message = new StringBuilder( 1000 );
 			message.append( "\n" );
 			message.append( "macAddress :" );
-			message.append( agent.getMacAddress() );
+			message.append( agent.getMacAddress().toLowerCase().replaceAll("-", ":") );
 			message.append( "name :" );
 			message.append( agent.getName() );
 			message.append( "\n" );
@@ -189,7 +189,7 @@ public class AgentEndpointImpl implements AgentEndpoint {
 		LOGGER.debug( "Begin call doPut method for AgentEndpoint at: " + new Date() );
 
 		AgentDao agentDao = new AgentDao();
-		agentDao.setMacAddress(macAddress);
+		agentDao.setMacAddress(macAddress.toLowerCase().replaceAll("-", ":"));
 		agentDao.setName(agent.getName().trim());
 		agentDao.setDescription(agent.getDesc());
 
@@ -197,7 +197,7 @@ public class AgentEndpointImpl implements AgentEndpoint {
 			LOGGER.debug( "Begin call updateAgent(String id, AgentInput2 agent) method of AgentEndpoint, with parameters :");
 			final StringBuilder message = new StringBuilder( 1000 );
 			message.append( "macAddress :" );
-			message.append( macAddress );
+			message.append( macAddress.toLowerCase().replaceAll("-", ":") );
 			message.append( "\n" );
 			message.append( "name :" );
 			message.append( agent.getName() );
@@ -233,7 +233,7 @@ public class AgentEndpointImpl implements AgentEndpoint {
 	public Response removeAgent(String macAddress) {
 		try {
 
-			agentManager.delete(macAddress);
+			agentManager.delete(macAddress.toLowerCase().replaceAll("-", ":"));
 
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in removeAgent() AgentEndpointImpl with message :" + e.getMessage(), e);			
@@ -256,7 +256,7 @@ public class AgentEndpointImpl implements AgentEndpoint {
 
 	@Override
 	public AgentDto findByMacAddress(String macAddress) throws DataNotExistsException {
-		return agentManager.findByMacAddress(macAddress);
+		return agentManager.findByMacAddress(macAddress.toLowerCase().replaceAll("-", ":"));
 	}
 
 	@Override

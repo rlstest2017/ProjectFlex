@@ -50,7 +50,7 @@ public class DashboardApiEndpointImpl implements DashboardApiEndpoint {
 			
 			LOGGER.debug( "End call DashboardApiEndpointImpl.getConfig  at: " + new Date() );
 			
-			return meetinRoomGroupsConfigurationManager.getConfigurationFiles(macAddress);
+			return meetinRoomGroupsConfigurationManager.getConfigurationFiles(macAddress.toLowerCase().replaceAll("-", ":"));
 		
 		} catch (DataNotExistsException e) {
 			LOGGER.debug("DataNotExistsException in getConfig() DashboardApiEndpointImpl with message :" + e.getMessage(), e);
@@ -68,7 +68,7 @@ public class DashboardApiEndpointImpl implements DashboardApiEndpoint {
 		DashboardOutput returnedDashboard = factory.createDashboardOutput();
 		try {
 			DashboardDao dashboardDao = new DashboardDao();
-			dashboardDao.setMacAddress(identifier);
+			dashboardDao.setMacAddress(identifier.toLowerCase().replaceAll("-", ":"));
 			dashboardDao.setStatus(dashboard.getDashboardStatus().toString());
 			DashboardDao dashboardUpdated = dashboardManager.updateStatus(dashboardDao);
 			
