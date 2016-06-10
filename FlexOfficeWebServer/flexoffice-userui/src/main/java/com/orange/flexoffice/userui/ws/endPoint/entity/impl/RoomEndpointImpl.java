@@ -21,7 +21,6 @@ import com.orange.flexoffice.business.common.service.data.PreferenceUserManager;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.business.common.service.data.UserManager;
-import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 import com.orange.flexoffice.dao.common.model.data.PreferencesDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
@@ -134,7 +133,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		}
 		
 		// Add meeting rooms
-		List<MeetingRoomDao> dataMeetingRoomList = meetingRoomManager.findMeetingRoomsByCriteria(countryId, regionId, cityId, buildingId, floor);
+		/*List<MeetingRoomDao> dataMeetingRoomList = meetingRoomManager.findMeetingRoomsByCriteria(countryId, regionId, cityId, buildingId, floor);
 		
 		if (dataMeetingRoomList != null) {
 			for (MeetingRoomDao meetingRoomDao : dataMeetingRoomList) {
@@ -149,7 +148,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				room.setKind(ERoomKind.MEETINGROOM);
 				roomList.add(room);
 			}
-		}
+		}*/
 
 		LOGGER.debug("UserUi.RoomEndpoint.getRooms List of rooms : nb = " + roomList.size());
 		LOGGER.debug( "End call UserUi.RoomEndpoint.getRooms  at: " + new Date() );
