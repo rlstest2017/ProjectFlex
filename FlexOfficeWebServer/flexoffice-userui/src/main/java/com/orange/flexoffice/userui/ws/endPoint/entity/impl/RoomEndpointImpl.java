@@ -193,9 +193,18 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				
 				MeetingRoomAddon meetingRoomAddon = new MeetingRoomAddon();
 				meetingRoomAddon.setKind(ERoomKind.MEETINGROOM);
-				meetingRoomAddon.setStartDate(meetingRoomDto.getStartDate().getTime());
-				meetingRoomAddon.setEndDate(meetingRoomDto.getEndDate().getTime());
-				meetingRoomAddon.setOrganizerLabel(meetingRoomDto.getOrganizerLabel());
+				if (meetingRoomDto.getStartDate() != null) {
+					meetingRoomAddon.setStartDate(meetingRoomDto.getStartDate().getTime());
+				}
+				
+				if (meetingRoomDto.getEndDate() != null){
+					meetingRoomAddon.setEndDate(meetingRoomDto.getEndDate().getTime());
+				}
+				
+				if (meetingRoomDto.getOrganizerLabel() != null){
+					meetingRoomAddon.setOrganizerLabel(meetingRoomDto.getOrganizerLabel());
+				}
+				
 				room.setAddon(meetingRoomAddon);
 				
 				LOGGER.debug( "End call UserUi.RoomEndpoint.getRoom  at: " + new Date() );
