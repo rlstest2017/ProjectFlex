@@ -74,7 +74,7 @@ public class RoomEndpointImplTest {
 		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, null, null, null, null);
 
 		// Asserts
-		assertEquals(5, rooms.size());
+		assertEquals(10, rooms.size());
 	}
 
 	@Test
@@ -108,7 +108,7 @@ public class RoomEndpointImplTest {
 		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, null, null, "1", null);
 
 		// Asserts
-		assertEquals(3, rooms.size());
+		assertEquals(6, rooms.size());
 	}
 
 	@Test
@@ -119,7 +119,7 @@ public class RoomEndpointImplTest {
 		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, null, "1", null, null);
 
 		// Asserts
-		assertEquals(5, rooms.size());
+		assertEquals(10, rooms.size());
 	}
 
 	@Test
@@ -141,7 +141,7 @@ public class RoomEndpointImplTest {
 		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, "1", null, null, null, null);
 
 		// Asserts
-		assertEquals(5, rooms.size());
+		assertEquals(10, rooms.size());
 	}
 
 	@Test

@@ -21,6 +21,7 @@ import com.orange.flexoffice.business.common.service.data.PreferenceUserManager;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.business.common.service.data.UserManager;
+import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 import com.orange.flexoffice.dao.common.model.data.PreferencesDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
@@ -74,6 +75,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	public List<RoomSummary> getRooms(String auth, Boolean latest, String countryId, String regionId, String cityId, String buildingId, Integer floor) {
 		LOGGER.debug( "Begin call UserUi.RoomEndpoint.getRooms at: " + new Date() );
 		List<RoomDao> dataList = null;
+		List<MeetingRoomDao> dataMeetingRoomList = null;
 		
 		if (latest) { // get latest reserved rooms
 			try {
@@ -111,6 +113,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			} finally {
 				// get rooms by criteria
 				dataList = roomManager.findRoomsByCriteria(countryId, regionId, cityId, buildingId, floor);
+				
+				// Add meeting rooms
+				dataMeetingRoomList = meetingRoomManager.findMeetingRoomsByCriteria(countryId, regionId, cityId, buildingId, floor);
 			}
 		}
 
@@ -132,9 +137,6 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			}
 		}
 		
-		// Add meeting rooms
-		/*List<MeetingRoomDao> dataMeetingRoomList = meetingRoomManager.findMeetingRoomsByCriteria(countryId, regionId, cityId, buildingId, floor);
-		
 		if (dataMeetingRoomList != null) {
 			for (MeetingRoomDao meetingRoomDao : dataMeetingRoomList) {
 				RoomSummary room = factory.createRoomSummary();
@@ -148,7 +150,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				room.setKind(ERoomKind.MEETINGROOM);
 				roomList.add(room);
 			}
-		}*/
+		}
 
 		LOGGER.debug("UserUi.RoomEndpoint.getRooms List of rooms : nb = " + roomList.size());
 		LOGGER.debug( "End call UserUi.RoomEndpoint.getRooms  at: " + new Date() );
