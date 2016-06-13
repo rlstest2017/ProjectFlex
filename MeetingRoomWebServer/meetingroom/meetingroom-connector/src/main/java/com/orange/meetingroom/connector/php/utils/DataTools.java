@@ -65,7 +65,9 @@ public class DataTools {
 		if (params.getRoomGroupID() != null) {
 			urlEncodeParameters.append( "&" );
 			urlEncodeParameters.append( "RoomGroupID="+URLEncoder.encode(params.getRoomGroupID(), "UTF-8"));
-		} 
+		}
+		urlEncodeParameters.append( "&" );
+		urlEncodeParameters.append( "ForceUpdateCache=true");
 		urlEncodeParameters.append( "&" );
 		urlEncodeParameters.append( "_="+System.currentTimeMillis()); // in milliseconds !!!
 		return urlEncodeParameters.toString();
