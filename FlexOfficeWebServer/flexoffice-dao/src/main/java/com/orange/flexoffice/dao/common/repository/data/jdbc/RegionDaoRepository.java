@@ -46,6 +46,16 @@ public class RegionDaoRepository extends DataRepository<RegionDao> implements Re
 				new BeanPropertyRowMapper<RegionDao>(RegionDao.class)
 			);
 	}
+	
+	@Override
+	public List<RegionDao> findRegionsHaveMeetingRoomsByCountryId(long countryId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("countryId", countryId);
+		return jdbcTemplate.query(
+				findRegionsHaveMeetingRoomsByCountryIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<RegionDao>(RegionDao.class)
+			);
+	}
 
 	// return a Dto not Dao !!!
 	@Override

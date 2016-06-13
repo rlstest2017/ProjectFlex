@@ -1,5 +1,6 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -46,8 +47,15 @@ public class CityManagerImpl implements CityManager {
 		if (isFromAdminUI) {
 			return cityRepository.findByRegionId(Long.valueOf(regionId));
 		} else {
+			ArrayList<CityDao> lst = new ArrayList<CityDao>();
+			
 			// get only cities have rooms
-			return cityRepository.findCitiesHaveRoomsByRegionId(Long.valueOf(regionId));
+			lst.addAll(cityRepository.findCitiesHaveRoomsByRegionId(Long.valueOf(regionId)));
+			
+			// get only cities have meeting rooms
+			lst.addAll(cityRepository.findCitiesHaveMeetingRoomsByRegionId(Long.valueOf(regionId)));
+			
+			return lst;
 		}
 	}
 	

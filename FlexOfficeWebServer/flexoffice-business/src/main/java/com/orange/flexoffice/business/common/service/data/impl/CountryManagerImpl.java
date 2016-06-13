@@ -1,5 +1,6 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -44,8 +45,15 @@ public class CountryManagerImpl implements CountryManager {
 		if (isFromAdminUI) {
 			return countryRepository.findAllCountries();
 		} else {
+			ArrayList<CountryDao> lst = new ArrayList<CountryDao>();
+			
 			// get only countries have rooms
-			return countryRepository.findCountriesHaveRooms();
+			lst.addAll(countryRepository.findCountriesHaveRooms());
+			
+			//get only countries have meeting rooms
+			lst.addAll(countryRepository.findCountriesHaveMeetingRooms());
+			
+			return lst;
 		}
 	}
 	

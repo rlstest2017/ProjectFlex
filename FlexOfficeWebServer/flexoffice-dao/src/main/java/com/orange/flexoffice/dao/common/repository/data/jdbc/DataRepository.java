@@ -25,6 +25,7 @@ public abstract class DataRepository<T extends Data>
 	private   final String findOneQuery;
 	protected final String findAllQuery;
 	protected final String findCountriesHaveRoomsQuery;
+	protected final String findCountriesHaveMeetingRoomsQuery;
 	protected final String findAllRoomDailyQuery;
 	protected final String findAllMeetingRoomGroupsConfigurationQuery;
 	protected final String findAllMeetingRoomDailyQuery;
@@ -78,8 +79,11 @@ public abstract class DataRepository<T extends Data>
 	protected final String findDashboardsInTimeoutQuery;
 	protected final String findByColumnCountryIdQuery;
 	protected final String findRegionsHaveRoomsByCountryIdQuery;
+	protected final String findRegionsHaveMeetingRoomsByCountryIdQuery;
 	protected final String findCitiesHaveRoomsByRegionIdQuery;
+	protected final String findCitiesHaveMeetingRoomsByRegionIdQuery;
 	protected final String findBuildingsHaveRoomsByCityIdQuery;
+	protected final String findBuildingsHaveMeetingRoomsByCityIdQuery;
 	protected final String findByColumnRegionIdQuery;
 	protected final String findByColumnCityIdQuery;
 	protected final String findByColumnBuildingIdQuery;
@@ -189,6 +193,7 @@ public abstract class DataRepository<T extends Data>
 		findOneQuery = String.format(FIND_ONE_TEMPLATE, getTableName());
 		findAllQuery = String.format(FIND_ALL_TEMPLATE, getTableName(), getColName());
 		findCountriesHaveRoomsQuery = String.format(FIND_COUNTRIES_HAVE_ROOMS_TEMPLATE, getTableName(), getColName());
+		findCountriesHaveMeetingRoomsQuery = String.format(FIND_COUNTRIES_HAVE_MEETINGROOMS_TEMPLATE, getTableName(), getColName());
 		findAllMeetingRoomDailyQuery = String.format(FIND_ALL_MEETINGROOM_DAILY_TEMPLATE, getTableName());
 		findAllRoomDailyQuery = String.format(FIND_ALL_ROOM_DAILY_TEMPLATE, getTableName());
 		findAllMeetingRoomGroupsConfigurationQuery = String.format(FIND_ALL_MEETINGROOM_GROUPS_CONFIGURATION_TEMPLATE, getTableName());
@@ -242,8 +247,11 @@ public abstract class DataRepository<T extends Data>
 		findDashboardsInTimeoutQuery = String.format(FIND_DASHBOARDS_IN_TIMEOUT_TEMPLATE, getTableName());
 		findByColumnCountryIdQuery = String.format(FIND_BY_COL_COUNTRY_ID_TEMPLATE, getTableName());
 		findRegionsHaveRoomsByCountryIdQuery = String.format(FIND_REGIONS_HAVE_ROOMS_BY_COUNTRY_ID_TEMPLATE, getTableName());
+		findRegionsHaveMeetingRoomsByCountryIdQuery = String.format(FIND_REGIONS_HAVE_MEETINGROOMS_BY_COUNTRY_ID_TEMPLATE, getTableName());
 		findCitiesHaveRoomsByRegionIdQuery = String.format(FIND_CITIES_HAVE_ROOMS_BY_REGION_ID_TEMPLATE, getTableName());
+		findCitiesHaveMeetingRoomsByRegionIdQuery = String.format(FIND_CITIES_HAVE_MEETINGROOMS_BY_REGION_ID_TEMPLATE, getTableName());
 		findBuildingsHaveRoomsByCityIdQuery = String.format(FIND_BUILDINGS_HAVE_ROOMS_BY_CITY_ID_TEMPLATE, getTableName());
+		findBuildingsHaveMeetingRoomsByCityIdQuery = String.format(FIND_BUILDINGS_HAVE_MEETINGROOMS_BY_CITY_ID_TEMPLATE, getTableName());
 		findByColumnRegionIdQuery = String.format(FIND_BY_COL_REGION_ID_TEMPLATE, getTableName());
 		findByColumnCityIdQuery = String.format(FIND_BY_COL_CITY_ID_TEMPLATE, getTableName());
 		findByColumnBuildingIdQuery = String.format(FIND_BY_COL_BUILDING_ID_TEMPLATE, getTableName());

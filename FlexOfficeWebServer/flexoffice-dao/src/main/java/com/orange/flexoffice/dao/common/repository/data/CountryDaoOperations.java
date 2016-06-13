@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+
 import com.orange.flexoffice.dao.common.model.data.CountryDao;
 
 /**
@@ -16,6 +17,8 @@ public interface CountryDaoOperations {
 	List<CountryDao> findAllCountries();
 	
 	List<CountryDao> findCountriesHaveRooms();
+	
+	List<CountryDao> findCountriesHaveMeetingRooms();
 	
 	CountryDao saveCountry(CountryDao data) throws DataIntegrityViolationException;
 	

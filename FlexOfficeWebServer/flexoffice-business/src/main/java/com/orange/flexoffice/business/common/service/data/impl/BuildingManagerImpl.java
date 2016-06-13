@@ -3,6 +3,7 @@ package com.orange.flexoffice.business.common.service.data.impl;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -79,8 +80,15 @@ public class BuildingManagerImpl implements BuildingManager {
 		if (isFromAdminUI) {
 			return buildingRepository.findByCityId(Long.valueOf(cityId));
 		} else {
+			ArrayList<BuildingDao> lst = new ArrayList<BuildingDao>();
+			
 			// get only cities have rooms
-			return buildingRepository.findBuildingsHaveRoomsByCityId(Long.valueOf(cityId));
+			lst.addAll(buildingRepository.findBuildingsHaveRoomsByCityId(Long.valueOf(cityId)));
+			
+			// get only cities have meeting rooms
+			lst.addAll(buildingRepository.findBuildingsHaveMeetingRoomsByCityId(Long.valueOf(cityId)));
+			
+			return lst;
 		}
 	}
 

@@ -46,6 +46,16 @@ public class BuildingDaoRepository extends DataRepository<BuildingDao> implement
 				new BeanPropertyRowMapper<BuildingDao>(BuildingDao.class)
 			);
 	}
+	
+	@Override
+	public List<BuildingDao> findBuildingsHaveMeetingRoomsByCityId(long cityId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("cityId", cityId);
+		return jdbcTemplate.query(
+				findBuildingsHaveMeetingRoomsByCityIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<BuildingDao>(BuildingDao.class)
+			);
+	}
 
 	@Override
 	public List<BuildingDao> findByCityId(Long cityId) throws IncorrectResultSizeDataAccessException {

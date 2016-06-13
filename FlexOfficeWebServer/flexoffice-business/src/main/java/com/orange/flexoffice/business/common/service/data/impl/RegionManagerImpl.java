@@ -1,5 +1,6 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -93,8 +94,15 @@ public class RegionManagerImpl implements RegionManager {
 		if (isFromAdminUI) {
 			return regionRepository.findByCountryId(Long.valueOf(countryId));
 		} else {
+			ArrayList<RegionDao> lst = new ArrayList<RegionDao>();
+			
 			// get only regions have rooms
-			return regionRepository.findRegionsHaveRoomsByCountryId(Long.valueOf(countryId));
+			lst.addAll(regionRepository.findRegionsHaveRoomsByCountryId(Long.valueOf(countryId)));
+			
+			// get only regions have meeting rooms
+			lst.addAll(regionRepository.findRegionsHaveMeetingRoomsByCountryId(Long.valueOf(countryId)));
+			
+			return lst;
 		}
 	}
 		

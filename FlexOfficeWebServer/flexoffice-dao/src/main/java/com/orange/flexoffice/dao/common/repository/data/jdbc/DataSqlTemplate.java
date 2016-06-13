@@ -68,10 +68,16 @@ public final class DataSqlTemplate {
 			"select distinct dashboards.* From dashboards where last_measure_date < current_timestamp - cast(:intervalTimeout|| 'MINUTE' as interval)";
 	public static final String FIND_REGIONS_HAVE_ROOMS_BY_COUNTRY_ID_TEMPLATE = 
 			"select distinct regions.id, regions.name From rooms, buildings, cities, regions, countries where rooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=regions.id and regions.country_id=countries.id and country_id=:countryId";
+	public static final String FIND_REGIONS_HAVE_MEETINGROOMS_BY_COUNTRY_ID_TEMPLATE = 
+			"select distinct regions.id, regions.name From meetingrooms, buildings, cities, regions, countries where meetingrooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=regions.id and regions.country_id=countries.id and country_id=:countryId";
 	public static final String FIND_CITIES_HAVE_ROOMS_BY_REGION_ID_TEMPLATE = 
 			"select distinct cities.id, cities.name From rooms, buildings, cities, regions where rooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=regions.id and region_id=:regionId";
+	public static final String FIND_CITIES_HAVE_MEETINGROOMS_BY_REGION_ID_TEMPLATE = 
+			"select distinct cities.id, cities.name From meetingrooms, buildings, cities, regions where meetingrooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=regions.id and region_id=:regionId";
 	public static final String FIND_BUILDINGS_HAVE_ROOMS_BY_CITY_ID_TEMPLATE = 
 			"select distinct buildings.id, buildings.name, buildings.nb_floors From rooms, buildings, cities where rooms.building_id=buildings.id and buildings.city_id=cities.id and city_id=:cityId";
+	public static final String FIND_BUILDINGS_HAVE_MEETINGROOMS_BY_CITY_ID_TEMPLATE = 
+			"select distinct buildings.id, buildings.name, buildings.nb_floors From meetingrooms, buildings, cities where meetingrooms.building_id=buildings.id and buildings.city_id=cities.id and city_id=:cityId";
 	public static final String FIND_BY_COL_REGION_ID_TEMPLATE = 
 			"select * from %s where region_id=:regionId";
 	public static final String FIND_BY_COL_CITY_ID_TEMPLATE = 
@@ -104,6 +110,8 @@ public final class DataSqlTemplate {
 			"select * from %s order by %s";
 	public static final String FIND_COUNTRIES_HAVE_ROOMS_TEMPLATE = 
 			"select distinct countries.id, countries.name From rooms, buildings, cities, regions, countries where rooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=regions.id and regions.country_id=countries.id";
+	public static final String FIND_COUNTRIES_HAVE_MEETINGROOMS_TEMPLATE = 
+			"select distinct countries.id, countries.name From meetingrooms, buildings, cities, regions, countries where meetingrooms.building_id=buildings.id and buildings.city_id=cities.id and cities.region_id=regions.id and regions.country_id=countries.id";
 	public static final String FIND_ALL_ROOM_DAILY_TEMPLATE = 
 			"select * from %s order by room_id";
 	public static final String FIND_ALL_MEETINGROOM_GROUPS_CONFIGURATION_TEMPLATE = 

@@ -1,6 +1,6 @@
 package com.orange.flexoffice.userui.ws.endPoint.entity.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -65,7 +65,7 @@ public class LocationEndpointImplTest {
 		// Test
 		List<LocationItem> countries = locationEndpoint.getCountries();
 		// Asserts
-		assertEquals(1, countries.size());
+		assertEquals(2, countries.size());
 	}
 
 	//-----------------------------------------------------------------
@@ -76,7 +76,7 @@ public class LocationEndpointImplTest {
 		// Test
 		List<LocationItem> regions = locationEndpoint.getRegions("1");
 		// Asserts
-		assertEquals(1, regions.size());
+		assertEquals(2, regions.size());
 	}
 	
 	//-----------------------------------------------------------------
@@ -87,7 +87,7 @@ public class LocationEndpointImplTest {
 		// Test
 		List<LocationItem> cities = locationEndpoint.getCities("1");
 		// Asserts
-		assertEquals(1, cities.size());
+		assertEquals(2, cities.size());
 	}
 	
 	//-----------------------------------------------------------------
@@ -98,7 +98,7 @@ public class LocationEndpointImplTest {
 		// Test
 		List<BuildingItem> buildings = locationEndpoint.getBuildings("1");
 		// Asserts
-		assertEquals(2, buildings.size());
+		assertEquals(4, buildings.size());
 	}
 	
 }
