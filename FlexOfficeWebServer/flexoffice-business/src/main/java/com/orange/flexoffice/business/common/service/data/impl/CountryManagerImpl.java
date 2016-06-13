@@ -54,7 +54,7 @@ public class CountryManagerImpl implements CountryManager {
 			//get only countries have meeting rooms
 			for(CountryDao countryDao : countryRepository.findCountriesHaveMeetingRooms()){
 				for(CountryDao countryInList : lst){
-					if(countryDao.getId() != countryInList.getId()){
+					if(countryDao.getId() == countryInList.getId()){
 						found = true;
 					}
 				}

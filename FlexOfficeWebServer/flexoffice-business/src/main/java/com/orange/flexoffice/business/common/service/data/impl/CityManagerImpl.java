@@ -56,7 +56,7 @@ public class CityManagerImpl implements CityManager {
 			// get only cities have meeting rooms
 			for(CityDao cityDao : cityRepository.findCitiesHaveMeetingRoomsByRegionId(Long.valueOf(regionId))){
 				for(CityDao cityInList : lst){
-					if(cityDao.getId() != cityInList.getId()){
+					if(cityDao.getId() == cityInList.getId()){
 						found = true;
 					}
 				}

@@ -89,7 +89,7 @@ public class BuildingManagerImpl implements BuildingManager {
 			// get only cities have meeting rooms	
 			for(BuildingDao buildingDao : buildingRepository.findBuildingsHaveMeetingRoomsByCityId(Long.valueOf(cityId))){
 				for(BuildingDao buildingInList : lst){
-					if(buildingDao.getId() != buildingInList.getId()){
+					if(buildingDao.getId() == buildingInList.getId()){
 						found = true;
 					}
 				}
