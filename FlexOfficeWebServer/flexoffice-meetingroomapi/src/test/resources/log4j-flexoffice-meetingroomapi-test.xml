@@ -10,7 +10,7 @@
 	<!-- Log Test File appender                -->
 	<!-- ******************************** -->
 	<appender name="logTestFile" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="target/surefire-reports/flexoffice-gatewayapi-test.log"/>
+		<param name="File" value="target/surefire-reports/flexoffice-meetingroomapi-test.log"/>
 		<param name="Append" value="true" />
 		<param name="threshold" value="debug"/>
 		<param name="MaxFileSize" value="500000KB" />

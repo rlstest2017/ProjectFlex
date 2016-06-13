@@ -121,7 +121,7 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		jdbcTemplateForTest.update(sqlMeetingRoomStats, new Object[] {2, 2, "2015-12-09 09:20:32.676828", "2015-12-09 09:34:26.852377", "UNOCCUPIED"});
 		jdbcTemplateForTest.update(sqlMeetingRoomStats, new Object[] {3, 2, null, null, "UNOCCUPIED" });
 		jdbcTemplateForTest.update(sqlMeetingRoomStats, new Object[] {4, 1, null, null, "UNOCCUPIED"});
-		jdbcTemplateForTest.update(sqlMeetingRoomStats, new Object[] {5, 1, "2016-01-19 07:04:35.051909", "2016-01-19 07:07:43.4994", "OCCUPIED" });
+		jdbcTemplateForTest.update(sqlMeetingRoomStats, new Object[] {5, 1, "2016-01-19 07:04:35.051909", "2016-01-19 07:07:43.4994", "UNOCCUPIED" });
 		
 		String sqlAgents = "INSERT INTO agents " +
 				"(id, name, mac_address, description, status, meetingroom_id, last_measure_date, command) VALUES (?, ?, ?, ?, CAST(? AS agentStatus), ?, CAST(? AS timestamp), CAST(? AS commandModel))";
