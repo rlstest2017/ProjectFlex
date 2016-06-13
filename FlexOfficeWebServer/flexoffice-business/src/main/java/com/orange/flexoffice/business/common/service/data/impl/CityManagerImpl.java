@@ -1,7 +1,9 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +57,11 @@ public class CityManagerImpl implements CityManager {
 			// get only cities have meeting rooms
 			lst.addAll(cityRepository.findCitiesHaveMeetingRoomsByRegionId(Long.valueOf(regionId)));
 			
-			return lst;
+			Set<CityDao> set = new HashSet<CityDao>() ;
+	        set.addAll(lst) ;
+	        ArrayList<CityDao> distinctList = new ArrayList<CityDao>(set) ;
+			
+			return distinctList;
 		}
 	}
 	
