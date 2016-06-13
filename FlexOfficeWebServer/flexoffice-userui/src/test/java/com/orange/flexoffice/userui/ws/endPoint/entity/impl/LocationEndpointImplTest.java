@@ -76,7 +76,7 @@ public class LocationEndpointImplTest {
 		// Test
 		List<LocationItem> regions = locationEndpoint.getRegions("1");
 		// Asserts
-		assertEquals(2, regions.size());
+		assertEquals(1, regions.size());
 	}
 	
 	//-----------------------------------------------------------------
@@ -98,7 +98,7 @@ public class LocationEndpointImplTest {
 		// Test
 		List<BuildingItem> buildings = locationEndpoint.getBuildings("1");
 		// Asserts
-		assertEquals(4, buildings.size());
+		assertEquals(2, buildings.size());
 	}
 	
 }

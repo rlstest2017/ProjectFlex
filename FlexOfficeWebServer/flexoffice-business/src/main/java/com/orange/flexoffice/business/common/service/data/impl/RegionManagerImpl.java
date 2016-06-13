@@ -1,9 +1,7 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,18 +95,26 @@ public class RegionManagerImpl implements RegionManager {
 			return regionRepository.findByCountryId(Long.valueOf(countryId));
 		} else {
 			ArrayList<RegionDao> lst = new ArrayList<RegionDao>();
+			boolean found = false;
 			
 			// get only regions have rooms
 			lst.addAll(regionRepository.findRegionsHaveRoomsByCountryId(Long.valueOf(countryId)));
 			
 			// get only regions have meeting rooms
-			lst.addAll(regionRepository.findRegionsHaveMeetingRoomsByCountryId(Long.valueOf(countryId)));
+			for(RegionDao regionDao : regionRepository.findRegionsHaveMeetingRoomsByCountryId(Long.valueOf(countryId))){
+				for(RegionDao regionInList : lst){
+					if(regionDao.getId() == regionInList.getId()){
+						found = true;
+					}
+				}
+				if(!found) {
+					lst.add(regionDao);
+				} else {
+					found = false;
+				}
+			}
 			
-			Set<RegionDao> set = new HashSet<RegionDao>() ;
-	        set.addAll(lst) ;
-	        ArrayList<RegionDao> distinctList = new ArrayList<RegionDao>(set) ;
-			
-			return distinctList;
+			return lst;
 		}
 	}
 		

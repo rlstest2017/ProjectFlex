@@ -4,10 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -83,18 +81,26 @@ public class BuildingManagerImpl implements BuildingManager {
 			return buildingRepository.findByCityId(Long.valueOf(cityId));
 		} else {
 			ArrayList<BuildingDao> lst = new ArrayList<BuildingDao>();
+			boolean found = false;
 			
 			// get only cities have rooms
 			lst.addAll(buildingRepository.findBuildingsHaveRoomsByCityId(Long.valueOf(cityId)));
 			
-			// get only cities have meeting rooms
-			lst.addAll(buildingRepository.findBuildingsHaveMeetingRoomsByCityId(Long.valueOf(cityId)));
+			// get only cities have meeting rooms	
+			for(BuildingDao buildingDao : buildingRepository.findBuildingsHaveMeetingRoomsByCityId(Long.valueOf(cityId))){
+				for(BuildingDao buildingInList : lst){
+					if(buildingDao.getId() != buildingInList.getId()){
+						found = true;
+					}
+				}
+				if(!found) {
+					lst.add(buildingDao);
+				} else {
+					found = false;
+				}
+			}
 			
-			Set<BuildingDao> set = new HashSet<BuildingDao>() ;
-	        set.addAll(lst) ;
-	        ArrayList<BuildingDao> distinctList = new ArrayList<BuildingDao>(set) ;
-			
-			return distinctList;
+			return lst;
 		}
 	}
 

@@ -1,9 +1,7 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,18 +46,26 @@ public class CountryManagerImpl implements CountryManager {
 			return countryRepository.findAllCountries();
 		} else {
 			ArrayList<CountryDao> lst = new ArrayList<CountryDao>();
+			boolean found = false;
 			
 			// get only countries have rooms
 			lst.addAll(countryRepository.findCountriesHaveRooms());
 			
 			//get only countries have meeting rooms
-			lst.addAll(countryRepository.findCountriesHaveMeetingRooms());
+			for(CountryDao countryDao : countryRepository.findCountriesHaveMeetingRooms()){
+				for(CountryDao countryInList : lst){
+					if(countryDao.getId() != countryInList.getId()){
+						found = true;
+					}
+				}
+				if(!found) {
+					lst.add(countryDao);
+				} else {
+					found = false;
+				}
+			}
 			
-			Set<CountryDao> set = new HashSet<CountryDao>() ;
-	        set.addAll(lst) ;
-	        ArrayList<CountryDao> distinctList = new ArrayList<CountryDao>(set) ;
-			
-			return distinctList;
+			return lst;
 		}
 	}
 	
