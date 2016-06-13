@@ -117,11 +117,11 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		
 		String sqlMeetingRoomStats = "INSERT INTO meetingroom_stats " +
 				"(id, meetingroom_id, begin_occupancy_date, end_occupancy_date, meetingroom_info) VALUES (?, ?, CAST(? AS timestamp), CAST(? AS timestamp), CAST(? AS meetingroomInfo))";
-		jdbcTemplateForTest.update(sqlMeetingRoomStats, new Object[] {1, 3, "2015-12-08 18:56:25.620506", "2015-12-08 18:59:35.164569", "OCCUPIED" });
+		jdbcTemplateForTest.update(sqlMeetingRoomStats, new Object[] {1, 3, "2015-12-08 18:56:25.620506", "2015-12-08 18:59:35.164569", "UNOCCUPIED" });
 		jdbcTemplateForTest.update(sqlMeetingRoomStats, new Object[] {2, 2, "2015-12-09 09:20:32.676828", "2015-12-09 09:34:26.852377", "UNOCCUPIED"});
 		jdbcTemplateForTest.update(sqlMeetingRoomStats, new Object[] {3, 2, null, null, "UNOCCUPIED" });
 		jdbcTemplateForTest.update(sqlMeetingRoomStats, new Object[] {4, 1, null, null, "UNOCCUPIED"});
-		jdbcTemplateForTest.update(sqlMeetingRoomStats, new Object[] {5, 1, "2016-01-19 07:04:35.051909", "2016-01-19 07:07:43.4994", "UNOCCUPIED" });
+		jdbcTemplateForTest.update(sqlMeetingRoomStats, new Object[] {5, 1, "2016-01-19 07:04:35.051909", null, "OCCUPIED" });
 		
 		String sqlAgents = "INSERT INTO agents " +
 				"(id, name, mac_address, description, status, meetingroom_id, last_measure_date, command) VALUES (?, ?, ?, ?, CAST(? AS agentStatus), ?, CAST(? AS timestamp), CAST(? AS commandModel))";
