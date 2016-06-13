@@ -83,6 +83,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				UserDto data = userManager.findByUserAccessToken(auth);
 				 // get latest reserved rooms by userId
 				dataList = roomManager.findLatestReservedRoomsByUserId(data.getId());
+				
+				// Add meeting rooms
+				dataMeetingRoomList = meetingRoomManager.findMeetingRoomsByCriteria(countryId, regionId, cityId, buildingId, floor);
 			} catch (AuthenticationException e){
 				LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.getRooms with message :", e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_34, Response.Status.UNAUTHORIZED));
