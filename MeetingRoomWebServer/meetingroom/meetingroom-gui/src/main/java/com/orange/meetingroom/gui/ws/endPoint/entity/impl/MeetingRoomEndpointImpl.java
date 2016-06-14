@@ -1,6 +1,7 @@
 package com.orange.meetingroom.gui.ws.endPoint.entity.impl;
 
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -277,7 +278,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			params.setRoomID(meetingRoomExternalId);
 			params.setIdReservation(bookingUpdateInput.getIDReservation());
 			params.setRevisionReservation(bookingUpdateInput.getRevisionReservation());
-			params.setEndDate(bookingUpdateInput.getEndDate().toString()); // only endDate to cancel request !!!
+			params.setEndDate(new Date().toString()); // only endDate to cancel request !!!
 			params.setFormat(FORMAT_JSON);
 						
 			BookingSummary outputSummary = phpConnectorManager.updateBooking(params);
@@ -309,7 +310,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			params.setRoomID(meetingRoomExternalId);
 			params.setIdReservation(bookingUpdateInput.getIDReservation());
 			params.setRevisionReservation(bookingUpdateInput.getRevisionReservation());
-			params.setStartDate(bookingUpdateInput.getStartDate().toString()); // only startDate to confirm request !!!
+			params.setStartDate(new Date().toString()); // only startDate to confirm request !!!
 			params.setAcknowledged(ACKNOWLEDGED_CONFIRM);
 			params.setSubject(bookingUpdateInput.getSubject());
 			params.setFormat(FORMAT_JSON);

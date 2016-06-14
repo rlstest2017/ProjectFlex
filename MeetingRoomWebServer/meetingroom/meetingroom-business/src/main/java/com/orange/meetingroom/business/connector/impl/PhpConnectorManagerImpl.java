@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.orange.meetingroom.business.connector.PhpConnectorManager;
+import com.orange.meetingroom.business.connector.utils.DateTools;
 import com.orange.meetingroom.business.connector.utils.MeetingRoomInfoTools;
 import com.orange.meetingroom.connector.exception.DataNotExistsException;
 import com.orange.meetingroom.connector.exception.FlexOfficeInternalServerException;
@@ -42,7 +43,9 @@ public class PhpConnectorManagerImpl implements PhpConnectorManager {
 	FlexOfficeConnectorClient flexOfficeConnector;
 	@Autowired
 	MeetingRoomInfoTools meetingRoomInfoTools;
-
+	@Autowired
+	DateTools dateTools;
+	
 	@Override
 	public SystemCurrentDateConnectorReturn getCurrentDate() throws PhpInternalServerException, MeetingRoomInternalServerException {
 		return phpConnector.getCurrentDate();
@@ -100,6 +103,25 @@ public class PhpConnectorManagerImpl implements PhpConnectorManager {
 
 	@Override
 	public BookingSummary updateBooking(UpdateBookingParameters params) throws MeetingRoomInternalServerException, MethodNotAllowedException, PhpInternalServerException  {
+		
+		if (params.getStartDate() != null) {
+			SystemCurrentDateConnectorReturn connectorreturn = phpConnector.getCurrentDate();
+			Integer currentDate = connectorreturn.getCurrentDate();
+			LOGGER.debug("currentDate is:" + currentDate);
+			Integer returnDate = dateTools.processDate(currentDate, 10);// 10 seconds
+			LOGGER.debug("returnDate is:" + returnDate);
+			params.setStartDate(returnDate.toString());
+		}
+		
+		if (params.getEndDate() != null) {
+			SystemCurrentDateConnectorReturn connectorreturn = phpConnector.getCurrentDate();
+			Integer currentDate = connectorreturn.getCurrentDate();
+			LOGGER.debug("currentDate is:" + currentDate);
+			Integer returnDate = dateTools.processDate(currentDate, 10);// 10 seconds
+			LOGGER.debug("returnDate is:" + returnDate);
+			params.setEndDate(returnDate.toString());
+		}
+		
 		return phpConnector.updateBooking(params);
 	}
 

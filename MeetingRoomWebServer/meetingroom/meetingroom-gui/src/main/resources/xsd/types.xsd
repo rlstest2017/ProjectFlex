@@ -173,8 +173,6 @@
 			<xsd:element name="iDReservation" type="xsd:string"/>
 			<xsd:element name="revisionReservation" type="xsd:string"/>
 			<xsd:element name="subject" type="xsd:string"/>
-			<xsd:element name="startDate" type="xsd:integer"/>
-			<xsd:element name="endDate" type="xsd:integer"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<!-- BookingUpdateOutput -->

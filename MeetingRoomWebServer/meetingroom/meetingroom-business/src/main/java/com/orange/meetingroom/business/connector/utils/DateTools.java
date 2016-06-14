@@ -42,6 +42,17 @@ public class DateTools {
 	
 	/**
 	 * processStartDate
+	 * @param startTime
+	 * @param nbSeconds
+	 * @return
+	 */
+	public Integer processDate(Integer startTime, Integer nbSeconds) {
+		Timestamp later = new Timestamp(startTime + (nbSeconds));
+		return (int)(long)(later.getTime());
+	}
+	
+	/**
+	 * processStartDate
 	 * @param nbSeconds
 	 * @return
 	 */
@@ -65,6 +76,13 @@ public class DateTools {
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MILLISECOND,0);
 		return cal.getTime();
+	}
+	
+	public static void main(String[] args) {
+		DateTools tool = new DateTools();
+		Integer startTime = 1465893000;
+		Integer result = tool.processDate(startTime, 10);
+		System.out.println("time is:" + result);
 	}
 
 }
