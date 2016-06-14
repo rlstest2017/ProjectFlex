@@ -1,3 +1,41 @@
+CREATE EXTENSION IF NOT EXISTS citext;
+
+/* Start Migration part */
+alter table buildings alter column name type citext;
+alter table buildings alter column name SET NOT NULL;
+alter table buildings 
+	ADD CONSTRAINT name_length_check CHECK (char_length(name) <= 100);
+
+alter table cities alter column name type citext;
+alter table cities alter column name SET NOT NULL;
+alter table cities 
+	ADD CONSTRAINT name_length_check CHECK (char_length(name) <= 100);
+
+alter table regions alter column name type citext;
+alter table regions alter column name SET NOT NULL;
+alter table regions 
+	ADD CONSTRAINT name_length_check CHECK (char_length(name) <= 100);
+
+alter table countries alter column name type citext;
+alter table countries alter column name SET NOT NULL;
+alter table countries 
+	ADD CONSTRAINT name_length_check CHECK (char_length(name) <= 100);
+	
+alter table gateways alter column name type citext;
+alter table gateways alter column name SET NOT NULL;
+alter table gateways 
+	ADD CONSTRAINT name_length_check CHECK (char_length(name) <= 100);
+	
+alter table rooms alter column name type citext;
+alter table rooms alter column name SET NOT NULL;
+alter table rooms 
+	ADD CONSTRAINT name_length_check CHECK (char_length(name) <= 100);
+	
+alter table sensors alter column name type citext;
+alter table sensors 
+	ADD CONSTRAINT name_length_check CHECK (char_length(name) <= 100);
+/* End Migration part */
+
 CREATE TYPE meetingroomStatus AS ENUM ('FREE', 'OCCUPIED', 'UNKNOWN', 'ACK');
 CREATE TYPE meetingroomType AS ENUM ('BOX', 'VIDEO_CONF');
 CREATE TYPE agentStatus AS ENUM ('ONLINE', 'OFFLINE', 'ECONOMIC', 'STANDBY');
@@ -7,7 +45,7 @@ CREATE TYPE meetingroomInfo AS ENUM ('TIMEOUT', 'OCCUPIED', 'UNOCCUPIED');
 CREATE TABLE meetingrooms (
     id serial NOT NULL,
     external_id character varying(100) unique NOT NULL,
-    name character varying(100) NOT NULL,
+    name citext NOT NULL,
     organizerLabel character varying(300),
     capacity integer,
     description text,
@@ -24,7 +62,7 @@ CREATE TABLE meetingrooms (
 CREATE TABLE agents (
     id serial NOT NULL,
     mac_address character varying(100) unique NOT NULL,
-    name character varying(100),
+    name citext,
     description text,
     status agentStatus DEFAULT 'OFFLINE',
     meetingroom_id integer DEFAULT 0,
@@ -35,7 +73,7 @@ CREATE TABLE agents (
 CREATE TABLE dashboards (
     id serial NOT NULL,
     mac_address character varying(100) unique NOT NULL,
-    name character varying(100),
+    name citext,
     description text,
     status dashboardStatus DEFAULT 'OFFLINE',
     last_measure_date timestamp without time zone,
@@ -68,17 +106,20 @@ CREATE TABLE meetingroom_daily_occupancy (
 );	
 
 ALTER TABLE ONLY agents
-    ADD CONSTRAINT agents_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT agents_pkey PRIMARY KEY (id),
+	ADD CONSTRAINT name_length_check CHECK (char_length(name) <= 100);
 
 ALTER TABLE ONLY dashboards
     ADD CONSTRAINT dashboards_pkey PRIMARY KEY (id),
     ADD  FOREIGN KEY(city_id) REFERENCES cities(id),
-	ADD  FOREIGN KEY(building_id) REFERENCES buildings(id);
+	ADD  FOREIGN KEY(building_id) REFERENCES buildings(id),
+	ADD CONSTRAINT name_length_check CHECK (char_length(name) <= 100);
 
 ALTER TABLE ONLY meetingrooms
     ADD CONSTRAINT meetingrooms_pkey PRIMARY KEY (id),
     ADD  FOREIGN KEY(agent_id) REFERENCES agents(id),
-	ADD  FOREIGN KEY(building_id) REFERENCES buildings(id);
+	ADD  FOREIGN KEY(building_id) REFERENCES buildings(id),
+	ADD CONSTRAINT name_length_check CHECK (char_length(name) <= 100);
 
 ALTER TABLE ONLY meetingroom_groups_configuration
     ADD CONSTRAINT meetingroom_groups_configuration_pkey PRIMARY KEY (id),
