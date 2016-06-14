@@ -127,11 +127,11 @@ public final class DataSqlTemplate {
 	public static final String FIND_ALL_UNOCCUPIED_DAILY_TEMPLATE_MEETINGROOM = 
 			"select * from %s where meetingroom_info=CAST(:meetingRoomInfo AS meetingRoomInfo) and begin_occupancy_date >:beginOccupancyDate and end_occupancy_date <:endOccupancyDate order by meetingroom_id";
 	public static final String FIND_ALL_REGIONS_SUMMARY_TEMPLATE = 
-	"select regions.id, regions.name, countries.name as country_name From regions, countries where regions.country_id=countries.id";
+	"select regions.id, regions.name, countries.name as country_name From regions, countries where regions.country_id=countries.id order by regions.name asc";
 	public static final String FIND_ALL_CITIES_SUMMARY_TEMPLATE = 
-	"select cities.id, cities.name, regions.name as region_name, countries.name as country_name From cities, regions, countries where cities.region_id=regions.id and regions.country_id=countries.id";
+	"select cities.id, cities.name, regions.name as region_name, countries.name as country_name From cities, regions, countries where cities.region_id=regions.id and regions.country_id=countries.id order by cities.name asc";
 	public static final String FIND_ALL_BUILDINGS_SUMMARY_TEMPLATE = 
-	"select buildings.id, buildings.name, cities.name as city_name, regions.name as region_name, countries.name as country_name, buildings.address, buildings.nb_floors From buildings, cities, regions, countries where buildings.city_id=cities.id and cities.region_id=regions.id and regions.country_id=countries.id";
+	"select buildings.id, buildings.name, cities.name as city_name, regions.name as region_name, countries.name as country_name, buildings.address, buildings.nb_floors From buildings, cities, regions, countries where buildings.city_id=cities.id and cities.region_id=regions.id and regions.country_id=countries.id order by buildings.name asc";
 	public static final String FIND_REQUESTED_ROOM_DAILY_TEMPLATE = 
 			"select * from %s where day >:fromDate and day <:toDate order by day";
 	public static final String FIND_REQUESTED_MEETINGROOM_DAILY_TEMPLATE = 
