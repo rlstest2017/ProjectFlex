@@ -320,10 +320,7 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
 			if ((statusCode != 200) && (statusCode != 201) && (statusCode != 202)) {
-				if (statusCode == 405) {
-					LOGGER.error("agentMacAddress #: " + params.getAgentMacAddress() + " is not not paired to a meetingroom");
-					throw new MethodNotAllowedException("agentMacAddress #: " + params.getAgentMacAddress() + " is not paired to a meetingroom");
-				} else if (statusCode == 404) {
+				if (statusCode == 404) {
 					LOGGER.error("agentMacAddress #: " + params.getAgentMacAddress() + " is not found in FlexOffice DataBase");
 					throw new DataNotExistsException("agentMacAddress #: " + params.getAgentMacAddress() + " is not found in FlexOffice DataBase");
 				} else {
@@ -338,7 +335,12 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			ObjectMapper mapper = new ObjectMapper();
 			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {
 			});
+			
 			String meetingRoomExternalId = (String)mp.get("meetingRoomExternalId");
+			if (meetingRoomExternalId == null) {
+				LOGGER.error("agentMacAddress #: " + params.getAgentMacAddress() + " is not not paired to a meetingroom");
+				throw new MethodNotAllowedException("agentMacAddress #: " + params.getAgentMacAddress() + " is not paired to a meetingroom");
+			} 
 			String command = (String)mp.get("command");
 			agentOutput.setMeetingRoomExternalId(meetingRoomExternalId);
 			agentOutput.setCommand(EnumCommand.valueOf(command));

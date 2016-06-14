@@ -61,6 +61,21 @@ public class DashboardEndpointImplTest {
 		assertEquals(false, expectedResult);
 	}
 	
-	
+	@Test
+	public void TestB_DASHBOARD_NOT_FOUND() {
+		// SetUp
+		boolean expectedResult = false;
+		try {
+			DashboardInput params = new DashboardInput();
+			params.setDashboardStatus(EDashboardStatus.ONLINE);
+			dashboardEndpoint.updateDashboard("tk:rl:rl:rl:rl:rl", params);
+			
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error("TestB_DASHBOARD_NOT_FOUND : " +e.getMessage());
+		}	
+		// Asserts
+		assertEquals(true, expectedResult);
+	}
 
 }

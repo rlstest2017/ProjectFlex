@@ -62,6 +62,39 @@ public class AgentEndpointImplTest {
 		assertEquals(false, expectedResult);
 	}
 	
+	@Test
+	public void TestB_AGENT_NOT_FOUND() {
+		// SetUp
+		boolean expectedResult = false;
+		try {
+			AgentInput params = new AgentInput();
+			params.setAgentStatus(EAgentStatus.ECONOMIC);
+			agentEndpoint.updateAgent("tk:rl:rl:rl:rl:rl", params);
+			
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error("TestB_AGENT_NOT_FOUND : " +e.getMessage());
+		}	
+		// Asserts
+		assertEquals(true, expectedResult);
+	}
 	
-
+	@Test
+	public void TestC_AGENT_NOT_PAIRED() {
+		// SetUp
+		boolean expectedResult = false;
+		try {
+			AgentInput params = new AgentInput();
+			params.setAgentStatus(EAgentStatus.ECONOMIC);
+			agentEndpoint.updateAgent("lr:lr:lr:lr:lr:lr", params);
+			
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error("TestC_AGENT_NOT_PAIRED : " +e.getMessage());
+		}	
+		// Asserts
+		assertEquals(true, expectedResult);
+	}
+	
+	
 }
