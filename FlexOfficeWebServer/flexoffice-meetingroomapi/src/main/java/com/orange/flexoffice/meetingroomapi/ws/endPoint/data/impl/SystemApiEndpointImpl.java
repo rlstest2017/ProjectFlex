@@ -45,93 +45,115 @@ public class SystemApiEndpointImpl implements SystemApiEndpoint {
 			ConfigurationDao configuration;
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.AGENT_STATUS_TIMEOUT.toString());
-			if (configuration != null)
-			system.setAgentTimeout(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			if (configuration != null){
+				system.setAgentTimeout(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.DASHBOARD_STATUS_TIMEOUT.toString());
-			if (configuration != null)
-			system.setDashboardTimeout(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			if (configuration != null) {
+				system.setDashboardTimeout(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.MEETINGROOM_STATUS_TIMEOUT.toString());
-			if (configuration != null)
-			system.setMeetingRoomTimeout(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			if (configuration != null){
+				system.setMeetingRoomTimeout(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.WS_REFRESH_INTERVAL.toString());
-			if (configuration != null)
-			system.setWsRefreshInterval(Long.valueOf(configuration.getValue()));
+			if (configuration != null){
+				system.setWsRefreshInterval(Long.valueOf(configuration.getValue()));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.INACTIVITY_TIME.toString());
-			if (configuration != null)
-			system.setInactivityTime(Long.valueOf(configuration.getValue()));
+			if (configuration != null){
+				system.setInactivityTime(Long.valueOf(configuration.getValue()));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.HOUR_START.toString());
-			if (configuration != null)
-			system.setHourStart(Long.valueOf(configuration.getValue()));
+			if (configuration != null){
+				system.setHourStart(Long.valueOf(configuration.getValue()));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.HOUR_END.toString());
-			if (configuration != null)
-			system.setHourEnd(Long.valueOf(configuration.getValue()));
+			if (configuration != null) {
+				system.setHourEnd(Long.valueOf(configuration.getValue()));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.ORGANIZER_MANDATORY.toString());
-			if (configuration != null)
-			system.setOrganizerMandatory(Boolean.valueOf(configuration.getValue()));
+			if (configuration != null) {
+				system.setOrganizerMandatory(Boolean.valueOf(configuration.getValue()));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.SUBJECT_MANDATORY.toString());
-			if (configuration != null)
-			system.setSubjectMandatory(Boolean.valueOf(configuration.getValue()));
+			if (configuration != null){
+				system.setSubjectMandatory(Boolean.valueOf(configuration.getValue()));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.ACK_TIME.toString());
-			if (configuration != null)
-			system.setAckTime(Long.valueOf(configuration.getValue()));
+			if (configuration != null) {
+				system.setAckTime(Long.valueOf(configuration.getValue()));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.USER_CAN_CANCEL.toString());
-			if (configuration != null)
-			system.setUserCanCancel(Boolean.valueOf(configuration.getValue()));
+			if (configuration != null){
+				system.setUserCanCancel(Boolean.valueOf(configuration.getValue()));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.CAN_SHOW_SUBJECT.toString());
-			if (configuration != null)
-			system.setCanShowSubject(Boolean.valueOf(configuration.getValue()));
+			if (configuration != null){
+				system.setCanShowSubject(Boolean.valueOf(configuration.getValue()));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.CAN_SHOW_ORGANIZER.toString());
-			if (configuration != null)
-			system.setCanShowOrganizer(Boolean.valueOf(configuration.getValue()));
+			if (configuration != null){
+				system.setCanShowOrganizer(Boolean.valueOf(configuration.getValue()));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.DURATION_STEP.toString());
-			if (configuration != null)
-			system.setDurationStep(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			if (configuration != null) {
+				system.setDurationStep(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.MAX_DURATION.toString());
-			if (configuration != null)
-			system.setMaxDuration(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			if (configuration != null){
+				system.setMaxDuration(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.PAGES_SHIFT_INTERVAL.toString());
-			if (configuration != null)
-			system.setPagesShiftInterval(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			if (configuration != null){
+				system.setPagesShiftInterval(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.NB_ROOMS_PER_PAGE.toString());
-			if (configuration != null)
-			system.setNbRoomsPerPage(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			if (configuration != null){
+				system.setNbRoomsPerPage(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.VIRTUAL_KEYBOARD.toString());
-			if (configuration != null)
-			system.setVirtualKeyboard(Boolean.valueOf(configuration.getValue()));
+			if (configuration != null){
+				system.setVirtualKeyboard(Boolean.valueOf(configuration.getValue()));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.KEYBOARD_LANG.toString());
-			if (configuration != null)
-			system.setKeyboardLang(configuration.getValue());
+			if (configuration != null){
+				system.setKeyboardLang(configuration.getValue());
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.DASHBOARD_START_DATE.toString());
-			if (configuration != null)
-			system.setDashboardStartDate(Long.valueOf(configuration.getValue()));
+			if (configuration != null){
+				system.setDashboardStartDate(Long.valueOf(configuration.getValue()));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.DASHBOARD_MAX_BOOKINGS.toString());
-			if (configuration != null)
-			system.setDashboardMaxBookings(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			if (configuration != null){
+				system.setDashboardMaxBookings(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
+			}
 			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.SYNCHRO_TIME.toString());
-			if (configuration != null)
-			system.setSynchroTime(Long.valueOf(configuration.getValue()));
-		
+			if (configuration != null) {
+				system.setSynchroTime(Long.valueOf(configuration.getValue()));
+			}
+			
 			LOGGER.debug( "End call SystemApiEndpointImpl.getSystem  at: " + new Date() );
 			
 			return factory.createSystem(system).getValue();
