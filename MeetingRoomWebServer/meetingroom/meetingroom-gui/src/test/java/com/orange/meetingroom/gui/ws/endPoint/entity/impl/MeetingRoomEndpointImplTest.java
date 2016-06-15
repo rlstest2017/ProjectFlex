@@ -157,6 +157,25 @@ public class MeetingRoomEndpointImplTest {
 	}
 	
 	@Test
+	public void TestE_OK() {
+		// SetUp
+		boolean expectedResult = false;
+		try {
+			MeetingRoom output = meetingRoomEndpoint.getMeetingRoomBookings("test0@microsoft.cad.aql.fr", false);
+			
+			// Asserts
+			assertEquals("[TEST]gardian.paris@microsoft.cad.aql.fr", output.getRoom().getMeetingRoomDetails().getMeetingRoomExternalId());
+			
+			
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(false, expectedResult);
+	}
+	
+	@Test
 	public void TestE_KO1() {
 		// SetUp
 		boolean expectedResult = false;
