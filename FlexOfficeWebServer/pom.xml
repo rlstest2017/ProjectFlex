@@ -33,6 +33,15 @@
 	        </modules>
 	    </profile>
 	</profiles>
+	
+	<modules>
+       	<module>flexoffice-adminui</module> 
+   		<module>flexoffice-userui</module>
+   		<module>flexoffice-gatewayapi</module>
+   		<module>flexoffice-business</module>
+   		<module>flexoffice-dao</module>
+   		<module>flexoffice-meetingroomapi</module>
+	</modules>
  
   <properties>
     <!-- Par ordre alphabétique, veuillez respecter l'ordre à l'ajout. -->
