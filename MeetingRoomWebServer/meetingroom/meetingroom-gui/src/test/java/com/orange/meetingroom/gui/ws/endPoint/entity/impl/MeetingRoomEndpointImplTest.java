@@ -155,6 +155,48 @@ public class MeetingRoomEndpointImplTest {
 		// Asserts
 		assertEquals(true, output);
 	}
+	
+	@Test
+	public void TestE_KO1() {
+		// SetUp
+		boolean expectedResult = false;
+		try {
+			meetingRoomEndpoint.getMeetingRoomBookings("test1@microsoft.cad.aql.fr", false);
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(true, expectedResult);
+	}
+
+	@Test
+	public void TestE_KO2() {
+		// SetUp
+		boolean expectedResult = false;
+		try {
+			meetingRoomEndpoint.getMeetingRoomBookings("test2@microsoft.cad.aql.fr", false);
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(true, expectedResult);
+	}
+
+	@Test
+	public void TestE_KO3() {
+		// SetUp
+		boolean expectedResult = false;
+		try {
+			meetingRoomEndpoint.getMeetingRoomBookings("test3@microsoft.cad.aql.fr", false);
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(true, expectedResult);
+	}
 
 
 }
