@@ -59,7 +59,7 @@ public class MeetingRoomEndpointImplTest {
 		assertEquals(false, expectedResult);
 	}
 	
-	//@Test
+	@Test
 	public void TestB() {
 		// SetUp
 		boolean expectedResult = false;
