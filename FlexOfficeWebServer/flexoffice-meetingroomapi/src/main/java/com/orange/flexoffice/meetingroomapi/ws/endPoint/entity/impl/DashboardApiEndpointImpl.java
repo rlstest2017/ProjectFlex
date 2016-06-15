@@ -54,7 +54,7 @@ public class DashboardApiEndpointImpl implements DashboardApiEndpoint {
 		
 		} catch (DataNotExistsException e) {
 			LOGGER.debug("DataNotExistsException in getConfig() DashboardApiEndpointImpl with message :" + e.getMessage(), e);
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_66, Response.Status.NOT_FOUND));
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_68, Response.Status.NOT_FOUND));
 		} catch (RuntimeException ex) {
 			LOGGER.debug("RuntimeException in getConfig() DashboardApiEndpointImpl with message :" + ex.getMessage(), ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
