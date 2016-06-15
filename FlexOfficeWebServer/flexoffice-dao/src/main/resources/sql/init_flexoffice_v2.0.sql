@@ -62,7 +62,7 @@ CREATE TABLE meetingrooms (
 CREATE TABLE agents (
     id serial NOT NULL,
     mac_address character varying(100) unique NOT NULL,
-    name citext,
+    name citext unique NOT NULL,
     description text,
     status agentStatus DEFAULT 'OFFLINE',
     meetingroom_id integer DEFAULT 0,
@@ -73,7 +73,7 @@ CREATE TABLE agents (
 CREATE TABLE dashboards (
     id serial NOT NULL,
     mac_address character varying(100) unique NOT NULL,
-    name citext,
+    name citext unique NOT NULL,
     description text,
     status dashboardStatus DEFAULT 'OFFLINE',
     last_measure_date timestamp without time zone,
@@ -119,6 +119,7 @@ ALTER TABLE ONLY meetingrooms
     ADD CONSTRAINT meetingrooms_pkey PRIMARY KEY (id),
     ADD  FOREIGN KEY(agent_id) REFERENCES agents(id),
 	ADD  FOREIGN KEY(building_id) REFERENCES buildings(id),
+	ADD CONSTRAINT meetingrooms_unique_key UNIQUE (name, building_id),
 	ADD CONSTRAINT name_length_check CHECK (char_length(name) <= 100);
 
 ALTER TABLE ONLY meetingroom_groups_configuration
