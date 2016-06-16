@@ -228,7 +228,7 @@ public class AgentManagerImpl implements AgentManager {
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("DataAccessException in update() AgentManagerImpl with message :" + e.getMessage(), e);
 			LOGGER.error("DataAccessException in update() AgentManagerImpl with message :" + e.getMessage());
-			throw new DataNotExistsException("Agent not exist");
+			throw new DataNotExistsException("Agent " + agentDao.getMacAddress() + " not exist");
 		}
 	}
 
