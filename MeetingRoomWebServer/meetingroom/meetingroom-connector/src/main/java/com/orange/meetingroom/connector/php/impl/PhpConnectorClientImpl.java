@@ -373,7 +373,7 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 
 			} catch (java.lang.ClassCastException e) {
 				// if not rooms, PHP returns ( "Rooms": []) witch produce this exception
-				LOGGER.error("no rooms found.", e);
+				LOGGER.debug("no rooms found.", e);
 			}
 			
 			return meetingrooms;
