@@ -44,7 +44,7 @@ public class AgentApiEndpointImpl implements AgentApiEndpoint {
 	
 	@Override
 	public AgentOutput updateStatus(String macAddress, AgentInput agent) throws DataNotExistsException {
-		LOGGER.debug( "Begin call AgentApiEndpointImpl.updateStatus at: " + new Date() );
+		LOGGER.debug( "Begin call AgentApiEndpointImpl.updateStatus at: " + new Date() +" with status " + agent.getAgentStatus() + " for agent " + macAddress);
 		
 		AgentOutput returnedAgent = factory.createAgentOutput();
 		AgentDao agentUpdated = new AgentDao();
