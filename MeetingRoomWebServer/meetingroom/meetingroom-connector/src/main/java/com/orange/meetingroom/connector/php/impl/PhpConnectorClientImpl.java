@@ -159,6 +159,7 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 			//Now pull back the response object
 			HttpEntity httpEntity = response.getEntity();
 			String apiOutput = EntityUtils.toString(httpEntity);
+			//LOGGER.info("apiOutput in getBookingsFromAgent(...) method is : " + apiOutput);
 			// parse the JSON response
 			ObjectMapper mapper = new ObjectMapper();
 			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {
@@ -293,6 +294,7 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 			//Now pull back the response object
 			HttpEntity httpEntity = response.getEntity();
 			String apiOutput = EntityUtils.toString(httpEntity);
+			//LOGGER.info("apiOutput in getBookingsFromDashboard(...) method is : " + apiOutput);
 			// parse the JSON response
 			ObjectMapper mapper = new ObjectMapper();
 			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {
@@ -432,6 +434,7 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 			//Now pull back the response object
 			HttpEntity httpEntity = response.getEntity();
 			String apiOutput = EntityUtils.toString(httpEntity);
+			LOGGER.info("apiOutput in setBooking(...) method is : " + apiOutput);
 			// parse the JSON response
 			ObjectMapper mapper = new ObjectMapper();
 			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {
@@ -508,6 +511,7 @@ public class PhpConnectorClientImpl implements PhpConnectorClient {
 			//Now pull back the response object
 			HttpEntity httpEntity = response.getEntity();
 			String apiOutput = EntityUtils.toString(httpEntity);
+			LOGGER.info("apiOutput in updateBooking(...) method is : " + apiOutput);
 			// parse the JSON response
 			ObjectMapper mapper = new ObjectMapper();
 			Map<String, Object> mp = mapper.readValue(apiOutput,new TypeReference<Map<String, Object>>() {
