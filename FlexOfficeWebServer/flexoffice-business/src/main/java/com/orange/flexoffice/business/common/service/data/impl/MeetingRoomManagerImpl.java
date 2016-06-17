@@ -321,7 +321,7 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 			MeetingRoomDao foundMeetingRoom = meetingroomRepository.findByExternalId(meetingroomDao.getExternalId());
 			meetingroomDao.setId(foundMeetingRoom.getId());
 
-			LOGGER.debug("Meeting Room id is : " + meetingroomDao.getId());
+			LOGGER.debug("Meeting Room id is : " + meetingroomDao.getId() + " status received is " + meetingroomDao.getStatus());
 			// Use in case of reservation meeting Room in agent/dashboard
 			if  (meetingroomDao.getStatus().equals(E_MeetingRoomStatus.OCCUPIED.toString())) { 
 				LOGGER.info("foundMeetingRoomStatus is " + foundMeetingRoom.getStatus() + " for meeting room#" + foundMeetingRoom.getName());
