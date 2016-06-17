@@ -337,7 +337,7 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 					meetingRoomStatRepository.saveOccupiedMeetingRoomStat(meetingRoomStat);
 					LOGGER.info("meetingRoomStat created for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
 				}
-			} else if (meetingroomDao.getStatus().equals(E_MeetingRoomStatus.FREE.toString()) || meetingroomDao.getStatus().equals(E_MeetingRoomStatus.UNKNOWN.toString())) { 
+			} else if (meetingroomDao.getStatus().equals(E_MeetingRoomStatus.FREE.toString()) || meetingroomDao.getStatus().equals(E_MeetingRoomStatus.UNKNOWN.toString()) || meetingroomDao.getStatus().equals(E_MeetingRoomStatus.ACK.toString())) { 
 				if (foundMeetingRoom.getStatus().equals(E_MeetingRoomStatus.OCCUPIED.toString())) { 
 					LOGGER.debug("MeetingRoomStat to update !!!");
 					MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
