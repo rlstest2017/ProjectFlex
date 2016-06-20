@@ -10,6 +10,7 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.orange.flexoffice.business.common.service.data.AlertManager;
 import com.orange.flexoffice.business.common.service.data.TaskManager;
 import com.orange.flexoffice.business.common.utils.DateTools;
 import com.orange.flexoffice.dao.common.model.data.AgentDao;
@@ -67,6 +68,8 @@ public class TaskManagerImpl implements TaskManager {
 	private AgentDaoRepository agentRepository;
 	@Autowired
 	private DashboardDaoRepository dashboardRepository;
+	@Autowired
+	private AlertManager alertManager;
 	
 	@Autowired
 	DateTools dateTools;
@@ -311,6 +314,10 @@ public class TaskManagerImpl implements TaskManager {
 		for(AgentDao agent : listAgents){
 			if(E_AgentStatus.ONLINE.toString().equals(agent.getStatus())){
 				agent.setStatus(E_AgentStatus.OFFLINE.toString());
+				
+				// update Agent Alert
+				alertManager.updateAgentAlert(agent.getId(), agent.getStatus());
+				
 				agentRepository.updateAgentStatusForTimeout(agent);
 			}
 		}
@@ -321,6 +328,10 @@ public class TaskManagerImpl implements TaskManager {
 		for(DashboardDao dashboard : listDashboards){
 			if(E_DashboardStatus.ONLINE.toString().equals(dashboard.getStatus())){
 				dashboard.setStatus(E_DashboardStatus.OFFLINE.toString());
+				
+				// update Dashboard Alert
+				alertManager.updateDashboardAlert(dashboard.getId(), dashboard.getStatus());
+				
 				dashboardRepository.updateDashboardStatusForTimeout(dashboard);
 			}
 		}
