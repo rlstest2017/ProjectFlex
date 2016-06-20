@@ -191,7 +191,7 @@ public final class DataSqlTemplate {
 	public static final String COUNT_MEETINGROOM_BY_TYPE_TEMPLATE =
 			"select count(id) from %s where type=CAST(:type AS meetingroomtype)";
 	public static final String CREATE_ALERT_TEMPLATE = 
-			"insert into %s (name, type, gateway_id, sensor_id, agent_id, dashboard_id) values (:name, CAST(:type AS deviceType), :gatewayId, :sensorId, :agentId, :dashboardId)";
+			"insert into %s (name, type, gateway_id, sensor_id, agent_id, dashboard_id, last_notification) values (:name, CAST(:type AS deviceType), :gatewayId, :sensorId, :agentId, :dashboardId, :lastNotification)";
 	public static final String CREATE_USER_TEMPLATE = 
 			"insert into %s (first_name, last_name, email) values (:firstName, :lastName, :email)";
 	public static final String CREATE_USER_FROM_USERUI_TEMPLATE = 
