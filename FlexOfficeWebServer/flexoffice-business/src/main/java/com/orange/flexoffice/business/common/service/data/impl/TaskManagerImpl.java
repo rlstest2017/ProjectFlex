@@ -309,7 +309,9 @@ public class TaskManagerImpl implements TaskManager {
 	@Override
 	public void checkAgentDashboardTimeOut() {
 		ConfigurationDao intervalAgentTimeout = configRepository.findByKey(E_ConfigurationKey.AGENT_STATUS_TIMEOUT.toString());
-		List<AgentDao> listAgents = agentRepository.findAgentsInTimeout(intervalAgentTimeout.getValue()); 
+		List<AgentDao> listAgents = agentRepository.findAgentsInTimeout(intervalAgentTimeout.getValue());
+		
+		LOGGER.debug("checkAgentDashboardTimeOut there are : " + listAgents.size() + " agents in timeout.");
 		
 		for(AgentDao agent : listAgents){
 			if(E_AgentStatus.ONLINE.toString().equals(agent.getStatus())){
@@ -324,6 +326,8 @@ public class TaskManagerImpl implements TaskManager {
 		
 		ConfigurationDao intervalDashboardTimeout = configRepository.findByKey(E_ConfigurationKey.DASHBOARD_STATUS_TIMEOUT.toString());
 		List<DashboardDao> listDashboards = dashboardRepository.findDashboardsInTimeout(intervalDashboardTimeout.getValue()); 
+		
+		LOGGER.debug("checkAgentDashboardTimeOut there are : " + listDashboards.size() + " dashboards in timeout.");
 		
 		for(DashboardDao dashboard : listDashboards){
 			if(E_DashboardStatus.ONLINE.toString().equals(dashboard.getStatus())){
