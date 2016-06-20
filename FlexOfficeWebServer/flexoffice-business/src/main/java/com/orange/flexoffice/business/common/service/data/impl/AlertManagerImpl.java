@@ -209,6 +209,7 @@ public class AlertManagerImpl implements AlertManager {
 					alert = new AlertDao();
 					alert.setName(status);
 					alert.setType(E_DeviceType.GATEWAY.toString());
+					alert.setLastNotification(new Date());
 					alertRepository.saveAlert(alert);
 				}
 			} catch(IncorrectResultSizeDataAccessException e ) {
@@ -218,6 +219,7 @@ public class AlertManagerImpl implements AlertManager {
 				alert.setName(status);
 				alert.setType(E_DeviceType.GATEWAY.toString());
 				alert.setGatewayId(gatewayId.intValue());
+				alert.setLastNotification(new Date());
 				alertRepository.saveAlert(alert);
 			}
 		} else if (sensorId != null) {
@@ -235,6 +237,7 @@ public class AlertManagerImpl implements AlertManager {
 						alert = new AlertDao();
 						alert.setName(status);
 						alert.setType(E_DeviceType.SENSOR.toString());
+						alert.setLastNotification(new Date());
 						alertRepository.saveAlert(alert);
 					}
 				} catch(IncorrectResultSizeDataAccessException e ) {
@@ -244,6 +247,7 @@ public class AlertManagerImpl implements AlertManager {
 					alert.setName(status);
 					alert.setType(E_DeviceType.SENSOR.toString());
 					alert.setSensorId(sensorId.intValue());
+					alert.setLastNotification(new Date());
 					alertRepository.saveAlert(alert);
 				}	
 
