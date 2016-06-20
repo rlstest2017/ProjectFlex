@@ -314,16 +314,14 @@ public class TaskManagerImpl implements TaskManager {
 		LOGGER.debug("checkAgentDashboardTimeOut there are : " + listAgents.size() + " agents in timeout.");
 		
 		for(AgentDao agent : listAgents){
-			if(E_AgentStatus.ONLINE.toString().equals(agent.getStatus())){
-				agent.setStatus(E_AgentStatus.OFFLINE.toString());
-				
-				LOGGER.debug("checkAgentDashboardTimeOut agent : " + agent.getId() + " set to offline");
-				
-				// update Agent Alert
-				alertManager.updateAgentAlert(agent.getId(), agent.getStatus());
-				
-				agentRepository.updateAgentStatusForTimeout(agent);
-			}
+			agent.setStatus(E_AgentStatus.OFFLINE.toString());
+			
+			LOGGER.debug("checkAgentDashboardTimeOut agent : " + agent.getId() + " set to offline");
+			
+			// update Agent Alert
+			alertManager.updateAgentAlert(agent.getId(), agent.getStatus());
+			
+			agentRepository.updateAgentStatusForTimeout(agent);
 		}
 		
 		ConfigurationDao intervalDashboardTimeout = configRepository.findByKey(E_ConfigurationKey.DASHBOARD_STATUS_TIMEOUT.toString());
@@ -332,16 +330,14 @@ public class TaskManagerImpl implements TaskManager {
 		LOGGER.debug("checkAgentDashboardTimeOut there are : " + listDashboards.size() + " dashboards in timeout.");
 		
 		for(DashboardDao dashboard : listDashboards){
-			if(E_DashboardStatus.ONLINE.toString().equals(dashboard.getStatus())){
-				dashboard.setStatus(E_DashboardStatus.OFFLINE.toString());
-				
-				LOGGER.debug("checkAgentDashboardTimeOut dashboard : " + dashboard.getId() + " set to offline");
-				
-				// update Dashboard Alert
-				alertManager.updateDashboardAlert(dashboard.getId(), dashboard.getStatus());
-				
-				dashboardRepository.updateDashboardStatusForTimeout(dashboard);
-			}
+			dashboard.setStatus(E_DashboardStatus.OFFLINE.toString());
+			
+			LOGGER.debug("checkAgentDashboardTimeOut dashboard : " + dashboard.getId() + " set to offline");
+			
+			// update Dashboard Alert
+			alertManager.updateDashboardAlert(dashboard.getId(), dashboard.getStatus());
+			
+			dashboardRepository.updateDashboardStatusForTimeout(dashboard);
 		}
 	}	
 	

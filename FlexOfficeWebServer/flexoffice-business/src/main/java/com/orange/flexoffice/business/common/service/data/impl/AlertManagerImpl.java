@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.orange.flexoffice.business.common.service.data.AlertManager;
+import com.orange.flexoffice.dao.common.model.data.AgentDao;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
+import com.orange.flexoffice.dao.common.model.data.DashboardDao;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
@@ -19,7 +21,9 @@ import com.orange.flexoffice.dao.common.model.enumeration.E_DashboardStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_DeviceType;
 import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_SensorStatus;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.AgentDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.DashboardDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
@@ -38,6 +42,10 @@ public class AlertManagerImpl implements AlertManager {
 	
 	@Autowired
 	private AlertDaoRepository alertRepository;
+	@Autowired
+	private AgentDaoRepository agentRepository;
+	@Autowired
+	private DashboardDaoRepository dashboardRepository;
 	@Autowired
 	private RoomDaoRepository roomRepository;
 	@Autowired
@@ -240,13 +248,14 @@ public class AlertManagerImpl implements AlertManager {
 				}	
 
 		} else if (agentId != null) {
+			AgentDao agentDao = agentRepository.findByAgentId(agentId);
 			try {
 				alert = alertRepository.findByAgentId(agentId);
 				if (alert != null) {
 					if ((alert.getType().equals(E_DeviceType.AGENT.toString()))&&(!alert.getName().equals(status))) {
 						// update name & lastnotification
 						alert.setName(status);
-						alert.setLastNotification(new Date());
+						alert.setLastNotification(agentDao.getLastMeasureDate());
 						alertRepository.updateAlert(alert);
 					}
 				} else {
@@ -254,6 +263,7 @@ public class AlertManagerImpl implements AlertManager {
 					alert = new AlertDao();
 					alert.setName(status);
 					alert.setType(E_DeviceType.AGENT.toString());
+					alert.setLastNotification(agentDao.getLastMeasureDate());
 					alertRepository.saveAlert(alert);
 				}
 			} catch(IncorrectResultSizeDataAccessException e ) {
@@ -263,17 +273,19 @@ public class AlertManagerImpl implements AlertManager {
 				alert.setName(status);
 				alert.setType(E_DeviceType.AGENT.toString());
 				alert.setAgentId(agentId.intValue());
+				alert.setLastNotification(agentDao.getLastMeasureDate());
 				alertRepository.saveAlert(alert);
 			}	
 
 	} else if (dashboardId != null) {
+		DashboardDao dashboardDao = dashboardRepository.findByDashboardId(dashboardId);
 		try {
 			alert = alertRepository.findByDashboardId(dashboardId);
 			if (alert != null) {
 				if ((alert.getType().equals(E_DeviceType.DASHBOARD.toString()))&&(!alert.getName().equals(status))) {
 					// update name & lastnotification
 					alert.setName(status);
-					alert.setLastNotification(new Date());
+					alert.setLastNotification(dashboardDao.getLastMeasureDate());
 					alertRepository.updateAlert(alert);
 				}
 			} else {
@@ -281,6 +293,7 @@ public class AlertManagerImpl implements AlertManager {
 				alert = new AlertDao();
 				alert.setName(status);
 				alert.setType(E_DeviceType.DASHBOARD.toString());
+				alert.setLastNotification(dashboardDao.getLastMeasureDate());
 				alertRepository.saveAlert(alert);
 			}
 		} catch(IncorrectResultSizeDataAccessException e ) {
@@ -290,6 +303,7 @@ public class AlertManagerImpl implements AlertManager {
 			alert.setName(status);
 			alert.setType(E_DeviceType.DASHBOARD.toString());
 			alert.setDashboardId(dashboardId.intValue());
+			alert.setLastNotification(dashboardDao.getLastMeasureDate());
 			alertRepository.saveAlert(alert);
 		}	
 
