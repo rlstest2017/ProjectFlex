@@ -119,7 +119,7 @@ public class AgentDaoRepository extends DataRepository<AgentDao> implements Agen
 	public AgentDao updateAgentStatus(AgentDao data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		
-		LOGGER.debug("Before execute jdbcTemplate update() method");
+		LOGGER.debug("Before execute jdbcTemplate update() method, agent " + data.getId() + " set status to " + data.getStatus());
 		
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
 		jdbcTemplate.update(updateAgentStatusQuery, paramBean, keyHolder);
@@ -137,7 +137,7 @@ public class AgentDaoRepository extends DataRepository<AgentDao> implements Agen
 	public AgentDao updateAgentStatusForTimeout(AgentDao data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		
-		LOGGER.debug("Before execute jdbcTemplate update() method");
+		LOGGER.debug("Before execute jdbcTemplate update() method, agent " + data.getId() + " set status to " + data.getStatus());
 		
 		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
 		jdbcTemplate.update(updateAgentStatusForTimeoutQuery, paramBean, keyHolder);
