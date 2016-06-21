@@ -1,7 +1,5 @@
 package com.orange.flexoffice.dao.common.model.object;
 
-import java.util.Date;
-
 /**
  * ExportStatDto
  * @author oab
@@ -16,8 +14,8 @@ public class ExportStatDto {
 	private String roomName;
 	private Integer roomFloor;
 	private String roomType;
-	private Date beginOccupancyDate;
-	private Date endOccupancyDate;
+	private String beginOccupancyDate;
+	private String endOccupancyDate;
 	
 	
 	/**
@@ -104,16 +102,16 @@ public class ExportStatDto {
 	public void setRoomType(String roomType) {
 		this.roomType = roomType;
 	}
-	public Date getBeginOccupancyDate() {
+	public String getBeginOccupancyDate() {
 		return beginOccupancyDate;
 	}
-	public void setBeginOccupancyDate(Date beginOccupancyDate) {
+	public void setBeginOccupancyDate(String beginOccupancyDate) {
 		this.beginOccupancyDate = beginOccupancyDate;
 	}
-	public Date getEndOccupancyDate() {
+	public String getEndOccupancyDate() {
 		return endOccupancyDate;
 	}
-	public void setEndOccupancyDate(Date endOccupancyDate) {
+	public void setEndOccupancyDate(String endOccupancyDate) {
 		this.endOccupancyDate = endOccupancyDate;
 	}
 
