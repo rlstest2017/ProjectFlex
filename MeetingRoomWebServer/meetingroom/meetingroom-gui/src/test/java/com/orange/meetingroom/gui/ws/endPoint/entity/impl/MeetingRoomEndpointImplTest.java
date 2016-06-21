@@ -44,8 +44,17 @@ public class MeetingRoomEndpointImplTest {
 		meetingRoomEndpoint = (MeetingRoomEndpointImpl)context.getBean("meetingRoomEndpoint");
 	}
 	
+	
 	@Test
-	public void TestA() {
+	public void TestA_CheckTimeOut() {
+		// SetUp
+		Boolean output = meetingRoomEndpoint.checkMeetingRoomsStatusTimeOutTestMethod();
+		// Asserts
+		assertEquals(true, output);
+	}
+	
+	@Test
+	public void TestA_GetMeetingRoom() {
 		// SetUp
 		boolean expectedResult = false;
 		try {
@@ -148,13 +157,7 @@ public class MeetingRoomEndpointImplTest {
 		// Asserts
 		assertEquals(false, expectedResult);
 	}
-	@Test
-	public void TestD() {
-		// SetUp
-		Boolean output = meetingRoomEndpoint.checkMeetingRoomsStatusTimeOutTestMethod();
-		// Asserts
-		assertEquals(true, output);
-	}
+	
 	
 	@Test
 	public void TestE_OK() {
