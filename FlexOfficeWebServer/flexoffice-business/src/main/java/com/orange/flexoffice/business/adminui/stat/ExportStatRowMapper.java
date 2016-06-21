@@ -19,7 +19,7 @@ public class ExportStatRowMapper implements RowMapper<ExportStatDto> {
 	public ExportStatDto mapRow(ResultSet rs, int rowNum) throws SQLException {
 		
 		SimpleDateFormat formatter;
-		formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		ExportStatDto result = new ExportStatDto();
 		result.setCountryName(rs.getString("country_name"));

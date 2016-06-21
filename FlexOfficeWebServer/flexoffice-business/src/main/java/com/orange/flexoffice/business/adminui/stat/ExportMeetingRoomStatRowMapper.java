@@ -19,7 +19,7 @@ public class ExportMeetingRoomStatRowMapper implements RowMapper<ExportMeetingRo
 	public ExportMeetingRoomStatDto mapRow(ResultSet rs, int rowNum) throws SQLException {
 		
 		SimpleDateFormat formatter;
-		formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		ExportMeetingRoomStatDto result = new ExportMeetingRoomStatDto();
 		result.setCountryName(rs.getString("country_name"));
