@@ -146,7 +146,11 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				if (meetingRoomDao.getCapacity() != null) {
 					room.setCapacity(BigInteger.valueOf(meetingRoomDao.getCapacity()));
 				}
-				room.setStatus(ERoomStatus.valueOf(meetingRoomDao.getStatus().toString()));
+				if("ACK".equals(meetingRoomDao.getStatus().toString())){
+					room.setStatus(ERoomStatus.RESERVED);
+				} else {
+					room.setStatus(ERoomStatus.valueOf(meetingRoomDao.getStatus().toString()));
+				}
 				room.setKind(ERoomKind.MEETINGROOM);
 				roomList.add(room);
 			}
@@ -185,7 +189,12 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				if (meetingRoomDto.getCapacity() != null) {
 					room.setCapacity(BigInteger.valueOf(meetingRoomDto.getCapacity()));
 				}
-				room.setStatus(ERoomStatus.valueOf(meetingRoomDto.getStatus().toString()));
+				
+				if("ACK".equals(meetingRoomDto.getStatus().toString())){
+					room.setStatus(ERoomStatus.RESERVED);
+				} else {
+					room.setStatus(ERoomStatus.valueOf(meetingRoomDto.getStatus().toString()));
+				}
 				
 				if (meetingRoomDto.getLastMeasureDate() != null) {
 					room.setLastMeasureDate(BigInteger.valueOf(meetingRoomDto.getLastMeasureDate().getTime()));
