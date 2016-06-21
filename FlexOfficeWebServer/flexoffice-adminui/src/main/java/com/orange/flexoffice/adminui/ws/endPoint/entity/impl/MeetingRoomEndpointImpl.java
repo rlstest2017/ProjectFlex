@@ -360,8 +360,8 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 
 		String tenant = "";
 
-		// Compute tenant name only if room is reserved or occupied
-		if (status == EMeetingroomStatus.OCCUPIED) {
+		// Compute tenant name only if meeting room is ack or occupied
+		if (status == EMeetingroomStatus.OCCUPIED || status == EMeetingroomStatus.ACK) {
 			tenant= organizerLabel;
 		}
 
