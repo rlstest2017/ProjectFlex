@@ -516,6 +516,7 @@
 			<xsd:element name="meetingroom" type="MeetingRoomOutput" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="status" type="e-agentStatus"/>
 			<xsd:element name="lastMeasureDate" type="xsd:long"/>
+			<xsd:element name="command" type="e-commandModel" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	

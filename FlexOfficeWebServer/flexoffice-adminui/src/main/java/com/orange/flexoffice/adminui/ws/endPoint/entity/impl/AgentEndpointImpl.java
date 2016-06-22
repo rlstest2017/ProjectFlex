@@ -18,6 +18,7 @@ import com.orange.flexoffice.adminui.ws.model.AgentInput2;
 import com.orange.flexoffice.adminui.ws.model.AgentOutput;
 import com.orange.flexoffice.adminui.ws.model.AgentSummary;
 import com.orange.flexoffice.adminui.ws.model.EAgentStatus;
+import com.orange.flexoffice.adminui.ws.model.ECommandModel;
 import com.orange.flexoffice.adminui.ws.model.MeetingRoomOutput;
 import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
 import com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler;
@@ -30,6 +31,7 @@ import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.dao.common.model.data.AgentDao;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_AgentStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_CommandModel;
 import com.orange.flexoffice.dao.common.model.object.AgentDto;
 
 
@@ -116,6 +118,20 @@ public class AgentEndpointImpl implements AgentEndpoint {
 				agent.setLastMeasureDate(data.getLastMeasureDate().getTime());
 			}
 			
+			if (data.getCommand().equals(E_CommandModel.NONE.toString())) {
+				agent.setCommand(ECommandModel.NONE);
+			} else if (data.getCommand().equals(E_CommandModel.ECONOMIC.toString())) {
+				agent.setCommand(ECommandModel.ECONOMIC);
+			} else if (data.getCommand().equals(E_CommandModel.ONLINE.toString())) {
+				agent.setCommand(ECommandModel.ONLINE);
+			} else if (data.getCommand().equals(E_CommandModel.OFFLINE.toString())) {
+				agent.setCommand(ECommandModel.OFFLINE);
+			} else if (data.getCommand().equals(E_CommandModel.RESET.toString())) {
+				agent.setCommand(ECommandModel.RESET);
+			} else if (data.getCommand().equals(E_CommandModel.STANDBY.toString())) {
+				agent.setCommand(ECommandModel.STANDBY);
+			}
+				
 			MeetingRoomDao meetingroom = data.getMeetingRoom();
 			
 			if (meetingroom != null){

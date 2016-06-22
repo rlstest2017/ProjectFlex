@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_AgentStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_CommandModel;
 
 /**
  * AgentDto
@@ -20,6 +21,7 @@ public class AgentDto {
 	private String macAddress;
 	private String description;
 	private E_AgentStatus status;
+	private E_CommandModel command;
 
 	/**
 	 * Meetingroom infos
@@ -68,6 +70,12 @@ public class AgentDto {
 	}
 	public void setLastMeasureDate(Date lastPollingDate) {
 		this.lastMeasureDate = lastPollingDate;
+	}
+	public E_CommandModel getCommand() {
+		return command;
+	}
+	public void setCommand(E_CommandModel command) {
+		this.command = command;
 	}
 	
 	
