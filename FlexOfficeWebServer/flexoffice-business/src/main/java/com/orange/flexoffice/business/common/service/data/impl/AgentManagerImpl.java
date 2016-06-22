@@ -111,6 +111,9 @@ public class AgentManagerImpl implements AgentManager {
 			dto.setMacAddress(macAddress);
 			dto.setName(agentDao.getName());
 			dto.setStatus(E_AgentStatus.valueOf(agentDao.getStatus()));
+			if (agentDao.getCommand() != null) {
+				dto.setCommand(E_CommandModel.valueOf(agentDao.getCommand()));
+			}
 			
 			if (LOGGER.isDebugEnabled()) {
 	            LOGGER.debug( "Return findByMacAddress(String macAddress) method for AgentManagerImpl, with parameters :");
