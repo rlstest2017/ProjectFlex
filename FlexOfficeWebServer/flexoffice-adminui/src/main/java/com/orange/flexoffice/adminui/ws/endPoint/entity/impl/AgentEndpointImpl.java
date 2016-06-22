@@ -118,17 +118,17 @@ public class AgentEndpointImpl implements AgentEndpoint {
 				agent.setLastMeasureDate(data.getLastMeasureDate().getTime());
 			}
 			
-			if (data.getCommand().equals(E_CommandModel.NONE.toString())) {
+			if (data.getCommand() == E_CommandModel.NONE) {
 				agent.setCommand(ECommandModel.NONE);
-			} else if (data.getCommand().equals(E_CommandModel.ECONOMIC.toString())) {
+			} else if (data.getCommand() == E_CommandModel.ECONOMIC) {
 				agent.setCommand(ECommandModel.ECONOMIC);
-			} else if (data.getCommand().equals(E_CommandModel.ONLINE.toString())) {
+			} else if (data.getCommand()== E_CommandModel.ONLINE) {
 				agent.setCommand(ECommandModel.ONLINE);
-			} else if (data.getCommand().equals(E_CommandModel.OFFLINE.toString())) {
+			} else if (data.getCommand() == E_CommandModel.OFFLINE) {
 				agent.setCommand(ECommandModel.OFFLINE);
-			} else if (data.getCommand().equals(E_CommandModel.RESET.toString())) {
+			} else if (data.getCommand() == E_CommandModel.RESET) {
 				agent.setCommand(ECommandModel.RESET);
-			} else if (data.getCommand().equals(E_CommandModel.STANDBY.toString())) {
+			} else if (data.getCommand() == E_CommandModel.STANDBY) {
 				agent.setCommand(ECommandModel.STANDBY);
 			}
 				
