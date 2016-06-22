@@ -208,6 +208,7 @@ public class AgentEndpointImpl implements AgentEndpoint {
 		agentDao.setMacAddress(macAddress.toLowerCase().replaceAll("-", ":"));
 		agentDao.setName(agent.getName().trim());
 		agentDao.setDescription(agent.getDesc());
+		agentDao.setCommand(agent.getCommand().toString());
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug( "Begin call updateAgent(String id, AgentInput2 agent) method of AgentEndpoint, with parameters :");
