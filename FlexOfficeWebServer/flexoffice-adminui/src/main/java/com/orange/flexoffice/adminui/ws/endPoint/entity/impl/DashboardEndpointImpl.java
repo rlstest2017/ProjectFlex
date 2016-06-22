@@ -111,11 +111,11 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 			dashboard.setMacAddress(data.getMacAddress());
 			dashboard.setName(data.getName());
 			dashboard.setDesc(data.getDescription());
-			if (data.getStatus().equals(E_DashboardStatus.ONLINE.toString())) {
+			if (data.getStatus() == E_DashboardStatus.ONLINE) {
 				dashboard.setStatus(EDashboardStatus.ONLINE);
-			} else if (data.getStatus().equals(E_DashboardStatus.OFFLINE.toString())) {
+			} else if (data.getStatus() == E_DashboardStatus.OFFLINE) {
 				dashboard.setStatus(EDashboardStatus.OFFLINE);
-			} else if(data.getStatus().equals(E_DashboardStatus.STANDBY.toString())){
+			} else if(data.getStatus() == E_DashboardStatus.STANDBY){
 				dashboard.setStatus(EDashboardStatus.STANDBY);
 			} else {
 				dashboard.setStatus(EDashboardStatus.ECONOMIC);

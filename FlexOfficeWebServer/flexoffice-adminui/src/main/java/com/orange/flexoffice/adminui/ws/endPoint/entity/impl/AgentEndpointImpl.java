@@ -104,11 +104,11 @@ public class AgentEndpointImpl implements AgentEndpoint {
 			agent.setMacAddress(data.getMacAddress());
 			agent.setName(data.getName());
 			agent.setDesc(data.getDescription());
-			if (data.getStatus().equals(E_AgentStatus.ONLINE.toString())) {
+			if (data.getStatus() == E_AgentStatus.ONLINE) {
 				agent.setStatus(EAgentStatus.ONLINE);
-			} else if (data.getStatus().equals(E_AgentStatus.OFFLINE.toString())) {
+			} else if (data.getStatus() == E_AgentStatus.OFFLINE) {
 				agent.setStatus(EAgentStatus.OFFLINE);
-			} else if(data.getStatus().equals(E_AgentStatus.STANDBY.toString())){
+			} else if(data.getStatus() == E_AgentStatus.STANDBY){
 				agent.setStatus(EAgentStatus.STANDBY);
 			} else {
 				agent.setStatus(EAgentStatus.ECONOMIC);
