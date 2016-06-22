@@ -78,11 +78,28 @@ public class DateTools {
 		return cal.getTime();
 	}
 	
+	/**
+	 * DayWithHour
+	 * @param dailyDate
+	 * @return
+	 */
+	// hh:Hour; mm:00; ss:00
+	public Integer DayWithHour(Integer Hour) {
+		Calendar cal = Calendar.getInstance();
+		cal.getTime();
+		cal.set(Calendar.HOUR_OF_DAY, Hour);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND,0);
+		cal.set(Calendar.MILLISECOND,0);
+		return (int)(long)(cal.getTime().getTime()/1000L);
+	}
+	
 	public static void main(String[] args) {
 		DateTools tool = new DateTools();
-		Integer startTime = 1465893000;
-		Integer result = tool.processDate(startTime, 10);
-		System.out.println("time is:" + result);
+		//Integer startTime = 1466571600;
+		//Integer result = tool.processDate(startTime, 10);
+		Integer today = tool.DayWithHour(20);
+		System.out.println("today is:" + today);
 	}
 
 }

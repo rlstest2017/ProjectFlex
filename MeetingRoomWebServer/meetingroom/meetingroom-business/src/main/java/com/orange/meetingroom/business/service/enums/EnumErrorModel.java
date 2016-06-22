@@ -7,15 +7,16 @@ package com.orange.meetingroom.business.service.enums;
  */
 public enum EnumErrorModel {
 	ERROR_1("500","une erreur métier s'est produite"),
-	ERROR_2("A001","agentMacAddress is not found"),
-	ERROR_3("A002","agentMacAddress is not paired to a meetingroom"),
-	ERROR_4("D001","dashboardMacAddress is not found"),
-	ERROR_5("M001","reservation is failed, Timeslot was not available or Internal error"),
-	ERROR_6("M002","cancel reservation is failed"),
-	ERROR_7("M003","confirm reservation is failed"),
-	ERROR_8("M004","meetingRoomExternalId not found, It doesn't exist or connexion problem to Exchange Server"),
-	ERROR_9("M005","errorFlag=true in PHP server return"),
-	ERROR_10("M006","no rooms or at least one roomId is not found in exchange server or the RoomGroupID (config xml file referenced) is wrong");
+	ERROR_2("A001","impossible de charger cet agent"),
+	ERROR_3("A002","cet agent n'est pas associé à une salle"),
+	ERROR_4("D001","impossible de charger cet écran"),
+	ERROR_5("M001","la réservation a échoué "/* le créneau horaire est refusé ou erreur serveur*/),
+	ERROR_6("M002","l'annulation de la réservation a échoué"),
+	ERROR_7("M003","la confirmation de la réservation a échoué"),
+	ERROR_8("M004","impossible de charger cette salle"/*meetingRoomExternalId not found, It doesn't exist or connexion problem to Exchange Server*/),
+	ERROR_9("M005","une erreur serveur distant s'est produite"/*errorFlag=true in PHP server return*/),
+	ERROR_10("M006","une erreur serveur s'est produite"/*no rooms or at least one roomId is not found in exchange server or the RoomGroupID (config xml file referenced) is wrong*/),
+	ERROR_11("M007","les dates sont en dehors de l'intervalle autorisé");
 	
      /**
      * status code

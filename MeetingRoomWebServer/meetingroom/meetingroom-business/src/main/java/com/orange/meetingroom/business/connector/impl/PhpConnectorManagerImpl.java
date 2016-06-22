@@ -1,20 +1,24 @@
 package com.orange.meetingroom.business.connector.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.orange.meetingroom.business.connector.PhpConnectorManager;
+import com.orange.meetingroom.business.connector.utils.ConfHashMapFactoryBean;
 import com.orange.meetingroom.business.connector.utils.DateTools;
 import com.orange.meetingroom.business.connector.utils.MeetingRoomInfoTools;
+import com.orange.meetingroom.business.service.exception.DateNotInSlotTimeException;
 import com.orange.meetingroom.connector.exception.DataNotExistsException;
 import com.orange.meetingroom.connector.exception.FlexOfficeInternalServerException;
 import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerException;
 import com.orange.meetingroom.connector.exception.MethodNotAllowedException;
 import com.orange.meetingroom.connector.exception.PhpInternalServerException;
 import com.orange.meetingroom.connector.flexoffice.FlexOfficeConnectorClient;
+import com.orange.meetingroom.connector.flexoffice.enums.EnumSystemInMap;
 import com.orange.meetingroom.connector.flexoffice.model.request.DashboardConnectorInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.MeetingRoomData;
 import com.orange.meetingroom.connector.php.PhpConnectorClient;
@@ -37,6 +41,9 @@ import com.orange.meetingroom.connector.php.model.response.SystemCurrentDateConn
 public class PhpConnectorManagerImpl implements PhpConnectorManager {
 
 	private static final Logger LOGGER = Logger.getLogger(PhpConnectorManagerImpl.class);
+	
+	@Autowired
+	ConfHashMapFactoryBean confHashMapFactoryBean; 
 	@Autowired
 	PhpConnectorClient phpConnector;
 	@Autowired
@@ -45,6 +52,9 @@ public class PhpConnectorManagerImpl implements PhpConnectorManager {
 	MeetingRoomInfoTools meetingRoomInfoTools;
 	@Autowired
 	DateTools dateTools;
+	
+	Integer hourStart = 0; // Hour start booking
+	Integer hourEnd = 0; // Hour end booking
 	
 	@Override
 	public SystemCurrentDateConnectorReturn getCurrentDate() throws PhpInternalServerException, MeetingRoomInternalServerException {
@@ -97,7 +107,23 @@ public class PhpConnectorManagerImpl implements PhpConnectorManager {
 	}
 
 	@Override
-	public BookingSummary setBooking(SetBookingParameters params) throws MeetingRoomInternalServerException, MethodNotAllowedException, PhpInternalServerException  {
+	public BookingSummary setBooking(SetBookingParameters params) throws MeetingRoomInternalServerException, MethodNotAllowedException, PhpInternalServerException, DateNotInSlotTimeException  {
+		// check HOUR_START & HOUR_END
+		getHourStart(); // get HourStart from Config hashMap from DataBase System Table
+		getHourEnd(); // get HourEnd from Config hashMap from DataBase System Table
+		Integer HourStartDay = dateTools.DayWithHour(getHourStart());
+		Integer HourEndDay = dateTools.DayWithHour(getHourEnd());
+		Boolean compareDates1 = dateTools.isTime1BeforeTime2(HourStartDay, Integer.valueOf(params.getStartDate()), 0);
+		Boolean compareDates2 = dateTools.isTime1BeforeTime2(Integer.valueOf(params.getEndDate()), HourEndDay, 0);
+		if (!compareDates1) { 
+			LOGGER.error("Error in setBooking(...) method, startDate is before HourStart parameter");
+			throw new DateNotInSlotTimeException("Error in setBooking(...) method, startDate is before HourStart parameter");
+		}
+		if (!compareDates2) { 
+			LOGGER.error("Error in setBooking(...) method, endDate is after HourEnd parameter");
+			throw new DateNotInSlotTimeException("Error in setBooking(...) method, endDate is after HourEnd parameter");
+		}
+		
 		return phpConnector.setBooking(params);
 	}
 
@@ -125,5 +151,28 @@ public class PhpConnectorManagerImpl implements PhpConnectorManager {
 		return phpConnector.updateBooking(params);
 	}
 
+	/**
+	 * getHourStart
+	 * @return
+	 */
+	private Integer getHourStart() {
+		Map<String, Integer> configMap = confHashMapFactoryBean.getObject();
+		if (configMap.containsKey(EnumSystemInMap.HOUR_START.toString())) {
+			this.hourStart = configMap.get(EnumSystemInMap.HOUR_START.toString());
+		}
+		return this.hourStart;
+	}
+	
+	/**
+	 * getHourEnd
+	 * @return
+	 */
+	private Integer getHourEnd() {
+		Map<String, Integer> configMap = confHashMapFactoryBean.getObject();
+		if (configMap.containsKey(EnumSystemInMap.HOUR_END.toString())) {
+			this.hourEnd = configMap.get(EnumSystemInMap.HOUR_END.toString());
+		}
+		return this.hourEnd;
+	}
 
 }

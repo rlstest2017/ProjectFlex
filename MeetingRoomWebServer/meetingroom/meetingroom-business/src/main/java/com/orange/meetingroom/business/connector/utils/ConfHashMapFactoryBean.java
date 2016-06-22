@@ -46,6 +46,9 @@ public class ConfHashMapFactoryBean implements FactoryBean<Map<String, Integer>>
 			configMap.put(EnumSystemInMap.ACK_TIME.toString(), systemreturn.getAckTime());
 			configMap.put(EnumSystemInMap.DASHBOARD_START_DATE.toString(), startDate);
 			configMap.put(EnumSystemInMap.DASHBOARD_MAX_BOOKINGS.toString(), systemreturn.getDashboardMaxBookings());
+			configMap.put(EnumSystemInMap.HOUR_START.toString(), systemreturn.getHourStart());
+			configMap.put(EnumSystemInMap.HOUR_END.toString(), systemreturn.getHourEnd());
+			
 		} catch (FlexOfficeInternalServerException | MeetingRoomInternalServerException e) {
 			LOGGER.debug("Exception thrown in flexofficeConnector.getSystem() in ConfHashMapFactoryBean class: " + e.getMessage(), e);
 		}

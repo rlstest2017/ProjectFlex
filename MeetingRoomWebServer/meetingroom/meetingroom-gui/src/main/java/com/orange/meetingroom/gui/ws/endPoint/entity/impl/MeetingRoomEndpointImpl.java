@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.orange.meetingroom.business.connector.PhpConnectorManager;
 import com.orange.meetingroom.business.connector.utils.ConfHashMapFactoryBean;
 import com.orange.meetingroom.business.service.enums.EnumErrorModel;
+import com.orange.meetingroom.business.service.exception.DateNotInSlotTimeException;
 import com.orange.meetingroom.connector.exception.DataNotExistsException;
 import com.orange.meetingroom.connector.exception.FlexOfficeInternalServerException;
 import com.orange.meetingroom.connector.exception.MeetingRoomInternalServerException;
@@ -260,6 +261,9 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 		
 		return factory.createBookingSetOutput(output).getValue();
 		
+		} catch (DateNotInSlotTimeException e) {
+			LOGGER.debug("DateNotInSlotTimeException in setBooking() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_11, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (MethodNotAllowedException e) {
 			LOGGER.debug("MethodNotAllowedException in setBooking() MeetingRoomEndpointImpl with message :" + e.getMessage(), e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_5, Response.Status.METHOD_NOT_ALLOWED));
