@@ -249,7 +249,7 @@ public final class DataSqlTemplate {
 	public static final String UPDATE_GATEWAY_TEMPLATE = 
 			"update %s set name=:name, description=:description WHERE mac_address=:macAddress";
 	public static final String UPDATE_AGENT_TEMPLATE = 
-			"update %s set name=:name, description=:description WHERE mac_address=:macAddress";
+			"update %s set name=:name, description=:description, command=CAST(:command AS commandModel) WHERE mac_address=:macAddress";
 	public static final String UPDATE_MEETINGROOM_GROUPS_CONFIGURATION_TEMPLATE = 
 			"update %s set meetingroom_group_id=:meetingroomGroupId WHERE building_id=:buildingId and floor=:floor";
 	public static final String UPDATE_DASHBOARD_TEMPLATE = 

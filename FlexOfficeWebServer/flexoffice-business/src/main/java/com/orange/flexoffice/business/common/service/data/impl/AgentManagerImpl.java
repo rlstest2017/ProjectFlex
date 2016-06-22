@@ -213,6 +213,8 @@ public class AgentManagerImpl implements AgentManager {
 			AgentDao agent = agentRepository.findByMacAddress(agentDao.getMacAddress());
 			agentDao.setId(agent.getId());
 			agentDao.setMeetingroomId(agent.getMeetingroomId());
+			agentDao.setName(agent.getName());
+			agentDao.setDescription(agent.getDescription());
 			if(agent.getCommand() == null){
 				agentDao.setCommand(E_CommandModel.NONE.toString());
 			} else {
@@ -224,7 +226,19 @@ public class AgentManagerImpl implements AgentManager {
 			alertManager.updateAgentAlert(agentId, agentDao.getStatus());
 			
 			// update AgentDao
-			return agentRepository.updateAgentStatus(agentDao);
+			AgentDao agentToRet = agentRepository.updateAgentStatus(agentDao);
+			
+			// Set to NONE agent command after getting command to send 
+			AgentDao agentUpdateCommand = new AgentDao();
+			agentUpdateCommand.setMacAddress(agent.getMacAddress());
+			agentUpdateCommand.setId(agent.getId());
+			agentUpdateCommand.setMeetingroomId(agent.getMeetingroomId());
+			agentUpdateCommand.setName(agent.getName());
+			agentUpdateCommand.setDescription(agent.getDescription());
+			agentUpdateCommand.setCommand(E_CommandModel.NONE.toString());
+			agentRepository.updateAgent(agentUpdateCommand);
+			
+			return agentToRet;
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("DataAccessException in update() AgentManagerImpl with message :" + e.getMessage(), e);
 			LOGGER.error("DataAccessException in update() AgentManagerImpl with message :" + e.getMessage());

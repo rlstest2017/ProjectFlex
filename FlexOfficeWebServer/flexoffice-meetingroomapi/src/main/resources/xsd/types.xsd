@@ -35,6 +35,8 @@
 	 	<xsd:enumeration value="ECONOMIC"/>
 	 	<xsd:enumeration value="ONLINE"/>
 	 	<xsd:enumeration value="OFFLINE"/>
+	 	<xsd:enumeration value="STANDBY"/>
+	 	<xsd:enumeration value="RESET"/>
 	 </xsd:restriction>
 	</xsd:simpleType>
 	<!-- End Enumeration Type -->

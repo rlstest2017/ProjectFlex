@@ -97,6 +97,8 @@
 	 	<xsd:enumeration value="ECONOMIC"/>
 	 	<xsd:enumeration value="ONLINE"/>
 	 	<xsd:enumeration value="OFFLINE"/>
+	 	<xsd:enumeration value="RESET"/>
+	 	<xsd:enumeration value="STANDBY"/>
 	 </xsd:restriction>
 	</xsd:simpleType>
 	<!-- End Enumeration Type -->
@@ -245,6 +247,7 @@
 			<xsd:element name="roomTypes" type="e-roomType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="meetingRoomTypes" type="e-meetingroomType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="deviceAlerts" type="DeviceAlertSummary" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="commands" type="e-commandModel" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	

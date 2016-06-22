@@ -1,3 +1,5 @@
+DROP TABLE meetingrooms, agents, dashboards, meetingroom_groups_configuration, meetingroom_stats, meetingroom_daily_occupancy;
+
 CREATE EXTENSION IF NOT EXISTS citext;
 
 /* Start Migration part */
@@ -34,6 +36,17 @@ alter table rooms
 alter table sensors alter column name type citext;
 alter table sensors 
 	ADD CONSTRAINT name_length_check CHECK (char_length(name) <= 100);
+	
+/*
+ * !!!!!!! WARNING these 5 following lines have to be executed one by one !!!!!!!!!!!!
+ * 
+ */	
+alter type deviceType add value 'AGENT';
+alter type deviceType add value 'DASHBOARD';
+
+alter type commandModel add value 'ONLINE';
+alter type commandModel add value 'OFFLINE';
+alter type commandModel add value 'NONE';
 /* End Migration part */
 
 CREATE TYPE meetingroomStatus AS ENUM ('FREE', 'OCCUPIED', 'UNKNOWN', 'ACK');

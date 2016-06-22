@@ -1,4 +1,3 @@
-DROP TABLE meetingrooms, agents, dashboards, meetingroom_groups_configuration, meetingroom_stats, meetingroom_daily_occupancy;
 DROP TABLE users, gateways, rooms, sensors, alerts, room_stats, room_daily_occupancy, teachin_sensors, configuration, preferences, buildings, cities, regions, countries;
    
 DROP TYPE meetingroomStatus, meetingroomType, agentStatus, dashboardStatus, meetingroomInfo; 
@@ -6,7 +5,7 @@ DROP TYPE userRole, deviceType, sensorType, sensorStatus, gatewayStatus, roomSta
 
 
 CREATE TYPE userRole AS ENUM ('DEFAULT', 'ADMIN');
-CREATE TYPE deviceType AS ENUM ('GATEWAY', 'SENSOR', 'AGENT', 'DASHBOARD');
+CREATE TYPE deviceType AS ENUM ('GATEWAY', 'SENSOR');
 CREATE TYPE sensorType AS ENUM ('MOTION_DETECTION', 'TEMPERATURE_HUMIDITY');
 CREATE TYPE sensorStatus AS ENUM ('ONLINE', 'OFFLINE', 'UNSTABLE', 'UNSTABLE_VOLTAGE', 'UNSTABLE_RSSI');
 CREATE TYPE gatewayStatus AS ENUM ('ONLINE', 'OFFLINE', 'ONTEACHIN', 'ERROR_NO_USB_DEVICE', 'ERROR_FIFO_FILE');
@@ -16,7 +15,7 @@ CREATE TYPE sensorOccupancyInfo AS ENUM ('UNOCCUPIED', 'OCCUPIED');
 CREATE TYPE roomInfo AS ENUM ('RESERVED', 'CANCELED', 'TIMEOUT', 'OCCUPIED', 'UNOCCUPIED');
 CREATE TYPE teachinStatus AS ENUM ('INITIALIZING', 'RUNNING', 'ENDED');
 CREATE TYPE sensorTeachinStatus AS ENUM ('NOT_PAIRED', 'PAIRED_OK', 'PAIRED_KO');
-CREATE TYPE commandModel AS ENUM ('RESET', 'ECONOMIC', 'STANDBY', 'ONLINE', 'OFFLINE');
+CREATE TYPE commandModel AS ENUM ('RESET', 'ECONOMIC', 'STANDBY');
 
  
 CREATE TABLE users (

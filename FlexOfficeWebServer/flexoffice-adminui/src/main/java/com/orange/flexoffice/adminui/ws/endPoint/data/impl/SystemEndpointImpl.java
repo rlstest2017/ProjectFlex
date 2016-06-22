@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.adminui.ws.endPoint.data.SystemEndpoint;
 import com.orange.flexoffice.adminui.ws.model.DeviceAlertSummary;
+import com.orange.flexoffice.adminui.ws.model.ECommandModel;
 import com.orange.flexoffice.adminui.ws.model.EDeviceStatus;
 import com.orange.flexoffice.adminui.ws.model.EDeviceType;
 import com.orange.flexoffice.adminui.ws.model.EMeetingroomType;
@@ -106,6 +107,12 @@ public class SystemEndpointImpl implements SystemEndpoint {
 			List<EMeetingroomType> meetingRoomTypesToRet = system.getMeetingRoomTypes();
 			for (EMeetingroomType eMeetingRoomType : meetingRoomTypes) {
 				meetingRoomTypesToRet.add(eMeetingRoomType);
+			}
+			
+			List<ECommandModel> commands = constructCommands();
+			List<ECommandModel> commandsToRet = system.getCommands();
+			for (ECommandModel eCommand : commands) {
+				commandsToRet.add(eCommand);
 			}
 			
 			List<AlertDao> alertsDao = data.getDeviceAlerts();
@@ -331,5 +338,17 @@ public class SystemEndpointImpl implements SystemEndpoint {
 		meetingRoomTypes.add(EMeetingroomType.VIDEO_CONF);
 		
 		return meetingRoomTypes;
+	}
+	
+	private List<ECommandModel> constructCommands() {
+		List<ECommandModel> commands = new ArrayList<ECommandModel>();
+		commands.add(ECommandModel.ONLINE);
+		commands.add(ECommandModel.ECONOMIC);
+		commands.add(ECommandModel.STANDBY);
+		commands.add(ECommandModel.RESET);
+		commands.add(ECommandModel.OFFLINE);
+		commands.add(ECommandModel.NONE);
+		
+		return commands;
 	}
 }
