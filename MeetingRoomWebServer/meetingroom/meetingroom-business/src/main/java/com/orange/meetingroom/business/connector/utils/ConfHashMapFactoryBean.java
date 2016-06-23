@@ -37,14 +37,10 @@ public class ConfHashMapFactoryBean implements FactoryBean<Map<String, Integer>>
 			configMap = new HashMap<String, Integer>();
 			SystemConnectorReturn systemreturn;
 			systemreturn = flexofficeConnector.getSystem();
-			// process startDate
-			Integer startDate = 0;
 			Integer nbSeconds = systemreturn.getDashboardStartDate();
-			if (nbSeconds != 0) {
-				startDate = dateTools.processStartDate(nbSeconds);
-			}
+
 			configMap.put(EnumSystemInMap.ACK_TIME.toString(), systemreturn.getAckTime());
-			configMap.put(EnumSystemInMap.DASHBOARD_START_DATE.toString(), startDate);
+			configMap.put(EnumSystemInMap.DASHBOARD_START_DATE.toString(), nbSeconds);
 			configMap.put(EnumSystemInMap.DASHBOARD_MAX_BOOKINGS.toString(), systemreturn.getDashboardMaxBookings());
 			configMap.put(EnumSystemInMap.HOUR_START.toString(), systemreturn.getHourStart());
 			configMap.put(EnumSystemInMap.HOUR_END.toString(), systemreturn.getHourEnd());

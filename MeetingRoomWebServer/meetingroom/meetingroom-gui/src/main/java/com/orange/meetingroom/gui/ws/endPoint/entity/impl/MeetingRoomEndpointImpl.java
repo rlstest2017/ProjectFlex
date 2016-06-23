@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.meetingroom.business.connector.PhpConnectorManager;
 import com.orange.meetingroom.business.connector.utils.ConfHashMapFactoryBean;
+import com.orange.meetingroom.business.connector.utils.DateTools;
 import com.orange.meetingroom.business.service.enums.EnumErrorModel;
 import com.orange.meetingroom.business.service.exception.DateNotInSlotTimeException;
 import com.orange.meetingroom.connector.exception.DataNotExistsException;
@@ -77,6 +78,8 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	// for testing
 	@Autowired
 	private MeetingRoomGuiTasks meetingRoomTask;
+	@Autowired
+	DateTools dateTools;
 	
 	/**
 	 * @return the dashboardMaxBookingsParam
@@ -95,7 +98,16 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	private String getDashboardStartDateBookingsParam() {
 		Map<String, Integer> configMap = confHashMapFactoryBean.getObject();
 		if (configMap.containsKey(EnumSystemInMap.DASHBOARD_START_DATE.toString())) {
-			this.dashboardStartDateBookingsParam = configMap.get(EnumSystemInMap.DASHBOARD_START_DATE.toString()).toString();
+			// process startDate
+			Integer startDate = 0;
+			String nbSeconds = configMap.get(EnumSystemInMap.DASHBOARD_START_DATE.toString()).toString();
+			if (Integer.valueOf(nbSeconds) != 0) {
+					startDate = dateTools.processStartDate(Integer.valueOf(nbSeconds));
+					this.dashboardStartDateBookingsParam = startDate.toString();
+			} else {
+				this.dashboardStartDateBookingsParam = "0";
+			}
+			
 		}
 		return this.dashboardStartDateBookingsParam;
 	}
