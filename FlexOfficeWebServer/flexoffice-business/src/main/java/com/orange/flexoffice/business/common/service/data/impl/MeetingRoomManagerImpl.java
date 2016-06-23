@@ -1,6 +1,8 @@
 package com.orange.flexoffice.business.common.service.data.impl;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -345,10 +347,19 @@ public class MeetingRoomManagerImpl implements MeetingRoomManager {
 					meetingRoomStat.setEndOccupancyDate(meetingroomDao.getEndDate());
 					meetingRoomStatRepository.updateEndOccupancyDate(meetingRoomStat);
 					LOGGER.info("meetingRoomStat updateEndOccupancyDate for meeting room#" + foundMeetingRoom.getName() + " which status is : " + foundMeetingRoom.getStatus());
-					meetingroomDao.setOrganizerLabel(null);
-					meetingroomDao.setStartDate(null);
-					meetingroomDao.setEndDate(null);
-				} else if (!meetingroomDao.getStatus().equals(E_MeetingRoomStatus.ACK.toString())){
+				} else if (foundMeetingRoom.getStatus().equals(E_MeetingRoomStatus.ACK.toString())){
+					Date now = new Date();
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(now);
+					cal.add(Calendar.SECOND, -45);
+					Date modifiedTime = cal.getTime();
+					// pour compenser le manque de réactivité du php le premier status free reçu après un ack est ignoré -> lorsque l'utilisateur confirme la réservation on reçoit un free avant occupied -> à ignorer
+					if (meetingroomDao.getStatus().equals(E_MeetingRoomStatus.FREE.toString()) && foundMeetingRoom.getLastMeasureDate().after(modifiedTime)){
+						return meetingroomDao;
+					}
+				} 
+				
+				if (!meetingroomDao.getStatus().equals(E_MeetingRoomStatus.ACK.toString())){
 					meetingroomDao.setOrganizerLabel(null);
 					meetingroomDao.setStartDate(null);
 					meetingroomDao.setEndDate(null);
