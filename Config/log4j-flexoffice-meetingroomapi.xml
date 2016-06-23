@@ -34,13 +34,13 @@
 	<!-- additivity="true" permet de mettre les parents et fils du logger dans le même logger 
     et donc même destination (appender) -->
     
-	<logger name="com.orange.flexoffice" additivity="true">
+	<logger name="com.orange.flexoffice" additivity="false">
 		<level value="info" />
 		<appender-ref ref="logFile" />
 	</logger>
 	
     <!-- Spring -->
-	<logger name="org.springframework" additivity="true">
+	<logger name="org.springframework" additivity="false">
 		<level value="FATAL" />
 		<appender-ref ref="logFile" />
 	</logger>  
