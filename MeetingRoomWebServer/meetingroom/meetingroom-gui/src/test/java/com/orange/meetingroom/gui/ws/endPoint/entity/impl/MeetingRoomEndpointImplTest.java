@@ -13,6 +13,8 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Log4jConfigurer;
+
+import com.orange.meetingroom.business.connector.utils.DateTools;
 import com.orange.meetingroom.gui.ws.endPoint.entity.MeetingRoomEndpoint;
 import com.orange.meetingroom.gui.ws.model.BookingSetInput;
 import com.orange.meetingroom.gui.ws.model.BookingSetOutput;
@@ -37,11 +39,12 @@ public class MeetingRoomEndpointImplTest {
 
 	private static ClassPathXmlApplicationContext context;
 	private static MeetingRoomEndpoint meetingRoomEndpoint;
-	
+	private static DateTools dateTools;
 	@BeforeClass
 	public static void initSpringContextAndDatabase() throws Exception {
 		context = new ClassPathXmlApplicationContext("classpath*:applicationContext-meetingroom-gui-test.xml");
 		meetingRoomEndpoint = (MeetingRoomEndpointImpl)context.getBean("meetingRoomEndpoint");
+		dateTools = (DateTools)context.getBean("dateTools");
 	}
 	
 	
@@ -92,11 +95,15 @@ public class MeetingRoomEndpointImplTest {
 	public void TestC_phpSetBooking() {
 		// SetUp
 		boolean expectedResult = false;
+		
+		Integer HourStartBooking = dateTools.DayWithHour(10);
+		Integer HourEndBooking = dateTools.DayWithHour(12);
+
 		BookingSetInput params = new BookingSetInput();
 		params.setOrganizerFullName("rachid test organisateur java");
 		params.setSubject("rachid test sujet java");
-		params.setStartDate(BigInteger.valueOf(1462370400)); // 25/4/2016 à 14:45:00 
-		params.setEndDate(BigInteger.valueOf(1462372200)); // 25/4/2016 à 15:45:00 
+		params.setStartDate(BigInteger.valueOf(HourStartBooking));  
+		params.setEndDate(BigInteger.valueOf(HourEndBooking));  
 		
 		try {
 			BookingSetOutput booking = meetingRoomEndpoint.setBooking("[TEST]gardian.paris@microsoft.cad.aql.fr", params);
@@ -110,6 +117,54 @@ public class MeetingRoomEndpointImplTest {
 		}	
 		// Asserts
 		assertEquals(false, expectedResult);
+	}
+	
+	@Test 
+	public void TestC_phpSetBooking_KO_BeforeBeginDate() {
+		// SetUp
+		boolean expectedResult = false;
+		
+		Integer HourStartBooking = dateTools.DayWithHour(4);
+		Integer HourEndBooking = dateTools.DayWithHour(14);
+		
+		BookingSetInput params = new BookingSetInput();
+		params.setOrganizerFullName("rachid test organisateur java");
+		params.setSubject("rachid test sujet java");
+		params.setStartDate(BigInteger.valueOf(HourStartBooking));  
+		params.setEndDate(BigInteger.valueOf(HourEndBooking));  
+		
+		try {
+			meetingRoomEndpoint.setBooking("[TEST]gardian.paris@microsoft.cad.aql.fr", params);
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());		
+		}	
+		// Asserts
+		assertEquals(true, expectedResult);
+	}
+	
+	@Test 
+	public void TestC_phpSetBooking_KO_AfterEndDate() {
+		// SetUp
+		boolean expectedResult = false;
+		
+		Integer HourStartBooking = dateTools.DayWithHour(14);
+		Integer HourEndBooking = dateTools.DayWithHour(23);
+		
+		BookingSetInput params = new BookingSetInput();
+		params.setOrganizerFullName("rachid test organisateur java");
+		params.setSubject("rachid test sujet java");
+		params.setStartDate(BigInteger.valueOf(HourStartBooking));  
+		params.setEndDate(BigInteger.valueOf(HourEndBooking));  
+		
+		try {
+			meetingRoomEndpoint.setBooking("[TEST]gardian.paris@microsoft.cad.aql.fr", params);
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());		
+		}	
+		// Asserts
+		assertEquals(true, expectedResult);
 	}
 	
 	@Test 

@@ -114,11 +114,11 @@ public class PhpConnectorManagerImpl implements PhpConnectorManager {
 		Integer HourStartDay = dateTools.DayWithHour(getHourStart());
 		Integer HourEndDay = dateTools.DayWithHour(getHourEnd());
 		Boolean compareDates1 = dateTools.isTime1BeforeTime2(HourStartDay, Integer.valueOf(params.getStartDate()), 0);
-		Boolean compareDates2 = dateTools.isTime1BeforeTime2(Integer.valueOf(params.getEndDate()), HourEndDay, 0);
 		if (!compareDates1) { 
 			LOGGER.error("Error in setBooking(...) method, startDate is before HourStart parameter");
 			throw new DateNotInSlotTimeException("Error in setBooking(...) method, startDate is before HourStart parameter");
 		}
+		Boolean compareDates2 = dateTools.isTime1BeforeTime2(Integer.valueOf(params.getEndDate()), HourEndDay, 0);
 		if (!compareDates2) { 
 			LOGGER.error("Error in setBooking(...) method, endDate is after HourEnd parameter");
 			throw new DateNotInSlotTimeException("Error in setBooking(...) method, endDate is after HourEnd parameter");
