@@ -74,6 +74,82 @@ public class MeetingRoomEndpointImplTest {
 		// Asserts
 		assertEquals(false, expectedResult);
 	}
+
+	@Test
+	public void TestAA_GetMeetingRoom() { // "Subject": "prenom nom - Quick Booking" 
+		// SetUp
+		boolean expectedResult = false;
+		try {
+			MeetingRoom output = meetingRoomEndpoint.getMeetingRoomBookings("[TEST2]gardian.paris@microsoft.cad.aql.fr", false);
+			
+			// Asserts
+			assertEquals("[TEST2]gardian.paris@microsoft.cad.aql.fr", output.getRoom().getMeetingRoomDetails().getMeetingRoomExternalId());
+			
+			
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(false, expectedResult);
+	}
+
+	@Test
+	public void TestAB_GetMeetingRoom() { // "Subject": "Booking Agent - Quick Booking" & "OrganizerFullName": "prenom nom"
+		// SetUp
+		boolean expectedResult = false;
+		try {
+			MeetingRoom output = meetingRoomEndpoint.getMeetingRoomBookings("[TEST3]gardian.paris@microsoft.cad.aql.fr", false);
+			
+			// Asserts
+			assertEquals("[TEST3]gardian.paris@microsoft.cad.aql.fr", output.getRoom().getMeetingRoomDetails().getMeetingRoomExternalId());
+			
+			
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(false, expectedResult);
+	}
+	
+	@Test
+	public void TestAC_GetMeetingRoom() { // "Subject": "Booking Agent - Quick Booking" & "OrganizerFullName": "delegate"
+		// SetUp
+		boolean expectedResult = false;
+		try {
+			MeetingRoom output = meetingRoomEndpoint.getMeetingRoomBookings("[TEST4]gardian.paris@microsoft.cad.aql.fr", false);
+			
+			// Asserts
+			assertEquals("[TEST4]gardian.paris@microsoft.cad.aql.fr", output.getRoom().getMeetingRoomDetails().getMeetingRoomExternalId());
+			
+			
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(false, expectedResult);
+	}
+	
+	@Test
+	public void TestAD_GetMeetingRoom() { // "Subject": "prenom1-prenom2 nom - Quick Booking"
+		// SetUp
+		boolean expectedResult = false;
+		try {
+			MeetingRoom output = meetingRoomEndpoint.getMeetingRoomBookings("[TEST5]gardian.paris@microsoft.cad.aql.fr", false);
+			
+			// Asserts
+			assertEquals("[TEST5]gardian.paris@microsoft.cad.aql.fr", output.getRoom().getMeetingRoomDetails().getMeetingRoomExternalId());
+			
+			
+		} catch (Exception e) {
+			expectedResult = true;
+			LOGGER.error(e.getMessage());
+		}	
+		// Asserts
+		assertEquals(false, expectedResult);
+	}
 	
 	@Test
 	public void TestB() {

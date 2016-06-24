@@ -22,7 +22,7 @@ public class DateTools {
 	 * @param ackTime
 	 * @return
 	 */
-	public Boolean isTime1BeforeTime2(Integer time1, Integer time2, Integer ackTime) {
+	public Boolean isTime1BeforeOrEqualsTime2(Integer time1, Integer time2, Integer ackTime) {
 		Boolean status = false;
 		Date date1 = new Date(time1 * 1000L); // booking start Date
 		Date date2 = new Date(time2 * 1000L); // php server current Date
@@ -33,7 +33,7 @@ public class DateTools {
 		} else {
 			date1AfterAddingAckTime = date1;
 		}
-		if (date1AfterAddingAckTime.before(date2)) {
+		if (date1AfterAddingAckTime.before(date2) || date1AfterAddingAckTime.equals(date2)) {
 			status = true;
 		}
 		
@@ -100,6 +100,12 @@ public class DateTools {
 		//Integer result = tool.processDate(startTime, 10);
 		Integer today = tool.DayWithHour(20);
 		System.out.println("today is:" + today);
+		Date date1 = new Date(today * 1000L); // booking start Date
+		Date date2 = new Date(today * 1000L); // php server current Date
+		if (date1.before(date2) || date1.equals(date2)) {
+			System.out.println("date1 is:" + date1);
+			System.out.println("date2 is:" + date2);
+		}
 	}
 
 }

@@ -157,20 +157,21 @@ public class DataTools {
 	public String constructOrganizerFullName(String organizer, String organizerFullName, String organizerMail,
 			String creator, String creatorFullName, String creatorEmail) {
 		String constructedOrganizer = "";
-		// Ordre de priorité décroissante => creatorFullName < creator < organizerFullName < organizer < creatorEmail < organizerMail
-		if (!creatorFullName.isEmpty()) {
-			constructedOrganizer = creatorFullName;
-		} else if (!creator.isEmpty()) {
-			constructedOrganizer = creator;
-		} else if (!organizerFullName.isEmpty()) {
+		// Ordre de priorité décroissante =>  organizerFullName < organizer < creatorFullName < creator < organizerMail < creatorEmail
+		if (!organizerFullName.isEmpty()) {
 			constructedOrganizer = organizerFullName;
 		} else if (!organizer.isEmpty()) {
 			constructedOrganizer = organizer;
+		}else if (!creatorFullName.isEmpty()) {
+			constructedOrganizer = creatorFullName;
+		} else if (!creator.isEmpty()) {
+			constructedOrganizer = creator;
+		} else if (!organizerMail.isEmpty()) {
+				constructedOrganizer = organizerMail;
 		} else if (!creatorEmail.isEmpty()) {
 			constructedOrganizer = creatorEmail;
-		} else if (!organizerMail.isEmpty()) {
-			constructedOrganizer = organizerMail;
 		}
+		
 		return constructedOrganizer;
 	}
 	

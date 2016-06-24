@@ -28,6 +28,8 @@ public class MeetingRoomInfoTools {
 	
 	private static final Logger LOGGER = Logger.getLogger(MeetingRoomInfoTools.class);
 	static final String FORMAT_JSON = "json";
+	static final String DEFAULT_CONTENT_SUBJECT = "Booking";
+	static final String DEFAULT_ORGANIZER = "delegate";
 	
 	@Autowired
 	ConfHashMapFactoryBean confHashMapFactoryBean; 
@@ -56,8 +58,8 @@ public class MeetingRoomInfoTools {
 			getAckTime(); // get AckTime from Config hashMap from DataBase System Table
 			
 			for (BookingConnectorReturn book : bookings) {
-				Boolean compareDates1 = dateTools.isTime1BeforeTime2(book.getStartDate(), currentDate, 0);
-				Boolean compareDates2 = dateTools.isTime1BeforeTime2(currentDate, book.getEndDate(), 0);
+				Boolean compareDates1 = dateTools.isTime1BeforeOrEqualsTime2(book.getStartDate(), currentDate, 0);
+				Boolean compareDates2 = dateTools.isTime1BeforeOrEqualsTime2(currentDate, book.getEndDate(), 0);
 				if ((compareDates1) && (compareDates2)) { // currentDate of a booking is between startDate and endDate
 					updateInfos(book, data, meetingRoomExternalId, currentDate);
 					break;
@@ -85,7 +87,7 @@ public class MeetingRoomInfoTools {
 				data.setMeetingRoomStatus(EnumMeetingRoomStatus.OCCUPIED);
 				setMeetingRoomData(book, data, meetingRoomExternalId);
 			} else { // acknowledged = false
-				Boolean compareDates = dateTools.isTime1BeforeTime2(book.getStartDate(), currentDate, ackTime);
+				Boolean compareDates = dateTools.isTime1BeforeOrEqualsTime2(book.getStartDate(), currentDate, ackTime);
 				if (compareDates) { // startDate + ackTime and currentDate of a booking
 					// exceeding ack Time
 					try {
@@ -122,8 +124,8 @@ public class MeetingRoomInfoTools {
 	private void setMeetingRoomData(BookingConnectorReturn book, MeetingRoomData data, String meetingRoomExternalId) {
 		data.setStartDate(book.getStartDate());
 		data.setEndDate(book.getEndDate());
-		data.setOrganizerLabel(book.getOrganizerFullName());
 		data.setMeetingRoomExternalId(meetingRoomExternalId);
+		data.setOrganizerLabel(processOrganizerLabel(book));
 	}
 	
 	/**
@@ -136,6 +138,33 @@ public class MeetingRoomInfoTools {
 			this.ackTime = configMap.get(EnumSystemInMap.ACK_TIME.toString());
 		}
 		return this.ackTime;
+	}
+	
+	/**
+	 * processOrganizerLabel
+	 * @param book
+	 * @return
+	 */
+	private String processOrganizerLabel(BookingConnectorReturn book) {
+		String label = null;
+		String subject = book.getSubject();
+		String[] subjectArray = subject.split("-");
+		if (subjectArray != null && subjectArray.length >= 2) {
+			String sub = subjectArray[0];
+			for (int i=1; i< subjectArray.length-1; i++) {
+				sub = sub +"-"+subjectArray[i];
+			}
+			if (sub.contains(DEFAULT_CONTENT_SUBJECT)) { // ex : Booking Agent - Quick Booking
+				String organizer = book.getOrganizerFullName();
+				if (!organizer.contains(DEFAULT_ORGANIZER)) {
+					label = organizer.trim();
+				} 
+			} else { // ex : rachid - Quick Booking
+				label = sub.trim(); 
+			}
+		}
+		
+		return label;
 	}
 
 }
