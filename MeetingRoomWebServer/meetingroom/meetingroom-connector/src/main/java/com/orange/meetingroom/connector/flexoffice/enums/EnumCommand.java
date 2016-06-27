@@ -10,5 +10,6 @@ public enum EnumCommand {
 	ECONOMIC,
 	STANDBY,
 	ONLINE,
-	OFFLINE
+	OFFLINE,
+	RESET
 }
