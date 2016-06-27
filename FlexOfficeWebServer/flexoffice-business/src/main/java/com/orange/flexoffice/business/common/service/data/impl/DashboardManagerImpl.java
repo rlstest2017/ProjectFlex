@@ -118,6 +118,10 @@ public class DashboardManagerImpl implements DashboardManager {
 					dto.setFloor(dashboardDao.getFloor());
 				}
 				
+				if (dashboardDao.getCommand() != null) {
+					dto.setCommand(E_CommandModel.valueOf(dashboardDao.getCommand()));
+				}
+				
 				if (LOGGER.isDebugEnabled()) {
 		            LOGGER.debug( "Return findByMacAddress(String macAddress) method for DashboardManagerImpl, with parameters :");
 		            final StringBuilder message = new StringBuilder( 100 );
@@ -172,6 +176,15 @@ public class DashboardManagerImpl implements DashboardManager {
 		try {	
 			DashboardDao dashboard = dashboardRepository.findByMacAddress(dashboardDao.getMacAddress());
 			dashboardDao.setId(dashboard.getId());
+			dashboardDao.setName(dashboard.getName());
+			dashboardDao.setDescription(dashboard.getDescription());
+			dashboardDao.setCityId(dashboard.getCityId());
+			if (dashboard.getBuildingId() != null){
+				dashboardDao.setBuildingId(dashboard.getBuildingId());
+			}
+			if (dashboard.getFloor() != null){
+				dashboardDao.setFloor(dashboard.getFloor());
+			}
 			if(dashboard.getCommand() == null){
 				dashboardDao.setCommand(E_CommandModel.NONE.toString());
 			} else {
@@ -183,7 +196,25 @@ public class DashboardManagerImpl implements DashboardManager {
 			alertManager.updateDashboardAlert(dashboardId, dashboardDao.getStatus());
 			
 			// update DashboardDao
-			return dashboardRepository.updateDashboardStatus(dashboardDao);
+			DashboardDao dashboardToRet = dashboardRepository.updateDashboardStatus(dashboardDao);
+			
+			// Set to NONE agent command after getting command to send 
+			DashboardDao dashboardUpdateCommand = new DashboardDao();
+			dashboardUpdateCommand.setMacAddress(dashboard.getMacAddress());
+			dashboardUpdateCommand.setId(dashboard.getId());
+			dashboardUpdateCommand.setName(dashboard.getName());
+			dashboardUpdateCommand.setDescription(dashboard.getDescription());
+			dashboardUpdateCommand.setCityId(dashboard.getCityId());
+			if (dashboard.getBuildingId() != null){
+				dashboardUpdateCommand.setBuildingId(dashboard.getBuildingId());
+			}
+			if (dashboard.getFloor() != null){
+				dashboardUpdateCommand.setFloor(dashboard.getFloor());
+			}
+			dashboardUpdateCommand.setCommand(E_CommandModel.NONE.toString());
+			dashboardRepository.updateDashboard(dashboardUpdateCommand);
+			
+			return dashboardToRet;
 		} catch(IncorrectResultSizeDataAccessException e ) {
 			LOGGER.debug("DataAccessException in update() DashboardManagerImpl with message :" + e.getMessage(), e);
 			LOGGER.error("DataAccessException in update() DashboardManagerImpl with message :" + e.getMessage());
