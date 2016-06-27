@@ -276,6 +276,7 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 			dashboard.setBuildingId(null);
 		}
 		dashboardDao.setCityId(Long.valueOf(dashboard.getCityId()));
+		dashboardDao.setCommand(dashboard.getCommand().toString());
 		
 
 		if (LOGGER.isDebugEnabled()) {
