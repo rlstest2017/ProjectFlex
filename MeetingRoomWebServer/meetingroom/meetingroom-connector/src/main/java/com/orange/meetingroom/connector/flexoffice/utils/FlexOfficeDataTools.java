@@ -1,7 +1,6 @@
 package com.orange.meetingroom.connector.flexoffice.utils;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 import com.orange.meetingroom.connector.flexoffice.model.request.AgentConnectorInput;
 import com.orange.meetingroom.connector.flexoffice.model.request.DashboardConnectorInput;
@@ -56,7 +55,7 @@ public class FlexOfficeDataTools {
 		inputJson.append( "\",\"startDate\":"+params.getStartDate());
 		inputJson.append( ",\"endDate\":"+params.getEndDate());
 		if (params.getOrganizerLabel() != null) {
-			inputJson.append( ",\"organizerLabel\":\""+URLEncoder.encode(params.getOrganizerLabel(), "UTF-8"));
+			inputJson.append( ",\"organizerLabel\":\""+params.getOrganizerLabel());
 			inputJson.append( "\"");
 		} 
 		inputJson.append( "}" );
