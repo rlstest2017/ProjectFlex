@@ -73,7 +73,9 @@ public class AgentEndpointImpl implements AgentEndpoint {
 					agent.setStatus(EAgentStatus.OFFLINE);
 				} else if (agentDao.getStatus().equals(E_AgentStatus.STANDBY.toString())){
 					agent.setStatus(EAgentStatus.STANDBY);
-				} else {
+				} else if (agentDao.getStatus().equals(E_AgentStatus.UNKNOWN.toString())){
+					agent.setStatus(EAgentStatus.UNKNOWN);
+				} else if (agentDao.getStatus().equals(E_AgentStatus.ECONOMIC.toString())){
 					agent.setStatus(EAgentStatus.ECONOMIC);
 				}
 				if (agentDao.getLastMeasureDate() != null) {
@@ -110,7 +112,9 @@ public class AgentEndpointImpl implements AgentEndpoint {
 				agent.setStatus(EAgentStatus.OFFLINE);
 			} else if(data.getStatus() == E_AgentStatus.STANDBY){
 				agent.setStatus(EAgentStatus.STANDBY);
-			} else {
+			} else if (data.getStatus() == E_AgentStatus.UNKNOWN){
+				agent.setStatus(EAgentStatus.UNKNOWN);
+			} else if (data.getStatus() == E_AgentStatus.ECONOMIC){
 				agent.setStatus(EAgentStatus.ECONOMIC);
 			}
 			
@@ -130,7 +134,7 @@ public class AgentEndpointImpl implements AgentEndpoint {
 				agent.setCommand(ECommandModel.RESET);
 			} else if (data.getCommand() == E_CommandModel.STANDBY) {
 				agent.setCommand(ECommandModel.STANDBY);
-			}
+			} 
 				
 			MeetingRoomDao meetingroom = data.getMeetingRoom();
 			

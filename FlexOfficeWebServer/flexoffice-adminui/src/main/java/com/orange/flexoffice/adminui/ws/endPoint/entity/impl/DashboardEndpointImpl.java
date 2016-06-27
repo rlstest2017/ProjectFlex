@@ -79,8 +79,10 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 					dashboard.setStatus(EDashboardStatus.OFFLINE);
 				} else if (dashboardDao.getStatus().equals(E_DashboardStatus.STANDBY.toString())){
 					dashboard.setStatus(EDashboardStatus.STANDBY);
-				} else {
+				} else if (dashboardDao.getStatus().equals(E_DashboardStatus.ECONOMIC.toString())){
 					dashboard.setStatus(EDashboardStatus.ECONOMIC);
+				} else if (dashboardDao.getStatus().equals(E_DashboardStatus.UNKNOWN.toString())){
+					dashboard.setStatus(EDashboardStatus.UNKNOWN);
 				}
 				if (dashboardDao.getLastMeasureDate() != null) {
 					dashboard.setLastMeasureDate(dashboardDao.getLastMeasureDate().getTime());
@@ -117,8 +119,10 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 				dashboard.setStatus(EDashboardStatus.OFFLINE);
 			} else if(data.getStatus() == E_DashboardStatus.STANDBY){
 				dashboard.setStatus(EDashboardStatus.STANDBY);
-			} else {
+			} else if(data.getStatus() == E_DashboardStatus.ECONOMIC){
 				dashboard.setStatus(EDashboardStatus.ECONOMIC);
+			} else if(data.getStatus() == E_DashboardStatus.UNKNOWN){
+				dashboard.setStatus(EDashboardStatus.UNKNOWN);
 			}
 			
 			if (data.getLastMeasureDate() != null) {

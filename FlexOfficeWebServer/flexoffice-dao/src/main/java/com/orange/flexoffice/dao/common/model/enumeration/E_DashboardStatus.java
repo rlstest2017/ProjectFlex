@@ -4,5 +4,6 @@ public enum E_DashboardStatus {
 	ONLINE,
 	OFFLINE,
 	ECONOMIC,
-	STANDBY
+	STANDBY,
+	UNKNOWN
 }
