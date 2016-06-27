@@ -30,6 +30,7 @@ public class MeetingRoomInfoTools {
 	static final String FORMAT_JSON = "json";
 	static final String DEFAULT_CONTENT_SUBJECT = "Booking";
 	static final String DEFAULT_ORGANIZER = "delegate";
+	static final String DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD = "Quick";
 	
 	@Autowired
 	ConfHashMapFactoryBean confHashMapFactoryBean; 
@@ -147,21 +148,31 @@ public class MeetingRoomInfoTools {
 	 */
 	private String processOrganizerLabel(BookingConnectorReturn book) {
 		String label = null;
-		String subject = book.getSubject();
-		String[] subjectArray = subject.split("-");
-		if (subjectArray != null && subjectArray.length >= 2) {
-			String sub = subjectArray[0];
-			for (int i=1; i< subjectArray.length-1; i++) {
-				sub = sub +"-"+subjectArray[i];
+		String subject = book.getSubject().trim();
+		
+		if (!subject.isEmpty()) {
+			String[] subjectArray = subject.split("-");
+			if (subjectArray != null) {
+				String sub = subjectArray[0];
+				for (int i=1; i< subjectArray.length; i++) {
+					if (!subjectArray[i].contains(DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD)) {
+						sub = sub +"-"+subjectArray[i];
+					}
+				}
+				if (sub.contains(DEFAULT_CONTENT_SUBJECT)) { // ex : Booking Agent - Quick Booking
+					String organizer = book.getOrganizerFullName();
+					if (!organizer.contains(DEFAULT_ORGANIZER)) {
+						label = organizer.trim();
+					} 
+				} else { // ex : rachid - Quick Booking
+					label = sub.trim(); 
+				}
 			}
-			if (sub.contains(DEFAULT_CONTENT_SUBJECT)) { // ex : Booking Agent - Quick Booking
-				String organizer = book.getOrganizerFullName();
-				if (!organizer.contains(DEFAULT_ORGANIZER)) {
-					label = organizer.trim();
-				} 
-			} else { // ex : rachid - Quick Booking
-				label = sub.trim(); 
-			}
+		} else {
+			String organizer = book.getOrganizerFullName();
+			if (!organizer.contains(DEFAULT_ORGANIZER)) {
+				label = organizer.trim();
+			} 
 		}
 		
 		return label;
