@@ -51,8 +51,8 @@ alter type commandModel add value 'NONE';
 
 CREATE TYPE meetingroomStatus AS ENUM ('FREE', 'OCCUPIED', 'UNKNOWN', 'ACK');
 CREATE TYPE meetingroomType AS ENUM ('BOX', 'VIDEO_CONF');
-CREATE TYPE agentStatus AS ENUM ('ONLINE', 'OFFLINE', 'ECONOMIC', 'STANDBY');
-CREATE TYPE dashboardStatus AS ENUM ('ONLINE', 'OFFLINE', 'ECONOMIC', 'STANDBY');
+CREATE TYPE agentStatus AS ENUM ('ONLINE', 'OFFLINE', 'ECONOMIC', 'STANDBY', 'UNKNOWN');
+CREATE TYPE dashboardStatus AS ENUM ('ONLINE', 'OFFLINE', 'ECONOMIC', 'STANDBY', 'UNKNOWN');
 CREATE TYPE meetingroomInfo AS ENUM ('TIMEOUT', 'OCCUPIED', 'UNOCCUPIED');
 
 CREATE TABLE meetingrooms (
