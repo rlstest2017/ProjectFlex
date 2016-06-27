@@ -1,7 +1,7 @@
 package com.orange.meetingroom.connector.flexoffice.enums;
 
 /**
- * EnumCommand
+ * EnumDashboardStatus
  * @author oab
  *
  */
@@ -9,5 +9,6 @@ public enum EnumDashboardStatus {
 	ECONOMIC,
 	STANDBY,
 	ONLINE,
-	OFFLINE
+	OFFLINE,
+	UNKNOWN
 }

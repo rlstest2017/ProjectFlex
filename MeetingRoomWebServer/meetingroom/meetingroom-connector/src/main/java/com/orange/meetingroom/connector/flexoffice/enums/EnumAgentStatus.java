@@ -1,7 +1,7 @@
 package com.orange.meetingroom.connector.flexoffice.enums;
 
 /**
- * EnumCommand
+ * EnumAgentStatus
  * @author oab
  *
  */
@@ -9,5 +9,6 @@ public enum EnumAgentStatus {
 	ECONOMIC,
 	STANDBY,
 	ONLINE,
-	OFFLINE
+	OFFLINE,
+	UNKNOWN
 }

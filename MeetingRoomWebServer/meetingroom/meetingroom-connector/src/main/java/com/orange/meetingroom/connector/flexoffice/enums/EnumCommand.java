@@ -11,5 +11,4 @@ public enum EnumCommand {
 	STANDBY,
 	ONLINE,
 	OFFLINE
-	
 }
