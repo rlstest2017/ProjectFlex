@@ -211,6 +211,7 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 		dashboardDao.setName(dashboard.getName().trim());
 		dashboardDao.setDescription(dashboard.getDesc());
 		dashboardDao.setCityId(Long.valueOf(dashboard.getCityId()));
+		dashboardDao.setCommand(dashboard.getCommand().toString());
 		
 		if (dashboard.getBuildingId() != null){
 			dashboardDao.setBuildingId(Long.valueOf(dashboard.getBuildingId()));
