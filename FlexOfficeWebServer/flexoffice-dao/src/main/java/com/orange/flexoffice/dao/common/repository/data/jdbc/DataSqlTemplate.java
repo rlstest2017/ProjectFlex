@@ -201,9 +201,9 @@ public final class DataSqlTemplate {
 	public static final String CREATE_MEETINGROOM_GROUPS_CONFIGURATION_TEMPLATE = 
 			"insert into %s (building_id, floor, meetingroom_group_id) values (:buildingId, :floor, :meetingroomGroupId)";
 	public static final String CREATE_AGENT_TEMPLATE = 
-			"insert into %s (mac_address, name, description) values (:macAddress, :name, :description)";
+			"insert into %s (mac_address, name, description, command) values (:macAddress, :name, :description, CAST(:command AS commandModel))";
 	public static final String CREATE_DASHBOARD_TEMPLATE = 
-			"insert into %s (mac_address, name, description, city_id, building_id, floor) values (:macAddress, :name, :description, :cityId, :buildingId, :floor)";
+			"insert into %s (mac_address, name, description, city_id, building_id, floor, command) values (:macAddress, :name, :description, :cityId, :buildingId, :floor, CAST(:command AS commandModel))";
 	public static final String CREATE_ROOM_TEMPLATE = 
 			"insert into %s (name, gateway_id, capacity, description, type, status, building_id, floor) values (:name, :gatewayId, :capacity, :description, CAST(:type AS roomtype), CAST(:status AS roomstatus), :buildingId, :floor)";
 	public static final String CREATE_MEETINGROOM_TEMPLATE = 
