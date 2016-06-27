@@ -133,7 +133,8 @@ ALTER TABLE ONLY meetingrooms
     ADD  FOREIGN KEY(agent_id) REFERENCES agents(id),
 	ADD  FOREIGN KEY(building_id) REFERENCES buildings(id),
 	ADD CONSTRAINT meetingrooms_unique_key UNIQUE (name, building_id),
-	ADD CONSTRAINT name_length_check CHECK (char_length(name) <= 100);
+	ADD CONSTRAINT name_length_check CHECK (char_length(name) <= 100),
+	ADD CONSTRAINT meetingrooms_agent_id_key UNIQUE (agent_id);
 
 ALTER TABLE ONLY meetingroom_groups_configuration
     ADD CONSTRAINT meetingroom_groups_configuration_pkey PRIMARY KEY (id),
