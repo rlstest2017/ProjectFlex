@@ -119,10 +119,12 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			meetingroom.setOrganizerLabel(computeTenant(meetingroom.getStatus(), meetingroomDto.getOrganizerLabel(), meetingroomDto.getName()));
 			meetingroom.setExternalId(meetingroomDto.getExternalId());
 			
-			if(meetingroomDto.getStartDate() != null)
-			meetingroom.setStartDate(meetingroomDto.getStartDate().getTime());
-			if(meetingroomDto.getEndDate() != null)
-			meetingroom.setEndDate(meetingroomDto.getEndDate().getTime());
+			if(meetingroomDto.getStartDate() != null){
+				meetingroom.setStartDate(meetingroomDto.getStartDate().getTime());
+			}
+			if(meetingroomDto.getEndDate() != null){
+				meetingroom.setEndDate(meetingroomDto.getEndDate().getTime());
+			}
 			
 			BuildingDto buidingDto = buildingManager.find(Long.valueOf(meetingroomDto.getBuildingId()));
 			Location location = factory.createLocation();
@@ -178,8 +180,9 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			meetingroomDao.setBuildingId(Long.valueOf(meetingroomInput.getBuildingId()));
 			meetingroomDao.setExternalId(meetingroomInput.getExternalId().trim());
 			
-			if(meetingroomInput.getFloor() != null)
+			if(meetingroomInput.getFloor() != null){
 				meetingroomDao.setFloor(meetingroomInput.getFloor().longValue());
+			}
 			
 			if (meetingroomInput.getAgent() !=null) {
 				AgentDto agent = agentManager.findByMacAddress(meetingroomInput.getAgent().getMacAddress().toLowerCase().replaceAll("-", ":"));
@@ -193,9 +196,10 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 				meetingroomDao.setDescription(meetingroomInput.getDesc());
 			}
 			
-			if(meetingroomInput.getCapacity() != null)
+			if(meetingroomInput.getCapacity() != null){
 				meetingroomDao.setCapacity(meetingroomInput.getCapacity().intValue());
-			
+			}
+				
 			meetingroomDao.setStatus(EMeetingroomStatus.UNKNOWN.toString());	
 			
 			if (LOGGER.isDebugEnabled()) {
@@ -263,8 +267,9 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			if ( desc != null) { 
 				meetingroomDao.setDescription(meetingroomInput.getDesc());
 			}
-			if(meetingroomInput.getCapacity() != null)
-			meetingroomDao.setCapacity(meetingroomInput.getCapacity().intValue());
+			if(meetingroomInput.getCapacity() != null){
+				meetingroomDao.setCapacity(meetingroomInput.getCapacity().intValue());
+			}
 			
 			meetingroomDao = meetingroomManager.update(meetingroomDao);
 	

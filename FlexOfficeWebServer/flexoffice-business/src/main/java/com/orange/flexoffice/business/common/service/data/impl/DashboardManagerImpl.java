@@ -15,14 +15,11 @@ import com.orange.flexoffice.business.common.exception.IntegrityViolationExcepti
 import com.orange.flexoffice.business.common.service.data.AlertManager;
 import com.orange.flexoffice.business.common.service.data.DashboardManager;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
-import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.DashboardDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_CommandModel;
-import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_DashboardStatus;
 import com.orange.flexoffice.dao.common.model.object.DashboardDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
-import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.DashboardDaoRepository;
 
 /**
@@ -41,8 +38,6 @@ public class DashboardManagerImpl implements DashboardManager {
 	private DashboardDaoRepository dashboardRepository;
 	@Autowired
 	private AlertDaoRepository alertRepository;
-	@Autowired
-	private ConfigurationDaoRepository configRepository;
 	@Autowired
 	private AlertManager alertManager;
 	
@@ -250,18 +245,5 @@ public class DashboardManagerImpl implements DashboardManager {
 			LOGGER.error("DashboardManager.delete : Dashboard associated to a meeting room");
 			throw new IntegrityViolationException("DashboardManager.delete : Dashboard associated to a meeting room");
 		}
-	}
-	
-
-	/**
-	 * getOccupancyTimeOut
-	 * @return
-	 */
-	@Transactional(readOnly=true)
-	private Long getOccupancyTimeOut() {
-		// get activeUsers
-		ConfigurationDao occupancyTimeOut = configRepository.findByKey(E_ConfigurationKey.OCCUPANCY_TIMEOUT.toString());
-		String occupancyTimeOutValueValue = occupancyTimeOut.getValue();
-		return Long.valueOf(occupancyTimeOutValueValue);
 	}	
 }

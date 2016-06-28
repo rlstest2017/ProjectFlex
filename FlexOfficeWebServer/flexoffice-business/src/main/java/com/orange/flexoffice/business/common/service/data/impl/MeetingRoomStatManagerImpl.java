@@ -462,8 +462,9 @@ public class MeetingRoomStatManagerImpl implements MeetingRoomStatManager {
 		} catch (JobExecutionException e) {
 			System.out.println("Job ExportStat failed");
 		} finally {
-			if (context != null)
-                	context.close();  
+			if (context != null){
+				context.close();
+			}
 		}
 	}
 

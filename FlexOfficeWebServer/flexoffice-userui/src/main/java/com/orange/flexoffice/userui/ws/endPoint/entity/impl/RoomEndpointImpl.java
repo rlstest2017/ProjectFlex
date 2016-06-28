@@ -95,11 +95,31 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				userId = Long.valueOf(data.getId());
 				// find user preferences
 				PreferencesDao preferences = preferencesManager.findByUserId(userId);
-				if (countryId != null) { preferences.setCountryId(Long.valueOf(countryId)); } else { preferences.setCountryId(null);}
-				if (regionId != null) { preferences.setRegionId(Long.valueOf(regionId)); } else { preferences.setRegionId(null);}
-				if (cityId != null) { preferences.setCityId(Long.valueOf(cityId)); } else { preferences.setCityId(null);}
-				if (buildingId != null) { preferences.setBuildingId(Long.valueOf(buildingId)); } else { preferences.setBuildingId(null);}
-				if (floor != null) { preferences.setFloor(Long.valueOf(floor)); } else { preferences.setFloor(null);}
+				if (countryId != null) { 
+					preferences.setCountryId(Long.valueOf(countryId)); 
+				} else { 
+						preferences.setCountryId(null);
+				}
+				if (regionId != null) {
+					preferences.setRegionId(Long.valueOf(regionId)); 
+				} else { 
+					preferences.setRegionId(null);
+				}
+				if (cityId != null) {
+					preferences.setCityId(Long.valueOf(cityId));
+				} else {
+					preferences.setCityId(null);
+				}
+				if (buildingId != null) { 
+					preferences.setBuildingId(Long.valueOf(buildingId)); 
+				} else {
+					preferences.setBuildingId(null);
+				}
+				if (floor != null) { 
+					preferences.setFloor(Long.valueOf(floor)); 
+				} else { 
+					preferences.setFloor(null);
+				}
 				// update user preferences
 				preferencesManager.update(preferences);
 			} catch (AuthenticationException e){

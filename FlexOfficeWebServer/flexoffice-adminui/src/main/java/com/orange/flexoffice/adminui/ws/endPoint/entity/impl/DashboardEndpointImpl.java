@@ -166,8 +166,9 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 				locationCity.setId(buidingDto.getCityId().toString());
 				locationCity.setName(buidingDto.getCityName());
 				location.setCity(locationCity);
-				if (data.getFloor() != null)
-				location.setFloor(BigInteger.valueOf(data.getFloor()));
+				if (data.getFloor() != null) {
+					location.setFloor(BigInteger.valueOf(data.getFloor()));
+				}
 				
 				dashboard.setLocation(location);
 			} else {

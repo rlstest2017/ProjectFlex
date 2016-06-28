@@ -199,40 +199,41 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		
 		try {
 			
-		RoomDao roomDao = new RoomDao();
-		roomDao.setName(roomInput.getName());
-		roomDao.setType(roomInput.getType().toString());
-		roomDao.setBuildingId(Long.valueOf(roomInput.getBuildingId()));
-		if (roomInput.getFloor() != null)
-		roomDao.setFloor(roomInput.getFloor().longValue());
-		
-		if (roomInput.getGateway() !=null) {
-			GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress().toLowerCase().replaceAll("-", ":"));
-			roomDao.setGatewayId(Long.valueOf(gateway.getId()));
-		} else {
-			roomDao.setGatewayId(0L);
-		}
-		
-		String desc = roomInput.getDesc(); 
-		if ( desc != null) { 
-			roomDao.setDescription(roomInput.getDesc());
-		}
-		
-		if (roomInput.getCapacity() != null)
-		roomDao.setCapacity(roomInput.getCapacity().intValue());
-		roomDao.setStatus(ERoomStatus.UNKNOWN.toString());	
-		
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug( "addRoom with parameters :");
-			final StringBuilder message = new StringBuilder( 1000 );
-			message.append( "name :" );
-			message.append( roomInput.getName() );
-			message.append( "\n" );
-			message.append( "gateway id :" );
-			message.append( roomDao.getGatewayId() );
-			message.append( "\n" );
-			LOGGER.debug( message.toString() );
-		}
+			RoomDao roomDao = new RoomDao();
+			roomDao.setName(roomInput.getName());
+			roomDao.setType(roomInput.getType().toString());
+			roomDao.setBuildingId(Long.valueOf(roomInput.getBuildingId()));
+			if (roomInput.getFloor() != null)
+			roomDao.setFloor(roomInput.getFloor().longValue());
+			
+			if (roomInput.getGateway() !=null) {
+				GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress().toLowerCase().replaceAll("-", ":"));
+				roomDao.setGatewayId(Long.valueOf(gateway.getId()));
+			} else {
+				roomDao.setGatewayId(0L);
+			}
+			
+			String desc = roomInput.getDesc(); 
+			if ( desc != null) { 
+				roomDao.setDescription(roomInput.getDesc());
+			}
+			
+			if (roomInput.getCapacity() != null){
+				roomDao.setCapacity(roomInput.getCapacity().intValue());
+			}
+			roomDao.setStatus(ERoomStatus.UNKNOWN.toString());	
+			
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug( "addRoom with parameters :");
+				final StringBuilder message = new StringBuilder( 1000 );
+				message.append( "name :" );
+				message.append( roomInput.getName() );
+				message.append( "\n" );
+				message.append( "gateway id :" );
+				message.append( roomDao.getGatewayId() );
+				message.append( "\n" );
+				LOGGER.debug( message.toString() );
+			}
 
 			roomDao = roomManager.save(roomDao);
 			
@@ -278,8 +279,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			roomDao.setName(roomInput.getName());
 			roomDao.setType(roomInput.getType().toString());
 			roomDao.setBuildingId(Long.valueOf(roomInput.getBuildingId()));
-			if(roomInput.getFloor() != null)
-			roomDao.setFloor(roomInput.getFloor().longValue());
+			if(roomInput.getFloor() != null){
+				roomDao.setFloor(roomInput.getFloor().longValue());
+			}
 	
 			if (roomInput.getGateway() !=null) {
 				GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress().toLowerCase().replaceAll("-", ":"));

@@ -16,11 +16,9 @@ import com.orange.flexoffice.business.common.service.data.AgentManager;
 import com.orange.flexoffice.business.common.service.data.AlertManager;
 import com.orange.flexoffice.dao.common.model.data.AgentDao;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
-import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_AgentStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_CommandModel;
-import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.object.AgentDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AgentDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
@@ -293,18 +291,5 @@ public class AgentManagerImpl implements AgentManager {
 		}
 		
 		return meetingroomDao;
-	}
-	
-
-	/**
-	 * getOccupancyTimeOut
-	 * @return
-	 */
-	@Transactional(readOnly=true)
-	private Long getOccupancyTimeOut() {
-		// get activeUsers
-		ConfigurationDao occupancyTimeOut = configRepository.findByKey(E_ConfigurationKey.OCCUPANCY_TIMEOUT.toString());
-		String occupancyTimeOutValueValue = occupancyTimeOut.getValue();
-		return Long.valueOf(occupancyTimeOutValueValue);
 	}
 }

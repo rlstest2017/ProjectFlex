@@ -51,12 +51,24 @@ public class PreferenceUserManagerImpl implements PreferenceUserManager {
 	@Override
 	public PreferencesDao save(String countryId, String regionId, String cityId, String buildingId, Integer floor, Long userId) {
 		PreferencesDao data = new PreferencesDao();
-		if (countryId != null) { data.setCountryId(Long.valueOf(countryId)); } 
-		if (regionId != null) { data.setRegionId(Long.valueOf(regionId)); } 
-		if (cityId != null) { data.setCityId(Long.valueOf(cityId)); } 
-		if (buildingId != null) { data.setBuildingId(Long.valueOf(buildingId)); } 
-		if (floor != null) { data.setFloor(Long.valueOf(floor)); } 
+		if (countryId != null) { 
+			data.setCountryId(Long.valueOf(countryId)); 
+		} 
+		if (regionId != null) { 
+			data.setRegionId(Long.valueOf(regionId));
+		} 
+		if (cityId != null) { 
+			data.setCityId(Long.valueOf(cityId)); 
+		} 
+		if (buildingId != null) {
+			data.setBuildingId(Long.valueOf(buildingId)); 
+		} 
+		if (floor != null) {
+			data.setFloor(Long.valueOf(floor));
+		}
+		
 		data.setUserId(userId);
+		
 		return preferencesRepository.savePreferences(data);
 	}
 

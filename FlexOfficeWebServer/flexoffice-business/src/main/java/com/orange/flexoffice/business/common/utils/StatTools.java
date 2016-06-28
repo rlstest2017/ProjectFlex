@@ -254,7 +254,7 @@ public class StatTools {
 			nbRoomsByType.put(eRoomType.toString(), 5L);
 		}
 		
-		System.out.println("Box nb salles :" + nbRoomsByType.get(E_RoomType.BOX.toString()));
+		//System.out.println("Box nb salles :" + nbRoomsByType.get(E_RoomType.BOX.toString()));
 		
 	}
 	

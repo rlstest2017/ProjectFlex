@@ -254,7 +254,7 @@ public class MeetingRoomStatTools {
 			nbMeetingRoomsByType.put(eMeetingRoomType.toString(), 5L);
 		}
 		
-		System.out.println("Box nb salles réservables :" + nbMeetingRoomsByType.get(E_MeetingRoomType.BOX.toString()));
+		//System.out.println("Box nb salles réservables :" + nbMeetingRoomsByType.get(E_MeetingRoomType.BOX.toString()));
 		
 	}
 	
