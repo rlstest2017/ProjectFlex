@@ -18,6 +18,7 @@ import com.orange.flexoffice.adminui.ws.model.Dashboard;
 import com.orange.flexoffice.adminui.ws.model.DashboardInput;
 import com.orange.flexoffice.adminui.ws.model.DashboardInput2;
 import com.orange.flexoffice.adminui.ws.model.DashboardSummary;
+import com.orange.flexoffice.adminui.ws.model.ECommandModel;
 import com.orange.flexoffice.adminui.ws.model.EDashboardStatus;
 import com.orange.flexoffice.adminui.ws.model.Location;
 import com.orange.flexoffice.adminui.ws.model.LocationItem;
@@ -32,6 +33,7 @@ import com.orange.flexoffice.business.common.service.data.CityManager;
 import com.orange.flexoffice.business.common.service.data.DashboardManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.dao.common.model.data.DashboardDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_CommandModel;
 import com.orange.flexoffice.dao.common.model.enumeration.E_DashboardStatus;
 import com.orange.flexoffice.dao.common.model.object.BuildingDto;
 import com.orange.flexoffice.dao.common.model.object.CityDto;
@@ -125,6 +127,20 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 				dashboard.setStatus(EDashboardStatus.UNKNOWN);
 			}
 			
+			if (data.getCommand() == E_CommandModel.NONE) {
+				dashboard.setCommand(ECommandModel.NONE);
+			} else if (data.getCommand() == E_CommandModel.ECONOMIC) {
+				dashboard.setCommand(ECommandModel.ECONOMIC);
+			} else if (data.getCommand() == E_CommandModel.ONLINE) {
+				dashboard.setCommand(ECommandModel.ONLINE);
+			} else if (data.getCommand() == E_CommandModel.OFFLINE) {
+				dashboard.setCommand(ECommandModel.OFFLINE);
+			} else if (data.getCommand() == E_CommandModel.RESET) {
+				dashboard.setCommand(ECommandModel.RESET);
+			} else if (data.getCommand() == E_CommandModel.STANDBY) {
+				dashboard.setCommand(ECommandModel.STANDBY);
+			}
+			
 			if (data.getLastMeasureDate() != null) {
 				dashboard.setLastMeasureDate(data.getLastMeasureDate().getTime());
 			}
@@ -195,6 +211,7 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 		dashboardDao.setName(dashboard.getName().trim());
 		dashboardDao.setDescription(dashboard.getDesc());
 		dashboardDao.setCityId(Long.valueOf(dashboard.getCityId()));
+		dashboardDao.setCommand(dashboard.getCommand().toString());
 		
 		if (dashboard.getBuildingId() != null){
 			dashboardDao.setBuildingId(Long.valueOf(dashboard.getBuildingId()));
@@ -260,6 +277,7 @@ public class DashboardEndpointImpl implements DashboardEndpoint {
 			dashboard.setBuildingId(null);
 		}
 		dashboardDao.setCityId(Long.valueOf(dashboard.getCityId()));
+		dashboardDao.setCommand(dashboard.getCommand().toString());
 		
 
 		if (LOGGER.isDebugEnabled()) {

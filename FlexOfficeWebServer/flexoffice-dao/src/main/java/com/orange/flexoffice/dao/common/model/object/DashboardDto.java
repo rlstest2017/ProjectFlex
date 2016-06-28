@@ -2,6 +2,7 @@ package com.orange.flexoffice.dao.common.model.object;
 
 import java.util.Date;
 
+import com.orange.flexoffice.dao.common.model.enumeration.E_CommandModel;
 import com.orange.flexoffice.dao.common.model.enumeration.E_DashboardStatus;
 
 /**
@@ -23,6 +24,7 @@ public class DashboardDto {
 	private Long buildingId;
 	private Long floor;
 	private Date lastMeasureDate;
+	private E_CommandModel command;
 	
 	public String getId() {
 		return id;
@@ -78,6 +80,12 @@ public class DashboardDto {
 	}
 	public void setFloor(Long floor) {
 		this.floor = floor;
+	}
+	public E_CommandModel getCommand() {
+		return command;
+	}
+	public void setCommand(E_CommandModel command) {
+		this.command = command;
 	}
 	
 	

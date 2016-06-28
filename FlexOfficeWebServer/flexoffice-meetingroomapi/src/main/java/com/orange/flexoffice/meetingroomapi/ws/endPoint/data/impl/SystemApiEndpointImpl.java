@@ -114,11 +114,6 @@ public class SystemApiEndpointImpl implements SystemApiEndpoint {
 				system.setDurationStep(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
 			}
 			
-			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.MAX_DURATION.toString());
-			if (configuration != null){
-				system.setMaxDuration(BigInteger.valueOf(Long.valueOf(configuration.getValue())));
-			}
-			
 			configuration = systemManager.getConfigurationValue(E_ConfigurationKey.PAGES_SHIFT_INTERVAL.toString());
 			if (configuration != null){
 				system.setPagesShiftInterval(BigInteger.valueOf(Long.valueOf(configuration.getValue())));

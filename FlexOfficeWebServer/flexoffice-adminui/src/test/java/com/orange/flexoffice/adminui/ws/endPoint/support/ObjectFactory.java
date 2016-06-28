@@ -72,11 +72,12 @@ public class ObjectFactory {
      * Create an instance of {@link AgentInput }
      * 
      */
-    public AgentInput createHmiAgent(String macAddress, String name, String desc) {
+    public AgentInput createHmiAgent(String macAddress, String name, String desc, ECommandModel command) {
     	AgentInput agent = factory.createAgentInput();
     	agent.setMacAddress(macAddress);
     	agent.setName(name);
     	agent.setDesc(desc);
+    	agent.setCommand(command);
     	
         return agent;
     }

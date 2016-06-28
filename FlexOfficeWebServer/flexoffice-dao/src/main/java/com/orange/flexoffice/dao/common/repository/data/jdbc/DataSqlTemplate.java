@@ -201,9 +201,9 @@ public final class DataSqlTemplate {
 	public static final String CREATE_MEETINGROOM_GROUPS_CONFIGURATION_TEMPLATE = 
 			"insert into %s (building_id, floor, meetingroom_group_id) values (:buildingId, :floor, :meetingroomGroupId)";
 	public static final String CREATE_AGENT_TEMPLATE = 
-			"insert into %s (mac_address, name, description) values (:macAddress, :name, :description)";
+			"insert into %s (mac_address, name, description, command) values (:macAddress, :name, :description, CAST(:command AS commandModel))";
 	public static final String CREATE_DASHBOARD_TEMPLATE = 
-			"insert into %s (mac_address, name, description, city_id, building_id, floor) values (:macAddress, :name, :description, :cityId, :buildingId, :floor)";
+			"insert into %s (mac_address, name, description, city_id, building_id, floor, command) values (:macAddress, :name, :description, :cityId, :buildingId, :floor, CAST(:command AS commandModel))";
 	public static final String CREATE_ROOM_TEMPLATE = 
 			"insert into %s (name, gateway_id, capacity, description, type, status, building_id, floor) values (:name, :gatewayId, :capacity, :description, CAST(:type AS roomtype), CAST(:status AS roomstatus), :buildingId, :floor)";
 	public static final String CREATE_MEETINGROOM_TEMPLATE = 
@@ -253,7 +253,7 @@ public final class DataSqlTemplate {
 	public static final String UPDATE_MEETINGROOM_GROUPS_CONFIGURATION_TEMPLATE = 
 			"update %s set meetingroom_group_id=:meetingroomGroupId WHERE building_id=:buildingId and floor=:floor";
 	public static final String UPDATE_DASHBOARD_TEMPLATE = 
-			"update %s set name=:name, description=:description, city_id=:cityId, building_id=:buildingId, floor=:floor WHERE mac_address=:macAddress";
+			"update %s set name=:name, description=:description, city_id=:cityId, building_id=:buildingId, floor=:floor, command=CAST(:command AS commandModel) WHERE mac_address=:macAddress";
 	public static final String UPDATE_USER_TEMPLATE =
 			"update %s set first_name=:firstName, last_name=:lastName, email=:email WHERE id=:id";
 	public static final String UPDATE_USER_ACCESS_TOKEN_TEMPLATE =
