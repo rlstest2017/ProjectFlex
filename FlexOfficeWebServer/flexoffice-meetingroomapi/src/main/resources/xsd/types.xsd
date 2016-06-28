@@ -93,7 +93,6 @@
  		    <xsd:element name="canShowSubject" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
  		    <xsd:element name="canShowOrganizer" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="durationStep" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="maxDuration" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="pagesShiftInterval" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="nbRoomsPerPage" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="virtualKeyboard" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>

@@ -181,7 +181,6 @@ INSERT INTO configuration ("key", "value", description) VALUES
     ('CAN_SHOW_SUBJECT', 'true', 'This data is in boolean'),
     ('CAN_SHOW_ORGANIZER', 'true', 'This data is in boolean'),
     ('DURATION_STEP', '15', 'This data is in minutes'),
-    ('MAX_DURATION', '720', 'This data is in minutes'),
     ('PAGES_SHIFT_INTERVAL', '2', 'This data is in secondes'),
     ('NB_ROOMS_PER_PAGE', '4', 'This data is an integer'),
     ('VIRTUAL_KEYBOARD', 'false', 'This data is in boolean'),
