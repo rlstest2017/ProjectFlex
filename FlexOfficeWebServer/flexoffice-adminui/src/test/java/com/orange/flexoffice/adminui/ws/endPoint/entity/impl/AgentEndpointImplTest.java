@@ -114,7 +114,7 @@ public class AgentEndpointImplTest {
 	@Test
 	public void TestD_addAgent() {
 		// Setup
-		final AgentInput agent = factory.createHmiAgent("AA:DD:SS:PP:SS:MM", "agent 10", "agent 10 test");
+		final AgentInput agent = factory.createHmiAgent("AA:DD:SS:PP:SS:MM", "agent 10", "agent 10 test", ECommandModel.NONE);
 		
 		// Test
 		final AgentOutput response = agentEndpoint.addAgent(agent);
@@ -135,7 +135,7 @@ public class AgentEndpointImplTest {
 			final AgentDto agentOut = agentEndpoint.findByMacAddress("FF:EE:ZZ:AA:GG:PP");
 			if (agentOut != null) {
 				
-				final AgentInput agent = factory.createHmiAgent(agentOut.getMacAddress(), agentOut.getName(), agentOut.getDescription());
+				final AgentInput agent = factory.createHmiAgent(agentOut.getMacAddress(), agentOut.getName(), agentOut.getDescription(), ECommandModel.NONE);
 
 				agentEndpoint.addAgent(agent);
 			}
