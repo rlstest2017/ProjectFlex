@@ -21,7 +21,6 @@ public class SystemConnectorReturn {
 	Boolean canShowSubject;
 	Boolean canShowOrganizer;
 	Integer durationStep;
-	Integer maxDuration;
 	Integer pagesShiftInterval;
 	Integer nbRoomsPerPage;
 	Boolean virtualKeyboard;
@@ -197,18 +196,6 @@ public class SystemConnectorReturn {
 	 */
 	public void setDurationStep(Integer durationStep) {
 		this.durationStep = durationStep;
-	}
-	/**
-	 * @return the maxDuration
-	 */
-	public Integer getMaxDuration() {
-		return maxDuration;
-	}
-	/**
-	 * @param maxDuration the maxDuration to set
-	 */
-	public void setMaxDuration(Integer maxDuration) {
-		this.maxDuration = maxDuration;
 	}
 	/**
 	 * @return the pagesShiftInterval

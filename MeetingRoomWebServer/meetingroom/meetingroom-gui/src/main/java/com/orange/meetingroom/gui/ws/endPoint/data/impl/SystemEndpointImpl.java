@@ -67,7 +67,6 @@ public class SystemEndpointImpl implements SystemEndpoint {
 				system.setHourEnd(BigInteger.valueOf(data.getHourEnd()));
 				system.setHourStart(BigInteger.valueOf(data.getHourStart()));
 				system.setInactivityTime(BigInteger.valueOf(data.getInactivityTime()));
-				system.setMaxDuration(BigInteger.valueOf(data.getMaxDuration()));
 				system.setMeetingRoomTimeout(BigInteger.valueOf(data.getMeetingRoomTimeout()));
 				system.setNbRoomsPerPage(BigInteger.valueOf(data.getNbRoomsPerPage()));
 				system.setOrganizerMandatory(data.getOrganizerMandatory());

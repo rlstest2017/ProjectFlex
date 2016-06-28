@@ -71,7 +71,6 @@
 			<xsd:element name="canShowSubject" type="xsd:boolean"/>
 			<xsd:element name="canShowOrganizer" type="xsd:boolean"/>
 			<xsd:element name="durationStep" type="xsd:integer"/>
-			<xsd:element name="maxDuration" type="xsd:integer"/>
 			<xsd:element name="pagesShiftInterval" type="xsd:integer"/>
 			<xsd:element name="nbRoomsPerPage" type="xsd:integer"/>
 			<xsd:element name="virtualKeyboard" type="xsd:boolean"/>
