@@ -168,6 +168,8 @@ public class InitTestRepository extends DataRepository<InitForTestDao>  {
 		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {10, "AGENT_STATUS_TIMEOUT", "3", "This data is in minutes"});
 		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {11, "DASHBOARD_STATUS_TIMEOUT", "3", "This data is in minutes"});
 		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {12, "MEETINGROOM_STATUS_TIMEOUT", "3", "This data is in minutes"});
+		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {13, "HOUR_START", "7", "This data is in hours"});
+		jdbcTemplateForTest.update(sqlConfiguration, new Object[] {14, "HOUR_END", "20", "This data is in hours"});
 		
 		return true;
 	}
