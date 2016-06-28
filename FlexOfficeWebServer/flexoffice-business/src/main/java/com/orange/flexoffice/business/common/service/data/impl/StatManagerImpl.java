@@ -2,6 +2,7 @@ package com.orange.flexoffice.business.common.service.data.impl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -115,6 +116,9 @@ public class StatManagerImpl implements StatManager {
 			float rate = ((float)simpleStatDto.getOccupancyDuration()*100/(float)(nb*duration));
 			simpleStatDto.setRate(rate);
 		}
+		
+		// Sort by rate descending
+		Collections.sort(simpleStatList);
 		
 		LOGGER.debug("End method StatManager.getPopularStats");
 		return simpleStatList;

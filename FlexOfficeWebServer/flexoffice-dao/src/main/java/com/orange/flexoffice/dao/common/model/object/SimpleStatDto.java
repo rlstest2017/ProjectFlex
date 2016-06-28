@@ -5,7 +5,7 @@ package com.orange.flexoffice.dao.common.model.object;
  * @author oab
  *
  */
-public class SimpleStatDto {
+public class SimpleStatDto implements Comparable<SimpleStatDto> {
 	
 	private Float rate;
 	private String roomName;
@@ -72,6 +72,11 @@ public class SimpleStatDto {
 	 */
 	public void setNbDaysDuration(Long nbDaysDuration) {
 		this.nbDaysDuration = nbDaysDuration;
+	}
+	
+	@Override
+	public int compareTo(SimpleStatDto o) {
+		return o.getRate().compareTo(this.getRate());
 	}
 
 	

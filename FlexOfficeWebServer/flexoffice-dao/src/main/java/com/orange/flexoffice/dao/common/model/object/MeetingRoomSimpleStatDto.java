@@ -1,11 +1,11 @@
 package com.orange.flexoffice.dao.common.model.object;
 
 /**
- * SimpleStatDto
+ * MeetingRoomSimpleStatDto
  * @author oab
  *
  */
-public class MeetingRoomSimpleStatDto {
+public class MeetingRoomSimpleStatDto implements Comparable<MeetingRoomSimpleStatDto>{
 	
 	private Float rate;
 	private String meetingRoomName;
@@ -63,5 +63,9 @@ public class MeetingRoomSimpleStatDto {
 		this.meetingRoomName = meetingRoomName;
 	}
 
+	@Override
+	public int compareTo(MeetingRoomSimpleStatDto o) {
+		return o.getRate().compareTo(this.getRate());
+	}
 	
 }
