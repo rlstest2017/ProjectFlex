@@ -192,11 +192,11 @@ public class TaskManagerImpl implements TaskManager {
 		
 		List<RoomDailyOccupancyDao> roomDailyList = new ArrayList<RoomDailyOccupancyDao>();
 			
-		// 1 - Get Date with DATE_BEGIN_DAY & DATE_END_DAY parameters
-		ConfigurationDao beginDay = configRepository.findByKey(E_ConfigurationKey.DATE_BEGIN_DAY.toString());
-		String  beginDayValue = beginDay.getValue(); // in hh:mm
-		ConfigurationDao endDay = configRepository.findByKey(E_ConfigurationKey.DATE_END_DAY.toString());
-		String  endDayValue = endDay.getValue(); // in hh:mm
+		// 1 - Get Date with HOUR_START & HOUR_END parameters
+		ConfigurationDao beginDay = configRepository.findByKey(E_ConfigurationKey.HOUR_START.toString());
+		String  beginDayValue = beginDay.getValue() + ":00"; // in h + ":00"
+		ConfigurationDao endDay = configRepository.findByKey(E_ConfigurationKey.HOUR_END.toString());
+		String  endDayValue = endDay.getValue() + ":00";  // in h + ":00"
 		
 		// 2 - Process the Dates
 		Date beginDayDate = dateTools.dateBeginDay(beginDayValue);
