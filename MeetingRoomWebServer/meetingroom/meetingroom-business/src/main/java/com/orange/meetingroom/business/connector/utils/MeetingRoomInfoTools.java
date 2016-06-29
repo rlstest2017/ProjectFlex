@@ -56,7 +56,7 @@ public class MeetingRoomInfoTools {
 			data.setMeetingRoomStatus(EnumMeetingRoomStatus.FREE);
 			data.setMeetingRoomExternalId(meetingRoomExternalId);
 			
-			getAckTime(); // get AckTime from Config hashMap from DataBase System Table
+			setAckTime(); // set AckTime properties from Config hashMap from DataBase System Table
 			
 			for (BookingConnectorReturn book : bookings) {
 				Boolean compareDates1 = dateTools.isTime1BeforeOrEqualsTime2(book.getStartDate(), currentDate, 0);
@@ -133,7 +133,7 @@ public class MeetingRoomInfoTools {
 	 * getAckTime
 	 * @return
 	 */
-	private Integer getAckTime() {
+	private Integer setAckTime() {
 		Map<String, Integer> configMap = confHashMapFactoryBean.getObject();
 		if (configMap.containsKey(EnumSystemInMap.ACK_TIME.toString())) {
 			this.ackTime = configMap.get(EnumSystemInMap.ACK_TIME.toString());

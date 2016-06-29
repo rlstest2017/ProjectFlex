@@ -59,8 +59,8 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	static final String FORMAT_JSON = "json";
 	static final String FORCED_UPDATE_CACHE_TRUE = "true";
 	static final String FORCED_UPDATE_CACHE_FALSE = "false";
-	static final String ACKNOWLEDGED_DAFAULT = "0";
-	static final String ACKNOWLEDGED_CONFIRM = "1";
+	static final String ACKNOWLEDGED_DEFAULT = "0";
+	static final String ACKNOWLEDGED_CONFIRMED = "1";
 
 	String dashboardMaxBookingsParam = "2"; // number of bookings to get from now() 
 	 
@@ -68,6 +68,8 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	// if startDate = 0 or before now(), PHP server get maxBookings from now()
 	// dashboardStartDateBookingsParam is date in milliseconds
 	String dashboardStartDateBookingsParam = "0";
+	
+	Integer ackTime = 0;
 	
 	@Autowired
 	private ConfHashMapFactoryBean confHashMapFactoryBean;
@@ -110,6 +112,18 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			
 		}
 		return this.dashboardStartDateBookingsParam;
+	}
+	
+	/**
+	 * getAckTime
+	 * @return
+	 */
+	private Integer setAckTime() {
+		Map<String, Integer> configMap = confHashMapFactoryBean.getObject();
+		if (configMap.containsKey(EnumSystemInMap.ACK_TIME.toString())) {
+			this.ackTime = configMap.get(EnumSystemInMap.ACK_TIME.toString());
+		}
+		return this.ackTime;
 	}
 	
 	@Override
@@ -260,7 +274,14 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 		params.setFormat(FORMAT_JSON);
 		params.setStartDate(bookingSetInput.getStartDate().toString());
 		params.setEndDate(bookingSetInput.getEndDate().toString());
-		params.setAcknowledged(ACKNOWLEDGED_DAFAULT);
+		
+		setAckTime(); // set AckTime properties from Config hashMap from DataBase System Table
+		
+		if (this.ackTime == 0) {
+			params.setAcknowledged(ACKNOWLEDGED_CONFIRMED);
+		} else {
+			params.setAcknowledged(ACKNOWLEDGED_DEFAULT);
+		}
 		
 		BookingSummary outputSummary = phpConnectorManager.setBooking(params);
 		
@@ -327,7 +348,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 			params.setIdReservation(bookingUpdateInput.getIDReservation());
 			params.setRevisionReservation(bookingUpdateInput.getRevisionReservation());
 			params.setStartDate(new Date().toString()); // only startDate to confirm request !!!
-			params.setAcknowledged(ACKNOWLEDGED_CONFIRM);
+			params.setAcknowledged(ACKNOWLEDGED_CONFIRMED);
 			params.setSubject(bookingUpdateInput.getSubject());
 			params.setFormat(FORMAT_JSON);
 						
