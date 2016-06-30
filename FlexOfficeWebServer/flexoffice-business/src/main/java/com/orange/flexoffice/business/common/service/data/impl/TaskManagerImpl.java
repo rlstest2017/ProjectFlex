@@ -248,19 +248,24 @@ public class TaskManagerImpl implements TaskManager {
 	
 	@Override
 	public void processMeetingRoomDailyStats() {
-		LOGGER.debug(" Begin TaskManager.processDailyStats method : " + new Date());
+		LOGGER.debug(" Begin TaskManager.processMeetingRoomDailyStats method : " + new Date());
 		
 		List<MeetingRoomDailyOccupancyDao> meetingRoomDailyList = new ArrayList<MeetingRoomDailyOccupancyDao>();
 			
 		// 1 - Get Date with HOUR_START & HOUR_END parameters
 		ConfigurationDao beginDay = configRepository.findByKey(E_ConfigurationKey.HOUR_START.toString());
 		String  beginDayValue = beginDay.getValue() + ":00"; // in h + ":00"
+		LOGGER.debug(" beginDayValue is : " + beginDayValue);
 		ConfigurationDao endDay = configRepository.findByKey(E_ConfigurationKey.HOUR_END.toString());
 		String  endDayValue = endDay.getValue() + ":00";  // in h + ":00"
+		LOGGER.debug(" endDayValue is : " + endDayValue);
 		
 		// 2 - Process the Dates
 		Date beginDayDate = dateTools.dateBeginDay(beginDayValue);
 		Date endDayDate = dateTools.dateEndDay(endDayValue);
+		
+		LOGGER.debug(" beginDayDate is : " + beginDayDate);
+		LOGGER.debug(" endDayDate is : " + endDayDate);
 		
 		if (dateTools.isWorkingDay(beginDayDate)) { // process only dates in working days
 			
@@ -295,6 +300,7 @@ public class TaskManagerImpl implements TaskManager {
 			
 			// 5 - save in Table meetingroom_daily_occupancy
 			for (MeetingRoomDailyOccupancyDao meetingRoomDailyOccupancyDao : meetingRoomDailyList) {
+				LOGGER.debug(" add entry");
 				meetingRoomDailyRepository.saveMeetingRoomDaily(meetingRoomDailyOccupancyDao);	
 			}
 			

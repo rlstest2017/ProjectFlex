@@ -27,6 +27,7 @@ import com.orange.flexoffice.adminui.ws.model.SimpleStat;
 import com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.service.data.MeetingRoomStatManager;
+import com.orange.flexoffice.business.common.service.data.TaskManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.dao.common.model.object.MeetingRoomSimpleStatDto;
 import com.orange.flexoffice.dao.common.model.object.MultiStatDto;
@@ -44,6 +45,8 @@ public class MeetingRoomStatEndpointImpl implements MeetingRoomStatEndpoint {
 	
 	@Autowired
 	private TestManager testManager;
+	@Autowired
+	private TaskManager taskManager;
 	@Autowired
 	private MeetingRoomStatManager meetingRoomStatManager;
 	@Autowired
@@ -65,6 +68,7 @@ public class MeetingRoomStatEndpointImpl implements MeetingRoomStatEndpoint {
 	@Override
 	public List<SimpleStat> getPopularStats() {
 		try {
+			taskManager.processMeetingRoomDailyStats();
 		LOGGER.debug( "Begin call MeetingRoomStatEndpoint.getPopularStats at: " + new Date() );
 		List<SimpleStat> simpleStatsList = new ArrayList<SimpleStat>();
 
