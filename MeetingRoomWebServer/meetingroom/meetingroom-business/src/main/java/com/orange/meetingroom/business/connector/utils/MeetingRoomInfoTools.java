@@ -28,9 +28,11 @@ public class MeetingRoomInfoTools {
 	
 	private static final Logger LOGGER = Logger.getLogger(MeetingRoomInfoTools.class);
 	static final String FORMAT_JSON = "json";
-	static final String DEFAULT_CONTENT_SUBJECT = "Booking";
+	static final String DEFAULT_CONTENT_SUBJECT_EN = "Booking";
+	static final String DEFAULT_CONTENT_SUBJECT_FR = "Delegate";
 	static final String DEFAULT_ORGANIZER = "delegate";
-	static final String DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD = "Quick";
+	static final String DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD_EN = "Quick";
+	static final String DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD_FR = "automatique";
 	
 	@Autowired
 	ConfHashMapFactoryBean confHashMapFactoryBean; 
@@ -155,11 +157,13 @@ public class MeetingRoomInfoTools {
 			if (subjectArray != null) {
 				String sub = subjectArray[0];
 				for (int i=1; i< subjectArray.length; i++) {
-					if (!subjectArray[i].contains(DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD)) {
+					if (!subjectArray[i].contains(DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD_EN) && !subjectArray[i].contains(DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD_FR)) {
 						sub = sub +"-"+subjectArray[i];
 					}
 				}
-				if (sub.contains(DEFAULT_CONTENT_SUBJECT)) { // ex : Booking Agent - Quick Booking
+				if (sub.contains(DEFAULT_CONTENT_SUBJECT_EN) || sub.contains(DEFAULT_CONTENT_SUBJECT_FR)) { 
+					// ex : Booking Agent - Quick Booking
+					// ex : Delegate - Agent de réservation automatique
 					String organizer = book.getOrganizerFullName();
 					if (!organizer.contains(DEFAULT_ORGANIZER)) {
 						label = organizer.trim();
