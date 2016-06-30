@@ -262,7 +262,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 							book.setIDReservation(bookConnector.getIdReservation());
 							book.setRevisionReservation(bookConnector.getRevisionReservation());
 							book.setOrganizerFullName(bookConnector.getOrganizerFullName());
-							book.setSubject(bookConnector.getSubject());
+							book.setSubject(processSubject(bookConnector.getSubject()));
 							book.setStartDate(BigInteger.valueOf(bookConnector.getStartDate()));
 							book.setEndDate(BigInteger.valueOf(bookConnector.getEndDate()));
 							book.setAcknowledged(bookConnector.getAcknowledged());
