@@ -27,7 +27,6 @@ import com.orange.flexoffice.adminui.ws.model.SimpleStat;
 import com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.service.data.MeetingRoomStatManager;
-import com.orange.flexoffice.business.common.service.data.TaskManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.dao.common.model.object.MeetingRoomSimpleStatDto;
 import com.orange.flexoffice.dao.common.model.object.MultiStatDto;
@@ -45,8 +44,6 @@ public class MeetingRoomStatEndpointImpl implements MeetingRoomStatEndpoint {
 	
 	@Autowired
 	private TestManager testManager;
-	@Autowired
-	private TaskManager taskManager;
 	@Autowired
 	private MeetingRoomStatManager meetingRoomStatManager;
 	@Autowired
@@ -68,20 +65,19 @@ public class MeetingRoomStatEndpointImpl implements MeetingRoomStatEndpoint {
 	@Override
 	public List<SimpleStat> getPopularStats() {
 		try {
-			taskManager.processMeetingRoomDailyStats();
-		LOGGER.debug( "Begin call MeetingRoomStatEndpoint.getPopularStats at: " + new Date() );
-		List<SimpleStat> simpleStatsList = new ArrayList<SimpleStat>();
-
-		List<MeetingRoomSimpleStatDto> statsList = meetingRoomStatManager.getPopularStats();
-		for (MeetingRoomSimpleStatDto meetingRoomSimpleStatDto : statsList) {
-			SimpleStat simpleStat = factory.createSimpleStat();
-			simpleStat.setLabel(meetingRoomSimpleStatDto.getMeetingRoomName());
-			simpleStat.setValue(String .valueOf(meetingRoomSimpleStatDto.getRate()));
-			simpleStatsList.add(simpleStat);
-		}
-		
-		LOGGER.debug( "End call MeetingRoomStatEndpoint.getPopularStats at: " + new Date() );
-		return simpleStatsList;
+			LOGGER.debug( "Begin call MeetingRoomStatEndpoint.getPopularStats at: " + new Date() );
+			List<SimpleStat> simpleStatsList = new ArrayList<SimpleStat>();
+	
+			List<MeetingRoomSimpleStatDto> statsList = meetingRoomStatManager.getPopularStats();
+			for (MeetingRoomSimpleStatDto meetingRoomSimpleStatDto : statsList) {
+				SimpleStat simpleStat = factory.createSimpleStat();
+				simpleStat.setLabel(meetingRoomSimpleStatDto.getMeetingRoomName());
+				simpleStat.setValue(String .valueOf(meetingRoomSimpleStatDto.getRate()));
+				simpleStatsList.add(simpleStat);
+			}
+			
+			LOGGER.debug( "End call MeetingRoomStatEndpoint.getPopularStats at: " + new Date() );
+			return simpleStatsList;
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in getPopularStats() MeetingRoomStatEndpointImpl with message :" + ex.getMessage(), ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
@@ -91,36 +87,36 @@ public class MeetingRoomStatEndpointImpl implements MeetingRoomStatEndpoint {
 	@Override
 	public MultiStatSet getOccupancyStats(String from, String to, String viewtype) {
 		try {
-		LOGGER.debug( "Begin call MeetingRoomStatEndpoint.getOccupancyStats at: " + new Date() );
-		
-		MultiStatSet set = factory.createMultiStatSet();
-		
-		MultiStatSetDto setDto = meetingRoomStatManager.getOccupancyStats(from, to, viewtype);
-		
-		set.setStartdate(setDto.getStartdate());
-		set.setEnddate(setDto.getEnddate());
-
-		// List categories
-		List<String> categoriesDto = setDto.getCategories();
-		for (String cat : categoriesDto) {
-			set.getCategories().add(cat);
-		}
-		// List multiStat
-		List<MultiStatDto> multiStatDtoList = setDto.getData();
-		for (MultiStatDto multiStatDto : multiStatDtoList) {
-			//multiStat
-			MultiStat mstat = factory.createMultiStat();
-			mstat.setLabel(multiStatDto.getLabel());
-			List<String> multiStatValues = multiStatDto.getValues();
-			for (String value : multiStatValues) {
-				mstat.getValues().add(value);
+			LOGGER.debug( "Begin call MeetingRoomStatEndpoint.getOccupancyStats at: " + new Date() );
+			
+			MultiStatSet set = factory.createMultiStatSet();
+			
+			MultiStatSetDto setDto = meetingRoomStatManager.getOccupancyStats(from, to, viewtype);
+			
+			set.setStartdate(setDto.getStartdate());
+			set.setEnddate(setDto.getEnddate());
+	
+			// List categories
+			List<String> categoriesDto = setDto.getCategories();
+			for (String cat : categoriesDto) {
+				set.getCategories().add(cat);
 			}
-			set.getData().add(mstat);
-		}
-		
-		LOGGER.debug( "End call MeetingRoomStatEndpoint.getOccupancyStats at: " + new Date() );
-		
-		return factory.createMultiStatSet(set).getValue();
+			// List multiStat
+			List<MultiStatDto> multiStatDtoList = setDto.getData();
+			for (MultiStatDto multiStatDto : multiStatDtoList) {
+				//multiStat
+				MultiStat mstat = factory.createMultiStat();
+				mstat.setLabel(multiStatDto.getLabel());
+				List<String> multiStatValues = multiStatDto.getValues();
+				for (String value : multiStatValues) {
+					mstat.getValues().add(value);
+				}
+				set.getData().add(mstat);
+			}
+			
+			LOGGER.debug( "End call MeetingRoomStatEndpoint.getOccupancyStats at: " + new Date() );
+			
+			return factory.createMultiStatSet(set).getValue();
 		
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in getOccupancyStats() MeetingRoomStatEndpointImpl with message :" + ex.getMessage(), ex);

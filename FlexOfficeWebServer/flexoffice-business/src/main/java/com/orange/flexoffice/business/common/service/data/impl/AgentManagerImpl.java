@@ -22,7 +22,6 @@ import com.orange.flexoffice.dao.common.model.enumeration.E_CommandModel;
 import com.orange.flexoffice.dao.common.model.object.AgentDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AgentDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
-import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomDaoRepository;
 
 /**
@@ -43,8 +42,6 @@ public class AgentManagerImpl implements AgentManager {
 	private MeetingRoomDaoRepository meetingroomRepository;
 	@Autowired
 	private AlertDaoRepository alertRepository;
-	@Autowired
-	private ConfigurationDaoRepository configRepository;
 	@Autowired
 	private AlertManager alertManager;
 	
