@@ -27,7 +27,7 @@ public class AdminUiTasks {
 	
 	// Every every day at 23:00
 	//second, minute, hour, day of month, month, day(s) of week
-	@Scheduled(cron="0 55 13 * * ?")
+	@Scheduled(cron="0 0 23 * * ?")
     public void processDailyStatsMethod()  {
 		
 		taskManager.processDailyStats();
