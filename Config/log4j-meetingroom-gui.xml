@@ -10,12 +10,14 @@
 	<!-- ******************************** -->
 	<!-- Log File appender                -->
 	<!-- ******************************** -->
-	<appender name="logFile" class="org.apache.log4j.FileAppender">
+	<appender name="logFile" class="org.apache.log4j.DailyMaxRollingFileAppender">
 		<param name="File" value="/home/flexoffice/flexoffice-webserver/logs/meetingroom-gui.log"/>
 		<param name="Append" value="true" />
 		<param name="threshold" value="info"/>
+		<param name="DatePattern" value="'.'yyyyMMdd" />
+		<param name="MaxBackupIndex" value="15" />
 		<layout class="org.apache.log4j.PatternLayout">
-		  <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} ~ %t ~ %p ~ %C{1}.%M ~ %L ~ %m%n"/>
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} ~ %t ~ %p ~ %C{1}.%M ~ %L ~ %m%n"/>
 		</layout>
 	</appender>
 
