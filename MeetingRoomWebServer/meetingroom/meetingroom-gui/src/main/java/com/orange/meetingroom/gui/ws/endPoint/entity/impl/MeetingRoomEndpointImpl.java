@@ -61,6 +61,8 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	static final String FORCED_UPDATE_CACHE_FALSE = "false";
 	static final String ACKNOWLEDGED_DEFAULT = "0";
 	static final String ACKNOWLEDGED_CONFIRMED = "1";
+	static final String DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD_EN = "Quick";
+	static final String DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD_FR = "automatique";
 
 	String dashboardMaxBookingsParam = "2"; // number of bookings to get from now() 
 	 
@@ -126,6 +128,32 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 		return this.ackTime;
 	}
 	
+	/**
+	 * processSubject
+	 * @param book
+	 * @return
+	 */
+	private String processSubject(String subjectParam) {
+		
+		String subject = subjectParam;
+		
+		if (!subject.isEmpty()) {
+			String[] subjectArray = subject.split("-");
+			if (subjectArray != null) {
+				String sub = subjectArray[0];
+				for (int i=1; i< subjectArray.length; i++) {
+					if (!subjectArray[i].contains(DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD_EN) && !subjectArray[i].contains(DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD_FR)) {
+						sub = sub +"-"+subjectArray[i];
+					}
+				}
+				subject = sub.trim(); 
+				
+			}
+		} 
+		
+		return subject;
+	}
+	
 	@Override
 	public MeetingRoom getMeetingRoomBookings(String meetingRoomExternalId, Boolean forceUpdateCache) {
 		try {
@@ -169,7 +197,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 					book.setIDReservation(bookConnector.getIdReservation());
 					book.setRevisionReservation(bookConnector.getRevisionReservation());
 					book.setOrganizerFullName(bookConnector.getOrganizerFullName());
-					book.setSubject(bookConnector.getSubject());
+					book.setSubject(processSubject(bookConnector.getSubject()));
 					book.setStartDate(BigInteger.valueOf(bookConnector.getStartDate()));
 					book.setEndDate(BigInteger.valueOf(bookConnector.getEndDate()));
 					book.setAcknowledged(bookConnector.getAcknowledged());
@@ -377,6 +405,5 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 	public boolean checkMeetingRoomsStatusTimeOutTestMethod() {
 		return meetingRoomTask.checkMeetingRoomsStatusTimeOutTestMethod();
 	}
-
-
+	
 }
