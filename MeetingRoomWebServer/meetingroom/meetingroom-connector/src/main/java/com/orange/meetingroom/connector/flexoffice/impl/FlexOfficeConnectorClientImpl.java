@@ -388,6 +388,7 @@ public class FlexOfficeConnectorClientImpl implements FlexOfficeConnectorClient 
 			putRequest.setEntity(input);
 			//Send the request; It will immediately return the response in HttpResponse object if any
 			LOGGER.info("The putRequest in updateMeetingRoomData(...) method is : " + putRequest);
+			LOGGER.info("The writer in putRequest in updateMeetingRoomData(...) method is : " + writer);
 			HttpResponse response = httpClient.execute(putRequest);
 			//verify the valid error code first
 			int statusCode = response.getStatusLine().getStatusCode();
