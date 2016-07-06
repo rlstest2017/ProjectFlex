@@ -143,7 +143,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 				String sub = subjectArray[0];
 				for (int i=1; i< subjectArray.length; i++) {
 					if (!subjectArray[i].contains(DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD_EN) && !subjectArray[i].contains(DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD_FR)) {
-						sub = sub +" "+subjectArray[i];
+						sub = sub +"-"+subjectArray[i];
 					}
 				}
 				subject = sub.trim(); 
@@ -197,7 +197,7 @@ public class MeetingRoomEndpointImpl implements MeetingRoomEndpoint {
 					book.setIDReservation(bookConnector.getIdReservation());
 					book.setRevisionReservation(bookConnector.getRevisionReservation());
 					book.setOrganizerFullName(bookConnector.getOrganizerFullName());
-					book.setSubject(processSubject(bookConnector.getSubject()));
+					book.setSubject(bookConnector.getSubject());
 					book.setStartDate(BigInteger.valueOf(bookConnector.getStartDate()));
 					book.setEndDate(BigInteger.valueOf(bookConnector.getEndDate()));
 					book.setAcknowledged(bookConnector.getAcknowledged());
