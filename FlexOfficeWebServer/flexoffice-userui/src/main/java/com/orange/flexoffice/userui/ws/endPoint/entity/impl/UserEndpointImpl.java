@@ -256,7 +256,9 @@ public class UserEndpointImpl implements UserEndpoint {
 				buildingItem.setName(building.getName());
 				buildingItem.setType(ELocationItemType.BUILDING);
 				userPref.setBuilding(buildingItem);
-				userPref.setFloor(BigInteger.valueOf(preferences.getFloor()));
+				if (preferences.getFloor() != null) {
+					userPref.setFloor(BigInteger.valueOf(preferences.getFloor()));
+				}
 			}
 			userContext.setUserPreferences(userPref);
 		} catch (DataNotExistsException e) {
