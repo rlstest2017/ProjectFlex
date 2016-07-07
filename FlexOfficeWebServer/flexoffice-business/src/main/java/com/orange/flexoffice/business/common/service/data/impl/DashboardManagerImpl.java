@@ -186,12 +186,12 @@ public class DashboardManagerImpl implements DashboardManager {
 				dashboardDao.setCommand(dashboard.getCommand());
 			}
 			
+			// update DashboardDao
+			DashboardDao dashboardToRet = dashboardRepository.updateDashboardStatus(dashboardDao);
+			
 			// update Dashboard Alert
 			Long dashboardId = dashboardDao.getId();
 			alertManager.updateDashboardAlert(dashboardId, dashboardDao.getStatus());
-			
-			// update DashboardDao
-			DashboardDao dashboardToRet = dashboardRepository.updateDashboardStatus(dashboardDao);
 			
 			// Set to NONE agent command after getting command to send 
 			DashboardDao dashboardUpdateCommand = new DashboardDao();

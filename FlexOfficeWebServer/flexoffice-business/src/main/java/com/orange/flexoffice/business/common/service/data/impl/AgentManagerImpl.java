@@ -219,12 +219,12 @@ public class AgentManagerImpl implements AgentManager {
 				agentDao.setCommand(agent.getCommand());
 			}
 			
+			// update AgentDao
+			AgentDao agentToRet = agentRepository.updateAgentStatus(agentDao);
+			
 			// update Agent Alert
 			Long agentId = agentDao.getId();
 			alertManager.updateAgentAlert(agentId, agentDao.getStatus());
-			
-			// update AgentDao
-			AgentDao agentToRet = agentRepository.updateAgentStatus(agentDao);
 			
 			// Set to NONE agent command after getting command to send 
 			AgentDao agentUpdateCommand = new AgentDao();
