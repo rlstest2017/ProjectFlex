@@ -67,7 +67,9 @@ public class MeetingRoomApiEndpointImpl implements MeetingRoomApiEndpoint {
 			meetingRoomDao.setStatus(meetingRoom.getMeetingRoomStatus().toString());
 			meetingRoomDao.setStartDate(new Date(meetingRoom.getStartDate() * 1000));
 			meetingRoomDao.setEndDate(new Date(meetingRoom.getEndDate() * 1000));
-			meetingRoomDao.setOrganizerLabel(URLDecoder.decode(meetingRoom.getOrganizerLabel(), "UTF-8"));
+			if (meetingRoom.getOrganizerLabel() != null){
+				meetingRoomDao.setOrganizerLabel(URLDecoder.decode(meetingRoom.getOrganizerLabel(), "UTF-8"));
+			}
 			
 			meetingRoomManager.updateData(meetingRoomDao);
 			
