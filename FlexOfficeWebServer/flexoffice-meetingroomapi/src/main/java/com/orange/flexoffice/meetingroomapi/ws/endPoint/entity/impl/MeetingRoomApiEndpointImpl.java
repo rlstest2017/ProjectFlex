@@ -1,5 +1,7 @@
 package com.orange.flexoffice.meetingroomapi.ws.endPoint.entity.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -65,7 +67,7 @@ public class MeetingRoomApiEndpointImpl implements MeetingRoomApiEndpoint {
 			meetingRoomDao.setStatus(meetingRoom.getMeetingRoomStatus().toString());
 			meetingRoomDao.setStartDate(new Date(meetingRoom.getStartDate() * 1000));
 			meetingRoomDao.setEndDate(new Date(meetingRoom.getEndDate() * 1000));
-			meetingRoomDao.setOrganizerLabel(meetingRoom.getOrganizerLabel());
+			meetingRoomDao.setOrganizerLabel(URLDecoder.decode(meetingRoom.getOrganizerLabel(), "UTF-8"));
 			
 			meetingRoomManager.updateData(meetingRoomDao);
 			
@@ -74,6 +76,9 @@ public class MeetingRoomApiEndpointImpl implements MeetingRoomApiEndpoint {
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_71, Response.Status.NOT_FOUND));
 		} catch (RuntimeException e){
 			LOGGER.debug("RuntimeException in MeetingRoomApiEndpoint.updateData with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		} catch (UnsupportedEncodingException e) {
+			LOGGER.error("UnsupportedEncodingException in updateData(...) method. ", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		}
 		
