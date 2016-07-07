@@ -1,5 +1,7 @@
 package com.orange.meetingroom.business.connector.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -151,34 +153,40 @@ public class MeetingRoomInfoTools {
 	private String processOrganizerLabel(BookingConnectorReturn book) {
 		String label = null;
 		String subject = book.getSubject().trim();
-		
-		if (!subject.isEmpty()) {
-			String[] subjectArray = subject.split("-");
-			if (subjectArray != null) {
-				String sub = subjectArray[0];
-				for (int i=1; i< subjectArray.length; i++) {
-					if (!subjectArray[i].contains(DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD_EN) && !subjectArray[i].contains(DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD_FR)) {
-						sub = sub +"-"+subjectArray[i];
+		try {
+			if (!subject.isEmpty()) {
+				String[] subjectArray = subject.split("-");
+				if (subjectArray != null) {
+					String sub = subjectArray[0];
+						sub = URLEncoder.encode(sub, "UTF-8");
+					for (int i=1; i< subjectArray.length; i++) {
+						if (!subjectArray[i].contains(DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD_EN) && !subjectArray[i].contains(DEFAULT_BOOK_FROM_AGENT_OR_DASHBOARD_FR)) {
+							sub = sub +"-"+URLEncoder.encode(subjectArray[i], "UTF-8");
+						}
+					}
+					if (sub.contains(DEFAULT_CONTENT_SUBJECT_EN) || sub.contains(DEFAULT_CONTENT_SUBJECT_FR)) { 
+						// ex : Booking Agent - Quick Booking
+						// ex : Delegate - Agent de réservation automatique
+						String organizer = book.getOrganizerFullName();
+						organizer = URLEncoder.encode(organizer, "UTF-8");
+						if (!organizer.contains(DEFAULT_ORGANIZER)) {
+							label = organizer.trim();
+						} 
+					} else { // ex : rachid - Quick Booking
+						label = sub.trim(); 
 					}
 				}
-				if (sub.contains(DEFAULT_CONTENT_SUBJECT_EN) || sub.contains(DEFAULT_CONTENT_SUBJECT_FR)) { 
-					// ex : Booking Agent - Quick Booking
-					// ex : Delegate - Agent de réservation automatique
-					String organizer = book.getOrganizerFullName();
-					if (!organizer.contains(DEFAULT_ORGANIZER)) {
-						label = organizer.trim();
-					} 
-				} else { // ex : rachid - Quick Booking
-					label = sub.trim(); 
-				}
+			} else {
+				String organizer = book.getOrganizerFullName();
+				organizer = URLEncoder.encode(organizer, "UTF-8");
+				if (!organizer.contains(DEFAULT_ORGANIZER)) {
+					label = organizer.trim();
+				} 
 			}
-		} else {
-			String organizer = book.getOrganizerFullName();
-			if (!organizer.contains(DEFAULT_ORGANIZER)) {
-				label = organizer.trim();
-			} 
+		} catch (UnsupportedEncodingException e) {
+			LOGGER.error("UnsupportedEncodingException in processOrganizerLabel(...) method. ", e);
 		}
-		
+	
 		return label;
 	}
 
