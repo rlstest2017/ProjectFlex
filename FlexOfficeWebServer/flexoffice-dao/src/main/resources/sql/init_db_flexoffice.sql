@@ -335,7 +335,7 @@ CREATE INDEX gateways_name_idx ON gateways USING btree (name);
 CREATE INDEX sensors_identifier_idx ON sensors USING btree (identifier);
 CREATE INDEX sensors_profile_idx ON sensors USING btree (profile);
 
-CREATE INDEX rooms_gateway_id_idx ON rooms USING btree (gateway_id);
+--CREATE INDEX rooms_gateway_id_idx ON rooms USING btree (gateway_id);
 CREATE INDEX rooms_name_idx ON rooms USING btree (name);
 
 CREATE INDEX room_stats_room_id_idx ON room_stats USING btree (room_id);
