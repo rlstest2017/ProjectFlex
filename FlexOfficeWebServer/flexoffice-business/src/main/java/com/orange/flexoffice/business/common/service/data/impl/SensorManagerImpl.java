@@ -25,7 +25,9 @@ import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_SensorStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_SensorTeachinStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_SensorType;
 import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
+import com.orange.flexoffice.dao.common.model.object.SensorTypeAndRoomDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
@@ -100,8 +102,16 @@ public class SensorManagerImpl implements SensorManager {
 						TeachinSensorDao teachinSensor = new TeachinSensorDao();
 						teachinSensor.setSensorIdentifier(sensorDao.getIdentifier());
 						teachinSensor.setSensorStatus(E_SensorTeachinStatus.NOT_PAIRED.toString());
-						teachinRepository.saveTechinSensor(teachinSensor);
-						teachinRepository.updateTeachinDate(teachin);
+						
+						try {
+							teachinRepository.findBySensorIdentifier(sensorDao.getIdentifier());
+						} catch(IncorrectResultSizeDataAccessException e ) {
+							LOGGER.debug("SensorManager.save : sensorIdentifier #" +sensorDao.getIdentifier()+" will be added in teachin_sensors table", e);
+							LOGGER.info("SensorManager.save : sensorIdentifier #" +sensorDao.getIdentifier()+" will be added in teachin_sensors table");
+							teachinRepository.saveTechinSensor(teachinSensor);
+							teachinRepository.updateTeachinDate(teachin);
+					    }
+						
 					}
 				} catch(IncorrectResultSizeDataAccessException e ) {
 					LOGGER.debug("SensorManager.save : There is no activate teachin", e);
@@ -125,6 +135,11 @@ public class SensorManagerImpl implements SensorManager {
 				// Set 0 as room id
 				sensorDao.setRoomId(0);				
 			} 
+			// update old associated roomInfos (status, temperature & humidity)
+			SensorDao oldSensorInfos = sensorRepository.findBySensorId(sensorDao.getIdentifier());
+			if (oldSensorInfos.getRoomId() != sensorDao.getRoomId()) {
+				updateRoomInfos(oldSensorInfos.getRoomId(), sensorDao.getType());
+			}
 			
 			// Update SensorDao
 			return sensorRepository.updateSensor(sensorDao);
@@ -148,11 +163,13 @@ public class SensorManagerImpl implements SensorManager {
 			String status = sensorDao.getStatus();
 			alertManager.updateSensorAlert(sensorId, status);
 			
+			LOGGER.debug("SensorManager.updateStatus : after alert process");
+			
 			if (roomDao != null) {
-				
+				LOGGER.debug("SensorManager.updateStatus : roomDao is not null");
 				// if Status is OFFLINE
 				if (status.equals(E_SensorStatus.OFFLINE.toString())) {
-					
+					LOGGER.debug("SensorManager.updateStatus : status sensor is OFFLINE");
 					// check if there is another sensor in room not OFFLINE
 					boolean isThereAnotherNotOfflineSensor = false;
 					List<SensorDao> sensors = sensorRepository.findByRoomId(roomDao.getId());
@@ -191,12 +208,16 @@ public class SensorManagerImpl implements SensorManager {
 					
 					
 				} else {
-					if (sensorDao.getOccupancyInfo() != null) {
-						//--------------------------------------
-						processOccupancyInfo(sensorDao, roomDao);
-						//--------------------------------------
-					} else {
-						LOGGER.info("SensorDao occupancyInfo propertie in updateStatus() method is null");
+					LOGGER.debug("SensorManager.updateStatus : status sensor is not OFFLINE");
+					if (E_SensorType.TEMPERATURE_HUMIDITY.toString().equals(sensorDao.getType())) {
+						LOGGER.debug("SensorManager.updateStatus : sensor is TEMPERATURE_HUMIDITY type");
+						roomRepository.updateRoomStatus(roomDao); 
+					}
+					else  { // occupancy_info is never null, because a default value in DB when the sensor is created
+							LOGGER.debug("SensorManager.updateStatus : OccupancyInfo is process");
+							//--------------------------------------
+							processOccupancyInfo(sensorDao, roomDao);
+							//--------------------------------------
 					}
 				}
 			} else {
@@ -221,7 +242,10 @@ public class SensorManagerImpl implements SensorManager {
 			// Add REST command to Gateways Table
 			if (sensor.getRoomId() != null && sensor.getRoomId() != 0) {
 				RoomDao room = roomRepository.findByRoomId(sensor.getRoomId().longValue());
-				//
+				// update room informations 
+				updateRoomInfos(room.getId(), sensor.getType());
+				
+				// ADD REST command
 				GatewayDao gateway = new GatewayDao();
 				gateway.setId(room.getGatewayId());
 				gateway.setCommand(E_CommandModel.RESET.toString());
@@ -272,9 +296,14 @@ public class SensorManagerImpl implements SensorManager {
 				} else {
 					teachinSensor.setSensorStatus(E_SensorTeachinStatus.PAIRED_OK.toString());
 				}
-				
-				teachinRepository.saveTechinSensor(teachinSensor);
-				teachinRepository.updateTeachinDate(teachin);
+					try {
+						teachinRepository.findBySensorIdentifier(identifier);
+					} catch(IncorrectResultSizeDataAccessException e ) {
+						LOGGER.debug("SensorManager.processTeachinSensor : sensorIdentifier #" +identifier+" will be added in teachin_sensors table", e);
+						LOGGER.info("SensorManager.processTeachinSensor : sensorIdentifier #" +identifier+" will be added in teachin_sensors table");
+						teachinRepository.saveTechinSensor(teachinSensor);
+						teachinRepository.updateTeachinDate(teachin);
+				    }
 				
 				if (isFromAddSensor) {
 					// Set Gateway to RESET 
@@ -380,6 +409,33 @@ public class SensorManagerImpl implements SensorManager {
 			}
 		}
 		
+	}
+	/**
+	 * updateRoomInfos
+	 * @param roomId
+	 * @param sensorType
+	 */
+	private void updateRoomInfos(long roomId, String sensorType) {
+		// Delete sensor => si type detection et si le seul type detection dans la room => mettre à jour status room à indisponible
+		//        => si type temperature et si le seul type temperature dans la room => mettre à null les champ temperature & humidity
+		// TODO 
+		SensorTypeAndRoomDto data = new SensorTypeAndRoomDto();
+		data.setType(sensorType);
+		data.setRoomId(Long.valueOf(roomId).intValue());
+		Long count = sensorRepository.countByTypeAndRoomId(data);
+		if (count == 1) {
+			RoomDao room = roomRepository.findOne(roomId);
+			if (E_SensorType.MOTION_DETECTION.toString().equals(sensorType)) {
+				// update room status to UNKNOWN
+				room.setStatus(E_RoomStatus.UNKNOWN.toString());
+				room.setUserId(null);
+			} else if (E_SensorType.TEMPERATURE_HUMIDITY.toString().equals(sensorType)) {
+				// update temperature & humidity to null
+				room.setTemperature(null);
+				room.setHumidity(null);
+			} 
+			roomRepository.updateRoomStatus(room);
+		}
 	}
 	
 	/**

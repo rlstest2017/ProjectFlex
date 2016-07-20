@@ -120,4 +120,14 @@ public class StatEndpointImplTest {
 		// Asserts
 		assertEquals(5, statSet.getData().size());
 	}
+	
+	@Test
+	public void TestH_statExportFile() {
+		
+		// Test
+		boolean statSet =	statEndpoint.getTestFile();
+		
+		// Asserts
+		assertEquals(true, statSet);
+	}
 }

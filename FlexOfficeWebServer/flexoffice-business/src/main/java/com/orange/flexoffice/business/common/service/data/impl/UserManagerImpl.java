@@ -19,6 +19,7 @@ import com.orange.flexoffice.business.common.service.data.UserManager;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.object.UserDto;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.PreferencesDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.UserDaoRepository;
 
@@ -36,9 +37,10 @@ public class UserManagerImpl implements UserManager {
 	
 	@Autowired
 	private UserDaoRepository userRepository;
-	
 	@Autowired
 	private RoomDaoRepository roomRepository;
+	@Autowired
+	private PreferencesDaoRepository preferenceRepository;
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -176,10 +178,10 @@ public class UserManagerImpl implements UserManager {
 	 */
 	@Override
 	public void delete(long id) throws DataNotExistsException, IntegrityViolationException {
-	
 		try {
 			// To generate exception if wrong id
 			userRepository.findOne(id);
+			preferenceRepository.deleteByUserId(id);
 			// Delete Room
 			userRepository.delete(id);	
 		} catch (IncorrectResultSizeDataAccessException e) {

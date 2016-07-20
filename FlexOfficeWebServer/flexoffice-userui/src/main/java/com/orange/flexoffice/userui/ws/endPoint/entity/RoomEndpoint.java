@@ -19,6 +19,11 @@ import static com.orange.flexoffice.userui.ws.PathConst.RESERVE_PATH;
 import static com.orange.flexoffice.userui.ws.PathConst.CANCEL_PATH;
 import static com.orange.flexoffice.userui.ws.PathConst.ROOM_ID_PATH;
 import static com.orange.flexoffice.userui.ws.ParamsConst.LATEST_PARAM;
+import static com.orange.flexoffice.userui.ws.ParamsConst.COUNTRY_ID_PARAM;
+import static com.orange.flexoffice.userui.ws.ParamsConst.REGION_ID_PARAM;
+import static com.orange.flexoffice.userui.ws.ParamsConst.CITY_ID_PARAM;
+import static com.orange.flexoffice.userui.ws.ParamsConst.BUILDING_ID_PARAM;
+import static com.orange.flexoffice.userui.ws.ParamsConst.FLOOR_PARAM;
 
 import java.util.List;
 import com.orange.flexoffice.userui.ws.model.Room;
@@ -40,7 +45,8 @@ public interface RoomEndpoint {
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	List<RoomSummary> getRooms(@HeaderParam(TOKEN_HEADER_PARAM) String auth, @QueryParam(LATEST_PARAM) Boolean latest);
+	List<RoomSummary> getRooms(@HeaderParam(TOKEN_HEADER_PARAM) String auth, @QueryParam(LATEST_PARAM) Boolean latest, @QueryParam(COUNTRY_ID_PARAM) String countryId
+			, @QueryParam(REGION_ID_PARAM) String regionId, @QueryParam(CITY_ID_PARAM) String cityId, @QueryParam(BUILDING_ID_PARAM) String buildingId, @QueryParam(FLOOR_PARAM) Integer floor);
 
 	/**
 	 * Gets information on a specific room.

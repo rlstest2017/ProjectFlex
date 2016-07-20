@@ -32,7 +32,16 @@ import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 
-
+/**
+ * GatewayApiEndpointImpl
+ * A l'initialisation du Gateway-server, le serveur appel les méthodes  « GET /gateways » et « GET /gateways/{gatewayId}/info »
+ * PS : Le Gateway-server n'a pas connaissance de la Base de Données FlexOffice. 
+ * Les Gateways (Boitiers noirs RSBerry) ainsi que les sensors, contact périodiquement le Gateway-server pour le mettre au courant de leur status. 
+ * Ainsi, le Gateway-server met au courant le serveur web « PUT /gateways/{gatewayId} » « PUT /sensor/{sensorId} » « POST /sensor »
+ * 
+ * @author oab
+ *
+ */
 public class GatewayApiEndpointImpl implements GatewayApiEndpoint {
 	
 	private static final Logger LOGGER = Logger.getLogger(GatewayApiEndpointImpl.class);

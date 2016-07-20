@@ -14,8 +14,18 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
+import com.orange.flexoffice.dao.common.model.object.RoomBuildingInfosDto;
 import com.orange.flexoffice.dao.common.repository.data.RoomDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.RoomDaoMetadata;
+
+/*---------------------------------------------------------------------------------------
+Manage rooms table
+
+last_measure_date is updated to now() for each access to method :
+RoomDao updateRoomStatus(RoomDao data) throws DataAccessException
+"update %s set status=CAST(:status AS roomstatus), temperature=:temperature, humidity=:humidity, last_measure_date=now(), user_id=:userId where id=:id"
+
+/*---------------------------------------------------------------------------------------*/
 
 @Repository
 public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDaoOperations {
@@ -35,6 +45,55 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 			);
 	}
 
+	@Override
+	public List<RoomDao> findRoomsByCountryId(Long countryId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("countryId", countryId);
+		return jdbcTemplate.query(
+				findRoomsByCountryIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<RoomDao>(RoomDao.class)
+			);
+	}
+
+	@Override
+	public List<RoomDao> findRoomsByRegionId(Long regionId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("regionId", regionId);
+		return jdbcTemplate.query(
+				findRoomsByRegionIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<RoomDao>(RoomDao.class)
+			);
+	}
+
+	@Override
+	public List<RoomDao> findRoomsByCityId(Long cityId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("cityId", cityId);
+		return jdbcTemplate.query(
+				findRoomsByCityIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<RoomDao>(RoomDao.class)
+			);	
+	}
+
+	@Override
+	public List<RoomDao> findRoomsByBuildingId(Long buildingId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("buildingId", buildingId);
+		return jdbcTemplate.query(
+				findRoomsByBuildingIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<RoomDao>(RoomDao.class)
+			);	
+	}
+
+	@Override
+	public List<RoomDao> findRoomsByBuildingIdAndFloor(RoomBuildingInfosDto data) {
+		SqlParameterSource paramBean = new BeanPropertySqlParameterSource(data);
+		return jdbcTemplate.query(
+				findRoomsByBuildingIdAndFloorQuery, 
+				paramBean, 
+				new BeanPropertyRowMapper<RoomDao>(RoomDao.class)
+			);	}
+	
 	@Override
 	public RoomDao findByRoomId(Long roomId) throws IncorrectResultSizeDataAccessException{
 		SqlParameterSource paramMap = new MapSqlParameterSource("columnId", roomId);
@@ -139,4 +198,5 @@ public class RoomDaoRepository extends DataRepository<RoomDao> implements RoomDa
 		return RoomDaoMetadata.ROOM_NAME_COL;
 	}
 
+	
 }

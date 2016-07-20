@@ -8,31 +8,24 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
     <!-- Import related to Flex Office Web Sever Business -->
+ 
 	<import resource="classpath*:spring/applicationContext-flexoffice-business-test.xml" />
-	
-	<bean id="userEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.UserEndpointImpl">
-	</bean>
-	
-	<bean id="gatewayEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.GatewayEndpointImpl">
-	</bean>
-	
-	<bean id="roomEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.RoomEndpointImpl">
-	</bean>
-	
-	<bean id="sensorEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.SensorEndpointImpl">
-	</bean>
-	
-	<bean id="systemEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.SystemEndpointImpl">
-	</bean>
-	
-	<bean id="statEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.StatEndpointImpl">
-	</bean>
-	
-	<bean id="errorMessageHandler" class="com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler">
-	</bean>
-	
-	<bean id="adminUiTasks" class="com.orange.flexoffice.adminui.ws.task.AdminUiTasks"></bean>
-	
-	<bean id="initOfflineGatewaysAlerts" class="com.orange.flexoffice.adminui.ws.utils.InitOfflineGatewaysAlerts"></bean>
+
+	<bean id="configurationEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.ConfigurationEndpointImpl"/>
+	<bean id="locationEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.LocationEndpointImpl"/>
+	<bean id="buildingHandler" class="com.orange.flexoffice.adminui.ws.utils.BuildingHandler"/>
+	<bean id="cityHandler" class="com.orange.flexoffice.adminui.ws.utils.CityHandler"/>
+	<bean id="regionHandler" class="com.orange.flexoffice.adminui.ws.utils.RegionHandler"/>
+	<bean id="countryHandler" class="com.orange.flexoffice.adminui.ws.utils.CountryHandler"/>
+		
+	<bean id="userEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.UserEndpointImpl"/>
+	<bean id="gatewayEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.GatewayEndpointImpl"/>
+	<bean id="roomEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.RoomEndpointImpl"/>
+	<bean id="sensorEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.SensorEndpointImpl"/>
+	<bean id="systemEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.SystemEndpointImpl"/>
+	<bean id="statEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.StatEndpointImpl"/>
+	<bean id="errorMessageHandler" class="com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler"/>
+	<bean id="adminUiTasks" class="com.orange.flexoffice.adminui.ws.task.AdminUiTasks"/>
+	<bean id="initOfflineGatewaysAlerts" class="com.orange.flexoffice.adminui.ws.utils.InitOfflineGatewaysAlerts"/>
 		
 </beans>

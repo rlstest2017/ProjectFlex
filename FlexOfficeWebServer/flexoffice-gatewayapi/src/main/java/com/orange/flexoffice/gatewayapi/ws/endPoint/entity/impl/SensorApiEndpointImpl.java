@@ -128,6 +128,11 @@ public class SensorApiEndpointImpl implements SensorApiEndpoint {
 					message.append( "sensor Occupancy Info :" );
 					message.append( sensor.getOccupancyInfo() );
 					message.append( "\n" );
+					message.append( "sensor Status :" );
+					message.append( sensor.getSensorStatus() );
+					message.append( "\n" );
+					message.append( "sensor Identifier :" );
+					message.append( identifier  );
 					LOGGER.debug( message.toString() );
 				}
 				

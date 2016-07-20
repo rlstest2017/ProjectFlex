@@ -1,14 +1,23 @@
 package com.orange.flexoffice.adminui.ws.endPoint.data.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.log4j.Logger;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecutionException;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.orange.flexoffice.adminui.ws.endPoint.data.StatEndpoint;
 import com.orange.flexoffice.adminui.ws.model.MultiStat;
@@ -40,6 +49,19 @@ public class StatEndpointImpl implements StatEndpoint {
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
 
+	private static ClassPathXmlApplicationContext context;
+	
+	/**
+	 * properties for get export file location
+	 */
+	private Properties properties;
+
+    @Autowired
+    @Qualifier("appProperties")
+    public void setProperties(Properties properties) {
+        this.properties = properties;
+    }
+    
 	@Override
 	public List<SimpleStat> getPopularStats() {
 		try {
@@ -102,6 +124,56 @@ public class StatEndpointImpl implements StatEndpoint {
 		}
 	}
 	
+	@Override
+	public Response getFile() {
+		 
+		context = new ClassPathXmlApplicationContext("classpath:spring/spring-batch-context.xml");
+		
+		JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
+		Job job = (Job) context.getBean("exportStatJob");
+	 
+		try {
+			jobLauncher.run(job, new JobParameters());
+			File file = new File(properties.getProperty("export.file.location"));
+			ResponseBuilder response = Response.ok((Object) file);
+		    response.header("Content-Disposition",
+		           "attachment; filename=\"export_stats.csv\"");
+		    
+			return response.build();
+		    //Response[] table = {response.build()};
+		   //return table; 
+			
+		} catch (JobExecutionException e) {
+			LOGGER.info("Job ExportStat failed");
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		} finally {
+			if (context != null)
+                	context.close();  
+		}
+		
+	}
+	
+	@Override
+	public boolean getTestFile() {
+		
+		context = new ClassPathXmlApplicationContext("classpath:spring/spring-batch-context-test.xml");
+		
+		JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
+		Job job = (Job) context.getBean("exportStatJob");
+	 
+		try {
+			jobLauncher.run(job, new JobParameters());
+			return true;
+			
+		} catch (JobExecutionException e) {
+			LOGGER.info("Job ExportStat failed");
+			return false;
+		} finally {
+			if (context != null)
+                	context.close();  
+		}
+		
+	}
 	
 	@Override
 	public boolean executeInitTestFile() {
@@ -117,5 +189,6 @@ public class StatEndpointImpl implements StatEndpoint {
 	public boolean initRoomMonthlyOccupancyTable() {
 		return testManager.initRoomMonthlyOccupancyTable();
 	}
+
 	
 }

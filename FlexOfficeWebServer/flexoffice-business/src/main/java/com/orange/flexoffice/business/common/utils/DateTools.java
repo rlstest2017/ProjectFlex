@@ -412,6 +412,9 @@ public class DateTools {
 			boolean priseCompteVendredi, boolean priseCompteSamedi,
 			boolean priseCompteDimanche) {
 
+		LOGGER.debug("d1 in nbJoursOuvrable() is :" + d1);
+		LOGGER.debug("d2 in nbJoursOuvrable() is :" + d2);
+		
 		if (d2.compareTo(d1) <= 0) {
 			return 0;
 		}
@@ -422,10 +425,13 @@ public class DateTools {
 				priseCompteJeudi, priseCompteVendredi, priseCompteSamedi };
 
 		GregorianCalendar date1 = new GregorianCalendar();
-		date1.setTime(d1);
+		date1.setTime(beginOfDay(d1));
 		GregorianCalendar date2 = new GregorianCalendar();
-		date2.setTime(d2);
-
+		date2.setTime(endOfDay(d2));
+	
+		//LOGGER.debug("date1 in nbJoursOuvrable() is :" + date1.getTime());
+		//LOGGER.debug("date2 in nbJoursOuvrable() is :" + date2.getTime());
+		
 		// Récupération des jours fériés
 		List<Date> joursFeries = new ArrayList<Date>();
 		for (int i = date1.get(GregorianCalendar.YEAR); i <= date2
@@ -439,10 +445,13 @@ public class DateTools {
 			if (!notionJourFerie || !joursFeries.contains(date1.getTime())) {
 				if (joursPrisEncompte[date1.get(GregorianCalendar.DAY_OF_WEEK) - 1]) {
 					nbJour++;
+					//LOGGER.debug("nbjour incremented is :" + nbJour);
+					//LOGGER.debug("date1 incremented is :" + date1.getTime());
 				}
 			}
 
 			date1.add(GregorianCalendar.DAY_OF_MONTH, 1);
+			//LOGGER.debug("date1 after add calendar is :" + date1.getTime());
 		}
 
 		return nbJour;

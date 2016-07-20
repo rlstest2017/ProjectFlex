@@ -69,6 +69,16 @@ public class TeachinSensorsDaoRepository extends DataRepository<TeachinSensorDao
 	}
 	
 	@Override
+	public TeachinSensorDao findBySensorIdentifier(String identifier) throws IncorrectResultSizeDataAccessException {
+		SqlParameterSource paramMap = new MapSqlParameterSource("identifier", identifier);
+		return jdbcTemplate.queryForObject(
+				findBySensorIdentifierQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<TeachinSensorDao>(TeachinSensorDao.class)
+			);
+	}
+
+	@Override
 	public TeachinSensorDao updateTeachinStatus(TeachinSensorDao data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		

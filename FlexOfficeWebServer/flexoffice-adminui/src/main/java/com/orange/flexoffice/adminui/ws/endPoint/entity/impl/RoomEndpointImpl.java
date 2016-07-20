@@ -14,9 +14,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.adminui.ws.endPoint.entity.RoomEndpoint;
+import com.orange.flexoffice.adminui.ws.model.BuildingOutput;
 import com.orange.flexoffice.adminui.ws.model.ERoomStatus;
 import com.orange.flexoffice.adminui.ws.model.ERoomType;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput;
+import com.orange.flexoffice.adminui.ws.model.Location;
+import com.orange.flexoffice.adminui.ws.model.LocationItem;
 import com.orange.flexoffice.adminui.ws.model.RoomSummary;
 import com.orange.flexoffice.adminui.ws.model.SensorOutput;
 import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
@@ -29,6 +32,7 @@ import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
+import com.orange.flexoffice.business.common.service.data.BuildingManager;
 import com.orange.flexoffice.business.common.service.data.GatewayManager;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
@@ -36,6 +40,7 @@ import com.orange.flexoffice.business.common.service.data.UserManager;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
+import com.orange.flexoffice.dao.common.model.object.BuildingDto;
 import com.orange.flexoffice.dao.common.model.object.GatewayDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 
@@ -47,16 +52,14 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 	@Autowired
 	private RoomManager roomManager;
-
+	@Autowired
+	private BuildingManager buildingManager;
 	@Autowired
 	private GatewayManager gatewayManager;
-
 	@Autowired
 	private UserManager userManager;
-
 	@Autowired
 	private TestManager testManager;
-	
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
 
@@ -67,14 +70,6 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		List<RoomDao> dataList = roomManager.findAllRooms();
 
-		if (dataList == null) {
-
-			LOGGER.error("RoomEndpoint.getRooms : Rooms not found");
-			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_27, Response.Status.NOT_FOUND));
-
-		}
-
-
 		List<RoomSummary> roomList = new ArrayList<RoomSummary>();
 
 		for (RoomDao roomDao : dataList) {
@@ -83,8 +78,14 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setName(roomDao.getName());
 			room.setType(ERoomType.valueOf(roomDao.getType().toString()));
 			room.setGateway(getGatewayFromId(Long.valueOf(roomDao.getGatewayId()), roomDao.getName()));
-			room.setAddress(roomDao.getAddress());
-			room.setCapacity(BigInteger.valueOf(roomDao.getCapacity()));
+			try {
+				room.setAddress(getAddressFromBuilding(roomDao.getBuildingId()));
+			} catch (DataNotExistsException e) {
+				LOGGER.debug("Building with id#" + roomDao.getBuildingId() + " does not exist");
+			}
+			if (roomDao.getCapacity() != null) {
+				room.setCapacity(BigInteger.valueOf(roomDao.getCapacity()));
+			}
 			if (roomDao.getStatus() != null) {
 				room.setStatus(ERoomStatus.valueOf(roomDao.getStatus().toString()));
 			}
@@ -116,8 +117,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setName(roomDto.getName());
 			room.setType(ERoomType.valueOf(roomDto.getType().toString()));
 			room.setGateway(getGatewayFromId(Long.valueOf(roomDto.getGateway().getId()), roomDto.getName()));
-			String description = computeDescription(roomDto.getDescription(), roomDto.getTemperature(), roomDto.getHumidity());
-			room.setDesc(description);
+			room.setDesc(roomDto.getDescription());
 
 			// Set Sensor list to room
 			List<SensorDao> sensors = roomDto.getSensors();
@@ -129,11 +129,42 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				room.getSensors().add(sensorOutput);
 			}
 
-			room.setAddress(roomDto.getAddress());
-			room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));			
+			if (roomDto.getCapacity() != null) {
+				room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));
+			}			
 			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
 			room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
-
+			if (roomDto.getTemperature() != null) {
+				room.setTemperature(formatDisplay(roomDto.getTemperature()));
+			}
+			if (roomDto.getHumidity() != null) {
+				room.setHumidity(formatDisplay(roomDto.getHumidity()));
+			}
+			
+			BuildingDto buidingDto = buildingManager.find(Long.valueOf(roomDto.getBuildingId()));
+			Location location = factory.createLocation();
+				BuildingOutput building = factory.createBuildingOutput();
+					building.setId(String.valueOf(buidingDto.getId()));
+					building.setName(buidingDto.getName());
+					building.setAddress(buidingDto.getAddress());
+					building.setNbFloors(BigInteger.valueOf(buidingDto.getNbFloors()));
+			location.setBuilding(building);
+				LocationItem locationCountry = factory.createLocationItem();
+					locationCountry.setId(buidingDto.getCountryId().toString());
+					locationCountry.setName(buidingDto.getCountryName());
+			location.setCountry(locationCountry);
+				LocationItem locationRegion = factory.createLocationItem();
+					locationRegion.setId(buidingDto.getRegionId().toString());
+					locationRegion.setName(buidingDto.getRegionName());
+			location.setRegion(locationRegion);
+				LocationItem locationCity = factory.createLocationItem();
+					locationCity.setId(buidingDto.getCityId().toString());
+					locationCity.setName(buidingDto.getCityName());
+			location.setCity(locationCity);
+			location.setFloor(BigInteger.valueOf(roomDto.getFloor()));
+			
+			room.setLocation(location);
+			
 			LOGGER.debug( "End call RoomEndpoint.getRoom  at: " + new Date() );
 
 			return room;
@@ -167,6 +198,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		RoomDao roomDao = new RoomDao();
 		roomDao.setName(roomInput.getName());
 		roomDao.setType(roomInput.getType().toString());
+		roomDao.setBuildingId(Long.valueOf(roomInput.getBuildingId()));
+		roomDao.setFloor(roomInput.getFloor().longValue());
+		
 		if (roomInput.getGateway() !=null) {
 			GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress());
 			roomDao.setGatewayId(Long.valueOf(gateway.getId()));
@@ -177,10 +211,6 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		String desc = roomInput.getDesc(); 
 		if ( desc != null) { 
 			roomDao.setDescription(roomInput.getDesc());
-		}
-		String address = roomInput.getAddress();
-		if (address != null) {
-			roomDao.setAddress(roomInput.getAddress());
 		}
 		
 		roomDao.setCapacity(roomInput.getCapacity().intValue());
@@ -241,6 +271,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		roomDao.setId(Long.valueOf(id));
 		roomDao.setName(roomInput.getName());
 		roomDao.setType(roomInput.getType().toString());
+		roomDao.setBuildingId(Long.valueOf(roomInput.getBuildingId()));
+		roomDao.setFloor(roomInput.getFloor().longValue());
+
 		if (roomInput.getGateway() !=null) {
 			GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress());
 			roomDao.setGatewayId(Long.valueOf(gateway.getId()));
@@ -252,13 +285,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		if ( desc != null) { 
 			roomDao.setDescription(roomInput.getDesc());
 		}
-		String address = roomInput.getAddress();
-		if (address != null) {
-			roomDao.setAddress(roomInput.getAddress());
-		}
 		roomDao.setCapacity(roomInput.getCapacity().intValue());
 		
-			roomDao = roomManager.update(roomDao);
+		roomDao = roomManager.update(roomDao);
 
 		LOGGER.debug( "End call RoomEndpoint.updateRoom at: " + new Date() );
 		return Response.status(Status.ACCEPTED).build();
@@ -340,7 +369,17 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		return gateway;		
 	}
 
-
+	/**
+	 * getAddressFromBuilding
+	 * @param buildingId
+	 * @return
+	 * @throws DataNotExistsException
+	 */
+	private String getAddressFromBuilding(final Long buildingId) throws DataNotExistsException {
+			final BuildingDto buiding = buildingManager.find(Long.valueOf(buildingId));
+			return buiding.getAddress();	
+	}
+	
 	/** Create tenant if room status is not free 
 	 * 
 	 * @param status
@@ -410,21 +449,15 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		return tenant;
 	}
-
-	private String computeDescription(String desc, Double temperature, Double humidity) {
-		
-		String description = desc; 
+	
+	/**
+	 * formatDisplay
+	 * @param param
+	 * @return
+	 */
+	private String formatDisplay(Double param) {
 		DecimalFormat df = new DecimalFormat("0.00"); 
-		
-		if (temperature != null && temperature > 0) {
-			description = description + " Température : " + df.format(temperature) + "°";
-		}
-		
-		if (humidity != null && humidity > 0) {
-			description = description + " Hygrométrie : " + df.format(humidity) + "%";
-		}
-		
-		return description;
+		return df.format(param);
 	}
 
 }

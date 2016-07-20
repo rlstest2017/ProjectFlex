@@ -31,7 +31,9 @@
 	<!-- Log -->
 	<dependency>
 		<groupId>log4j</groupId>
-		<artifactId>log4j</artifactId>
+		<!--  <artifactId>log4j</artifactId>-->
+		<artifactId>log4j-customized</artifactId>
+		<version>1.2.17</version>
 	</dependency>
 	
 	<!-- Spring -->
@@ -59,6 +61,16 @@
 	<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
+	</dependency>
+	
+	<!-- Spring batch -->
+    <dependency>
+			<groupId>org.springframework.batch</groupId>
+			<artifactId>spring-batch-core</artifactId>
+	</dependency>
+	<dependency>
+			<groupId>org.springframework.batch</groupId>
+			<artifactId>spring-batch-infrastructure</artifactId>
 	</dependency>
 	
 	<!-- spring AOP -->

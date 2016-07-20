@@ -20,6 +20,8 @@ public interface TeachinSensorDaoOperations {
 	
 	TeachinSensorDao findByUserId(Long userId) throws IncorrectResultSizeDataAccessException;
 	
+	TeachinSensorDao findBySensorIdentifier(String identifier) throws IncorrectResultSizeDataAccessException;
+
 	TeachinSensorDao updateTeachinStatus(TeachinSensorDao data);
 	
 	TeachinSensorDao updateTeachinDate(TeachinSensorDao data);

@@ -1,6 +1,7 @@
 package com.orange.flexoffice.userui.ws.endPoint.entity.impl;
 
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,9 +20,11 @@ import com.orange.flexoffice.userui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.RoomAlreadyUsedException;
+import com.orange.flexoffice.business.common.service.data.PreferenceUserManager;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.business.common.service.data.TestManager;
 import com.orange.flexoffice.business.common.service.data.UserManager;
+import com.orange.flexoffice.dao.common.model.data.PreferencesDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
@@ -43,10 +46,10 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	
 	@Autowired
 	private RoomManager roomManager;
-
 	@Autowired
 	private UserManager userManager;
-
+	@Autowired
+	private PreferenceUserManager preferencesManager;
 	@Autowired
 	private ErrorMessageHandler errorMessageHandler;
 	
@@ -61,7 +64,7 @@ public class RoomEndpointImpl implements RoomEndpoint {
 	 * @see RoomSummary
 	 */
 	@Override
-	public List<RoomSummary> getRooms(String auth, Boolean latest) {
+	public List<RoomSummary> getRooms(String auth, Boolean latest, String countryId, String regionId, String cityId, String buildingId, Integer floor) {
 		LOGGER.debug( "Begin call UserUi.RoomEndpoint.getRooms at: " + new Date() );
 		List<RoomDao> dataList = null;
 		
@@ -75,8 +78,33 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.getRooms with message :", e);
 				throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_34, Response.Status.UNAUTHORIZED));
 			}	
-		} else { // get all rooms
-			dataList = roomManager.findAllRooms();
+		} else { // get rooms by criteria
+				Long userId = null; // for save preferences of current user
+			try {
+				// get UserDto
+				UserDto data = userManager.findByUserAccessToken(auth);
+				userId = Long.valueOf(data.getId());
+				// find user preferences
+				PreferencesDao preferences = preferencesManager.findByUserId(userId);
+				if (countryId != null) { preferences.setCountryId(Long.valueOf(countryId)); } else { preferences.setCountryId(null);}
+				if (regionId != null) { preferences.setRegionId(Long.valueOf(regionId)); } else { preferences.setRegionId(null);}
+				if (cityId != null) { preferences.setCityId(Long.valueOf(cityId)); } else { preferences.setCityId(null);}
+				if (buildingId != null) { preferences.setBuildingId(Long.valueOf(buildingId)); } else { preferences.setBuildingId(null);}
+				if (floor != null) { preferences.setFloor(Long.valueOf(floor)); } else { preferences.setFloor(null);}
+				// update user preferences
+				preferencesManager.update(preferences);
+			} catch (AuthenticationException e){
+				LOGGER.debug("AuthenticationException in UserUi.RoomEndpoint.getRooms with message :", e);
+			} catch (DataNotExistsException ex) {
+				LOGGER.debug("DataNotExistsException in UserUi.RoomEndpoint.getRooms with message :", ex);
+				// save user preferences
+				if (countryId != null || regionId != null || cityId != null || buildingId != null) {
+					preferencesManager.save(countryId, regionId, cityId, buildingId, floor, userId);
+				}
+			} finally {
+				// get rooms by criteria
+				dataList = roomManager.findRoomsByCriteria(countryId, regionId, cityId, buildingId, floor);
+			}
 		}
 
 		List<RoomSummary> roomList = new ArrayList<RoomSummary>();
@@ -87,8 +115,9 @@ public class RoomEndpointImpl implements RoomEndpoint {
 				room.setId(roomDao.getColumnId());
 				room.setName(roomDao.getName());
 				room.setType(ERoomType.valueOf(roomDao.getType()));
-				room.setAddress(roomDao.getAddress());
-				room.setCapacity(BigInteger.valueOf(roomDao.getCapacity()));
+				if (roomDao.getCapacity() != null) {
+					room.setCapacity(BigInteger.valueOf(roomDao.getCapacity()));
+				}
 				room.setStatus(ERoomStatus.valueOf(roomDao.getStatus().toString()));
 				room.setTenantName(computeTenant(room.getStatus(), roomDao.getUserId(), roomDao.getName()));
 				roomList.add(room);
@@ -124,10 +153,18 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setType(ERoomType.valueOf(roomDto.getType().toString()));
 			room.setDesc(roomDto.getDescription());
 			room.setAddress(roomDto.getAddress());
-			room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));			
+			if (roomDto.getCapacity() != null) {
+				room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));
+			}
 			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
 			room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
-
+			if (roomDto.getTemperature() != null) {
+				room.setTemperature(formatDisplay(roomDto.getTemperature()));
+			}
+			if (roomDto.getHumidity() != null) {
+				room.setHumidity(formatDisplay(roomDto.getHumidity()));
+			}
+			
 			if (roomDto.getLastMeasureDate() != null) {
 				room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
 			}
@@ -185,7 +222,13 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));			
 			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
 			room.setTenant(computeTenantSummary(room.getStatus(), roomDto.getUser(), roomDto.getName()));
-	
+			if (roomDto.getTemperature() != null) {
+				room.setTemperature(formatDisplay(roomDto.getTemperature()));
+			}
+			if (roomDto.getHumidity() != null) {
+				room.setHumidity(formatDisplay(roomDto.getHumidity()));
+			}
+			
 			if (roomDto.getLastMeasureDate() != null) {
 				room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
 			}
@@ -249,7 +292,13 @@ public class RoomEndpointImpl implements RoomEndpoint {
 			room.setAddress(roomDto.getAddress());
 			room.setCapacity(BigInteger.valueOf(roomDto.getCapacity()));			
 			room.setStatus(ERoomStatus.valueOf(roomDto.getStatus().toString()));
-
+			if (roomDto.getTemperature() != null) {
+				room.setTemperature(formatDisplay(roomDto.getTemperature()));
+			}
+			if (roomDto.getHumidity() != null) {
+				room.setHumidity(formatDisplay(roomDto.getHumidity()));
+			}
+			
 			if (roomDto.getLastMeasureDate() != null) {
 				room.setLastMeasureDate(BigInteger.valueOf(roomDto.getLastMeasureDate().getTime()));
 			}
@@ -386,5 +435,14 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		return tenant;
 	}
 
+	/**
+	 * formatDisplay
+	 * @param param
+	 * @return
+	 */
+	private String formatDisplay(Double param) {
+		DecimalFormat df = new DecimalFormat("0.00"); 
+		return df.format(param);
+	}
 	
 }

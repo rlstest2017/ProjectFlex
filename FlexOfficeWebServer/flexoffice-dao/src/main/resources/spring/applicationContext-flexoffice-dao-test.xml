@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util-4.1.xsd">
 	
 	<!-- Scan base package -->
 	<context:component-scan base-package="com.orange.flexoffice.dao.common.repository, com.orange.flexoffice.dao.common.model" />
     
-   <!--   <context:property-placeholder  ignore-resource-not-found="true" location="file:/home/flexoffice/flexoffice-webserver/Config/flexoffice.properties"/> --> 
+    <util:properties id="appProperties" location="file:/home/flexoffice/flexoffice-webserver/Config/flexoffice.properties" ignore-resource-not-found="true"/>
     
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 	<property name="driverClassName" value="org.postgresql.Driver"/> 
 <!--	<property name="url" value="${postgres.jdbc.url.test}"/> -->
-	<property name="url" value="jdbc:postgresql://192.168.129.80:5432/FlexOffice_Test"/>  
-<!--  	<property name="url" value="jdbc:postgresql://localhost:5432/FlexOffice_Test"/> --> 
+	<property name="url" value="jdbc:postgresql://192.168.129.80:5432/FlexOffice_Test"/>    
+<!--  	<property name="url" value="jdbc:postgresql://localhost:5432/FlexOffice_Test"/>  -->
 	<property name="username" value="flexoffice"/>
 	<property name="password" value="oab"/>		
 	<property name="maxActive" value="10"/>

@@ -4,14 +4,18 @@
 	<xsd:include id="types" schemaLocation="types.xsd"/>
 	
 	<xsd:element name="userSummary" type="UserSummary"/>
-
+	<xsd:element name="user" type="User"/>
 	<xsd:element name="userInput" type="UserInput"/>
-
+	<xsd:element name="userContext" type="UserContext"/>
+	<xsd:element name="userPreferences" type="UserPreferences"/>
+	
 	<xsd:element name="room" type="Room"/>
 	<xsd:element name="roomSummary" type="RoomSummary"/>
 	
-	<xsd:element name="token" type="Token"/>
+	<xsd:element name="location" type="LocationItem"/>
+	<xsd:element name="building" type="BuildingItem"/>
 	
+	<xsd:element name="token" type="Token"/>
 	<xsd:element name="error" type="ErrorModel"/>
 	
 </xsd:schema>

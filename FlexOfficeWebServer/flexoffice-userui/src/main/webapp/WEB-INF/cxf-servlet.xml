@@ -13,6 +13,7 @@
 		<jaxrs:serviceBeans>
   			<bean class="com.orange.flexoffice.userui.ws.endPoint.entity.impl.UserEndpointImpl"/>
   			<bean class="com.orange.flexoffice.userui.ws.endPoint.entity.impl.RoomEndpointImpl"/>
+  			<bean class="com.orange.flexoffice.userui.ws.endPoint.data.impl.LocationEndpointImpl"/>
   		</jaxrs:serviceBeans>
   		 <jaxrs:extensionMappings>
             <entry key="json" value="application/json"/>

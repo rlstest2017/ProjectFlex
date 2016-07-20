@@ -14,6 +14,7 @@ import com.orange.flexoffice.business.common.exception.DataAlreadyExistsExceptio
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
 import com.orange.flexoffice.business.common.exception.RoomAlreadyUsedException;
+import com.orange.flexoffice.business.common.service.data.BuildingManager;
 import com.orange.flexoffice.business.common.service.data.RoomManager;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
@@ -26,6 +27,8 @@ import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomType;
+import com.orange.flexoffice.dao.common.model.object.BuildingDto;
+import com.orange.flexoffice.dao.common.model.object.RoomBuildingInfosDto;
 import com.orange.flexoffice.dao.common.model.object.RoomDto;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
@@ -61,6 +64,8 @@ public class RoomManagerImpl implements RoomManager {
 	private RoomDailyOccupancyDaoRepository roomDailyRepository;
 	@Autowired
 	private ConfigurationDaoRepository configRepository;
+	@Autowired
+	private BuildingManager buildingManager;
 
 	@Override
 	@Transactional(readOnly=true)
@@ -69,8 +74,35 @@ public class RoomManagerImpl implements RoomManager {
 	}
 
 	@Override
+	public List<RoomDao> findRoomsByCriteria(String countryId, String regionId, String cityId, String buildingId, Integer floor) {
+		
+		List<RoomDao> rooms;
+		
+		if (buildingId != null) {
+			if (floor != null) {
+				RoomBuildingInfosDto buildingInfo = new RoomBuildingInfosDto();
+				buildingInfo.setBuildingId(Long.valueOf(buildingId));
+				buildingInfo.setFloor(Long.valueOf(floor));
+				rooms = roomRepository.findRoomsByBuildingIdAndFloor(buildingInfo);
+			} else {
+				rooms = roomRepository.findRoomsByBuildingId(Long.valueOf(buildingId));
+			}
+		} else if (cityId != null) {
+			rooms = roomRepository.findRoomsByCityId(Long.valueOf(cityId));
+		} else if (regionId != null) {
+			rooms = roomRepository.findRoomsByRegionId(Long.valueOf(regionId));
+		} else if (countryId != null) {
+			rooms = roomRepository.findRoomsByCountryId(Long.valueOf(countryId));
+		} else {
+			rooms = roomRepository.findAllRooms();
+		}
+				
+		return rooms;
+	}
+	
+	@Override
 	@Transactional(readOnly=true)
-	public RoomDto find(long roomId)  throws DataNotExistsException {
+	public RoomDto find(long roomId) throws DataNotExistsException {
 
 		RoomDao roomDao;
 		try {
@@ -88,13 +120,21 @@ public class RoomManagerImpl implements RoomManager {
 		dto.setDescription(roomDao.getDescription());
 		dto.setName(roomDao.getName());
 		dto.setType(E_RoomType.valueOf(roomDao.getType()));
-		dto.setAddress(roomDao.getAddress());
 		dto.setCapacity(roomDao.getCapacity());
 		dto.setStatus(E_RoomStatus.valueOf(roomDao.getStatus()));
 		dto.setType(E_RoomType.valueOf(roomDao.getType()));
 		dto.setLastMeasureDate(roomDao.getLastMeasureDate());
 		dto.setTemperature(roomDao.getTemperature());
 		dto.setHumidity(roomDao.getHumidity());
+		dto.setBuildingId(roomDao.getBuildingId());
+		dto.setFloor(roomDao.getFloor());
+		
+		try {
+			dto.setAddress(getAddressFromBuilding(roomDao.getBuildingId()));
+		} catch (DataNotExistsException e) {
+			LOGGER.debug("Building with id#" + roomDao.getBuildingId() + " does not exist");
+		}
+
 		
 		if (roomDao.getUserId() != null) {
 			try {
@@ -355,6 +395,17 @@ public class RoomManagerImpl implements RoomManager {
 		}
 		
 		return dataList;
+	}
+	
+	/**
+	 * getAddressFromBuilding
+	 * @param buildingId
+	 * @return
+	 * @throws DataNotExistsException
+	 */
+	private String getAddressFromBuilding(final Long buildingId) throws DataNotExistsException {
+			final BuildingDto buiding = buildingManager.find(Long.valueOf(buildingId));
+			return buiding.getAddress();	
 	}
 	
 }

@@ -1,4 +1,4 @@
-DROP TABLE users, gateways, rooms, sensors, alerts, room_stats, room_daily_occupancy, teachin_sensors, configuration;
+DROP TABLE users, gateways, rooms, sensors, alerts, room_stats, room_daily_occupancy, teachin_sensors, configuration, preferences, buildings, cities, regions, countries;
 
 DROP TYPE userRole, deviceType, sensorType, sensorStatus, gatewayStatus, roomStatus, roomType, sensorOccupancyInfo, roomInfo, teachinStatus, sensorTeachinStatus, commandModel;     
 

@@ -6,10 +6,6 @@ package com.orange.flexoffice.business.common.enums;
  * @author oab
  */
 public enum EnumErrorModel {
-    /**
-     *  
-     */
-  
 	ERROR_1("D001", "impossible de charger le dashboard"),
 	ERROR_2("D002", "impossible de charger les statistiques sur les salles les plus utilisées"),
 	ERROR_3("D003", "impossible de charger les statistiques sur le taux d'occupation par type de salles"),
@@ -42,15 +38,33 @@ public enum EnumErrorModel {
 	ERROR_29("R003","impossible de mettre à jour cette salle"),
 	ERROR_30("R004","impossible de supprimer cette salle"),
 	ERROR_31("R005","impossible de charger cette salle"),
-	ERROR_32("500","une erreur métier c'est produite"),
+	ERROR_32("500","une erreur métier s'est produite "),
 	ERROR_33("U101","erreur dans le paramètre authorization"),
 	ERROR_34("L001", "authentification impossible"),
 	ERROR_35("T001", "impossible de démarrer une détection de capteurs"),
 	ERROR_36("T002", "une détection de capteurs est déjà en cours"),
 	ERROR_37("T003", "pas de détection de capteurs en cours"),
-	ERROR_38("T004", "Le profile est incorrect !!!");
-
-	
+	ERROR_38("T004", "Le profile est incorrect !!!"),
+	ERROR_39("C001","impossible de charger la liste des pays"),
+	ERROR_40("C002","impossible de créer ce pays"),
+	ERROR_41("C003","impossible de mettre à jour ce pays"),
+	ERROR_42("C004","impossible de supprimer ce pays"),
+	ERROR_43("C005","impossible de charger ce pays"),
+	ERROR_44("RG001","impossible de charger la liste des régions"),
+	ERROR_45("RG002","impossible de créer cette région"),
+	ERROR_46("RG003","impossible de mettre à jour cette région"),
+	ERROR_47("RG004","impossible de supprimer cette région"),
+	ERROR_48("RG005","impossible de charger cette région"),
+	ERROR_49("CT001","impossible de charger la liste des villes"),
+	ERROR_50("CT002","impossible de créer cette ville"),
+	ERROR_51("CT003","impossible de mettre à jour cette ville"),
+	ERROR_52("CT004","impossible de supprimer cette ville"),
+	ERROR_53("CT005","impossible de charger cette ville"),
+	ERROR_54("B001","impossible de charger la liste des bâtiments"),
+	ERROR_55("B002","impossible de créer ce bâtiment"),
+	ERROR_56("B003","impossible de mettre à jour ce bâtiment"),
+	ERROR_57("B004","impossible de supprimer ce bâtiment"),
+	ERROR_58("B005","impossible de charger ce bâtiment");
      /**
      * status code
      */

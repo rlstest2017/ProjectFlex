@@ -8,7 +8,6 @@
 	 	<xsd:enumeration value="VIDEO_CONF"/>
 	 </xsd:restriction>
 	</xsd:simpleType>
-	
 	<xsd:simpleType name="e-roomStatus">
 	 <xsd:restriction base="xsd:string">
 	 	<xsd:enumeration value="UNKNOWN"/>
@@ -17,8 +16,44 @@
 	 	<xsd:enumeration value="OCCUPIED"/>
 	 </xsd:restriction>
 	</xsd:simpleType>
+	<xsd:simpleType name="e-locationItemType">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="COUNTRY"/>
+	 	<xsd:enumeration value="REGION"/>
+	 	<xsd:enumeration value="CITY"/>
+	 	<xsd:enumeration value="BUILDING"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
+	
+	<!-- Location -->
+	<xsd:complexType name="LocationItem">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="type" type="e-locationItemType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- Building -->
+	<xsd:complexType name="BuildingItem">
+		<xsd:sequence>
+			<xsd:element name="buildingId" type="xsd:string"/>
+			<xsd:element name="buildingName" type="xsd:string"/>
+			<xsd:element name="nbFloors" type="xsd:integer"/>
+		</xsd:sequence>
+	</xsd:complexType>
 	
 	<!-- User -->
+	<xsd:complexType name="User">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string"/>
+ 		    <xsd:element name="firstName" type="xsd:string"/>
+			<xsd:element name="lastName" type="xsd:string"/>
+			<xsd:element name="email" type="xsd:string"/>
+			<xsd:element name="roomId" type="xsd:string"/>
+			<xsd:element name="context" type="UserContext"/>
+		</xsd:sequence>
+	</xsd:complexType>
 	<xsd:complexType name="UserSummary">
 		<xsd:sequence>
 			<xsd:element name="id" type="xsd:string"/>
@@ -29,12 +64,26 @@
 			<xsd:element name="roomId" type="xsd:string"/>
 		</xsd:sequence>
 	</xsd:complexType>
-	
 	<xsd:complexType name="UserInput">
 		<xsd:sequence>
 			<xsd:element name="firstName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="lastName" type="xsd:string"  minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="email" type="xsd:string"  minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="UserPreferences">
+		<xsd:sequence>
+			<xsd:element name="country" type="LocationItem" />
+			<xsd:element name="region" type="LocationItem" />
+			<xsd:element name="city" type="LocationItem" />
+			<xsd:element name="building" type="LocationItem" />
+			<xsd:element name="floor" type="xsd:integer" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="UserContext">
+		<xsd:sequence>
+			<xsd:element name="useLocationExplorer" type="xsd:boolean" />
+			<xsd:element name="userPreferences" type="UserPreferences" />
 		</xsd:sequence>
 	</xsd:complexType>
 
@@ -44,11 +93,9 @@
 			<xsd:element name="id" type="xsd:string"/>
 			<xsd:element name="name" type="xsd:string"/>
 			<xsd:element name="type" type="e-roomType"/>
-			<xsd:element name="address" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="capacity" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="status" type="e-roomStatus" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="tenantName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-
 		</xsd:sequence>
 	</xsd:complexType>
 	
@@ -63,6 +110,8 @@
 			<xsd:element name="lastMeasureDate" type="xsd:integer"/>
 			<xsd:element name="status" type="e-roomStatus"/>
 			<xsd:element name="tenant" type="UserSummary"/>
+			<xsd:element name="temperature" type="xsd:string"/>
+			<xsd:element name="humidity" type="xsd:string"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	

@@ -65,12 +65,79 @@ public class RoomEndpointImplTest {
 
 
 	@Test
-	public void TestB_getRooms() {
+	public void TestBA_getRooms() {
 		// SetUp
 		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
 		
 		// Test
-		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false);
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, null, null, null, null);
+
+		// Asserts
+		assertEquals(5, rooms.size());
+	}
+
+	@Test
+	public void TestBB_getRoomsByBuildingIdAndFloor() {
+		// SetUp
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
+		
+		// Test
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, null, null, "1", 3);
+
+		// Asserts
+		assertEquals(2, rooms.size());
+	}
+
+	@Test
+	public void TestBC_getRoomsByBuildingIdAndFloor() {
+		// SetUp
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
+		// Test
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, "1", null, null, "1", 3);
+
+		// Asserts
+		assertEquals(2, rooms.size());
+	}
+
+	@Test
+	public void TestBD_getRoomsByBuildingId() {
+		// SetUp
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
+		// Test
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, null, null, "1", null);
+
+		// Asserts
+		assertEquals(3, rooms.size());
+	}
+
+	@Test
+	public void TestBE_getRoomsByCityId() {
+		// SetUp
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
+		// Test
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, null, "1", null, null);
+
+		// Asserts
+		assertEquals(5, rooms.size());
+	}
+
+	@Test
+	public void TestBF_getRoomsByRegionId() {
+		// SetUp
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
+		// Test
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, "3", null, null, null);
+
+		// Asserts
+		assertEquals(0, rooms.size());
+	}
+
+	@Test
+	public void TestBG_getRoomsByCountryId() {
+		// SetUp
+		String token = "Zmlyc3QubGFzdDVAdGVzdC5jb206dGVzdDoxNDQ4NTI5MDc2ODQ0";
+		// Test
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, "1", null, null, null, null);
 
 		// Asserts
 		assertEquals(5, rooms.size());
@@ -82,7 +149,7 @@ public class RoomEndpointImplTest {
 		String token = "Zmlyc3QubGFzdDFAdGVzdC5jb206cGFzczoxNDQ4NjEzNjU2MDk4";
 		
 		// Test
-		List<RoomSummary> rooms = roomEndpoint.getRooms(token, true);
+		List<RoomSummary> rooms = roomEndpoint.getRooms(token, true, null, null, null, null, null);
 
 		// Asserts
 		assertEquals(3, rooms.size());

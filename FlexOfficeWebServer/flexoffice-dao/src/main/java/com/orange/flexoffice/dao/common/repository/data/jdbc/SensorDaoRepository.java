@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
+import com.orange.flexoffice.dao.common.model.object.SensorTypeAndRoomDto;
 import com.orange.flexoffice.dao.common.repository.data.SensorDaoOperations;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.metadata.SensorDaoMetadata;
 
@@ -24,6 +25,9 @@ occupancy_info field doesn't indicate the state of the room.
 It indicate the last information brought by the sensor about the room state (from Gateway API).
 It can indicate UNOCCUPIED, but an other sensor in the room indicates that it is. Than the room status
 is OCCUPIED and not UNOCCUPIED.
+
+Be careful the occupancy_info is never null, the default SQL value in creation of the line is UNKNOWN 
+
 /*---------------------------------------------------------------------------------------*/
  
 @Repository
@@ -137,6 +141,16 @@ public class SensorDaoRepository extends DataRepository<SensorDao> implements Se
 		jdbcTemplate.update(deleteByIdentifier, paramMap);	
 	}
 
+	@Override
+	public Long countByTypeAndRoomId(SensorTypeAndRoomDto data) {
+		SqlParameterSource paramMap = new BeanPropertySqlParameterSource(data);
+		return jdbcTemplate.queryForObject(
+				countSensorsByTypeAndRoomIdQuery, 
+				paramMap, 
+				Long.class
+			);
+	}
+	
 	@Override
 	protected String getTableName() {
 		return SensorDaoMetadata.SENSOR_TABLE_NAME;

@@ -8,7 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobExecutionException;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,6 +59,8 @@ public class StatManagerImpl implements StatManager {
 	@Autowired
 	private StatTools statTools;
 	
+	private static ClassPathXmlApplicationContext context;
+	
 	private Map<String, Long> nbRoomsByType = new HashMap<String, Long>();
 		    
 	@Override
@@ -64,7 +72,7 @@ public class StatManagerImpl implements StatManager {
 				
 		// 1 - Calculate day duration between beginDayDate & endDayDate in seconds. Ex : [7:30 ; 20:00]=> 45000 seconds 
 		Long duration = calculateDayDuration();
-		LOGGER.debug("duration betwwen beginDayDate and endDayDate :" + duration);
+		LOGGER.debug("duration between beginDayDate and endDayDate :" + duration);
 		
 		// 2 - Find All RoomDailOccupancy DATA order by roomId
 		List<RoomDailyOccupancyDao> roomDailyList = roomDailyRepository.findAllRoomsDailyOccupancy();
@@ -421,9 +429,11 @@ public class StatManagerImpl implements StatManager {
 				// - Get startdate & enddate
 				RoomDailyOccupancyDao firstEntry = dailyRoomsList.get(0);
 				Date startdate = firstEntry.getDay();
-								
+				LOGGER.debug("startdate in nbJoursOuvrableForPopular() is :" + startdate);				
+				
 				RoomDailyOccupancyDao endEntry = dailyRoomsList.get(dailyRoomsList.size()-1);
 				Date enddate = endEntry.getDay();
+				LOGGER.debug("endEntry in nbJoursOuvrableForPopular() is :" + endEntry);
 				
 				returnedValue = dateTools.nbJoursOuvrable(startdate, enddate, true, true, true, true, true, true, false, false);
 				
@@ -431,6 +441,26 @@ public class StatManagerImpl implements StatManager {
 			returnedValue = 1; // default value (not influence in calculate of rate (division))
 		}
 		return returnedValue;
+	}
+	
+	
+	public static void main(String areg[]){
+		
+		context = new ClassPathXmlApplicationContext("classpath:spring/spring-batch-context.xml");
+		
+		JobLauncher jobLauncher = (JobLauncher) context.getBean("jobLauncher");
+		Job job = (Job) context.getBean("exportStatJob");
+	 
+		try {
+			JobExecution execution = jobLauncher.run(job, new JobParameters());
+			System.out.println("Job Exit Status : "+ execution.getStatus());
+			
+		} catch (JobExecutionException e) {
+			System.out.println("Job ExportStat failed");
+		} finally {
+			if (context != null)
+                	context.close();  
+		}
 	}
 
 }

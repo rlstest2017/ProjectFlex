@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
+import com.orange.flexoffice.dao.common.model.object.SensorTypeAndRoomDto;
 
 /**
  * SensorDaoOperations
@@ -32,4 +33,6 @@ public interface SensorDaoOperations {
 	SensorDao updateSensorRoomId(SensorDao data) throws DataAccessException;
 	
 	void deleteByIdentifier(String sensorIdentifier) throws DataAccessException;
+	
+	Long countByTypeAndRoomId(SensorTypeAndRoomDto data);
 }

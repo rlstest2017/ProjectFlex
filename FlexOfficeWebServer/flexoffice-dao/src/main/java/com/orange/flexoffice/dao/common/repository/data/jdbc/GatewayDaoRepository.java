@@ -136,12 +136,10 @@ public class GatewayDaoRepository extends DataRepository<GatewayDao> implements 
 		return data;
 	}
 	
-
 	@Override
 	public void deleteByMacAddress(String macAddress) {
 		SqlParameterSource paramMap = new MapSqlParameterSource("macAddress", macAddress);
 		jdbcTemplate.update(deleteByMacAddressQuery, paramMap);
-		
 	}
 	
 	@Override
@@ -152,7 +150,6 @@ public class GatewayDaoRepository extends DataRepository<GatewayDao> implements 
 	@Override
 	protected String getColumnColName() {
 		return GatewayDaoMetadata.GATEWAY_ID_COL;
-		
 	}
 
 	@Override
