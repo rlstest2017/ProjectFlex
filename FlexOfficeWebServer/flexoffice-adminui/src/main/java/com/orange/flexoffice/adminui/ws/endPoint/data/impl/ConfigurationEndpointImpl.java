@@ -1,13 +1,17 @@
 package com.orange.flexoffice.adminui.ws.endPoint.data.impl;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.xml.sax.SAXException;
 
 import com.orange.flexoffice.adminui.ws.endPoint.data.ConfigurationEndpoint;
 import com.orange.flexoffice.adminui.ws.model.Building;
@@ -89,14 +93,21 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 				throw new InvalidParametersException("Parameter nbFloors is null");
 			}
 			return buildingHandler.addBuilding(building);
+
 		} catch (DataAlreadyExistsException e) {
-			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.addBuilding with message :", e);
+			LOGGER.debug("DataAlreadyExistsException in ConfigurationEndpoint.addBuilding with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_55, Response.Status.METHOD_NOT_ALLOWED));
+		} catch (DataNotExistsException e) {
+			LOGGER.debug("DataNotExistsException in ConfigurationEndpoint.addBuilding with message :", e);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_55, Response.Status.INTERNAL_SERVER_ERROR));
 		} catch (InvalidParametersException ex1){
 			LOGGER.debug("InvalidParametersException in ConfigurationEndpoint.updateBuilding with message :", ex1);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_55, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex) {
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.addBuilding with message :", ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		} catch (IOException | JAXBException e) {
+			LOGGER.debug("RuntimeException in ConfigurationEndpoint.addBuilding with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		} finally {
 			LOGGER.debug( "End call ConfigurationEndpoint.addBuilding at: " + new Date() );
@@ -121,6 +132,10 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.updateBuilding with message :", ex);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		} catch (IOException | JAXBException | SAXException | ParserConfigurationException e) {
+			LOGGER.debug("ConfigurationEndpoint.updateBuilding : Meeting Room xml meeting room file in error", e);
+			LOGGER.error("ConfigurationEndpoint.updateBuilding : Meeting Room xml meeting room file in error");
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		} finally {
 			LOGGER.debug( "End call ConfigurationEndpoint.updateBuilding at: " + new Date() );
 		}
@@ -139,6 +154,9 @@ public class ConfigurationEndpointImpl implements ConfigurationEndpoint {
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_57, Response.Status.METHOD_NOT_ALLOWED));
 		} catch (RuntimeException ex){
 			LOGGER.debug("RuntimeException in ConfigurationEndpoint.removeBuilding with message :", ex);
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
+		} catch (IOException | JAXBException e) {
+			LOGGER.debug("RuntimeException in ConfigurationEndpoint.removeBuilding with message :", e);
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		} finally {
 			LOGGER.debug( "End call ConfigurationEndpoint.removeBuilding at: " + new Date() );

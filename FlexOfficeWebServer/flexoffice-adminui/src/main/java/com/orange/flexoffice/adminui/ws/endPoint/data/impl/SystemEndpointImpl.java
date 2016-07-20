@@ -14,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.orange.flexoffice.adminui.ws.endPoint.data.SystemEndpoint;
 import com.orange.flexoffice.adminui.ws.model.DeviceAlertSummary;
+import com.orange.flexoffice.adminui.ws.model.ECommandModel;
 import com.orange.flexoffice.adminui.ws.model.EDeviceStatus;
 import com.orange.flexoffice.adminui.ws.model.EDeviceType;
+import com.orange.flexoffice.adminui.ws.model.EMeetingroomType;
 import com.orange.flexoffice.adminui.ws.model.ERoomType;
 import com.orange.flexoffice.adminui.ws.model.ESensorType;
 import com.orange.flexoffice.adminui.ws.model.ETeachinSensorStatus;
@@ -77,6 +79,11 @@ public class SystemEndpointImpl implements SystemEndpoint {
 			system.setRoomCount(BigInteger.valueOf(data.getRoomCount()));
 			system.setFreeRoomCount(BigInteger.valueOf(data.getFreeRoomCount()));
 			system.setOccupiedRoomCount(BigInteger.valueOf(data.getOccupiedRoomCount()));
+			system.setAgentCount(BigInteger.valueOf(data.getAgentCount()));
+			system.setActiveAgentCount(BigInteger.valueOf(data.getActiveAgentCount()));
+			system.setMeetingroomCount(BigInteger.valueOf(data.getMeetingroomCount()));
+			system.setFreeMeetingroomCount(BigInteger.valueOf(data.getFreeMeetingroomCount()));
+			system.setOccupiedMeetingroomCount(BigInteger.valueOf(data.getOccupiedMeetingroomCount()));
 			
 			List<EDeviceStatus> deviceStatuses = constructDeviceStatuses();
 			List<EDeviceStatus> deviceStatusesToRet = system.getDeviceStatuses();
@@ -94,6 +101,18 @@ public class SystemEndpointImpl implements SystemEndpoint {
 			List<ERoomType> roomTypesToRet = system.getRoomTypes();
 			for (ERoomType eRoomType : roomTypes) {
 				roomTypesToRet.add(eRoomType);
+			}
+			
+			List<EMeetingroomType> meetingRoomTypes = constructMeetingRoomtypes();
+			List<EMeetingroomType> meetingRoomTypesToRet = system.getMeetingRoomTypes();
+			for (EMeetingroomType eMeetingRoomType : meetingRoomTypes) {
+				meetingRoomTypesToRet.add(eMeetingRoomType);
+			}
+			
+			List<ECommandModel> commands = constructCommands();
+			List<ECommandModel> commandsToRet = system.getCommands();
+			for (ECommandModel eCommand : commands) {
+				commandsToRet.add(eCommand);
 			}
 			
 			List<AlertDao> alertsDao = data.getDeviceAlerts();
@@ -313,4 +332,23 @@ public class SystemEndpointImpl implements SystemEndpoint {
 		return roomTypes;
 	}
 	
+	private List<EMeetingroomType> constructMeetingRoomtypes() {
+		List<EMeetingroomType> meetingRoomTypes = new ArrayList<EMeetingroomType>();
+		meetingRoomTypes.add(EMeetingroomType.BOX);
+		meetingRoomTypes.add(EMeetingroomType.VIDEO_CONF);
+		
+		return meetingRoomTypes;
+	}
+	
+	private List<ECommandModel> constructCommands() {
+		List<ECommandModel> commands = new ArrayList<ECommandModel>();
+		commands.add(ECommandModel.ONLINE);
+		commands.add(ECommandModel.ECONOMIC);
+		commands.add(ECommandModel.STANDBY);
+		commands.add(ECommandModel.RESET);
+		commands.add(ECommandModel.OFFLINE);
+		commands.add(ECommandModel.NONE);
+		
+		return commands;
+	}
 }

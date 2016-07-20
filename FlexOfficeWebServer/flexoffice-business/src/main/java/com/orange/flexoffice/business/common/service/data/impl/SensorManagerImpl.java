@@ -137,7 +137,7 @@ public class SensorManagerImpl implements SensorManager {
 			} 
 			// update old associated roomInfos (status, temperature & humidity)
 			SensorDao oldSensorInfos = sensorRepository.findBySensorId(sensorDao.getIdentifier());
-			if (oldSensorInfos.getRoomId() != sensorDao.getRoomId()) {
+			if (oldSensorInfos.getRoomId() != sensorDao.getRoomId() && oldSensorInfos.getRoomId() != 0) {
 				updateRoomInfos(oldSensorInfos.getRoomId(), sensorDao.getType());
 			}
 			
@@ -212,8 +212,7 @@ public class SensorManagerImpl implements SensorManager {
 					if (E_SensorType.TEMPERATURE_HUMIDITY.toString().equals(sensorDao.getType())) {
 						LOGGER.debug("SensorManager.updateStatus : sensor is TEMPERATURE_HUMIDITY type");
 						roomRepository.updateRoomStatus(roomDao); 
-					}
-					else  { // occupancy_info is never null, because a default value in DB when the sensor is created
+					} else  { // occupancy_info is never null, because a default value in DB when the sensor is created
 							LOGGER.debug("SensorManager.updateStatus : OccupancyInfo is process");
 							//--------------------------------------
 							processOccupancyInfo(sensorDao, roomDao);

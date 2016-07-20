@@ -21,6 +21,8 @@ public interface BuildingDaoOperations {
 	
 	List<BuildingDao> findBuildingsHaveRoomsByCityId(long cityId);
 	
+	List<BuildingDao> findBuildingsHaveMeetingRoomsByCityId(long cityId);
+	
 	List<BuildingDao> findByCityId(Long cityId) throws IncorrectResultSizeDataAccessException;
 	
 	BuildingDto findByBuildingId(Long buildingId) throws IncorrectResultSizeDataAccessException;

@@ -11,6 +11,9 @@ public final class PathConst {
 	public static final String ROOMS_PATH = "/rooms";    // 5 requests
 	public static final String CONFIGURATION_PATH = "/configuration";    // 4 requests
 	public static final String LOCATION_PATH = "/location";    // 4 requests
+	public static final String AGENTS_PATH = "/agents";  // 5 requests
+	public static final String DASHBOARDS_PATH = "/dashboards"; // 5 requests
+	public static final String MEETINGROOMS_PATH = "/meetingrooms"; // 5 requests
 	
 	// Resources ID
 	public static final String USER_ID_PATH = "/{" + ParamsConst.USER_ID_PARAM + "}";
@@ -22,6 +25,10 @@ public final class PathConst {
 	public static final String CITY_ID_PATH = "/{" + ParamsConst.CITY_ID_PARAM + "}";
 	public static final String REGION_ID_PATH = "/{" + ParamsConst.REGION_ID_PARAM + "}";
 	public static final String COUNTRY_ID_PATH = "/{" + ParamsConst.COUNTRY_ID_PARAM + "}";
+	public static final String DASHBOARD_ID_PATH = "/{" + ParamsConst.DASHBOARD_ID_PARAM + "}";
+	public static final String AGENT_MAC_ADDRESS_PATH = "/{" + ParamsConst.AGENT_MAC_ADDRESS_PARAM + "}";
+	public static final String DASHBOARD_MAC_ADDRESS_PATH = "/{" + ParamsConst.DASHBOARD_MAC_ADDRESS_PARAM + "}";
+	public static final String MEETINGROOM_ID_PATH = "/{" + ParamsConst.MEETINGROOM_ID_PARAM + "}";
 	
 	// Resources 2nd level
 	public static final String LOGIN_PATH = "/login";  

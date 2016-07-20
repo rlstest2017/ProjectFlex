@@ -1,0 +1,17 @@
+# Database Access
+postgres.jdbc.url=jdbc:postgresql://localhost:5432/FlexOffice
+postgres.jdbc.username=flexoffice
+postgres.jdbc.password=flexoffice
+# maxActive : The number of maximum active connections to use
+# PostgreSQL on good hardware can support a few hundred connections
+postgres.jdbc.maxActive=20
+# maxIdle : The number of maximum unused connections
+postgres.jdbc.maxIdle=10
+# maxWait : The maximum number of milliseconds that the pool will wait. default value is 20 seconds
+postgres.jdbc.maxWait=10000
+
+
+#Meeting room activated
+meetingroom.activated=false
+#Meeting room config path
+meetingroom.path=.

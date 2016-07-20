@@ -1,10 +1,19 @@
 package com.orange.flexoffice.business.common.service.data;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import com.orange.flexoffice.business.common.exception.DataAlreadyExistsException;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.exception.IntegrityViolationException;
+import com.orange.flexoffice.business.common.exception.InvalidParametersException;
 import com.orange.flexoffice.dao.common.model.data.BuildingDao;
 import com.orange.flexoffice.dao.common.model.object.BuildingDto;
 import com.orange.flexoffice.dao.common.model.object.BuildingSummaryDto;
@@ -43,8 +52,13 @@ public interface BuildingManager {
 	 * 		  the new {@link BuildingDao}
 	 * @return a saved {@link BuildingDao}
 	 * @throws DataAlreadyExistsException 
+	 * @throws FileNotFoundException 
+	 * @throws UnsupportedEncodingException 
+	 * @throws JAXBException 
+	 * @throws IOException 
+	 * @throws DataNotExistsException 
 	 */
-	BuildingDao save(BuildingDao building) throws DataAlreadyExistsException;
+	BuildingDao save(BuildingDao building) throws DataAlreadyExistsException, UnsupportedEncodingException, FileNotFoundException, IOException, JAXBException, DataNotExistsException;
 
 	/**
 	 * Updates a {@link BuildingDao}
@@ -52,15 +66,22 @@ public interface BuildingManager {
 	 * @param BuildingDao
 	 * 		  the new {@link BuildingDao}
 	 * @return a saved {@link BuildingDao}
+	 * @throws JAXBException 
+	 * @throws IOException 
+	 * @throws SAXException 
+	 * @throws ParserConfigurationException 
+	 * @throws InvalidParametersException 
 	 */
-	BuildingDao update(BuildingDao building) throws DataNotExistsException;
+	BuildingDao update(BuildingDao building) throws DataNotExistsException, IOException, JAXBException, ParserConfigurationException, SAXException, InvalidParametersException;
 
 	/**
 	 * Delete a building
 	 * method used by adminui
 	 * @param buildingId 
 	 * 		  a building ID
+	 * @throws JAXBException 
+	 * @throws IOException 
 	 */
-	void delete(long buildingId) throws DataNotExistsException, IntegrityViolationException;
+	void delete(long buildingId) throws DataNotExistsException, IntegrityViolationException, IOException, JAXBException;
 	
 }

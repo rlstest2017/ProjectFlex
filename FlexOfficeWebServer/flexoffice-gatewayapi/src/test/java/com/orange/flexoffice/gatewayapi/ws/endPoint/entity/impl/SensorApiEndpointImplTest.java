@@ -1,14 +1,14 @@
 package com.orange.flexoffice.gatewayapi.ws.endPoint.entity.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.FileNotFoundException;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -17,8 +17,8 @@ import org.junit.runners.MethodSorters;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Log4jConfigurer;
 
-import com.orange.flexoffice.gatewayapi.ws.endPoint.entity.SensorApiEndpoint;
 import com.orange.flexoffice.gatewayapi.ws.endPoint.entity.GatewayApiEndpoint;
+import com.orange.flexoffice.gatewayapi.ws.endPoint.entity.SensorApiEndpoint;
 import com.orange.flexoffice.gatewayapi.ws.model.EOccupancyInfo;
 import com.orange.flexoffice.gatewayapi.ws.model.ESensorStatus;
 import com.orange.flexoffice.gatewayapi.ws.model.SensorInput;
@@ -265,7 +265,7 @@ public class SensorApiEndpointImplTest {
 			sensorInput.setOccupancyInfo(EOccupancyInfo.OCCUPIED);
 
 			// Test
-			final Response response = sensorEndpoint.updateSensor("ident 1", sensorInput);// ident 1 !!!!
+			final Response response = sensorEndpoint.updateSensor("ident 3", sensorInput);// ident 3 !!!!
 
 			// Asserts
 			assertEquals(Status.ACCEPTED.getStatusCode(), response.getStatus());

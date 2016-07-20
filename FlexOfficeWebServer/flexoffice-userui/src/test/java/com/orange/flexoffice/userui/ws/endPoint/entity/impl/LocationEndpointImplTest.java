@@ -1,6 +1,6 @@
 package com.orange.flexoffice.userui.ws.endPoint.entity.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.FileNotFoundException;
 import java.util.List;

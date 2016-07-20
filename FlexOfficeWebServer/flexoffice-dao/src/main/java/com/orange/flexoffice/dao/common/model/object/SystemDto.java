@@ -19,6 +19,11 @@ public class SystemDto {
 	private Integer roomCount;
 	private Integer freeRoomCount;
 	private Integer occupiedRoomCount;
+	private Integer agentCount;
+	private Integer activeAgentCount;
+	private Integer meetingroomCount;
+	private Integer freeMeetingroomCount;
+	private Integer occupiedMeetingroomCount;
 	private List<AlertDao> deviceAlerts;
 	
 	public Integer getUserCount() {
@@ -93,6 +98,36 @@ public class SystemDto {
 	 */
 	public void setOccupiedRoomCount(Integer occupiedRoomCount) {
 		this.occupiedRoomCount = occupiedRoomCount;
+	}
+	public Integer getAgentCount() {
+		return agentCount;
+	}
+	public void setAgentCount(Integer agentCount) {
+		this.agentCount = agentCount;
+	}
+	public Integer getMeetingroomCount() {
+		return meetingroomCount;
+	}
+	public void setMeetingroomCount(Integer meetingroomCount) {
+		this.meetingroomCount = meetingroomCount;
+	}
+	public Integer getFreeMeetingroomCount() {
+		return freeMeetingroomCount;
+	}
+	public void setFreeMeetingroomCount(Integer freeMeetingroomCount) {
+		this.freeMeetingroomCount = freeMeetingroomCount;
+	}
+	public Integer getOccupiedMeetingroomCount() {
+		return occupiedMeetingroomCount;
+	}
+	public void setOccupiedMeetingroomCount(Integer occupiedMeetingroomCount) {
+		this.occupiedMeetingroomCount = occupiedMeetingroomCount;
+	}
+	public Integer getActiveAgentCount() {
+		return activeAgentCount;
+	}
+	public void setActiveAgentCount(Integer activeAgentCount) {
+		this.activeAgentCount = activeAgentCount;
 	}
 	
 	

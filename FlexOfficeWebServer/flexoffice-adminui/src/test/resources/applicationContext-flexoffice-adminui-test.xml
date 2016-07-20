@@ -20,6 +20,9 @@
 		
 	<bean id="userEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.UserEndpointImpl"/>
 	<bean id="gatewayEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.GatewayEndpointImpl"/>
+	<bean id="agentEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.AgentEndpointImpl"/>
+	<bean id="dashboardEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.DashboardEndpointImpl"/>
+	<bean id="meetingroomEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.MeetingRoomEndpointImpl"/>
 	<bean id="roomEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.RoomEndpointImpl"/>
 	<bean id="sensorEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.SensorEndpointImpl"/>
 	<bean id="systemEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.SystemEndpointImpl"/>
@@ -27,5 +30,6 @@
 	<bean id="errorMessageHandler" class="com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler"/>
 	<bean id="adminUiTasks" class="com.orange.flexoffice.adminui.ws.task.AdminUiTasks"/>
 	<bean id="initOfflineGatewaysAlerts" class="com.orange.flexoffice.adminui.ws.utils.InitOfflineGatewaysAlerts"/>
+	<bean id="meetingRoomStatEndpoint" class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.MeetingRoomStatEndpointImpl"/>
 		
 </beans>

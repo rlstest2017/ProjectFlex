@@ -31,4 +31,22 @@ public interface TaskManager {
 	 */
 	void purgeStatsDataMethod();
 	
+	/**
+	 * generateMeetingRoomDailyStats
+	 * Every day at night one cumulate line is calculated from MeetingRoomStats to MeetingRoomDailyOccupancy 
+	 */
+	void processMeetingRoomDailyStats();
+	
+	/**
+	 * purgeMeetingRoomStatsData
+	 * Every day at night purge DATA Stat 
+	 */
+	void purgeMeetingRoomStatsDataMethod();
+	
+	/**
+	 * checkAgentDashboardTimeOut every 4 minutes
+	 * Set to offline agent/dashbaord if timeout and status = online
+	 */
+	void checkAgentDashboardTimeOut();
+	
 }

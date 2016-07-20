@@ -9,6 +9,7 @@ import javax.naming.AuthenticationException;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,24 +19,32 @@ import com.orange.flexoffice.business.common.exception.DataAlreadyExistsExceptio
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.SystemManager;
 import com.orange.flexoffice.business.common.utils.DateTools;
+import com.orange.flexoffice.dao.common.model.data.AgentDao;
 import com.orange.flexoffice.dao.common.model.data.AlertDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
+import com.orange.flexoffice.dao.common.model.data.DashboardDao;
 import com.orange.flexoffice.dao.common.model.data.GatewayDao;
+import com.orange.flexoffice.dao.common.model.data.MeetingRoomDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.SensorDao;
 import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
 import com.orange.flexoffice.dao.common.model.data.UserDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_AgentStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
 import com.orange.flexoffice.dao.common.model.enumeration.E_GatewayStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_MeetingRoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_UserRole;
 import com.orange.flexoffice.dao.common.model.object.SensorDto;
 import com.orange.flexoffice.dao.common.model.object.SystemDto;
 import com.orange.flexoffice.dao.common.model.object.TeachinSensorDto;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.AgentDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.AlertDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.DashboardDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.GatewayDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.SensorDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.TeachinSensorsDaoRepository;
@@ -59,9 +68,15 @@ public class SystemManagerImpl implements SystemManager {
 	@Autowired
 	private SensorDaoRepository sensorRepository;
 	@Autowired
+	private DashboardDaoRepository dashboardRepository;
+	@Autowired
 	private RoomDaoRepository roomRepository;
 	@Autowired
+	private MeetingRoomDaoRepository meetingroomRepository;
+	@Autowired
 	private UserDaoRepository userRepository;
+	@Autowired
+	private AgentDaoRepository agentRepository;
 	@Autowired
 	private AlertDaoRepository alertRepository;
 	@Autowired
@@ -83,6 +98,9 @@ public class SystemManagerImpl implements SystemManager {
 		Long gatewaysCount = countGateways();
 		Long activeGatewaysCount = countActiveGateways();
 		Long roomsCount = countRooms();
+		Long meetingroomsCount = countMeetingrooms();
+		Long agentsCount = countAgents();
+		Long activeAgentsCount = countActiveAgents();
 		List<AlertDao> deviceAlerts = findAllAlerts();
 		
 		if (LOGGER.isDebugEnabled()) {
@@ -105,6 +123,18 @@ public class SystemManagerImpl implements SystemManager {
 			} 
 		}		
 		
+		Long freeMeetingroomsCount = 0L;
+		Long occupiedMeetingroomsCount = 0L;
+		
+		List<MeetingRoomDao> meetingrooms = meetingroomRepository.findAllMeetingRooms();
+		for (MeetingRoomDao meetingroom : meetingrooms) {
+			if (E_MeetingRoomStatus.FREE.toString().equals(meetingroom.getStatus())) {
+				freeMeetingroomsCount++;
+			} else if (E_MeetingRoomStatus.OCCUPIED.toString().equals(meetingroom.getStatus())) {
+				occupiedMeetingroomsCount++;
+			} 
+		}	
+		
 		system.setActiveUserCount(usersActiveCount.intValue());
 		system.setUserCount(usersCount.intValue());
 		system.setGatewayCount(gatewaysCount.intValue());
@@ -113,6 +143,11 @@ public class SystemManagerImpl implements SystemManager {
 		system.setActiveGatewayCount(activeGatewaysCount.intValue());
 		system.setFreeRoomCount(freeRoomsCount.intValue());
 		system.setOccupiedRoomCount(occupiedRoomsCount.intValue());
+		system.setAgentCount(agentsCount.intValue());
+		system.setActiveAgentCount(activeAgentsCount.intValue());
+		system.setMeetingroomCount(meetingroomsCount.intValue());
+		system.setFreeMeetingroomCount(freeMeetingroomsCount.intValue());
+		system.setOccupiedMeetingroomCount(occupiedMeetingroomsCount.intValue());
 		
 		return system;
 	}
@@ -375,8 +410,18 @@ public class SystemManagerImpl implements SystemManager {
 	}
 	
 	@Transactional(readOnly=true)
+	private Long countMeetingrooms() {
+		return meetingroomRepository.count();
+	}
+	
+	@Transactional(readOnly=true)
 	private Long countUsers() {
 		return userRepository.count();
+	}
+	
+	@Transactional(readOnly=true)
+	private Long countAgents() {
+		return agentRepository.count();
 	}
 	
 	@Transactional(readOnly=true)
@@ -389,7 +434,13 @@ public class SystemManagerImpl implements SystemManager {
 			} else if (alertDao.getSensorId() != null) {
 				SensorDao sensor = sensorRepository.findOne(Long.valueOf(alertDao.getSensorId()));
 				alertDao.setName(sensor.getName() + " " + alertDao.getName());
-			} 
+			} else if (alertDao.getAgentId() != null) {
+				AgentDao agent = agentRepository.findOne(Long.valueOf(alertDao.getAgentId()));
+				alertDao.setName(agent.getName() + " " + alertDao.getName());
+			} else if (alertDao.getDashboardId() != null) {
+				DashboardDao dashboard = dashboardRepository.findOne(Long.valueOf(alertDao.getDashboardId()));
+				alertDao.setName(dashboard.getName() + " " + alertDao.getName());
+			}
 		}
 		return alertList;
 	}
@@ -411,6 +462,21 @@ public class SystemManagerImpl implements SystemManager {
 		
 		for (GatewayDao gateway : gateways) {
 			if (E_GatewayStatus.ONLINE.toString().equals(gateway.getStatus())) {
+				count++;
+			}
+		}
+		
+		return count;
+	}
+	
+	@Transactional(readOnly=true)
+	private Long countActiveAgents() {
+		// get activeAgents
+		Long count = 0L;
+		List<AgentDao> agents = agentRepository.findAllAgents();
+		
+		for (AgentDao agent : agents) {
+			if (E_AgentStatus.ONLINE.toString().equals(agent.getStatus())) {
 				count++;
 			}
 		}
@@ -449,5 +515,19 @@ public class SystemManagerImpl implements SystemManager {
 		}	
 	}
 
-		
+	/**
+	 * Get configuration value from key 
+	 * @param key
+	 * @return ConfigurationDao
+	 */
+	@Transactional(readOnly=true)
+	public	ConfigurationDao getConfigurationValue(String key){
+		try {
+			ConfigurationDao configurationDao = configRepository.findByKey(key);
+			return configurationDao;
+		} catch(EmptyResultDataAccessException e){
+			LOGGER.debug("SystemManager.getConfigurationValue : no configuration value for :" + key);
+			return null;
+		}
+	}
 }

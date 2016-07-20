@@ -15,7 +15,11 @@
   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.UserEndpointImpl"/>
   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.SensorEndpointImpl"/>
   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.GatewayEndpointImpl"/>
+  			<bean class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.AgentEndpointImpl"/>
+  			<bean class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.DashboardEndpointImpl"/>
+  			<bean class="com.orange.flexoffice.adminui.ws.endPoint.entity.impl.MeetingRoomEndpointImpl"/>
   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.StatEndpointImpl"/>
+  			<bean class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.MeetingRoomStatEndpointImpl"/>
   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.SystemEndpointImpl"/>
   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.ConfigurationEndpointImpl"/>
   			<bean class="com.orange.flexoffice.adminui.ws.endPoint.data.impl.LocationEndpointImpl"/>

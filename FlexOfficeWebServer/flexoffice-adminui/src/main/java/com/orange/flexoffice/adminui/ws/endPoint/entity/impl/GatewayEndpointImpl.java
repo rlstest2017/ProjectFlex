@@ -83,7 +83,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 	public GatewayOutput2 getGateway(String macAddress) {
 		
 		try {
-			GatewayDto data = gatewayManager.findByMacAddress(macAddress);
+			GatewayDto data = gatewayManager.findByMacAddress(macAddress.toLowerCase().replaceAll("-", ":"));
 			
 			GatewayOutput2 gateway = factory.createGatewayOutput2();
 			gateway.setMacAddress(data.getMacAddress());
@@ -128,7 +128,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 		LOGGER.debug( "Begin call doPost method for GatewayEndpoint at: " + new Date() );
 
 		GatewayDao gatewayDao = new GatewayDao();
-		gatewayDao.setMacAddress(gateway.getMacAddress());
+		gatewayDao.setMacAddress(gateway.getMacAddress().toLowerCase().replaceAll("-", ":"));
 		gatewayDao.setName(gateway.getName().trim());
 		gatewayDao.setDescription(gateway.getDesc());
 
@@ -174,7 +174,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 		LOGGER.debug( "Begin call doPut method for GatewayEndpoint at: " + new Date() );
 
 		GatewayDao gatewayDao = new GatewayDao();
-		gatewayDao.setMacAddress(macAddress);
+		gatewayDao.setMacAddress(macAddress.toLowerCase().replaceAll("-", ":"));
 		gatewayDao.setName(gateway.getName().trim());
 		gatewayDao.setDescription(gateway.getDesc());
 
@@ -218,7 +218,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 	public Response removeGateway(String macAddress) {
 		try {
 
-			gatewayManager.delete(macAddress);
+			gatewayManager.delete(macAddress.toLowerCase().replaceAll("-", ":"));
 
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in removeGateway() GatewayEndpointImpl with message :" + e.getMessage(), e);			
@@ -243,7 +243,7 @@ public class GatewayEndpointImpl implements GatewayEndpoint {
 
 	@Override
 	public GatewayDto findByMacAddress(String macAddress) throws DataNotExistsException {
-		return gatewayManager.findByMacAddress(macAddress);
+		return gatewayManager.findByMacAddress(macAddress.toLowerCase().replaceAll("-", ":"));
 	}
 
 	@Override

@@ -17,9 +17,17 @@ public interface AlertDaoOperations {
 	
 	AlertDao findByGatewayId(Long gatewayId) throws IncorrectResultSizeDataAccessException;
 	
+	AlertDao findByAgentId(Long agentId) throws IncorrectResultSizeDataAccessException;
+	
+	AlertDao findByDashboardId(Long dashboardId) throws IncorrectResultSizeDataAccessException;
+	
 	AlertDao findBySensorId(Long sensorId) throws IncorrectResultSizeDataAccessException;
 	
 	void deleteAlertByGatewayId(Long gatewayId);
+	
+	void deleteAlertByAgentId(Long agentId);
+	
+	void deleteAlertByDashboardId(Long dashboardId);
 	
 	void deleteAlertBySensorId(Long sensorId);
 	

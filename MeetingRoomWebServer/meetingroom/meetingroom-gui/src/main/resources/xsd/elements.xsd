@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<xsd:include id="types" schemaLocation="types.xsd"/>
+	
+	<xsd:element name="systemReturn" type="SystemReturn"/>
+	<xsd:element name="systemCurrentDate" type="SystemCurrentDate"/>
+	<xsd:element name="systemRemoteMacAddress" type="SystemRemoteMacAddress"/>
+	<xsd:element name="agentOutput" type="AgentOutput"/>
+	<xsd:element name="dashboardOutput" type="DashboardOutput"/>
+	<xsd:element name="bookingSetOutput" type="BookingSetOutput"/>
+	<xsd:element name="bookingUpdateOutput" type="BookingUpdateOutput"/>
+	<xsd:element name="meetingRoom" type="MeetingRoom"/>
+	<xsd:element name="meetingRooms" type="MeetingRooms"/>
+	
+	<xsd:element name="error" type="ErrorModel"/>
+		
+</xsd:schema>

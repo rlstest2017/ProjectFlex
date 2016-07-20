@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.orange.flexoffice</groupId>
     <artifactId>flexoffice</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
   </parent>
   
   <artifactId>flexoffice-gatewayapi</artifactId>
@@ -30,6 +30,12 @@
 	 <artifactId>javax.servlet-api</artifactId>
     </dependency>
 
+	<!-- Apache Common codec -->
+	<dependency>
+		<groupId>commons-codec</groupId>
+		<artifactId>commons-codec</artifactId>
+	</dependency>
+	
 	<!-- CXF -->	
 	<dependency>
     	<groupId>org.apache.cxf</groupId>
@@ -54,9 +60,7 @@
 	<!-- Log -->
 	<dependency>
 		<groupId>log4j</groupId>
-		<!--  <artifactId>log4j</artifactId>-->
-		<artifactId>log4j-customized</artifactId>
-		<version>1.2.17</version>
+		  <artifactId>log4j</artifactId>
 	</dependency>
 	
 	<!-- Spring -->

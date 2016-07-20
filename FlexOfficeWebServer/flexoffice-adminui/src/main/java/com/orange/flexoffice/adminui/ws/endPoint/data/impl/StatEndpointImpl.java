@@ -147,8 +147,9 @@ public class StatEndpointImpl implements StatEndpoint {
 			LOGGER.info("Job ExportStat failed");
 			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_32, Response.Status.INTERNAL_SERVER_ERROR));
 		} finally {
-			if (context != null)
-                	context.close();  
+			if (context != null){
+				context.close(); 
+			}
 		}
 		
 	}
@@ -169,8 +170,9 @@ public class StatEndpointImpl implements StatEndpoint {
 			LOGGER.info("Job ExportStat failed");
 			return false;
 		} finally {
-			if (context != null)
-                	context.close();  
+			if (context != null){
+				context.close();  
+			}
 		}
 		
 	}

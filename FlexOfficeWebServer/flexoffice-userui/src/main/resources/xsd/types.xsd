@@ -24,6 +24,12 @@
 	 	<xsd:enumeration value="BUILDING"/>
 	 </xsd:restriction>
 	</xsd:simpleType>
+	<xsd:simpleType name="e-roomKind">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="FLEXOFFICE"/>
+	 	<xsd:enumeration value="MEETINGROOM"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
 	
 	<!-- Location -->
 	<xsd:complexType name="LocationItem">
@@ -51,6 +57,7 @@
 			<xsd:element name="lastName" type="xsd:string"/>
 			<xsd:element name="email" type="xsd:string"/>
 			<xsd:element name="roomId" type="xsd:string"/>
+			<xsd:element name="roomKind" type="e-roomKind"/>
 			<xsd:element name="context" type="UserContext"/>
 		</xsd:sequence>
 	</xsd:complexType>
@@ -62,6 +69,7 @@
 			<xsd:element name="lastName" type="xsd:string"/>
 			<xsd:element name="email" type="xsd:string"/>
 			<xsd:element name="roomId" type="xsd:string"/>
+			<xsd:element name="roomKind" type="e-roomKind"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:complexType name="UserInput">
@@ -93,6 +101,7 @@
 			<xsd:element name="id" type="xsd:string"/>
 			<xsd:element name="name" type="xsd:string"/>
 			<xsd:element name="type" type="e-roomType"/>
+			<xsd:element name="kind" type="e-roomKind"/>
 			<xsd:element name="capacity" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="status" type="e-roomStatus" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="tenantName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
@@ -112,7 +121,40 @@
 			<xsd:element name="tenant" type="UserSummary"/>
 			<xsd:element name="temperature" type="xsd:string"/>
 			<xsd:element name="humidity" type="xsd:string"/>
+			<xsd:element name="addon" type="RoomAddon"/>
 		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="RoomAddon">
+		<xsd:sequence>
+			<xsd:element name="flexofficeRoomAddon" type="FlexOfficeRoomAddon" ></xsd:element>
+			<xsd:element name="meetingRoomAddon" type="MeetingRoomAddon"></xsd:element>
+			<xsd:element name="kind" type="e-roomKind"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="FlexOfficeRoomAddon">
+		<xsd:complexContent>
+        	<xsd:extension base="RoomAddon">
+				<xsd:sequence>
+					<xsd:element name="tenant" type="UserSummary" maxOccurs="1"/>
+					<xsd:element name="temperature" type="xsd:string" maxOccurs="1"/>
+					<xsd:element name="humidity" type="xsd:string" maxOccurs="1"/>
+				</xsd:sequence>
+			</xsd:extension>
+    	</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="MeetingRoomAddon">
+	    <xsd:complexContent>
+        	<xsd:extension base="RoomAddon">
+				<xsd:sequence>
+					<xsd:element name="organizerLabel" type="xsd:string" maxOccurs="1"/>   
+					<xsd:element name="startDate" type="xsd:long" minOccurs="0"/>
+					<xsd:element name="endDate" type="xsd:long" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+        </xsd:complexContent>
 	</xsd:complexType>
 	
 	<!-- Token -->

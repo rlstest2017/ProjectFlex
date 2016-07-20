@@ -20,12 +20,12 @@ import com.orange.flexoffice.adminui.ws.model.ERoomType;
 import com.orange.flexoffice.adminui.ws.model.GatewayOutput;
 import com.orange.flexoffice.adminui.ws.model.Location;
 import com.orange.flexoffice.adminui.ws.model.LocationItem;
-import com.orange.flexoffice.adminui.ws.model.RoomSummary;
-import com.orange.flexoffice.adminui.ws.model.SensorOutput;
 import com.orange.flexoffice.adminui.ws.model.ObjectFactory;
 import com.orange.flexoffice.adminui.ws.model.Room;
 import com.orange.flexoffice.adminui.ws.model.RoomInput1;
 import com.orange.flexoffice.adminui.ws.model.RoomOutput;
+import com.orange.flexoffice.adminui.ws.model.RoomSummary;
+import com.orange.flexoffice.adminui.ws.model.SensorOutput;
 import com.orange.flexoffice.adminui.ws.model.UserSummary;
 import com.orange.flexoffice.adminui.ws.utils.ErrorMessageHandler;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
@@ -69,6 +69,10 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		LOGGER.debug( "Begin call RoomEndpoint.getRooms at: " + new Date() );
 
 		List<RoomDao> dataList = roomManager.findAllRooms();
+		
+		if (dataList == null) {
+			throw new WebApplicationException(errorMessageHandler.createErrorMessage(EnumErrorModel.ERROR_27, Response.Status.NOT_FOUND));
+		}
 
 		List<RoomSummary> roomList = new ArrayList<RoomSummary>();
 
@@ -195,38 +199,41 @@ public class RoomEndpointImpl implements RoomEndpoint {
 		
 		try {
 			
-		RoomDao roomDao = new RoomDao();
-		roomDao.setName(roomInput.getName());
-		roomDao.setType(roomInput.getType().toString());
-		roomDao.setBuildingId(Long.valueOf(roomInput.getBuildingId()));
-		roomDao.setFloor(roomInput.getFloor().longValue());
-		
-		if (roomInput.getGateway() !=null) {
-			GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress());
-			roomDao.setGatewayId(Long.valueOf(gateway.getId()));
-		} else {
-			roomDao.setGatewayId(0L);
-		}
-		
-		String desc = roomInput.getDesc(); 
-		if ( desc != null) { 
-			roomDao.setDescription(roomInput.getDesc());
-		}
-		
-		roomDao.setCapacity(roomInput.getCapacity().intValue());
-		roomDao.setStatus(ERoomStatus.UNKNOWN.toString());	
-		
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug( "addRoom with parameters :");
-			final StringBuilder message = new StringBuilder( 1000 );
-			message.append( "name :" );
-			message.append( roomInput.getName() );
-			message.append( "\n" );
-			message.append( "gateway id :" );
-			message.append( roomDao.getGatewayId() );
-			message.append( "\n" );
-			LOGGER.debug( message.toString() );
-		}
+			RoomDao roomDao = new RoomDao();
+			roomDao.setName(roomInput.getName());
+			roomDao.setType(roomInput.getType().toString());
+			roomDao.setBuildingId(Long.valueOf(roomInput.getBuildingId()));
+			if (roomInput.getFloor() != null)
+			roomDao.setFloor(roomInput.getFloor().longValue());
+			
+			if (roomInput.getGateway() !=null) {
+				GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress().toLowerCase().replaceAll("-", ":"));
+				roomDao.setGatewayId(Long.valueOf(gateway.getId()));
+			} else {
+				roomDao.setGatewayId(0L);
+			}
+			
+			String desc = roomInput.getDesc(); 
+			if ( desc != null) { 
+				roomDao.setDescription(roomInput.getDesc());
+			}
+			
+			if (roomInput.getCapacity() != null){
+				roomDao.setCapacity(roomInput.getCapacity().intValue());
+			}
+			roomDao.setStatus(ERoomStatus.UNKNOWN.toString());	
+			
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug( "addRoom with parameters :");
+				final StringBuilder message = new StringBuilder( 1000 );
+				message.append( "name :" );
+				message.append( roomInput.getName() );
+				message.append( "\n" );
+				message.append( "gateway id :" );
+				message.append( roomDao.getGatewayId() );
+				message.append( "\n" );
+				LOGGER.debug( message.toString() );
+			}
 
 			roomDao = roomManager.save(roomDao);
 			
@@ -267,30 +274,33 @@ public class RoomEndpointImpl implements RoomEndpoint {
 
 		try {
 			
-		RoomDao roomDao = new RoomDao();
-		roomDao.setId(Long.valueOf(id));
-		roomDao.setName(roomInput.getName());
-		roomDao.setType(roomInput.getType().toString());
-		roomDao.setBuildingId(Long.valueOf(roomInput.getBuildingId()));
-		roomDao.setFloor(roomInput.getFloor().longValue());
-
-		if (roomInput.getGateway() !=null) {
-			GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress());
-			roomDao.setGatewayId(Long.valueOf(gateway.getId()));
-		} else {
-			roomDao.setGatewayId(0L);
-		}
-		
-		String desc = roomInput.getDesc(); 
-		if ( desc != null) { 
-			roomDao.setDescription(roomInput.getDesc());
-		}
-		roomDao.setCapacity(roomInput.getCapacity().intValue());
-		
-		roomDao = roomManager.update(roomDao);
-
-		LOGGER.debug( "End call RoomEndpoint.updateRoom at: " + new Date() );
-		return Response.status(Status.ACCEPTED).build();
+			RoomDao roomDao = new RoomDao();
+			roomDao.setId(Long.valueOf(id));
+			roomDao.setName(roomInput.getName());
+			roomDao.setType(roomInput.getType().toString());
+			roomDao.setBuildingId(Long.valueOf(roomInput.getBuildingId()));
+			if(roomInput.getFloor() != null){
+				roomDao.setFloor(roomInput.getFloor().longValue());
+			}
+	
+			if (roomInput.getGateway() !=null) {
+				GatewayDto gateway = gatewayManager.findByMacAddress(roomInput.getGateway().getMacAddress().toLowerCase().replaceAll("-", ":"));
+				roomDao.setGatewayId(Long.valueOf(gateway.getId()));
+			} else {
+				roomDao.setGatewayId(0L);
+			}
+			
+			String desc = roomInput.getDesc(); 
+			if ( desc != null) { 
+				roomDao.setDescription(roomInput.getDesc());
+			}
+			if (roomInput.getCapacity() != null)
+			roomDao.setCapacity(roomInput.getCapacity().intValue());
+			
+			roomDao = roomManager.update(roomDao);
+	
+			LOGGER.debug( "End call RoomEndpoint.updateRoom at: " + new Date() );
+			return Response.status(Status.ACCEPTED).build();
 
 		} catch (DataNotExistsException e){
 			LOGGER.debug("DataNotExistsException in RoomEndpoint.updateRoom with message :", e);

@@ -46,6 +46,16 @@ public class CityDaoRepository extends DataRepository<CityDao> implements CityDa
 				new BeanPropertyRowMapper<CityDao>(CityDao.class)
 			);
 	}
+	
+	@Override
+	public List<CityDao> findCitiesHaveMeetingRoomsByRegionId(long regionId) {
+		SqlParameterSource paramMap = new MapSqlParameterSource("regionId", regionId);
+		return jdbcTemplate.query(
+				findCitiesHaveMeetingRoomsByRegionIdQuery, 
+				paramMap, 
+				new BeanPropertyRowMapper<CityDao>(CityDao.class)
+			);
+	}
 
 	@Override
 	public List<CityDao> findByRegionId(Long regionId) throws IncorrectResultSizeDataAccessException {

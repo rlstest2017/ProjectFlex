@@ -1,6 +1,6 @@
 package com.orange.flexoffice.userui.ws.endPoint.entity.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -17,6 +17,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Log4jConfigurer;
 
 import com.orange.flexoffice.userui.ws.endPoint.entity.RoomEndpoint;
+import com.orange.flexoffice.userui.ws.model.ERoomKind;
 import com.orange.flexoffice.userui.ws.model.Room;
 import com.orange.flexoffice.userui.ws.model.RoomSummary;
 import com.orange.flexoffice.userui.ws.task.CheckReservationTimeOutTask;
@@ -73,7 +74,7 @@ public class RoomEndpointImplTest {
 		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, null, null, null, null);
 
 		// Asserts
-		assertEquals(5, rooms.size());
+		assertEquals(10, rooms.size());
 	}
 
 	@Test
@@ -107,7 +108,7 @@ public class RoomEndpointImplTest {
 		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, null, null, "1", null);
 
 		// Asserts
-		assertEquals(3, rooms.size());
+		assertEquals(6, rooms.size());
 	}
 
 	@Test
@@ -118,7 +119,7 @@ public class RoomEndpointImplTest {
 		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, null, null, "1", null, null);
 
 		// Asserts
-		assertEquals(5, rooms.size());
+		assertEquals(10, rooms.size());
 	}
 
 	@Test
@@ -140,7 +141,7 @@ public class RoomEndpointImplTest {
 		List<RoomSummary> rooms = roomEndpoint.getRooms(token, false, "1", null, null, null, null);
 
 		// Asserts
-		assertEquals(5, rooms.size());
+		assertEquals(10, rooms.size());
 	}
 
 	@Test
@@ -159,7 +160,7 @@ public class RoomEndpointImplTest {
 	public void TestD_getRoomByRoomId1() {
 
 		// Test
-		Room room = roomEndpoint.getRoom("1");
+		Room room = roomEndpoint.getRoom("1", ERoomKind.FLEXOFFICE.toString());
 
 		// Asserts
 		assertEquals("room 1", room.getName());
@@ -169,13 +170,31 @@ public class RoomEndpointImplTest {
 	public void TestE_getRoomByRoomId2() {
 
 		// Test
-		Room room = roomEndpoint.getRoom("2");
+		Room room = roomEndpoint.getRoom("2", ERoomKind.FLEXOFFICE.toString());
 
 		// Asserts
 		assertEquals("room 2", room.getName());
 	}
+	
+	@Test
+	public void TestD2_getRoomByRoomId1() {
 
+		// Test
+		Room room = roomEndpoint.getRoom("1", ERoomKind.MEETINGROOM.toString());
 
+		// Asserts
+		assertEquals("meeting room 1", room.getName());
+	}
+
+	@Test
+	public void TestE2_getRoomByRoomId2() {
+
+		// Test
+		Room room = roomEndpoint.getRoom("2", ERoomKind.MEETINGROOM.toString());
+
+		// Asserts
+		assertEquals("meeting room 2", room.getName());
+	}
 
 	@Test
 	public void TestF_getWrongRoom() {
@@ -185,7 +204,7 @@ public class RoomEndpointImplTest {
 		// Test
 		try {
 			// Test
-			roomEndpoint.getRoom("125");
+			roomEndpoint.getRoom("125", ERoomKind.FLEXOFFICE.toString());
 
 		} catch (WebApplicationException e) {
 			expectedResult = true;

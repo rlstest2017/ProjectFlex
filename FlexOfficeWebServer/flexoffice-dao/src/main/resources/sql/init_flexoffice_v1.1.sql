@@ -1,5 +1,6 @@
 DROP TABLE users, gateways, rooms, sensors, alerts, room_stats, room_daily_occupancy, teachin_sensors, configuration, preferences, buildings, cities, regions, countries;
-
+   
+DROP TYPE meetingroomStatus, meetingroomType, agentStatus, dashboardStatus, meetingroomInfo; 
 DROP TYPE userRole, deviceType, sensorType, sensorStatus, gatewayStatus, roomStatus, roomType, sensorOccupancyInfo, roomInfo, teachinStatus, sensorTeachinStatus, commandModel;     
 
 
@@ -14,7 +15,7 @@ CREATE TYPE sensorOccupancyInfo AS ENUM ('UNOCCUPIED', 'OCCUPIED');
 CREATE TYPE roomInfo AS ENUM ('RESERVED', 'CANCELED', 'TIMEOUT', 'OCCUPIED', 'UNOCCUPIED');
 CREATE TYPE teachinStatus AS ENUM ('INITIALIZING', 'RUNNING', 'ENDED');
 CREATE TYPE sensorTeachinStatus AS ENUM ('NOT_PAIRED', 'PAIRED_OK', 'PAIRED_KO');
-CREATE TYPE commandModel AS ENUM ('RESET');
+CREATE TYPE commandModel AS ENUM ('RESET', 'ECONOMIC', 'STANDBY');
 
  
 CREATE TABLE users (

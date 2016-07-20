@@ -2,6 +2,7 @@ package com.orange.flexoffice.business.adminui.stat;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -16,6 +17,9 @@ public class ExportStatRowMapper implements RowMapper<ExportStatDto> {
 
 	@Override
 	public ExportStatDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+		
+		SimpleDateFormat formatter;
+		formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		ExportStatDto result = new ExportStatDto();
 		result.setCountryName(rs.getString("country_name"));
@@ -25,8 +29,8 @@ public class ExportStatRowMapper implements RowMapper<ExportStatDto> {
 		result.setRoomName(rs.getString("room_name"));
 		result.setRoomFloor(rs.getInt("room_floor"));
 		result.setRoomType(rs.getString("room_type"));
-		result.setBeginOccupancyDate(rs.getTimestamp("begin_occupancy_date"));
-		result.setEndOccupancyDate(rs.getTimestamp("end_occupancy_date"));
+		result.setBeginOccupancyDate(formatter.format(rs.getTimestamp("begin_occupancy_date")));
+		result.setEndOccupancyDate(formatter.format(rs.getTimestamp("end_occupancy_date")));
 			
 		return result;
 	} 

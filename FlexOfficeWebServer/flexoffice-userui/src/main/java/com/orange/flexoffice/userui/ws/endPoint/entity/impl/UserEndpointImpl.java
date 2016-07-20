@@ -11,12 +11,6 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.orange.flexoffice.userui.ws.utils.ErrorMessageHandler;
-import com.orange.flexoffice.userui.ws.model.Token;
-import com.orange.flexoffice.userui.ws.model.User;
-import com.orange.flexoffice.userui.ws.model.UserContext;
-import com.orange.flexoffice.userui.ws.model.UserInput;
-import com.orange.flexoffice.userui.ws.model.UserPreferences;
 import com.orange.flexoffice.business.common.enums.EnumErrorModel;
 import com.orange.flexoffice.business.common.exception.DataNotExistsException;
 import com.orange.flexoffice.business.common.service.data.BuildingManager;
@@ -36,8 +30,15 @@ import com.orange.flexoffice.dao.common.model.object.RegionDto;
 import com.orange.flexoffice.dao.common.model.object.UserDto;
 import com.orange.flexoffice.userui.ws.endPoint.entity.UserEndpoint;
 import com.orange.flexoffice.userui.ws.model.ELocationItemType;
+import com.orange.flexoffice.userui.ws.model.ERoomKind;
 import com.orange.flexoffice.userui.ws.model.LocationItem;
 import com.orange.flexoffice.userui.ws.model.ObjectFactory;
+import com.orange.flexoffice.userui.ws.model.Token;
+import com.orange.flexoffice.userui.ws.model.User;
+import com.orange.flexoffice.userui.ws.model.UserContext;
+import com.orange.flexoffice.userui.ws.model.UserInput;
+import com.orange.flexoffice.userui.ws.model.UserPreferences;
+import com.orange.flexoffice.userui.ws.utils.ErrorMessageHandler;
 
 /**
  * UserEndpointImpl
@@ -98,6 +99,7 @@ public class UserEndpointImpl implements UserEndpoint {
 			
 			if (data.getRoomId() != null) {
 				user.setRoomId(data.getRoomId());
+				user.setRoomKind(ERoomKind.FLEXOFFICE);
 			}
 			
 			// add context
@@ -254,7 +256,9 @@ public class UserEndpointImpl implements UserEndpoint {
 				buildingItem.setName(building.getName());
 				buildingItem.setType(ELocationItemType.BUILDING);
 				userPref.setBuilding(buildingItem);
-				userPref.setFloor(BigInteger.valueOf(preferences.getFloor()));
+				if (preferences.getFloor() != null) {
+					userPref.setFloor(BigInteger.valueOf(preferences.getFloor()));
+				}
 			}
 			userContext.setUserPreferences(userPref);
 		} catch (DataNotExistsException e) {

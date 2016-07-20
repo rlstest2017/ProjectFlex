@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	
+	<!-- Begin Enumeration Type -->
+	<xsd:simpleType name="e-meetingRoomStatus">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="FREE"/>
+	 	<xsd:enumeration value="OCCUPIED"/>
+	 	<xsd:enumeration value="ACK"/>
+	 	<xsd:enumeration value="UNKNOWN"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="e-dashboardStatus">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="ONLINE"/>
+	 	<xsd:enumeration value="OFFLINE"/>
+	 	<xsd:enumeration value="ECONOMIC"/>
+	 	<xsd:enumeration value="STANDBY"/>
+	 	<xsd:enumeration value="UNKNOWN"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="e-agentStatus">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="ONLINE"/>
+	 	<xsd:enumeration value="OFFLINE"/>
+	 	<xsd:enumeration value="ECONOMIC"/>
+	 	<xsd:enumeration value="STANDBY"/>
+	 	<xsd:enumeration value="UNKNOWN"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="e-commandModel">
+	 <xsd:restriction base="xsd:string">
+	 	<xsd:enumeration value="NONE"/>
+	 	<xsd:enumeration value="ECONOMIC"/>
+	 	<xsd:enumeration value="ONLINE"/>
+	 	<xsd:enumeration value="OFFLINE"/>
+	 	<xsd:enumeration value="STANDBY"/>
+	 	<xsd:enumeration value="RESET"/>
+	 </xsd:restriction>
+	</xsd:simpleType>
+	<!-- End Enumeration Type -->
+	
+	<xsd:complexType name="AgentInput">
+		<xsd:sequence>
+			<xsd:element name="agentStatus" type="e-agentStatus" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="AgentOutput">
+		<xsd:sequence>
+		<xsd:element name="meetingRoomExternalId" type="xsd:string"/>
+			<xsd:element name="command" type="e-commandModel" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="DashboardInput">
+		<xsd:sequence>
+			<xsd:element name="dashboardStatus" type="e-dashboardStatus" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="DashboardOutput">
+		<xsd:sequence>
+			<xsd:element name="command" type="e-commandModel" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="MeetingRoomInput">
+		<xsd:sequence>
+			<xsd:element name="meetingRoomStatus" type="e-meetingRoomStatus"/>
+			<xsd:element name="startDate" type="xsd:long"/>
+ 		    <xsd:element name="endDate" type="xsd:long"/>
+			<xsd:element name="organizerLabel" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="System">
+		<xsd:sequence>
+			<xsd:element name="agentTimeout" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="dashboardTimeout" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="meetingRoomTimeout" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="wsRefreshInterval" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="inactivityTime" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="hourStart" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="hourEnd" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="ackTime" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="organizerMandatory" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="subjectMandatory" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="userCanCancel" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="canShowSubject" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
+ 		    <xsd:element name="canShowOrganizer" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="durationStep" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="pagesShiftInterval" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="nbRoomsPerPage" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="virtualKeyboard" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="keyboardLang" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="dashboardStartDate" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="dashboardMaxBookings" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="synchroTime" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- Error Model -->
+	<xsd:complexType name="ErrorModel">
+		<xsd:sequence>
+			<xsd:element name="code" type="xsd:string"/>
+			<xsd:element name="message" type="xsd:string"/>
+ 		</xsd:sequence>
+	</xsd:complexType>
+	
+</xsd:schema>

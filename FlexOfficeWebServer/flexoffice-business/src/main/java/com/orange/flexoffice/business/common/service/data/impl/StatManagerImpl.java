@@ -2,6 +2,7 @@ package com.orange.flexoffice.business.common.service.data.impl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -115,6 +116,9 @@ public class StatManagerImpl implements StatManager {
 			float rate = ((float)simpleStatDto.getOccupancyDuration()*100/(float)(nb*duration));
 			simpleStatDto.setRate(rate);
 		}
+		
+		// Sort by rate descending
+		Collections.sort(simpleStatList);
 		
 		LOGGER.debug("End method StatManager.getPopularStats");
 		return simpleStatList;
@@ -425,7 +429,9 @@ public class StatManagerImpl implements StatManager {
 		parameters.setFromDate(dateTools.getDateFromString("0"));
 		parameters.setToDate(new Date());
 		List<RoomDailyOccupancyDao> dailyRoomsList = dailyRoomsList(parameters);
-		if ( (dailyRoomsList != null) && (!dailyRoomsList.isEmpty()) ) {
+		if (dailyRoomsList == null || dailyRoomsList.isEmpty() || dailyRoomsList.size() == 1) {
+			returnedValue = 1; // default value (not influence in calculate of rate (division))
+		} else {
 				// - Get startdate & enddate
 				RoomDailyOccupancyDao firstEntry = dailyRoomsList.get(0);
 				Date startdate = firstEntry.getDay();
@@ -436,10 +442,7 @@ public class StatManagerImpl implements StatManager {
 				LOGGER.debug("endEntry in nbJoursOuvrableForPopular() is :" + endEntry);
 				
 				returnedValue = dateTools.nbJoursOuvrable(startdate, enddate, true, true, true, true, true, true, false, false);
-				
-		} else {
-			returnedValue = 1; // default value (not influence in calculate of rate (division))
-		}
+		} 
 		return returnedValue;
 	}
 	
@@ -458,8 +461,9 @@ public class StatManagerImpl implements StatManager {
 		} catch (JobExecutionException e) {
 			System.out.println("Job ExportStat failed");
 		} finally {
-			if (context != null)
-                	context.close();  
+			if (context != null){
+				context.close();  
+			}
 		}
 	}
 

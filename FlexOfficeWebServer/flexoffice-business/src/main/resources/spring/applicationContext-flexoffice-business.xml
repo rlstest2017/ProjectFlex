@@ -16,14 +16,20 @@
 	<bean id="statTools"
 	class="com.orange.flexoffice.business.common.utils.StatTools" />
 	
+	<bean id="meetingRoomStatTools"
+	class="com.orange.flexoffice.business.common.utils.MeetingRoomStatTools" />
+	
 	<!-- Import Dao -->
 	<import resource="classpath*:spring/applicationContext-flexoffice-dao.xml" />
 	
 	<!-- Scan base package -->
-	<context:component-scan base-package="com.orange.flexoffice.business.common, com.orange.flexoffice.business.gatewayapi" />
+	<context:component-scan base-package="com.orange.flexoffice.business.common, com.orange.flexoffice.business.gatewayapi, com.orange.flexoffice.business.meetingroom" />
 	
 	<!-- Transactions with annotations -->
 	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+
+
     
     
 </beans>

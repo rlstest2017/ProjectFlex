@@ -10,18 +10,30 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.orange.flexoffice.business.common.service.data.AlertManager;
 import com.orange.flexoffice.business.common.service.data.TaskManager;
 import com.orange.flexoffice.business.common.utils.DateTools;
+import com.orange.flexoffice.dao.common.model.data.AgentDao;
 import com.orange.flexoffice.dao.common.model.data.ConfigurationDao;
+import com.orange.flexoffice.dao.common.model.data.DashboardDao;
+import com.orange.flexoffice.dao.common.model.data.MeetingRoomDailyOccupancyDao;
+import com.orange.flexoffice.dao.common.model.data.MeetingRoomStatDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDailyOccupancyDao;
 import com.orange.flexoffice.dao.common.model.data.RoomDao;
 import com.orange.flexoffice.dao.common.model.data.RoomStatDao;
 import com.orange.flexoffice.dao.common.model.data.TeachinSensorDao;
+import com.orange.flexoffice.dao.common.model.enumeration.E_AgentStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_ConfigurationKey;
+import com.orange.flexoffice.dao.common.model.enumeration.E_DashboardStatus;
+import com.orange.flexoffice.dao.common.model.enumeration.E_MeetingRoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomInfo;
 import com.orange.flexoffice.dao.common.model.enumeration.E_RoomStatus;
 import com.orange.flexoffice.dao.common.model.enumeration.E_TeachinStatus;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.AgentDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.ConfigurationDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.DashboardDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomDailyOccupancyDaoRepository;
+import com.orange.flexoffice.dao.common.repository.data.jdbc.MeetingRoomStatDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDailyOccupancyDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomDaoRepository;
 import com.orange.flexoffice.dao.common.repository.data.jdbc.RoomStatDaoRepository;
@@ -41,13 +53,23 @@ public class TaskManagerImpl implements TaskManager {
 	@Autowired
 	private RoomStatDaoRepository roomStatsRepository;
 	@Autowired
+	private MeetingRoomStatDaoRepository meetingRoomStatsRepository;
+	@Autowired
 	private RoomDaoRepository roomRepository;
 	@Autowired
 	private ConfigurationDaoRepository configRepository;
 	@Autowired
 	private RoomDailyOccupancyDaoRepository roomDailyRepository;
 	@Autowired
+	private MeetingRoomDailyOccupancyDaoRepository meetingRoomDailyRepository;
+	@Autowired
 	private TeachinSensorsDaoRepository teachinRepository;
+	@Autowired
+	private AgentDaoRepository agentRepository;
+	@Autowired
+	private DashboardDaoRepository dashboardRepository;
+	@Autowired
+	private AlertManager alertManager;
 	
 	@Autowired
 	DateTools dateTools;
@@ -107,6 +129,26 @@ public class TaskManagerImpl implements TaskManager {
 		LOGGER.debug(" End TaskManager.purgeStatsDataMethod method : " + new Date());
 	}
 	
+	@Override
+	public void purgeMeetingRoomStatsDataMethod() {
+		
+		LOGGER.debug(" Begin TaskManager.purgeMeetingRoomStatsDataMethod method : " + new Date());
+		
+		// - Calculate Date with KEEP_STAT_DATA_IN_DAYS parameter
+		ConfigurationDao keepStatDataInDays = configRepository.findByKey(E_ConfigurationKey.KEEP_STAT_DATA_IN_DAYS.toString());
+		int keepStatDataInDaysValue = Integer.valueOf(keepStatDataInDays.getValue()); // in days	
+					
+		Date lastAcceptedStatDate = dateTools.lastAcceptedStatDate(String.valueOf(keepStatDataInDaysValue));
+		
+		// Delete all lines before lastAcceptedStatDate in meetingroom_stats & meetingroom_daily_occupancy
+		meetingRoomDailyRepository.deleteByDay(lastAcceptedStatDate);
+		meetingRoomStatsRepository.deleteByBeginOccupancyDate(lastAcceptedStatDate);
+		
+		LOGGER.info("TaskManager.purgeMeetingRoomStatsDataMethod is executed");
+		
+		LOGGER.debug(" End TaskManager.purgeMeetingRoomStatsDataMethod method : " + new Date());
+	}
+	
 	
 	@Override
 	public void checkTeachinTimeOut() {
@@ -149,7 +191,7 @@ public class TaskManagerImpl implements TaskManager {
 		LOGGER.debug(" Begin TaskManager.processDailyStats method : " + new Date());
 		
 		List<RoomDailyOccupancyDao> roomDailyList = new ArrayList<RoomDailyOccupancyDao>();
-			
+		
 		// 1 - Get Date with DATE_BEGIN_DAY & DATE_END_DAY parameters
 		ConfigurationDao beginDay = configRepository.findByKey(E_ConfigurationKey.DATE_BEGIN_DAY.toString());
 		String  beginDayValue = beginDay.getValue(); // in hh:mm
@@ -204,6 +246,107 @@ public class TaskManagerImpl implements TaskManager {
 		
 	}
 	
+	@Override
+	public void processMeetingRoomDailyStats() {
+		LOGGER.debug(" Begin TaskManager.processMeetingRoomDailyStats method : " + new Date());
+		
+		List<MeetingRoomDailyOccupancyDao> meetingRoomDailyList = new ArrayList<MeetingRoomDailyOccupancyDao>();
+			
+		// 1 - Get Date with HOUR_START & HOUR_END parameters
+		ConfigurationDao beginDay = configRepository.findByKey(E_ConfigurationKey.HOUR_START.toString());
+		String  beginDayValue = beginDay.getValue() + ":00"; // in h + ":00"
+		LOGGER.debug(" beginDayValue is : " + beginDayValue);
+		ConfigurationDao endDay = configRepository.findByKey(E_ConfigurationKey.HOUR_END.toString());
+		String  endDayValue = endDay.getValue() + ":00";  // in h + ":00"
+		LOGGER.debug(" endDayValue is : " + endDayValue);
+		
+		// 2 - Process the Dates
+		Date beginDayDate = dateTools.dateBeginDay(beginDayValue);
+		Date endDayDate = dateTools.dateEndDay(endDayValue);
+		
+		LOGGER.debug(" beginDayDate is : " + beginDayDate);
+		LOGGER.debug(" endDayDate is : " + endDayDate);
+		
+		if (dateTools.isWorkingDay(beginDayDate)) { // process only dates in working days
+			
+			// 3 - find used MeetingRoomStats in the current day
+			MeetingRoomStatDao meetingRoomStat = new MeetingRoomStatDao();
+			meetingRoomStat.setBeginOccupancyDate(beginDayDate);
+			meetingRoomStat.setEndOccupancyDate(endDayDate);
+			meetingRoomStat.setMeetingRoomInfo(E_MeetingRoomInfo.UNOCCUPIED.toString());
+			List<MeetingRoomStatDao> meetingRoomSt = meetingRoomStatsRepository.findAllOccupiedDailyMeetingRoomStats(meetingRoomStat);
+			
+			// 4 - cumulate the stats by meetingroomId
+			for (MeetingRoomStatDao rstat : meetingRoomSt) { // the meetingroomStats are order by meetingroomId 1,2,3,....
+					Integer index = getMeetingRoomInList(rstat.getMeetingroomId(), meetingRoomDailyList);
+					if (index != -1) {
+						// calculate occupancyDuration
+						Long duration = dateTools.calculateDuration(rstat.getBeginOccupancyDate(), rstat.getEndOccupancyDate());
+						MeetingRoomDailyOccupancyDao meetingRoomGet = meetingRoomDailyList.get(index);
+						// ------ update Occupancy Duration for existing meeting Room (cumulate) ------
+						meetingRoomGet.setOccupancyDuration(meetingRoomGet.getOccupancyDuration() + duration);
+						//
+					} else {
+						// add entry
+						MeetingRoomDailyOccupancyDao meetingRoomEntry = new MeetingRoomDailyOccupancyDao();
+						// calculate occupancyDuration
+						Long duration = dateTools.calculateDuration(rstat.getBeginOccupancyDate(), rstat.getEndOccupancyDate());
+						meetingRoomEntry.setMeetingroomId(rstat.getMeetingroomId());
+						meetingRoomEntry.setOccupancyDuration(duration);
+						// ------ Add new meeting room in the list ----
+						meetingRoomDailyList.add(meetingRoomEntry);
+					}
+			}
+			
+			// 5 - save in Table meetingroom_daily_occupancy
+			for (MeetingRoomDailyOccupancyDao meetingRoomDailyOccupancyDao : meetingRoomDailyList) {
+				LOGGER.debug(" add entry");
+				meetingRoomDailyRepository.saveMeetingRoomDaily(meetingRoomDailyOccupancyDao);	
+			}
+			
+			LOGGER.info("TaskManager.processMeetingRoomDailyStats is executed & saveMeetingRoomDaily in table. The day is a working one !!!");
+			
+		}
+		
+		LOGGER.debug(" end TaskManager.processMeetingRoomDailyStats method : " + new Date());
+		
+	}
+	
+	@Override
+	public void checkAgentDashboardTimeOut() {
+		ConfigurationDao intervalAgentTimeout = configRepository.findByKey(E_ConfigurationKey.AGENT_STATUS_TIMEOUT.toString());
+		List<AgentDao> listAgents = agentRepository.findAgentsInTimeout(intervalAgentTimeout.getValue());
+		
+		LOGGER.debug("checkAgentDashboardTimeOut there are : " + listAgents.size() + " agents in timeout.");
+		
+		for(AgentDao agent : listAgents){
+			agent.setStatus(E_AgentStatus.OFFLINE.toString());
+			
+			LOGGER.debug("checkAgentDashboardTimeOut agent : " + agent.getId() + " set to offline");
+			
+			// update Agent Alert
+			alertManager.updateAgentAlert(agent.getId(), agent.getStatus());
+			
+			agentRepository.updateAgentStatusForTimeout(agent);
+		}
+		
+		ConfigurationDao intervalDashboardTimeout = configRepository.findByKey(E_ConfigurationKey.DASHBOARD_STATUS_TIMEOUT.toString());
+		List<DashboardDao> listDashboards = dashboardRepository.findDashboardsInTimeout(intervalDashboardTimeout.getValue()); 
+		
+		LOGGER.debug("checkAgentDashboardTimeOut there are : " + listDashboards.size() + " dashboards in timeout.");
+		
+		for(DashboardDao dashboard : listDashboards){
+			dashboard.setStatus(E_DashboardStatus.OFFLINE.toString());
+			
+			LOGGER.debug("checkAgentDashboardTimeOut dashboard : " + dashboard.getId() + " set to offline");
+			
+			// update Dashboard Alert
+			alertManager.updateDashboardAlert(dashboard.getId(), dashboard.getStatus());
+			
+			dashboardRepository.updateDashboardStatusForTimeout(dashboard);
+		}
+	}	
+	
 	/**
 	 * isRoomInList
 	 * @param roomId
@@ -229,5 +372,30 @@ public class TaskManagerImpl implements TaskManager {
 		
 		return index;
 	}
+	
+	/**
+	 * isRoomInList
+	 * @param meetingRoomId
+	 * @param meetingRoomDailyList
+	 * @return
+	 */
+	private Integer getMeetingRoomInList(Integer meetingRoomId, List<MeetingRoomDailyOccupancyDao> meetingRoomDailyList) {
+		boolean state = false;
+		Integer index = -1;
+		if (!meetingRoomDailyList.isEmpty()) {
+			for (MeetingRoomDailyOccupancyDao meetingRoomDaily : meetingRoomDailyList) {
+				index = index + 1;
+				if (meetingRoomId == meetingRoomDaily.getMeetingroomId()) {
+					state = true;
+					break;
+				} 
+			}
+		}
 		
+		if (!state) { // if entry not exist return -1
+			index = -1;
+		}
+		
+		return index;
+	}
 }
